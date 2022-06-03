@@ -51,6 +51,7 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         dzenNoch = chin.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         binding = PasxaBinding.inflate(layoutInflater)
         setContentView(binding.root)

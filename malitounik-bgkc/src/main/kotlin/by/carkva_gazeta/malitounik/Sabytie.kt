@@ -46,7 +46,7 @@ import java.io.File
 import java.io.FileWriter
 import java.util.*
 
-class Sabytie : PreBaseActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener, DialogHelpAlarm.DialogHelpAlarmListener {
+class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener, DialogHelpAlarm.DialogHelpAlarmListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var konec = false
@@ -227,10 +227,6 @@ class Sabytie : PreBaseActivity(), DialogSabytieSaveListener, DialogContextMenuS
             edit2Save = ""
             binding.editText2.setText(edit2Save)
         }
-    }
-
-    override fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
-        recreate()
     }
 
     override fun onSettingsAlarm(notification: Int) {

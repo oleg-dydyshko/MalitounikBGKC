@@ -32,7 +32,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 
-class NovyZapavietSinaidal : PreBaseActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NovyZapavietSinaidalFragment.ClicParalelListiner, NovyZapavietSinaidalFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
+class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NovyZapavietSinaidalFragment.ClicParalelListiner, NovyZapavietSinaidalFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
 
     private var fullscreenPage = false
     private var paralel = false
@@ -44,8 +44,6 @@ class NovyZapavietSinaidal : PreBaseActivity(), DialogFontSizeListener, DialogBi
     private var dialog = true
     private var cytanneSours = ""
     private var cytanneParalelnye = ""
-    private var setedit = false
-    private var checkSetDzenNoch = false
     private var title = ""
     private var men = true
     private lateinit var binding: ActivityBibleBinding
@@ -115,11 +113,6 @@ class NovyZapavietSinaidal : PreBaseActivity(), DialogFontSizeListener, DialogBi
         resetTollbarJob?.cancel()
     }
 
-    override fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
-        checkSetDzenNoch = isDzenNoch
-        recreate()
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onDialogFontSize(fontSize: Float) {
         binding.pager.adapter?.notifyDataSetChanged()
@@ -133,17 +126,13 @@ class NovyZapavietSinaidal : PreBaseActivity(), DialogFontSizeListener, DialogBi
         fierstPosition = position
     }
 
-    override fun setEdit(edit: Boolean) {
-        setedit = edit
-    }
-
     override fun addZakladka(color: Int) {
-        val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
+        val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as NovyZapavietSinaidalFragment
         fragment.addZakladka(color)
     }
 
     override fun addNatatka() {
-        val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
+        val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as NovyZapavietSinaidalFragment
         fragment.addNatatka()
     }
 
@@ -155,7 +144,6 @@ class NovyZapavietSinaidal : PreBaseActivity(), DialogFontSizeListener, DialogBi
             window.attributes = lp
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
-        checkSetDzenNoch = dzenNoch
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = ActivityBibleBinding.inflate(layoutInflater)
@@ -296,8 +284,6 @@ class NovyZapavietSinaidal : PreBaseActivity(), DialogFontSizeListener, DialogBi
         })
         men = DialogVybranoeBibleList.checkVybranoe(this, kniga, glava, 2)
         if (savedInstanceState != null) {
-            checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
-            setedit = savedInstanceState.getBoolean("setedit")
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             dialog = savedInstanceState.getBoolean("dialog")
             paralel = savedInstanceState.getBoolean("paralel")
@@ -380,8 +366,6 @@ class NovyZapavietSinaidal : PreBaseActivity(), DialogFontSizeListener, DialogBi
         outState.putBoolean("paralel", paralel)
         outState.putString("cytanneSours", cytanneSours)
         outState.putString("cytanneParalelnye", cytanneParalelnye)
-        outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
-        outState.putBoolean("setedit", setedit)
         outState.putString("title", binding.titleToolbar.text.toString())
     }
 
@@ -398,10 +382,9 @@ class NovyZapavietSinaidal : PreBaseActivity(), DialogFontSizeListener, DialogBi
                 invalidateOptionsMenu()
             }
             BibleGlobalList.mPedakVisable -> {
-                val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
+                val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as NovyZapavietSinaidalFragment
                 fragment.onBackPressedFragment()
             }
-            setedit || checkSetDzenNoch != dzenNoch -> onSupportNavigateUp()
             else -> super.onBackPressed()
         }
     }

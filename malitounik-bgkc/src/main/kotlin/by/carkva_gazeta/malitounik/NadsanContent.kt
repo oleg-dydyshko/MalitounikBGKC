@@ -34,6 +34,7 @@ class NadsanContent : BaseActivity() {
         }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = chin.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         binding = ContentPsalterBinding.inflate(layoutInflater)
         setContentView(binding.root)

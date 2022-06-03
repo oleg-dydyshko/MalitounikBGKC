@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaPageFragmentBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -32,7 +33,7 @@ import java.net.URLEncoder
 import java.util.*
 
 
-class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
+class SvityiaFragment : Fragment(), View.OnClickListener {
     private var dayOfYear = 1
     private var _binding: AdminSviatyiaPageFragmentBinding? = null
     private val binding get() = _binding!!
@@ -224,7 +225,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         binding.apisanne.setSelection(endSelect + 12)
     }
 
-    override fun onBackPressedFragment(): Boolean {
+    fun onBackPressedFragment(): Boolean {
         if (binding.scrollpreView.visibility == View.VISIBLE) {
             binding.scrollpreView.visibility = View.GONE
             binding.scrollView.visibility = View.VISIBLE

@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.resources.DialogBibleNatatkaEdit.BibleNatatkaEditlistiner
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
@@ -91,21 +92,22 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        dzenNoch = k.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
         binding = BibleZakladkiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)
         semuxa = intent.getIntExtra("semuxa", 1)
         if (semuxa == 1) data = BibleGlobalList.natatkiSemuxa
         if (semuxa == 2) data = BibleGlobalList.natatkiSinodal
-        adapter = ItemAdapter(data, by.carkva_gazeta.malitounik.R.id.image, false)
+        adapter = ItemAdapter(data, R.id.image, false)
         binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
         binding.dragListView.setLayoutManager(LinearLayoutManager(this))
         binding.dragListView.setAdapter(adapter, false)
@@ -190,10 +192,10 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.setText(by.carkva_gazeta.malitounik.R.string.natatki_biblii)
+        binding.titleToolbar.setText(R.string.natatki_biblii)
         if (dzenNoch) {
-            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
+            binding.toolbar.popupTheme = R.style.AppCompatDark
         }
     }
 
@@ -209,14 +211,14 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.trash).isVisible = data.size != 0
+        menu.findItem(R.id.trash).isVisible = data.size != 0
         return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         val infl = menuInflater
-        infl.inflate(by.carkva_gazeta.malitounik.R.menu.zakladki_i_natatki, menu)
+        infl.inflate(R.menu.zakladki_i_natatki, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -233,30 +235,11 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
             onBackPressed()
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.trash) {
-            val natatki = DialogDeliteAllZakladkiINatatki.getInstance(resources.getString(by.carkva_gazeta.malitounik.R.string.natatki_biblii).lowercase(), semuxa)
+        if (id == R.id.trash) {
+            val natatki = DialogDeliteAllZakladkiINatatki.getInstance(resources.getString(R.string.natatki_biblii).lowercase(), semuxa)
             natatki.show(supportFragmentManager, "delite_all_zakladki_i_natatki")
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        if (semuxa == 1) {
-            if (MenuBibleSemuxa.bible_time) {
-                MenuBibleSemuxa.bible_time = false
-                onSupportNavigateUp()
-            } else {
-                super.onBackPressed()
-            }
-        }
-        if (semuxa == 2) {
-            if (MenuBibleSinoidal.bible_time) {
-                MenuBibleSinoidal.bible_time = false
-                onSupportNavigateUp()
-            } else {
-                super.onBackPressed()
-            }
-        }
     }
 
     override fun onResume() {
@@ -323,23 +306,23 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
             if (dzenNoch) {
                 BibleArrayAdapterParallel.colors[0] = "#FFFFFF"
                 BibleArrayAdapterParallel.colors[1] = "#f44336"
-                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                view.itemLayout.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark_list)
-                view.root.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-                view.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
+                view.root.setBackgroundResource(R.color.colorprimary_material_dark)
+                view.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             } else {
                 BibleArrayAdapterParallel.colors[0] = "#000000"
                 BibleArrayAdapterParallel.colors[1] = "#D00505"
-                view.itemLayout.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default_list)
-                view.root.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorDivider)
+                view.itemLayout.setBackgroundResource(R.drawable.selector_default_list)
+                view.root.setBackgroundResource(R.color.colorDivider)
             }
             return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             super.onBindViewHolder(holder, position)
-            holder.mText.text = getString(by.carkva_gazeta.malitounik.R.string.bible_natatki, mItemList[position].list[4], mItemList[position].list[5])
+            holder.mText.text = getString(R.string.bible_natatki, mItemList[position].list[4], mItemList[position].list[5])
             holder.itemView.tag = mItemList[position]
         }
 

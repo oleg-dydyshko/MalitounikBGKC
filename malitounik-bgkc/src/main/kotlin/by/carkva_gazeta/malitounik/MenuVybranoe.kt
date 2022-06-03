@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
@@ -23,7 +24,7 @@ import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
 import java.io.File
 
-class MenuVybranoe : VybranoeFragment(), DialogVybranoeBibleList.DialogVybranoeBibleListListener {
+class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleListListener {
     private lateinit var adapter: ItemAdapter
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
@@ -49,11 +50,11 @@ class MenuVybranoe : VybranoeFragment(), DialogVybranoeBibleList.DialogVybranoeB
         setHasOptionsMenu(true)
     }
 
-    override fun fileDeliteCancel() {
+    fun fileDeliteCancel() {
         binding.dragListView.resetSwipedViews(null)
     }
 
-    override fun fileDelite(position: Int) {
+    fun fileDelite(position: Int) {
         val edit = k.edit()
         when (adapter.itemList[position].resurs) {
             "1" -> edit.remove("bibleVybranoeSemuxa")
@@ -154,7 +155,7 @@ class MenuVybranoe : VybranoeFragment(), DialogVybranoeBibleList.DialogVybranoeB
         }
     }
 
-    override fun deliteAllVybranoe() {
+    fun deliteAllVybranoe() {
         activity?.let { activity ->
             val edit = k.edit()
             edit.remove("bibleVybranoeSemuxa")
@@ -286,7 +287,7 @@ class MenuVybranoe : VybranoeFragment(), DialogVybranoeBibleList.DialogVybranoeB
                 view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
-                view.root.setBackgroundResource(R.color.colorprimary_material_dark)
+                view.root.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
                 view.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             } else {
                 view.itemLayout.setBackgroundResource(R.drawable.selector_default_list)

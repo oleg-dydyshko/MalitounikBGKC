@@ -340,6 +340,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         dzenNoch = k.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         binding = PesnyBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView

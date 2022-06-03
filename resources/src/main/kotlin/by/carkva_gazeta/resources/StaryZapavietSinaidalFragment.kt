@@ -14,6 +14,7 @@ import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.widget.TooltipCompat
+import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.MainActivity
@@ -21,7 +22,7 @@ import by.carkva_gazeta.resources.databinding.ActivityBiblePageFragmentBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickListener, AdapterView.OnItemClickListener {
+class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, AdapterView.OnItemClickListener {
     private var kniga = 0
     private var page = 0
     private var pazicia = 0
@@ -100,14 +101,13 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
 
     internal interface ListPositionListiner {
         fun getListPosition(position: Int)
-        fun setEdit(edit: Boolean = false)
     }
 
     fun upDateListView() {
         adapter.notifyDataSetChanged()
     }
 
-    override fun onBackPressedFragment() {
+    fun onBackPressedFragment() {
         BibleGlobalList.mPedakVisable = false
         BibleGlobalList.bibleCopyList.clear()
         activity?.let {
@@ -119,7 +119,7 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
         adapter.notifyDataSetChanged()
     }
 
-    override fun addZakladka(color: Int) {
+    fun addZakladka(color: Int) {
         if (color != -1) {
             var maxIndex: Long = 0
             BibleGlobalList.zakladkiSinodal.forEach {
@@ -130,12 +130,11 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
             MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
         }
         BibleGlobalList.mPedakVisable = false
-        listPositionListiner?.setEdit(true)
         BibleGlobalList.bibleCopyList.clear()
         adapter.notifyDataSetChanged()
     }
 
-    override fun addNatatka() {
+    fun addNatatka() {
         BibleGlobalList.bibleCopyList.clear()
         adapter.notifyDataSetChanged()
     }
@@ -735,7 +734,6 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
                     } else {
                         BibleGlobalList.zakladkiSinodal.removeAt(index)
                         BibleGlobalList.mPedakVisable = false
-                        listPositionListiner?.setEdit(true)
                         BibleGlobalList.bibleCopyList.clear()
                     }
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
@@ -753,7 +751,6 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     binding.linearLayout4.visibility = View.GONE
                     BibleGlobalList.mPedakVisable = false
-                    listPositionListiner?.setEdit(true)
                     BibleGlobalList.bibleCopyList.clear()
                 } else {
                     MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))

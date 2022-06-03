@@ -13,14 +13,10 @@ import by.carkva_gazeta.malitounik.databinding.MenuBibleBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class MenuBibleSemuxa : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleListListener {
+class MenuBibleSemuxa : Fragment() {
     private var mLastClickTime: Long = 0
     private var _binding: MenuBibleBinding? = null
     private val binding get() = _binding!!
-
-    override fun onAllDeliteBible() {
-        binding.myBible.visibility = View.GONE
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -36,24 +32,26 @@ class MenuBibleSemuxa : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleL
         activity?.let { activity ->
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            val bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
-            if (bibleVybranoe == "") {
-                binding.myBible.visibility = View.GONE
-            } else {
-                val gson = Gson()
-                val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
-                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
-                if (arrayListVybranoe.isEmpty()) binding.myBible.visibility = View.GONE
-            }
             binding.myBible.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                DialogVybranoeBibleList.biblia = 1
-                val dialogVybranoeList = DialogVybranoeBibleList()
-                dialogVybranoeList.setDialogVybranoeBibleListListener(this)
-                dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                val arrayListVybranoe = ArrayList<VybranoeBibliaData>()
+                val bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
+                if (bibleVybranoe != "") {
+                    val gson = Gson()
+                    val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
+                    arrayListVybranoe.addAll(gson.fromJson(bibleVybranoe, type))
+                }
+                if (bibleVybranoe == "" || arrayListVybranoe.isEmpty()) {
+                    val dialogBibleVybranoeError = DialogBibleVybranoeError()
+                    dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
+                } else {
+                    DialogVybranoeBibleList.biblia = 1
+                    val dialogVybranoeList = DialogVybranoeBibleList()
+                    dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                }
             }
             binding.novyZavet.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -69,43 +67,43 @@ class MenuBibleSemuxa : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleL
                 mLastClickTime = SystemClock.elapsedRealtime()
                 startActivity(Intent(activity, StaryZapavietSemuxaList::class.java))
             }
-            val bibleTime = k.getString("bible_time_semuxa", "") ?: ""
-            if (bibleTime == "") {
-                bible_time = true
-                binding.prodolzych.visibility = View.GONE
-            }
             binding.prodolzych.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                val bibleTime2 = k.getString("bible_time_semuxa", "") ?: ""
-                val gson = Gson()
-                val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
-                val set: ArrayMap<String, Int> = gson.fromJson(bibleTime2, type)
-                if (set["zavet"] == 1) {
-                    if (MainActivity.checkmoduleResources()) {
-                        val intent = Intent(activity, NovyZapavietSemuxaList::class.java)
-                        intent.putExtra("kniga", set["kniga"])
-                        intent.putExtra("glava", set["glava"])
-                        intent.putExtra("stix", set["stix"])
-                        intent.putExtra("prodolzyt", true)
-                        startActivity(intent)
-                    } else {
-                        val dadatak = DialogInstallDadatak()
-                        dadatak.show(childFragmentManager, "dadatak")
-                    }
+                val bibleTime = k.getString("bible_time_semuxa", "") ?: ""
+                if (bibleTime == "") {
+                    val dialogBibleTimeError = DialogBibleTimeError()
+                    dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
-                    if (MainActivity.checkmoduleResources()) {
-                        val intent = Intent(activity, StaryZapavietSemuxaList::class.java)
-                        intent.putExtra("kniga", set["kniga"])
-                        intent.putExtra("glava", set["glava"])
-                        intent.putExtra("stix", set["stix"])
-                        intent.putExtra("prodolzyt", true)
-                        startActivity(intent)
+                    val gson = Gson()
+                    val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
+                    val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
+                    if (set["zavet"] == 1) {
+                        if (MainActivity.checkmoduleResources()) {
+                            val intent = Intent(activity, NovyZapavietSemuxaList::class.java)
+                            intent.putExtra("kniga", set["kniga"])
+                            intent.putExtra("glava", set["glava"])
+                            intent.putExtra("stix", set["stix"])
+                            intent.putExtra("prodolzyt", true)
+                            startActivity(intent)
+                        } else {
+                            val dadatak = DialogInstallDadatak()
+                            dadatak.show(childFragmentManager, "dadatak")
+                        }
                     } else {
-                        val dadatak = DialogInstallDadatak()
-                        dadatak.show(childFragmentManager, "dadatak")
+                        if (MainActivity.checkmoduleResources()) {
+                            val intent = Intent(activity, StaryZapavietSemuxaList::class.java)
+                            intent.putExtra("kniga", set["kniga"])
+                            intent.putExtra("glava", set["glava"])
+                            intent.putExtra("stix", set["stix"])
+                            intent.putExtra("prodolzyt", true)
+                            startActivity(intent)
+                        } else {
+                            val dadatak = DialogInstallDadatak()
+                            dadatak.show(childFragmentManager, "dadatak")
+                        }
                     }
                 }
             }
@@ -167,9 +165,5 @@ class MenuBibleSemuxa : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleL
                 binding.staryZavet.setBackgroundResource(R.drawable.knopka_red_black)
             }
         }
-    }
-
-    companion object {
-        var bible_time = false
     }
 }

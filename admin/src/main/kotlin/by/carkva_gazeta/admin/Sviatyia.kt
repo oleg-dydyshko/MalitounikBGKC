@@ -136,7 +136,7 @@ class Sviatyia : AppCompatActivity(), DialogImageFileLoad.DialogFileExplorerList
     }
 
     override fun onBackPressed() {
-        val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
+        val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as SvityiaFragment
         if (fragment.onBackPressedFragment()) super.onBackPressed()
     }
 

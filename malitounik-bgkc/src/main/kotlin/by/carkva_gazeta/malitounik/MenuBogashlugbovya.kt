@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.ListFragment
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 
@@ -46,6 +47,12 @@ class MenuBogashlugbovya : ListFragment() {
             data.add(MenuListData("Малебен сьвятым айцам нашым, роўным апосталам Кірылу і Мятоду, настаўнікам славянскім", "malebien_kiryla_miatod"))
             data.sort()
             listAdapter = MenuListAdaprer(it)
+            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            if (dzenNoch) {
+                listView.setBackgroundResource(R.color.colorbackground_material_dark)
+                listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
+            }
         }
         listView.isVerticalScrollBarEnabled = false
     }

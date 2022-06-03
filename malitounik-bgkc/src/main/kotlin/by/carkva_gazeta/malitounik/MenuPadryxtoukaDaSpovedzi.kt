@@ -12,20 +12,21 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.ListFragment
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class MenuPadryxtoukaDaSpovedzi : PadryxtoukaPamiatkaListFragment() {
+class MenuPadryxtoukaDaSpovedzi : ListFragment() {
     private lateinit var adapter: MyArrayAdapter
-    private var k: SharedPreferences? = null
+    private lateinit var k: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onDialogFontSize(fontSize: Float) {
+    fun onDialogFontSize() {
         adapter.notifyDataSetChanged()
     }
 
@@ -41,7 +42,7 @@ class MenuPadryxtoukaDaSpovedzi : PadryxtoukaPamiatkaListFragment() {
         }
         if (id == R.id.action_dzen_noch) {
             item.isChecked = !item.isChecked
-            val prefEditor = k?.edit()
+            val prefEditor = k.edit()
             if (item.isChecked) {
                 prefEditor?.putBoolean("dzen_noch", true)
             } else {
@@ -54,11 +55,11 @@ class MenuPadryxtoukaDaSpovedzi : PadryxtoukaPamiatkaListFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        k = activity?.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val dzenNoch = k?.getBoolean("dzen_noch", false)
         listView.isVerticalScrollBarEnabled = false
         listView.isHorizontalScrollBarEnabled = false
         activity?.let { it ->
+            k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = k.getBoolean("dzen_noch", false)
             val data = ArrayList<String>()
             val inputStream = it.resources.openRawResource(R.raw.padryxtouka_da_spovedzi)
             val isr = InputStreamReader(inputStream)
@@ -67,12 +68,16 @@ class MenuPadryxtoukaDaSpovedzi : PadryxtoukaPamiatkaListFragment() {
             reader.use { bufferedReader ->
                 bufferedReader.forEachLine {
                     line = it
-                    if (dzenNoch == true) line = line.replace("#d00505", "#f44336")
+                    if (dzenNoch) line = line.replace("#d00505", "#f44336")
                     data.add(line)
                 }
             }
             adapter = MyArrayAdapter(it, data)
             listAdapter = adapter
+            if (dzenNoch) {
+                listView.setBackgroundResource(R.color.colorbackground_material_dark)
+                listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
+            }
         }
         listView.divider = null
         val pad = (10 * resources.displayMetrics.density).toInt()

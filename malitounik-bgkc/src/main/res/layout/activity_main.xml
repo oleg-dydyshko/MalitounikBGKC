@@ -15,6 +15,7 @@
         android:layout_height="match_parent" />
 
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -31,9 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="15dp"
-                android:paddingEnd="5dp"
-                android:paddingStart="5dp">
+                android:paddingTop="15dp">
 
                 <ImageView
                     android:id="@+id/logosite"
@@ -71,9 +70,7 @@
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
                     android:paddingTop="10dp"
-                    android:paddingRight="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/sajt"
                     android:textSize="16sp" />
@@ -229,10 +226,8 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny1"
                         android:textSize="16sp"
@@ -246,10 +241,8 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny2"
                         android:textSize="16sp"
@@ -263,10 +256,8 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny3"
                         android:textSize="16sp"
@@ -280,10 +271,8 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny4"
                         android:textSize="16sp"
@@ -297,15 +286,13 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny5"
                         android:textSize="16sp"
-                        app:drawableStartCompat="@drawable/stiker"
-                        app:drawableLeftCompat="@drawable/stiker" />
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
                 </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -355,10 +342,8 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/spovedz"
                         android:textSize="16sp"
@@ -372,15 +357,13 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pamiatka"
                         android:textSize="16sp"
-                        app:drawableStartCompat="@drawable/stiker"
-                        app:drawableLeftCompat="@drawable/stiker" />
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
 
                     <TextView
                         android:id="@+id/label103"
@@ -389,15 +372,13 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/sviaty"
                         android:textSize="16sp"
-                        app:drawableStartCompat="@drawable/stiker"
-                        app:drawableLeftCompat="@drawable/stiker" />
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
 
                     <TextView
                         android:id="@+id/label105"
@@ -406,15 +387,13 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/parafii"
                         android:textSize="16sp"
-                        app:drawableStartCompat="@drawable/stiker"
-                        app:drawableLeftCompat="@drawable/stiker" />
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
 
                     <TextView
                         android:id="@+id/label104"
@@ -423,15 +402,13 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pascha"
                         android:textSize="16sp"
-                        app:drawableStartCompat="@drawable/stiker"
-                        app:drawableLeftCompat="@drawable/stiker" />
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

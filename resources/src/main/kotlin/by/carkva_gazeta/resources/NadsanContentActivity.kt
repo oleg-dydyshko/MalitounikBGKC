@@ -30,14 +30,13 @@ import com.google.gson.Gson
 import kotlinx.coroutines.*
 import java.io.File
 
-class NadsanContentActivity : PreBaseActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NadsanContentPage.ListPosition {
+class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NadsanContentPage.ListPosition {
 
     private var fullscreenPage = false
     private var glava = 0
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var dialog = true
-    private var checkSetDzenNoch = false
     private var men = true
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
@@ -54,11 +53,6 @@ class NadsanContentActivity : PreBaseActivity(), DialogFontSizeListener, DialogB
         prefEditors.putString("psalter_time_psalter_nadsan", gson.toJson(set))
         prefEditors.apply()
         resetTollbarJob?.cancel()
-    }
-
-    override fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
-        checkSetDzenNoch = isDzenNoch
-        recreate()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -82,7 +76,6 @@ class NadsanContentActivity : PreBaseActivity(), DialogFontSizeListener, DialogB
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
-        checkSetDzenNoch = dzenNoch
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = ActivityBibleBinding.inflate(layoutInflater)
@@ -118,7 +111,6 @@ class NadsanContentActivity : PreBaseActivity(), DialogFontSizeListener, DialogB
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             dialog = savedInstanceState.getBoolean("dialog")
-            checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         binding.actionFullscreen.setOnClickListener {
             show()
@@ -231,23 +223,14 @@ class NadsanContentActivity : PreBaseActivity(), DialogFontSizeListener, DialogB
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("dialog", dialog)
-        outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
     }
 
     override fun onBackPressed() {
-        when {
-            BibleGlobalList.mPedakVisable -> {
-                val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
-                fragment.onBackPressedFragment()
-            }
-            checkSetDzenNoch != dzenNoch -> {
-                onSupportNavigateUp()
-            }
-            MenuBibleSemuxa.bible_time -> {
-                MenuBibleSemuxa.bible_time = false
-                onSupportNavigateUp()
-            }
-            else -> super.onBackPressed()
+        if (BibleGlobalList.mPedakVisable) {
+            val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as NadsanContentPage
+            fragment.onBackPressedFragment()
+        } else {
+            super.onBackPressed()
         }
     }
 

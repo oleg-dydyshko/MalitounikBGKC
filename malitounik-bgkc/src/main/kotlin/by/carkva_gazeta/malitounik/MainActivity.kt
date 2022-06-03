@@ -51,7 +51,7 @@ import java.util.*
 import kotlin.math.roundToLong
 
 
-class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
+class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
 
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
@@ -62,7 +62,6 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
     private var idSelect = 0
     private var idOld = -1
     private var dzenNoch = false
-    private var checkDzenNoch = false
     private var tolbarTitle = ""
     private var shortcuts = false
     private var mLastClickTime: Long = 0
@@ -102,9 +101,9 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
 
     override fun onDialogFontSize(fontSize: Float) {
         val menuPadryxtoukaDaSpovedzi = supportFragmentManager.findFragmentByTag("MenuPadryxtoukaDaSpovedzi") as? MenuPadryxtoukaDaSpovedzi
-        menuPadryxtoukaDaSpovedzi?.onDialogFontSize(fontSize)
+        menuPadryxtoukaDaSpovedzi?.onDialogFontSize()
         val menuPamiatka = supportFragmentManager.findFragmentByTag("MenuPamiatka") as? MenuPamiatka
-        menuPamiatka?.onDialogFontSize(fontSize)
+        menuPamiatka?.onDialogFontSize()
     }
 
     override fun setPage(page: Int) {
@@ -150,8 +149,6 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
 
     override fun onResume() {
         super.onResume()
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (checkDzenNoch != dzenNoch) recreate()
         if (checkBrightness) {
             brightness = try {
                 Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
@@ -163,8 +160,6 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
             lp.screenBrightness = brightness.toFloat() / 100
             window.attributes = lp
         }
-        k = getSharedPreferences("biblia", MODE_PRIVATE)
-
         val density = resources.displayMetrics.density
 
         binding.logosite.post {
@@ -178,8 +173,6 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
             layoutParams.height = (hidch * density).toInt()
             binding.logosite.layoutParams = layoutParams
         }
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun ajustCompoundDrawableSizeWithText(textView: TextView, leftDrawable: Drawable?) {
@@ -187,17 +180,11 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
         textView.setCompoundDrawables(leftDrawable, null, null, null)
     }
 
-    override fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
-        checkDzenNoch = isDzenNoch
-        recreate()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         k = getSharedPreferences("biblia", MODE_PRIVATE)
         mkDir()
         loadOpisanieSviatyiaISxiaty()
         dzenNoch = k.getBoolean("dzen_noch", false)
-        checkDzenNoch = dzenNoch
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -653,12 +640,12 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
     }
 
     override fun cleanFullHistory() {
-        val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesnyHistory
+        val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesny
         fragment?.cleanFullHistory()
     }
 
     override fun cleanHistory(position: Int) {
-        val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesnyHistory
+        val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesny
         fragment?.cleanHistory(position)
     }
 

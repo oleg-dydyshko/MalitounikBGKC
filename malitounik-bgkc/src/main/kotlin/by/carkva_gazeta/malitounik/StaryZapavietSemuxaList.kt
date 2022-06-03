@@ -7,7 +7,10 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.ExpandableListView
 import androidx.core.content.ContextCompat
@@ -31,14 +34,15 @@ class StaryZapavietSemuxaList : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        dzenNoch = k.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)
@@ -306,15 +310,6 @@ class StaryZapavietSemuxaList : BaseActivity() {
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
-    }
-
-    override fun onBackPressed() {
-        if (MenuBibleSemuxa.bible_time) {
-            MenuBibleSemuxa.bible_time = false
-            onSupportNavigateUp()
-        } else {
-            super.onBackPressed()
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

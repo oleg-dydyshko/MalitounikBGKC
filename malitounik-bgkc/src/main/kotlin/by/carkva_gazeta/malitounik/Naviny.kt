@@ -32,9 +32,10 @@ class Naviny : BaseActivity() {
 
     @SuppressLint("SetTextI18n", "SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         kq = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = kq.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
+        super.onCreate(savedInstanceState)
         binding = NavinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)

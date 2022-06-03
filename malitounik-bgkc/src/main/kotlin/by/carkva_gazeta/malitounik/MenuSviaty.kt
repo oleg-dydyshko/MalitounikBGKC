@@ -16,11 +16,11 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.ListFragment
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemSviatyBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
-class MenuSviaty : SviatyListFragment() {
+class MenuSviaty : ListFragment() {
     private var year = Calendar.getInstance()[Calendar.YEAR]
     private lateinit var mListener: CarkvaCarkvaListener
     private var mLastClickTime: Long = 0
@@ -37,9 +37,9 @@ class MenuSviaty : SviatyListFragment() {
         outState.putInt("year", year)
     }
 
-    override fun getCviatyYear() = year
+    fun getCviatyYear() = year
 
-    override fun setCviatyYear(year: Int) {
+    fun setCviatyYear(year: Int) {
         this.year = year
         list = getPrazdnik(year)
         activity?.let {
@@ -71,6 +71,12 @@ class MenuSviaty : SviatyListFragment() {
             }
             myArrayAdapter = MyArrayAdapter(it)
             listAdapter = myArrayAdapter
+            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            if (dzenNoch) {
+                listView.setBackgroundResource(R.color.colorbackground_material_dark)
+                listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
+            }
         }
         val pad = (10 * resources.displayMetrics.density).toInt()
         listView.setPadding(pad, pad, pad, pad)

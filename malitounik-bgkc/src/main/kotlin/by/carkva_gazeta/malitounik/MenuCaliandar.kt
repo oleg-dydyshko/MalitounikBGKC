@@ -26,9 +26,8 @@ import java.io.BufferedReader
 import java.io.FileWriter
 import java.io.InputStreamReader
 import java.util.*
-import kotlin.collections.ArrayList
 
-class MenuCaliandar : MenuCaliandarFragment() {
+class MenuCaliandar : Fragment() {
     private var listinner: MenuCaliandarPageListinner? = null
     private lateinit var adapter: MyCalendarAdapter
     private var page = 0
@@ -71,7 +70,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun delitePadzeia(position: Int) {
+    fun delitePadzeia(position: Int) {
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             while (true) {

@@ -18,6 +18,7 @@ import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.resources.databinding.AkafistListBibleBinding
 import com.google.gson.Gson
@@ -92,6 +93,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
     override fun onCreate(savedInstanceState: Bundle?) {
         chin = getSharedPreferences("biblia", MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         binding = AkafistListBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -118,10 +120,10 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             }
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
-        binding.titleToolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.prynagodnyia)
+        binding.titleToolbar.text = resources.getText(R.string.prynagodnyia)
         if (dzenNoch) {
-            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
+            binding.toolbar.popupTheme = R.style.AppCompatDark
         }
         data.add(MenuListData("Малітва аб блаславеньні", "prynagodnyia_0"))
         data.add(MenuListData("Малітва аб дапамозе ў выбары жыцьцёвай дарогі дзіцяці", "prynagodnyia_1"))
@@ -173,8 +175,8 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         data.sort()
         adapter = MenuListAdaprer(this)
         binding.ListView.adapter = adapter
-        if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-        else binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+        if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
                 if (firstVisibleItem == 1) {
@@ -211,8 +213,8 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             history.addAll(gson.fromJson(json, type))
         }
         historyAdapter = HistoryAdapter(this, history)
-        if (dzenNoch) binding.History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-        else binding.History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+        if (dzenNoch) binding.History.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else binding.History.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         binding.History.adapter = historyAdapter
         binding.History.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -252,19 +254,19 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
 
     private fun changeSearchViewElements(view: View?) {
         if (view == null) return
-        if (view.id == by.carkva_gazeta.malitounik.R.id.search_edit_frame || view.id == by.carkva_gazeta.malitounik.R.id.search_mag_icon) {
+        if (view.id == R.id.search_edit_frame || view.id == R.id.search_mag_icon) {
             val p = view.layoutParams as LinearLayout.LayoutParams
             p.leftMargin = 0
             p.rightMargin = 0
             view.layoutParams = p
-        } else if (view.id == by.carkva_gazeta.malitounik.R.id.search_src_text) {
+        } else if (view.id == R.id.search_src_text) {
             autoCompleteTextView = view as AutoCompleteTextView
             val p = view.layoutParams as LinearLayout.LayoutParams
             val density = resources.displayMetrics.density
             val margin = (10 * density).toInt()
             p.rightMargin = margin
             autoCompleteTextView?.layoutParams = p
-            autoCompleteTextView?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
+            autoCompleteTextView?.setBackgroundResource(R.drawable.underline_white)
             autoCompleteTextView?.addTextChangedListener(MyTextWatcher())
         }
         if (view is ViewGroup) {
@@ -276,7 +278,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        val histopy = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_clean_histopy)
+        val histopy = menu.findItem(R.id.action_clean_histopy)
         histopy.isVisible = history.size != 0
         return true
     }
@@ -287,7 +289,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             onBackPressed()
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_clean_histopy) {
+        if (id == R.id.action_clean_histopy) {
             val dialogClearHishory = DialogClearHishory.getInstance()
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
         }
@@ -301,8 +303,8 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.malitvy_prynagodnyia, menu)
-        val searchViewItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_seashe_text)
+        menuInflater.inflate(R.menu.malitvy_prynagodnyia, menu)
+        val searchViewItem = menu.findItem(R.id.action_seashe_text)
         searchView = searchViewItem.actionView as SearchView
         if (actionExpandOn) {
             searchViewItem.expandActionView()
@@ -322,7 +324,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                 return true
             }
         })
-        searchView?.queryHint = getString(by.carkva_gazeta.malitounik.R.string.search_malitv)
+        searchView?.queryHint = getString(R.string.search_malitv)
         changeSearchViewElements(searchView)
         if (searchViewQwery != "") {
             searchViewItem.expandActionView()
@@ -385,7 +387,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         }
     }
 
-    private inner class MenuListAdaprer(private val context: Activity) : ArrayAdapter<MenuListData?>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, data as List<MenuListData>) {
+    private inner class MenuListAdaprer(private val context: Activity) : ArrayAdapter<MenuListData?>(context, R.layout.simple_list_item_2, R.id.label, data as List<MenuListData>) {
         private val origData = ArrayList<MenuListData>(data)
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
@@ -403,7 +405,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             val dzenNoch = chin.getBoolean("dzen_noch", false)
             viewHolder.text.text = data[position].title
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
 

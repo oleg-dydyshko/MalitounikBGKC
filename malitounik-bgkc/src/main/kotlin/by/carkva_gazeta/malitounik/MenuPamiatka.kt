@@ -12,11 +12,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.ListFragment
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class MenuPamiatka : PadryxtoukaPamiatkaListFragment() {
+class MenuPamiatka : ListFragment() {
     private lateinit var adapter: MyArrayAdapter
     private lateinit var k: SharedPreferences
 
@@ -25,7 +26,7 @@ class MenuPamiatka : PadryxtoukaPamiatkaListFragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onDialogFontSize(fontSize: Float) {
+    fun onDialogFontSize() {
         adapter.notifyDataSetChanged()
     }
 

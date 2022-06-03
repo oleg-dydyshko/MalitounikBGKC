@@ -222,6 +222,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         prefEditors = chin.edit()
         dzenNoch = chin.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         binding = SearchBibliaBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -695,33 +696,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        if (zavet == 1) {
-            if (MenuBibleSemuxa.bible_time) {
-                MenuBibleSemuxa.bible_time = false
-                onSupportNavigateUp()
-            } else {
-                super.onBackPressed()
-            }
-        }
-        if (zavet == 2) {
-            if (MenuBibleSinoidal.bible_time) {
-                MenuBibleSinoidal.bible_time = false
-                onSupportNavigateUp()
-            } else {
-                super.onBackPressed()
-            }
-        }
-        if (zavet == 3) {
-            if (MenuPsalterNadsana.bible_time) {
-                MenuPsalterNadsana.bible_time = false
-                onSupportNavigateUp()
-            } else {
-                super.onBackPressed()
-            }
-        }
     }
 
     private fun addHistory(item: String) {

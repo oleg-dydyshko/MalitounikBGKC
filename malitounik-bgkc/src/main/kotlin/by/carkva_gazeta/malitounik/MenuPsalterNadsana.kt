@@ -14,16 +14,11 @@ import by.carkva_gazeta.malitounik.databinding.MenuPsalterBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class MenuPsalterNadsana : Fragment(), View.OnClickListener, DialogVybranoeBibleList.DialogVybranoeBibleListListener {
+class MenuPsalterNadsana : Fragment(), View.OnClickListener {
     private lateinit var k: SharedPreferences
     private var mLastClickTime: Long = 0
-    private var bibleTime = ""
     private var _binding: MenuPsalterBinding? = null
     private val binding get() = _binding!!
-
-    override fun onAllDeliteBible() {
-        binding.myBible.visibility = View.GONE
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -39,20 +34,6 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener, DialogVybranoeBible
         activity?.let {
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            bibleTime = k.getString("psalter_time_psalter_nadsan", "") ?: ""
-            if (bibleTime == "") {
-                MenuBibleSemuxa.bible_time = true
-                binding.prodolzych.visibility = View.GONE
-            }
-            val bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
-            if (bibleVybranoe == "") {
-                binding.myBible.visibility = View.GONE
-            } else {
-                val gson = Gson()
-                val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
-                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
-                if (arrayListVybranoe.isEmpty()) binding.myBible.visibility = View.GONE
-            }
             binding.saeche.setOnClickListener(this)
             binding.myBible.setOnClickListener(this)
             binding.psalter.setOnClickListener(this)
@@ -111,28 +92,44 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener, DialogVybranoeBible
             }
         }
         if (id == R.id.myBible) {
-            DialogVybranoeBibleList.biblia = 3
-            val dialogVybranoeList = DialogVybranoeBibleList()
-            dialogVybranoeList.setDialogVybranoeBibleListListener(this)
-            dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+            val arrayListVybranoe = ArrayList<VybranoeBibliaData>()
+            val bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
+            if (bibleVybranoe != "") {
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
+                arrayListVybranoe.addAll(gson.fromJson(bibleVybranoe, type))
+            }
+            if (bibleVybranoe == "" || arrayListVybranoe.isEmpty()) {
+                val dialogBibleVybranoeError = DialogBibleVybranoeError()
+                dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
+            } else {
+                DialogVybranoeBibleList.biblia = 3
+                val dialogVybranoeList = DialogVybranoeBibleList()
+                dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+            }
         }
         if (id == R.id.psalter) {
             startActivity(Intent(activity, NadsanContent::class.java))
         }
         if (id == R.id.prodolzych) {
-            bibleTime = k.getString("psalter_time_psalter_nadsan", "") ?: ""
-            val gson = Gson()
-            val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
-            val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
-            if (MainActivity.checkmoduleResources()) {
-                val intent = Intent(activity, NadsanContent::class.java)
-                intent.putExtra("glava", set["glava"])
-                intent.putExtra("stix", set["stix"])
-                intent.putExtra("prodolzyt", true)
-                startActivity(intent)
+            val bibleTime = k.getString("psalter_time_psalter_nadsan", "") ?: ""
+            if (bibleTime == "") {
+                val dialogBibleTimeError = DialogBibleTimeError()
+                dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
             } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
+                val gson = Gson()
+                val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
+                val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
+                if (MainActivity.checkmoduleResources()) {
+                    val intent = Intent(activity, NadsanContent::class.java)
+                    intent.putExtra("glava", set["glava"])
+                    intent.putExtra("stix", set["stix"])
+                    intent.putExtra("prodolzyt", true)
+                    startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(childFragmentManager, "dadatak")
+                }
             }
         }
         if (id == R.id.pravila_chtenia) {
@@ -228,9 +225,5 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener, DialogVybranoeBible
                 dadatak.show(childFragmentManager, "dadatak")
             }
         }
-    }
-
-    companion object {
-        var bible_time = false
     }
 }

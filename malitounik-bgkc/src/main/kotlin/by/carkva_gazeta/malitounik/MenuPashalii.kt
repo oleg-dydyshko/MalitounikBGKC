@@ -15,12 +15,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.PashaliiBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemPaschaliiBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
-class MenuPashalii : PashaliiFragment() {
+class MenuPashalii : Fragment() {
     private val pasxi = ArrayList<Pashalii>()
     private lateinit var myArrayAdapter: MyArrayAdapter
     private var _binding: PashaliiBinding? = null
@@ -56,10 +56,18 @@ class MenuPashalii : PashaliiFragment() {
             binding.pasha.adapter = myArrayAdapter
             binding.pasha.selector = ContextCompat.getDrawable(it, android.R.color.transparent)
             binding.pasha.isClickable = false
+            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            if (dzenNoch) {
+                binding.gri.setBackgroundResource(R.color.colorbackground_material_dark)
+                binding.ula.setBackgroundResource(R.color.colorbackground_material_dark)
+                binding.pasha.setBackgroundResource(R.color.colorbackground_material_dark)
+                binding.pasha.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
+            }
         }
     }
 
-    override fun setPasha(year: Int) {
+    fun setPasha(year: Int) {
         activity?.let {
             pasxi.clear()
             setArrayPasha(it, year)

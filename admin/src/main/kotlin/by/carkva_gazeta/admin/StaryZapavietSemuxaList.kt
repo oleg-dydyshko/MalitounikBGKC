@@ -13,7 +13,6 @@ import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.MenuBibleSemuxa
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
@@ -303,15 +302,6 @@ class StaryZapavietSemuxaList : AppCompatActivity() {
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
-    }
-
-    override fun onBackPressed() {
-        if (MenuBibleSemuxa.bible_time) {
-            MenuBibleSemuxa.bible_time = false
-            onSupportNavigateUp()
-        } else {
-            super.onBackPressed()
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

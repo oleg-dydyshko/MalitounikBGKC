@@ -44,6 +44,7 @@ class SubMenuBogashlugbovyaVialikiPost : BaseActivity() {
         }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         binding = AkafistListBinding.inflate(layoutInflater)
         setContentView(binding.root)

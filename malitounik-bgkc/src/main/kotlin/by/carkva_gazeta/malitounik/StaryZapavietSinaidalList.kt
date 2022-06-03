@@ -34,14 +34,15 @@ class StaryZapavietSinaidalList : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        dzenNoch = k.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)
@@ -364,15 +365,6 @@ class StaryZapavietSinaidalList : BaseActivity() {
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
-    }
-
-    override fun onBackPressed() {
-        if (MenuBibleSinoidal.bible_time) {
-            MenuBibleSinoidal.bible_time = false
-            onSupportNavigateUp()
-        } else {
-            super.onBackPressed()
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

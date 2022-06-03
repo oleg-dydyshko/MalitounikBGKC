@@ -14,7 +14,7 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.*
 import java.util.*
 
-class CaliandarMun : PreBaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, CaliandarMunTab2.CaliandarMunTab2Listener, DialogCaliandarMunDate.DialogCaliandarMunDateListener {
+class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, CaliandarMunTab2.CaliandarMunTab2Listener, DialogCaliandarMunDate.DialogCaliandarMunDateListener {
     private var yearG1 = 0
     private var posMun1 = 0
     private var day1 = 0
@@ -26,10 +26,6 @@ class CaliandarMun : PreBaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listene
     private var sabytue = false
     private lateinit var binding: CalendarBinding
     private var resetTollbarJob: Job? = null
-
-    override fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
-        recreate()
-    }
 
     override fun setDataCalendar(dataCalendar: Int) {
         val fragment = supportFragmentManager.findFragmentByTag("mun") as? CaliandarMunTab1

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.*
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
@@ -21,7 +22,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 
-class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
+class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
     private lateinit var adapter: ItemAdapter
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
@@ -128,7 +129,7 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
         }
     }
 
-    override fun fileDeliteCancel() {
+    fun fileDeliteCancel() {
         binding.dragListView.resetSwipedViews(null)
     }
 
@@ -155,7 +156,7 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
         adapter.updateList(myNatatkiFiles)
     }
 
-    override fun fileDelite(position: Int) {
+    fun fileDelite(position: Int) {
         activity?.let { fragmentActivity ->
             val f = adapter.itemList[position]
             adapter.itemList.removeAt(position)
@@ -170,7 +171,7 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
         }
     }
 
-    override fun onDialogDeliteClick(position: Int, name: String) {
+    fun onDialogDeliteClick(position: Int, name: String) {
         val dd = DialogDelite.getInstance(position, "", "нататку", name)
         dd.show(childFragmentManager, "dialog_delite")
     }
@@ -261,7 +262,7 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
                 view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
-                view.root.setBackgroundResource(R.color.colorprimary_material_dark)
+                view.root.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
                 view.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             } else {
                 view.itemLayout.setBackgroundResource(R.drawable.selector_default_list)

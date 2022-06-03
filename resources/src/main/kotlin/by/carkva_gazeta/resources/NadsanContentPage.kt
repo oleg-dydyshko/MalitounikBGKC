@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -23,7 +24,7 @@ import by.carkva_gazeta.resources.databinding.ActivityBiblePageFragmentBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, AdapterView.OnItemClickListener {
+class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnItemClickListener {
     private var page = 0
     private var pazicia = 0
     private var listPosition: ListPosition? = null
@@ -52,7 +53,7 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         adapter.notifyDataSetChanged()
     }
 
-    override fun onBackPressedFragment() {
+    fun onBackPressedFragment() {
         BibleGlobalList.mPedakVisable = false
         BibleGlobalList.bibleCopyList.clear()
         activity?.let {
@@ -60,12 +61,6 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         }
         binding.linearLayout4.visibility = View.GONE
         adapter.notifyDataSetChanged()
-    }
-
-    override fun addZakladka(color: Int) {
-    }
-
-    override fun addNatatka() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

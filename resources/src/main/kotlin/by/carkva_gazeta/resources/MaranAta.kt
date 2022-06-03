@@ -117,6 +117,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         belarus = k.getBoolean("belarus", true)
         spid = k.getInt("autoscrollSpid", 60)
         maranAtaScrollPosition = k.getInt("maranAtaScrollPasition", 0)
+        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         binding = AkafistMaranAtaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView

@@ -44,6 +44,7 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         binding = NadsanMalitvyIPesnyBinding.inflate(layoutInflater)
         setContentView(binding.root)

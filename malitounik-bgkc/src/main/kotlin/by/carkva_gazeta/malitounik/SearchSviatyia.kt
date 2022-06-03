@@ -132,6 +132,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val c = Calendar.getInstance() as GregorianCalendar
         dzenNoch = chin.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         binding = SearchSviatyiaBinding.inflate(layoutInflater)
         setContentView(binding.root)

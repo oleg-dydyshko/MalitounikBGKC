@@ -1,10 +1,12 @@
 package by.carkva_gazeta.malitounik
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
 import android.widget.ListView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.ListFragment
 
 class MenuRuzanec : ListFragment() {
@@ -17,6 +19,12 @@ class MenuRuzanec : ListFragment() {
             val adapter = MenuListAdaprer(it, data)
             listAdapter = adapter
             listView.isVerticalScrollBarEnabled = false
+            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            if (dzenNoch) {
+                listView.setBackgroundResource(R.color.colorbackground_material_dark)
+                listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
+            }
         }
     }
 

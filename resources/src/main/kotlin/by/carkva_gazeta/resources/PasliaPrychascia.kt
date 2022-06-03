@@ -34,10 +34,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
 
 
-class PasliaPrychascia : PreBaseActivity(), View.OnTouchListener, DialogFontSizeListener {
+class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeListener {
 
     private var fullscreenPage = false
-    private var checkSetDzenNoch = false
     private lateinit var k: SharedPreferences
     private var men = false
     private val malitvy = ArrayList<Malitvy>()
@@ -64,8 +63,6 @@ class PasliaPrychascia : PreBaseActivity(), View.OnTouchListener, DialogFontSize
                 hide()
             }
         }
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         malitvy.forEachIndexed { index, _ ->
             val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(index) as LinearLayout
             val tabTextView = tabLayout.getChildAt(1) as TextView
@@ -79,11 +76,6 @@ class PasliaPrychascia : PreBaseActivity(), View.OnTouchListener, DialogFontSize
         binding.pager.adapter?.notifyDataSetChanged()
     }
 
-    override fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
-        checkSetDzenNoch = isDzenNoch
-        recreate()
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -93,7 +85,6 @@ class PasliaPrychascia : PreBaseActivity(), View.OnTouchListener, DialogFontSize
             window.attributes = lp
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
-        checkSetDzenNoch = dzenNoch
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
@@ -122,7 +113,6 @@ class PasliaPrychascia : PreBaseActivity(), View.OnTouchListener, DialogFontSize
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -369,14 +359,6 @@ class PasliaPrychascia : PreBaseActivity(), View.OnTouchListener, DialogFontSize
         }
     }
 
-    override fun onBackPressed() {
-        if (checkSetDzenNoch != dzenNoch) {
-            onSupportNavigateUp()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     private fun hide() {
         fullscreenPage = true
         val prefEditor = k.edit()
@@ -415,7 +397,6 @@ class PasliaPrychascia : PreBaseActivity(), View.OnTouchListener, DialogFontSize
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
-        outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
         outState.putInt("pasliaPrychascia", pasliaPrychascia)
     }
 

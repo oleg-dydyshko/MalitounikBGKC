@@ -38,6 +38,7 @@ class Onas : BaseActivity() {
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = k.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         binding = HelpBinding.inflate(layoutInflater)
         setContentView(binding.root)

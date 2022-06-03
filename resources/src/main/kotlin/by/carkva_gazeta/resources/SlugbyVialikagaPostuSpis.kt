@@ -37,6 +37,7 @@ class SlugbyVialikagaPostuSpis : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         binding = AkafistListBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)

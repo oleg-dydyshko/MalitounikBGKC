@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
 import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
@@ -31,6 +32,7 @@ class NadsanMalitvyIPesniList : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -43,7 +45,7 @@ class NadsanMalitvyIPesniList : BaseActivity() {
         Slidr.attach(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         for (i in 1..9) {
-            data.add(getString(by.carkva_gazeta.malitounik.R.string.pesnia, i))
+            data.add(getString(R.string.pesnia, i))
         }
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams
@@ -61,13 +63,13 @@ class NadsanMalitvyIPesniList : BaseActivity() {
             }
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        binding.titleToolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.pesni)
+        binding.titleToolbar.text = resources.getText(R.string.pesni)
         if (dzenNoch) {
-            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
-            binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
+            binding.toolbar.popupTheme = R.style.AppCompatDark
+            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         } else {
-            binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         }
         binding.ListView.adapter = MenuListAdaprer(this, data)
         binding.ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->

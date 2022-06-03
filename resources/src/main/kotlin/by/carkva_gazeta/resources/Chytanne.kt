@@ -72,6 +72,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             window.attributes = lp
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
         binding = AkafistChytanneBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView

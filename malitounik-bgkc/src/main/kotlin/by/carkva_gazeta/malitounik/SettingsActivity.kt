@@ -692,9 +692,10 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
+        super.onCreate(savedInstanceState)
         val notification = k.getInt("notification", 2)
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)

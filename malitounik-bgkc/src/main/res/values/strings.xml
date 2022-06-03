@@ -699,5 +699,7 @@
     <string name="admin_link">Спасылка:</string>
     <string name="admin_title_link">Імя спасылкі:</string>
     <string name="malitva_za_paclicanyx_i_jyvyx">УСПАМІН ПАМЕРЛЫХ І ЖЫВЫХ</string>
+    <string name="bible_time_error">Няма захаванай старонкі</string>
+    <string name="bible_vybranoe_error">Каб дадаць у Выбранае, націсьніце на зорачку ці \"Дадаць у Выбранае\"</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

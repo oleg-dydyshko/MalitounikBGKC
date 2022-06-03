@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.MenuPesnyBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
@@ -29,7 +30,7 @@ import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
+class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
     private var mLastClickTime: Long = 0
     private var editText: AutoCompleteTextView? = null
     private var textViewCount: TextView? = null
@@ -67,6 +68,11 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             binding.ListView.adapter = adapter
             binding.ListView.isVerticalScrollBarEnabled = false
             binding.ListView.onItemClickListener = this
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            if (dzenNoch) {
+                binding.ListView.setBackgroundResource(R.color.colorbackground_material_dark)
+                binding.ListView.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_dark)
+            }
             binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
                 override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                     if (i == 1) {
@@ -102,7 +108,6 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                 }
             }
             historyAdapter = HistoryAdapter(fraragment, history, true)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 binding.History.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_dark)
                 binding.ListView.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_dark)
@@ -147,13 +152,13 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         prefEditors.apply()
     }
 
-    override fun cleanFullHistory() {
+    fun cleanFullHistory() {
         history.clear()
         saveHistopy()
         activity?.invalidateOptionsMenu()
     }
 
-    override fun cleanHistory(position: Int) {
+    fun cleanHistory(position: Int) {
         history.removeAt(position)
         saveHistopy()
         if (history.size == 0) activity?.invalidateOptionsMenu()

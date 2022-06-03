@@ -112,6 +112,12 @@ class MenuParafiiBgkc : Fragment() {
             groups.add(children4)
             val adapter = ExpListAdapterPrafiiBgkc(activity)
             binding.elvMain.setAdapter(adapter)
+            if (dzenNoch) {
+                binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
+                binding.elvMain.selector = ContextCompat.getDrawable(activity, R.drawable.selector_dark)
+            } else {
+                binding.elvMain.selector = ContextCompat.getDrawable(activity, R.drawable.selector_default)
+            }
             binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnChildClickListener true

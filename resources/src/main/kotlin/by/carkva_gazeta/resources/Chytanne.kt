@@ -963,6 +963,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             autoScrollJob?.cancel()
             stopAutoStartScroll()
             binding.textView.setTextIsSelectable(true)
+            binding.textView.movementMethod = LinkMovementMethod()
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
@@ -1002,6 +1003,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         if (autoScrollJob?.isActive != true) {
             binding.textView.clearFocus()
             binding.textView.setTextIsSelectable(false)
+            binding.textView.movementMethod = LinkMovementMethod()
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             autoscroll = true
             val prefEditor = k.edit()

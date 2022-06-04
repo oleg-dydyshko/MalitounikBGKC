@@ -60,6 +60,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private lateinit var bindingappbar: AppBarMainBinding
     private lateinit var bindingcontent: ContentMainBinding
     private var idSelect = 0
+    private var backPressed: Long = 0
     private var idOld = -1
     private var dzenNoch = false
     private var tolbarTitle = ""
@@ -544,7 +545,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             snackbar?.dismiss()
         }
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            if (back_pressed + 2000 > System.currentTimeMillis()) {
+            if (backPressed + 2000 > System.currentTimeMillis()) {
                 moveTaskToBack(true)
                 prefEditors = k.edit()
                 for ((key) in k.all) {
@@ -564,7 +565,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 checkBrightness = true
                 super.onBackPressed()
             } else {
-                back_pressed = System.currentTimeMillis()
+                backPressed = System.currentTimeMillis()
                 toastView(getString(R.string.exit))
             }
         } else {
@@ -965,7 +966,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                                 if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
                                 startActivity(intentBib)
                             } else {
-                                moduleName = "biblijateka"
                                 downloadDynamicModule(this)
                             }
                         } else {
@@ -1343,14 +1343,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val NOVYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.NovyZapavietSinaidal"
         const val STARYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.StaryZapavietSinaidal"
         const val BIBLIAVYBRANOE = "by.carkva_gazeta.resources.BibliaVybranoe"
-        var back_pressed: Long = 0
         var padzeia = ArrayList<Padzeia>()
         var setDataCalendar = -1
         var checkBrightness = true
-        private var SessionId = 0
+        private var sessionId = 0
         var brightness = 15
         var dialogVisable = false
-        var moduleName = "biblijateka"
 
         fun setListPadzeia() {
             padzeia.clear()
@@ -1394,12 +1392,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             padzeia.sort()
         }
 
-        fun downloadDynamicModule(context: Activity) {
+        fun downloadDynamicModule(context: Activity, moduleName: String = "biblijateka") {
             val progressBarModule = context.findViewById<ProgressBar>(R.id.progressBarModule)
             val layoutDialod = context.findViewById<LinearLayout>(R.id.linear)
             val layoutDialod2 = context.findViewById<LinearLayout>(R.id.linear2)
             val text = context.findViewById<TextView>(R.id.textProgress)
-            val k: SharedPreferences = context.getSharedPreferences("biblia", MODE_PRIVATE)
+            val k = context.getSharedPreferences("biblia", MODE_PRIVATE)
             val dzenNoch: Boolean = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 layoutDialod2.setBackgroundResource(R.color.colorbackground_material_dark)
@@ -1419,7 +1417,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (state.status() == SplitInstallSessionStatus.REQUIRES_USER_CONFIRMATION) {
                     splitInstallManager.startConfirmationDialogForResult(state, context, 150)
                 }
-                if (state.sessionId() == SessionId) {
+                if (state.sessionId() == sessionId) {
                     val bytesDownload = (state.bytesDownloaded() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
                     val total = (state.totalBytesToDownload() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
                     when (state.status()) {
@@ -1483,7 +1481,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     toastView(context.getString(R.string.no_internet))
                 }
             }.addOnSuccessListener {
-                SessionId = it
+                sessionId = it
             }
         }
 

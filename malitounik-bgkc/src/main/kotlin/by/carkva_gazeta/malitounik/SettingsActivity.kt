@@ -859,8 +859,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
                 intent.setClassName(this, MainActivity.ADMINMAIN)
                 startActivity(intent)
             } else {
-                MainActivity.moduleName = "admin"
-                MainActivity.downloadDynamicModule(this)
+                MainActivity.downloadDynamicModule(this, "admin")
             }
         }
         if (dzenNoch) binding.prav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -1397,8 +1396,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
         binding.admin.visibility = View.VISIBLE
         binding.checkBox8.visibility = View.VISIBLE
         if (!MainActivity.checkmodulesAdmin()) {
-            MainActivity.moduleName = "admin"
-            MainActivity.downloadDynamicModule(this)
+            MainActivity.downloadDynamicModule(this, "admin")
         }
     }
 

@@ -47,7 +47,6 @@ class MenuGlavnoe : ListFragment() {
                     }
                 } else {
                     activity?.let {
-                        MainActivity.moduleName = "biblijateka"
                         MainActivity.downloadDynamicModule(it)
                     }
                 }

@@ -1262,9 +1262,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     private fun hide() {
         fullscreenPage = true
-        val prefEditor = k.edit()
-        prefEditor.putBoolean("fullscreenPage", true)
-        prefEditor.apply()
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)
@@ -1281,9 +1278,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     private fun show() {
         fullscreenPage = false
-        val prefEditor = k.edit()
-        prefEditor.putBoolean("fullscreenPage", false)
-        prefEditor.apply()
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)

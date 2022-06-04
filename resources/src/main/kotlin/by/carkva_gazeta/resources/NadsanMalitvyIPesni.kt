@@ -214,9 +214,6 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
 
     private fun hide() {
         fullscreenPage = true
-        val prefEditor = k.edit()
-        prefEditor.putBoolean("fullscreenPage", true)
-        prefEditor.apply()
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)
@@ -233,9 +230,6 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
 
     private fun show() {
         fullscreenPage = false
-        val prefEditor = k.edit()
-        prefEditor.putBoolean("fullscreenPage", false)
-        prefEditor.apply()
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)

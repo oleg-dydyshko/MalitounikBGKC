@@ -63,6 +63,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textColorLink="@color/colorPrimary_text"
             android:textIsSelectable="true"
             android:textSize="18sp" />
     </by.carkva_gazeta.malitounik.InteractiveScrollView>

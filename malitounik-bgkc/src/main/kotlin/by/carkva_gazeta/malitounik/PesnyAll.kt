@@ -317,7 +317,6 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
 
     override fun onResume() {
         super.onResume()
-        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
             binding.constraint.post {
                 hide()
@@ -347,9 +346,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         setContentView(binding.root)
         Slidr.attach(this)
         binding.constraint.setOnTouchListener(this)
-        if (savedInstanceState != null) {
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-        }
+        fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)

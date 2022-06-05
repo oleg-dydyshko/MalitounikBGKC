@@ -43,41 +43,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <ImageView
             android:id="@+id/brighess_plus"
             android:layout_width="40dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/selector_red_maran_ata"
+            android:contentDescription="@string/empty"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="@string/plus"
-            android:textColor="@color/colorWhite"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toTopOf="@+id/find"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:srcCompat="@drawable/plus_auto_scroll" />
 
-        <TextView
+        <ImageView
             android:id="@+id/brighess_minus"
             android:layout_width="40dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/selector_red_maran_ata"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="@string/minus"
-            android:textColor="@color/colorWhite"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toTopOf="@+id/find"
-            app:layout_constraintEnd_toStartOf="@+id/action_plus" />
+            android:contentDescription="@string/empty"
+            app:srcCompat="@drawable/minus_auto_scroll" />
     </LinearLayout>
 
     <LinearLayout
@@ -85,36 +78,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
         android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <ImageView
             android:id="@+id/fontSize_plus"
             android:layout_width="40dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/selector_red_maran_ata"
+            android:contentDescription="@string/empty"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="@string/plus"
-            android:textColor="@color/colorWhite"
-            android:textSize="30sp" />
+            app:srcCompat="@drawable/plus_auto_scroll" />
 
-        <TextView
+        <ImageView
             android:id="@+id/fontSize_minus"
             android:layout_width="40dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/selector_red_maran_ata"
             android:gravity="center"
+            android:contentDescription="@string/empty"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="@string/minus"
-            android:textColor="@color/colorWhite"
-            android:textSize="30sp" />
+            app:srcCompat="@drawable/minus_auto_scroll" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

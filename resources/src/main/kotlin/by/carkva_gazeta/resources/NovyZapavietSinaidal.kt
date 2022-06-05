@@ -292,6 +292,8 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
             if (paralel) {
                 setOnClic(cytanneParalelnye, cytanneSours)
             }
+        } else {
+            fullscreenPage = k.getBoolean("fullscreenPage", false)
         }
         binding.pager.setCurrentItem(glava, false)
         val file = File("$filesDir/BibliaSinodalNovyZavet/$kniga.json")
@@ -465,7 +467,6 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
 
     override fun onResume() {
         super.onResume()
-        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
             binding.linealLayoutTitle.post {
                 hide()

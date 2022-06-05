@@ -55,6 +55,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private var diffScroll = false
     private var title = ""
     private var firstTextPosition = ""
+    private var checkAutoDzenNoch = false
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -96,6 +97,9 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
+            checkAutoDzenNoch = savedInstanceState.getBoolean("checkAutoDzenNoch")
+        } else {
+            fullscreenPage = k.getBoolean("fullscreenPage", false)
         }
         title = intent.extras?.getString("title", "") ?: ""
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
@@ -509,7 +513,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                     val index = binding.textView.text.indexOf(textline)
                     val line = binding.textView.layout.getLineForOffset(index)
                     val y = binding.textView.layout.getLineTop(line)
-                    binding.InteractiveScroll.scrollY = y
+                    binding.InteractiveScroll.smoothScrollBy(0, y)
                 }
             }
         } else {
@@ -689,10 +693,13 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         resetScreenJob?.cancel()
     }
 
+    override fun checkAutoDzenNoch() {
+        checkAutoDzenNoch = true
+    }
+
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
-        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
             binding.constraint.post {
                 hide()
@@ -701,7 +708,10 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
-            autoStartScroll()
+            if (checkAutoDzenNoch) {
+                startAutoScroll()
+                checkAutoDzenNoch = false
+            } else autoStartScroll()
         }
     }
 
@@ -785,6 +795,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putBoolean("checkAutoDzenNoch", checkAutoDzenNoch)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putString("textLine", firstTextPosition)
     }

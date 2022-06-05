@@ -62,6 +62,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     private var titleTwo = SpannableString("")
     private var firstTextPosition = ""
     private val titleArrayList = ArrayList<TitleList>()
+    private var checkAutoDzenNoch = false
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -103,6 +104,9 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
+            checkAutoDzenNoch = savedInstanceState.getBoolean("checkAutoDzenNoch")
+        } else {
+            fullscreenPage = k.getBoolean("fullscreenPage", false)
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
@@ -863,7 +867,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                         val index = binding.textView.text.indexOf(textline)
                         val line = binding.textView.layout.getLineForOffset(index)
                         val y = binding.textView.layout.getLineTop(line)
-                        binding.InteractiveScroll.scrollY = y
+                        binding.InteractiveScroll.smoothScrollBy(0, y)
                     }
                 }
             } else {
@@ -1073,10 +1077,13 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         resetScreenJob?.cancel()
     }
 
+    override fun checkAutoDzenNoch() {
+        checkAutoDzenNoch = true
+    }
+
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
-        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
             binding.constraint.post {
                 hide()
@@ -1085,7 +1092,10 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
         if (autoscroll) {
-            autoStartScroll()
+            if (checkAutoDzenNoch) {
+                startAutoScroll()
+                checkAutoDzenNoch = false
+            } else autoStartScroll()
         }
     }
 
@@ -1176,6 +1186,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putBoolean("checkAutoDzenNoch", checkAutoDzenNoch)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putString("textLine", firstTextPosition)
     }

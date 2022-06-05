@@ -7,6 +7,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 
@@ -15,12 +16,21 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var checkDzenNoch = false
+    private var mLastClickTime: Long = 0
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putLong("mLastClickTime", mLastClickTime)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         checkDzenNoch = dzenNoch
         super.onCreate(savedInstanceState)
+        if (savedInstanceState != null) {
+            mLastClickTime = savedInstanceState.getLong("mLastClickTime")
+        }
     }
 
     override fun onPause() {
@@ -38,26 +48,29 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         if (k.getBoolean("auto_dzen_noch", false)) setlightSensor()
     }
 
+    open fun checkAutoDzenNoch() {}
+
     private fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 10000) {
+            return
+        }
+        mLastClickTime = SystemClock.elapsedRealtime()
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("dzen_noch", isDzenNoch)
+        prefEditor.apply()
+        dzenNoch = isDzenNoch
         checkDzenNoch = isDzenNoch
+        checkAutoDzenNoch()
         recreate()
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
         event?.let { sensorEvent ->
             if (sensorEvent.values[0] <= 4f && !dzenNoch) {
-                val prefEditor = k.edit()
-                prefEditor.putBoolean("dzen_noch", true)
-                prefEditor.apply()
                 sensorChangeDzenNoch(true)
-                dzenNoch = true
             }
             if (sensorEvent.values[0] >= 21f && dzenNoch) {
-                val prefEditor = k.edit()
-                prefEditor.putBoolean("dzen_noch", false)
-                prefEditor.apply()
                 sensorChangeDzenNoch(false)
-                dzenNoch = false
             }
         }
     }

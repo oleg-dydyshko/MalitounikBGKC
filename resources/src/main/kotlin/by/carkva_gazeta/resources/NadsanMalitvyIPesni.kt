@@ -82,9 +82,7 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
             }
             binding.malitvyIPesny.text = MainActivity.fromHtml(result)
         }
-        if (savedInstanceState != null) {
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-        }
+        fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.malitvyIPesny.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         binding.actionFullscreen.setOnClickListener {
@@ -202,7 +200,6 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
 
     override fun onResume() {
         super.onResume()
-        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
             binding.constraint.post {
                 hide()

@@ -111,6 +111,8 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             dialog = savedInstanceState.getBoolean("dialog")
+        } else {
+            fullscreenPage = k.getBoolean("fullscreenPage", false)
         }
         binding.actionFullscreen.setOnClickListener {
             show()
@@ -307,7 +309,6 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
 
     override fun onResume() {
         super.onResume()
-        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
             binding.linealLayoutTitle.post {
                 hide()

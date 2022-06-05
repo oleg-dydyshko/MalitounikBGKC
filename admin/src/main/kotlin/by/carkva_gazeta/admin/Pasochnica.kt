@@ -207,7 +207,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     val index = binding.apisanne.text.toString().indexOf(textline)
                     val line = binding.apisanne.layout.getLineForOffset(index)
                     val y = binding.apisanne.layout.getLineTop(line)
-                    binding.scrollView.scrollY = y
+                    binding.scrollView.smoothScrollBy(0, y)
                 } else {
                     binding.scrollView.smoothScrollBy(0, positionY)
                 }

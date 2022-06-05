@@ -80,6 +80,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private var raznica = 400
     private var dayOfYear = "1"
     private var checkDayOfYear = false
+    private var checkAutoDzenNoch = false
     private var sviaty = false
     private var daysv = 1
     private var munsv = 0
@@ -657,6 +658,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
 
             override fun onSlideClosed(): Boolean {
+                if (binding.find.visibility == View.VISIBLE) {
+                    binding.find.visibility = View.GONE
+                    binding.textSearch.setText("")
+                    findRemoveSpan()
+                    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
+                }
                 onBackPressed()
                 return false
             }
@@ -673,11 +681,14 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {
+            checkAutoDzenNoch = savedInstanceState.getBoolean("checkAutoDzenNoch")
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             MainActivity.dialogVisable = false
             if (savedInstanceState.getBoolean("seach")) {
                 binding.find.visibility = View.VISIBLE
             }
+        } else {
+            fullscreenPage = k.getBoolean("fullscreenPage", false)
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.textSize = fontBiblia
@@ -1364,7 +1375,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     val index = binding.textView.text.indexOf(textline)
                     val line = binding.textView.layout.getLineForOffset(index)
                     val y = binding.textView.layout.getLineTop(line)
-                    binding.scrollView2.scrollY = y
+                    binding.scrollView2.smoothScrollBy(0, y)
                 } else {
                     binding.scrollView2.smoothScrollBy(0, positionY)
                 }
@@ -1388,7 +1399,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     val index = binding.textView.text.indexOf(textline, ignoreCase = true)
                     val line = binding.textView.layout.getLineForOffset(index)
                     val y = binding.textView.layout.getLineTop(line)
-                    binding.scrollView2.scrollY = y
+                    binding.scrollView2.smoothScrollBy(0, y)
                     if (binding.textView.bottom <= binding.scrollView2.height) {
                         stopAutoStartScroll()
                         mAutoScroll = false
@@ -1635,7 +1646,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         startProcent(3000)
                     }
                     if (y > heightConstraintLayout - otstup) {
-                        if (binding.find.visibility == View.GONE) {
+                        if (mAutoScroll && binding.find.visibility == View.GONE) {
                             spid = k.getInt("autoscrollSpid", 60)
                             proc = 100 - (spid - 15) * 100 / 215
                             bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
@@ -1857,10 +1868,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         resetScreenJob?.cancel()
     }
 
+    override fun checkAutoDzenNoch() {
+        checkAutoDzenNoch = true
+    }
+
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
-        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
             binding.constraint.post {
                 hide()
@@ -1869,7 +1883,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
-            autoStartScroll()
+            if (checkAutoDzenNoch) {
+                startAutoScroll()
+                checkAutoDzenNoch = false
+            } else autoStartScroll()
         }
     }
 
@@ -1885,8 +1902,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
-        binding.actionBack.visibility = View.VISIBLE
-        binding.actionBack.animation = animation
+        if (binding.actionMinus.visibility == View.GONE) {
+            binding.actionBack.visibility = View.VISIBLE
+            binding.actionBack.animation = animation
+        }
     }
 
     private fun show() {
@@ -1904,6 +1923,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putBoolean("checkAutoDzenNoch", checkAutoDzenNoch)
         outState.putBoolean("fullscreen", fullscreenPage)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)

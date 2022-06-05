@@ -57,7 +57,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
-        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
             binding.constraint.post {
                 hide()
@@ -111,9 +110,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         binding.pager.offscreenPageLimit = 3
         binding.pager.setCurrentItem(pasliaPrychascia, false)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (savedInstanceState != null) {
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-        }
+        fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 men = Bogashlugbovya.checkVybranoe(this@PasliaPrychascia, malitvy[position].resourse)

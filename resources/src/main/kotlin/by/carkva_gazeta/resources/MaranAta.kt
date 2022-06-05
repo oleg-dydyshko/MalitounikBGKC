@@ -77,6 +77,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private var vydelenie = ArrayList<ArrayList<Int>>()
     private var bibleCopyList = ArrayList<Int>()
     private lateinit var slidr: SlidrInterface
+    private var checkAutoDzenNoch = false
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -159,6 +160,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         if (savedInstanceState != null) {
             onsave = true
             MainActivity.dialogVisable = false
+            checkAutoDzenNoch = savedInstanceState.getBoolean("checkAutoDzenNoch")
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             tollBarText = savedInstanceState.getString("tollBarText") ?: ""
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
@@ -170,6 +172,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 parralelMestaView(paralelPosition)
             }
         } else {
+            fullscreenPage = k.getBoolean("fullscreenPage", false)
             if (k.getBoolean("autoscrollAutostart", false)) {
                 autoStartScroll()
             }
@@ -1130,9 +1133,12 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         resetScreenJob?.cancel()
     }
 
+    override fun checkAutoDzenNoch() {
+        checkAutoDzenNoch = true
+    }
+
     override fun onResume() {
         super.onResume()
-        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
             binding.constraint.post {
                 hide()
@@ -1141,7 +1147,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
-            autoStartScroll()
+            if (checkAutoDzenNoch) {
+                startAutoScroll()
+                checkAutoDzenNoch = false
+            } else autoStartScroll()
         }
         bindingprogress.progress.visibility = View.GONE
     }
@@ -1291,6 +1300,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putBoolean("checkAutoDzenNoch", checkAutoDzenNoch)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putString("tollBarText", tollBarText)
         outState.putBoolean("paralel", paralel)

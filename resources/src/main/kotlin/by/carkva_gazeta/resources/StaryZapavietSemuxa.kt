@@ -341,6 +341,8 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
             if (paralel) {
                 setOnClic(cytanneParalelnye, cytanneSours)
             }
+        } else {
+            fullscreenPage = k.getBoolean("fullscreenPage", false)
         }
         binding.pager.setCurrentItem(glava, false)
         val file = File("$filesDir/BibliaSemuxaStaryZavet/$kniga.json")
@@ -520,7 +522,6 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
 
     override fun onResume() {
         super.onResume()
-        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
             binding.linealLayoutTitle.post {
                 hide()

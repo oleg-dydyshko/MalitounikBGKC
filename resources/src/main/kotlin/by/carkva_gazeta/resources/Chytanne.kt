@@ -753,7 +753,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                 er.setSpan(StyleSpan(Typeface.ITALIC), 0, er.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                                 ssbTitle.append("\n").append(er)
                                 title = if (e == 0) {
-                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_40, spln, zaglavieName))
+                                    setTitleArrayList(25, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_40, spln, zaglavieName), 2)
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -893,8 +893,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             val t2 = title.length
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val intent = if (titleArrayList[i].zavet == 1) Intent(this@Chytanne, NovyZapavietSemuxa::class.java)
-                    else Intent(this@Chytanne, StaryZapavietSemuxa::class.java)
+                    val intent = when(titleArrayList[i].zavet) {
+                        0 -> Intent(this@Chytanne, StaryZapavietSemuxa::class.java)
+                        2 -> Intent(this@Chytanne, StaryZapavietSinaidal::class.java)
+                        else -> Intent(this@Chytanne, NovyZapavietSemuxa::class.java)
+                    }
                     intent.putExtra("kniga", titleArrayList[i].kniga)
                     intent.putExtra("glava", titleArrayList[i].glava)
                     intent.putExtra("stix", titleArrayList[i].stix)

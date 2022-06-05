@@ -377,6 +377,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
         if (dzenNoch) {
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+            binding.linealLayoutTitle.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }

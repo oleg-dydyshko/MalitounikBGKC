@@ -30,40 +30,7 @@ class NovyZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapte
     private var listPositionListiner: ListPositionListiner? = null
     private lateinit var adapter: BibleArrayAdapterParallel
     private var bible: ArrayList<String> = ArrayList()
-    private val knigaBible: String
-        get() {
-            var knigaName = ""
-            when (kniga) {
-                0 -> knigaName = "От Матфея"
-                1 -> knigaName = "От Марка"
-                2 -> knigaName = "От Луки"
-                3 -> knigaName = "От Иоанна"
-                4 -> knigaName = "Деяния святых апостолов"
-                5 -> knigaName = "Иакова"
-                6 -> knigaName = "1-е Петра"
-                7 -> knigaName = "2-е Петра"
-                8 -> knigaName = "1-е Иоанна"
-                9 -> knigaName = "2-е Иоанна"
-                10 -> knigaName = "3-е Иоанна"
-                11 -> knigaName = "Иуды"
-                12 -> knigaName = "Римлянам"
-                13 -> knigaName = "1-е Коринфянам"
-                14 -> knigaName = "2-е Коринфянам"
-                15 -> knigaName = "Галатам"
-                16 -> knigaName = "Ефесянам"
-                17 -> knigaName = "Филиппийцам"
-                18 -> knigaName = "Колоссянам"
-                19 -> knigaName = "1-е Фессалоникийцам (Солунянам)"
-                20 -> knigaName = "2-е Фессалоникийцам (Солунянам)"
-                21 -> knigaName = "1-е Тимофею"
-                22 -> knigaName = "2-е Тимофею"
-                23 -> knigaName = "Титу"
-                24 -> knigaName = "Филимону"
-                25 -> knigaName = "Евреям"
-                26 -> knigaName = "Откровение (Апокалипсис)"
-            }
-            return knigaName
-        }
+    private var knigaBible = ""
     private var _binding: ActivityBiblePageFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -127,6 +94,7 @@ class NovyZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        knigaBible = arguments?.getString("title") ?: ""
         kniga = arguments?.getInt("kniga") ?: 0
         page = arguments?.getInt("page") ?: 0
         pazicia = arguments?.getInt("pazicia") ?: 0
@@ -598,9 +566,10 @@ class NovyZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapte
     }
 
     companion object {
-        fun newInstance(page: Int, kniga: Int, pazicia: Int): NovyZapavietSinaidalFragment {
+        fun newInstance(title: String, page: Int, kniga: Int, pazicia: Int): NovyZapavietSinaidalFragment {
             val fragmentFirst = NovyZapavietSinaidalFragment()
             val args = Bundle()
+            args.putString("title", title)
             args.putInt("page", page)
             args.putInt("kniga", kniga)
             args.putInt("pazicia", pazicia)

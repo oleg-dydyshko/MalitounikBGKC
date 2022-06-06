@@ -49,7 +49,6 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
     private var men = true
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
-    private var bibliaKnigi = ArrayList<BibliaData>()
     private var fierstPosition = 0
 
     private fun clearEmptyPosition() {
@@ -357,10 +356,6 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
                 fullglav = 16
             }
         }
-        for (i in 0 until fullglav) {
-            val pazicia = if (glava != i) 0 else fierstPosition
-            bibliaKnigi.add(BibliaData(i, kniga, pazicia))
-        }
         BibleGlobalList.mListGlava = 0
         binding.pager.adapter = MyPagerAdapter(this)
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
@@ -633,8 +628,11 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
             fragment?.upDateListView() ?: super.onBindViewHolder(holder, position, payloads)
         }
 
-        override fun getItemCount() = bibliaKnigi.size
+        override fun getItemCount() = fullglav
 
-        override fun createFragment(position: Int) = StaryZapavietSinaidalFragment.newInstance(bibliaKnigi[position].glava, bibliaKnigi[position].kniga, bibliaKnigi[position].styx)
+        override fun createFragment(position: Int): StaryZapavietSinaidalFragment {
+            val styx = if (glava != position) 0 else fierstPosition
+            return StaryZapavietSinaidalFragment.newInstance(title, position, kniga, styx)
+        }
     }
 }

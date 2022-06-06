@@ -48,7 +48,6 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
     private var men = true
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
-    private var bibliaKnigi = ArrayList<BibliaData>()
     private var fierstPosition = 0
 
     private fun clearEmptyPosition() {
@@ -262,10 +261,6 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
                 title = "Откровение (Апокалипсис)"
                 fullglav = 22
             }
-        }
-        for (i in 0 until fullglav) {
-            val pazicia = if (glava != i) 0 else fierstPosition
-            bibliaKnigi.add(BibliaData(i, kniga, pazicia))
         }
         BibleGlobalList.mListGlava = 0
         val adapterViewPager = MyPagerAdapter(this)
@@ -541,8 +536,11 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
             fragment?.upDateListView() ?: super.onBindViewHolder(holder, position, payloads)
         }
 
-        override fun getItemCount() = bibliaKnigi.size
+        override fun getItemCount() = fullglav
 
-        override fun createFragment(position: Int) = NovyZapavietSinaidalFragment.newInstance(bibliaKnigi[position].glava, bibliaKnigi[position].kniga, bibliaKnigi[position].styx)
+        override fun createFragment(position: Int): NovyZapavietSinaidalFragment {
+            val styx = if (glava != position) 0 else fierstPosition
+            return NovyZapavietSinaidalFragment.newInstance(title, position, kniga, styx)
+        }
     }
 }

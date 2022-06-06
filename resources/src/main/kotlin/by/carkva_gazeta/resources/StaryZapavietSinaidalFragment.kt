@@ -30,63 +30,7 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
     private var listPositionListiner: ListPositionListiner? = null
     private lateinit var adapter: BibleArrayAdapterParallel
     private var bible: ArrayList<String> = ArrayList()
-    private val knigaBible: String
-        get() {
-            var knigaName = ""
-            when (kniga) {
-                0 -> knigaName = "Бытие"
-                1 -> knigaName = "Исход"
-                2 -> knigaName = "Левит"
-                3 -> knigaName = "Числа"
-                4 -> knigaName = "Второзаконие"
-                5 -> knigaName = "Иисуса Навина"
-                6 -> knigaName = "Судей израилевых"
-                7 -> knigaName = "Руфи"
-                8 -> knigaName = "1-я Царств"
-                9 -> knigaName = "2-я Царств"
-                10 -> knigaName = "3-я Царств"
-                11 -> knigaName = "4-я Царств"
-                12 -> knigaName = "1-я Паралипоменон"
-                13 -> knigaName = "2-я Паралипоменон"
-                14 -> knigaName = "1-я Ездры"
-                15 -> knigaName = "Неемии"
-                16 -> knigaName = "2-я Ездры"
-                17 -> knigaName = "Товита"
-                18 -> knigaName = "Иудифи"
-                19 -> knigaName = "Есфири"
-                20 -> knigaName = "Иова"
-                21 -> knigaName = "Псалтирь"
-                22 -> knigaName = "Притчи Соломона"
-                23 -> knigaName = "Екклезиаста"
-                24 -> knigaName = "Песнь песней Соломона"
-                25 -> knigaName = "Премудрости Соломона"
-                26 -> knigaName = "Премудрости Иисуса, сына Сирахова"
-                27 -> knigaName = "Исаии"
-                28 -> knigaName = "Иеремии"
-                29 -> knigaName = "Плач Иеремии"
-                30 -> knigaName = "Послание Иеремии"
-                31 -> knigaName = "Варуха"
-                32 -> knigaName = "Иезекииля"
-                33 -> knigaName = "Даниила"
-                34 -> knigaName = "Осии"
-                35 -> knigaName = "Иоиля"
-                36 -> knigaName = "Амоса"
-                37 -> knigaName = "Авдия"
-                38 -> knigaName = "Ионы"
-                39 -> knigaName = "Михея"
-                40 -> knigaName = "Наума"
-                41 -> knigaName = "Аввакума"
-                42 -> knigaName = "Сафонии"
-                43 -> knigaName = "Аггея"
-                44 -> knigaName = "Захарии"
-                45 -> knigaName = "Малахии"
-                46 -> knigaName = "1-я Маккавейская"
-                47 -> knigaName = "2-я Маккавейская"
-                48 -> knigaName = "3-я Маккавейская"
-                49 -> knigaName = "3-я Ездры"
-            }
-            return knigaName
-        }
+    private var knigaBible = ""
     private var _binding: ActivityBiblePageFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -150,6 +94,7 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        knigaBible = arguments?.getString("title") ?: ""
         kniga = arguments?.getInt("kniga") ?: 0
         page = arguments?.getInt("page") ?: 0
         pazicia = arguments?.getInt("pazicia") ?: 0
@@ -760,9 +705,10 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
     }
 
     companion object {
-        fun newInstance(page: Int, kniga: Int, pazicia: Int): StaryZapavietSinaidalFragment {
+        fun newInstance(title: String, page: Int, kniga: Int, pazicia: Int): StaryZapavietSinaidalFragment {
             val fragmentFirst = StaryZapavietSinaidalFragment()
             val args = Bundle()
+            args.putString("title", title)
             args.putInt("page", page)
             args.putInt("kniga", kniga)
             args.putInt("pazicia", pazicia)

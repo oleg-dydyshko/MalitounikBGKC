@@ -30,40 +30,7 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
     private var listPositionListiner: ListPositionListiner? = null
     private lateinit var adapter: BibleArrayAdapterParallel
     private var bible: ArrayList<String> = ArrayList()
-    private val knigaBible: String
-        get() {
-            var knigaName = ""
-            when (kniga) {
-                0 -> knigaName = "Паводле Мацьвея"
-                1 -> knigaName = "Паводле Марка"
-                2 -> knigaName = "Паводле Лукаша"
-                3 -> knigaName = "Паводле Яна"
-                4 -> knigaName = "Дзеі Апосталаў"
-                5 -> knigaName = "Якава"
-                6 -> knigaName = "1-е Пятра"
-                7 -> knigaName = "2-е Пятра"
-                8 -> knigaName = "1-е Яна Багаслова"
-                9 -> knigaName = "2-е Яна Багаслова"
-                10 -> knigaName = "3-е Яна Багаслова"
-                11 -> knigaName = "Юды"
-                12 -> knigaName = "Да Рымлянаў"
-                13 -> knigaName = "1-е да Карынфянаў"
-                14 -> knigaName = "2-е да Карынфянаў"
-                15 -> knigaName = "Да Галятаў"
-                16 -> knigaName = "Да Эфэсянаў"
-                17 -> knigaName = "Да Піліпянаў"
-                18 -> knigaName = "Да Каласянаў"
-                19 -> knigaName = "1-е да Фесаланікійцаў"
-                20 -> knigaName = "2-е да Фесаланікійцаў"
-                21 -> knigaName = "1-е да Цімафея"
-                22 -> knigaName = "2-е да Цімафея"
-                23 -> knigaName = "Да Ціта"
-                24 -> knigaName = "Да Філімона"
-                25 -> knigaName = "Да Габрэяў"
-                26 -> knigaName = "Адкрыцьцё (Апакаліпсіс)"
-            }
-            return knigaName
-        }
+    private var knigaBible = ""
     private var _binding: ActivityBiblePageFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -127,6 +94,7 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        knigaBible = arguments?.getString("title") ?: ""
         kniga = arguments?.getInt("kniga") ?: 0
         page = arguments?.getInt("page") ?: 0
         pazicia = arguments?.getInt("pazicia") ?: 0
@@ -612,9 +580,10 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
     }
 
     companion object {
-        fun newInstance(page: Int, kniga: Int, pazicia: Int): NovyZapavietSemuxaFragment {
+        fun newInstance(title: String, page: Int, kniga: Int, pazicia: Int): NovyZapavietSemuxaFragment {
             val fragmentFirst = NovyZapavietSemuxaFragment()
             val args = Bundle()
+            args.putString("title", title)
             args.putInt("page", page)
             args.putInt("kniga", kniga)
             args.putInt("pazicia", pazicia)

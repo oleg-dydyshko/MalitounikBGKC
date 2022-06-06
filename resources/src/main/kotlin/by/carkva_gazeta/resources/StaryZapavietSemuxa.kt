@@ -50,7 +50,6 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
     private var men = true
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
-    private var bibliaKnigi = ArrayList<BibliaData>()
     private var fierstPosition = 0
 
     private fun clearEmptyPosition() {
@@ -312,10 +311,6 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
                 title = "Малахіі"
                 fullglav = 4
             }
-        }
-        for (i in 0 until fullglav) {
-            val pazicia = if (glava != i) 0 else fierstPosition
-            bibliaKnigi.add(BibliaData(i, kniga, pazicia))
         }
         BibleGlobalList.mListGlava = 0
         binding.pager.adapter = MyPagerAdapter(this)
@@ -597,8 +592,11 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
             fragment?.upDateListView() ?: super.onBindViewHolder(holder, position, payloads)
         }
 
-        override fun getItemCount() = bibliaKnigi.size
+        override fun getItemCount() = fullglav
 
-        override fun createFragment(position: Int) = StaryZapavietSemuxaFragment.newInstance(bibliaKnigi[position].glava, bibliaKnigi[position].kniga, bibliaKnigi[position].styx)
+        override fun createFragment(position: Int): StaryZapavietSemuxaFragment {
+            val styx = if (glava != position) 0 else fierstPosition
+            return StaryZapavietSemuxaFragment.newInstance(title, position, kniga, styx)
+        }
     }
 }

@@ -660,10 +660,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             override fun onSlideClosed(): Boolean {
                 if (binding.find.visibility == View.VISIBLE) {
                     binding.find.visibility = View.GONE
-                    binding.textSearch.setText("")
-                    findRemoveSpan()
-                    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
                 }
                 onBackPressed()
                 return false

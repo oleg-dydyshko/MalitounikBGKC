@@ -232,7 +232,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.textPamerlyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textPost.visibility = View.VISIBLE
                         binding.PostFish.visibility = View.VISIBLE
-                        if (dzenNoch) binding.PostFish.setImageResource(R.drawable.fishe_red_black) else binding.PostFish.setImageResource(R.drawable.fishe_red)
+                        if (dzenNoch) binding.PostFish.setImageResource(R.drawable.fishe_red_black)
+                        else binding.PostFish.setImageResource(R.drawable.fishe_red)
                     }
                     else -> {
                         binding.textDenNedeli.setBackgroundResource(R.color.colorDivider)

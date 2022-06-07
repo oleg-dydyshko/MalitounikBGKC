@@ -11,7 +11,6 @@ import by.carkva_gazeta.malitounik.databinding.CalendarTab2Binding
 import java.util.*
 
 class CaliandarMunTab2 : Fragment() {
-    private var dzenNoch = false
     private lateinit var adapterViewPagerNedel: FragmentStateAdapter
     private var day = 0
     private var posMun = 0
@@ -27,6 +26,9 @@ class CaliandarMunTab2 : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        day = arguments?.getInt("day") ?: 0
+        posMun = arguments?.getInt("posMun") ?: 0
+        yearG = arguments?.getInt("yearG") ?: 0
     }
 
     override fun onDestroyView() {
@@ -49,11 +51,6 @@ class CaliandarMunTab2 : Fragment() {
         _binding = CalendarTab2Binding.inflate(inflater, container, false)
         binding.pagerNedel.offscreenPageLimit = 3
         activity?.let { activity ->
-            val chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = chin.getBoolean("dzen_noch", false)
-            day = arguments?.getInt("day") ?: 0
-            posMun = arguments?.getInt("posMun") ?: 0
-            yearG = arguments?.getInt("yearG") ?: 0
             adapterViewPagerNedel = MyCalendarNedelAdapter(this)
             binding.pagerNedel.adapter = adapterViewPagerNedel
             binding.pagerNedel.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

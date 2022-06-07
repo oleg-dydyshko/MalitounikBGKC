@@ -16,7 +16,6 @@ import java.util.*
 
 class CaliandarMunTab1 : Fragment() {
     private lateinit var adapterViewPager: FragmentStateAdapter
-    private var dzenNoch = false
     private lateinit var names: Array<out String>
     private var day = 0
     private var posMun = 0
@@ -48,6 +47,10 @@ class CaliandarMunTab1 : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        day = arguments?.getInt("day") ?: 0
+        posMun = arguments?.getInt("posMun") ?: 0
+        yearG = arguments?.getInt("yearG") ?: 0
+        names = resources.getStringArray(R.array.meciac2)
     }
 
     fun setDataCalendar(dataCalendar: Int) {
@@ -83,17 +86,17 @@ class CaliandarMunTab1 : Fragment() {
         _binding = CalendarTab1Binding.inflate(inflater, container, false)
         activity?.let { activity ->
             val chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = chin.getBoolean("dzen_noch", false)
-            day = arguments?.getInt("day") ?: 0
-            posMun = arguments?.getInt("posMun") ?: 0
-            yearG = arguments?.getInt("yearG") ?: 0
-            names = resources.getStringArray(R.array.meciac2)
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
             val c = Calendar.getInstance() as GregorianCalendar
             if (posMun == c[Calendar.MONTH] && yearG == c[Calendar.YEAR]) {
                 binding.mun.typeface = MainActivity.createFont(Typeface.BOLD)
             }
             if (yearG == c[Calendar.YEAR]) {
                 binding.year.typeface = MainActivity.createFont(Typeface.BOLD)
+            }
+            if (dzenNoch) {
+                binding.mun.setBackgroundResource(R.drawable.selector_dark)
+                binding.year.setBackgroundResource(R.drawable.selector_dark)
             }
             binding.mun.text = names[posMun]
             binding.year.text = yearG.toString()

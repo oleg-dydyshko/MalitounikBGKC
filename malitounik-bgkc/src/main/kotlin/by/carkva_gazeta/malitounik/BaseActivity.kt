@@ -40,12 +40,14 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onResume() {
         super.onResume()
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (checkDzenNoch != dzenNoch)
-            recreate()
+        if (k.getBoolean("auto_dzen_noch", false)) {
+            setlightSensor()
+        } else {
+            dzenNoch = k.getBoolean("dzen_noch", false)
+            if (checkDzenNoch != dzenNoch) recreate()
+        }
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        if (k.getBoolean("auto_dzen_noch", false)) setlightSensor()
     }
 
     open fun checkAutoDzenNoch() {}
@@ -59,9 +61,11 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         prefEditor.putBoolean("dzen_noch", isDzenNoch)
         prefEditor.apply()
         dzenNoch = isDzenNoch
-        checkDzenNoch = isDzenNoch
-        checkAutoDzenNoch()
-        recreate()
+        if (isDzenNoch != checkDzenNoch) {
+            checkDzenNoch = isDzenNoch
+            checkAutoDzenNoch()
+            recreate()
+        }
     }
 
     override fun onSensorChanged(event: SensorEvent?) {

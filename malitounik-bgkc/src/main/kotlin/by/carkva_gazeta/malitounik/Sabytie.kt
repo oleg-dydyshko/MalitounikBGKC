@@ -420,7 +420,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                     binding.radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorSecondary_text))
                 } else {
                     binding.radioButton3.isClickable = true
-                    if (dzenNoch) binding.radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite)) else binding.radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
+                    if (dzenNoch) binding.radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
+                    else binding.radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
                 }
                 if (repitL == 0) binding.radioButton1.isChecked = true
                 if (repitL > 0) {
@@ -533,6 +534,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         binding.titleToolbar.text = resources.getString(R.string.sabytie)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.pacatak.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
             binding.kanec.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
             binding.pavedamic.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))

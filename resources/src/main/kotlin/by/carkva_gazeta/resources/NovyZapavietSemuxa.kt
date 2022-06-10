@@ -12,8 +12,8 @@ import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
 import androidx.collection.ArrayMap
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -33,7 +33,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 
-class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NovyZapavietSemuxaFragment.ClicParalelListiner, NovyZapavietSemuxaFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
+class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
 
     private var fullscreenPage = false
     private var paralel = false
@@ -120,6 +120,19 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
 
     override fun onComplete(glava: Int) {
         binding.pager.setCurrentItem(glava, false)
+    }
+
+    override fun isPanelVisible(visible: Boolean) {
+        if (fullscreenPage) {
+            val density = (resources.displayMetrics.density).toInt()
+            val params = binding.actionFullscreen.layoutParams as ConstraintLayout.LayoutParams
+            if (visible) {
+                params.setMargins(0, 0, 60 * density, 10 * density)
+            } else {
+                params.setMargins(0, 0, 10 * density, 10 * density)
+            }
+            binding.actionFullscreen.layoutParams = params
+        }
     }
 
     override fun getListPosition(position: Int) {
@@ -513,11 +526,9 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
         fullscreenPage = true
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        val controller = ViewCompat.getWindowInsetsController(binding.linealLayoutTitle)
-        controller?.let {
-            it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            it.hide(WindowInsetsCompat.Type.systemBars())
-        }
+        val controller = WindowCompat.getInsetsController(window, binding.linealLayoutTitle)
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.hide(WindowInsetsCompat.Type.systemBars())
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
@@ -529,8 +540,8 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
         fullscreenPage = false
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
-        val controller = ViewCompat.getWindowInsetsController(binding.linealLayoutTitle)
-        controller?.show(WindowInsetsCompat.Type.systemBars())
+        val controller = WindowCompat.getInsetsController(window, binding.linealLayoutTitle)
+        controller.show(WindowInsetsCompat.Type.systemBars())
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation

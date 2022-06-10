@@ -27,7 +27,7 @@ import java.io.InputStreamReader
 class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnItemClickListener {
     private var page = 0
     private var pazicia = 0
-    private var listPosition: ListPosition? = null
+    private var bibleListiner: BibleListiner? = null
     private var bible: ArrayList<String> = ArrayList()
     private lateinit var adapter: ListAdaprer
     private var _binding: ActivityBiblePageFragmentBinding? = null
@@ -38,14 +38,10 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
         _binding = null
     }
 
-    internal interface ListPosition {
-        fun getListPosition(position: Int)
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is Activity) {
-            listPosition = context as ListPosition
+            bibleListiner = context as BibleListiner
         }
     }
 
@@ -60,6 +56,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
             binding.linearLayout4.animation = AnimationUtils.loadAnimation(it.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
         }
         binding.linearLayout4.visibility = View.GONE
+        bibleListiner?.isPanelVisible(false)
         adapter.notifyDataSetChanged()
     }
 
@@ -75,6 +72,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
         BibleGlobalList.mPedakVisable = false
         BibleGlobalList.bibleCopyList.clear()
         binding.linearLayout4.visibility = View.GONE
+        bibleListiner?.isPanelVisible(false)
         adapter.notifyDataSetChanged()
     }
 
@@ -105,6 +103,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
             if (binding.linearLayout4.visibility == View.GONE) {
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(it.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_top)
                 binding.linearLayout4.visibility = View.VISIBLE
+                bibleListiner?.isPanelVisible(true)
             }
         }
         var find = false
@@ -126,7 +125,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
         binding.listView.onItemClickListener = this
         binding.listView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                listPosition?.getListPosition(view.firstVisiblePosition)
+                bibleListiner?.getListPosition(view.firstVisiblePosition)
             }
 
             override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {}
@@ -181,6 +180,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
                     MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.copy))
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     binding.linearLayout4.visibility = View.GONE
+                    bibleListiner?.isPanelVisible(false)
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()

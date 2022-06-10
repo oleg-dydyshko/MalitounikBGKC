@@ -32,24 +32,24 @@
 
             <ImageView
                 android:id="@+id/copyBigFull"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginBottom="20dp"
                 android:contentDescription="@string/copy_big_full"
                 app:srcCompat="@drawable/select_all" />
 
             <ImageView
                 android:id="@+id/copyBig"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginBottom="20dp"
                 android:contentDescription="@string/copy_big"
                 app:srcCompat="@drawable/copy" />
 
             <ImageView
                 android:id="@+id/adpravit"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:contentDescription="@string/share"
                 app:srcCompat="@drawable/share_bible" />
 
@@ -61,40 +61,40 @@
 
             <TextView
                 android:id="@+id/yelloy"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginBottom="20dp"
                 android:background="@color/colorBezPosta2"
                 android:contentDescription="@string/set_yelloy" />
 
             <ImageView
                 android:id="@+id/underline"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginBottom="20dp"
                 android:contentDescription="@string/set_underline"
                 app:srcCompat="@drawable/underline" />
 
             <ImageView
                 android:id="@+id/bold"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginBottom="20dp"
                 android:contentDescription="@string/set_bold"
                 app:srcCompat="@drawable/bold" />
 
             <ImageView
                 android:id="@+id/zakladka"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginBottom="20dp"
                 android:contentDescription="@string/set_bookmark"
                 app:srcCompat="@drawable/bookmark" />
 
             <ImageView
                 android:id="@+id/zametka"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:contentDescription="@string/natatka_add"
                 app:srcCompat="@drawable/sketch" />
         </LinearLayout>

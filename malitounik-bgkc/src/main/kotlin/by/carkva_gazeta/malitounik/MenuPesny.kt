@@ -284,7 +284,6 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
             intent.putExtra("pesny", menuList[position].title)
             intent.putExtra("type", menuList[position].resurs)
             if (search) {
-                intent.putExtra("search", searchViewQwery)
                 addHistory(menuList[position].title)
                 saveHistopy()
             }

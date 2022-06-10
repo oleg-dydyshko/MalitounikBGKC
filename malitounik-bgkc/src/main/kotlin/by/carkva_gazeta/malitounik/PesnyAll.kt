@@ -11,15 +11,12 @@ import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
-import android.text.style.BackgroundColorSpan
-import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
 import android.view.animation.AnimationUtils
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -287,29 +284,6 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         }
     }
 
-    private fun findAllAsanc(search: String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            findAll(search)
-        }
-    }
-
-    private fun findAll(search: String) {
-        val text = binding.textView.text as SpannableString
-        val searchLig = search.length
-        var position = 0
-        var run = true
-        while (run) {
-            val strPosition = text.indexOf(search, position, true)
-            if (strPosition != -1) {
-                text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                position = strPosition + 1
-            } else {
-                run = false
-            }
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
@@ -376,8 +350,6 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             builder.append(getString(R.string.error_ch))
         }
         binding.textView.text = MainActivity.fromHtml(builder.toString())
-        val search = intent.extras?.getString("search", "") ?: ""
-        if (search != "") findAllAsanc(search)
         men = checkVybranoe(this, resurs)
         checkVybranoe = men
         bindingprogress.fontSizePlus.setOnClickListener {
@@ -633,11 +605,9 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         fullscreenPage = true
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        val controller = ViewCompat.getWindowInsetsController(binding.constraint)
-        controller?.let {
-            it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            it.hide(WindowInsetsCompat.Type.systemBars())
-        }
+        val controller = WindowCompat.getInsetsController(window, binding.constraint)
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.hide(WindowInsetsCompat.Type.systemBars())
         val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
@@ -649,8 +619,8 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         fullscreenPage = false
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
-        val controller = ViewCompat.getWindowInsetsController(binding.constraint)
-        controller?.show(WindowInsetsCompat.Type.systemBars())
+        val controller = WindowCompat.getInsetsController(window, binding.constraint)
+        controller.show(WindowInsetsCompat.Type.systemBars())
         val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation

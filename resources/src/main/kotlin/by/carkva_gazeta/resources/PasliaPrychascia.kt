@@ -18,7 +18,6 @@ import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -360,11 +359,9 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         fullscreenPage = true
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        val controller = ViewCompat.getWindowInsetsController(binding.constraint)
-        controller?.let {
-            it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            it.hide(WindowInsetsCompat.Type.systemBars())
-        }
+        val controller = WindowCompat.getInsetsController(window, binding.constraint)
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.hide(WindowInsetsCompat.Type.systemBars())
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
@@ -376,8 +373,8 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         fullscreenPage = false
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
-        val controller = ViewCompat.getWindowInsetsController(binding.constraint)
-        controller?.show(WindowInsetsCompat.Type.systemBars())
+        val controller = WindowCompat.getInsetsController(window, binding.constraint)
+        controller.show(WindowInsetsCompat.Type.systemBars())
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation

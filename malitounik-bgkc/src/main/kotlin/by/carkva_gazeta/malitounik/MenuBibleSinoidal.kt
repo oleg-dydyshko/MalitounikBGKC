@@ -31,7 +31,7 @@ class MenuBibleSinoidal : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { activity ->
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             binding.myBible.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener

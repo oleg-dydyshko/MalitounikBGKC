@@ -2,10 +2,8 @@ package by.carkva_gazeta.malitounik
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -23,7 +21,6 @@ import kotlinx.coroutines.Job
 
 class DialogMineiaList : DialogFragment() {
 
-    private lateinit var k: SharedPreferences
     private lateinit var binding: DialogListviewDisplayBinding
     private lateinit var alert: AlertDialog
     private var resetTollbarJob: Job? = null
@@ -42,8 +39,7 @@ class DialogMineiaList : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlackVybranoe
             val builder = AlertDialog.Builder(it, style)
@@ -93,7 +89,7 @@ class DialogMineiaList : DialogFragment() {
         return alert
     }
 
-    private inner class ListAdaprer(context: Activity) : ArrayAdapter<MineiaDay>(context, R.layout.simple_list_item_2, R.id.label, fileList) {
+    private inner class ListAdaprer(private val context: Activity) : ArrayAdapter<MineiaDay>(context, R.layout.simple_list_item_2, R.id.label, fileList) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -107,7 +103,7 @@ class DialogMineiaList : DialogFragment() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             viewHolder.text.text = fileList[position].titleResource
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)

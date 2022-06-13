@@ -36,7 +36,7 @@ import java.util.*
 class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
     private lateinit var k: SharedPreferences
     private lateinit var prefEditor: Editor
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var mLastClickTime: Long = 0
     private var itemDefault = 0
     private lateinit var binding: SettingsActivityBinding
@@ -687,15 +687,14 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         val notification = k.getInt("notification", 2)
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)

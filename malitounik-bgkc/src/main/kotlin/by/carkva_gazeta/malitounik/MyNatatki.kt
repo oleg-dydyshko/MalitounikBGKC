@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.TypedValue
@@ -26,13 +25,11 @@ class MyNatatki : DialogFragment() {
     private var redak = 3
     private var edit = true
     private var position = 0
-    private var dzenNoch = false
     private var md5sum = ""
     private var _binding: MyNatatkiBinding? = null
     private val binding get() = _binding!!
     private var editDrawer: Drawable? = null
     private lateinit var alert: AlertDialog
-    private lateinit var k: SharedPreferences
     private var editSettings = false
     private var mListener: MyNatatkiListener? = null
     private var resetTollbarJob: Job? = null
@@ -66,15 +63,12 @@ class MyNatatki : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             md5sum = md5Sum("<MEMA></MEMA>")
-            k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             _binding = MyNatatkiBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it, style)
             builder.setView(binding.root)
-            val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-            binding.EditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (savedInstanceState != null) {
                 filename = savedInstanceState.getString("filename") ?: ""
                 redak = savedInstanceState.getInt("redak", 2)

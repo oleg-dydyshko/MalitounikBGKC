@@ -1,8 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
-import android.content.Context
-import android.content.SharedPreferences
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -15,18 +13,15 @@ class MenuListAdaprer : ArrayAdapter<String> {
     private val mContext: Activity
     private var items: Array<out String>? = null
     private var itemsL: ArrayList<String>? = null
-    private val k: SharedPreferences
 
     constructor(context: Activity, strings: Array<out String>) : super(context, R.layout.simple_list_item_2, R.id.label, strings) {
         mContext = context
         items = strings
-        k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     }
 
     constructor(context: Activity, strings: ArrayList<String>) : super(context, R.layout.simple_list_item_2, R.id.label, strings) {
         mContext = context
         itemsL = strings
-        k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     }
 
     override fun add(string: String?) {
@@ -56,7 +51,7 @@ class MenuListAdaprer : ArrayAdapter<String> {
             rootView = mView
             viewHolder = rootView.tag as ViewHolder
         }
-        val dzenNoch = k.getBoolean("dzen_noch", false)
+        val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
         if (itemsL != null)
             viewHolder.text.text = itemsL?.get(position)
         if (items != null)

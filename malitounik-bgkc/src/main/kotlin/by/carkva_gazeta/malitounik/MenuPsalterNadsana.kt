@@ -33,7 +33,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let {
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             binding.saeche.setOnClickListener(this)
             binding.myBible.setOnClickListener(this)
             binding.psalter.setOnClickListener(this)

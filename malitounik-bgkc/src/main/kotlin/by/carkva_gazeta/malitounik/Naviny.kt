@@ -26,16 +26,16 @@ import com.r0adkll.slidr.Slidr
 
 class Naviny : BaseActivity() {
 
-    private lateinit var kq: SharedPreferences
+    private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private lateinit var binding: NavinyBinding
 
     @SuppressLint("SetTextI18n", "SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
-        kq = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = kq.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        dzenNoch = getBaseDzenNoch()
+        setMyTheme()
         binding = NavinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)
@@ -196,14 +196,14 @@ class Naviny : BaseActivity() {
             } else error = true
         }
         if (id == R.id.calendar) {
-            val prefEditors = kq.edit()
+            val prefEditors = k.edit()
             prefEditors.putInt("id", R.id.label1)
             prefEditors.apply()
             val intent = Intent(this@Naviny, MainActivity::class.java)
             startActivity(intent)
         }
         if (id == R.id.biblia) {
-            val prefEditors = kq.edit()
+            val prefEditors = k.edit()
             prefEditors.putInt("id", R.id.label8)
             prefEditors.apply()
             val intent = Intent(this@Naviny, MainActivity::class.java)
@@ -221,7 +221,7 @@ class Naviny : BaseActivity() {
         }
         if (id == R.id.bib) {
             if (MainActivity.checkmoduleResources()) {
-                val prefEditors = kq.edit()
+                val prefEditors = k.edit()
                 prefEditors.putInt("id", R.id.label2)
                 prefEditors.apply()
                 val intent = Intent(this@Naviny, MainActivity::class.java)
@@ -357,7 +357,7 @@ class Naviny : BaseActivity() {
                 return true
             }
             if (url.contains("https://malitounik.page.link/caliandar")) {
-                val prefEditors = kq.edit()
+                val prefEditors = k.edit()
                 prefEditors.putInt("id", R.id.label1)
                 prefEditors.apply()
                 val intent = Intent(this@Naviny, MainActivity::class.java)
@@ -365,7 +365,7 @@ class Naviny : BaseActivity() {
                 return true
             }
             if (url.contains("https://malitounik.page.link/biblija")) {
-                val prefEditors = kq.edit()
+                val prefEditors = k.edit()
                 prefEditors.putInt("id", R.id.label8)
                 prefEditors.apply()
                 val intent = Intent(this@Naviny, MainActivity::class.java)
@@ -373,7 +373,7 @@ class Naviny : BaseActivity() {
                 return true
             }
             if (url.contains("https://carkva-gazeta.by/index.php?ie=14")) {
-                val prefEditors = kq.edit()
+                val prefEditors = k.edit()
                 prefEditors.putInt("id", R.id.label104)
                 prefEditors.apply()
                 val intent = Intent(this@Naviny, MainActivity::class.java)
@@ -381,7 +381,7 @@ class Naviny : BaseActivity() {
                 return true
             }
             if (url.contains("https://carkva-gazeta.by/index.php?ie=16")) {
-                val prefEditors = kq.edit()
+                val prefEditors = k.edit()
                 prefEditors.putInt("id", R.id.label102)
                 prefEditors.apply()
                 val intent = Intent(this@Naviny, MainActivity::class.java)
@@ -390,7 +390,7 @@ class Naviny : BaseActivity() {
             }
             if (url.contains("https://carkva-gazeta.by/index.php?bib=")) {
                 if (MainActivity.checkmoduleResources()) {
-                    val prefEditors = kq.edit()
+                    val prefEditors = k.edit()
                     prefEditors.putInt("id", R.id.label2)
                     prefEditors.apply()
                     val intent = Intent(this@Naviny, MainActivity::class.java)

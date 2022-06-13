@@ -41,7 +41,7 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
     private var kniga = 0
     private var glava = 0
     private lateinit var k: SharedPreferences
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var dialog = true
     private var cytanneSours = ""
     private var cytanneParalelnye = ""
@@ -150,16 +150,19 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
         fragment.addNatatka()
     }
 
+    override fun setMyTheme() {
+        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         binding = ActivityBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         kniga = intent.extras?.getInt("kniga", 0) ?: 0
@@ -378,12 +381,12 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 BibleGlobalList.mListGlava = position
-                men = DialogVybranoeBibleList.checkVybranoe(this@StaryZapavietSinaidal, kniga, position, 2)
+                men = DialogVybranoeBibleList.checkVybranoe(kniga, position, 2)
                 if (glava != position) fierstPosition = 0
                 invalidateOptionsMenu()
             }
         })
-        men = DialogVybranoeBibleList.checkVybranoe(this, kniga, glava, 2)
+        men = DialogVybranoeBibleList.checkVybranoe(kniga, glava, 2)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             dialog = savedInstanceState.getBoolean("dialog")
@@ -516,7 +519,7 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
         val id = item.itemId
         val prefEditors = k.edit()
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            men = DialogVybranoeBibleList.setVybranoe(this, title, kniga, BibleGlobalList.mListGlava, bibleName = 2)
+            men = DialogVybranoeBibleList.setVybranoe(title, kniga, BibleGlobalList.mListGlava, bibleName = 2)
             if (men) {
                 MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
                 if (!DialogVybranoeBibleList.checkVybranoe("2")) {
@@ -538,7 +541,6 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
             } else {
                 prefEditor.putBoolean("dzen_noch", false)
             }
-            dzenNoch = item.isChecked
             prefEditor.apply()
             recreate()
         }

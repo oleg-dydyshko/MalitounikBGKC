@@ -1,9 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -21,12 +19,10 @@ import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
 class NovyZapavietSemuxaList : BaseActivity() {
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var mLastClickTime: Long = 0
-    private val groups = ArrayList<ArrayList<String>>()
     private lateinit var binding: ContentBibleBinding
     private var resetTollbarJob: Job? = null
-    private lateinit var k: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -34,10 +30,8 @@ class NovyZapavietSemuxaList : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
+        setMyTheme()
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
@@ -52,6 +46,7 @@ class NovyZapavietSemuxaList : BaseActivity() {
         } else {
             binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         }
+        val groups = ArrayList<ArrayList<String>>()
         val children1 = ArrayList<String>()
         val children2 = ArrayList<String>()
         val children3 = ArrayList<String>()
@@ -179,7 +174,7 @@ class NovyZapavietSemuxaList : BaseActivity() {
             children27.add("Разьдзел $i")
         }
         groups.add(children27)
-        val adapter = ExpListAdapterNovyZapaviet(this)
+        val adapter = ExpListAdapterNovyZapaviet(this, groups)
         binding.elvMain.setAdapter(adapter)
         binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -253,7 +248,7 @@ class NovyZapavietSemuxaList : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class ExpListAdapterNovyZapaviet(private val mContext: Activity) : BaseExpandableListAdapter() {
+    private class ExpListAdapterNovyZapaviet(private val mContext: Activity, private val groups: ArrayList<ArrayList<String>>) : BaseExpandableListAdapter() {
         override fun getGroupCount(): Int {
             return groups.size
         }
@@ -319,9 +314,8 @@ class NovyZapavietSemuxaList : BaseActivity() {
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
-            val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             rootView.textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             rootView.textChild.text = groups[groupPosition][childPosition]
             return rootView.root

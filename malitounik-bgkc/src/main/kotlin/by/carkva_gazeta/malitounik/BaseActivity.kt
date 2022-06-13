@@ -15,22 +15,38 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
+    private var autoDzenNoch = false
     private var checkDzenNoch = false
     private var mLastClickTime: Long = 0
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putLong("mLastClickTime", mLastClickTime)
+        outState.putBoolean("autoDzenNoch", autoDzenNoch)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         checkDzenNoch = dzenNoch
-        super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
             mLastClickTime = savedInstanceState.getLong("mLastClickTime")
+            autoDzenNoch = savedInstanceState.getBoolean("autoDzenNoch")
         }
+    }
+
+    open fun setMyTheme() {
+        if (k.getBoolean("auto_dzen_noch", false)) {
+            if (autoDzenNoch) setTheme(R.style.AppCompatDarkSlider)
+        } else {
+            if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
+        }
+    }
+
+    fun getBaseDzenNoch(): Boolean {
+        return if (k.getBoolean("auto_dzen_noch", false)) autoDzenNoch
+        else dzenNoch
     }
 
     override fun onPause() {
@@ -52,28 +68,25 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
 
     open fun checkAutoDzenNoch() {}
 
+    //open fun test(sensorEvent: Float, dzn: Boolean) {}
+
     private fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 10000) {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val prefEditor = k.edit()
-        prefEditor.putBoolean("dzen_noch", isDzenNoch)
-        prefEditor.apply()
-        dzenNoch = isDzenNoch
-        if (isDzenNoch != checkDzenNoch) {
-            checkDzenNoch = isDzenNoch
-            checkAutoDzenNoch()
-            recreate()
-        }
+        autoDzenNoch = isDzenNoch
+        checkAutoDzenNoch()
+        recreate()
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
         event?.let { sensorEvent ->
-            if (sensorEvent.values[0] <= 4f && !dzenNoch) {
+            //test(sensorEvent.values[0], autoDzenNoch)
+            if (sensorEvent.values[0] <= 4f && !autoDzenNoch) {
                 sensorChangeDzenNoch(true)
             }
-            if (sensorEvent.values[0] >= 21f && dzenNoch) {
+            if (sensorEvent.values[0] >= 21f && autoDzenNoch) {
                 sensorChangeDzenNoch(false)
             }
         }

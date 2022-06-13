@@ -1,7 +1,6 @@
 package by.carkva_gazeta.biblijateka
 
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.TypedValue
@@ -9,6 +8,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
@@ -26,8 +26,7 @@ class DialogSecurityError : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
-            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val ad = AlertDialog.Builder(it, style)

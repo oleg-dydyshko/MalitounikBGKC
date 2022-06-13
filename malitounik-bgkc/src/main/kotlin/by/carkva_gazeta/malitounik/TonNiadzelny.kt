@@ -1,8 +1,6 @@
 package by.carkva_gazeta.malitounik
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -21,7 +19,6 @@ class TonNiadzelny : BaseActivity() {
     private val data = ArrayList<String>()
     private lateinit var binding: AkafistListBinding
     private var resetTollbarJob: Job? = null
-    private lateinit var chin: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -29,15 +26,14 @@ class TonNiadzelny : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        val dzenNoch = getBaseDzenNoch()
+        setMyTheme()
         binding = AkafistListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)

@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
@@ -29,8 +28,7 @@ class DialogTipicon : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             val tipicon = arguments?.getInt("tipicon") ?: 0
-            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             _binding = TipiconBinding.inflate(LayoutInflater.from(it))

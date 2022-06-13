@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.AkafistFragmentPasliaPrichBinding
@@ -20,7 +21,6 @@ class PasliaPrychasciaFragment : Fragment() {
     private var resursID = R.raw.paslia_prychascia1
     private lateinit var k: SharedPreferences
     private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
-    private var dzenNoch = false
     private var _binding: AkafistFragmentPasliaPrichBinding? = null
     private val binding get() = _binding!!
 
@@ -43,7 +43,7 @@ class PasliaPrychasciaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { activity ->
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             val inputStream = activity.resources.openRawResource(resursID)

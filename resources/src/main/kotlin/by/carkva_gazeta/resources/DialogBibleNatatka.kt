@@ -11,10 +11,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.BibleGlobalList
-import by.carkva_gazeta.malitounik.BibleNatatkiData
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
 
 class DialogBibleNatatka : DialogFragment() {
@@ -62,8 +60,7 @@ class DialogBibleNatatka : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { fragmentActivity ->
             _binding = DialogEditviewDisplayBinding.inflate(LayoutInflater.from(fragmentActivity))
-            val chin = fragmentActivity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (fragmentActivity as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             ad = AlertDialog.Builder(fragmentActivity, style)

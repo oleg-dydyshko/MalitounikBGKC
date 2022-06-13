@@ -32,21 +32,7 @@ class DialogTraparyAndKandaki : DialogFragment() {
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
 
-    companion object {
-        fun getInstance(lityrgia: Int, title: String, ton: Int, ton_naidzelny: Boolean, ton_na_sviaty: Boolean, ton_na_viliki_post: Boolean, resurs: String): DialogTraparyAndKandaki {
-            val bundle = Bundle()
-            bundle.putInt("lityrgia", lityrgia)
-            bundle.putString("title", title)
-            bundle.putInt("ton", ton)
-            bundle.putBoolean("ton_naidzelny", ton_naidzelny)
-            bundle.putBoolean("ton_na_sviaty", ton_na_sviaty)
-            bundle.putBoolean("ton_na_viliki_post", ton_na_viliki_post)
-            bundle.putString("resurs", resurs)
-            val trapary = DialogTraparyAndKandaki()
-            trapary.arguments = bundle
-            return trapary
-        }
-    }
+
 
     override fun onPause() {
         super.onPause()
@@ -57,7 +43,7 @@ class DialogTraparyAndKandaki : DialogFragment() {
         super.onCreateDialog(savedInstanceState)
         activity?.let {
             chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             _binding = TraparyAndKandakiBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it)
             builder.setView(binding.root)
@@ -129,7 +115,7 @@ class DialogTraparyAndKandaki : DialogFragment() {
         return alert
     }
 
-    private class TraparyAndKandakiAdaprer(context: Context, item: ArrayList<Bogaslujbovyia>) : ArrayAdapter<Bogaslujbovyia>(context, R.layout.simple_list_item_2, R.id.label, item) {
+    private class TraparyAndKandakiAdaprer(private val activity: BaseActivity, item: ArrayList<Bogaslujbovyia>) : ArrayAdapter<Bogaslujbovyia>(activity, R.layout.simple_list_item_2, R.id.label, item) {
         private val data = item
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
@@ -144,12 +130,27 @@ class DialogTraparyAndKandaki : DialogFragment() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val chin = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = activity.getBaseDzenNoch()
             viewHolder.text.text = data[position].title
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
+        }
+    }
+
+    companion object {
+        fun getInstance(lityrgia: Int, title: String, ton: Int, ton_naidzelny: Boolean, ton_na_sviaty: Boolean, ton_na_viliki_post: Boolean, resurs: String): DialogTraparyAndKandaki {
+            val bundle = Bundle()
+            bundle.putInt("lityrgia", lityrgia)
+            bundle.putString("title", title)
+            bundle.putInt("ton", ton)
+            bundle.putBoolean("ton_naidzelny", ton_naidzelny)
+            bundle.putBoolean("ton_na_sviaty", ton_na_sviaty)
+            bundle.putBoolean("ton_na_viliki_post", ton_na_viliki_post)
+            bundle.putString("resurs", resurs)
+            val trapary = DialogTraparyAndKandaki()
+            trapary.arguments = bundle
+            return trapary
         }
     }
 

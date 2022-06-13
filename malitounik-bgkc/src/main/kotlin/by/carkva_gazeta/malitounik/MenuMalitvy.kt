@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -11,8 +10,7 @@ import androidx.fragment.app.ListFragment
 
 class MenuMalitvy : ListFragment() {
     private var mLastClickTime: Long = 0
-    private val data: Array<out String>
-        get() = resources.getStringArray(R.array.malitvy)
+    private val data get() = resources.getStringArray(R.array.malitvy)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,8 +21,7 @@ class MenuMalitvy : ListFragment() {
         activity?.let {
             listAdapter = MenuListAdaprer(it, data)
             listView.isVerticalScrollBarEnabled = false
-            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) {
                 listView.setBackgroundResource(R.color.colorbackground_material_dark)
                 listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)

@@ -24,7 +24,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -49,7 +48,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private var cytanne = ""
     private lateinit var k: SharedPreferences
     private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var autoscroll = false
     private lateinit var adapter: MaranAtaListAdaprer
     private val maranAta = ArrayList<String>()
@@ -113,13 +112,12 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
         belarus = k.getBoolean("belarus", true)
         spid = k.getInt("autoscrollSpid", 60)
         maranAtaScrollPosition = k.getInt("maranAtaScrollPasition", 0)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         binding = AkafistMaranAtaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)

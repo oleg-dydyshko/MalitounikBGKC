@@ -21,7 +21,7 @@ import kotlinx.coroutines.*
 
 class PsalterNadsana : BaseActivity(), View.OnClickListener {
     private lateinit var k: SharedPreferences
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private lateinit var binding: NadsanPravilaBinding
     private var resetTollbarJob: Job? = null
 
@@ -31,15 +31,14 @@ class PsalterNadsana : BaseActivity(), View.OnClickListener {
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         binding = NadsanPravilaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)
@@ -52,23 +51,23 @@ class PsalterNadsana : BaseActivity(), View.OnClickListener {
         ftrans.setCustomAnimations(by.carkva_gazeta.malitounik.R.anim.alphainfragment, by.carkva_gazeta.malitounik.R.anim.alphaoutfragment)
         when (pNadsana) {
             1 -> {
-                val nadsana1 = PsalterNadsana1(this)
+                val nadsana1 = PsalterNadsana1()
                 ftrans.replace(R.id.conteiner, nadsana1)
             }
             2 -> {
-                val nadsana2 = PsalterNadsana2(this)
+                val nadsana2 = PsalterNadsana2()
                 ftrans.replace(R.id.conteiner, nadsana2)
             }
             3 -> {
-                val nadsana3 = PsalterNadsana3(this)
+                val nadsana3 = PsalterNadsana3()
                 ftrans.replace(R.id.conteiner, nadsana3)
             }
             4 -> {
-                val nadsana4 = PsalterNadsana4(this)
+                val nadsana4 = PsalterNadsana4()
                 ftrans.replace(R.id.conteiner, nadsana4)
             }
             5 -> {
-                val nadsana5 = PsalterNadsana5(this)
+                val nadsana5 = PsalterNadsana5()
                 ftrans.replace(R.id.conteiner, nadsana5)
             }
         }
@@ -94,23 +93,23 @@ class PsalterNadsana : BaseActivity(), View.OnClickListener {
         ftrans.setCustomAnimations(by.carkva_gazeta.malitounik.R.anim.alphainfragment, by.carkva_gazeta.malitounik.R.anim.alphaoutfragment)
         when (pNadsana) {
             1 -> {
-                val nadsana1 = PsalterNadsana1(this)
+                val nadsana1 = PsalterNadsana1()
                 ftrans.replace(R.id.conteiner, nadsana1)
             }
             2 -> {
-                val nadsana2 = PsalterNadsana2(this)
+                val nadsana2 = PsalterNadsana2()
                 ftrans.replace(R.id.conteiner, nadsana2)
             }
             3 -> {
-                val nadsana3 = PsalterNadsana3(this)
+                val nadsana3 = PsalterNadsana3()
                 ftrans.replace(R.id.conteiner, nadsana3)
             }
             4 -> {
-                val nadsana4 = PsalterNadsana4(this)
+                val nadsana4 = PsalterNadsana4()
                 ftrans.replace(R.id.conteiner, nadsana4)
             }
             5 -> {
-                val nadsana5 = PsalterNadsana5(this)
+                val nadsana5 = PsalterNadsana5()
                 ftrans.replace(R.id.conteiner, nadsana5)
             }
         }

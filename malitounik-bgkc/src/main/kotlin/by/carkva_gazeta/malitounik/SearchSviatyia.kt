@@ -29,7 +29,7 @@ import java.util.*
 
 class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryListener {
     private lateinit var adapter: SearchListAdapter
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var editText: AutoCompleteTextView? = null
     private var textViewCount: TextView? = null
     private var searchView: SearchView? = null
@@ -124,16 +124,15 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val c = Calendar.getInstance() as GregorianCalendar
-        dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        val c = Calendar.getInstance()
+        setMyTheme()
         binding = SearchSviatyiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)

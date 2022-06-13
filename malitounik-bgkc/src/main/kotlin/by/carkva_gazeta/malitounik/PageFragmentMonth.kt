@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -13,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.CalendarMunBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 class PageFragmentMonth : Fragment() {
     private var wik = 0
@@ -21,8 +19,15 @@ class PageFragmentMonth : Fragment() {
     private var mun = 0
     private var year = 0
     private var pageNumberFull = 0
-    private var dzenNoch = false
-    private lateinit var data: ArrayList<ArrayList<String>>
+    private val dzenNoch: Boolean
+        get() {
+            var dzn = false
+            activity?.let {
+                dzn = (it as BaseActivity).getBaseDzenNoch()
+            }
+            return dzn
+        }
+    private val data = ArrayList<ArrayList<String>>()
     private val padzei = ArrayList<Padzeia>()
     private var _binding: CalendarMunBinding? = null
     private val binding get() = _binding!!
@@ -32,7 +37,7 @@ class PageFragmentMonth : Fragment() {
         date = arguments?.getInt("date") ?: 0
         mun = arguments?.getInt("mun") ?: 0
         year = arguments?.getInt("year") ?: SettingsActivity.GET_CALIANDAR_YEAR_MIN
-        data = MenuCaliandar.getDataCalaindar(mun = mun, year = year)
+        data.addAll(MenuCaliandar.getDataCalaindar(mun = mun, year = year))
         for (p in MainActivity.padzeia) {
             val r1 = p.dat.split(".")
             val munL = r1[1].toInt() - 1
@@ -117,8 +122,6 @@ class PageFragmentMonth : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { activity ->
-            val chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = chin.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 binding.textView2.setBackgroundResource(R.drawable.calendar_red_black)
                 binding.button1.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))

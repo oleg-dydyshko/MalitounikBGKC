@@ -45,7 +45,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
     private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var autoscroll = false
     private var n = 0
     private var spid = 60
@@ -70,15 +70,14 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         binding = AkafistChytanneBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)

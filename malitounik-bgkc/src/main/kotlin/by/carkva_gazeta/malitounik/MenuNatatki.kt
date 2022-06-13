@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -84,7 +85,7 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
             }
             myNatatkiFiles.sort()
             activity.invalidateOptionsMenu()
-            adapter = ItemAdapter(R.id.image, false)
+            adapter = ItemAdapter(activity, R.id.image, false)
             binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
             binding.dragListView.setLayoutManager(LinearLayoutManager(activity))
             binding.dragListView.setAdapter(adapter, true)
@@ -96,7 +97,7 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
 
                 override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
                     val adapterItem = item.tag as MyNatatkiFiles
-                    val pos: Int = binding.dragListView.adapter.getPositionForItem(adapterItem)
+                    val pos = binding.dragListView.adapter.getPositionForItem(adapterItem)
                     if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
                         onDialogDeliteClick(pos, adapter.itemList[pos].title)
                     }
@@ -251,12 +252,10 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class ItemAdapter(private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<MyNatatkiFiles, ItemAdapter.ViewHolder>() {
-        private var dzenNoch = false
+    private inner class ItemAdapter(private val activity: Activity, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<MyNatatkiFiles, ItemAdapter.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
                 view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))

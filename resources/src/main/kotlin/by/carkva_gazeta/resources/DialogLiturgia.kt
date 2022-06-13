@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
@@ -42,7 +43,7 @@ class DialogLiturgia : DialogFragment() {
             _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(activity))
             MainActivity.dialogVisable = true
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             var style = by.carkva_gazeta.malitounik.R.style.AlertDialogTheme
             if (dzenNoch) style = by.carkva_gazeta.malitounik.R.style.AlertDialogThemeBlack
             ab = AlertDialog.Builder(activity, style)
@@ -82,12 +83,12 @@ class DialogLiturgia : DialogFragment() {
                 }
                 8 -> {
                     binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne).uppercase()
-                    val zch = ZmenyiaChastki()
+                    val zch = ZmenyiaChastki(dzenNoch)
                     builder.append(zch.sviatyiaView(1))
                 }
                 9 -> {
                     binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne).uppercase()
-                    val zch = ZmenyiaChastki()
+                    val zch = ZmenyiaChastki(dzenNoch)
                     builder.append(zch.sviatyiaView(0))
                 }
                 10 -> {

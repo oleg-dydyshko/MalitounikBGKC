@@ -21,7 +21,7 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
     private var yearG2 = 0
     private var posMun2 = 0
     private var day2 = 0
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private lateinit var chin: SharedPreferences
     private var sabytue = false
     private lateinit var binding: CalendarBinding
@@ -94,16 +94,19 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
         SabytieOnView = false
     }
 
+    override fun setMyTheme() {
+        if (dzenNoch) setTheme(R.style.AppCompatDark)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         binding = CalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)

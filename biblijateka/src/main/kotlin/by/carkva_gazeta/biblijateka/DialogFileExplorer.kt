@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -18,6 +17,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.biblijateka.databinding.BiblijatekaSimpleListItemBinding
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogListviewDisplayBinding
 import com.google.android.play.core.splitcompat.SplitCompat
@@ -25,13 +25,20 @@ import java.io.File
 import java.io.FilenameFilter
 
 class DialogFileExplorer : DialogFragment() {
+    private val dzenNoch: Boolean
+        get() {
+            var dzn = false
+            activity?.let {
+                dzn = (it as BaseActivity).getBaseDzenNoch()
+            }
+            return dzn
+        }
     private val str = ArrayList<String>()
     private var firstLvl = true
     private val fileList = ArrayList<MyFile>()
     private var path: File? = null
     private var chosenFile: String = ""
     private var mListener: DialogFileExplorerListener? = null
-    private lateinit var chin: SharedPreferences
     private var sdCard = true
     private var sdCard2 = false
     private lateinit var alert: AlertDialog
@@ -59,7 +66,6 @@ class DialogFileExplorer : DialogFragment() {
     }
 
     private fun loadFileList() {
-        val dzenNoch = chin.getBoolean("dzen_noch", false)
         fileList.clear()
         if (path?.exists() == true) {
             val filterDir = FilenameFilter { dir: File, filename: String ->
@@ -135,8 +141,6 @@ class DialogFileExplorer : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogListviewDisplayBinding.inflate(LayoutInflater.from(it))
-            chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
             val files = ContextCompat.getExternalFilesDirs(it, null)
             if (dzenNoch) {
                 fileList.add(MyFile("Унутраная памяць", R.drawable.directory_icon_black))
@@ -220,9 +224,7 @@ class DialogFileExplorer : DialogFragment() {
 
     private inner class TitleListAdaprer(private val mContext: Activity) : ArrayAdapter<MyFile>(mContext, R.layout.biblijateka_simple_list_item, fileList) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
-            activity?.let {
-                SplitCompat.install(it)
-            }
+            SplitCompat.install(mContext)
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
@@ -235,11 +237,8 @@ class DialogFileExplorer : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             viewHolder.text.text = fileList[position].name
-            activity?.let {
-                val dzenNoch = chin.getBoolean("dzen_noch", false)
-                if (dzenNoch)
-                    viewHolder.text.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            }
+            if (dzenNoch)
+                viewHolder.text.setTextColor(ContextCompat.getColor(mContext, by.carkva_gazeta.malitounik.R.color.colorWhite))
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val image = ContextCompat.getDrawable(mContext, fileList[position].resources)
             val density = resources.displayMetrics.density.toInt()

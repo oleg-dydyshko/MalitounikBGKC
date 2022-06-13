@@ -1,7 +1,10 @@
 package by.carkva_gazeta.resources
 
 import android.app.Activity
-import android.content.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -16,6 +19,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -141,7 +145,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
                 bible.add(it)
         }
         activity?.let { activity ->
-            adapter = ListAdaprer(activity)
+            adapter = ListAdaprer(activity, bible)
             binding.view.visibility = View.GONE
             binding.yelloy.visibility = View.GONE
             binding.underline.visibility = View.GONE
@@ -152,8 +156,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
             binding.listView.adapter = adapter
             binding.listView.setSelection(pazicia)
             binding.listView.isVerticalScrollBarEnabled = false
-            val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) {
                 binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta)
             }
@@ -211,8 +214,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
         }
     }
 
-    private inner class ListAdaprer(mContext: Activity) : ArrayAdapter<String>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_bible, bible) {
-        private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+    private class ListAdaprer(private val mContext: Activity, private val bible: ArrayList<String>) : ArrayAdapter<String>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_bible, bible) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -225,7 +227,8 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             if (BibleGlobalList.bibleCopyList.size > 0 && BibleGlobalList.bibleCopyList.contains(position) && BibleGlobalList.mPedakVisable) {
                 if (dzenNoch) {
                     viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark2)

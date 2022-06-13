@@ -70,7 +70,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     private lateinit var pdfView: PDFView
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var filePath = ""
     private var fileName = ""
     private val bookTitle = ArrayList<String>()
@@ -511,9 +511,14 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         mySensorManager.unregisterListener(this, lightSensor)
     }
 
+    override fun setMyTheme() {
+        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
+    }
+
     @Suppress("DEPRECATION")
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         SplitCompat.install(this)
         val display = windowManager.defaultDisplay
         val size = Point()
@@ -531,9 +536,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         File("$filesDir/Biblijateka").deleteRecursively() ////////////////////////////////////
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         binding = BibliotekaViewBinding.inflate(layoutInflater)
         bindingappbar = binding.bibliotekaViewApp
         bindingcontent = binding.bibliotekaViewApp.bibliotekaViewContent
@@ -1937,11 +1940,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         }
     }
 
-    internal inner class BibliotekaAdapter(context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
-        private val k: SharedPreferences = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        private val activity: Activity = context
+    internal inner class BibliotekaAdapter(private val context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            SplitCompat.install(activity)
+            SplitCompat.install(context)
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
@@ -1993,7 +1994,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     }
                 }
             }
-            val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 viewHolder.text.setTextColor(ContextCompat.getColor(this@BibliotekaView, by.carkva_gazeta.malitounik.R.color.colorWhite))
                 viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)

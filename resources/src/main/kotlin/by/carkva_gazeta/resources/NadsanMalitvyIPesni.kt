@@ -25,7 +25,7 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private lateinit var binding: NadsanMalitvyIPesnyBinding
     private var resetTollbarJob: Job? = null
@@ -36,15 +36,14 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         binding = NadsanMalitvyIPesnyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)

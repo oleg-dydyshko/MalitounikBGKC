@@ -39,7 +39,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
     private lateinit var k: SharedPreferences
     private var men = false
     private val malitvy = ArrayList<Malitvy>()
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var pasliaPrychascia = 0
     private var n = 0
     private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
@@ -74,18 +74,21 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         binding.pager.adapter?.notifyDataSetChanged()
     }
 
+    override fun setMyTheme() {
+        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        dzenNoch = k.getBoolean("dzen_noch", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         binding = AkafistActivityPasliaPrichBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
@@ -248,7 +251,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             } else {
                 prefEditor.putBoolean("dzen_noch", false)
             }
-            dzenNoch = item.isChecked
             prefEditor.apply()
             recreate()
         }

@@ -1,8 +1,6 @@
 package by.carkva_gazeta.malitounik
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -16,12 +14,10 @@ import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
 class SubMenuBogashlugbovyaVialikiPost : BaseActivity() {
-    private val data: Array<out String>
-        get() = resources.getStringArray(R.array.sub_bogaslugbovuia_vialiki_post)
+    private val data get() = resources.getStringArray(R.array.sub_bogaslugbovuia_vialiki_post)
     private var mLastClickTime: Long = 0
     private lateinit var binding: AkafistListBinding
     private var resetTollbarJob: Job? = null
-    private lateinit var chin: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -37,15 +33,14 @@ class SubMenuBogashlugbovyaVialikiPost : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        val dzenNoch = getBaseDzenNoch()
+        setMyTheme()
         binding = AkafistListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)

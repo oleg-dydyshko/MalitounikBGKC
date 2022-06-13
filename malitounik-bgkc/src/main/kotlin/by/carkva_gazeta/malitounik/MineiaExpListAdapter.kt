@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
-import android.content.Context
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -49,9 +48,8 @@ class MineiaExpListAdapter(private val mContext: Activity, private val groups:Ar
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
-            val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             rootView.textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             rootView.textChild.text = groups[groupPosition][childPosition].title
             return rootView.root

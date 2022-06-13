@@ -59,7 +59,7 @@ class MenuPadryxtoukaDaSpovedzi : ListFragment() {
         listView.isHorizontalScrollBarEnabled = false
         activity?.let { it ->
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             val data = ArrayList<String>()
             val inputStream = it.resources.openRawResource(R.raw.padryxtouka_da_spovedzi)
             val isr = InputStreamReader(inputStream)
@@ -104,7 +104,7 @@ class MenuPadryxtoukaDaSpovedzi : ListFragment() {
             }
             ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT))
             ea.textView.text = MainActivity.fromHtml(list[position])
-            if (k.getBoolean("dzen_noch", false)) {
+            if ((activity as BaseActivity).getBaseDzenNoch()) {
                 ea.textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
             }
             return rootView

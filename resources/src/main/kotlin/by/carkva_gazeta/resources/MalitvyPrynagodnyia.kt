@@ -91,10 +91,10 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        chin = getSharedPreferences("biblia", MODE_PRIVATE)
-        val dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
+        chin = getSharedPreferences("biblia", MODE_PRIVATE)
+        val dzenNoch = getBaseDzenNoch()
+        setMyTheme()
         binding = AkafistListBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
@@ -173,7 +173,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         data.add(MenuListData("Малітва да Багародзіцы, праслаўленай у цудатворнай Жыровіцкай іконе", "mltv_mb_zyrovickaja"))
         data.add(MenuListData("Малітва за Царкву", "mltv_za_carkvu"))
         data.sort()
-        adapter = MenuListAdaprer(this)
+        adapter = MenuListAdaprer(this, data)
         binding.ListView.adapter = adapter
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
@@ -387,7 +387,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         }
     }
 
-    private inner class MenuListAdaprer(private val context: Activity) : ArrayAdapter<MenuListData?>(context, R.layout.simple_list_item_2, R.id.label, data as List<MenuListData>) {
+    private class MenuListAdaprer(private val context: Activity, private val data: List<MenuListData>) : ArrayAdapter<MenuListData>(context, R.layout.simple_list_item_2, R.id.label, data) {
         private val origData = ArrayList<MenuListData>(data)
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
@@ -402,7 +402,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             viewHolder.text.text = data[position].title
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -416,7 +416,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                     constraint1 = constraint1.toString()
                     val result = FilterResults()
                     if (constraint1.isNotEmpty()) {
-                        val founded: ArrayList<MenuListData> = ArrayList()
+                        val founded = ArrayList<MenuListData>()
                         for (item in origData) {
                             if (item.title.contains(constraint1, true)) {
                                 founded.add(item)

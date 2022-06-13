@@ -1,7 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -46,9 +44,8 @@ class MenuBogashlugbovya : ListFragment() {
             data.add(MenuListData("Трыёдзь", "7"))
             data.add(MenuListData("Малебен сьвятым айцам нашым, роўным апосталам Кірылу і Мятоду, настаўнікам славянскім", "malebien_kiryla_miatod"))
             data.sort()
-            listAdapter = MenuListAdaprer(it)
-            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            listAdapter = MenuListAdaprer(it as BaseActivity, data)
+            val dzenNoch = it.getBaseDzenNoch()
             if (dzenNoch) {
                 listView.setBackgroundResource(R.color.colorbackground_material_dark)
                 listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
@@ -111,7 +108,7 @@ class MenuBogashlugbovya : ListFragment() {
             }
         }
     }
-    private inner class MenuListAdaprer(private val context: Activity) : ArrayAdapter<MenuListData?>(context, R.layout.simple_list_item_2, R.id.label, data as List<MenuListData>) {
+    private class MenuListAdaprer(private val context: BaseActivity, private val data: ArrayList<MenuListData>) : ArrayAdapter<MenuListData>(context, R.layout.simple_list_item_2, R.id.label, data) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -125,8 +122,7 @@ class MenuBogashlugbovya : ListFragment() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = context.getBaseDzenNoch()
             viewHolder.text.text = data[position].title
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)

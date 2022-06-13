@@ -28,7 +28,14 @@ import kotlinx.coroutines.*
 import java.io.File
 
 class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.DialogDeliteBibliVybranoeListener {
-    private var dzenNoch = false
+    private val dzenNoch: Boolean
+        get() {
+            var dzn = false
+            activity?.let {
+                dzn = (it as BaseActivity).getBaseDzenNoch()
+            }
+            return dzn
+        }
     private lateinit var k: SharedPreferences
     private var mLastClickTime: Long = 0
     private var _binding: DialogVybranoeBibleListBinding? = null
@@ -97,7 +104,6 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
         activity?.let {
             _binding = DialogVybranoeBibleListBinding.inflate(LayoutInflater.from(it))
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = k.getBoolean("dzen_noch", false)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlackVybranoe
             val builder = AlertDialog.Builder(it, style)
@@ -193,12 +199,9 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
     }
 
     private inner class ItemAdapter(list: ArrayList<VybranoeBibliaData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<VybranoeBibliaData, ItemAdapter.ViewHolder>() {
-        private var dzenNoch = false
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             view.root.supportedSwipeDirection = SwipeDirection.LEFT
-            val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = k.getBoolean("dzen_noch", false)
             view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
                 view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
@@ -262,8 +265,8 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
         var arrayListVybranoe = ArrayList<VybranoeBibliaData>()
         var biblia = 1
 
-        fun checkVybranoe(context: Context, kniga: Int, glava: Int, bibleName: Int = 1): Boolean {
-            val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        fun checkVybranoe(kniga: Int, glava: Int, bibleName: Int = 1): Boolean {
+            val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val knigaglava = "${kniga + 1}${glava + 1}".toLong()
             val gson = Gson()
             val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
@@ -294,7 +297,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             return false
         }
 
-        fun setVybranoe(context: Context, title: String, kniga: Int, glava: Int, novyZavet: Boolean = false, bibleName: Int = 1): Boolean {
+        fun setVybranoe(title: String, kniga: Int, glava: Int, novyZavet: Boolean = false, bibleName: Int = 1): Boolean {
             val knigaglava = "${kniga + 1}${glava + 1}".toLong()
             var remove = true
             for (i in 0 until arrayListVybranoe.size) {
@@ -306,7 +309,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             }
             if (remove) arrayListVybranoe.add(0, VybranoeBibliaData(knigaglava, "$title ${glava + 1}", kniga, glava + 1, novyZavet, bibleName))
             val gson = Gson()
-            val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val prefEditors = k.edit()
             when (bibleName) {
                 1 -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe))

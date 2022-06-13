@@ -1,8 +1,6 @@
 package by.carkva_gazeta.malitounik
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -19,7 +17,6 @@ class NadsanContent : BaseActivity() {
     private var mLastClickTime: Long = 0
     private lateinit var binding: ContentPsalterBinding
     private var resetTollbarJob: Job? = null
-    private lateinit var chin: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -27,15 +24,14 @@ class NadsanContent : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        dzenNoch = getBaseDzenNoch()
+        setMyTheme()
         binding = ContentPsalterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)

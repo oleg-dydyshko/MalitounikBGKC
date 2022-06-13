@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.CalaindarNedelBinding
 import by.carkva_gazeta.malitounik.databinding.CaliandarNedzeliaBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
     private var year = 0
@@ -47,7 +46,7 @@ class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
             binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
         }
         val c = GregorianCalendar(year, mun, dateInt)
-        val cReal = Calendar.getInstance() as GregorianCalendar
+        val cReal = Calendar.getInstance()
         cReal[Calendar.DATE] = dateInt
         if (c[Calendar.YEAR] == cReal[Calendar.YEAR] && c[Calendar.DAY_OF_YEAR] == cReal[Calendar.DAY_OF_YEAR]) {
             binding.listView.setSelection(c[Calendar.DAY_OF_WEEK] - 1)
@@ -65,8 +64,7 @@ class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
     }
 
     private inner class CaliandarNedzelListAdapter(private val mContext: Context) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.calaindar_nedel, niadzelia) {
-        private val c = Calendar.getInstance() as GregorianCalendar
-        private val chin = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        private val c = Calendar.getInstance()
         private val munName = mContext.resources.getStringArray(R.array.meciac_smoll)
         private val nedelName = mContext.resources.getStringArray(R.array.dni_nedeli)
 
@@ -82,7 +80,7 @@ class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
                 view = rootView
                 viewHolder = view.tag as ViewHolder
             }
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
             viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorDivider))
             viewHolder.textSviat.visibility = View.VISIBLE

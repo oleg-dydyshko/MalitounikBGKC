@@ -53,7 +53,7 @@ import kotlin.math.roundToLong
 
 class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
 
-    private lateinit var c: GregorianCalendar
+    private val c = Calendar.getInstance()
     private lateinit var k: SharedPreferences
     private lateinit var prefEditors: SharedPreferences.Editor
     private lateinit var binding: ActivityMainBinding
@@ -62,7 +62,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private var idSelect = 0
     private var backPressed: Long = 0
     private var idOld = -1
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var tolbarTitle = ""
     private var shortcuts = false
     private var mLastClickTime: Long = 0
@@ -93,7 +93,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     override fun setDataCalendar(dayOfYear: Int, year: Int) {
         val data = MenuCaliandar.getPositionCaliandar(dayOfYear, year)
-        c = Calendar.getInstance() as GregorianCalendar
         idSelect = R.id.label1
         setDataCalendar = data[25].toInt()
         idOld = -1
@@ -181,13 +180,16 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         textView.setCompoundDrawables(leftDrawable, null, null, null)
     }
 
+    override fun setMyTheme() {
+        if (dzenNoch) setTheme(R.style.AppCompatDark)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", MODE_PRIVATE)
         mkDir()
         loadOpisanieSviatyiaISxiaty()
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain
         bindingcontent = binding.appBarMain.contentMain
@@ -247,8 +249,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         setSupportActionBar(bindingappbar.toolbar)
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-
-        c = Calendar.getInstance() as GregorianCalendar
 
         idSelect = k.getInt("id", R.id.label1)
 
@@ -717,7 +717,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 menu.findItem(R.id.action_mun).setIcon(R.drawable.calendar_black_full)
                 menu.findItem(R.id.action_glava).setIcon(R.drawable.calendar_black)
             }
-            menu.findItem(R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+            menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
             if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
         }
         return true
@@ -737,11 +737,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         return true
     }
 
+    /*override fun test(sensorEvent: Float, dzn: Boolean) {
+        bindingappbar.titleToolbar.text = "$sensorEvent $dzn"
+    }*/
+
     private fun selectFragment(view: View?, start: Boolean = false) {
         idSelect = view?.id ?: 0
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
-            dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 binding.label1.setBackgroundResource(R.drawable.selector_dark)
                 binding.label2.setBackgroundResource(R.drawable.selector_dark)
@@ -938,7 +941,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             val ftrans = supportFragmentManager.beginTransaction()
             ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
 
-            c = Calendar.getInstance() as GregorianCalendar
             if (idSelect != R.id.label2 && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
             when (idSelect) {
                 R.id.label1 -> {
@@ -1233,7 +1235,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     private fun popupSnackbarForCompleteUpdate(code: Int) {
-        val c = Calendar.getInstance() as GregorianCalendar
+        val c = Calendar.getInstance()
         val updateCode = k.getInt("updateCode", 0)
         if (updateCode != 0 && updateCode != code) {
             val edit = k.edit()
@@ -1397,8 +1399,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             val layoutDialod = context.findViewById<LinearLayout>(R.id.linear)
             val layoutDialod2 = context.findViewById<LinearLayout>(R.id.linear2)
             val text = context.findViewById<TextView>(R.id.textProgress)
-            val k = context.getSharedPreferences("biblia", MODE_PRIVATE)
-            val dzenNoch: Boolean = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) {
                 layoutDialod2.setBackgroundResource(R.color.colorbackground_material_dark)
                 val maduleDownload = context.findViewById<TextView>(R.id.module_download)

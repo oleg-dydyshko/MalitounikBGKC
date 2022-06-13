@@ -15,12 +15,20 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.DialogSpinnerDisplayBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemColorBinding
 
 class DialogAddZakladka : DialogFragment() {
-    private var dzenNoch = false
+    private val dzenNoch: Boolean
+        get() {
+            var dzn = false
+            activity?.let {
+                dzn = (it as BaseActivity).getBaseDzenNoch()
+            }
+            return dzn
+        }
     private lateinit var alert: AlertDialog
     private var dialogAddZakladkiListiner: DialogAddZakladkiListiner? = null
     private var color = 0
@@ -54,8 +62,6 @@ class DialogAddZakladka : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogSpinnerDisplayBinding.inflate(LayoutInflater.from(it))
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = k.getBoolean("dzen_noch", false)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
@@ -89,7 +95,7 @@ class DialogAddZakladka : DialogFragment() {
         return alert
     }
 
-    private inner class ColorAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_color, R.id.label, BibleArrayAdapterParallel.colors) {
+    private class ColorAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_color, R.id.label, BibleArrayAdapterParallel.colors) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolderColor

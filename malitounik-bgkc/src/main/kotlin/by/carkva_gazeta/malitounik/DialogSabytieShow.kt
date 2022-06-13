@@ -52,8 +52,7 @@ class DialogSabytieShow : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             binding.title.text = title
             binding.title.setBackgroundColor(Color.parseColor(Sabytie.getColors(color)))
             val textR = if (konecSabytie) {

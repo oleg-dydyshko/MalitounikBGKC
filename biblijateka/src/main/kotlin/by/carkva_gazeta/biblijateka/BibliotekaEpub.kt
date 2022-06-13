@@ -4,12 +4,11 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 
-internal class BibliotekaEpub(dirPatch: String) {
-    private val navigation: String
-        get() = File(patch + "toc.ncx").readText()
+internal class BibliotekaEpub(private val dirPatch: String) {
+    private val navigation get() = File(patch + "toc.ncx").readText()
     private var rootDir = "/"
-    private val navig: ArrayList<ArrayList<String>>
-    private val patch: String
+    private val navig = ArrayList<ArrayList<String>>()
+    private val patch get() = getFullPatch(dirPatch)
     private var contentOpf = "content.opf"
 
     private fun getFullPatch(dirPatch: String): String {
@@ -128,10 +127,4 @@ internal class BibliotekaEpub(dirPatch: String) {
             }
             return patch + res
         }
-
-    init {
-        patch = getFullPatch(dirPatch)
-        navigation
-        navig = ArrayList()
-    }
 }

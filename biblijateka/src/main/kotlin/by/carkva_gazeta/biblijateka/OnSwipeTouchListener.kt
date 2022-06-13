@@ -1,6 +1,5 @@
 package by.carkva_gazeta.biblijateka
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
@@ -9,10 +8,10 @@ import android.view.View
 import android.view.View.OnTouchListener
 import kotlin.math.abs
 
-internal open class OnSwipeTouchListener(c: Context) : OnTouchListener {
-    private val gestureDetector: GestureDetector
-    @SuppressLint("ClickableViewAccessibility")
+internal abstract class OnSwipeTouchListener(private val context: Context) : OnTouchListener {
+    private val gestureDetector get() = GestureDetector(context, GestureListener())
     override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
+        view?.performClick()
         return gestureDetector.onTouchEvent(motionEvent)
     }
 
@@ -42,8 +41,4 @@ internal open class OnSwipeTouchListener(c: Context) : OnTouchListener {
 
     open fun onSwipeRight() {}
     open fun onSwipeLeft() {}
-
-    init {
-        gestureDetector = GestureDetector(c, GestureListener())
-    }
 }

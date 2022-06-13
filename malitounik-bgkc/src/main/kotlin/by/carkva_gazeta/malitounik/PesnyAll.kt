@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Spannable
@@ -305,6 +304,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -312,9 +312,8 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             window.attributes = lp
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        dzenNoch = getBaseDzenNoch()
+        setMyTheme()
         binding = PesnyBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
@@ -359,7 +358,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                 bindingprogress.progressText.text = getString(R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(R.string.font_size)
                 bindingprogress.progress.visibility = View.VISIBLE
-                val prefEditor: Editor = k.edit()
+                val prefEditor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)
@@ -373,7 +372,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                 bindingprogress.progressText.text = getString(R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(R.string.font_size)
                 bindingprogress.progress.visibility = View.VISIBLE
-                val prefEditor: Editor = k.edit()
+                val prefEditor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)

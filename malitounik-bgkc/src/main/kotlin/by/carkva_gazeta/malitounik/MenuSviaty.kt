@@ -69,10 +69,9 @@ class MenuSviaty : ListFragment() {
             } else {
                 list = getPrazdnik()
             }
-            myArrayAdapter = MyArrayAdapter(it)
+            myArrayAdapter = MyArrayAdapter(it, list)
             listAdapter = myArrayAdapter
-            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) {
                 listView.setBackgroundResource(R.color.colorbackground_material_dark)
                 listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
@@ -105,7 +104,7 @@ class MenuSviaty : ListFragment() {
         }
     }
 
-    private inner class MyArrayAdapter(private val context: Activity) : ArrayAdapter<Prazdniki>(context, R.layout.simple_list_item_sviaty, list) {
+    private class MyArrayAdapter(private val context: Activity, private val list: ArrayList<Prazdniki>) : ArrayAdapter<Prazdniki>(context, R.layout.simple_list_item_sviaty, list) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)

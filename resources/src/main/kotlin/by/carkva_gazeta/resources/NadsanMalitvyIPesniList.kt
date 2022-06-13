@@ -1,8 +1,6 @@
 package by.carkva_gazeta.resources
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -22,7 +20,6 @@ class NadsanMalitvyIPesniList : BaseActivity() {
     private var mLastClickTime: Long = 0
     private lateinit var binding: AkafistListBinding
     private var resetTollbarJob: Job? = null
-    private lateinit var chin: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -30,10 +27,9 @@ class NadsanMalitvyIPesniList : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
+        val dzenNoch = getBaseDzenNoch()
+        setMyTheme()
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100

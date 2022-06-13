@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -17,6 +16,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogListviewDisplayBinding
@@ -25,7 +25,6 @@ import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 class DialogTitleBiblioteka : DialogFragment() {
     private var bookmarks: ArrayList<String> = ArrayList()
     private var mListener: DialogTitleBibliotekaListener? = null
-    private lateinit var chin: SharedPreferences
     private lateinit var alert: AlertDialog
     private var _binding: DialogListviewDisplayBinding? = null
     private val binding get() = _binding!!
@@ -59,8 +58,7 @@ class DialogTitleBiblioteka : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogListviewDisplayBinding.inflate(LayoutInflater.from(it))
-            chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
@@ -90,7 +88,7 @@ class DialogTitleBiblioteka : DialogFragment() {
         return alert
     }
 
-    internal inner class TitleListAdaprer(mContext: Activity) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, bookmarks) {
+    internal inner class TitleListAdaprer(private val mContext: Activity) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, bookmarks) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -103,7 +101,7 @@ class DialogTitleBiblioteka : DialogFragment() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             var t1 = bookmarks[position].indexOf("<>")
             if (t1 == -1) {
                 t1 = bookmarks[position].indexOf("<str>")

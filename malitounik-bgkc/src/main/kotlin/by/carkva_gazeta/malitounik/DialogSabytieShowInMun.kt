@@ -22,7 +22,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogSabytieShowInMunBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 class DialogSabytieShowInMun : DialogFragment() {
     private var dayYear = 1
@@ -45,8 +44,7 @@ class DialogSabytieShowInMun : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogSabytieShowInMunBinding.inflate(LayoutInflater.from(it))
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             sabytieView(dayYear)

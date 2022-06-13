@@ -21,9 +21,8 @@ import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
 class StaryZapavietSinaidalList : BaseActivity() {
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var mLastClickTime: Long = 0
-    private val groups = ArrayList<ArrayList<String>>()
     private lateinit var binding: ContentBibleBinding
     private var resetTollbarJob: Job? = null
     private lateinit var k: SharedPreferences
@@ -34,10 +33,9 @@ class StaryZapavietSinaidalList : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        setMyTheme()
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
@@ -52,6 +50,7 @@ class StaryZapavietSinaidalList : BaseActivity() {
         } else {
             binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         }
+        val groups = ArrayList<ArrayList<String>>()
         val children1 = ArrayList<String>()
         val children2 = ArrayList<String>()
         val children3 = ArrayList<String>()
@@ -302,7 +301,7 @@ class StaryZapavietSinaidalList : BaseActivity() {
             children50.add("Глава $i")
         }
         groups.add(children50)
-        val adapter = ExpListAdapterStaryZapavietSinaidal(this)
+        val adapter = ExpListAdapterStaryZapavietSinaidal(this, groups)
         binding.elvMain.setAdapter(adapter)
         binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -376,7 +375,7 @@ class StaryZapavietSinaidalList : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class ExpListAdapterStaryZapavietSinaidal(private val mContext: Activity) : BaseExpandableListAdapter() {
+    private class ExpListAdapterStaryZapavietSinaidal(private val mContext: Activity, private val groups: ArrayList<ArrayList<String>>) : BaseExpandableListAdapter() {
         override fun getGroupCount(): Int {
             return groups.size
         }
@@ -465,9 +464,8 @@ class StaryZapavietSinaidalList : BaseActivity() {
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
-            val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             rootView.textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             if (dzenNoch)
                 rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             rootView.textChild.text = groups[groupPosition][childPosition]

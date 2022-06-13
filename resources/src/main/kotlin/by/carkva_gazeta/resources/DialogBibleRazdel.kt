@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -23,7 +24,6 @@ class DialogBibleRazdel : DialogFragment() {
     private var fullGlav = 0
     private var mListener: DialogBibleRazdelListener? = null
     private lateinit var builder: AlertDialog.Builder
-    private var dzenNoch = false
     private var _binding: DialogEditviewDisplayBinding? = null
     private val binding get() = _binding!!
 
@@ -60,8 +60,7 @@ class DialogBibleRazdel : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogEditviewDisplayBinding.inflate(LayoutInflater.from(it))
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             builder = AlertDialog.Builder(it, style)

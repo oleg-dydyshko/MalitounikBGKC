@@ -72,10 +72,6 @@ class MenuCaliandar : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     fun delitePadzeia(position: Int) {
         activity?.let {
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            while (true) {
-                if (!k.getBoolean("setAlarm", true)) break
-            }
             val sab = MainActivity.padzeia[position]
             val filen = sab.padz
             val del = ArrayList<Padzeia>()

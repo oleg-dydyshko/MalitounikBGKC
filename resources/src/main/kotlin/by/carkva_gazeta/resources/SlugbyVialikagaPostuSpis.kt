@@ -1,9 +1,7 @@
 package by.carkva_gazeta.resources
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -27,7 +25,6 @@ class SlugbyVialikagaPostuSpis : BaseActivity() {
     private var data = ArrayList<SlugbovyiaTextuData>()
     private lateinit var binding: AkafistListBibleBinding
     private var resetTollbarJob: Job? = null
-    private lateinit var chin: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -35,10 +32,9 @@ class SlugbyVialikagaPostuSpis : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
+        val dzenNoch = getBaseDzenNoch()
+        setMyTheme()
         binding = AkafistListBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
@@ -74,7 +70,7 @@ class SlugbyVialikagaPostuSpis : BaseActivity() {
             16 -> data = slugba.getTydzen5()
             17 -> data = slugba.getTydzen6()
         }
-        val adapter = ListAdaprer(this)
+        val adapter = ListAdaprer(this, data)
         binding.ListView.adapter = adapter
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
         else binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
@@ -117,8 +113,7 @@ class SlugbyVialikagaPostuSpis : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class ListAdaprer(private val context: Activity) : ArrayAdapter<SlugbovyiaTextuData>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, data as List<SlugbovyiaTextuData>) {
-        private val k: SharedPreferences = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+    private class ListAdaprer(private val context: Activity, private val data: List<SlugbovyiaTextuData>) : ArrayAdapter<SlugbovyiaTextuData>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, data) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -132,7 +127,7 @@ class SlugbyVialikagaPostuSpis : BaseActivity() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             viewHolder.text.text = data[position].title
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch)

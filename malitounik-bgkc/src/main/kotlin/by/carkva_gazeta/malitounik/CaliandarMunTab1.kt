@@ -54,7 +54,7 @@ class CaliandarMunTab1 : Fragment() {
     }
 
     fun setDataCalendar(dataCalendar: Int) {
-        val c = Calendar.getInstance() as GregorianCalendar
+        val c = Calendar.getInstance()
         if (dataCalendar >= SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
             yearG = dataCalendar
             if (yearG == c[Calendar.YEAR]) {
@@ -85,9 +85,8 @@ class CaliandarMunTab1 : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = CalendarTab1Binding.inflate(inflater, container, false)
         activity?.let { activity ->
-            val chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
-            val c = Calendar.getInstance() as GregorianCalendar
+            val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
+            val c = Calendar.getInstance()
             if (posMun == c[Calendar.MONTH] && yearG == c[Calendar.YEAR]) {
                 binding.mun.typeface = MainActivity.createFont(Typeface.BOLD)
             }

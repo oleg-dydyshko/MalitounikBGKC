@@ -33,7 +33,7 @@ import java.util.*
 
 
 class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener {
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var mun = Calendar.getInstance()[Calendar.MONTH] + 1
     private var day = Calendar.getInstance()[Calendar.DATE]
     private var year = Calendar.getInstance()[Calendar.YEAR]
@@ -193,15 +193,14 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         binding = OpisanieBinding.inflate(layoutInflater)
         setContentView(binding.root)
         slidr = Slidr.attach(this)

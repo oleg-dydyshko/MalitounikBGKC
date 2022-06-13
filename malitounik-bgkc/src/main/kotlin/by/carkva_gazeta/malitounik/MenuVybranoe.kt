@@ -192,7 +192,7 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
             checkBibleVybranoe()
             vybranoeSort = k.getInt("vybranoe_sort", 1)
             vybranoe.sort()
-            adapter = ItemAdapter(R.id.image, false)
+            adapter = ItemAdapter(fragmentActivity as BaseActivity, R.id.image, false)
             binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
             binding.dragListView.setLayoutManager(LinearLayoutManager(fragmentActivity))
             binding.dragListView.setAdapter(adapter, false)
@@ -275,13 +275,11 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class ItemAdapter(private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<VybranoeData, ItemAdapter.ViewHolder>() {
-        private var dzenNoch = false
+    private inner class ItemAdapter(private val activity: BaseActivity, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<VybranoeData, ItemAdapter.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             view.root.supportedSwipeDirection = ListSwipeItem.SwipeDirection.LEFT
-            val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = activity.getBaseDzenNoch()
             view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
                 view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
@@ -315,13 +313,11 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (itemList[adapterPosition].resurs.contains("pesny")) {
-                    activity?.let {
-                        val intent = Intent(it, PesnyAll::class.java)
-                        intent.putExtra("type", itemList[adapterPosition].resurs)
-                        intent.putExtra("pesny", itemList[adapterPosition].data)
-                        intent.putExtra("chekVybranoe", true)
-                        menuVybranoeLauncher.launch(intent)
-                    }
+                    val intent = Intent(activity, PesnyAll::class.java)
+                    intent.putExtra("type", itemList[adapterPosition].resurs)
+                    intent.putExtra("pesny", itemList[adapterPosition].data)
+                    intent.putExtra("chekVybranoe", true)
+                    menuVybranoeLauncher.launch(intent)
                 } else {
                     if (MainActivity.checkmoduleResources()) {
                         when (itemList[adapterPosition].resurs) {
@@ -344,14 +340,12 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
                                 dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                             }
                             else -> {
-                                activity?.let {
-                                    val intent = Intent()
-                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                    intent.putExtra("resurs", itemList[adapterPosition].resurs)
-                                    intent.putExtra("title", itemList[adapterPosition].data)
-                                    intent.putExtra("chekVybranoe", true)
-                                    menuVybranoeLauncher.launch(intent)
-                                }
+                                val intent = Intent()
+                                intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("resurs", itemList[adapterPosition].resurs)
+                                intent.putExtra("title", itemList[adapterPosition].data)
+                                intent.putExtra("chekVybranoe", true)
+                                menuVybranoeLauncher.launch(intent)
                             }
                         }
                     } else {

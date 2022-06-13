@@ -37,7 +37,14 @@ import java.util.*
 
 
 class CaliandarFull : Fragment(), View.OnClickListener {
-    private var dzenNoch = false
+    private val dzenNoch: Boolean
+        get() {
+            var dzn = false
+            activity?.let {
+                dzn = (it as BaseActivity).getBaseDzenNoch()
+            }
+            return dzn
+        }
     private var rColorColorprimary = R.drawable.selector_red
     private var sabytieTitle = ""
     private var position = 0
@@ -69,7 +76,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             val monthName = it.resources.getStringArray(R.array.meciac)
             val c = Calendar.getInstance() as GregorianCalendar
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) rColorColorprimary = R.drawable.selector_red_dark
             val tileMe = BitmapDrawable(it.resources, BitmapFactory.decodeResource(resources, R.drawable.calendar_fon))
             tileMe.tileModeX = Shader.TileMode.REPEAT

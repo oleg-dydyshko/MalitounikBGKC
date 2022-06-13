@@ -25,7 +25,6 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
     private lateinit var binding: PasxaBinding
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
-    private var dzenNoch = false
 
     override fun onPause() {
         super.onPause()
@@ -43,16 +42,15 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-        dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        val dzenNoch = getBaseDzenNoch()
+        setMyTheme()
         binding = PasxaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)
@@ -73,7 +71,6 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         binding.titleToolbar.text = resources.getText(R.string.pascha_kaliandar_bel)
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
@@ -98,7 +95,7 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
         builder.append("</body></html>")
         val webSettings = binding.pasxa.settings
         webSettings.standardFontFamily = "sans-serif-condensed"
-        webSettings.defaultFontSize = fontBiblia.toInt()
+        webSettings.defaultFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT.toInt()
         webSettings.domStorageEnabled = true
         binding.pasxa.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
     }

@@ -19,7 +19,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogListviewDisplayBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import java.util.*
-import kotlin.collections.ArrayList
 
 class DialogCaliandarMunDate : DialogFragment() {
     private var mListener: DialogCaliandarMunDateListener? = null
@@ -57,8 +56,7 @@ class DialogCaliandarMunDate : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogListviewDisplayBinding.inflate(LayoutInflater.from(it))
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)

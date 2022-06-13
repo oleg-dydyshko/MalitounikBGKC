@@ -44,7 +44,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
     private lateinit var chin: SharedPreferences
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var mLastClickTime: Long = 0
     private var autoCompleteTextView: AutoCompleteTextView? = null
     private var textViewCount: TextView? = null
@@ -59,6 +59,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     private lateinit var binding: SearchBibliaBinding
     private var keyword = false
     private var edittext2Focus = false
+    private var title = ""
 
     init {
         sinodalBible["sinaidals1"] = R.raw.sinaidals1
@@ -214,6 +215,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
@@ -221,9 +223,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         prefEditors = chin.edit()
-        dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         binding = SearchBibliaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)
@@ -1427,12 +1427,13 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         }
     }
 
-    private inner class SearchSpinnerAdapter(context: Activity, private val name: Array<String>) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_4, name) {
+    private class SearchSpinnerAdapter(private val context: Activity, private val name: Array<String>) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_4, name) {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             textView.gravity = Gravity.START
+            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
             else textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return v
@@ -1451,6 +1452,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                 viewHolder = rootView.tag as ViewHolder
             }
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
+            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
             else viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             viewHolder.text.gravity = Gravity.START

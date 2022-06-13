@@ -1,6 +1,5 @@
 package by.carkva_gazeta.resources
 
-import android.content.Context
 import androidx.collection.ArrayMap
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
@@ -9,7 +8,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
 
-internal class ZmenyiaChastki {
+internal class ZmenyiaChastki(private val dzenNoch: Boolean) {
     private val data: ArrayMap<String, Int> = ArrayMap()
     private val arrayData = ArrayList<ArrayList<String>>()
 
@@ -530,8 +529,6 @@ internal class ZmenyiaChastki {
         val inputStream = Malitounik.applicationContext().resources.openRawResource(resource)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
-        val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val dzenNoch = k.getBoolean("dzen_noch", false)
         val builder = StringBuilder()
         var result: String
         reader.forEachLine {

@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -52,12 +51,11 @@ class MenuPashalii : Fragment() {
             binding.ula.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             if (savedInstanceState == null) setArrayPasha(it)
             else setArrayPasha(it, savedInstanceState.getInt("year"))
-            myArrayAdapter = MyArrayAdapter(it)
+            myArrayAdapter = MyArrayAdapter(it, pasxi)
             binding.pasha.adapter = myArrayAdapter
             binding.pasha.selector = ContextCompat.getDrawable(it, android.R.color.transparent)
             binding.pasha.isClickable = false
-            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) {
                 binding.gri.setBackgroundResource(R.color.colorbackground_material_dark)
                 binding.ula.setBackgroundResource(R.color.colorbackground_material_dark)
@@ -131,10 +129,9 @@ class MenuPashalii : Fragment() {
         }
     }
 
-    private inner class MyArrayAdapter(private val context: Activity) : ArrayAdapter<Pashalii>(context, R.layout.simple_list_item_sviaty, pasxi) {
+    private class MyArrayAdapter(private val context: Activity, private val pasxi: ArrayList<Pashalii>) : ArrayAdapter<Pashalii>(context, R.layout.simple_list_item_sviaty, pasxi) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
-            val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val ea: ViewHolder
             if (convertView == null) {
                 val binding = SimpleListItemPaschaliiBinding.inflate(LayoutInflater.from(context), parent, false)
@@ -148,12 +145,12 @@ class MenuPashalii : Fragment() {
             ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             var color = R.color.colorPrimary_text
             var colorP = R.color.colorPrimary
-            if (k.getBoolean("dzen_noch", false)) {
+            if ((context as BaseActivity).getBaseDzenNoch()) {
                 ea.textView.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
                 color = R.color.colorWhite
                 colorP = R.color.colorPrimary_black
             }
-            val c = Calendar.getInstance() as GregorianCalendar
+            val c = Calendar.getInstance()
             val pasxa = SpannableStringBuilder(pasxi[position].katolic)
             if (!pasxi[position].sovpadenie) {
                 pasxa.append("\n${pasxi[position].pravas}")

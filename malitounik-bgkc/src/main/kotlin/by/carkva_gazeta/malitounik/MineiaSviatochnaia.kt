@@ -1,8 +1,6 @@
 package by.carkva_gazeta.malitounik
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -18,7 +16,6 @@ import java.util.*
 
 
 class MineiaSviatochnaia : BaseActivity() {
-    private lateinit var k: SharedPreferences
     private lateinit var binding: ContentBibleBinding
     private var resetTollbarJob: Job? = null
     private lateinit var adapter: MineiaExpListAdapter
@@ -37,9 +34,8 @@ class MineiaSviatochnaia : BaseActivity() {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
+        dzenNoch = getBaseDzenNoch()
+        setMyTheme()
         super.onCreate(savedInstanceState)
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)

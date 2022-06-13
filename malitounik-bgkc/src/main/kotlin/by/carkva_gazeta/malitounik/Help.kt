@@ -1,7 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.util.TypedValue
@@ -15,23 +13,19 @@ import java.io.InputStreamReader
 class Help : BaseActivity() {
     
     private lateinit var binding: HelpBinding
-    private lateinit var k: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-        val dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
-        super.onCreate(savedInstanceState)
+        val dzenNoch = getBaseDzenNoch()
+        setMyTheme()
         binding = HelpBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)
-        binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         binding.textView.movementMethod = LinkMovementMethod.getInstance()
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)

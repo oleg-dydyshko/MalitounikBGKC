@@ -39,7 +39,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
     private var search = false
     private var pesny = "prasl"
     private lateinit var adapter: MenuPesnyListAdapter
-    private lateinit var menuList: ArrayList<MenuListData>
+    private val menuList = ArrayList<MenuListData>()
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private lateinit var chin: SharedPreferences
@@ -62,13 +62,13 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
         activity?.let { fraragment ->
             chin = fraragment.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             pesny = arguments?.getString("pesny") ?: "prasl"
-            menuList = getMenuListData(pesny)
+            menuList.addAll(getMenuListData(pesny))
             menuList.sort()
-            adapter = MenuPesnyListAdapter(fraragment)
+            adapter = MenuPesnyListAdapter(fraragment, menuList)
             binding.ListView.adapter = adapter
             binding.ListView.isVerticalScrollBarEnabled = false
             binding.ListView.onItemClickListener = this
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (fraragment as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) {
                 binding.ListView.setBackgroundResource(R.color.colorbackground_material_dark)
                 binding.ListView.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_dark)
@@ -494,7 +494,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
         }
     }
 
-    private inner class MenuPesnyListAdapter(activity: Activity) : ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
+    private class MenuPesnyListAdapter(private val activity: Activity, private val menuList: ArrayList<MenuListData>) : ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -507,7 +507,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             viewHolder.text.text = menuList[position].title
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)

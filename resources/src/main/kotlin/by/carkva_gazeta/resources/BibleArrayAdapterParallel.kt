@@ -1,27 +1,23 @@
 package by.carkva_gazeta.resources
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.*
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.BibleGlobalList
-import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibleBinding
 
 internal class BibleArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val Zapavet: Boolean, private val mPerevod: Int) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) { // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана
-    private val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+    private val dzenNoch get() = (context as BaseActivity).getBaseDzenNoch()
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup): View {
         val rootView: View
@@ -35,8 +31,6 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             rootView = convertView
             ea = rootView.tag as BibleArrayAdapterParallelItems
         }
-        val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-        ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
         val parallel = BibliaParallelChtenia()
         var res = "+-+"
         if (Zapavet) {
@@ -329,14 +323,14 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             ea.textView.text = ssb
         }
         if (BibleGlobalList.bibleCopyList.size > 0 && BibleGlobalList.bibleCopyList.contains(position) && BibleGlobalList.mPedakVisable) {
-            if (k.getBoolean("dzen_noch", false)) {
+            if (dzenNoch) {
                 ea.textView.setBackgroundResource(R.color.colorprimary_material_dark2)
                 ea.textView.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
             } else {
                 ea.textView.setBackgroundResource(R.color.colorDivider)
             }
         } else {
-            if (k.getBoolean("dzen_noch", false)) {
+            if (dzenNoch) {
                 ea.textView.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
                 if (res == "+-+") ea.textView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorbackground_material_dark))
                 else ea.textView.setBackgroundResource(R.drawable.selector_dark)
@@ -478,11 +472,11 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                     else 0
                     when (color) {
                         0 -> {
-                            d = if (k.getBoolean("dzen_noch", false)) ContextCompat.getDrawable(context, R.drawable.bookmark)
+                            d = if (dzenNoch) ContextCompat.getDrawable(context, R.drawable.bookmark)
                             else ContextCompat.getDrawable(context, R.drawable.bookmark_black)
                         }
                         1 -> {
-                            d = if (k.getBoolean("dzen_noch", false)) ContextCompat.getDrawable(context, R.drawable.bookmark1_black)
+                            d = if (dzenNoch) ContextCompat.getDrawable(context, R.drawable.bookmark1_black)
                             else ContextCompat.getDrawable(context, R.drawable.bookmark1)
                         }
                         2 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark2)
@@ -497,8 +491,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                         11 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark11)
                         12 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark12)
                     }
-                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-                    val realpadding = (fontSize * context.resources.displayMetrics.density).toInt()
+                    val realpadding = (SettingsActivity.GET_FONT_SIZE_DEFAULT * context.resources.displayMetrics.density).toInt()
                     d?.setBounds(0, 0, realpadding, realpadding)
                     d?.let {
                         val span = ImageSpan(it, DynamicDrawableSpan.ALIGN_BASELINE)
@@ -619,11 +612,11 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                     else 0
                     when (color) {
                         0 -> {
-                            d = if (k.getBoolean("dzen_noch", false)) ContextCompat.getDrawable(context, R.drawable.bookmark)
+                            d = if (dzenNoch) ContextCompat.getDrawable(context, R.drawable.bookmark)
                             else ContextCompat.getDrawable(context, R.drawable.bookmark_black)
                         }
                         1 -> {
-                            d = if (k.getBoolean("dzen_noch", false)) ContextCompat.getDrawable(context, R.drawable.bookmark1_black)
+                            d = if (dzenNoch) ContextCompat.getDrawable(context, R.drawable.bookmark1_black)
                             else ContextCompat.getDrawable(context, R.drawable.bookmark1)
                         }
                         2 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark2)
@@ -638,8 +631,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                         11 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark11)
                         12 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark12)
                     }
-                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-                    val realpadding = (fontSize * context.resources.displayMetrics.density).toInt()
+                    val realpadding = (SettingsActivity.GET_FONT_SIZE_DEFAULT * context.resources.displayMetrics.density).toInt()
                     d?.setBounds(0, 0, realpadding, realpadding)
                     d?.let {
                         val span = ImageSpan(it, DynamicDrawableSpan.ALIGN_BASELINE)

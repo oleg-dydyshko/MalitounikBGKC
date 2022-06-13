@@ -40,6 +40,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textSize="18sp" />
     </by.carkva_gazeta.malitounik.InteractiveScrollView>
 </LinearLayout>

@@ -35,7 +35,7 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
     private var fullscreenPage = false
     private var glava = 0
     private lateinit var k: SharedPreferences
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var dialog = true
     private var men = true
     private lateinit var binding: ActivityBibleBinding
@@ -83,16 +83,19 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
         fierstPosition = position
     }
 
+    override fun setMyTheme() {
+        if (dzenNoch) setTheme(R.style.AppCompatDark)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
         k = getSharedPreferences("biblia", MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
-        super.onCreate(savedInstanceState)
+        setMyTheme()
         binding = ActivityBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         glava = if (intent.extras?.containsKey("kafizma") == true) {
@@ -114,11 +117,11 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
             override fun onPageSelected(position: Int) {
                 if (glava != position) fierstPosition = 0
                 binding.subtitleToolbar.text = getString(R.string.kafizma2, getKafizma(position))
-                men = DialogVybranoeBibleList.checkVybranoe(this@NadsanContentActivity, 0, position, 3)
+                men = DialogVybranoeBibleList.checkVybranoe(0, position, 3)
                 invalidateOptionsMenu()
             }
         })
-        men = DialogVybranoeBibleList.checkVybranoe(this, 0, glava, 3)
+        men = DialogVybranoeBibleList.checkVybranoe(0, glava, 3)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             dialog = savedInstanceState.getBoolean("dialog")
@@ -268,9 +271,8 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         val prefEditors = k.edit()
-        dzenNoch = k.getBoolean("dzen_noch", false)
         if (id == R.id.action_vybranoe) {
-            men = DialogVybranoeBibleList.setVybranoe(this, resources.getString(R.string.psalom2), 0, binding.pager.currentItem, bibleName = 3)
+            men = DialogVybranoeBibleList.setVybranoe(resources.getString(R.string.psalom2), 0, binding.pager.currentItem, bibleName = 3)
             if (men) {
                 MainActivity.toastView(getString(R.string.addVybranoe))
                 if (!DialogVybranoeBibleList.checkVybranoe("3")) {
@@ -292,7 +294,6 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
             } else {
                 prefEditor.putBoolean("dzen_noch", false)
             }
-            dzenNoch = item.isChecked
             prefEditor.apply()
             recreate()
         }

@@ -47,8 +47,8 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
             window.attributes = lp
         }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
+        val dzenNoch = getBaseDzenNoch()
+        setMyTheme()
         super.onCreate(savedInstanceState)
         binding = AkafistListBinding.inflate(layoutInflater)
         setContentView(binding.root)

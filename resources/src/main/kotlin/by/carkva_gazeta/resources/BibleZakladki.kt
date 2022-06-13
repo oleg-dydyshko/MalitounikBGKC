@@ -1,9 +1,7 @@
 package by.carkva_gazeta.resources
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.os.SystemClock
@@ -36,11 +34,10 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
     private lateinit var adapter: ItemAdapter
     private var data = ArrayList<BibleZakladkiData>()
     private var semuxa = 1
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var mLastClickTime: Long = 0
     private lateinit var binding: BibleZakladkiBinding
     private var resetTollbarJob: Job? = null
-    private lateinit var k: SharedPreferences
     private val novyZapavietSemuxaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             adapter.updateList(data)
@@ -70,10 +67,8 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         super.onCreate(savedInstanceState)
+        setMyTheme()
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
@@ -277,12 +272,9 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
     }
 
     private inner class ItemAdapter(list: ArrayList<BibleZakladkiData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<BibleZakladkiData, ItemAdapter.ViewHolder>() {
-        private var dzenNoch = false
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             view.root.supportedSwipeDirection = ListSwipeItem.SwipeDirection.LEFT
-            val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = k.getBoolean("dzen_noch", false)
             view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
                 BibleArrayAdapterParallel.colors[0] = "#FFFFFF"

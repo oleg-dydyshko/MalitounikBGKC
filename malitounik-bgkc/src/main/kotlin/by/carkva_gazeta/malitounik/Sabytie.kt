@@ -48,7 +48,7 @@ import java.util.*
 
 class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener, DialogHelpAlarm.DialogHelpAlarmListener {
     private lateinit var k: SharedPreferences
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var konec = false
     private var back = false
     private var home = false
@@ -306,19 +306,22 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         }
     }
 
+    override fun setMyTheme() {
+        if (dzenNoch) setTheme(R.style.AppCompatDark)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
+        setMyTheme()
         if (dzenNoch) {
-            setTheme(R.style.AppCompatDark)
             colors[0] = "#f44336"
         }
-        super.onCreate(savedInstanceState)
         binding = SabytieBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.labelbutton12.setOnClickListener(View.OnClickListener {

@@ -59,7 +59,7 @@ class MenuPamiatka : ListFragment() {
             k = fragmentActivity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             listView.isVerticalScrollBarEnabled = false
             listView.isHorizontalScrollBarEnabled = false
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (fragmentActivity as BaseActivity).getBaseDzenNoch()
             val inputStream = resources.openRawResource(R.raw.pamiatka)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
@@ -100,7 +100,7 @@ class MenuPamiatka : ListFragment() {
             }
             ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT))
             ea.textView.text = MainActivity.fromHtml(list[position])
-            if (k.getBoolean("dzen_noch", false)) {
+            if ((activity as BaseActivity).getBaseDzenNoch()) {
                 ea.textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
             }
             return rootView

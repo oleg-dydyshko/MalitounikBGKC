@@ -20,7 +20,14 @@ import by.carkva_gazeta.malitounik.databinding.MenuParafiiBgkcBinding
 
 class MenuParafiiBgkc : Fragment() {
     private var mLastClickTime: Long = 0
-    private var dzenNoch = false
+    private val dzenNoch: Boolean
+        get() {
+            var dzn = false
+            activity?.let {
+                dzn = (it as BaseActivity).getBaseDzenNoch()
+            }
+            return dzn
+        }
     private lateinit var k: SharedPreferences
     private var _binding: MenuParafiiBgkcBinding? = null
     private val binding get() = _binding!!
@@ -39,7 +46,6 @@ class MenuParafiiBgkc : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { activity ->
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) binding.elvMain.selector = ContextCompat.getDrawable(activity, R.drawable.selector_dark)
             else binding.elvMain.selector = ContextCompat.getDrawable(activity, R.drawable.selector_default)
             binding.label.text = getString(R.string.bgkc_kuryia)
@@ -110,7 +116,7 @@ class MenuParafiiBgkc : Fragment() {
             children4.add(MenuListData("Беласток (Польшча)", "dzie_bielastok"))
             children4.sort()
             groups.add(children4)
-            val adapter = ExpListAdapterPrafiiBgkc(activity)
+            val adapter = ExpListAdapterPrafiiBgkc(activity, groups)
             binding.elvMain.setAdapter(adapter)
             if (dzenNoch) {
                 binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
@@ -139,7 +145,7 @@ class MenuParafiiBgkc : Fragment() {
         }
     }
 
-    private inner class ExpListAdapterPrafiiBgkc(private val mContext: Activity) : BaseExpandableListAdapter() {
+    private class ExpListAdapterPrafiiBgkc(private val mContext: Activity, private val groups: ArrayList<ArrayList<MenuListData>>) : BaseExpandableListAdapter() {
         override fun getGroupCount(): Int {
             return groups.size
         }
@@ -179,7 +185,8 @@ class MenuParafiiBgkc : Fragment() {
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
             rootView.textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            if ((mContext as BaseActivity).getBaseDzenNoch())
+                rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             rootView.textChild.text = groups[groupPosition][childPosition].title
             return rootView.root
         }

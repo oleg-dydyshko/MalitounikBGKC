@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
@@ -43,7 +42,6 @@ class WebViewCustom : WebView {
     }
 
     companion object {
-        @SuppressLint("NewApi")
         private fun getFixedContext(context: Context): Context {
             return if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP || Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1) {
                 context.createConfigurationContext(Configuration())

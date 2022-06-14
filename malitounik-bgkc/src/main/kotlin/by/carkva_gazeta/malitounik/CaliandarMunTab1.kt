@@ -144,7 +144,7 @@ class CaliandarMunTab1 : Fragment() {
                 } else {
                     resources.getString(R.string.sabytie_enable_mun)
                 }
-                MainActivity.toastView(messege)
+                MainActivity.toastView(it, messege)
                 it.invalidateOptionsMenu()
             }
         }

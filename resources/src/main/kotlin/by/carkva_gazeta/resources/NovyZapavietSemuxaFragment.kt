@@ -63,7 +63,9 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
             }
             maxIndex++
             BibleGlobalList.zakladkiSemuxa.add(0, BibleZakladkiData(maxIndex, knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString() + "<!--" + color))
-            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
+            activity?.let {
+                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
+            }
         }
         BibleGlobalList.mPedakVisable = false
         BibleGlobalList.bibleCopyList.clear()
@@ -420,7 +422,7 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
                     }
                     val clip = ClipData.newPlainText("", MainActivity.fromHtml(copyString.toString()).toString().trim())
                     clipboard.setPrimaryClip(clip)
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.copy))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.copy))
                     binding.linearLayout4.visibility = View.GONE
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     bibleListiner?.isPanelVisible(false)
@@ -428,7 +430,7 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             binding.adpravit.setOnClickListener {
@@ -449,7 +451,7 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
                     startActivity(Intent.createChooser(sendIntent, null))
                     adapter.notifyDataSetChanged()
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             binding.yelloy.setOnClickListener {
@@ -477,7 +479,7 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             binding.underline.setOnClickListener {
@@ -505,7 +507,7 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             binding.bold.setOnClickListener {
@@ -533,7 +535,7 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             binding.zakladka.setOnClickListener {
@@ -558,7 +560,7 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
                     bibleListiner?.isPanelVisible(false)
                     adapter.notifyDataSetChanged()
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             binding.zametka.setOnClickListener {
@@ -572,7 +574,7 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
         }

@@ -180,7 +180,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
                     }
                     val clip = ClipData.newPlainText("", MainActivity.fromHtml(copyString.toString()).toString().trim())
                     clipboard.setPrimaryClip(clip)
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.copy))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.copy))
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     binding.linearLayout4.visibility = View.GONE
                     bibleListiner?.isPanelVisible(false)
@@ -188,7 +188,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             binding.adpravit.setOnClickListener {
@@ -208,7 +208,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
                     sendIntent.type = "text/plain"
                     startActivity(Intent.createChooser(sendIntent, null))
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
         }

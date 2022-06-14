@@ -31,13 +31,7 @@ class MineiaShodzennaia : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         val dzenNoch = getBaseDzenNoch()
-        setMyTheme()
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)

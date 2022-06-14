@@ -334,7 +334,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }
@@ -388,7 +388,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }
@@ -423,7 +423,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }
@@ -492,7 +492,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                             }
                         } catch (e: Throwable) {
                             withContext(Dispatchers.Main) {
-                                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                                MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                             }
                         }
                     }
@@ -517,7 +517,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                             }
                         } catch (e: Throwable) {
                             withContext(Dispatchers.Main) {
-                                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                                MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                             }
                         }
                     }
@@ -597,7 +597,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         } catch (e: Throwable) {
             text = ""
             CoroutineScope(Dispatchers.Main).launch {
-                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
             }
         }
         return text
@@ -967,7 +967,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             val startSelect = binding.apisanne.selectionStart
             val endSelect = binding.apisanne.selectionEnd
             if (startSelect == endSelect) {
-                MainActivity.toastView("Памылка. Абярыце тэкст", Toast.LENGTH_LONG)
+                MainActivity.toastView(this, "Памылка. Абярыце тэкст", Toast.LENGTH_LONG)
             } else {
                 val text = binding.apisanne.text
                 val urlSpan = text?.getSpans(startSelect, endSelect, URLSpan::class.java)

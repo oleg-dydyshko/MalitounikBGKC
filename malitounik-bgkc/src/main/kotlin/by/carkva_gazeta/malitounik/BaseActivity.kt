@@ -34,6 +34,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
             mLastClickTime = savedInstanceState.getLong("mLastClickTime")
             autoDzenNoch = savedInstanceState.getBoolean("autoDzenNoch")
         }
+        setMyTheme()
     }
 
     open fun setMyTheme() {
@@ -64,11 +65,14 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         }
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        if (!MainActivity.checkBrightness) {
+            val lp = window.attributes
+            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+            window.attributes = lp
+        }
     }
 
     open fun checkAutoDzenNoch() {}
-
-    //open fun test(sensorEvent: Float, dzn: Boolean) {}
 
     private fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 10000) {
@@ -82,7 +86,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         event?.let { sensorEvent ->
-            //test(sensorEvent.values[0], autoDzenNoch)
             if (sensorEvent.values[0] <= 4f && !autoDzenNoch) {
                 sensorChangeDzenNoch(true)
             }

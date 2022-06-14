@@ -31,12 +31,6 @@ class NovyZapavietSemuxaList : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setMyTheme()
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)

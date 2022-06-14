@@ -688,13 +688,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        setMyTheme()
         val notification = k.getInt("notification", 2)
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -779,7 +773,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
                         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
                         startActivity(intent)
                     } catch (ex: ActivityNotFoundException) {
-                        MainActivity.toastView(getString(R.string.error_ch2))
+                        MainActivity.toastView(this, getString(R.string.error_ch2))
                     }
                 }
             }
@@ -1022,7 +1016,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
                 if (del) prefEditor.remove(key)
             }
             File("$filesDir/Book").deleteRecursively()
-            MainActivity.toastView(getString(R.string.save))
+            MainActivity.toastView(this, getString(R.string.save))
             prefEditor.putInt("id", id)
             prefEditor.putFloat("font_biblia", GET_FONT_SIZE_DEFAULT)
             prefEditor.putBoolean("dzen_noch", false)

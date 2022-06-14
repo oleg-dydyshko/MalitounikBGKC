@@ -105,14 +105,8 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = getBaseDzenNoch()
-        setMyTheme()
         binding = PiarlinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)
@@ -215,7 +209,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 intent.setClassName(this, MainActivity.ADMINPIARLINY)
                 startActivity(intent)
             } else {
-                MainActivity.toastView(getString(R.string.error))
+                MainActivity.toastView(this, getString(R.string.error))
             }
         }
         if (id == R.id.action_dzen_noch) {

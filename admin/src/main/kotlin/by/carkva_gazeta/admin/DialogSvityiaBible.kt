@@ -78,7 +78,7 @@ class DialogSvityiaBible : DialogFragment() {
                     intent.putExtra("glava", bibleFullGlav - 1)
                     startActivity(intent)
                 } else {
-                    MainActivity.toastView(getString(R.string.error))
+                    MainActivity.toastView(it, getString(R.string.error))
                 }
             }
             builder.setNegativeButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }

@@ -89,13 +89,7 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         k = getSharedPreferences("biblia", MODE_PRIVATE)
-        setMyTheme()
         binding = ActivityBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         glava = if (intent.extras?.containsKey("kafizma") == true) {
@@ -274,7 +268,7 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
         if (id == R.id.action_vybranoe) {
             men = DialogVybranoeBibleList.setVybranoe(resources.getString(R.string.psalom2), 0, binding.pager.currentItem, bibleName = 3)
             if (men) {
-                MainActivity.toastView(getString(R.string.addVybranoe))
+                MainActivity.toastView(this, getString(R.string.addVybranoe))
                 if (!DialogVybranoeBibleList.checkVybranoe("3")) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "3", getString(R.string.title_psalter)))
                     val gson = Gson()

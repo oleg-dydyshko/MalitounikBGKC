@@ -155,12 +155,6 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
-        setMyTheme()
         binding = ActivityBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         kniga = intent.extras?.getInt("kniga", 0) ?: 0
@@ -428,7 +422,7 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             men = DialogVybranoeBibleList.setVybranoe(title, kniga, BibleGlobalList.mListGlava, true, 2)
             if (men) {
-                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
                 if (!DialogVybranoeBibleList.checkVybranoe("2")) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "2", getString(by.carkva_gazeta.malitounik.R.string.bsinaidal)))
                     val gson = Gson()

@@ -112,7 +112,9 @@ class DialogPasochnicaMkDir : DialogFragment() {
                                 }
                             } catch (e: Throwable) {
                                 withContext(Dispatchers.Main) {
-                                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                                    activity?.let {
+                                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                                    }
                                 }
                             }
                         }

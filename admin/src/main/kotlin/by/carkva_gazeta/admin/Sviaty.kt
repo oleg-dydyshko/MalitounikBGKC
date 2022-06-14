@@ -66,7 +66,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
                     urlJob?.cancel()
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
-                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
+                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                         binding.progressBar2.visibility = View.GONE
                     }
                 }
@@ -131,7 +131,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
                     return@withContext gson.fromJson(builder, type)
                 } catch (e: Throwable) {
                     withContext(Dispatchers.Main) {
-                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                     return@withContext ArrayList<ArrayList<String>>()
                 }
@@ -233,14 +233,14 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }
                 if (responseCodeS == 200) {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
+                    MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.save))
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
+                    MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
                 binding.progressBar2.visibility = View.GONE
             }
@@ -389,14 +389,14 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }
                 if (responseCodeS == 200) {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
+                    MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.save))
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
+                    MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
                 binding.progressBar2.visibility = View.GONE
             }

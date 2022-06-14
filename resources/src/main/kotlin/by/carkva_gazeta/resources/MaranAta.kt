@@ -117,7 +117,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         belarus = k.getBoolean("belarus", true)
         spid = k.getInt("autoscrollSpid", 60)
         maranAtaScrollPosition = k.getInt("maranAtaScrollPasition", 0)
-        setMyTheme()
         binding = AkafistMaranAtaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
@@ -140,11 +139,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
         }).build()
         slidr = Slidr.attach(this, config)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.ListView.onItemClickListener = this
         binding.ListView.onItemLongClickListener = this
@@ -289,7 +283,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
             val clip = ClipData.newPlainText("", MainActivity.fromHtml(copyString.toString()).toString().trim())
             clipboard.setPrimaryClip(clip)
-            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.copy))
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.copy))
             binding.linearLayout4.visibility = View.GONE
             binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
             mPedakVisable = false
@@ -323,7 +317,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 startActivity(Intent.createChooser(sendIntent, null))
                 adapter.notifyDataSetChanged()
             } else {
-                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
         binding.underline.setOnClickListener {
@@ -350,7 +344,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 invalidateOptionsMenu()
                 adapter.notifyDataSetChanged()
             } else {
-                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
         binding.bold.setOnClickListener {
@@ -377,7 +371,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 invalidateOptionsMenu()
                 adapter.notifyDataSetChanged()
             } else {
-                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
         binding.yelloy.setOnClickListener {
@@ -404,7 +398,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 invalidateOptionsMenu()
                 adapter.notifyDataSetChanged()
             } else {
-                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
         if (dzenNoch) {

@@ -34,6 +34,7 @@ import androidx.core.view.GravityCompat
 import by.carkva_gazeta.malitounik.databinding.ActivityMainBinding
 import by.carkva_gazeta.malitounik.databinding.AppBarMainBinding
 import by.carkva_gazeta.malitounik.databinding.ContentMainBinding
+import by.carkva_gazeta.malitounik.databinding.ToastBinding
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.splitinstall.*
@@ -189,7 +190,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         k = getSharedPreferences("biblia", MODE_PRIVATE)
         mkDir()
         loadOpisanieSviatyiaISxiaty()
-        setMyTheme()
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain
         bindingcontent = binding.appBarMain.contentMain
@@ -566,7 +566,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 super.onBackPressed()
             } else {
                 backPressed = System.currentTimeMillis()
-                toastView(getString(R.string.exit))
+                toastView(this, getString(R.string.exit))
             }
         } else {
             binding.drawerLayout.openDrawer(GravityCompat.START)
@@ -736,10 +736,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
         return true
     }
-
-    /*override fun test(sensorEvent: Float, dzn: Boolean) {
-        bindingappbar.titleToolbar.text = "$sensorEvent $dzn"
-    }*/
 
     private fun selectFragment(view: View?, start: Boolean = false) {
         idSelect = view?.id ?: 0
@@ -1479,7 +1475,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
             splitInstallManager.startInstall(request).addOnFailureListener {
                 if ((it as SplitInstallException).errorCode == SplitInstallErrorCode.NETWORK_ERROR) {
-                    toastView(context.getString(R.string.no_internet))
+                    toastView(context, context.getString(R.string.no_internet))
                 }
             }.addOnSuccessListener {
                 sessionId = it
@@ -1656,24 +1652,15 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
 
         @Suppress("DEPRECATION")
-        fun toastView(message: String, ToastLength: Int = Toast.LENGTH_SHORT) {
-            val chin = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
-            val density = Malitounik.applicationContext().resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            val layout = LinearLayout(Malitounik.applicationContext())
-            if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black)
-            else layout.setBackgroundResource(R.color.colorPrimary)
-            val toast = TextView(Malitounik.applicationContext())
-            toast.typeface = createFont(Typeface.NORMAL)
-            toast.setTextColor(ContextCompat.getColor(Malitounik.applicationContext(), R.color.colorWhite))
-            toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-            toast.text = message
-            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            layout.addView(toast)
-            val mes = Toast(Malitounik.applicationContext())
-            mes.duration = ToastLength
-            mes.view = layout
+        fun toastView(context: Context, message: String, toastLength: Int = Toast.LENGTH_SHORT) {
+            val layout = ToastBinding.inflate(LayoutInflater.from(context))
+            layout.textView.text = message
+            val dzenNoch = (context as? BaseActivity)?.getBaseDzenNoch() ?: false
+            if (dzenNoch) layout.toastRoot.setBackgroundResource(R.color.colorPrimary_black)
+            else layout.toastRoot.setBackgroundResource(R.color.colorPrimary)
+            val mes = Toast(context)
+            mes.duration = toastLength
+            mes.view = layout.root
             mes.show()
         }
 

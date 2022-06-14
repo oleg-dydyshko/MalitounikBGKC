@@ -25,13 +25,7 @@ class NadsanContent : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         dzenNoch = getBaseDzenNoch()
-        setMyTheme()
         binding = ContentPsalterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)

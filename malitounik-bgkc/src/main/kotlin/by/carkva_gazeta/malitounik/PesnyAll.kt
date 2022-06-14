@@ -306,14 +306,8 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         dzenNoch = getBaseDzenNoch()
-        setMyTheme()
         binding = PesnyBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
@@ -549,7 +543,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         if (id == R.id.action_vybranoe) {
             men = setVybranoe(this, resurs, title)
             if (men) {
-                MainActivity.toastView(getString(R.string.addVybranoe))
+                MainActivity.toastView(this, getString(R.string.addVybranoe))
             }
             invalidateOptionsMenu()
         }
@@ -585,7 +579,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                 intent.putExtra("text", text)
                 startActivity(intent)
             } else {
-                MainActivity.toastView(getString(R.string.error))
+                MainActivity.toastView(this, getString(R.string.error))
             }
         }
         return super.onOptionsItemSelected(item)

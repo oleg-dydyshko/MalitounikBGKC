@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogNadsanPravila
-import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.NadsanPravilaBinding
 import com.r0adkll.slidr.Slidr
@@ -32,13 +31,7 @@ class PsalterNadsana : BaseActivity(), View.OnClickListener {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        setMyTheme()
         binding = NadsanPravilaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)

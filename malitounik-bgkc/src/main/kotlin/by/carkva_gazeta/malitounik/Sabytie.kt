@@ -120,7 +120,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 val kon = gc2.timeInMillis
                 val resul = gc.timeInMillis
                 if (kon - resul < 0) {
-                    MainActivity.toastView(getString(R.string.data_sabytie_error2))
+                    MainActivity.toastView(this, getString(R.string.data_sabytie_error2))
                     nol1 = ""
                     nol2 = ""
                     if (gc[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
@@ -213,7 +213,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 val kon = gc2.timeInMillis
                 this.result = gc.timeInMillis
                 if (kon - this.result < 0) {
-                    MainActivity.toastView(getString(R.string.data_sabytie_error))
+                    MainActivity.toastView(this, getString(R.string.data_sabytie_error))
                     da = binding.label1.text.toString()
                     binding.label12.text = da
                 }
@@ -312,16 +312,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        setMyTheme()
-        if (dzenNoch) {
-            colors[0] = "#f44336"
-        }
+        if (dzenNoch) colors[0] = "#f44336"
         binding = SabytieBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.labelbutton12.setOnClickListener(View.OnClickListener {
@@ -781,7 +773,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 }
             }
         }
-        MainActivity.toastView(getString(R.string.remove_padzea))
+        MainActivity.toastView(this, getString(R.string.remove_padzea))
     }
 
     override fun onDialogDeliteClick(position: Int) {
@@ -960,7 +952,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
                         startActivity(intent)
                     } catch (ex: ActivityNotFoundException) {
-                        MainActivity.toastView(getString(R.string.error_ch2))
+                        MainActivity.toastView(this, getString(R.string.error_ch2))
                     }
                 }
             } else {
@@ -1471,7 +1463,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 adapter.updateList(MainActivity.padzeia)
                 binding.editText.setText("")
                 binding.editText2.setText("")
-                MainActivity.toastView(getString(R.string.save))
+                MainActivity.toastView(this, getString(R.string.save))
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
                 binding.titleLayout.visibility = View.GONE
@@ -2017,7 +2009,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 binding.label2.text = ta
                 binding.label12.text = da
                 binding.label22.text = ta
-                MainActivity.toastView(getString(R.string.save))
+                MainActivity.toastView(this, getString(R.string.save))
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
                 binding.titleLayout.visibility = View.GONE
@@ -2155,7 +2147,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 File("$filesDir/Sabytie.json").delete()
             }
             adapter.updateList(MainActivity.padzeia)
-            MainActivity.toastView(getString(R.string.remove_padzea))
+            MainActivity.toastView(this@Sabytie, getString(R.string.remove_padzea))
         }
     }
 

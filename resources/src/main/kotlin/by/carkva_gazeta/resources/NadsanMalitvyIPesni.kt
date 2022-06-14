@@ -37,13 +37,7 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        setMyTheme()
         binding = NadsanMalitvyIPesnyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)

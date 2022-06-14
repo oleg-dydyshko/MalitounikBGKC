@@ -107,9 +107,9 @@ class AdminMain : AppCompatActivity(), DialogUpdateHelp.DialogUpdateHelpListener
 
     override fun onUpdate(error: Boolean) {
         if (error) {
-            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
         } else {
-            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.save))
         }
     }
 

@@ -227,7 +227,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                         arrayList.removeAll(temp.toSet())
                         adapter.notifyDataSetChanged()
                         bindingcontent.progressBar2.visibility = View.GONE
-                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
+                        MainActivity.toastView(this@BibliotekaView, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                         runSql = false
                     }
                 }
@@ -524,11 +524,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         val size = Point()
         display.getSize(size)
         width = size.x
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        } // Копирование и удаление старых файлов из Библиотеки
+        // Копирование и удаление старых файлов из Библиотеки
         getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.let {
             val file = File("$filesDir/Biblijateka")
             if (file.exists()) file.copyRecursively(it, overwrite = true)
@@ -536,7 +532,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         File("$filesDir/Biblijateka").deleteRecursively() ////////////////////////////////////
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-        setMyTheme()
         binding = BibliotekaViewBinding.inflate(layoutInflater)
         bindingappbar = binding.bibliotekaViewApp
         bindingcontent = binding.bibliotekaViewApp.bibliotekaViewContent
@@ -644,7 +639,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     val prefEditor = k.edit()
                     prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
                     prefEditor.apply()
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.no_file))
+                    MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_file))
                 }
             } else {
                 file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])

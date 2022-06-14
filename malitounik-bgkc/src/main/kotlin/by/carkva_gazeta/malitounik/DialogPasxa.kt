@@ -122,7 +122,7 @@ class DialogPasxa : DialogFragment() {
 
     private fun error() {
         activity?.let {
-            MainActivity.toastView(getString(R.string.error))
+            MainActivity.toastView(it, getString(R.string.error))
         }
     }
 }

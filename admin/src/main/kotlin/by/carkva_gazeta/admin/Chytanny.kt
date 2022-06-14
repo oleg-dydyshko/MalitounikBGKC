@@ -52,7 +52,7 @@ class Chytanny : AppCompatActivity() {
                     urlJob?.cancel()
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
-                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
+                        MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                         binding.progressBar2.visibility = View.GONE
                     }
                 }
@@ -94,7 +94,7 @@ class Chytanny : AppCompatActivity() {
             if (text.isEmpty()) {
                 stopTimer()
                 binding.progressBar2.visibility = View.GONE
-                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 return@launch
             }
             val a = year % 19
@@ -305,14 +305,14 @@ class Chytanny : AppCompatActivity() {
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }
                 if (responseCodeS == 200) {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
+                    MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.save))
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
+                    MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
                 binding.progressBar2.visibility = View.GONE
             }

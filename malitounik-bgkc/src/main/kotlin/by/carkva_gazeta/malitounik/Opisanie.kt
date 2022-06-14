@@ -89,7 +89,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                             }
                         }
                         binding.progressBar2.visibility = View.INVISIBLE
-                        MainActivity.toastView(getString(R.string.bad_internet), Toast.LENGTH_LONG)
+                        MainActivity.toastView(this@Opisanie, getString(R.string.bad_internet), Toast.LENGTH_LONG)
                     }
                 }
                 timerCount++
@@ -194,13 +194,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        setMyTheme()
         binding = OpisanieBinding.inflate(layoutInflater)
         setContentView(binding.root)
         slidr = Slidr.attach(this)
@@ -557,7 +551,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 }
                 startActivity(intent)
             } else {
-                MainActivity.toastView(getString(R.string.error))
+                MainActivity.toastView(this, getString(R.string.error))
             }
         }
         if (id == R.id.action_dzen_noch) {

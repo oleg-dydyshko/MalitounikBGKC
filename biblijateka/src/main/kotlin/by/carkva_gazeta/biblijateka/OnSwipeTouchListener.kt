@@ -39,6 +39,6 @@ internal abstract class OnSwipeTouchListener(private val context: Context) : OnT
         }
     }
 
-    open fun onSwipeRight() {}
-    open fun onSwipeLeft() {}
+    abstract fun onSwipeRight()
+    abstract fun onSwipeLeft()
 }

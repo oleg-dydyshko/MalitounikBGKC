@@ -48,7 +48,7 @@ class DialogHelpNotification : DialogFragment() {
                     val intent = Intent(Settings.ACTION_SETTINGS)
                     startActivity(intent)
                 } catch (e: ActivityNotFoundException) {
-                    MainActivity.toastView(getString(R.string.error_ch2))
+                    MainActivity.toastView(it, getString(R.string.error_ch2))
                     dialog.cancel()
                 }
             }

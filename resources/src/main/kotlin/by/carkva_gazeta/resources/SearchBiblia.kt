@@ -216,14 +216,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         prefEditors = chin.edit()
-        setMyTheme()
         binding = SearchBibliaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)
@@ -632,7 +626,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                         binding.ListView.visibility = View.VISIBLE
                         execute(edit)
                     } else {
-                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.seashmin))
+                        MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.seashmin))
                     }
                 }
                 true

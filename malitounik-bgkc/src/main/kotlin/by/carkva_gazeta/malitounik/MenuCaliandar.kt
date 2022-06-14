@@ -128,7 +128,7 @@ class MenuCaliandar : Fragment() {
                         }
                     }
                 }
-                MainActivity.toastView(getString(R.string.remove_padzea))
+                MainActivity.toastView(it, getString(R.string.remove_padzea))
                 Sabytie.editCaliandar = true
                 adapter.notifyDataSetChanged()
             }
@@ -208,7 +208,7 @@ class MenuCaliandar : Fragment() {
                     intent.putExtra("dayOfYear", dayofyear)
                     startActivity(intent)
                 } else {
-                    MainActivity.toastView(getString(R.string.error))
+                    MainActivity.toastView(it, getString(R.string.error))
                 }
             }
         }

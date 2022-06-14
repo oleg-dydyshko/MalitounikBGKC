@@ -240,7 +240,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }
@@ -274,7 +274,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }
@@ -308,7 +308,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }
@@ -376,7 +376,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }
@@ -517,7 +517,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                                 }
                             }
                         } catch (e: Throwable) {
-                            MainActivity.toastView(Malitounik.applicationContext().getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            MainActivity.toastView(Malitounik.applicationContext(), Malitounik.applicationContext().getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }

@@ -245,7 +245,7 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
                     intent.setClassName(it, MainActivity.PASOCHNICALIST)
                     startActivity(intent)
                 } else {
-                    MainActivity.toastView(getString(R.string.error))
+                    MainActivity.toastView(it, getString(R.string.error))
                 }
             }
         }

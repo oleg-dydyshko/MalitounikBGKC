@@ -62,7 +62,7 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
                         activity?.let {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
+                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                         }
                         binding.progressBar2.visibility = View.GONE
                     }
@@ -272,14 +272,18 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            activity?.let {
+                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            }
                         }
                     }
                 }
-                if (responseCodeS == 200) {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
-                } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
+                activity?.let {
+                    if (responseCodeS == 200) {
+                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    } else {
+                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }
                 }
                 binding.progressBar2.visibility = View.GONE
             }
@@ -370,14 +374,18 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            activity?.let {
+                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            }
                         }
                     }
                 }
-                if (responseCodeS == 200) {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
-                } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
+                activity?.let {
+                    if (responseCodeS == 200) {
+                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    } else {
+                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }
                 }
                 binding.progressBar2.visibility = View.GONE
             }
@@ -426,7 +434,9 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {
-                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            activity?.let {
+                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            }
                         }
                     }
                 }

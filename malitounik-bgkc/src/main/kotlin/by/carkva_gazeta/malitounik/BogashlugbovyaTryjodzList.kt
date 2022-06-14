@@ -41,15 +41,9 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
+        super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = getBaseDzenNoch()
-        setMyTheme()
-        super.onCreate(savedInstanceState)
         binding = AkafistListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)

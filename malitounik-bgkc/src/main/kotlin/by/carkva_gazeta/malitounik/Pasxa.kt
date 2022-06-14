@@ -43,14 +43,8 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = getBaseDzenNoch()
-        setMyTheme()
         binding = PasxaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)

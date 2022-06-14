@@ -635,12 +635,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
-        setMyTheme()
         binding = BogasluzbovyaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
@@ -1787,7 +1781,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             men = setVybranoe(this, resurs, title)
             if (men) {
-                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
             }
             invalidateOptionsMenu()
         }
@@ -1826,7 +1820,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 intent.putExtra("text", text)
                 startActivity(intent)
             } else {
-                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
             }
         }
         return super.onOptionsItemSelected(item)

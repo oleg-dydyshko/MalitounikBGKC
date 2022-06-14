@@ -35,7 +35,6 @@ class Naviny : BaseActivity() {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = getBaseDzenNoch()
-        setMyTheme()
         binding = NavinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)
@@ -129,11 +128,6 @@ class Naviny : BaseActivity() {
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         binding.viewWeb.onResume()
     }
 
@@ -249,7 +243,7 @@ class Naviny : BaseActivity() {
                 intent.setPackage(null)
                 startActivity(intent)
             } catch (ex: ActivityNotFoundException) {
-                MainActivity.toastView(getString(R.string.error_ch2))
+                MainActivity.toastView(this, getString(R.string.error_ch2))
             }
         }
     }

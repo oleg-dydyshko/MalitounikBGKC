@@ -34,6 +34,9 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
             mLastClickTime = savedInstanceState.getLong("mLastClickTime")
             autoDzenNoch = savedInstanceState.getBoolean("autoDzenNoch")
         }
+        if (k.getBoolean("auto_dzen_noch", false)) {
+            autoDzenNoch = startAutoDzenNoch
+        }
         setMyTheme()
     }
 
@@ -80,6 +83,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         autoDzenNoch = isDzenNoch
+        startAutoDzenNoch = isDzenNoch
         checkAutoDzenNoch()
         recreate()
     }
@@ -108,5 +112,9 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         val mySensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
         mySensorManager.unregisterListener(this, lightSensor)
+    }
+
+    companion object {
+        private var startAutoDzenNoch = false
     }
 }

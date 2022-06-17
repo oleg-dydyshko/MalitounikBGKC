@@ -248,7 +248,7 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.action_glava).isVisible = true
-        menu.findItem(R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+        menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
         val itemVybranoe: MenuItem = menu.findItem(R.id.action_vybranoe)
         if (men) {

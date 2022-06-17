@@ -287,7 +287,6 @@ class Naviny : BaseActivity() {
     }
 
     private inner class MyWebChromeClient : WebChromeClient() {
-
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
             binding.toolbarprogress.setValue(newProgress)
@@ -323,7 +322,6 @@ class Naviny : BaseActivity() {
     }
 
     private inner class MyWebViewClient : WebViewClient() {
-
         @Deprecated("Deprecated in Java")
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             if (url.contains("viber://")) {

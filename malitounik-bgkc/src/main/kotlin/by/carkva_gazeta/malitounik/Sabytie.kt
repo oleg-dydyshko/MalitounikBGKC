@@ -55,7 +55,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
     private var redak = false
     private var save = false
     private lateinit var adapter: SabytieAdapter
-    private lateinit var c: GregorianCalendar
+    private lateinit var c: Calendar
     private var timeH = 0
     private var timeM = 0
     private var posit = 0
@@ -251,7 +251,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             da = binding.label1.text.toString()
             daK = binding.label12.text.toString()
             taK = binding.label22.text.toString()
-            c = Calendar.getInstance() as GregorianCalendar
+            c = Calendar.getInstance()
             c.timeInMillis = result
             timeH = hour
             timeM = minute
@@ -368,7 +368,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             }
         }
         am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        c = Calendar.getInstance() as GregorianCalendar
+        c = Calendar.getInstance()
         c.add(Calendar.DATE, 1)
         var nol1 = ""
         var nol2 = ""
@@ -932,7 +932,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             0
         }
         val id = item.itemId
-        c = Calendar.getInstance() as GregorianCalendar
+        c = Calendar.getInstance()
         val shakeanimation = AnimationUtils.loadAnimation(this, R.anim.shake)
         if (id == android.R.id.home) {
             onBackPressed()
@@ -2084,7 +2084,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
 
     private fun addSabytie() {
         if (actionExpandOn) binding.toolbar.collapseActionView()
-        c = Calendar.getInstance() as GregorianCalendar
+        c = Calendar.getInstance()
         save = false
         back = true
         konec = false
@@ -2157,7 +2157,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         } else {
             0
         }
-        val c2 = Calendar.getInstance() as GregorianCalendar
+        val c2 = Calendar.getInstance()
         c2.set(Calendar.SECOND, 0)
         val del = ArrayList<Padzeia>()
         for (p in MainActivity.padzeia) {
@@ -2234,15 +2234,13 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
 
     private inner class SabytieAdapter(list: ArrayList<Padzeia>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<Padzeia, SabytieAdapter.ViewHolder>(), Filterable {
         private var dzenNoch = false
-        private val day = Calendar.getInstance() as GregorianCalendar
+        private val day = Calendar.getInstance()
         private val origData = ArrayList(list)
 
         fun getOpigData() = origData
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemSabytieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            dzenNoch = k.getBoolean("dzen_noch", false)
             view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
                 view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
@@ -2360,7 +2358,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 val konecSabytie = p.konecSabytie
                 val color = p.color
                 var res = getString(R.string.sabytie_no_pavedam)
-                val gc = Calendar.getInstance() as GregorianCalendar
+                val gc = Calendar.getInstance()
                 val realTime = gc.timeInMillis
                 var paznicia = false
                 if (paz != 0L) {
@@ -2543,7 +2541,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                         if (gc[Calendar.MONTH] < 9) nol2 = "0"
                         if (gc[Calendar.MINUTE] < 10) nol3 = "0"
                         binding.pavedamic2.text = getString(R.string.sabytie_pavedam, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR], gc[Calendar.HOUR_OF_DAY], nol3, gc[Calendar.MINUTE])
-                        val gcReal = Calendar.getInstance() as GregorianCalendar
+                        val gcReal = Calendar.getInstance()
                         if (gcReal.timeInMillis > londs2) {
                             if (dzenNoch) binding.pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_black))
                             else binding.pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary))
@@ -2571,9 +2569,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         private val colors = arrayOf("#D00505", "#800080", "#C71585", "#FF00FF", "#F4A460", "#D2691E", "#A52A2A", "#1E90FF", "#6A5ACD", "#228B22", "#9ACD32", "#20B2AA")
         var editCaliandar = false
 
-        fun getColors(color: Int): String {
-            val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+        fun getColors(activity: Activity, color: Int): String {
+            val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) {
                 colors[0] = "#f44336"
             } else {

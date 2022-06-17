@@ -403,7 +403,7 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_font).isVisible = !paralel
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_bright).isVisible = !paralel
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = !paralel
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
         if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = false
         val itemVybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         if (men) {

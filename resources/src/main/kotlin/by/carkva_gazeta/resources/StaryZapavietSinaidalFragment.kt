@@ -15,6 +15,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.widget.TooltipCompat
 import androidx.fragment.app.Fragment
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.MainActivity
@@ -513,8 +514,8 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
             binding.listView.adapter = adapter
             binding.listView.setSelection(pazicia)
             binding.listView.isVerticalScrollBarEnabled = false
-            val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            if (k.getBoolean("dzen_noch", false)) {
+            val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
+            if (dzenNoch) {
                 binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta)
             }
             TooltipCompat.setTooltipText(binding.copyBigFull, getString(by.carkva_gazeta.malitounik.R.string.copy_big_full))

@@ -22,7 +22,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.SearchView
-import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import by.carkva_gazeta.malitounik.*
@@ -32,10 +31,7 @@ import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.r0adkll.slidr.Slidr
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -53,165 +49,169 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = false
     private var fierstPosition = 0
-    private var sinodalBible = ArrayMap<String, Int>()
-    private var semuxaBible = ArrayMap<String, Int>()
+    private var sinodalBible = ArrayList<Int>()
+    private var semuxaBible = ArrayList<Int>()
     private var searche = false
     private lateinit var binding: SearchBibliaBinding
     private var keyword = false
     private var edittext2Focus = false
     private var title = ""
+    private var searchJob: Job? = null
+    private var canselJob: Job? = null
 
     init {
-        sinodalBible["sinaidals1"] = R.raw.sinaidals1
-        sinodalBible["sinaidals2"] = R.raw.sinaidals2
-        sinodalBible["sinaidals3"] = R.raw.sinaidals3
-        sinodalBible["sinaidals4"] = R.raw.sinaidals4
-        sinodalBible["sinaidals5"] = R.raw.sinaidals5
-        sinodalBible["sinaidals6"] = R.raw.sinaidals6
-        sinodalBible["sinaidals7"] = R.raw.sinaidals7
-        sinodalBible["sinaidals8"] = R.raw.sinaidals8
-        sinodalBible["sinaidals9"] = R.raw.sinaidals9
-        sinodalBible["sinaidals10"] = R.raw.sinaidals10
-        sinodalBible["sinaidals11"] = R.raw.sinaidals11
-        sinodalBible["sinaidals12"] = R.raw.sinaidals12
-        sinodalBible["sinaidals13"] = R.raw.sinaidals13
-        sinodalBible["sinaidals14"] = R.raw.sinaidals14
-        sinodalBible["sinaidals15"] = R.raw.sinaidals15
-        sinodalBible["sinaidals16"] = R.raw.sinaidals16
-        sinodalBible["sinaidals17"] = R.raw.sinaidals17
-        sinodalBible["sinaidals18"] = R.raw.sinaidals18
-        sinodalBible["sinaidals19"] = R.raw.sinaidals19
-        sinodalBible["sinaidals20"] = R.raw.sinaidals20
-        sinodalBible["sinaidals21"] = R.raw.sinaidals21
-        sinodalBible["sinaidals22"] = R.raw.sinaidals22
-        sinodalBible["sinaidals23"] = R.raw.sinaidals23
-        sinodalBible["sinaidals24"] = R.raw.sinaidals24
-        sinodalBible["sinaidals25"] = R.raw.sinaidals25
-        sinodalBible["sinaidals26"] = R.raw.sinaidals26
-        sinodalBible["sinaidals27"] = R.raw.sinaidals27
-        sinodalBible["sinaidals28"] = R.raw.sinaidals28
-        sinodalBible["sinaidals29"] = R.raw.sinaidals29
-        sinodalBible["sinaidals30"] = R.raw.sinaidals30
-        sinodalBible["sinaidals31"] = R.raw.sinaidals31
-        sinodalBible["sinaidals32"] = R.raw.sinaidals32
-        sinodalBible["sinaidals33"] = R.raw.sinaidals33
-        sinodalBible["sinaidals34"] = R.raw.sinaidals34
-        sinodalBible["sinaidals35"] = R.raw.sinaidals35
-        sinodalBible["sinaidals36"] = R.raw.sinaidals36
-        sinodalBible["sinaidals37"] = R.raw.sinaidals37
-        sinodalBible["sinaidals38"] = R.raw.sinaidals38
-        sinodalBible["sinaidals39"] = R.raw.sinaidals39
-        sinodalBible["sinaidals40"] = R.raw.sinaidals40
-        sinodalBible["sinaidals41"] = R.raw.sinaidals41
-        sinodalBible["sinaidals42"] = R.raw.sinaidals42
-        sinodalBible["sinaidals43"] = R.raw.sinaidals43
-        sinodalBible["sinaidals44"] = R.raw.sinaidals44
-        sinodalBible["sinaidals45"] = R.raw.sinaidals45
-        sinodalBible["sinaidals46"] = R.raw.sinaidals46
-        sinodalBible["sinaidals47"] = R.raw.sinaidals47
-        sinodalBible["sinaidals48"] = R.raw.sinaidals48
-        sinodalBible["sinaidals49"] = R.raw.sinaidals49
-        sinodalBible["sinaidals50"] = R.raw.sinaidals50
-        sinodalBible["sinaidaln1"] = R.raw.sinaidaln1
-        sinodalBible["sinaidaln2"] = R.raw.sinaidaln2
-        sinodalBible["sinaidaln3"] = R.raw.sinaidaln3
-        sinodalBible["sinaidaln4"] = R.raw.sinaidaln4
-        sinodalBible["sinaidaln5"] = R.raw.sinaidaln5
-        sinodalBible["sinaidaln6"] = R.raw.sinaidaln6
-        sinodalBible["sinaidaln7"] = R.raw.sinaidaln7
-        sinodalBible["sinaidaln8"] = R.raw.sinaidaln8
-        sinodalBible["sinaidaln9"] = R.raw.sinaidaln9
-        sinodalBible["sinaidaln10"] = R.raw.sinaidaln10
-        sinodalBible["sinaidaln11"] = R.raw.sinaidaln11
-        sinodalBible["sinaidaln12"] = R.raw.sinaidaln12
-        sinodalBible["sinaidaln13"] = R.raw.sinaidaln13
-        sinodalBible["sinaidaln14"] = R.raw.sinaidaln14
-        sinodalBible["sinaidaln15"] = R.raw.sinaidaln15
-        sinodalBible["sinaidaln16"] = R.raw.sinaidaln16
-        sinodalBible["sinaidaln17"] = R.raw.sinaidaln17
-        sinodalBible["sinaidaln18"] = R.raw.sinaidaln18
-        sinodalBible["sinaidaln19"] = R.raw.sinaidaln19
-        sinodalBible["sinaidaln20"] = R.raw.sinaidaln20
-        sinodalBible["sinaidaln21"] = R.raw.sinaidaln21
-        sinodalBible["sinaidaln22"] = R.raw.sinaidaln22
-        sinodalBible["sinaidaln23"] = R.raw.sinaidaln23
-        sinodalBible["sinaidaln24"] = R.raw.sinaidaln24
-        sinodalBible["sinaidaln25"] = R.raw.sinaidaln25
-        sinodalBible["sinaidaln26"] = R.raw.sinaidaln26
-        sinodalBible["sinaidaln27"] = R.raw.sinaidaln27
-        semuxaBible["biblias1"] = R.raw.biblias1
-        semuxaBible["biblias2"] = R.raw.biblias2
-        semuxaBible["biblias3"] = R.raw.biblias3
-        semuxaBible["biblias4"] = R.raw.biblias4
-        semuxaBible["biblias5"] = R.raw.biblias5
-        semuxaBible["biblias6"] = R.raw.biblias6
-        semuxaBible["biblias7"] = R.raw.biblias7
-        semuxaBible["biblias8"] = R.raw.biblias8
-        semuxaBible["biblias9"] = R.raw.biblias9
-        semuxaBible["biblias10"] = R.raw.biblias10
-        semuxaBible["biblias11"] = R.raw.biblias11
-        semuxaBible["biblias12"] = R.raw.biblias12
-        semuxaBible["biblias13"] = R.raw.biblias13
-        semuxaBible["biblias14"] = R.raw.biblias14
-        semuxaBible["biblias15"] = R.raw.biblias15
-        semuxaBible["biblias16"] = R.raw.biblias16
-        semuxaBible["biblias17"] = R.raw.biblias17
-        semuxaBible["biblias18"] = R.raw.biblias18
-        semuxaBible["biblias19"] = R.raw.biblias19
-        semuxaBible["biblias20"] = R.raw.biblias20
-        semuxaBible["biblias21"] = R.raw.biblias21
-        semuxaBible["biblias22"] = R.raw.biblias22
-        semuxaBible["biblias23"] = R.raw.biblias23
-        semuxaBible["biblias24"] = R.raw.biblias24
-        semuxaBible["biblias25"] = R.raw.biblias25
-        semuxaBible["biblias26"] = R.raw.biblias26
-        semuxaBible["biblias27"] = R.raw.biblias27
-        semuxaBible["biblias28"] = R.raw.biblias28
-        semuxaBible["biblias29"] = R.raw.biblias29
-        semuxaBible["biblias30"] = R.raw.biblias30
-        semuxaBible["biblias31"] = R.raw.biblias31
-        semuxaBible["biblias32"] = R.raw.biblias32
-        semuxaBible["biblias33"] = R.raw.biblias33
-        semuxaBible["biblias34"] = R.raw.biblias34
-        semuxaBible["biblias35"] = R.raw.biblias35
-        semuxaBible["biblias36"] = R.raw.biblias36
-        semuxaBible["biblias37"] = R.raw.biblias37
-        semuxaBible["biblias38"] = R.raw.biblias38
-        semuxaBible["biblias39"] = R.raw.biblias39
-        semuxaBible["biblian1"] = R.raw.biblian1
-        semuxaBible["biblian2"] = R.raw.biblian2
-        semuxaBible["biblian3"] = R.raw.biblian3
-        semuxaBible["biblian4"] = R.raw.biblian4
-        semuxaBible["biblian5"] = R.raw.biblian5
-        semuxaBible["biblian6"] = R.raw.biblian6
-        semuxaBible["biblian7"] = R.raw.biblian7
-        semuxaBible["biblian8"] = R.raw.biblian8
-        semuxaBible["biblian9"] = R.raw.biblian9
-        semuxaBible["biblian10"] = R.raw.biblian10
-        semuxaBible["biblian11"] = R.raw.biblian11
-        semuxaBible["biblian12"] = R.raw.biblian12
-        semuxaBible["biblian13"] = R.raw.biblian13
-        semuxaBible["biblian14"] = R.raw.biblian14
-        semuxaBible["biblian15"] = R.raw.biblian15
-        semuxaBible["biblian16"] = R.raw.biblian16
-        semuxaBible["biblian17"] = R.raw.biblian17
-        semuxaBible["biblian18"] = R.raw.biblian18
-        semuxaBible["biblian19"] = R.raw.biblian19
-        semuxaBible["biblian20"] = R.raw.biblian20
-        semuxaBible["biblian21"] = R.raw.biblian21
-        semuxaBible["biblian22"] = R.raw.biblian22
-        semuxaBible["biblian23"] = R.raw.biblian23
-        semuxaBible["biblian24"] = R.raw.biblian24
-        semuxaBible["biblian25"] = R.raw.biblian25
-        semuxaBible["biblian26"] = R.raw.biblian26
-        semuxaBible["biblian27"] = R.raw.biblian27
+        sinodalBible.add(R.raw.sinaidals1)
+        sinodalBible.add(R.raw.sinaidals2)
+        sinodalBible.add(R.raw.sinaidals3)
+        sinodalBible.add(R.raw.sinaidals4)
+        sinodalBible.add(R.raw.sinaidals5)
+        sinodalBible.add(R.raw.sinaidals6)
+        sinodalBible.add(R.raw.sinaidals7)
+        sinodalBible.add(R.raw.sinaidals8)
+        sinodalBible.add(R.raw.sinaidals9)
+        sinodalBible.add(R.raw.sinaidals10)
+        sinodalBible.add(R.raw.sinaidals11)
+        sinodalBible.add(R.raw.sinaidals12)
+        sinodalBible.add(R.raw.sinaidals13)
+        sinodalBible.add(R.raw.sinaidals14)
+        sinodalBible.add(R.raw.sinaidals15)
+        sinodalBible.add(R.raw.sinaidals16)
+        sinodalBible.add(R.raw.sinaidals17)
+        sinodalBible.add(R.raw.sinaidals18)
+        sinodalBible.add(R.raw.sinaidals19)
+        sinodalBible.add(R.raw.sinaidals20)
+        sinodalBible.add(R.raw.sinaidals21)
+        sinodalBible.add(R.raw.sinaidals22)
+        sinodalBible.add(R.raw.sinaidals23)
+        sinodalBible.add(R.raw.sinaidals24)
+        sinodalBible.add(R.raw.sinaidals25)
+        sinodalBible.add(R.raw.sinaidals26)
+        sinodalBible.add(R.raw.sinaidals27)
+        sinodalBible.add(R.raw.sinaidals28)
+        sinodalBible.add(R.raw.sinaidals29)
+        sinodalBible.add(R.raw.sinaidals30)
+        sinodalBible.add(R.raw.sinaidals31)
+        sinodalBible.add(R.raw.sinaidals32)
+        sinodalBible.add(R.raw.sinaidals33)
+        sinodalBible.add(R.raw.sinaidals34)
+        sinodalBible.add(R.raw.sinaidals35)
+        sinodalBible.add(R.raw.sinaidals36)
+        sinodalBible.add(R.raw.sinaidals37)
+        sinodalBible.add(R.raw.sinaidals38)
+        sinodalBible.add(R.raw.sinaidals39)
+        sinodalBible.add(R.raw.sinaidals40)
+        sinodalBible.add(R.raw.sinaidals41)
+        sinodalBible.add(R.raw.sinaidals42)
+        sinodalBible.add(R.raw.sinaidals43)
+        sinodalBible.add(R.raw.sinaidals44)
+        sinodalBible.add(R.raw.sinaidals45)
+        sinodalBible.add(R.raw.sinaidals46)
+        sinodalBible.add(R.raw.sinaidals47)
+        sinodalBible.add(R.raw.sinaidals48)
+        sinodalBible.add(R.raw.sinaidals49)
+        sinodalBible.add(R.raw.sinaidals50)
+        sinodalBible.add(R.raw.sinaidaln1)
+        sinodalBible.add(R.raw.sinaidaln2)
+        sinodalBible.add(R.raw.sinaidaln3)
+        sinodalBible.add(R.raw.sinaidaln4)
+        sinodalBible.add(R.raw.sinaidaln5)
+        sinodalBible.add(R.raw.sinaidaln6)
+        sinodalBible.add(R.raw.sinaidaln7)
+        sinodalBible.add(R.raw.sinaidaln8)
+        sinodalBible.add(R.raw.sinaidaln9)
+        sinodalBible.add(R.raw.sinaidaln10)
+        sinodalBible.add(R.raw.sinaidaln11)
+        sinodalBible.add(R.raw.sinaidaln12)
+        sinodalBible.add(R.raw.sinaidaln13)
+        sinodalBible.add(R.raw.sinaidaln14)
+        sinodalBible.add(R.raw.sinaidaln15)
+        sinodalBible.add(R.raw.sinaidaln16)
+        sinodalBible.add(R.raw.sinaidaln17)
+        sinodalBible.add(R.raw.sinaidaln18)
+        sinodalBible.add(R.raw.sinaidaln19)
+        sinodalBible.add(R.raw.sinaidaln20)
+        sinodalBible.add(R.raw.sinaidaln21)
+        sinodalBible.add(R.raw.sinaidaln22)
+        sinodalBible.add(R.raw.sinaidaln23)
+        sinodalBible.add(R.raw.sinaidaln24)
+        sinodalBible.add(R.raw.sinaidaln25)
+        sinodalBible.add(R.raw.sinaidaln26)
+        sinodalBible.add(R.raw.sinaidaln27)
+        semuxaBible.add(R.raw.biblias1)
+        semuxaBible.add(R.raw.biblias2)
+        semuxaBible.add(R.raw.biblias3)
+        semuxaBible.add(R.raw.biblias4)
+        semuxaBible.add(R.raw.biblias5)
+        semuxaBible.add(R.raw.biblias6)
+        semuxaBible.add(R.raw.biblias7)
+        semuxaBible.add(R.raw.biblias8)
+        semuxaBible.add(R.raw.biblias9)
+        semuxaBible.add(R.raw.biblias10)
+        semuxaBible.add(R.raw.biblias11)
+        semuxaBible.add(R.raw.biblias12)
+        semuxaBible.add(R.raw.biblias13)
+        semuxaBible.add(R.raw.biblias14)
+        semuxaBible.add(R.raw.biblias15)
+        semuxaBible.add(R.raw.biblias16)
+        semuxaBible.add(R.raw.biblias17)
+        semuxaBible.add(R.raw.biblias18)
+        semuxaBible.add(R.raw.biblias19)
+        semuxaBible.add(R.raw.biblias20)
+        semuxaBible.add(R.raw.biblias21)
+        semuxaBible.add(R.raw.biblias22)
+        semuxaBible.add(R.raw.biblias23)
+        semuxaBible.add(R.raw.biblias24)
+        semuxaBible.add(R.raw.biblias25)
+        semuxaBible.add(R.raw.biblias26)
+        semuxaBible.add(R.raw.biblias27)
+        semuxaBible.add(R.raw.biblias28)
+        semuxaBible.add(R.raw.biblias29)
+        semuxaBible.add(R.raw.biblias30)
+        semuxaBible.add(R.raw.biblias31)
+        semuxaBible.add(R.raw.biblias32)
+        semuxaBible.add(R.raw.biblias33)
+        semuxaBible.add(R.raw.biblias34)
+        semuxaBible.add(R.raw.biblias35)
+        semuxaBible.add(R.raw.biblias36)
+        semuxaBible.add(R.raw.biblias37)
+        semuxaBible.add(R.raw.biblias38)
+        semuxaBible.add(R.raw.biblias39)
+        semuxaBible.add(R.raw.biblian1)
+        semuxaBible.add(R.raw.biblian2)
+        semuxaBible.add(R.raw.biblian3)
+        semuxaBible.add(R.raw.biblian4)
+        semuxaBible.add(R.raw.biblian5)
+        semuxaBible.add(R.raw.biblian6)
+        semuxaBible.add(R.raw.biblian7)
+        semuxaBible.add(R.raw.biblian8)
+        semuxaBible.add(R.raw.biblian9)
+        semuxaBible.add(R.raw.biblian10)
+        semuxaBible.add(R.raw.biblian11)
+        semuxaBible.add(R.raw.biblian12)
+        semuxaBible.add(R.raw.biblian13)
+        semuxaBible.add(R.raw.biblian14)
+        semuxaBible.add(R.raw.biblian15)
+        semuxaBible.add(R.raw.biblian16)
+        semuxaBible.add(R.raw.biblian17)
+        semuxaBible.add(R.raw.biblian18)
+        semuxaBible.add(R.raw.biblian19)
+        semuxaBible.add(R.raw.biblian20)
+        semuxaBible.add(R.raw.biblian21)
+        semuxaBible.add(R.raw.biblian22)
+        semuxaBible.add(R.raw.biblian23)
+        semuxaBible.add(R.raw.biblian24)
+        semuxaBible.add(R.raw.biblian25)
+        semuxaBible.add(R.raw.biblian26)
+        semuxaBible.add(R.raw.biblian27)
     }
 
     override fun onPause() {
         super.onPause()
+        searchJob?.cancel()
         prefEditors.putString("search_string_filter", binding.editText2.text.toString())
         prefEditors.putInt("search_bible_fierstPosition", fierstPosition)
         prefEditors.apply()
+        canselJob?.cancel()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -514,15 +514,12 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             val edit = history[position]
-            addHistory(edit)
-            saveHistory()
             binding.History.visibility = View.GONE
             binding.ListView.visibility = View.VISIBLE
             searche = true
             prefEditors.putString("search_string", edit)
             prefEditors.apply()
             autoCompleteTextView?.setText(edit)
-            searchView?.clearFocus()
             execute(edit)
         }
         binding.History.setOnItemLongClickListener { _, _, position, _ ->
@@ -620,8 +617,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                     val edit = autoCompleteTextView?.text.toString()
                     if (edit.length >= 3) {
                         searche = true
-                        addHistory(edit)
-                        saveHistory()
                         binding.History.visibility = View.GONE
                         binding.ListView.visibility = View.VISIBLE
                         execute(edit)
@@ -661,6 +656,12 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         textViewCount = menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextView
         textViewCount?.typeface = MainActivity.createFont(Typeface.NORMAL)
         textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
+        val closeButton = searchView?.findViewById(androidx.appcompat.R.id.search_close_btn) as ImageView
+        closeButton.setOnClickListener {
+            searchJob?.cancel()
+            searchView?.setQuery("", false)
+            onPostExecute(ArrayList())
+        }
         changeSearchViewElements(searchView)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
@@ -754,7 +755,10 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     }
 
     private fun execute(searche: String) {
-        CoroutineScope(Dispatchers.Main).launch {
+        if (searchJob?.isActive == true) {
+            searchJob?.cancel()
+        }
+        searchJob = CoroutineScope(Dispatchers.Main).launch {
             onPreExecute()
             val result = withContext(Dispatchers.IO) {
                 return@withContext doInBackground(searche)
@@ -773,7 +777,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         var edit = autoCompleteTextView?.text.toString()
         if (edit != "") {
             edit = edit.trim()
-            autoCompleteTextView?.setText(edit)
             prefEditors.putString("search_string", edit)
             prefEditors.apply()
         }
@@ -789,6 +792,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     }
 
     private fun onPostExecute(result: ArrayList<Spannable>) {
+        canselJob?.cancel()
         adapter.addAll(result)
         adapter.filter.filter(binding.editText2.text.toString())
         textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
@@ -796,8 +800,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             binding.ListView.post { binding.ListView.setSelection(chin.getInt("search_position", 0)) }
         }
         binding.progressBar.visibility = View.GONE
-        binding.History.visibility = View.GONE
-        binding.ListView.visibility = View.VISIBLE
         val arrayList = ArrayList<String>()
         result.forEach {
             arrayList.add(MainActivity.toHtml(it))
@@ -806,9 +808,20 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         val json = gson.toJson(arrayList)
         prefEditors.putString("search_array", json)
         prefEditors.apply()
+        val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView
+        val search = searcheTextView.text.toString()
+        if (search != "") {
+            binding.History.visibility = View.GONE
+            binding.ListView.visibility = View.VISIBLE
+            canselJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(2000L)
+                val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm1.hideSoftInputFromWindow(autoCompleteTextView?.windowToken, 0)
+                addHistory(search)
+                saveHistory()
+            }
+        }
         searche = false
-        val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm1.hideSoftInputFromWindow(autoCompleteTextView?.windowToken, 0)
     }
 
     private fun zamena(replase: String): String {
@@ -893,85 +906,86 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             } else {
                 poshuk1 = " $poshuk1 "
             }
-            for (i in 0 until semuxaBible.size) {
-                val biblia = chin.getInt("biblia_seash", 0)
-                var nazva = ""
-                if (biblia == 0 || biblia == 3 || biblia == 4) {
-                    if (semuxaBible.keyAt(i) == "biblias1") nazva = "Быцьцё"
-                    if (semuxaBible.keyAt(i) == "biblias2") nazva = "Выхад"
-                    if (semuxaBible.keyAt(i) == "biblias3") nazva = "Лявіт"
-                    if (semuxaBible.keyAt(i) == "biblias4") nazva = "Лікі"
-                    if (semuxaBible.keyAt(i) == "biblias5") nazva = "Другі Закон"
-                }
-                if (biblia == 0 || biblia == 4) {
-                    if (semuxaBible.keyAt(i) == "biblias6") nazva = "Ісуса сына Нава"
-                    if (semuxaBible.keyAt(i) == "biblias7") nazva = "Судзьдзяў"
-                    if (semuxaBible.keyAt(i) == "biblias8") nazva = "Рут"
-                    if (semuxaBible.keyAt(i) == "biblias9") nazva = "1-я Царстваў"
-                    if (semuxaBible.keyAt(i) == "biblias10") nazva = "2-я Царстваў"
-                    if (semuxaBible.keyAt(i) == "biblias11") nazva = "3-я Царстваў"
-                    if (semuxaBible.keyAt(i) == "biblias12") nazva = "4-я Царстваў"
-                    if (semuxaBible.keyAt(i) == "biblias13") nazva = "1-я Летапісаў"
-                    if (semuxaBible.keyAt(i) == "biblias14") nazva = "2-я Летапісаў"
-                    if (semuxaBible.keyAt(i) == "biblias15") nazva = "Эздры"
-                    if (semuxaBible.keyAt(i) == "biblias16") nazva = "Нээміі"
-                    if (semuxaBible.keyAt(i) == "biblias17") nazva = "Эстэр"
-                    if (semuxaBible.keyAt(i) == "biblias18") nazva = "Ёва"
-                    if (semuxaBible.keyAt(i) == "biblias19") nazva = "Псалтыр"
-                    if (semuxaBible.keyAt(i) == "biblias20") nazva = "Выслоўяў Саламонавых"
-                    if (semuxaBible.keyAt(i) == "biblias21") nazva = "Эклезіяста"
-                    if (semuxaBible.keyAt(i) == "biblias22") nazva = "Найвышэйшая Песьня Саламонава"
-                    if (semuxaBible.keyAt(i) == "biblias23") nazva = "Ісаі"
-                    if (semuxaBible.keyAt(i) == "biblias24") nazva = "Ераміі"
-                    if (semuxaBible.keyAt(i) == "biblias25") nazva = "Ераміін Плач"
-                    if (semuxaBible.keyAt(i) == "biblias26") nazva = "Езэкііля"
-                    if (semuxaBible.keyAt(i) == "biblias27") nazva = "Данііла"
-                    if (semuxaBible.keyAt(i) == "biblias28") nazva = "Асіі"
-                    if (semuxaBible.keyAt(i) == "biblias29") nazva = "Ёіля"
-                    if (semuxaBible.keyAt(i) == "biblias30") nazva = "Амоса"
-                    if (semuxaBible.keyAt(i) == "biblias31") nazva = "Аўдзея"
-                    if (semuxaBible.keyAt(i) == "biblias32") nazva = "Ёны"
-                    if (semuxaBible.keyAt(i) == "biblias33") nazva = "Міхея"
-                    if (semuxaBible.keyAt(i) == "biblias34") nazva = "Навума"
-                    if (semuxaBible.keyAt(i) == "biblias35") nazva = "Абакума"
-                    if (semuxaBible.keyAt(i) == "biblias36") nazva = "Сафона"
-                    if (semuxaBible.keyAt(i) == "biblias37") nazva = "Агея"
-                    if (semuxaBible.keyAt(i) == "biblias38") nazva = "Захарыі"
-                    if (semuxaBible.keyAt(i) == "biblias39") nazva = "Малахіі"
-                }
-                if (biblia == 0 || biblia == 1 || biblia == 2) {
-                    if (semuxaBible.keyAt(i) == "biblian1") nazva = "Паводле Мацьвея"
-                    if (semuxaBible.keyAt(i) == "biblian2") nazva = "Паводле Марка"
-                    if (semuxaBible.keyAt(i) == "biblian3") nazva = "Паводле Лукаша"
-                    if (semuxaBible.keyAt(i) == "biblian4") nazva = "Паводле Яна"
-                }
-                if (biblia == 0 || biblia == 2) {
-                    if (semuxaBible.keyAt(i) == "biblian5") nazva = "Дзеі Апосталаў"
-                    if (semuxaBible.keyAt(i) == "biblian6") nazva = "Якава"
-                    if (semuxaBible.keyAt(i) == "biblian7") nazva = "1-е Пятра"
-                    if (semuxaBible.keyAt(i) == "biblian8") nazva = "2-е Пятра"
-                    if (semuxaBible.keyAt(i) == "biblian9") nazva = "1-е Яна Багаслова"
-                    if (semuxaBible.keyAt(i) == "biblian10") nazva = "2-е Яна Багаслова"
-                    if (semuxaBible.keyAt(i) == "biblian11") nazva = "3-е Яна Багаслова"
-                    if (semuxaBible.keyAt(i) == "biblian12") nazva = "Юды"
-                    if (semuxaBible.keyAt(i) == "biblian13") nazva = "Да Рымлянаў"
-                    if (semuxaBible.keyAt(i) == "biblian14") nazva = "1-е да Карынфянаў"
-                    if (semuxaBible.keyAt(i) == "biblian15") nazva = "2-е да Карынфянаў"
-                    if (semuxaBible.keyAt(i) == "biblian16") nazva = "Да Галятаў"
-                    if (semuxaBible.keyAt(i) == "biblian17") nazva = "Да Эфэсянаў"
-                    if (semuxaBible.keyAt(i) == "biblian18") nazva = "Да Піліпянаў"
-                    if (semuxaBible.keyAt(i) == "biblian19") nazva = "Да Каласянаў"
-                    if (semuxaBible.keyAt(i) == "biblian20") nazva = "1-е да Фесаланікійцаў"
-                    if (semuxaBible.keyAt(i) == "biblian21") nazva = "2-е да Фесаланікійцаў"
-                    if (semuxaBible.keyAt(i) == "biblian22") nazva = "1-е да Цімафея"
-                    if (semuxaBible.keyAt(i) == "biblian23") nazva = "2-е да Цімафея"
-                    if (semuxaBible.keyAt(i) == "biblian24") nazva = "Да Ціта"
-                    if (semuxaBible.keyAt(i) == "biblian25") nazva = "Да Філімона"
-                    if (semuxaBible.keyAt(i) == "biblian26") nazva = "Да Габрэяў"
-                    if (semuxaBible.keyAt(i) == "biblian27") nazva = "Адкрыцьцё (Апакаліпсіс)"
+            val range = when (chin.getInt("biblia_seash", 0)) {
+                1 -> 39..42
+                2 -> 39 until semuxaBible.size
+                3 -> 0..4
+                4 -> 0..38
+                else -> 0 until semuxaBible.size
+            }
+            for (i in range) {
+                if (searchJob?.isActive == false) break
+                val nazva = when (i) {
+                    0 -> "Быцьцё"
+                    1 -> "Выхад"
+                    2 -> "Лявіт"
+                    3 -> "Лікі"
+                    4 -> "Другі Закон"
+                    5 -> "Ісуса сына Нава"
+                    6 -> "Судзьдзяў"
+                    7 -> "Рут"
+                    8 -> "1-я Царстваў"
+                    9 -> "2-я Царстваў"
+                    10 -> "3-я Царстваў"
+                    11 -> "4-я Царстваў"
+                    12 -> "1-я Летапісаў"
+                    13 -> "2-я Летапісаў"
+                    14 -> "Эздры"
+                    15 -> "Нээміі"
+                    16 -> "Эстэр"
+                    17 -> "Ёва"
+                    18 -> "Псалтыр"
+                    19 -> "Выслоўяў Саламонавых"
+                    20 -> "Эклезіяста"
+                    21 -> "Найвышэйшая Песьня Саламонава"
+                    22 -> "Ісаі"
+                    23 -> "Ераміі"
+                    24 -> "Ераміін Плач"
+                    25 -> "Езэкііля"
+                    26 -> "Данііла"
+                    27 -> "Асіі"
+                    28 -> "Ёіля"
+                    29 -> "Амоса"
+                    30 -> "Аўдзея"
+                    31 -> "Ёны"
+                    32 -> "Міхея"
+                    33 -> "Навума"
+                    34 -> "Абакума"
+                    35 -> "Сафона"
+                    36 -> "Агея"
+                    37 -> "Захарыі"
+                    38 -> "Малахіі"
+                    39 -> "Паводле Мацьвея"
+                    40 -> "Паводле Марка"
+                    41 -> "Паводле Лукаша"
+                    42 -> "Паводле Яна"
+                    43 -> "Дзеі Апосталаў"
+                    44 -> "Якава"
+                    45 -> "1-е Пятра"
+                    46 -> "2-е Пятра"
+                    47 -> "1-е Яна Багаслова"
+                    48 -> "2-е Яна Багаслова"
+                    49 -> "3-е Яна Багаслова"
+                    50 -> "Юды"
+                    51 -> "Да Рымлянаў"
+                    52 -> "1-е да Карынфянаў"
+                    53 -> "2-е да Карынфянаў"
+                    54 -> "Да Галятаў"
+                    55 -> "Да Эфэсянаў"
+                    56 -> "Да Піліпянаў"
+                    57 -> "Да Каласянаў"
+                    58 -> "1-е да Фесаланікійцаў"
+                    59 -> "2-е да Фесаланікійцаў"
+                    60 -> "1-е да Цімафея"
+                    61 -> "2-е да Цімафея"
+                    62 -> "Да Ціта"
+                    63 -> "Да Філімона"
+                    64 -> "Да Габрэяў"
+                    65 -> "Адкрыцьцё (Апакаліпсіс)"
+                    else -> ""
                 }
                 if (nazva != "") {
-                    val inputStream = resources.openRawResource(semuxaBible.valueAt(i))
+                    val inputStream = resources.openRawResource(semuxaBible[i])
                     val isr = InputStreamReader(inputStream)
                     val reader = BufferedReader(isr)
                     var glava = 0
@@ -1058,96 +1072,97 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             } else {
                 poshuk1 = " $poshuk1 "
             }
-            for (i in 0 until sinodalBible.size) {
-                val biblia = chin.getInt("biblia_seash", 0)
-                var nazva = ""
-                if (biblia == 0 || biblia == 3 || biblia == 4) {
-                    if (sinodalBible.keyAt(i) == "sinaidals1") nazva = "Бытие"
-                    if (sinodalBible.keyAt(i) == "sinaidals2") nazva = "Исход"
-                    if (sinodalBible.keyAt(i) == "sinaidals3") nazva = "Левит"
-                    if (sinodalBible.keyAt(i) == "sinaidals4") nazva = "Числа"
-                    if (sinodalBible.keyAt(i) == "sinaidals5") nazva = "Второзаконие"
-                }
-                if (biblia == 0 || biblia == 4) {
-                    if (sinodalBible.keyAt(i) == "sinaidals6") nazva = "Иисуса Навина"
-                    if (sinodalBible.keyAt(i) == "sinaidals7") nazva = "Судей израилевых"
-                    if (sinodalBible.keyAt(i) == "sinaidals8") nazva = "Руфи"
-                    if (sinodalBible.keyAt(i) == "sinaidals9") nazva = "1-я Царств"
-                    if (sinodalBible.keyAt(i) == "sinaidals10") nazva = "2-я Царств"
-                    if (sinodalBible.keyAt(i) == "sinaidals11") nazva = "3-я Царств"
-                    if (sinodalBible.keyAt(i) == "sinaidals12") nazva = "4-я Царств"
-                    if (sinodalBible.keyAt(i) == "sinaidals13") nazva = "1-я Паралипоменон"
-                    if (sinodalBible.keyAt(i) == "sinaidals14") nazva = "2-я Паралипоменон"
-                    if (sinodalBible.keyAt(i) == "sinaidals15") nazva = "1-я Ездры"
-                    if (sinodalBible.keyAt(i) == "sinaidals16") nazva = "Неемии"
-                    if (sinodalBible.keyAt(i) == "sinaidals17") nazva = "2-я Ездры"
-                    if (sinodalBible.keyAt(i) == "sinaidals18") nazva = "Товита"
-                    if (sinodalBible.keyAt(i) == "sinaidals19") nazva = "Иудифи"
-                    if (sinodalBible.keyAt(i) == "sinaidals20") nazva = "Есфири"
-                    if (sinodalBible.keyAt(i) == "sinaidals21") nazva = "Иова"
-                    if (sinodalBible.keyAt(i) == "sinaidals22") nazva = "Псалтирь"
-                    if (sinodalBible.keyAt(i) == "sinaidals23") nazva = "Притчи Соломона"
-                    if (sinodalBible.keyAt(i) == "sinaidals24") nazva = "Екклезиаста"
-                    if (sinodalBible.keyAt(i) == "sinaidals25") nazva = "Песнь песней Соломона"
-                    if (sinodalBible.keyAt(i) == "sinaidals26") nazva = "Премудрости Соломона"
-                    if (sinodalBible.keyAt(i) == "sinaidals27") nazva = "Премудрости Иисуса, сына Сирахова"
-                    if (sinodalBible.keyAt(i) == "sinaidals28") nazva = "Исаии"
-                    if (sinodalBible.keyAt(i) == "sinaidals29") nazva = "Иеремии"
-                    if (sinodalBible.keyAt(i) == "sinaidals30") nazva = "Плач Иеремии"
-                    if (sinodalBible.keyAt(i) == "sinaidals31") nazva = "Послание Иеремии"
-                    if (sinodalBible.keyAt(i) == "sinaidals32") nazva = "Варуха"
-                    if (sinodalBible.keyAt(i) == "sinaidals33") nazva = "Иезекииля"
-                    if (sinodalBible.keyAt(i) == "sinaidals34") nazva = "Даниила"
-                    if (sinodalBible.keyAt(i) == "sinaidals35") nazva = "Осии"
-                    if (sinodalBible.keyAt(i) == "sinaidals36") nazva = "Иоиля"
-                    if (sinodalBible.keyAt(i) == "sinaidals37") nazva = "Амоса"
-                    if (sinodalBible.keyAt(i) == "sinaidals38") nazva = "Авдия"
-                    if (sinodalBible.keyAt(i) == "sinaidals39") nazva = "Ионы"
-                    if (sinodalBible.keyAt(i) == "sinaidals40") nazva = "Михея"
-                    if (sinodalBible.keyAt(i) == "sinaidals41") nazva = "Наума"
-                    if (sinodalBible.keyAt(i) == "sinaidals42") nazva = "Аввакума"
-                    if (sinodalBible.keyAt(i) == "sinaidals43") nazva = "Сафонии"
-                    if (sinodalBible.keyAt(i) == "sinaidals44") nazva = "Аггея"
-                    if (sinodalBible.keyAt(i) == "sinaidals45") nazva = "Захарии"
-                    if (sinodalBible.keyAt(i) == "sinaidals46") nazva = "Малахии"
-                    if (sinodalBible.keyAt(i) == "sinaidals47") nazva = "1-я Маккавейская"
-                    if (sinodalBible.keyAt(i) == "sinaidals48") nazva = "2-я Маккавейская"
-                    if (sinodalBible.keyAt(i) == "sinaidals49") nazva = "3-я Маккавейская"
-                    if (sinodalBible.keyAt(i) == "sinaidals50") nazva = "3-я Ездры"
-                }
-                if (biblia == 0 || biblia == 1 || biblia == 2) {
-                    if (sinodalBible.keyAt(i) == "sinaidaln1") nazva = "От Матфея"
-                    if (sinodalBible.keyAt(i) == "sinaidaln2") nazva = "От Марка"
-                    if (sinodalBible.keyAt(i) == "sinaidaln3") nazva = "От Луки"
-                    if (sinodalBible.keyAt(i) == "sinaidaln4") nazva = "От Иоанна"
-                }
-                if (biblia == 0 || biblia == 2) {
-                    if (sinodalBible.keyAt(i) == "sinaidaln5") nazva = "Деяния святых апостолов"
-                    if (sinodalBible.keyAt(i) == "sinaidaln6") nazva = "Иакова"
-                    if (sinodalBible.keyAt(i) == "sinaidaln7") nazva = "1-е Петра"
-                    if (sinodalBible.keyAt(i) == "sinaidaln8") nazva = "2-е Петра"
-                    if (sinodalBible.keyAt(i) == "sinaidaln9") nazva = "1-е Иоанна"
-                    if (sinodalBible.keyAt(i) == "sinaidaln10") nazva = "2-е Иоанна"
-                    if (sinodalBible.keyAt(i) == "sinaidaln11") nazva = "3-е Иоанна"
-                    if (sinodalBible.keyAt(i) == "sinaidaln12") nazva = "Иуды"
-                    if (sinodalBible.keyAt(i) == "sinaidaln13") nazva = "Римлянам"
-                    if (sinodalBible.keyAt(i) == "sinaidaln14") nazva = "1-е Коринфянам"
-                    if (sinodalBible.keyAt(i) == "sinaidaln15") nazva = "2-е Коринфянам"
-                    if (sinodalBible.keyAt(i) == "sinaidaln16") nazva = "Галатам"
-                    if (sinodalBible.keyAt(i) == "sinaidaln17") nazva = "Эфэсянам"
-                    if (sinodalBible.keyAt(i) == "sinaidaln18") nazva = "Филиппийцам"
-                    if (sinodalBible.keyAt(i) == "sinaidaln19") nazva = "Колоссянам"
-                    if (sinodalBible.keyAt(i) == "sinaidaln20") nazva = "1-е Фессалоникийцам (Солунянам)"
-                    if (sinodalBible.keyAt(i) == "sinaidaln21") nazva = "2-е Фессалоникийцам (Солунянам)"
-                    if (sinodalBible.keyAt(i) == "sinaidaln22") nazva = "1-е Тимофею"
-                    if (sinodalBible.keyAt(i) == "sinaidaln23") nazva = "2-е Тимофею"
-                    if (sinodalBible.keyAt(i) == "sinaidaln24") nazva = "Титу"
-                    if (sinodalBible.keyAt(i) == "sinaidaln25") nazva = "Филимону"
-                    if (sinodalBible.keyAt(i) == "sinaidaln26") nazva = "Евреям"
-                    if (sinodalBible.keyAt(i) == "sinaidaln27") nazva = "Откровение (Апокалипсис)"
+            val range = when (chin.getInt("biblia_seash", 0)) {
+                1 -> 50..53
+                2 -> 50 until sinodalBible.size
+                3 -> 0..4
+                4 -> 0..49
+                else -> 0 until sinodalBible.size
+            }
+            for (i in range) {
+                if (searchJob?.isActive == false) break
+                val nazva = when (i) {
+                    0 -> "Бытие"
+                    1 -> "Исход"
+                    2 -> "Левит"
+                    3 -> "Числа"
+                    4 -> "Второзаконие"
+                    5 -> "Иисуса Навина"
+                    6 -> "Судей израилевых"
+                    7 -> "Руфи"
+                    8 -> "1-я Царств"
+                    9 -> "2-я Царств"
+                    10 -> "3-я Царств"
+                    11 -> "4-я Царств"
+                    12 -> "1-я Паралипоменон"
+                    13 -> "2-я Паралипоменон"
+                    14 -> "1-я Ездры"
+                    15 -> "Неемии"
+                    16 -> "2-я Ездры"
+                    17 -> "Товита"
+                    18 -> "Иудифи"
+                    19 -> "Есфири"
+                    20 -> "Иова"
+                    21 -> "Псалтирь"
+                    22 -> "Притчи Соломона"
+                    23 -> "Екклезиаста"
+                    24 -> "Песнь песней Соломона"
+                    25 -> "Премудрости Соломона"
+                    26 -> "Премудрости Иисуса, сына Сирахова"
+                    27 -> "Исаии"
+                    28 -> "Иеремии"
+                    29 -> "Плач Иеремии"
+                    30 -> "Послание Иеремии"
+                    31 -> "Варуха"
+                    32 -> "Иезекииля"
+                    33 -> "Даниила"
+                    34 -> "Осии"
+                    35 -> "Иоиля"
+                    36 -> "Амоса"
+                    37 -> "Авдия"
+                    38 -> "Ионы"
+                    39 -> "Михея"
+                    40 -> "Наума"
+                    41 -> "Аввакума"
+                    42 -> "Сафонии"
+                    43 -> "Аггея"
+                    44 -> "Захарии"
+                    45 -> "Малахии"
+                    46 -> "1-я Маккавейская"
+                    47 -> "2-я Маккавейская"
+                    48 -> "3-я Маккавейская"
+                    49 -> "3-я Ездры"
+                    50 -> "От Матфея"
+                    51 -> "От Марка"
+                    52 -> "От Луки"
+                    53 -> "От Иоанна"
+                    54 -> "Деяния святых апостолов"
+                    55 -> "Иакова"
+                    56 -> "1-е Петра"
+                    57 -> "2-е Петра"
+                    58 -> "1-е Иоанна"
+                    59 -> "2-е Иоанна"
+                    60 -> "3-е Иоанна"
+                    61 -> "Иуды"
+                    62 -> "Римлянам"
+                    63 -> "1-е Коринфянам"
+                    64 -> "2-е Коринфянам"
+                    65 -> "Галатам"
+                    66 -> "Эфэсянам"
+                    67 -> "Филиппийцам"
+                    68 -> "Колоссянам"
+                    69 -> "1-е Фессалоникийцам (Солунянам)"
+                    70 -> "2-е Фессалоникийцам (Солунянам)"
+                    71 -> "1-е Тимофею"
+                    72 -> "2-е Тимофею"
+                    73 -> "Титу"
+                    74 -> "Филимону"
+                    75 -> "Евреям"
+                    76 -> "Откровение (Апокалипсис)"
+                    else -> ""
                 }
                 if (nazva != "") {
-                    val inputStream = resources.openRawResource(sinodalBible.valueAt(i))
+                    val inputStream = resources.openRawResource(sinodalBible[i])
                     val isr = InputStreamReader(inputStream)
                     val reader = BufferedReader(isr)
                     var glava = 0
@@ -1322,6 +1337,11 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                     editText?.setSelection(editPosition)
                     editText?.addTextChangedListener(this)
                 }
+                if (editText?.id == by.carkva_gazeta.malitounik.R.id.search_src_text) {
+                    if (editPosition >= 3) {
+                        execute(edit)
+                    }
+                }
             }
             if (editText?.id == by.carkva_gazeta.malitounik.R.id.search_src_text) {
                 if (actionExpandOn && editPosition != 0) {
@@ -1332,9 +1352,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                     if (searche && editPosition != 0) {
                         binding.History.visibility = View.GONE
                         binding.ListView.visibility = View.VISIBLE
-                        editText.clearFocus()
-                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(editText.windowToken, 0)
                     } else {
                         binding.History.visibility = View.VISIBLE
                         binding.ListView.visibility = View.GONE
@@ -1347,8 +1364,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
 
     }
 
-    internal inner class SearchBibliaListAdaprer(context: Activity) : ArrayAdapter<Spannable>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, seash) {
-        private val origData: ArrayList<Spannable> = ArrayList(seash)
+    private inner class SearchBibliaListAdaprer(context: Activity) : ArrayAdapter<Spannable>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, seash) {
+        private val origData = ArrayList<Spannable>(seash)
         override fun addAll(collection: Collection<Spannable>) {
             super.addAll(collection)
             origData.addAll(collection)

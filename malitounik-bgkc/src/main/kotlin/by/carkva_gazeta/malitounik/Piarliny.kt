@@ -23,7 +23,7 @@ import java.util.*
 
 
 class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener {
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var mun = Calendar.getInstance()[Calendar.MONTH] + 1
     private var day = Calendar.getInstance()[Calendar.DATE]
     private lateinit var binding: PiarlinyBinding
@@ -106,7 +106,6 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = getBaseDzenNoch()
         binding = PiarlinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Slidr.attach(this)
@@ -192,7 +191,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
-        menu.findItem(R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
+        menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         if (chin.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
         return true
     }

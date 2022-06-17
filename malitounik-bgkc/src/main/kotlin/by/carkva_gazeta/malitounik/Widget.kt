@@ -37,7 +37,7 @@ class Widget : AppWidgetProvider() {
         val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, flags)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pIntent = PendingIntent.getBroadcast(context, 50, intent, flags)
-        val c = Calendar.getInstance() as GregorianCalendar
+        val c = Calendar.getInstance()
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms() -> {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
@@ -104,7 +104,7 @@ class Widget : AppWidgetProvider() {
             onUpdate(context, appWidgetManager, ids)
             val intentUpdate = Intent(context, Widget::class.java)
             intentUpdate.action = updateAllWidgets
-            val c = Calendar.getInstance() as GregorianCalendar
+            val c = Calendar.getInstance()
             c.add(Calendar.DATE, 1)
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -139,7 +139,7 @@ class Widget : AppWidgetProvider() {
 
         fun kaliandar(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
             val updateViews = RemoteViews(context.packageName, R.layout.widget)
-            val g = Calendar.getInstance() as GregorianCalendar
+            val g = Calendar.getInstance()
             val data = MenuCaliandar.getDataCalaindar(g[Calendar.DATE])
             val dzenNoch = context.getSharedPreferences("biblia", Context.MODE_PRIVATE).getBoolean("dzen_noch_widget_day$widgetID", false)
             val rColorColorPrimaryText: Int

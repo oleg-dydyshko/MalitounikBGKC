@@ -85,7 +85,7 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
                 sluzba.getNiadzeliaTamasha()
             }
         }
-        binding.ListView.adapter = ListAdaprer(this)
+        binding.ListView.adapter = ListAdaprer(this, data)
         binding.ListView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnItemClickListener
@@ -114,8 +114,7 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
         binding.titleToolbar.isSingleLine = true
     }
 
-    private inner class ListAdaprer(private val context: Activity) : ArrayAdapter<SlugbovyiaTextuData>(context, R.layout.simple_list_item_2, R.id.label, data as List<SlugbovyiaTextuData>) {
-        private val k: SharedPreferences = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+    private class ListAdaprer(private val context: Activity, private val data: ArrayList<SlugbovyiaTextuData>) : ArrayAdapter<SlugbovyiaTextuData>(context, R.layout.simple_list_item_2, R.id.label, data) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -129,7 +128,7 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             viewHolder.text.text = data[position].title
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)

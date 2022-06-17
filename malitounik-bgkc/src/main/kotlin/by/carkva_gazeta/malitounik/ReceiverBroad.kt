@@ -18,7 +18,7 @@ import java.util.*
 class ReceiverBroad : BroadcastReceiver() {
     private var sabytieSet = false
     override fun onReceive(ctx: Context, intent: Intent) {
-        val g = Calendar.getInstance() as GregorianCalendar
+        val g = Calendar.getInstance()
         val dayofyear = g[Calendar.DAY_OF_YEAR]
         val year = g[Calendar.YEAR]
         val sabytie = intent.getBooleanExtra("sabytieSet", false)

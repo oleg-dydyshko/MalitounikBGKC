@@ -178,7 +178,7 @@ class MyNatatki : DialogFragment() {
         var nazva = binding.file.text.toString()
         var imiafile = "Mae_malitvy"
         val natatka = binding.EditText.text.toString()
-        val gc = Calendar.getInstance() as GregorianCalendar
+        val gc = Calendar.getInstance()
         val editMd5 = md5Sum("$nazva<MEMA></MEMA>$natatka")
         var i: Long = 1
         if (md5sum != editMd5) {

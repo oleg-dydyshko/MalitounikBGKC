@@ -131,7 +131,7 @@ class PageFragmentMonth : Fragment() {
                 binding.button29.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
                 binding.button36.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
             }
-            val c = Calendar.getInstance() as GregorianCalendar
+            val c = Calendar.getInstance()
             var munTudey = false
             if (mun == c[Calendar.MONTH] && year == c[Calendar.YEAR]) munTudey = true
             val calendarFull = GregorianCalendar(year, mun, 1)

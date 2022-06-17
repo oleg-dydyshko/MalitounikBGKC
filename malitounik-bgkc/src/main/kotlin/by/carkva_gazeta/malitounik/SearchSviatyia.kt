@@ -487,8 +487,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         }
     }
 
-    private class SearchListAdapter(mContext: Activity, private val adapterList: ArrayList<Searche>) : ArrayAdapter<Searche>(mContext, R.layout.simple_list_item_2, R.id.label, adapterList) {
-        private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+    private class SearchListAdapter(private val mContext: Activity, private val adapterList: ArrayList<Searche>) : ArrayAdapter<Searche>(mContext, R.layout.simple_list_item_2, R.id.label, adapterList) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -502,7 +501,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             viewHolder.text.text = adapterList[position].text
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)

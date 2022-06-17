@@ -853,7 +853,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya_error
             var nochenia = false
             val inputStream = resources.openRawResource(id)
-            val gregorian = Calendar.getInstance() as GregorianCalendar
+            val gregorian = Calendar.getInstance()
             val dayOfWeek = gregorian.get(Calendar.DAY_OF_WEEK)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
@@ -1680,7 +1680,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
             itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
         }
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
         if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = false
         spanString = SpannableString(itemVybranoe.title.toString())
         end = spanString.length

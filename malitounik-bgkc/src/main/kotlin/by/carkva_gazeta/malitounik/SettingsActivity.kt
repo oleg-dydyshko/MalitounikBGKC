@@ -60,21 +60,21 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
         const val NOTIFICATION_CHANNEL_ID_SVIATY = "2001"
 
         private fun mkTime(year: Int, month: Int, day: Int, hour: Int): Long {
-            val calendar = Calendar.getInstance() as GregorianCalendar
+            val calendar = Calendar.getInstance()
             calendar[year, month, day, hour, 0] = 0
             calendar[Calendar.MILLISECOND] = 0
             return calendar.timeInMillis
         }
 
         private fun mkTimeDayOfYear(year: Int, month: Int, day: Int): Int {
-            val calendar = Calendar.getInstance() as GregorianCalendar
+            val calendar = Calendar.getInstance()
             calendar[year, month, day, 19, 0] = 0
             calendar[Calendar.MILLISECOND] = 0
             return calendar[Calendar.DAY_OF_YEAR]
         }
 
         private fun mkTimeYear(year: Int, month: Int, day: Int): Int {
-            val calendar = Calendar.getInstance() as GregorianCalendar
+            val calendar = Calendar.getInstance()
             calendar[year, month, day, 19, 0] = 0
             calendar[Calendar.MILLISECOND] = 0
             return calendar[Calendar.YEAR]
@@ -138,7 +138,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             var intent: Intent
             var pIntent: PendingIntent?
             if (chin.getBoolean("WIDGET_MUN_ENABLED", false)) {
-                val cw = Calendar.getInstance() as GregorianCalendar
+                val cw = Calendar.getInstance()
                 val munAk = cw[Calendar.MONTH]
                 val yearAk = cw[Calendar.YEAR]
                 var resetWid = false
@@ -181,7 +181,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
                 }
             }
             if (chin.getBoolean("WIDGET_ENABLED", false)) {
-                val cw = Calendar.getInstance() as GregorianCalendar
+                val cw = Calendar.getInstance()
                 intent = Intent(context, Widget::class.java)
                 intent.action = UPDATE_ALL_WIDGETS
                 var flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -201,7 +201,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
                 pIntent = PendingIntent.getBroadcast(context, 50, intent, flags)
                 setAlarm(mkTime(cw[Calendar.YEAR], cw[Calendar.MONTH], cw[Calendar.DAY_OF_MONTH]), pIntent)
             }
-            val c = Calendar.getInstance() as GregorianCalendar
+            val c = Calendar.getInstance()
             val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 PendingIntent.FLAG_IMMUTABLE or 0
             } else {
@@ -1394,8 +1394,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
     }
 
     private class TimeAdapter(activity: Activity, private val dataTimes: ArrayList<DataTime>) : ArrayAdapter<DataTime>(activity, R.layout.simple_list_item_1, dataTimes) {
-        private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        private val dzenNoch = k.getBoolean("dzen_noch", false)
+        private val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView

@@ -18,7 +18,6 @@ import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.squareup.picasso.Picasso
 import java.io.File
-import java.util.*
 
 class DialogImageFileLoad : DialogFragment() {
 
@@ -92,7 +91,6 @@ class DialogImageFileLoad : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             viewHolder.text.text = arrayList[position]
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return rootView
         }

@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminDialogSviatyiaBibleDisplayBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 
 class DialogSvityiaBible : DialogFragment() {
@@ -91,7 +89,6 @@ class DialogSvityiaBible : DialogFragment() {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             textView.text = dataTimes[position].title
             textView.setBackgroundResource(R.drawable.selector_default)
             return v
@@ -113,7 +110,6 @@ class DialogSvityiaBible : DialogFragment() {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             viewHolder.text.text = dataTimes[position].title
             viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             return rootView
@@ -124,7 +120,6 @@ class DialogSvityiaBible : DialogFragment() {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             textView.text = dataTimes[position].toString()
             textView.setBackgroundResource(R.drawable.selector_default)
             return v
@@ -146,7 +141,6 @@ class DialogSvityiaBible : DialogFragment() {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             viewHolder.text.text = dataTimes[position].toString()
             viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             return rootView

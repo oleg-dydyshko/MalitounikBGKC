@@ -22,7 +22,7 @@ class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
     private var year = 0
     private var mun = 0
     private var dateInt = 0
-    private var niadzelia = ArrayList<ArrayList<String>>()
+    private val niadzelia = ArrayList<ArrayList<String>>()
     private var _binding: CaliandarNedzeliaBinding? = null
     private val binding get() = _binding!!
 
@@ -40,9 +40,9 @@ class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = CaliandarNedzeliaBinding.inflate(inflater, container, false)
-        niadzelia = MenuCaliandar.getDataCalaindar(dateInt, mun, year)
+        niadzelia.addAll(MenuCaliandar.getDataCalaindar(dateInt, mun, year))
         activity?.let {
-            binding.listView.adapter = CaliandarNedzelListAdapter(it)
+            binding.listView.adapter = CaliandarNedzelListAdapter(it, niadzelia)
             binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
         }
         val c = GregorianCalendar(year, mun, dateInt)
@@ -63,7 +63,7 @@ class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
         activity?.finish()
     }
 
-    private inner class CaliandarNedzelListAdapter(private val mContext: Context) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.calaindar_nedel, niadzelia) {
+    private class CaliandarNedzelListAdapter(private val mContext: Context, private val niadzelia: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.calaindar_nedel, niadzelia) {
         private val c = Calendar.getInstance()
         private val munName = mContext.resources.getStringArray(R.array.meciac_smoll)
         private val nedelName = mContext.resources.getStringArray(R.array.dni_nedeli)
@@ -99,8 +99,8 @@ class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
                 if (dzenNoch) viewHolder.linearLayout.setBackgroundResource(R.drawable.selector_dark)
                 else viewHolder.linearLayout.setBackgroundResource(R.drawable.selector_default)
             }
-            if (niadzelia[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar.text = getString(R.string.tydzen_name3, nedelName[niadzelia[position][0].toInt()], niadzelia[position][1], munName[niadzelia[position][2].toInt()], niadzelia[position][3])
-            else viewHolder.textCalendar.text = getString(R.string.tydzen_name2, nedelName[niadzelia[position][0].toInt()], niadzelia[position][1], munName[niadzelia[position][2].toInt()])
+            if (niadzelia[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar.text = mContext.getString(R.string.tydzen_name3, nedelName[niadzelia[position][0].toInt()], niadzelia[position][1], munName[niadzelia[position][2].toInt()], niadzelia[position][3])
+            else viewHolder.textCalendar.text = mContext.getString(R.string.tydzen_name2, nedelName[niadzelia[position][0].toInt()], niadzelia[position][1], munName[niadzelia[position][2].toInt()])
             var sviatyia = niadzelia[position][4]
             if (dzenNoch) {
                 sviatyia = sviatyia.replace("#d00505", "#f44336")

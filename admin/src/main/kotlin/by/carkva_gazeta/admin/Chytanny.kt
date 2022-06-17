@@ -335,7 +335,7 @@ class Chytanny : AppCompatActivity() {
 
     private class SpinnerAdapter(activity: Activity, private val data: ArrayList<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {
 
-        private val gc = Calendar.getInstance() as GregorianCalendar
+        private val gc = Calendar.getInstance()
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)

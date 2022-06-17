@@ -26,7 +26,6 @@ class DialogCaliandarMunDate : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var _binding: DialogListviewDisplayBinding? = null
     private val binding get() = _binding!!
-    private val arrayList = ArrayList<String>()
 
     interface DialogCaliandarMunDateListener {
         fun setDataCalendar(dataCalendar: Int)
@@ -64,6 +63,7 @@ class DialogCaliandarMunDate : DialogFragment() {
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             if (dzenNoch) binding.content.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
             else binding.content.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
+            val arrayList = ArrayList<String>()
             if (data >= SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
                 binding.title.text = resources.getString(R.string.vybor_year)
                 for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) {
@@ -73,12 +73,12 @@ class DialogCaliandarMunDate : DialogFragment() {
                 binding.title.text = resources.getString(R.string.vybor_mun)
                 arrayList.addAll(it.resources.getStringArray(R.array.meciac2))
             }
-            binding.content.adapter = DataListAdaprer(it)
             binding.content.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
                 if (data >= SettingsActivity.GET_CALIANDAR_YEAR_MIN) mListener?.setDataCalendar(i + SettingsActivity.GET_CALIANDAR_YEAR_MIN)
                 else mListener?.setDataCalendar(i)
                 alert.cancel()
             }
+            binding.content.adapter = DataListAdaprer(it, arrayList, data)
             builder.setPositiveButton(resources.getText(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             builder.setView(binding.root)
             alert = builder.create()
@@ -86,7 +86,7 @@ class DialogCaliandarMunDate : DialogFragment() {
         return alert
     }
 
-    internal inner class DataListAdaprer(val mContext: Activity) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, arrayList) {
+    private class DataListAdaprer(private val mContext: Activity, private val arrayList: ArrayList<String>, private val data: Int) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, arrayList) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -99,11 +99,10 @@ class DialogCaliandarMunDate : DialogFragment() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             viewHolder.text.text = arrayList[position]
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            val c = Calendar.getInstance() as GregorianCalendar
+            val c = Calendar.getInstance()
             if (data >= SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
                 if (c[Calendar.YEAR] == position + SettingsActivity.GET_CALIANDAR_YEAR_MIN) viewHolder.text.typeface = MainActivity.createFont(Typeface.BOLD)
                 else viewHolder.text.typeface = MainActivity.createFont(Typeface.NORMAL)

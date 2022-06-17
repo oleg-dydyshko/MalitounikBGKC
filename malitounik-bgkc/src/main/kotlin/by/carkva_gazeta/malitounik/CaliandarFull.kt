@@ -74,7 +74,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         activity?.let {
             val nedelName = it.resources.getStringArray(R.array.dni_nedeli)
             val monthName = it.resources.getStringArray(R.array.meciac)
-            val c = Calendar.getInstance() as GregorianCalendar
+            val c = Calendar.getInstance()
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (dzenNoch) rColorColorprimary = R.drawable.selector_red_dark
             val tileMe = BitmapDrawable(it.resources, BitmapFactory.decodeResource(resources, R.drawable.calendar_fon))
@@ -577,7 +577,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
 
                         textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
-                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(p.color)))
+                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(activity, p.color)))
                         sabytieList.add(textViewT)
                         val textView = TextView(activity)
                         textView.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_text))

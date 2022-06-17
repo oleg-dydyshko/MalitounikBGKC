@@ -15,8 +15,7 @@ import by.carkva_gazeta.malitounik.databinding.CalendarTab1Binding
 import java.util.*
 
 class CaliandarMunTab1 : Fragment() {
-    private lateinit var adapterViewPager: FragmentStateAdapter
-    private lateinit var names: Array<out String>
+    private val names get() = resources.getStringArray(R.array.meciac2)
     private var day = 0
     private var posMun = 0
     private var yearG = 0
@@ -50,7 +49,6 @@ class CaliandarMunTab1 : Fragment() {
         day = arguments?.getInt("day") ?: 0
         posMun = arguments?.getInt("posMun") ?: 0
         yearG = arguments?.getInt("yearG") ?: 0
-        names = resources.getStringArray(R.array.meciac2)
     }
 
     fun setDataCalendar(dataCalendar: Int) {
@@ -106,7 +104,7 @@ class CaliandarMunTab1 : Fragment() {
                 showDialog(yearG)
             }
             binding.pager.offscreenPageLimit = 3
-            adapterViewPager = MyPagerAdapter(this)
+            val adapterViewPager = MyPagerAdapter(this)
             binding.pager.adapter = adapterViewPager
 
             val son = (yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + posMun
@@ -151,7 +149,7 @@ class CaliandarMunTab1 : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class MyPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+    private class MyPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
         override fun getItemCount() = (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
 
         override fun createFragment(position: Int): Fragment {

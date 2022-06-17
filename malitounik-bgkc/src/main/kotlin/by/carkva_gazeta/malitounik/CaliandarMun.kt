@@ -118,7 +118,7 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
-        val c = Calendar.getInstance() as GregorianCalendar
+        val c = Calendar.getInstance()
         if (savedInstanceState != null) {
             day1 = savedInstanceState.getInt("day")
             posMun1 = savedInstanceState.getInt("mun")

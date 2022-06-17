@@ -58,8 +58,7 @@ class DialogSabytieShowInMun : DialogFragment() {
 
     private fun sabytieView(DayYear: Int) {
         activity?.let {
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             binding.linearLayout.removeAllViewsInLayout()
             val density = (resources.displayMetrics.density).toInt()
             val gc = Calendar.getInstance() as GregorianCalendar
@@ -111,7 +110,7 @@ class DialogSabytieShowInMun : DialogFragment() {
                         textViewT.typeface = MainActivity.createFont(Typeface.BOLD)
                         textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
                         textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(p.color)))
+                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(it, p.color)))
                         sabytieList.add(textViewT)
                         val textView = TextView(it)
                         textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))

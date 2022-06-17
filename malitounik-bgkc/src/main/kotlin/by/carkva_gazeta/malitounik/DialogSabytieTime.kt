@@ -45,7 +45,7 @@ class DialogSabytieTime : DialogFragment() {
         activity?.let {
             _binding = DialogSettimeDisplayBinding.inflate(LayoutInflater.from(it))
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
-            val c = Calendar.getInstance() as GregorianCalendar
+            val c = Calendar.getInstance()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val ad = AlertDialog.Builder(it, style)

@@ -24,8 +24,6 @@ class DialogMineiaList : DialogFragment() {
     private lateinit var binding: DialogListviewDisplayBinding
     private lateinit var alert: AlertDialog
     private var resetTollbarJob: Job? = null
-    private val fileList = ArrayList<MineiaDay>()
-    private lateinit var adapter: ListAdaprer
     private var resourceUtran = "0"
     private var resourceLiturgia = "0"
     private var resourceViachernia = "0"
@@ -48,6 +46,7 @@ class DialogMineiaList : DialogFragment() {
             if (dzenNoch) {
                 binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             }
+            val fileList = ArrayList<MineiaDay>()
             val dayOfYear = arguments?.getString("dayOfYear") ?: "1"
             val titleResource = arguments?.getString("titleResource") ?: "0"
             resourceUtran = arguments?.getString("resourceUtran", "0") ?: "0"
@@ -74,7 +73,7 @@ class DialogMineiaList : DialogFragment() {
                     dadatak.show(childFragmentManager, "dadatak")
                 }
             }
-            adapter = ListAdaprer(it)
+            val adapter = ListAdaprer(it, fileList)
             binding.content.adapter = adapter
             binding.title.text = if (arguments?.getBoolean("isSvity", false) == true) getString(R.string.mineia_sviatochnaia)
             else getString(R.string.mineia_shtodzennaia)
@@ -89,7 +88,7 @@ class DialogMineiaList : DialogFragment() {
         return alert
     }
 
-    private inner class ListAdaprer(private val context: Activity) : ArrayAdapter<MineiaDay>(context, R.layout.simple_list_item_2, R.id.label, fileList) {
+    private class ListAdaprer(private val context: Activity, private val fileList: ArrayList<MineiaDay>) : ArrayAdapter<MineiaDay>(context, R.layout.simple_list_item_2, R.id.label, fileList) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View

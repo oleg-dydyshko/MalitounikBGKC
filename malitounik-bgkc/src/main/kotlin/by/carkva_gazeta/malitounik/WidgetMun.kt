@@ -32,7 +32,7 @@ class WidgetMun : AppWidgetProvider() {
     private fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, widgetIDs: IntArray) {
         if (updateViews == null) updateViews = RemoteViews(context.packageName, R.layout.widget_mun)
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val c = Calendar.getInstance() as GregorianCalendar
+        val c = Calendar.getInstance()
         val monthName = arrayOf("СТУДЗЕНЬ", "ЛЮТЫ", "САКАВІК", "КРАСАВІК", "ТРАВЕНЬ", "ЧЭРВЕНЬ", "ЛІПЕНЬ", "ЖНІВЕНЬ", "ВЕРАСЕНЬ", "КАСТРЫЧНІК", "ЛІСТАПАД", "СЬНЕЖАНЬ")
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -59,7 +59,7 @@ class WidgetMun : AppWidgetProvider() {
 
     private fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val c = Calendar.getInstance() as GregorianCalendar
+        val c = Calendar.getInstance()
         val cYear = SettingsActivity.GET_CALIANDAR_YEAR_MAX //c.get(Calendar.YEAR);
         val tecmun = chin.getInt("WIDGET$widgetID", c[Calendar.MONTH])
         val tecyear = chin.getInt("WIDGETYEAR$widgetID", SettingsActivity.GET_CALIANDAR_YEAR_MAX)
@@ -101,7 +101,7 @@ class WidgetMun : AppWidgetProvider() {
         val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, flags)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pIntent = PendingIntent.getBroadcast(context, 50, intent, flags)
-        val c = Calendar.getInstance() as GregorianCalendar
+        val c = Calendar.getInstance()
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms() -> {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
@@ -168,7 +168,7 @@ class WidgetMun : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        var c = Calendar.getInstance() as GregorianCalendar
+        var c = Calendar.getInstance()
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (intent.action.equals(SettingsActivity.UPDATE_ALL_WIDGETS, ignoreCase = true)) {
             val thisAppWidget = ComponentName(context.packageName, javaClass.name)
@@ -201,7 +201,7 @@ class WidgetMun : AppWidgetProvider() {
                 }
             }
         }
-        c = Calendar.getInstance() as GregorianCalendar
+        c = Calendar.getInstance()
         val resetMain = SettingsActivity.RESET_MAIN
         if (intent.action.equals(resetMain, ignoreCase = true)) {
             val thisAppWidget = ComponentName(context.packageName, javaClass.name)
@@ -325,7 +325,7 @@ class WidgetMun : AppWidgetProvider() {
         updateViews?.setViewVisibility(R.id.nedel5, View.VISIBLE)
         updateViews?.setViewVisibility(R.id.nedel6, View.VISIBLE)
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val c = Calendar.getInstance() as GregorianCalendar
+        val c = Calendar.getInstance()
         var calendarPost: GregorianCalendar
         val month = chin.getInt("WIDGET$widgetID", c[Calendar.MONTH])
         val year = chin.getInt("WIDGETYEAR$widgetID", c[Calendar.YEAR])

@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +22,7 @@ import java.util.*
 
 class DialogPrazdnik : DialogFragment() {
     private var setid = 10
-    private lateinit var arrayList: ArrayList<Int>
+    private val arrayList = ArrayList<Int>()
     private var mListener: DialogPrazdnikListener? = null
     private lateinit var alert: AlertDialog
     private var _binding: DialogSpinnerDisplayBinding? = null
@@ -66,17 +65,16 @@ class DialogPrazdnik : DialogFragment() {
             if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = resources.getString(R.string.carkva_sviaty)
-            val c = Calendar.getInstance() as GregorianCalendar
+            val c = Calendar.getInstance()
             if (savedInstanceState != null) {
                 setid = savedInstanceState.getInt("setid")
-                arrayList = savedInstanceState.getIntegerArrayList("arrayList") ?: ArrayList()
+                savedInstanceState.getIntegerArrayList("arrayList")?.let { it1 -> arrayList.addAll(it1) }
             } else {
-                arrayList = ArrayList()
                 for (i in c[Calendar.YEAR] + 10 downTo SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
                     arrayList.add(i)
                 }
             }
-            val arrayAdapter = ListAdapter(it)
+            val arrayAdapter = ListAdapter(it, arrayList)
             binding.content.adapter = arrayAdapter
             for (i in arrayList.indices) {
                 if (arrayList[i] == (arguments?.getInt("year") ?: c[Calendar.YEAR])) {
@@ -109,10 +107,8 @@ class DialogPrazdnik : DialogFragment() {
         }
     }
 
-    private inner class ListAdapter(mContext: Activity) : ArrayAdapter<Int>(mContext, R.layout.simple_list_item_1, arrayList) {
-        private val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        private val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-        private val gc = Calendar.getInstance() as GregorianCalendar
+    private class ListAdapter(private val mContext: Activity, private val arrayList: ArrayList<Int>) : ArrayAdapter<Int>(mContext, R.layout.simple_list_item_1, arrayList) {
+        private val gc = Calendar.getInstance()
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -125,11 +121,10 @@ class DialogPrazdnik : DialogFragment() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             if (gc[Calendar.YEAR] == arrayList[position]) viewHolder.text.typeface = MainActivity.createFont(Typeface.BOLD)
             else viewHolder.text.typeface = MainActivity.createFont(Typeface.NORMAL)
             viewHolder.text.text = arrayList[position].toString()
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (dzenNoch)
                 viewHolder.text.setBackgroundResource(R.drawable.selector_dialog_font_dark)
             else
@@ -139,9 +134,8 @@ class DialogPrazdnik : DialogFragment() {
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             val text = v as TextView
-            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (gc[Calendar.YEAR] == arrayList[position]) text.typeface = MainActivity.createFont(Typeface.BOLD)
             else text.typeface = MainActivity.createFont(Typeface.NORMAL)
             text.text = arrayList[position].toString()

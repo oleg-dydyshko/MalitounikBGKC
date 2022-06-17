@@ -83,8 +83,7 @@ class CaliandarMunTab2 : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class MyCalendarNedelAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
-
+    private class MyCalendarNedelAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
         override fun getItemCount(): Int {
             var count = MenuCaliandar.getDataCalaindar().size / 7
             if (MenuCaliandar.getDataCalaindar()[0][0].toInt() != Calendar.SUNDAY) count++

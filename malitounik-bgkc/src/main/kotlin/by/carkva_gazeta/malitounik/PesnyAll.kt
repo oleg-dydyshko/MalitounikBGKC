@@ -34,7 +34,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
     private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
-    private var dzenNoch = false
+    private val dzenNoch get() = getBaseDzenNoch()
     private var checkVybranoe = false
     private var n = 0
     private var title = ""
@@ -307,7 +307,6 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        dzenNoch = getBaseDzenNoch()
         binding = PesnyBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
@@ -498,7 +497,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             menu.findItem(R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, R.drawable.star_big_off)
             menu.findItem(R.id.action_vybranoe).title = resources.getString(R.string.vybranoe)
         }
-        menu.findItem(R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+        menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
         val item = menu.findItem(R.id.action_vybranoe)
         val spanString = SpannableString(menu.findItem(R.id.action_vybranoe).title.toString())

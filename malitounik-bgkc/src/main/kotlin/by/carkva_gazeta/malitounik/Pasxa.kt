@@ -120,7 +120,7 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
+        menu.findItem(R.id.action_dzen_noch).isChecked = getBaseDzenNoch()
         if (chin.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
         return true
     }

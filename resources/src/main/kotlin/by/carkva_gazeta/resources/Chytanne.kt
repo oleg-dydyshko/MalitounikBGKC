@@ -1056,7 +1056,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             diffScroll -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_up)
             else -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
         }
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
         if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_utran).isChecked = k.getBoolean("utran", true)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_utran).isVisible = true

@@ -39,7 +39,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
     private var timer = Timer()
     private var timerTask: TimerTask? = null
     private var edit = -1
-    private var timeListCalendar = Calendar.getInstance() as GregorianCalendar
+    private var timeListCalendar = Calendar.getInstance()
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
@@ -312,7 +312,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             binding.addPiarliny.visibility = View.VISIBLE
             binding.linearLayout2.visibility = View.VISIBLE
             binding.addPiarliny.setText("")
-            val calendar = Calendar.getInstance() as GregorianCalendar
+            val calendar = Calendar.getInstance()
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, calendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)])
             invalidateOptionsMenu()
         }

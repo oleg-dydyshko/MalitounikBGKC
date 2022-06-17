@@ -45,8 +45,8 @@ class MenuSviaty : ListFragment() {
         activity?.let {
             if (SettingsActivity.GET_CALIANDAR_YEAR_MAX >= year) {
                 listView.isClickable = true
-                val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-                if (k.getBoolean("dzen_noch", false)) {
+                val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
+                if (dzenNoch) {
                     listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
                 } else {
                     listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
@@ -107,7 +107,6 @@ class MenuSviaty : ListFragment() {
     private class MyArrayAdapter(private val context: Activity, private val list: ArrayList<Prazdniki>) : ArrayAdapter<Prazdniki>(context, R.layout.simple_list_item_sviaty, list) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
-            val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val ea: ViewHolder
             if (convertView == null) {
                 val binding = SimpleListItemSviatyBinding.inflate(LayoutInflater.from(context), parent, false)
@@ -118,7 +117,8 @@ class MenuSviaty : ListFragment() {
                 rootView = convertView
                 ea = rootView.tag as ViewHolder
             }
-            if (k.getBoolean("dzen_noch", false)) {
+            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
+            if (dzenNoch) {
                 ea.title.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary_black))
             }
             var title = SpannableString(list[position].opisanie)
@@ -137,13 +137,13 @@ class MenuSviaty : ListFragment() {
                 -4 -> {
                     title = SpannableString("ДНІ ЎСПАМІНУ ПАМЁРЛЫХ\n\n${list[position].opisanie}")
                     title.setSpan(StyleSpan(Typeface.BOLD), 0, 21, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    if (k.getBoolean("dzen_noch", false)) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 21, list[position].opisanie.length + 23, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    if (dzenNoch) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 21, list[position].opisanie.length + 23, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 21, list[position].opisanie.length + 23, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
                 -5 -> {
                     title = SpannableString("ЦАРКОЎНЫЯ ПАМЯТНЫЯ ДАТЫ\n\n${list[position].opisanie}")
                     title.setSpan(StyleSpan(Typeface.BOLD), 0, 23, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    if (k.getBoolean("dzen_noch", false)) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 23, list[position].opisanie.length + 25, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    if (dzenNoch) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 23, list[position].opisanie.length + 25, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 23, list[position].opisanie.length + 25, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
                 -6 -> {
@@ -153,10 +153,10 @@ class MenuSviaty : ListFragment() {
                 else -> {
                     title = SpannableString(list[position].opisanie)
                     if (list[position].svaity in 4..5) {
-                        if (k.getBoolean("dzen_noch", false)) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (dzenNoch) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     } else {
-                        if (k.getBoolean("dzen_noch", false)) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (dzenNoch) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 }

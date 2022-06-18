@@ -57,7 +57,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     private var edittext2Focus = false
     private var title = ""
     private var searchJob: Job? = null
-    private var canselJob: Job? = null
 
     init {
         sinodalBible.add(R.raw.sinaidals1)
@@ -211,7 +210,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         prefEditors.putString("search_string_filter", binding.editText2.text.toString())
         prefEditors.putInt("search_bible_fierstPosition", fierstPosition)
         prefEditors.apply()
-        canselJob?.cancel()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -260,15 +258,15 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         zavet = intent.getIntExtra("zavet", 1)
         when (zavet) {
             1 -> {
-                title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_semuxa)
+                title = getString(by.carkva_gazeta.malitounik.R.string.poshuk_semuxa)
                 biblia = "semuxa"
             }
             2 -> {
-                title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_sinoidal)
+                title = getString(by.carkva_gazeta.malitounik.R.string.poshuk_sinoidal)
                 biblia = "sinoidal"
             }
             3 -> {
-                title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_nadsan)
+                title = getString(by.carkva_gazeta.malitounik.R.string.poshuk_nadsan)
                 biblia = "nadsan"
             }
         }
@@ -655,9 +653,10 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         searcheTextView.typeface = MainActivity.createFont(Typeface.NORMAL)
         textViewCount = menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextView
         textViewCount?.typeface = MainActivity.createFont(Typeface.NORMAL)
-        textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
+        textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
         val closeButton = searchView?.findViewById(androidx.appcompat.R.id.search_close_btn) as ImageView
         closeButton.setOnClickListener {
+            searche = true
             searchJob?.cancel()
             searchView?.setQuery("", false)
             onPostExecute(ArrayList())
@@ -702,7 +701,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         history.add(item)
         for (i in 0 until temp.size) {
             history.add(temp[i])
-            if (history.size == 10) break
+            if (history.size == 15) break
         }
         if (history.size == 1) invalidateOptionsMenu()
         historyAdapter.notifyDataSetChanged()
@@ -773,6 +772,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         adapter.clear()
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
         binding.progressBar.visibility = View.VISIBLE
+        binding.History.visibility = View.GONE
         binding.ListView.visibility = View.GONE
         var edit = autoCompleteTextView?.text.toString()
         if (edit != "") {
@@ -792,10 +792,10 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     }
 
     private fun onPostExecute(result: ArrayList<Spannable>) {
-        canselJob?.cancel()
+        adapter.clear()
         adapter.addAll(result)
         adapter.filter.filter(binding.editText2.text.toString())
-        textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
+        textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
         if (chin.getString("search_string", "") != "") {
             binding.ListView.post { binding.ListView.setSelection(chin.getInt("search_position", 0)) }
         }
@@ -810,16 +810,10 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         prefEditors.apply()
         val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView
         val search = searcheTextView.text.toString()
-        if (search != "") {
-            binding.History.visibility = View.GONE
+        if (search != "" && result.size != 0) {
             binding.ListView.visibility = View.VISIBLE
-            canselJob = CoroutineScope(Dispatchers.Main).launch {
-                delay(2000L)
-                val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm1.hideSoftInputFromWindow(autoCompleteTextView?.windowToken, 0)
-                addHistory(search)
-                saveHistory()
-            }
+            addHistory(search)
+            saveHistory()
         }
         searche = false
     }
@@ -894,7 +888,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             poshuk1 = zamena(poshuk1)
             val registr = chin.getBoolean("pegistrbukv", true)
             if (chin.getInt("slovocalkam", 0) == 0) {
-                val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
+                val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
                 for (aM in m) {
                     val r = poshuk1.length - 1
                     if (poshuk1.length >= 3) {
@@ -1234,7 +1228,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             poshuk1 = zamena(poshuk1)
             val registr = chin.getBoolean("pegistrbukv", true)
             if (chin.getInt("slovocalkam", 0) == 0) {
-                val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
+                val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
                 for (aM in m) {
                     val r = poshuk1.length - 1
                     if (poshuk1.length >= 3) {
@@ -1355,7 +1349,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                     } else {
                         binding.History.visibility = View.VISIBLE
                         binding.ListView.visibility = View.GONE
-                        textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
+                        textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
                     }
                 }
             }
@@ -1432,7 +1426,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                             add(item)
                         }
                     }
-                    textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, results.count)
+                    textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, results.count)
                 }
             }
         }

@@ -227,7 +227,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.buttonx2.setImageResource(by.carkva_gazeta.malitounik.R.drawable.cancel)
         }
-        binding.editText2.addTextChangedListener(MyTextWatcher(binding.editText2, true))
         if (intent.getIntExtra("zavet", 1) != zavet) {
             prefEditors.putString("search_string", "")
             prefEditors.putString("search_string_filter", "")
@@ -292,6 +291,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
         })
         binding.editText2.setText(chin.getString("search_string_filter", ""))
+        binding.editText2.addTextChangedListener(MyTextWatcher(binding.editText2, true))
         binding.ListView.setOnItemClickListener { adapterView: AdapterView<*>, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
@@ -544,6 +544,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     prefEditors.putInt("biblia_seash", position)
                     prefEditors.apply()
+                    val edit = autoCompleteTextView?.text.toString()
+                    execute(edit)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -567,6 +569,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                 prefEditors.putBoolean("pegistrbukv", true)
             }
             prefEditors.apply()
+            val edit = autoCompleteTextView?.text.toString()
+            execute(edit)
         }
         if (chin.getInt("slovocalkam", 0) == 1) binding.checkBox2.isChecked = true
         binding.checkBox2.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
@@ -576,6 +580,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                 prefEditors.putInt("slovocalkam", 0)
             }
             prefEditors.apply()
+            val edit = autoCompleteTextView?.text.toString()
+            execute(edit)
         }
         setTollbarTheme()
     }
@@ -598,12 +604,12 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
 
     private fun changeSearchViewElements(view: View?) {
         if (view == null) return
-        if (view.id == by.carkva_gazeta.malitounik.R.id.search_edit_frame || view.id == by.carkva_gazeta.malitounik.R.id.search_mag_icon) {
+        if (view.id == androidx.appcompat.R.id.search_edit_frame || view.id == androidx.appcompat.R.id.search_mag_icon) {
             val p = view.layoutParams as LinearLayout.LayoutParams
             p.leftMargin = 0
             p.rightMargin = 0
             view.layoutParams = p
-        } else if (view.id == by.carkva_gazeta.malitounik.R.id.search_src_text) {
+        } else if (view.id == androidx.appcompat.R.id.search_src_text) {
             autoCompleteTextView = view as AutoCompleteTextView
             autoCompleteTextView?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
             val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -613,14 +619,10 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             autoCompleteTextView?.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     val edit = autoCompleteTextView?.text.toString()
-                    if (edit.length >= 3) {
-                        searche = true
-                        binding.History.visibility = View.GONE
-                        binding.ListView.visibility = View.VISIBLE
-                        execute(edit)
-                    } else {
+                    if (edit.length < 3) {
                         MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.seashmin))
                     }
+                    execute(edit)
                 }
                 true
             }
@@ -753,16 +755,21 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         prefEditors.apply()
     }
 
-    private fun execute(searche: String) {
-        if (searchJob?.isActive == true) {
-            searchJob?.cancel()
-        }
-        searchJob = CoroutineScope(Dispatchers.Main).launch {
-            onPreExecute()
-            val result = withContext(Dispatchers.IO) {
-                return@withContext doInBackground(searche)
+    private fun execute(searcheString: String) {
+        if (searcheString.length >= 3) {
+            searche = true
+            binding.History.visibility = View.GONE
+            binding.ListView.visibility = View.VISIBLE
+            if (searchJob?.isActive == true) {
+                searchJob?.cancel()
             }
-            onPostExecute(result)
+            searchJob = CoroutineScope(Dispatchers.Main).launch {
+                onPreExecute()
+                val result = withContext(Dispatchers.IO) {
+                    return@withContext doInBackground(searcheString)
+                }
+                onPostExecute(result)
+            }
         }
     }
 
@@ -1331,13 +1338,11 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                     editText?.setSelection(editPosition)
                     editText?.addTextChangedListener(this)
                 }
-                if (editText?.id == by.carkva_gazeta.malitounik.R.id.search_src_text) {
-                    if (editPosition >= 3) {
-                        execute(edit)
-                    }
+                if (editText?.id == androidx.appcompat.R.id.search_src_text) {
+                    execute(edit)
                 }
             }
-            if (editText?.id == by.carkva_gazeta.malitounik.R.id.search_src_text) {
+            if (editText?.id == androidx.appcompat.R.id.search_src_text) {
                 if (actionExpandOn && editPosition != 0) {
                     binding.History.visibility = View.GONE
                     binding.ListView.visibility = View.VISIBLE

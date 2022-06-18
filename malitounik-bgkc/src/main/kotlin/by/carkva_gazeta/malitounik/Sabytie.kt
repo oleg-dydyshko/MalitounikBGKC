@@ -2233,7 +2233,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
     }
 
     private inner class SabytieAdapter(list: ArrayList<Padzeia>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<Padzeia, SabytieAdapter.ViewHolder>(), Filterable {
-        private var dzenNoch = false
         private val day = Calendar.getInstance()
         private val origData = ArrayList(list)
 

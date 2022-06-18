@@ -47,11 +47,9 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     private var searchView: SearchView? = null
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
-    private var actionExpandOn = false
     private var fierstPosition = 0
     private var sinodalBible = ArrayList<Int>()
     private var semuxaBible = ArrayList<Int>()
-    private var searche = false
     private lateinit var binding: SearchBibliaBinding
     private var keyword = false
     private var edittext2Focus = false
@@ -250,7 +248,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                     val span = MainActivity.fromHtml(str.substring(0, t1)) as Spannable
                     seash.add(span)
                 }
-                actionExpandOn = true
             }
         }
         var biblia = "semuxa"
@@ -514,7 +511,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             val edit = history[position]
             binding.History.visibility = View.GONE
             binding.ListView.visibility = View.VISIBLE
-            searche = true
             prefEditors.putString("search_string", edit)
             prefEditors.apply()
             autoCompleteTextView?.setText(edit)
@@ -528,7 +524,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         if (savedInstanceState != null) {
             val listView = savedInstanceState.getBoolean("list_view")
             if (listView) binding.ListView.visibility = View.VISIBLE
-            actionExpandOn = listView
             fierstPosition = savedInstanceState.getInt("fierstPosition")
         } else {
             fierstPosition = chin.getInt("search_bible_fierstPosition", 0)
@@ -658,7 +653,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
         val closeButton = searchView?.findViewById(androidx.appcompat.R.id.search_close_btn) as ImageView
         closeButton.setOnClickListener {
-            searche = true
             searchJob?.cancel()
             searchView?.setQuery("", false)
             onPostExecute(ArrayList())
@@ -727,14 +721,12 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         saveHistory()
         invalidateOptionsMenu()
         historyAdapter.notifyDataSetChanged()
-        actionExpandOn = true
     }
 
     override fun cleanHistory(position: Int) {
         history.removeAt(position)
         saveHistory()
         if (history.size == 0) {
-            actionExpandOn = true
             invalidateOptionsMenu()
         }
         historyAdapter.notifyDataSetChanged()
@@ -757,24 +749,24 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
 
     private fun execute(searcheString: String) {
         if (searcheString.length >= 3) {
-            searche = true
-            binding.History.visibility = View.GONE
-            binding.ListView.visibility = View.VISIBLE
-            if (searchJob?.isActive == true) {
-                searchJob?.cancel()
-            }
-            searchJob = CoroutineScope(Dispatchers.Main).launch {
-                onPreExecute()
-                val result = withContext(Dispatchers.IO) {
-                    return@withContext doInBackground(searcheString)
+            if (seash.size == 0 || searcheString != history[0]) {
+                binding.History.visibility = View.GONE
+                binding.ListView.visibility = View.VISIBLE
+                if (searchJob?.isActive == true) {
+                    searchJob?.cancel()
                 }
-                onPostExecute(result)
+                searchJob = CoroutineScope(Dispatchers.Main).launch {
+                    onPreExecute()
+                    val result = withContext(Dispatchers.IO) {
+                        return@withContext doInBackground(searcheString)
+                    }
+                    onPostExecute(result)
+                }
             }
         }
     }
 
     private fun onPreExecute() {
-        searche = true
         prefEditors = chin.edit()
         adapter.clear()
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
@@ -822,7 +814,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             addHistory(search)
             saveHistory()
         }
-        searche = false
     }
 
     private fun zamena(replase: String): String {
@@ -1343,19 +1334,12 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                 }
             }
             if (editText?.id == androidx.appcompat.R.id.search_src_text) {
-                if (actionExpandOn && editPosition != 0) {
+                if (editPosition >= 3 && seash.size > 0) {
                     binding.History.visibility = View.GONE
                     binding.ListView.visibility = View.VISIBLE
-                    actionExpandOn = false
                 } else {
-                    if (searche && editPosition != 0) {
-                        binding.History.visibility = View.GONE
-                        binding.ListView.visibility = View.VISIBLE
-                    } else {
-                        binding.History.visibility = View.VISIBLE
-                        binding.ListView.visibility = View.GONE
-                        textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
-                    }
+                    binding.History.visibility = View.VISIBLE
+                    binding.ListView.visibility = View.GONE
                 }
             }
             if (filtep) adapter.filter.filter(edit)
@@ -1367,12 +1351,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         private val origData = ArrayList<Spannable>(seash)
         override fun addAll(collection: Collection<Spannable>) {
             super.addAll(collection)
+            origData.clear()
             origData.addAll(collection)
-        }
-
-        override fun clear() {
-            super.clear()
-            if (searche) origData.clear()
         }
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {

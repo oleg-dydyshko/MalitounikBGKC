@@ -859,7 +859,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                         val index = binding.textView.text.indexOf(textline)
                         val line = binding.textView.layout.getLineForOffset(index)
                         val y = binding.textView.layout.getLineTop(line)
-                        binding.InteractiveScroll.smoothScrollBy(0, y)
+                        binding.InteractiveScroll.scrollY = y
                     }
                 }
             } else {

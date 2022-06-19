@@ -540,7 +540,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                     prefEditors.putInt("biblia_seash", position)
                     prefEditors.apply()
                     val edit = autoCompleteTextView?.text.toString()
-                    execute(edit)
+                    execute(edit, true)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -565,7 +565,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             }
             prefEditors.apply()
             val edit = autoCompleteTextView?.text.toString()
-            execute(edit)
+            execute(edit, true)
         }
         if (chin.getInt("slovocalkam", 0) == 1) binding.checkBox2.isChecked = true
         binding.checkBox2.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
@@ -576,7 +576,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             }
             prefEditors.apply()
             val edit = autoCompleteTextView?.text.toString()
-            execute(edit)
+            execute(edit, true)
         }
         setTollbarTheme()
     }
@@ -606,18 +606,15 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             view.layoutParams = p
         } else if (view.id == androidx.appcompat.R.id.search_src_text) {
             autoCompleteTextView = view as AutoCompleteTextView
+            autoCompleteTextView?.imeOptions = EditorInfo.IME_ACTION_DONE
             autoCompleteTextView?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
-            val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
             autoCompleteTextView?.addTextChangedListener(MyTextWatcher(autoCompleteTextView))
-            autoCompleteTextView?.setText(chin.getString("search_string", ""))
+            autoCompleteTextView?.setText(chin.getString("search_string", "")) ?: history[0]
             autoCompleteTextView?.setSelection(autoCompleteTextView?.text?.length ?: 0)
             autoCompleteTextView?.setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    val edit = autoCompleteTextView?.text.toString()
-                    if (edit.length < 3) {
-                        MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.seashmin))
-                    }
-                    execute(edit)
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm1.hideSoftInputFromWindow(autoCompleteTextView?.windowToken, 0)
                 }
                 true
             }
@@ -747,9 +744,9 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         prefEditors.apply()
     }
 
-    private fun execute(searcheString: String) {
+    private fun execute(searcheString: String, run: Boolean = false) {
         if (searcheString.length >= 3) {
-            if (seash.size == 0 || searcheString != history[0]) {
+            if (seash.size == 0 || searcheString != history[0] || run) {
                 binding.History.visibility = View.GONE
                 binding.ListView.visibility = View.VISIBLE
                 if (searchJob?.isActive == true) {

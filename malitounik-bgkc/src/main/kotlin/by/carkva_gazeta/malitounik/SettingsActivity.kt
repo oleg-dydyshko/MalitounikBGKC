@@ -787,7 +787,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             binding.textView14.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.textView15.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.textView16.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            binding.notificationView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black)) //textView57.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.notificationView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.secret.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
@@ -1162,16 +1162,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             }
             prefEditor.apply()
         }
-        binding.checkBox5.setOnCheckedChangeListener { view: View, isChecked: Boolean ->
-            if (view.isClickable) {
-                val check = k.getBoolean("dzen_noch", false)
-                prefEditor.putBoolean("dzen_noch", isChecked)
-                prefEditor.apply()
-                if (check != k.getBoolean("dzen_noch", false)) {
-                    recreate()
-                }
-            }
-        }
         binding.checkBox6.setOnCheckedChangeListener { _, isChecked: Boolean ->
             prefEditor.putBoolean("autoscrollAutostart", isChecked)
             prefEditor.apply()
@@ -1197,6 +1187,17 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             prefEditor.putBoolean("fullscreenPage", isChecked)
             prefEditor.apply()
         }
+        binding.checkBox5.setOnCheckedChangeListener { view: View, isChecked: Boolean ->
+            if (view.isClickable) {
+                val check = k.getBoolean("dzen_noch", false)
+                prefEditor.putBoolean("dzen_noch", isChecked)
+                prefEditor.apply()
+                if (check != k.getBoolean("dzen_noch", false)) {
+                    editFull = true
+                    recreate()
+                }
+            }
+        }
         binding.checkBox10.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (!isChecked) {
                 binding.checkBox5.isClickable = true
@@ -1206,6 +1207,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
                     binding.checkBox5.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                 }
                 binding.checkBox5.isChecked = dzenNoch
+                prefEditor.putBoolean("dzen_noch", dzenNoch)
             } else {
                 binding.checkBox5.isClickable = false
                 binding.checkBox5.isChecked = false
@@ -1215,6 +1217,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             prefEditor.putBoolean("auto_dzen_noch", isChecked)
             prefEditor.apply()
             if (check != k.getBoolean("auto_dzen_noch", false)) {
+                editFull = true
                 recreate()
             }
         }

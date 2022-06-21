@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
+import android.content.res.Configuration
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
@@ -79,11 +80,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private var raznica = 400
     private var dayOfYear = "1"
     private var checkDayOfYear = false
-    private var checkAutoDzenNoch = false
     private var sviaty = false
     private var daysv = 1
     private var munsv = 0
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
+    private var orientation = Configuration.ORIENTATION_UNDEFINED
 
     companion object {
         val resursMap = ArrayMap<String, Int>()
@@ -671,8 +672,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {
-            checkAutoDzenNoch = savedInstanceState.getBoolean("checkAutoDzenNoch")
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
+            orientation = savedInstanceState.getInt("orientation")
             MainActivity.dialogVisable = false
             if (savedInstanceState.getBoolean("seach")) {
                 binding.find.visibility = View.VISIBLE
@@ -1858,10 +1859,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         resetScreenJob?.cancel()
     }
 
-    override fun checkAutoDzenNoch() {
-        checkAutoDzenNoch = true
-    }
-
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
@@ -1873,11 +1870,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
-            if (checkAutoDzenNoch) {
+            if (resources.configuration.orientation == orientation) {
                 startAutoScroll()
-                checkAutoDzenNoch = false
             } else autoStartScroll()
         }
+        orientation = resources.configuration.orientation
     }
 
     private fun hide() {
@@ -1911,7 +1908,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean("checkAutoDzenNoch", checkAutoDzenNoch)
+        outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)

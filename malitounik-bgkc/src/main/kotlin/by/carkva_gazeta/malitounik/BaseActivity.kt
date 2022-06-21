@@ -28,8 +28,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        checkDzenNoch = dzenNoch
         if (savedInstanceState != null) {
             mLastClickTime = savedInstanceState.getLong("mLastClickTime")
             autoDzenNoch = savedInstanceState.getBoolean("autoDzenNoch")
@@ -37,6 +35,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         if (k.getBoolean("auto_dzen_noch", false)) {
             autoDzenNoch = startAutoDzenNoch
         }
+        dzenNoch = k.getBoolean("dzen_noch", false)
+        checkDzenNoch = getBaseDzenNoch()
         setMyTheme()
     }
 
@@ -47,6 +47,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
             if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
         }
     }
+
+    fun getCheckDzenNoch() = checkDzenNoch
 
     fun getBaseDzenNoch(): Boolean {
         return if (k.getBoolean("auto_dzen_noch", false)) autoDzenNoch
@@ -64,8 +66,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
             setlightSensor()
         } else {
             dzenNoch = k.getBoolean("dzen_noch", false)
-            if (checkDzenNoch != dzenNoch) recreate()
         }
+        if (checkDzenNoch != getBaseDzenNoch()) recreate()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if (!MainActivity.checkBrightness) {
@@ -75,8 +77,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
-    open fun checkAutoDzenNoch() {}
-
     private fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 10000) {
             return
@@ -84,7 +84,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         mLastClickTime = SystemClock.elapsedRealtime()
         autoDzenNoch = isDzenNoch
         startAutoDzenNoch = isDzenNoch
-        checkAutoDzenNoch()
         recreate()
     }
 
@@ -102,13 +101,13 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
 
-    private fun setlightSensor() {
+    fun setlightSensor() {
         val mySensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
         mySensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_UI)
     }
 
-    private fun removelightSensor() {
+    fun removelightSensor() {
         val mySensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
         mySensorManager.unregisterListener(this, lightSensor)

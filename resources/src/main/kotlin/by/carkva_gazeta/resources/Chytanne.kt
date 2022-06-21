@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.provider.Settings
@@ -61,7 +62,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     private var titleTwo = SpannableString("")
     private var firstTextPosition = ""
     private val titleArrayList = ArrayList<TitleList>()
-    private var checkAutoDzenNoch = false
+    private var orientation = Configuration.ORIENTATION_UNDEFINED
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -96,7 +97,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            checkAutoDzenNoch = savedInstanceState.getBoolean("checkAutoDzenNoch")
+            orientation = savedInstanceState.getInt("orientation")
         } else {
             fullscreenPage = k.getBoolean("fullscreenPage", false)
         }
@@ -1072,10 +1073,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         resetScreenJob?.cancel()
     }
 
-    override fun checkAutoDzenNoch() {
-        checkAutoDzenNoch = true
-    }
-
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
@@ -1087,11 +1084,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
         if (autoscroll) {
-            if (checkAutoDzenNoch) {
+            if (resources.configuration.orientation == orientation) {
                 startAutoScroll()
-                checkAutoDzenNoch = false
             } else autoStartScroll()
         }
+        orientation = resources.configuration.orientation
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -1112,6 +1109,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             recreate()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_utran) {
+            item.isChecked = !item.isChecked
             if (item.isChecked) {
                 prefEditor.putBoolean("utran", true)
             } else {
@@ -1181,7 +1179,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean("checkAutoDzenNoch", checkAutoDzenNoch)
+        outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putString("textLine", firstTextPosition)
     }

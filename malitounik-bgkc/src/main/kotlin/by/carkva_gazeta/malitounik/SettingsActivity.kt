@@ -1193,32 +1193,30 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
                 prefEditor.putBoolean("dzen_noch", isChecked)
                 prefEditor.apply()
                 if (check != k.getBoolean("dzen_noch", false)) {
-                    editFull = true
                     recreate()
                 }
             }
         }
         binding.checkBox10.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            prefEditor.putBoolean("auto_dzen_noch", isChecked)
+            prefEditor.apply()
             if (!isChecked) {
+                removelightSensor()
                 binding.checkBox5.isClickable = true
-                if (dzenNoch) {
+                if (getCheckDzenNoch()) {
                     binding.checkBox5.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                 } else {
                     binding.checkBox5.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                 }
-                binding.checkBox5.isChecked = dzenNoch
-                prefEditor.putBoolean("dzen_noch", dzenNoch)
+                binding.checkBox5.isChecked = getCheckDzenNoch()
+                prefEditor.putBoolean("dzen_noch", getCheckDzenNoch())
+                prefEditor.apply()
             } else {
                 binding.checkBox5.isClickable = false
                 binding.checkBox5.isChecked = false
                 binding.checkBox5.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            }
-            val check = k.getBoolean("auto_dzen_noch", false)
-            prefEditor.putBoolean("auto_dzen_noch", isChecked)
-            prefEditor.apply()
-            if (check != k.getBoolean("auto_dzen_noch", false)) {
-                editFull = true
-                recreate()
+                setlightSensor()
+                if (getCheckDzenNoch() != dzenNoch) recreate()
             }
         }
         binding.vibro.typeface = MainActivity.createFont(Typeface.NORMAL)

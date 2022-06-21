@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.provider.Settings
@@ -54,7 +55,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private var diffScroll = false
     private var title = ""
     private var firstTextPosition = ""
-    private var checkAutoDzenNoch = false
+    private var orientation = Configuration.ORIENTATION_UNDEFINED
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -89,7 +90,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            checkAutoDzenNoch = savedInstanceState.getBoolean("checkAutoDzenNoch")
+            orientation = savedInstanceState.getInt("orientation")
         } else {
             fullscreenPage = k.getBoolean("fullscreenPage", false)
         }
@@ -685,10 +686,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         resetScreenJob?.cancel()
     }
 
-    override fun checkAutoDzenNoch() {
-        checkAutoDzenNoch = true
-    }
-
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
@@ -700,11 +697,11 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
-            if (checkAutoDzenNoch) {
+            if (resources.configuration.orientation == orientation) {
                 startAutoScroll()
-                checkAutoDzenNoch = false
             } else autoStartScroll()
         }
+        orientation = resources.configuration.orientation
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -787,7 +784,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean("checkAutoDzenNoch", checkAutoDzenNoch)
+        outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putString("textLine", firstTextPosition)
     }

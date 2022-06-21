@@ -13,8 +13,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.graphics.drawable.Drawable
-import android.hardware.Sensor
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.Environment
 import android.os.SystemClock
@@ -497,18 +495,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         }
         menu = bookTitle.size != 0
         invalidateOptionsMenu()
-    }
-
-    private fun setlightSensor() {
-        val mySensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
-        mySensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_UI)
-    }
-
-    private fun removelightSensor() {
-        val mySensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
-        mySensorManager.unregisterListener(this, lightSensor)
     }
 
     override fun setMyTheme() {
@@ -1487,7 +1473,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
 
     override fun onPause() {
         super.onPause()
-        removelightSensor()
         val prefEditor = k.edit()
         if (pdfView.visibility == View.VISIBLE) {
             prefEditor.putInt(fileName, pdfView.currentPage)
@@ -1505,7 +1490,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     }
 
     override fun onBackPressed() {
-        val prefEditor: SharedPreferences.Editor = k.edit()
+        val prefEditor = k.edit()
         if (pdfView.visibility == View.VISIBLE) {
             prefEditor.putInt(fileName, pdfView.currentPage)
         } else {
@@ -1761,13 +1746,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             adapter.notifyDataSetChanged()
             bindingcontent.progressBar2.visibility = View.GONE
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (k.getBoolean("auto_dzen_noch", false)) setlightSensor()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -320,6 +320,10 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
+            bindingprogress.brighessPlus.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
+            bindingprogress.brighessMinus.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
+            bindingprogress.fontSizePlus.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
+            bindingprogress.fontSizeMinus.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
         }
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""

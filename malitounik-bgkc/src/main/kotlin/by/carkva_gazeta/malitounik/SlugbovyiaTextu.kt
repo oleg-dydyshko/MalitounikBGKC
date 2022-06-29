@@ -164,6 +164,7 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(143, "Сьвятое маці нашае Еўфрасіньні Полацкай" , "mm_23_05_jutran", UTRAN))
         datMinSH.add(SlugbovyiaTextuData(143, "Сьвятое маці нашае Еўфрасіньні Полацкай" , "mm_23_05_liturhija", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(143, "Сьвятое маці нашае Еўфрасіньні Полацкай" , "mm_23_05_viaczernia", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(180, "Сьвятых слаўных i годных пахвалы апосталаў Пятра i Паўла", "mm_29_06_piatra_i_paula_liturhija", LITURGIA))
 
         datMinSV.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "ndz_miranosic_liturhija", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(21, "Нядзеля расслабленага - Літургія", "ndz_rasslablenaha_liturhija", LITURGIA, pasxa = true))

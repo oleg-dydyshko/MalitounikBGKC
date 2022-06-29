@@ -43,6 +43,7 @@ class MenuBogashlugbovya : ListFragment() {
             data.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага", "kanon_a_kryckaha"))
             data.add(MenuListData("Трыёдзь", "7"))
             data.add(MenuListData("Малебен сьвятым айцам нашым, роўным апосталам Кірылу і Мятоду, настаўнікам славянскім", "malebien_kiryla_miatod"))
+            data.add(MenuListData("Служба за памерлых на кожны дзень тыдня", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
             data.sort()
             listAdapter = MenuListAdaprer(it as BaseActivity, data)
             val dzenNoch = it.getBaseDzenNoch()

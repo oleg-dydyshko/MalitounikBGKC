@@ -769,7 +769,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 r1.append(split2[e].substring(vN).trim())
                             }
                             if (e != nachalo && e != konec) {
-                                r1.append("\n").append(split2[e].trim())
+                                r1.append("\n").append("#$e#").append(split2[e].trim())
                             }
                             if (e == konec) {
                                 val vK1 = if (belarus && !replace) split2[e].indexOf("$stixk. ")
@@ -828,8 +828,13 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 ires1 = str1.toInt()
                             }
                         }
-                        if (belarus) maranAta.add("<!--$kniga.$glava.$i3--><!--nazva+++$nazvaBel " + glava + "-->" + res1[i2] + getParallel(nomer, glava, i3 - 1) + "\n")
-                        else maranAta.add("<!--$kniga.$glava.$i3--><!--nazva+++$nazva " + glava + "-->" + res1[i2] + getParallel(nomer, glava, i3 - 1) + "\n")
+                        var resbib = res1[i2]
+                        if (resbib.contains("#")) {
+                            glava = resbib.substring(1, 2).toInt()
+                            resbib = resbib.substring(3)
+                        }
+                        if (belarus) maranAta.add("<!--$kniga.$glava.$i3--><!--nazva+++$nazvaBel " + glava + "-->" + resbib + getParallel(nomer, glava, i3 - 1) + "\n")
+                        else maranAta.add("<!--$kniga.$glava.$i3--><!--nazva+++$nazva " + glava + "-->" + resbib + getParallel(nomer, glava, i3 - 1) + "\n")
                         i3++
                     }
                     if (konec - nachalo != 0) {

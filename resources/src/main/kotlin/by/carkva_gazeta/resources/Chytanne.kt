@@ -13,7 +13,6 @@ import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
 import android.text.style.StrikethroughSpan
@@ -41,7 +40,7 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
-class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback {
+class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -63,6 +62,8 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     private var firstTextPosition = ""
     private val titleArrayList = ArrayList<TitleList>()
     private var orientation = Configuration.ORIENTATION_UNDEFINED
+    private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
+    private var positionY = 0
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -844,7 +845,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                     if (i == 1 && e == 0) titleTwo = title
                 }
                 binding.textView.text = ssbTitle.trim()
-                binding.textView.movementMethod = LinkMovementMethod()
+                binding.textView.movementMethod = setLinkMovementMethodCheck()
                 if (dzenNoch) binding.textView.setLinkTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
             }
             setTitleLinkToBible()
@@ -880,6 +881,20 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     private fun setTitleArrayList(myKniga: Int, myGlava: Int, myStix: Int, title: String, zavet: Int = 1): SpannableString {
         titleArrayList.add(TitleList(myKniga, myGlava, myStix, title.trim(), zavet))
         return SpannableString(title)
+    }
+
+    override fun linkMovementMethodCheckOnTouch(onTouch: Boolean) {
+        mActionDown = onTouch
+    }
+
+    private fun setMovementMethodscrollY() {
+        linkMovementMethodCheck?.getScrollY(positionY)
+    }
+
+    private fun setLinkMovementMethodCheck(): LinkMovementMethodCheck? {
+        linkMovementMethodCheck = LinkMovementMethodCheck()
+        linkMovementMethodCheck?.setLinkMovementMethodCheckListener(this)
+        return linkMovementMethodCheck
     }
 
     private fun setTitleLinkToBible() {
@@ -967,7 +982,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             autoScrollJob?.cancel()
             stopAutoStartScroll()
             binding.textView.setTextIsSelectable(true)
-            binding.textView.movementMethod = LinkMovementMethod()
+            binding.textView.movementMethod = setLinkMovementMethodCheck()
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
@@ -1007,7 +1022,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         if (autoScrollJob?.isActive != true) {
             binding.textView.clearFocus()
             binding.textView.setTextIsSelectable(false)
-            binding.textView.movementMethod = LinkMovementMethod()
+            binding.textView.movementMethod = setLinkMovementMethodCheck()
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             autoscroll = true
             val prefEditor = k.edit()
@@ -1174,6 +1189,8 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     }
 
     override fun onScroll(t: Int, oldt: Int) {
+        positionY = t
+        setMovementMethodscrollY()
         val lineLayout = binding.textView.layout
         lineLayout?.let {
             val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(it.getLineForVertical(t)), binding.textView.layout.getLineEnd(it.getLineForVertical(t))).trim()

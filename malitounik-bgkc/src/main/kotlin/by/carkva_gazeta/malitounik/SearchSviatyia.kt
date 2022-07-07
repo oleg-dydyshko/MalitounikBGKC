@@ -14,6 +14,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
@@ -71,6 +72,14 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
             view.layoutParams = p
         } else if (view.id == R.id.search_src_text) {
             editText = view as AutoCompleteTextView
+            editText?.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
+                }
+                true
+            }
+            editText?.imeOptions = EditorInfo.IME_ACTION_DONE
             editText?.setBackgroundResource(R.drawable.underline_white)
             val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
             editText?.setText(chin.getString("search_svityx_string", ""))

@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -173,6 +172,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             resursMap["pesny_prasl_73"] = R.raw.pesny_prasl_73
             resursMap["pesny_prasl_74"] = R.raw.pesny_prasl_74
             resursMap["pesny_prasl_75"] = R.raw.pesny_prasl_75
+            resursMap["piesni_prasl_aliluja"] = R.raw.piesni_prasl_aliluja
             resursMap["pesny_taize_0"] = R.raw.pesny_taize_0
             resursMap["pesny_taize_1"] = R.raw.pesny_taize_1
             resursMap["pesny_taize_2"] = R.raw.pesny_taize_2
@@ -190,31 +190,6 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             resursMap["pesny_taize_14"] = R.raw.pesny_taize_14
             resursMap["pesny_taize_15"] = R.raw.pesny_taize_15
             resursMap["pesny_taize_16"] = R.raw.pesny_taize_16
-        }
-
-        fun listRaw(activity: Activity?, filename: String): Int {
-            var id = resursMap[filename] ?: -1
-            activity?.let {
-                if (id == -1) {
-                    val inputStream = it.resources.openRawResource(R.raw.pesny_menu)
-                    val isr = InputStreamReader(inputStream)
-                    val reader = BufferedReader(isr)
-                    var line: String
-                    reader.forEachLine { s ->
-                        line = s
-                        val split = line.split("<>")
-                        if (resursMap[split[0]] == null) {
-                            val idResourse = it.resources.getIdentifier(split[0], "raw", it.packageName)
-                            if (idResourse != 0) {
-                                id = idResourse
-                                resursMap[split[0]] = id
-                            }
-                        }
-                    }
-                }
-            }
-            if (id < 0) id = R.raw.pesny_prasl_0
-            return id
         }
 
         private fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -328,7 +303,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""
         resurs = intent.extras?.getString("type", "pesny_prasl_0") ?: "pesny_prasl_0"
-        val pesny = listRaw(this, resurs)
+        val pesny = resursMap[resurs] ?: R.raw.pesny_prasl_0
         val builder = StringBuilder()
         if (pesny != -1) {
             val inputStream = resources.openRawResource(pesny)

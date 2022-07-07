@@ -14,6 +14,7 @@ import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.SearchView
@@ -39,6 +40,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
     private var search = false
     private var pesny = "prasl"
     private lateinit var adapter: MenuPesnyListAdapter
+    private val menuListOrig = ArrayList<MenuListData>()
     private val menuList = ArrayList<MenuListData>()
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
@@ -62,6 +64,15 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
         activity?.let { fraragment ->
             chin = fraragment.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             pesny = arguments?.getString("pesny") ?: "prasl"
+            val inputStream = resources.openRawResource(R.raw.pesny_menu)
+            val isr = InputStreamReader(inputStream)
+            val reader = BufferedReader(isr)
+            var line: String
+            reader.forEachLine {
+                line = it
+                val split = line.split("<>")
+                menuListOrig.add(MenuListData(split[1], split[0]))
+            }
             menuList.addAll(getMenuListData(pesny))
             menuList.sort()
             adapter = MenuPesnyListAdapter(fraragment, menuList)
@@ -174,6 +185,16 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
             view.layoutParams = p
         } else if (view.id == R.id.search_src_text) {
             editText = view as AutoCompleteTextView
+            editText?.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    activity?.let {
+                        val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
+                    }
+                }
+                true
+            }
+            editText?.imeOptions = EditorInfo.IME_ACTION_DONE
             editText?.addTextChangedListener(textWatcher)
             editText?.setBackgroundResource(R.drawable.underline_white)
         }
@@ -260,7 +281,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
         })
         changeSearchViewElements(searchView)
         if (searchViewQwery != "") {
-            menu.findItem(R.id.search).expandActionView()
+            searchViewItem.expandActionView()
             searchView?.setQuery(searchViewQwery, true)
             searchView?.clearFocus()
         }
@@ -324,7 +345,6 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
 
     private fun searchPasny(poshuk: String) {
         var poshuk1 = poshuk
-        var setClear = true
         if (poshuk1 != "") {
             poshuk1 = poshuk1.replace("ё", "е", true)
             poshuk1 = poshuk1.replace("све", "сьве", true)
@@ -391,8 +411,9 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
             }
             searchViewQwery = poshuk1
             val menuListData = getMenuListData()
+            menuList.clear()
             for (i in menuListData.indices) {
-                val inputStream = resources.openRawResource(PesnyAll.listRaw(activity, menuListData[i].resurs))
+                val inputStream = resources.openRawResource(PesnyAll.resursMap[menuListData[i].resurs] ?: R.raw.pesny_prasl_0)
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
                 var line: String
@@ -408,15 +429,8 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
                 }
                 inputStream.close()
                 if (builder.toString().replace("ё", "е", true).contains(poshuk1, true)) {
-                    if (setClear) {
-                        menuList.clear()
-                        setClear = false
-                    }
                     menuList.add(menuListData[i])
                 }
-            }
-            if (setClear) {
-                menuList.clear()
             }
             adapter.notifyDataSetChanged()
         }
@@ -424,20 +438,13 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
     }
 
     private fun getMenuListData(pesny: String = "no_filter"): ArrayList<MenuListData> {
-        var menuListData = ArrayList<MenuListData>()
-        val inputStream = resources.openRawResource(R.raw.pesny_menu)
-        val isr = InputStreamReader(inputStream)
-        val reader = BufferedReader(isr)
-        var line: String
-        reader.forEachLine {
-            line = it
-            val split = line.split("<>")
-            menuListData.add(MenuListData(split[1], split[0]))
-        }
+        val menuListData = ArrayList<MenuListData>()
         if (pesny != "no_filter") {
-            menuListData = menuListData.filter {
+            menuListData.addAll(menuListOrig.filter {
                 it.resurs.contains(pesny)
-            } as ArrayList<MenuListData>
+            })
+        } else {
+            menuListData.addAll(menuListOrig)
         }
         return menuListData
     }
@@ -457,7 +464,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
 
         override fun afterTextChanged(s: Editable) {
             if (editch && search) {
-                var edit = s.toString() //searchViewQwery = edit
+                var edit = s.toString()
                 edit = edit.replace("и", "і")
                 edit = edit.replace("И", "І")
                 edit = edit.replace("щ", "ў")

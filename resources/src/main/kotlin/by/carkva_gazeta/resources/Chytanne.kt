@@ -63,7 +63,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     private val titleArrayList = ArrayList<TitleList>()
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
-    private var positionY = 0
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -887,10 +886,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         mActionDown = onTouch
     }
 
-    private fun setMovementMethodscrollY() {
-        linkMovementMethodCheck?.getScrollY(positionY)
-    }
-
     private fun setLinkMovementMethodCheck(): LinkMovementMethodCheck? {
         linkMovementMethodCheck = LinkMovementMethodCheck()
         linkMovementMethodCheck?.setLinkMovementMethodCheckListener(this)
@@ -1189,8 +1184,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     }
 
     override fun onScroll(t: Int, oldt: Int) {
-        positionY = t
-        setMovementMethodscrollY()
         val lineLayout = binding.textView.layout
         lineLayout?.let {
             val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(it.getLineForVertical(t)), binding.textView.layout.getLineEnd(it.getLineForVertical(t))).trim()

@@ -73,8 +73,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
                 val split = line.split("<>")
                 menuListOrig.add(MenuListData(split[1], split[0]))
             }
-            menuList.addAll(getMenuListData(pesny))
-            menuList.sort()
+            getMenuListData(pesny)
             adapter = MenuPesnyListAdapter(fraragment, menuList)
             binding.ListView.adapter = adapter
             binding.ListView.isVerticalScrollBarEnabled = false
@@ -245,9 +244,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
         }
         if (search) {
             searchViewItem.expandActionView()
-            menuList.clear()
-            menuList.addAll(getMenuListData())
-            menuList.sort()
+            getMenuListData()
             textViewCount?.text = getString(R.string.seash, menuList.size)
             adapter.notifyDataSetChanged()
             menu.findItem(R.id.count).isVisible = search
@@ -255,9 +252,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 search = true
-                menuList.clear()
-                menuList.addAll(getMenuListData())
-                menuList.sort()
+                getMenuListData()
                 textViewCount?.text = getString(R.string.seash, menuList.size)
                 adapter.notifyDataSetChanged()
                 menu.findItem(R.id.count).isVisible = search
@@ -267,13 +262,9 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                 searchView?.setOnQueryTextListener(null)
                 search = false
-                activity?.let {
-                    menuList.clear()
-                    menuList.addAll(getMenuListData(pesny))
-                    menuList.sort()
-                    adapter.notifyDataSetChanged()
-                    menu.findItem(R.id.count).isVisible = search
-                }
+                getMenuListData(pesny)
+                adapter.notifyDataSetChanged()
+                menu.findItem(R.id.count).isVisible = search
                 binding.History.visibility = View.GONE
                 binding.ListView.visibility = View.VISIBLE
                 return true
@@ -344,109 +335,49 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
     }
 
     private fun searchPasny(poshuk: String) {
-        var poshuk1 = poshuk
-        if (poshuk1 != "") {
-            poshuk1 = poshuk1.replace("ё", "е", true)
-            poshuk1 = poshuk1.replace("све", "сьве", true)
-            poshuk1 = poshuk1.replace("сві", "сьві", true)
-            poshuk1 = poshuk1.replace("свя", "сьвя", true)
-            poshuk1 = poshuk1.replace("зве", "зьве", true)
-            poshuk1 = poshuk1.replace("зві", "зьві", true)
-            poshuk1 = poshuk1.replace("звя", "зьвя", true)
-            poshuk1 = poshuk1.replace("зме", "зьме", true)
-            poshuk1 = poshuk1.replace("змі", "зьмі", true)
-            poshuk1 = poshuk1.replace("змя", "зьмя", true)
-            poshuk1 = poshuk1.replace("зня", "зьня", true)
-            poshuk1 = poshuk1.replace("сле", "сьле", true)
-            poshuk1 = poshuk1.replace("слі", "сьлі", true)
-            poshuk1 = poshuk1.replace("сль", "сьль", true)
-            poshuk1 = poshuk1.replace("слю", "сьлю", true)
-            poshuk1 = poshuk1.replace("сля", "сьля", true)
-            poshuk1 = poshuk1.replace("сне", "сьне", true)
-            poshuk1 = poshuk1.replace("сні", "сьні", true)
-            poshuk1 = poshuk1.replace("сню", "сьню", true)
-            poshuk1 = poshuk1.replace("сня", "сьня", true)
-            poshuk1 = poshuk1.replace("спе", "сьпе", true)
-            poshuk1 = poshuk1.replace("спі", "сьпі", true)
-            poshuk1 = poshuk1.replace("спя", "сьпя", true)
-            poshuk1 = poshuk1.replace("сце", "сьце", true)
-            poshuk1 = poshuk1.replace("сці", "сьці", true)
-            poshuk1 = poshuk1.replace("сць", "сьць", true)
-            poshuk1 = poshuk1.replace("сцю", "сьцю", true)
-            poshuk1 = poshuk1.replace("сця", "сьця", true)
-            poshuk1 = poshuk1.replace("цце", "цьце", true)
-            poshuk1 = poshuk1.replace("цці", "цьці", true)
-            poshuk1 = poshuk1.replace("ццю", "цьцю", true)
-            poshuk1 = poshuk1.replace("ззе", "зьзе", true)
-            poshuk1 = poshuk1.replace("ззі", "зьзі", true)
-            poshuk1 = poshuk1.replace("ззю", "зьзю", true)
-            poshuk1 = poshuk1.replace("ззя", "зьзя", true)
-            poshuk1 = poshuk1.replace("зле", "зьле", true)
-            poshuk1 = poshuk1.replace("злі", "зьлі", true)
-            poshuk1 = poshuk1.replace("злю", "зьлю", true)
-            poshuk1 = poshuk1.replace("зля", "зьля", true)
-            poshuk1 = poshuk1.replace("збе", "зьбе", true)
-            poshuk1 = poshuk1.replace("збі", "зьбі", true)
-            poshuk1 = poshuk1.replace("збя", "зьбя", true)
-            poshuk1 = poshuk1.replace("нне", "ньне", true)
-            poshuk1 = poshuk1.replace("нні", "ньні", true)
-            poshuk1 = poshuk1.replace("нню", "ньню", true)
-            poshuk1 = poshuk1.replace("ння", "ньня", true)
-            poshuk1 = poshuk1.replace("лле", "льле", true)
-            poshuk1 = poshuk1.replace("ллі", "льлі", true)
-            poshuk1 = poshuk1.replace("ллю", "льлю", true)
-            poshuk1 = poshuk1.replace("лля", "льля", true)
-            poshuk1 = poshuk1.replace("дск", "дзк", true)
-            poshuk1 = poshuk1.replace("дств", "дзтв", true)
-            poshuk1 = poshuk1.replace("з’е", "зье", true)
-            poshuk1 = poshuk1.replace("з’я", "зья", true)
-            val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ў', 'ь', 'ы')
-            for (aM in m) {
-                val r = poshuk1.length - 1
-                if (r >= 3) {
-                    if (poshuk1[r] == aM) {
-                        poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), true)
-                    }
+        var poshuk1 = MainActivity.zamena(poshuk)
+        val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ў', 'ь', 'ы')
+        for (aM in m) {
+            val r = poshuk1.length - 1
+            if (r >= 3) {
+                if (poshuk1[r] == aM) {
+                    poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), true)
                 }
             }
-            searchViewQwery = poshuk1
-            val menuListData = getMenuListData()
-            menuList.clear()
-            for (i in menuListData.indices) {
-                val inputStream = resources.openRawResource(PesnyAll.resursMap[menuListData[i].resurs] ?: R.raw.pesny_prasl_0)
-                val isr = InputStreamReader(inputStream)
-                val reader = BufferedReader(isr)
-                var line: String
-                val builder = StringBuilder()
-                reader.forEachLine {
-                    line = it.replace(",", "")
-                    line = line.replace(" — ", " ")
-                    line = line.replace("(", "")
-                    line = line.replace(")", "")
-                    line = line.replace(".", "")
-                    line = line.replace("!", "")
-                    builder.append(line).append("\n")
-                }
-                inputStream.close()
-                if (builder.toString().replace("ё", "е", true).contains(poshuk1, true)) {
-                    menuList.add(menuListData[i])
-                }
-            }
-            adapter.notifyDataSetChanged()
         }
+        searchViewQwery = poshuk1
+        menuList.clear()
+        for (i in menuListOrig.indices) {
+            val inputStream = resources.openRawResource(PesnyAll.resursMap[menuListOrig[i].resurs] ?: R.raw.pesny_prasl_0)
+            val isr = InputStreamReader(inputStream)
+            val reader = BufferedReader(isr)
+            var line: String
+            val builder = StringBuilder()
+            reader.forEachLine {
+                line = it.replace(",", "")
+                line = line.replace(" — ", " ")
+                line = line.replace("(", "")
+                line = line.replace(")", "")
+                line = line.replace(".", "")
+                line = line.replace("!", "")
+                builder.append(line).append("\n")
+            }
+            inputStream.close()
+            if (builder.toString().replace("ё", "е", true).contains(poshuk1, true)) {
+                menuList.add(menuListOrig[i])
+            }
+        }
+        menuList.sort()
+        adapter.notifyDataSetChanged()
         textViewCount?.text = resources.getString(R.string.seash, menuList.size)
     }
 
-    private fun getMenuListData(pesny: String = "no_filter"): ArrayList<MenuListData> {
-        val menuListData = ArrayList<MenuListData>()
-        if (pesny != "no_filter") {
-            menuListData.addAll(menuListOrig.filter {
-                it.resurs.contains(pesny)
-            })
-        } else {
-            menuListData.addAll(menuListOrig)
-        }
-        return menuListData
+    private fun getMenuListData(pesny: String = "") {
+        menuList.clear()
+        menuList.addAll(menuListOrig.filter {
+            it.resurs.contains(pesny)
+        })
+        menuList.sort()
     }
 
     private inner class MyTextWatcher : TextWatcher {
@@ -482,9 +413,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
                         textViewCount?.text = "(0)"
                     }
                     else -> {
-                        menuList.clear()
-                        menuList.addAll(getMenuListData())
-                        menuList.sort()
+                        getMenuListData()
                         adapter.notifyDataSetChanged()
                         textViewCount?.text = getString(R.string.seash, menuList.size)
                         binding.History.visibility = View.GONE

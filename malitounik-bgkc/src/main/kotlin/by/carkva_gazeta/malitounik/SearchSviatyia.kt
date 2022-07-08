@@ -323,117 +323,69 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         val posukOrig = poshuk
         arrayRes.clear()
         adapter.notifyDataSetChanged()
-        if (poshuk != "") {
-            poshuk = poshuk.replace("ё", "е", true)
-            poshuk = poshuk.replace("сві", "сьві", true)
-            poshuk = poshuk.replace("свя", "сьвя", true)
-            poshuk = poshuk.replace("зме", "зьме", true)
-            poshuk = poshuk.replace("змі", "зьмі", true)
-            poshuk = poshuk.replace("змя", "зьмя", true)
-            poshuk = poshuk.replace("зня", "зьня", true)
-            poshuk = poshuk.replace("сле", "сьле", true)
-            poshuk = poshuk.replace("слі", "сьлі", true)
-            poshuk = poshuk.replace("сль", "сьль", true)
-            poshuk = poshuk.replace("слю", "сьлю", true)
-            poshuk = poshuk.replace("сля", "сьля", true)
-            poshuk = poshuk.replace("сне", "сьне", true)
-            poshuk = poshuk.replace("сні", "сьні", true)
-            poshuk = poshuk.replace("сню", "сьню", true)
-            poshuk = poshuk.replace("сня", "сьня", true)
-            poshuk = poshuk.replace("спе", "сьпе", true)
-            poshuk = poshuk.replace("спі", "сьпі", true)
-            poshuk = poshuk.replace("спя", "сьпя", true)
-            poshuk = poshuk.replace("сце", "сьце", true)
-            poshuk = poshuk.replace("сці", "сьці", true)
-            poshuk = poshuk.replace("сць", "сьць", true)
-            poshuk = poshuk.replace("сцю", "сьцю", true)
-            poshuk = poshuk.replace("сця", "сьця", true)
-            poshuk = poshuk.replace("цце", "цьце", true)
-            poshuk = poshuk.replace("цці", "цьці", true)
-            poshuk = poshuk.replace("ццю", "цьцю", true)
-            poshuk = poshuk.replace("ззе", "зьзе", true)
-            poshuk = poshuk.replace("ззі", "зьзі", true)
-            poshuk = poshuk.replace("ззю", "зьзю", true)
-            poshuk = poshuk.replace("ззя", "зьзя", true)
-            poshuk = poshuk.replace("зле", "зьле", true)
-            poshuk = poshuk.replace("злі", "зьлі", true)
-            poshuk = poshuk.replace("злю", "зьлю", true)
-            poshuk = poshuk.replace("зля", "зьля", true)
-            poshuk = poshuk.replace("збе", "зьбе", true)
-            poshuk = poshuk.replace("збі", "зьбі", true)
-            poshuk = poshuk.replace("збя", "зьбя", true)
-            poshuk = poshuk.replace("нне", "ньне", true)
-            poshuk = poshuk.replace("нні", "ньні", true)
-            poshuk = poshuk.replace("нню", "ньню", true)
-            poshuk = poshuk.replace("ння", "ньня", true)
-            poshuk = poshuk.replace("лле", "льле", true)
-            poshuk = poshuk.replace("ллі", "льлі", true)
-            poshuk = poshuk.replace("ллю", "льлю", true)
-            poshuk = poshuk.replace("лля", "льля", true)
-            poshuk = poshuk.replace("дск", "дзк", true)
-            val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ў', 'ь', 'ы')
-            for (aM in m) {
-                val r = poshuk.length - 1
-                if (r >= 3) {
-                    if (poshuk[r] == aM) {
-                        poshuk = poshuk.replace(poshuk, poshuk.substring(0, r), true)
-                    }
+        poshuk = MainActivity.zamena(poshuk)
+        val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ў', 'ь', 'ы')
+        for (aM in m) {
+            val r = poshuk.length - 1
+            if (r >= 3) {
+                if (poshuk[r] == aM) {
+                    poshuk = poshuk.replace(poshuk, poshuk.substring(0, r), true)
                 }
             }
-            for (e in arrayLists.indices) {
-                val sviatyia = arrayLists[e][4].split("<br>")
-                for (aSviatyia in sviatyia) {
-                    if (aSviatyia.replace("ё", "е", true).contains(poshuk, true)) {
-                        var bSviatyia = aSviatyia
-                        bSviatyia = bSviatyia.replace("<font color=#d00505>", "")
-                        bSviatyia = bSviatyia.replace("</font>", "")
-                        bSviatyia = bSviatyia.replace("<strong>", "")
-                        bSviatyia = bSviatyia.replace("</strong>", "")
-                        val t1 = bSviatyia.replace("ё", "е", true).indexOf(poshuk, ignoreCase = true)
-                        val t2 = poshuk.length
-                        val span = SpannableString(bSviatyia.substring(0, t1) + bSviatyia.substring(t1, t1 + t2) + bSviatyia.substring(t1 + t2))
-                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        val g = GregorianCalendar(arrayLists[e][3].toInt(), arrayLists[e][2].toInt(), arrayLists[e][1].toInt())
-                        val str1 = SpannableStringBuilder(arrayLists[e][1] + " " + munName[arrayLists[e][2].toInt()])
-                        str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        val result = Searche(g[Calendar.DAY_OF_YEAR], str1.append("\n").append(span))
-                        arrayRes.add(result)
-                    }
-                }
-            }
-            val data = MenuSviaty.getPrazdnik(search = true)
-            for (e in data.indices) {
-                val sviatya = data[e].opisanie.replace("ё", "е", true)
-                if (sviatya.contains(poshuk, true)) {
-                    val resultSpan = SpannableStringBuilder()
-                    var opisanieData = data[e].opisanieData
-                    val opis1 = opisanieData.indexOf(",")
-                    if (opis1 != -1) opisanieData = opisanieData.substring(0, opis1)
-                    val str1 = SpannableString(opisanieData)
-                    when (data[e].svaity) {
-                        -1, -2, 2 -> {
-                            str1.setSpan(StyleSpan(Typeface.BOLD_ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            if (dzenNoch) str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_black)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            else str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
-                        -3, 3 -> {
-                            str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            if (dzenNoch) str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_black)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            else str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
-                        else -> {
-                            str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
-                    }
-                    val span = SpannableString(data[e].opisanie)
-                    val t1 = sviatya.indexOf(poshuk, ignoreCase = true)
+        }
+        for (e in arrayLists.indices) {
+            val sviatyia = arrayLists[e][4].split("<br>")
+            for (aSviatyia in sviatyia) {
+                if (aSviatyia.replace("ё", "е", true).contains(poshuk, true)) {
+                    var bSviatyia = aSviatyia
+                    bSviatyia = bSviatyia.replace("<font color=#d00505>", "")
+                    bSviatyia = bSviatyia.replace("</font>", "")
+                    bSviatyia = bSviatyia.replace("<strong>", "")
+                    bSviatyia = bSviatyia.replace("</strong>", "")
+                    val t1 = bSviatyia.replace("ё", "е", true).indexOf(poshuk, ignoreCase = true)
                     val t2 = poshuk.length
+                    val span = SpannableString(bSviatyia.substring(0, t1) + bSviatyia.substring(t1, t1 + t2) + bSviatyia.substring(t1 + t2))
                     span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    resultSpan.append(str1).append("\n").append(span)
-                    arrayRes.add(Searche(data[e].dayOfYear, resultSpan))
+                    val g = GregorianCalendar(arrayLists[e][3].toInt(), arrayLists[e][2].toInt(), arrayLists[e][1].toInt())
+                    val str1 = SpannableStringBuilder(arrayLists[e][1] + " " + munName[arrayLists[e][2].toInt()])
+                    str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    val result = Searche(g[Calendar.DAY_OF_YEAR], str1.append("\n").append(span))
+                    arrayRes.add(result)
                 }
+            }
+        }
+        val data = MenuSviaty.getPrazdnik(search = true)
+        for (e in data.indices) {
+            val sviatya = data[e].opisanie.replace("ё", "е", true)
+            if (sviatya.contains(poshuk, true)) {
+                val resultSpan = SpannableStringBuilder()
+                var opisanieData = data[e].opisanieData
+                val opis1 = opisanieData.indexOf(",")
+                if (opis1 != -1) opisanieData = opisanieData.substring(0, opis1)
+                val str1 = SpannableString(opisanieData)
+                when (data[e].svaity) {
+                    -1, -2, 2 -> {
+                        str1.setSpan(StyleSpan(Typeface.BOLD_ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (dzenNoch) str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_black)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        else str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                    -3, 3 -> {
+                        str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (dzenNoch) str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_black)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        else str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                    else -> {
+                        str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                }
+                val span = SpannableString(data[e].opisanie)
+                val t1 = sviatya.indexOf(poshuk, ignoreCase = true)
+                val t2 = poshuk.length
+                span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                resultSpan.append(str1).append("\n").append(span)
+                arrayRes.add(Searche(data[e].dayOfYear, resultSpan))
             }
         }
         textViewCount?.text = resources.getString(R.string.seash, arrayRes.size)

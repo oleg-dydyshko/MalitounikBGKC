@@ -813,228 +813,163 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         }
     }
 
-    private fun zamena(replase: String): String {
-        val registr = chin.getBoolean("pegistrbukv", true)
-        var replase1 = replase
-        replase1 = replase1.replace("ё", "е", registr)
-        replase1 = replase1.replace("и", "і", registr)
-        replase1 = replase1.replace("щ", "ў", registr)
-        replase1 = replase1.replace("ъ", "'", registr)
-        replase1 = replase1.replace("све", "сьве", registr)
-        replase1 = replase1.replace("сві", "сьві", registr)
-        replase1 = replase1.replace("свя", "сьвя", registr)
-        replase1 = replase1.replace("зве", "зьве", registr)
-        replase1 = replase1.replace("зві", "зьві", registr)
-        replase1 = replase1.replace("звя", "зьвя", registr)
-        replase1 = replase1.replace("зме", "зьме", registr)
-        replase1 = replase1.replace("змі", "зьмі", registr)
-        replase1 = replase1.replace("змя", "зьмя", registr)
-        replase1 = replase1.replace("зня", "зьня", registr)
-        replase1 = replase1.replace("сле", "сьле", registr)
-        replase1 = replase1.replace("слі", "сьлі", registr)
-        replase1 = replase1.replace("сль", "сьль", registr)
-        replase1 = replase1.replace("слю", "сьлю", registr)
-        replase1 = replase1.replace("сля", "сьля", registr)
-        replase1 = replase1.replace("сне", "сьне", registr)
-        replase1 = replase1.replace("сні", "сьні", registr)
-        replase1 = replase1.replace("сню", "сьню", registr)
-        replase1 = replase1.replace("сня", "сьня", registr)
-        replase1 = replase1.replace("спе", "сьпе", registr)
-        replase1 = replase1.replace("спі", "сьпі", registr)
-        replase1 = replase1.replace("спя", "сьпя", registr)
-        replase1 = replase1.replace("сце", "сьце", registr)
-        replase1 = replase1.replace("сці", "сьці", registr)
-        replase1 = replase1.replace("сць", "сьць", registr)
-        replase1 = replase1.replace("сцю", "сьцю", registr)
-        replase1 = replase1.replace("сця", "сьця", registr)
-        replase1 = replase1.replace("цце", "цьце", registr)
-        replase1 = replase1.replace("цці", "цьці", registr)
-        replase1 = replase1.replace("ццю", "цьцю", registr)
-        replase1 = replase1.replace("ззе", "зьзе", registr)
-        replase1 = replase1.replace("ззі", "зьзі", registr)
-        replase1 = replase1.replace("ззю", "зьзю", registr)
-        replase1 = replase1.replace("ззя", "зьзя", registr)
-        replase1 = replase1.replace("зле", "зьле", registr)
-        replase1 = replase1.replace("злі", "зьлі", registr)
-        replase1 = replase1.replace("злю", "зьлю", registr)
-        replase1 = replase1.replace("зля", "зьля", registr)
-        replase1 = replase1.replace("збе", "зьбе", registr)
-        replase1 = replase1.replace("збі", "зьбі", registr)
-        replase1 = replase1.replace("збя", "зьбя", registr)
-        replase1 = replase1.replace("нне", "ньне", registr)
-        replase1 = replase1.replace("нні", "ньні", registr)
-        replase1 = replase1.replace("нню", "ньню", registr)
-        replase1 = replase1.replace("ння", "ньня", registr)
-        replase1 = replase1.replace("лле", "льле", registr)
-        replase1 = replase1.replace("ллі", "льлі", registr)
-        replase1 = replase1.replace("ллю", "льлю", registr)
-        replase1 = replase1.replace("лля", "льля", registr)
-        replase1 = replase1.replace("дск", "дзк", registr)
-        replase1 = replase1.replace("дств", "дзтв", registr)
-        replase1 = replase1.replace("з’е", "зье", registr)
-        replase1 = replase1.replace("з’я", "зья", registr)
-        return replase1
-    }
-
     private fun semuxa(poshuk: String): ArrayList<Spannable> {
         var poshuk1 = poshuk
         val seashpost = ArrayList<Spannable>()
-        if (poshuk1 != "") {
-            poshuk1 = zamena(poshuk1)
-            val registr = chin.getBoolean("pegistrbukv", true)
-            if (chin.getInt("slovocalkam", 0) == 0) {
-                val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
-                for (aM in m) {
-                    val r = poshuk1.length - 1
-                    if (poshuk1.length >= 3) {
-                        if (poshuk1[r] == aM) {
-                            poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), registr)
+        poshuk1 = MainActivity.zamena(poshuk1, chin.getBoolean("pegistrbukv", true))
+        val registr = chin.getBoolean("pegistrbukv", true)
+        if (chin.getInt("slovocalkam", 0) == 0) {
+            val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
+            for (aM in m) {
+                val r = poshuk1.length - 1
+                if (poshuk1.length >= 3) {
+                    if (poshuk1[r] == aM) {
+                        poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), registr)
+                    }
+                }
+            }
+        } else {
+            poshuk1 = " $poshuk1 "
+        }
+        val range = when (chin.getInt("biblia_seash", 0)) {
+            1 -> 39..42
+            2 -> 39 until semuxaBible.size
+            3 -> 0..4
+            4 -> 0..38
+            else -> 0 until semuxaBible.size
+        }
+        for (i in range) {
+            if (searchJob?.isActive == false) break
+            val nazva = when (i) {
+                0 -> "Быцьцё"
+                1 -> "Выхад"
+                2 -> "Лявіт"
+                3 -> "Лікі"
+                4 -> "Другі Закон"
+                5 -> "Ісуса сына Нава"
+                6 -> "Судзьдзяў"
+                7 -> "Рут"
+                8 -> "1-я Царстваў"
+                9 -> "2-я Царстваў"
+                10 -> "3-я Царстваў"
+                11 -> "4-я Царстваў"
+                12 -> "1-я Летапісаў"
+                13 -> "2-я Летапісаў"
+                14 -> "Эздры"
+                15 -> "Нээміі"
+                16 -> "Эстэр"
+                17 -> "Ёва"
+                18 -> "Псалтыр"
+                19 -> "Выслоўяў Саламонавых"
+                20 -> "Эклезіяста"
+                21 -> "Найвышэйшая Песьня Саламонава"
+                22 -> "Ісаі"
+                23 -> "Ераміі"
+                24 -> "Ераміін Плач"
+                25 -> "Езэкііля"
+                26 -> "Данііла"
+                27 -> "Асіі"
+                28 -> "Ёіля"
+                29 -> "Амоса"
+                30 -> "Аўдзея"
+                31 -> "Ёны"
+                32 -> "Міхея"
+                33 -> "Навума"
+                34 -> "Абакума"
+                35 -> "Сафона"
+                36 -> "Агея"
+                37 -> "Захарыі"
+                38 -> "Малахіі"
+                39 -> "Паводле Мацьвея"
+                40 -> "Паводле Марка"
+                41 -> "Паводле Лукаша"
+                42 -> "Паводле Яна"
+                43 -> "Дзеі Апосталаў"
+                44 -> "Якава"
+                45 -> "1-е Пятра"
+                46 -> "2-е Пятра"
+                47 -> "1-е Яна Багаслова"
+                48 -> "2-е Яна Багаслова"
+                49 -> "3-е Яна Багаслова"
+                50 -> "Юды"
+                51 -> "Да Рымлянаў"
+                52 -> "1-е да Карынфянаў"
+                53 -> "2-е да Карынфянаў"
+                54 -> "Да Галятаў"
+                55 -> "Да Эфэсянаў"
+                56 -> "Да Піліпянаў"
+                57 -> "Да Каласянаў"
+                58 -> "1-е да Фесаланікійцаў"
+                59 -> "2-е да Фесаланікійцаў"
+                60 -> "1-е да Цімафея"
+                61 -> "2-е да Цімафея"
+                62 -> "Да Ціта"
+                63 -> "Да Філімона"
+                64 -> "Да Габрэяў"
+                65 -> "Адкрыцьцё (Апакаліпсіс)"
+                else -> ""
+            }
+            if (nazva != "") {
+                val inputStream = resources.openRawResource(semuxaBible[i])
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                var glava = 0
+                val split = reader.use {
+                    it.readText().split("===")
+                }
+                (1 until split.size).forEach { e ->
+                    glava++
+                    val bibleline = split[e].split("\n")
+                    var stix = 0
+                    for (r in 1 until bibleline.size) {
+                        var prepinanie = bibleline[r]
+                        if (prepinanie.contains("//")) {
+                            val t1 = prepinanie.indexOf("//")
+                            prepinanie = if (t1 == 0) continue else prepinanie.substring(0, t1).trim()
                         }
-                    }
-                }
-            } else {
-                poshuk1 = " $poshuk1 "
-            }
-            val range = when (chin.getInt("biblia_seash", 0)) {
-                1 -> 39..42
-                2 -> 39 until semuxaBible.size
-                3 -> 0..4
-                4 -> 0..38
-                else -> 0 until semuxaBible.size
-            }
-            for (i in range) {
-                if (searchJob?.isActive == false) break
-                val nazva = when (i) {
-                    0 -> "Быцьцё"
-                    1 -> "Выхад"
-                    2 -> "Лявіт"
-                    3 -> "Лікі"
-                    4 -> "Другі Закон"
-                    5 -> "Ісуса сына Нава"
-                    6 -> "Судзьдзяў"
-                    7 -> "Рут"
-                    8 -> "1-я Царстваў"
-                    9 -> "2-я Царстваў"
-                    10 -> "3-я Царстваў"
-                    11 -> "4-я Царстваў"
-                    12 -> "1-я Летапісаў"
-                    13 -> "2-я Летапісаў"
-                    14 -> "Эздры"
-                    15 -> "Нээміі"
-                    16 -> "Эстэр"
-                    17 -> "Ёва"
-                    18 -> "Псалтыр"
-                    19 -> "Выслоўяў Саламонавых"
-                    20 -> "Эклезіяста"
-                    21 -> "Найвышэйшая Песьня Саламонава"
-                    22 -> "Ісаі"
-                    23 -> "Ераміі"
-                    24 -> "Ераміін Плач"
-                    25 -> "Езэкііля"
-                    26 -> "Данііла"
-                    27 -> "Асіі"
-                    28 -> "Ёіля"
-                    29 -> "Амоса"
-                    30 -> "Аўдзея"
-                    31 -> "Ёны"
-                    32 -> "Міхея"
-                    33 -> "Навума"
-                    34 -> "Абакума"
-                    35 -> "Сафона"
-                    36 -> "Агея"
-                    37 -> "Захарыі"
-                    38 -> "Малахіі"
-                    39 -> "Паводле Мацьвея"
-                    40 -> "Паводле Марка"
-                    41 -> "Паводле Лукаша"
-                    42 -> "Паводле Яна"
-                    43 -> "Дзеі Апосталаў"
-                    44 -> "Якава"
-                    45 -> "1-е Пятра"
-                    46 -> "2-е Пятра"
-                    47 -> "1-е Яна Багаслова"
-                    48 -> "2-е Яна Багаслова"
-                    49 -> "3-е Яна Багаслова"
-                    50 -> "Юды"
-                    51 -> "Да Рымлянаў"
-                    52 -> "1-е да Карынфянаў"
-                    53 -> "2-е да Карынфянаў"
-                    54 -> "Да Галятаў"
-                    55 -> "Да Эфэсянаў"
-                    56 -> "Да Піліпянаў"
-                    57 -> "Да Каласянаў"
-                    58 -> "1-е да Фесаланікійцаў"
-                    59 -> "2-е да Фесаланікійцаў"
-                    60 -> "1-е да Цімафея"
-                    61 -> "2-е да Цімафея"
-                    62 -> "Да Ціта"
-                    63 -> "Да Філімона"
-                    64 -> "Да Габрэяў"
-                    65 -> "Адкрыцьцё (Апакаліпсіс)"
-                    else -> ""
-                }
-                if (nazva != "") {
-                    val inputStream = resources.openRawResource(semuxaBible[i])
-                    val isr = InputStreamReader(inputStream)
-                    val reader = BufferedReader(isr)
-                    var glava = 0
-                    val split = reader.use {
-                        it.readText().split("===")
-                    }
-                    (1 until split.size).forEach { e ->
-                        glava++
-                        val bibleline = split[e].split("\n")
-                        var stix = 0
-                        for (r in 1 until bibleline.size) {
-                            var prepinanie = bibleline[r]
-                            if (prepinanie.contains("//")) {
-                                val t1 = prepinanie.indexOf("//")
-                                prepinanie = if (t1 == 0) continue else prepinanie.substring(0, t1).trim()
+                        stix++
+                        if (chin.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "
+                        prepinanie = prepinanie.replace(",", "")
+                        prepinanie = prepinanie.replace(".", "")
+                        prepinanie = prepinanie.replace(";", "")
+                        prepinanie = prepinanie.replace(":", "")
+                        prepinanie = prepinanie.replace("-", "")
+                        prepinanie = prepinanie.replace("\"", "")
+                        prepinanie = prepinanie.replace("ё", "е", registr)
+                        prepinanie = prepinanie.replace("<em>", "", registr)
+                        prepinanie = prepinanie.replace("</em>", " ", registr)
+                        prepinanie = prepinanie.replace("<br>", "", registr)
+                        prepinanie = prepinanie.replace("<strong>", "", registr)
+                        prepinanie = prepinanie.replace("</strong>", " ", registr)
+                        if (chin.getInt("slovocalkam", 0) == 0) {
+                            if (prepinanie.contains(poshuk1, registr)) {
+                                val aSviatyia = MainActivity.fromHtml(bibleline[r])
+                                val title = "$nazva Гл. $glava".length
+                                val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                val t3 = span.indexOf("-->")
+                                val t1 = span.indexOf(poshuk1, ignoreCase = registr)
+                                val t2 = poshuk1.length
+                                span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                if (t1 != -1) {
+                                    span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                }
+                                seashpost.add(span)
                             }
-                            stix++
-                            if (chin.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "
-                            prepinanie = prepinanie.replace(",", "")
-                            prepinanie = prepinanie.replace(".", "")
-                            prepinanie = prepinanie.replace(";", "")
-                            prepinanie = prepinanie.replace(":", "")
-                            prepinanie = prepinanie.replace("-", "")
-                            prepinanie = prepinanie.replace("\"", "")
-                            prepinanie = prepinanie.replace("ё", "е", registr)
-                            prepinanie = prepinanie.replace("<em>", "", registr)
-                            prepinanie = prepinanie.replace("</em>", " ", registr)
-                            prepinanie = prepinanie.replace("<br>", "", registr)
-                            prepinanie = prepinanie.replace("<strong>", "", registr)
-                            prepinanie = prepinanie.replace("</strong>", " ", registr)
-                            if (chin.getInt("slovocalkam", 0) == 0) {
-                                if (prepinanie.contains(poshuk1, registr)) {
-                                    val aSviatyia = MainActivity.fromHtml(bibleline[r])
-                                    val title = "$nazva Гл. $glava".length
-                                    val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                                    val t3 = span.indexOf("-->")
-                                    val t1 = span.indexOf(poshuk1, ignoreCase = registr)
-                                    val t2 = poshuk1.length
-                                    span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    if (t1 != -1) {
-                                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    }
-                                    seashpost.add(span)
+                        } else {
+                            if (prepinanie.contains(poshuk1, registr)) {
+                                val aSviatyia = MainActivity.fromHtml(bibleline[r])
+                                val t2 = poshuk1.length
+                                val title = "$nazva Гл. $glava".length
+                                val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                val t3 = span.indexOf("-->")
+                                val t1 = span.indexOf(poshuk1, ignoreCase = registr)
+                                span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                if (t1 != -1) {
+                                    span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                                 }
-                            } else {
-                                if (prepinanie.contains(poshuk1, registr)) {
-                                    val aSviatyia = MainActivity.fromHtml(bibleline[r])
-                                    val t2 = poshuk1.length
-                                    val title = "$nazva Гл. $glava".length
-                                    val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                                    val t3 = span.indexOf("-->")
-                                    val t1 = span.indexOf(poshuk1, ignoreCase = registr)
-                                    span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    if (t1 != -1) {
-                                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    }
-                                    seashpost.add(span)
-                                }
+                                seashpost.add(span)
                             }
                         }
                     }
@@ -1047,166 +982,164 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     private fun sinoidal(poshuk: String): ArrayList<Spannable> {
         var poshuk1 = poshuk
         val seashpost = ArrayList<Spannable>()
-        if (poshuk1 != "") {
-            val registr = chin.getBoolean("pegistrbukv", true)
-            poshuk1 = poshuk1.replace("ё", "е", registr)
-            if (chin.getInt("slovocalkam", 0) == 0) {
-                val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
-                for (aM in m) {
-                    val r = poshuk1.length - 1
-                    if (poshuk1[r] == aM) {
-                        poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), registr)
-                    }
+        val registr = chin.getBoolean("pegistrbukv", true)
+        poshuk1 = poshuk1.replace("ё", "е", registr)
+        if (chin.getInt("slovocalkam", 0) == 0) {
+            val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
+            for (aM in m) {
+                val r = poshuk1.length - 1
+                if (poshuk1[r] == aM) {
+                    poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), registr)
                 }
-            } else {
-                poshuk1 = " $poshuk1 "
             }
-            val range = when (chin.getInt("biblia_seash", 0)) {
-                1 -> 50..53
-                2 -> 50 until sinodalBible.size
-                3 -> 0..4
-                4 -> 0..49
-                else -> 0 until sinodalBible.size
+        } else {
+            poshuk1 = " $poshuk1 "
+        }
+        val range = when (chin.getInt("biblia_seash", 0)) {
+            1 -> 50..53
+            2 -> 50 until sinodalBible.size
+            3 -> 0..4
+            4 -> 0..49
+            else -> 0 until sinodalBible.size
+        }
+        for (i in range) {
+            if (searchJob?.isActive == false) break
+            val nazva = when (i) {
+                0 -> "Бытие"
+                1 -> "Исход"
+                2 -> "Левит"
+                3 -> "Числа"
+                4 -> "Второзаконие"
+                5 -> "Иисуса Навина"
+                6 -> "Судей израилевых"
+                7 -> "Руфи"
+                8 -> "1-я Царств"
+                9 -> "2-я Царств"
+                10 -> "3-я Царств"
+                11 -> "4-я Царств"
+                12 -> "1-я Паралипоменон"
+                13 -> "2-я Паралипоменон"
+                14 -> "1-я Ездры"
+                15 -> "Неемии"
+                16 -> "2-я Ездры"
+                17 -> "Товита"
+                18 -> "Иудифи"
+                19 -> "Есфири"
+                20 -> "Иова"
+                21 -> "Псалтирь"
+                22 -> "Притчи Соломона"
+                23 -> "Екклезиаста"
+                24 -> "Песнь песней Соломона"
+                25 -> "Премудрости Соломона"
+                26 -> "Премудрости Иисуса, сына Сирахова"
+                27 -> "Исаии"
+                28 -> "Иеремии"
+                29 -> "Плач Иеремии"
+                30 -> "Послание Иеремии"
+                31 -> "Варуха"
+                32 -> "Иезекииля"
+                33 -> "Даниила"
+                34 -> "Осии"
+                35 -> "Иоиля"
+                36 -> "Амоса"
+                37 -> "Авдия"
+                38 -> "Ионы"
+                39 -> "Михея"
+                40 -> "Наума"
+                41 -> "Аввакума"
+                42 -> "Сафонии"
+                43 -> "Аггея"
+                44 -> "Захарии"
+                45 -> "Малахии"
+                46 -> "1-я Маккавейская"
+                47 -> "2-я Маккавейская"
+                48 -> "3-я Маккавейская"
+                49 -> "3-я Ездры"
+                50 -> "От Матфея"
+                51 -> "От Марка"
+                52 -> "От Луки"
+                53 -> "От Иоанна"
+                54 -> "Деяния святых апостолов"
+                55 -> "Иакова"
+                56 -> "1-е Петра"
+                57 -> "2-е Петра"
+                58 -> "1-е Иоанна"
+                59 -> "2-е Иоанна"
+                60 -> "3-е Иоанна"
+                61 -> "Иуды"
+                62 -> "Римлянам"
+                63 -> "1-е Коринфянам"
+                64 -> "2-е Коринфянам"
+                65 -> "Галатам"
+                66 -> "Эфэсянам"
+                67 -> "Филиппийцам"
+                68 -> "Колоссянам"
+                69 -> "1-е Фессалоникийцам (Солунянам)"
+                70 -> "2-е Фессалоникийцам (Солунянам)"
+                71 -> "1-е Тимофею"
+                72 -> "2-е Тимофею"
+                73 -> "Титу"
+                74 -> "Филимону"
+                75 -> "Евреям"
+                76 -> "Откровение (Апокалипсис)"
+                else -> ""
             }
-            for (i in range) {
-                if (searchJob?.isActive == false) break
-                val nazva = when (i) {
-                    0 -> "Бытие"
-                    1 -> "Исход"
-                    2 -> "Левит"
-                    3 -> "Числа"
-                    4 -> "Второзаконие"
-                    5 -> "Иисуса Навина"
-                    6 -> "Судей израилевых"
-                    7 -> "Руфи"
-                    8 -> "1-я Царств"
-                    9 -> "2-я Царств"
-                    10 -> "3-я Царств"
-                    11 -> "4-я Царств"
-                    12 -> "1-я Паралипоменон"
-                    13 -> "2-я Паралипоменон"
-                    14 -> "1-я Ездры"
-                    15 -> "Неемии"
-                    16 -> "2-я Ездры"
-                    17 -> "Товита"
-                    18 -> "Иудифи"
-                    19 -> "Есфири"
-                    20 -> "Иова"
-                    21 -> "Псалтирь"
-                    22 -> "Притчи Соломона"
-                    23 -> "Екклезиаста"
-                    24 -> "Песнь песней Соломона"
-                    25 -> "Премудрости Соломона"
-                    26 -> "Премудрости Иисуса, сына Сирахова"
-                    27 -> "Исаии"
-                    28 -> "Иеремии"
-                    29 -> "Плач Иеремии"
-                    30 -> "Послание Иеремии"
-                    31 -> "Варуха"
-                    32 -> "Иезекииля"
-                    33 -> "Даниила"
-                    34 -> "Осии"
-                    35 -> "Иоиля"
-                    36 -> "Амоса"
-                    37 -> "Авдия"
-                    38 -> "Ионы"
-                    39 -> "Михея"
-                    40 -> "Наума"
-                    41 -> "Аввакума"
-                    42 -> "Сафонии"
-                    43 -> "Аггея"
-                    44 -> "Захарии"
-                    45 -> "Малахии"
-                    46 -> "1-я Маккавейская"
-                    47 -> "2-я Маккавейская"
-                    48 -> "3-я Маккавейская"
-                    49 -> "3-я Ездры"
-                    50 -> "От Матфея"
-                    51 -> "От Марка"
-                    52 -> "От Луки"
-                    53 -> "От Иоанна"
-                    54 -> "Деяния святых апостолов"
-                    55 -> "Иакова"
-                    56 -> "1-е Петра"
-                    57 -> "2-е Петра"
-                    58 -> "1-е Иоанна"
-                    59 -> "2-е Иоанна"
-                    60 -> "3-е Иоанна"
-                    61 -> "Иуды"
-                    62 -> "Римлянам"
-                    63 -> "1-е Коринфянам"
-                    64 -> "2-е Коринфянам"
-                    65 -> "Галатам"
-                    66 -> "Эфэсянам"
-                    67 -> "Филиппийцам"
-                    68 -> "Колоссянам"
-                    69 -> "1-е Фессалоникийцам (Солунянам)"
-                    70 -> "2-е Фессалоникийцам (Солунянам)"
-                    71 -> "1-е Тимофею"
-                    72 -> "2-е Тимофею"
-                    73 -> "Титу"
-                    74 -> "Филимону"
-                    75 -> "Евреям"
-                    76 -> "Откровение (Апокалипсис)"
-                    else -> ""
+            if (nazva != "") {
+                val inputStream = resources.openRawResource(sinodalBible[i])
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                var glava = 0
+                val split = reader.use {
+                    it.readText().split("===")
                 }
-                if (nazva != "") {
-                    val inputStream = resources.openRawResource(sinodalBible[i])
-                    val isr = InputStreamReader(inputStream)
-                    val reader = BufferedReader(isr)
-                    var glava = 0
-                    val split = reader.use {
-                        it.readText().split("===")
-                    }
-                    (1 until split.size).forEach { e ->
-                        glava++
-                        val bibleline = split[e].split("\n")
-                        var stix = 0
-                        (1 until bibleline.size).forEach { r ->
-                            stix++
-                            var prepinanie = bibleline[r]
-                            if (chin.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "
-                            prepinanie = prepinanie.replace(",", "")
-                            prepinanie = prepinanie.replace(".", "")
-                            prepinanie = prepinanie.replace(";", "")
-                            prepinanie = prepinanie.replace(":", "")
-                            prepinanie = prepinanie.replace("[", "")
-                            prepinanie = prepinanie.replace("]", "")
-                            prepinanie = prepinanie.replace("-", "")
-                            prepinanie = prepinanie.replace("\"", "")
-                            prepinanie = prepinanie.replace("ё", "е", registr)
-                            if (chin.getInt("slovocalkam", 0) == 0) {
-                                if (prepinanie.contains(poshuk1, registr)) {
-                                    var aSviatyia = bibleline[r]
-                                    aSviatyia = aSviatyia.replace("\\n", "\n")
-                                    val t2 = poshuk1.length
-                                    val title = "$nazva Гл. $glava".length
-                                    val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                                    val t3 = span.indexOf("-->")
-                                    val t1 = span.indexOf(poshuk1, ignoreCase = registr)
-                                    span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    if (t1 != -1) {
-                                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    }
-                                    seashpost.add(span)
+                (1 until split.size).forEach { e ->
+                    glava++
+                    val bibleline = split[e].split("\n")
+                    var stix = 0
+                    (1 until bibleline.size).forEach { r ->
+                        stix++
+                        var prepinanie = bibleline[r]
+                        if (chin.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "
+                        prepinanie = prepinanie.replace(",", "")
+                        prepinanie = prepinanie.replace(".", "")
+                        prepinanie = prepinanie.replace(";", "")
+                        prepinanie = prepinanie.replace(":", "")
+                        prepinanie = prepinanie.replace("[", "")
+                        prepinanie = prepinanie.replace("]", "")
+                        prepinanie = prepinanie.replace("-", "")
+                        prepinanie = prepinanie.replace("\"", "")
+                        prepinanie = prepinanie.replace("ё", "е", registr)
+                        if (chin.getInt("slovocalkam", 0) == 0) {
+                            if (prepinanie.contains(poshuk1, registr)) {
+                                var aSviatyia = bibleline[r]
+                                aSviatyia = aSviatyia.replace("\\n", "\n")
+                                val t2 = poshuk1.length
+                                val title = "$nazva Гл. $glava".length
+                                val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                val t3 = span.indexOf("-->")
+                                val t1 = span.indexOf(poshuk1, ignoreCase = registr)
+                                span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                if (t1 != -1) {
+                                    span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                                 }
-                            } else {
-                                if (prepinanie.contains(poshuk1, registr)) {
-                                    var aSviatyia = bibleline[r]
-                                    aSviatyia = aSviatyia.replace("\\n", "\n")
-                                    val t2 = poshuk1.length
-                                    val title = "$nazva Гл. $glava".length
-                                    val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                                    val t3 = span.indexOf("-->")
-                                    val t1 = span.indexOf(poshuk1, ignoreCase = registr)
-                                    span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    if (t1 != -1) {
-                                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    }
-                                    seashpost.add(span)
+                                seashpost.add(span)
+                            }
+                        } else {
+                            if (prepinanie.contains(poshuk1, registr)) {
+                                var aSviatyia = bibleline[r]
+                                aSviatyia = aSviatyia.replace("\\n", "\n")
+                                val t2 = poshuk1.length
+                                val title = "$nazva Гл. $glava".length
+                                val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                val t3 = span.indexOf("-->")
+                                val t1 = span.indexOf(poshuk1, ignoreCase = registr)
+                                span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                if (t1 != -1) {
+                                    span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                                 }
+                                seashpost.add(span)
                             }
                         }
                     }
@@ -1219,79 +1152,77 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     private fun nadsan(poshuk: String): ArrayList<Spannable> {
         var poshuk1 = poshuk
         val seashpost = ArrayList<Spannable>()
-        if (poshuk1 != "") {
-            poshuk1 = zamena(poshuk1)
-            val registr = chin.getBoolean("pegistrbukv", true)
-            if (chin.getInt("slovocalkam", 0) == 0) {
-                val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
-                for (aM in m) {
-                    val r = poshuk1.length - 1
-                    if (poshuk1.length >= 3) {
-                        if (poshuk1[r] == aM) {
-                            poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), registr)
-                        }
+        poshuk1 = MainActivity.zamena(poshuk1)
+        val registr = chin.getBoolean("pegistrbukv", true)
+        if (chin.getInt("slovocalkam", 0) == 0) {
+            val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
+            for (aM in m) {
+                val r = poshuk1.length - 1
+                if (poshuk1.length >= 3) {
+                    if (poshuk1[r] == aM) {
+                        poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), registr)
                     }
                 }
-            } else {
-                poshuk1 = " $poshuk1 "
             }
-            val nazva = getString(by.carkva_gazeta.malitounik.R.string.psalter)
-            val inputStream = resources.openRawResource(R.raw.psaltyr_nadsan)
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            val split = reader.use {
-                it.readText().split("===")
-            }
-            var glava = 0
-            (1 until split.size).forEach { e ->
-                glava++
-                val bibleline = split[e].split("\n")
-                var stix = 0
-                (1 until bibleline.size).forEach { r ->
-                    stix++
-                    var prepinanie = bibleline[r]
-                    prepinanie = prepinanie.replace(",", "")
-                    prepinanie = prepinanie.replace(".", "")
-                    prepinanie = prepinanie.replace(";", "")
-                    prepinanie = prepinanie.replace(":", "")
-                    prepinanie = prepinanie.replace("-", "")
-                    prepinanie = prepinanie.replace("\"", "")
-                    prepinanie = prepinanie.replace("ё", "е")
-                    prepinanie = prepinanie.replace("<em>", "", registr)
-                    prepinanie = prepinanie.replace("</em>", " ", registr)
-                    prepinanie = prepinanie.replace("<br>", "", registr)
-                    prepinanie = prepinanie.replace("<strong>", "", registr)
-                    prepinanie = prepinanie.replace("</strong>", " ", registr)
-                    if (chin.getInt("slovocalkam", 0) == 0) {
-                        if (prepinanie.contains(poshuk1, registr)) {
-                            val aSviatyia = MainActivity.fromHtml(bibleline[r])
-                            val t2 = poshuk1.length
-                            val title = "$nazva Гл. $glava".length
-                            val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                            val t3 = span.indexOf("-->")
-                            val t1 = span.indexOf(poshuk1, ignoreCase = registr)
-                            span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            if (t1 != -1) {
-                                span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            }
-                            seashpost.add(span)
+        } else {
+            poshuk1 = " $poshuk1 "
+        }
+        val nazva = getString(by.carkva_gazeta.malitounik.R.string.psalter)
+        val inputStream = resources.openRawResource(R.raw.psaltyr_nadsan)
+        val isr = InputStreamReader(inputStream)
+        val reader = BufferedReader(isr)
+        val split = reader.use {
+            it.readText().split("===")
+        }
+        var glava = 0
+        (1 until split.size).forEach { e ->
+            glava++
+            val bibleline = split[e].split("\n")
+            var stix = 0
+            (1 until bibleline.size).forEach { r ->
+                stix++
+                var prepinanie = bibleline[r]
+                prepinanie = prepinanie.replace(",", "")
+                prepinanie = prepinanie.replace(".", "")
+                prepinanie = prepinanie.replace(";", "")
+                prepinanie = prepinanie.replace(":", "")
+                prepinanie = prepinanie.replace("-", "")
+                prepinanie = prepinanie.replace("\"", "")
+                prepinanie = prepinanie.replace("ё", "е")
+                prepinanie = prepinanie.replace("<em>", "", registr)
+                prepinanie = prepinanie.replace("</em>", " ", registr)
+                prepinanie = prepinanie.replace("<br>", "", registr)
+                prepinanie = prepinanie.replace("<strong>", "", registr)
+                prepinanie = prepinanie.replace("</strong>", " ", registr)
+                if (chin.getInt("slovocalkam", 0) == 0) {
+                    if (prepinanie.contains(poshuk1, registr)) {
+                        val aSviatyia = MainActivity.fromHtml(bibleline[r])
+                        val t2 = poshuk1.length
+                        val title = "$nazva Гл. $glava".length
+                        val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                        val t3 = span.indexOf("-->")
+                        val t1 = span.indexOf(poshuk1, ignoreCase = registr)
+                        span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (t1 != -1) {
+                            span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
-                    } else {
-                        if (prepinanie.contains(poshuk1, registr)) {
-                            val aSviatyia = MainActivity.fromHtml(bibleline[r])
-                            val t2 = poshuk1.length
-                            val title = "$nazva Гл. $glava".length
-                            val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                            val t3 = span.indexOf("-->")
-                            val t1 = span.indexOf(poshuk1, ignoreCase = registr)
-                            span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            if (t1 != -1) {
-                                span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            }
-                            seashpost.add(span)
+                        seashpost.add(span)
+                    }
+                } else {
+                    if (prepinanie.contains(poshuk1, registr)) {
+                        val aSviatyia = MainActivity.fromHtml(bibleline[r])
+                        val t2 = poshuk1.length
+                        val title = "$nazva Гл. $glava".length
+                        val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                        val t3 = span.indexOf("-->")
+                        val t1 = span.indexOf(poshuk1, ignoreCase = registr)
+                        span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (t1 != -1) {
+                            span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
+                        seashpost.add(span)
                     }
                 }
             }

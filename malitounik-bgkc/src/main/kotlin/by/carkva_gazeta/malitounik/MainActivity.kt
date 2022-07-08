@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo
 import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.hardware.SensorEvent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -184,6 +185,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     override fun setMyTheme() {
         if (dzenNoch) setTheme(R.style.AppCompatDark)
     }
+
+    /*override fun onSensorChanged(event: SensorEvent?) {
+        super.onSensorChanged(event)
+        event?.let { sensorEvent ->
+            bindingappbar.titleToolbar.text = sensorEvent.values[0].toString()
+        }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -1649,6 +1657,68 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             paralel = paralel.replace("Евр", "Гбр")
             paralel = paralel.replace("Откр", "Адкр")
             return paralel
+        }
+
+        fun zamena(replase: String, ignoreCase: Boolean = true): String {
+            var replase1 = replase
+            replase1 = replase1.replace("ё", "е", ignoreCase)
+            replase1 = replase1.replace("и", "і", ignoreCase)
+            replase1 = replase1.replace("щ", "ў", ignoreCase)
+            replase1 = replase1.replace("ъ", "'", ignoreCase)
+            replase1 = replase1.replace("све", "сьве", ignoreCase)
+            replase1 = replase1.replace("сві", "сьві", ignoreCase)
+            replase1 = replase1.replace("свя", "сьвя", ignoreCase)
+            replase1 = replase1.replace("зве", "зьве", ignoreCase)
+            replase1 = replase1.replace("зві", "зьві", ignoreCase)
+            replase1 = replase1.replace("звя", "зьвя", ignoreCase)
+            replase1 = replase1.replace("зме", "зьме", ignoreCase)
+            replase1 = replase1.replace("змі", "зьмі", ignoreCase)
+            replase1 = replase1.replace("змя", "зьмя", ignoreCase)
+            replase1 = replase1.replace("зня", "зьня", ignoreCase)
+            replase1 = replase1.replace("сле", "сьле", ignoreCase)
+            replase1 = replase1.replace("слі", "сьлі", ignoreCase)
+            replase1 = replase1.replace("сль", "сьль", ignoreCase)
+            replase1 = replase1.replace("слю", "сьлю", ignoreCase)
+            replase1 = replase1.replace("сля", "сьля", ignoreCase)
+            replase1 = replase1.replace("сне", "сьне", ignoreCase)
+            replase1 = replase1.replace("сні", "сьні", ignoreCase)
+            replase1 = replase1.replace("сню", "сьню", ignoreCase)
+            replase1 = replase1.replace("сня", "сьня", ignoreCase)
+            replase1 = replase1.replace("спе", "сьпе", ignoreCase)
+            replase1 = replase1.replace("спі", "сьпі", ignoreCase)
+            replase1 = replase1.replace("спя", "сьпя", ignoreCase)
+            replase1 = replase1.replace("сце", "сьце", ignoreCase)
+            replase1 = replase1.replace("сці", "сьці", ignoreCase)
+            replase1 = replase1.replace("сць", "сьць", ignoreCase)
+            replase1 = replase1.replace("сцю", "сьцю", ignoreCase)
+            replase1 = replase1.replace("сця", "сьця", ignoreCase)
+            replase1 = replase1.replace("цце", "цьце", ignoreCase)
+            replase1 = replase1.replace("цці", "цьці", ignoreCase)
+            replase1 = replase1.replace("ццю", "цьцю", ignoreCase)
+            replase1 = replase1.replace("ззе", "зьзе", ignoreCase)
+            replase1 = replase1.replace("ззі", "зьзі", ignoreCase)
+            replase1 = replase1.replace("ззю", "зьзю", ignoreCase)
+            replase1 = replase1.replace("ззя", "зьзя", ignoreCase)
+            replase1 = replase1.replace("зле", "зьле", ignoreCase)
+            replase1 = replase1.replace("злі", "зьлі", ignoreCase)
+            replase1 = replase1.replace("злю", "зьлю", ignoreCase)
+            replase1 = replase1.replace("зля", "зьля", ignoreCase)
+            replase1 = replase1.replace("збе", "зьбе", ignoreCase)
+            replase1 = replase1.replace("збі", "зьбі", ignoreCase)
+            replase1 = replase1.replace("збя", "зьбя", ignoreCase)
+            replase1 = replase1.replace("нне", "ньне", ignoreCase)
+            replase1 = replase1.replace("нні", "ньні", ignoreCase)
+            replase1 = replase1.replace("нню", "ньню", ignoreCase)
+            replase1 = replase1.replace("ння", "ньня", ignoreCase)
+            replase1 = replase1.replace("лле", "льле", ignoreCase)
+            replase1 = replase1.replace("ллі", "льлі", ignoreCase)
+            replase1 = replase1.replace("ллю", "льлю", ignoreCase)
+            replase1 = replase1.replace("лля", "льля", ignoreCase)
+            replase1 = replase1.replace("дск", "дзк", ignoreCase)
+            replase1 = replase1.replace("дств", "дзтв", ignoreCase)
+            replase1 = replase1.replace("з’е", "зье", ignoreCase)
+            replase1 = replase1.replace("з’я", "зья", ignoreCase)
+            return replase1
         }
 
         @Suppress("DEPRECATION")

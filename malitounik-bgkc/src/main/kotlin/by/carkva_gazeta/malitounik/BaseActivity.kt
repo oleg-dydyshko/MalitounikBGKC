@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.*
 
 abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
 
@@ -18,6 +19,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
     private var autoDzenNoch = false
     private var checkDzenNoch = false
     private var mLastClickTime: Long = 0
+    private var startTimeJob1: Job? = null
+    private var startTimeJob2: Job? = null
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -57,6 +60,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onPause() {
         super.onPause()
+        startTimeJob1?.cancel()
+        startTimeJob2?.cancel()
         removelightSensor()
     }
 
@@ -77,10 +82,37 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
-    private fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
+    private fun sensorChangeDzenNoch(sensorValue: Float) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 10000) {
             return
         }
+        when {
+            sensorValue <= 4f -> {
+                startTimeJob2?.cancel()
+                if (!autoDzenNoch) {
+                    if (startTimeJob1?.isActive != true) {
+                        startTimeJob1 = CoroutineScope(Dispatchers.Main).launch {
+                            delay(3000)
+                            timeJob(true)
+                        }
+                    }
+                }
+            }
+            sensorValue >= 21f -> {
+                startTimeJob1?.cancel()
+                if (autoDzenNoch) {
+                    if (startTimeJob2?.isActive != true) {
+                        startTimeJob2 = CoroutineScope(Dispatchers.Main).launch {
+                            delay(3000)
+                            timeJob(false)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun timeJob(isDzenNoch: Boolean) {
         mLastClickTime = SystemClock.elapsedRealtime()
         autoDzenNoch = isDzenNoch
         startAutoDzenNoch = isDzenNoch
@@ -89,12 +121,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         event?.let { sensorEvent ->
-            if (sensorEvent.values[0] <= 4f && !autoDzenNoch) {
-                sensorChangeDzenNoch(true)
-            }
-            if (sensorEvent.values[0] >= 21f && autoDzenNoch) {
-                sensorChangeDzenNoch(false)
-            }
+            sensorChangeDzenNoch(sensorEvent.values[0])
         }
     }
 

@@ -180,7 +180,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.textChytanneSviatyia.setBackgroundResource(R.drawable.selector_bez_posta)
                         binding.textBlaslavenne.setBackgroundResource(R.drawable.selector_bez_posta)
                         binding.textPamerlyia.setBackgroundResource(R.drawable.selector_bez_posta)
-                        if (MenuCaliandar.getPositionCaliandar(position)[0].contains("6")) {
+                        if (MenuCaliandar.getPositionCaliandar(position)[0].toInt() == Calendar.FRIDAY) {
                             binding.textPost.visibility = View.VISIBLE
                             binding.textPost.textSize = SettingsActivity.GET_FONT_SIZE_MIN
                             binding.textPost.text = resources.getString(R.string.No_post)
@@ -203,7 +203,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_post_black)
                         else binding.kniga.setImageResource(R.drawable.book_post)
                         binding.textPamerlyia.setBackgroundResource(R.drawable.selector_post)
-                        if (MenuCaliandar.getPositionCaliandar(position)[0].contains("6")) {
+                        if (MenuCaliandar.getPositionCaliandar(position)[0].toInt() == Calendar.FRIDAY) {
                             binding.PostFish.visibility = View.VISIBLE
                             binding.textPost.visibility = View.VISIBLE
                             binding.textPost.textSize = SettingsActivity.GET_FONT_SIZE_MIN
@@ -476,6 +476,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[10])
+                    intent.putExtra("denNedeli", MenuCaliandar.getPositionCaliandar(position)[0].toInt())
                     startActivity(intent)
                 }
             } else {
@@ -487,6 +488,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[9])
+                    intent.putExtra("denNedeli", MenuCaliandar.getPositionCaliandar(position)[0].toInt())
                     startActivity(intent)
                 }
             } else {
@@ -498,6 +500,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[11])
+                    intent.putExtra("denNedeli", MenuCaliandar.getPositionCaliandar(position)[0].toInt())
                     startActivity(intent)
                 }
             } else {

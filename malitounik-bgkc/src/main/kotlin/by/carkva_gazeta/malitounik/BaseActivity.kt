@@ -21,6 +21,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
     private var mLastClickTime: Long = 0
     private var startTimeJob1: Job? = null
     private var startTimeJob2: Job? = null
+    private var startTimeJob3: Job? = null
+    private var startTimeDelay: Long = 3000
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -30,6 +32,12 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        startTimeDelay = 0
+        startTimeJob3?.cancel()
+        startTimeJob3 = CoroutineScope(Dispatchers.IO).launch {
+            delay(4000)
+            startTimeDelay = 3000
+        }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (savedInstanceState != null) {
             mLastClickTime = savedInstanceState.getLong("mLastClickTime")
@@ -62,6 +70,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         super.onPause()
         startTimeJob1?.cancel()
         startTimeJob2?.cancel()
+        startTimeJob3?.cancel()
         removelightSensor()
     }
 
@@ -92,7 +101,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
                 if (!autoDzenNoch) {
                     if (startTimeJob1?.isActive != true) {
                         startTimeJob1 = CoroutineScope(Dispatchers.Main).launch {
-                            delay(3000)
+                            delay(startTimeDelay)
                             timeJob(true)
                         }
                     }
@@ -103,7 +112,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
                 if (autoDzenNoch) {
                     if (startTimeJob2?.isActive != true) {
                         startTimeJob2 = CoroutineScope(Dispatchers.Main).launch {
-                            delay(3000)
+                            delay(startTimeDelay)
                             timeJob(false)
                         }
                     }
@@ -113,6 +122,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
     }
 
     private fun timeJob(isDzenNoch: Boolean) {
+        startTimeDelay = 3000
         mLastClickTime = SystemClock.elapsedRealtime()
         autoDzenNoch = isDzenNoch
         startAutoDzenNoch = isDzenNoch

@@ -95,26 +95,24 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 10000) {
             return
         }
-        when {
-            sensorValue <= 4f -> {
-                startTimeJob2?.cancel()
-                if (!autoDzenNoch) {
-                    if (startTimeJob1?.isActive != true) {
-                        startTimeJob1 = CoroutineScope(Dispatchers.Main).launch {
-                            delay(startTimeDelay)
-                            timeJob(true)
-                        }
+        if (sensorValue <= 4f) {
+            startTimeJob2?.cancel()
+            if (!autoDzenNoch) {
+                if (startTimeJob1?.isActive != true) {
+                    startTimeJob1 = CoroutineScope(Dispatchers.Main).launch {
+                        delay(startTimeDelay)
+                        timeJob(true)
                     }
                 }
             }
-            sensorValue >= 21f -> {
-                startTimeJob1?.cancel()
-                if (autoDzenNoch) {
-                    if (startTimeJob2?.isActive != true) {
-                        startTimeJob2 = CoroutineScope(Dispatchers.Main).launch {
-                            delay(startTimeDelay)
-                            timeJob(false)
-                        }
+        }
+        if (sensorValue >= 21f) {
+            startTimeJob1?.cancel()
+            if (autoDzenNoch) {
+                if (startTimeJob2?.isActive != true) {
+                    startTimeJob2 = CoroutineScope(Dispatchers.Main).launch {
+                        delay(startTimeDelay)
+                        timeJob(false)
                     }
                 }
             }

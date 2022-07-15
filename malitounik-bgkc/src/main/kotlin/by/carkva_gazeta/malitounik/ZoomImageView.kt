@@ -134,9 +134,7 @@ class ZoomImageView : AppCompatImageView, View.OnTouchListener, GestureDetector.
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         viewWidth = MeasureSpec.getSize(widthMeasureSpec)
         viewHeight = MeasureSpec.getSize(heightMeasureSpec)
-        if (mSaveScale == 1f) {
-            fitToScreen()
-        }
+        fitToScreen()
     }
 
     override fun onTouch(view: View?, event: MotionEvent): Boolean {

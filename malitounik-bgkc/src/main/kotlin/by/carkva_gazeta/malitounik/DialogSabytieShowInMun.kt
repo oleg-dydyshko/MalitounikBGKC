@@ -29,6 +29,13 @@ class DialogSabytieShowInMun : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var _binding: DialogSabytieShowInMunBinding? = null
     private val binding get() = _binding!!
+    private val dzenNoch: Boolean
+        get() {
+            activity?.let {
+                return (it as BaseActivity).getBaseDzenNoch()
+            }
+            return false
+        }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -44,7 +51,6 @@ class DialogSabytieShowInMun : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogSabytieShowInMunBinding.inflate(LayoutInflater.from(it))
-            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             sabytieView(dayYear)
@@ -58,7 +64,6 @@ class DialogSabytieShowInMun : DialogFragment() {
 
     private fun sabytieView(DayYear: Int) {
         activity?.let {
-            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             binding.linearLayout.removeAllViewsInLayout()
             val density = (resources.displayMetrics.density).toInt()
             val gc = Calendar.getInstance() as GregorianCalendar
@@ -106,9 +111,9 @@ class DialogSabytieShowInMun : DialogFragment() {
                         }
                         val textViewT = TextView(it)
                         textViewT.text = title
-                        textViewT.setPadding(10 * density, 10 * density, 10 * density, 10 * density)
+                        textViewT.setPadding(10 * density, 5 * density, 5 * density, 5 * density)
                         textViewT.typeface = MainActivity.createFont(Typeface.BOLD)
-                        textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+                        textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
                         textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(it, p.color)))
                         sabytieList.add(textViewT)
@@ -118,7 +123,7 @@ class DialogSabytieShowInMun : DialogFragment() {
                         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
                         if (dzenNoch) {
                             textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                            textView.setBackgroundResource(R.color.colorprimary_material_dark)
+                            textView.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
                         }
                         val textR = if (!konecSabytie) {
                             getString(R.string.sabytieKali, data, time, res)

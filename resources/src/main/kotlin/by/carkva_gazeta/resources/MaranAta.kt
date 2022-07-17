@@ -830,8 +830,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         }
                         var resbib = res1[i2]
                         if (resbib.contains("#")) {
-                            glava = resbib.substring(1, 2).toInt()
-                            resbib = resbib.substring(3)
+                            val t2 = resbib.indexOf("#")
+                            val t3 = resbib.indexOf("#", t2 + 1)
+                            glava = resbib.substring(t2 + 1, t3).toInt()
+                            resbib = resbib.substring(t3 + 1)
                         }
                         if (belarus) maranAta.add("<!--$kniga.$glava.$i3--><!--nazva+++$nazvaBel " + glava + "-->" + resbib + getParallel(nomer, glava, i3 - 1) + "\n")
                         else maranAta.add("<!--$kniga.$glava.$i3--><!--nazva+++$nazva " + glava + "-->" + resbib + getParallel(nomer, glava, i3 - 1) + "\n")

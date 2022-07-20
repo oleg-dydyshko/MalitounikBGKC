@@ -1468,7 +1468,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun runZmennyiaChastki(text: Spannable, index: Int): Int {
-        val stringGTA1 = "Глядзіце тут"
+        val stringGTA1 = getString(by.carkva_gazeta.malitounik.R.string.gl_tyt)
         val strLigGTA1 = stringGTA1.length
         val bsatGTA1 = text.indexOf(stringGTA1, index)
         if (bsatGTA1 != -1) {
@@ -1810,9 +1810,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
-            val rub = if (resurs.contains("prynagodnyia")) "pub=4"
-            else "pub=2"
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?$rub&file=$resurs")
+            val gson = Gson()
+            val shareTitle = gson.toJson(title)
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=2&title=$shareTitle&file=$resurs")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
         }

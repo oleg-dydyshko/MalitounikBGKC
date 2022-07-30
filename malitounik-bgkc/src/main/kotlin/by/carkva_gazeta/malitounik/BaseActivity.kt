@@ -22,6 +22,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
     private var startTimeJob1: Job? = null
     private var startTimeJob2: Job? = null
     private var startTimeJob3: Job? = null
+    private var startTimeJob4: Job? = null
     private var startTimeDelay: Long = 3000
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -71,6 +72,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         startTimeJob1?.cancel()
         startTimeJob2?.cancel()
         startTimeJob3?.cancel()
+        startTimeJob4?.cancel()
         removelightSensor()
     }
 
@@ -95,24 +97,39 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 10000) {
             return
         }
-        if (sensorValue <= 4f) {
-            startTimeJob2?.cancel()
-            if (!autoDzenNoch) {
-                if (startTimeJob1?.isActive != true) {
-                    startTimeJob1 = CoroutineScope(Dispatchers.Main).launch {
-                        delay(startTimeDelay)
-                        timeJob(true)
+        when {
+            sensorValue <= 4f -> {
+                if (!autoDzenNoch) {
+                    startTimeJob2?.cancel()
+                    startTimeJob4?.cancel()
+                    if (startTimeJob1?.isActive != true) {
+                        startTimeJob1 = CoroutineScope(Dispatchers.Main).launch {
+                            delay(startTimeDelay)
+                            timeJob(true)
+                        }
                     }
                 }
             }
-        }
-        if (sensorValue >= 21f) {
-            startTimeJob1?.cancel()
-            if (autoDzenNoch) {
-                if (startTimeJob2?.isActive != true) {
-                    startTimeJob2 = CoroutineScope(Dispatchers.Main).launch {
-                        delay(startTimeDelay)
-                        timeJob(false)
+            sensorValue >= 21f -> {
+                if (autoDzenNoch) {
+                    startTimeJob1?.cancel()
+                    startTimeJob4?.cancel()
+                    if (startTimeJob2?.isActive != true) {
+                        startTimeJob2 = CoroutineScope(Dispatchers.Main).launch {
+                            delay(startTimeDelay)
+                            timeJob(false)
+                        }
+                    }
+                }
+            }
+            else -> {
+                if (autoDzenNoch != startAutoDzenNoch) {
+                    startTimeJob2?.cancel()
+                    startTimeJob1?.cancel()
+                    if (startTimeJob4?.isActive != true) {
+                        startTimeJob4 = CoroutineScope(Dispatchers.Main).launch {
+                            timeJob(!autoDzenNoch)
+                        }
                     }
                 }
             }

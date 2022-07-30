@@ -113,7 +113,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 binding.maranata.text = dataMaranAta
             }
             binding.znakTipicona.setOnClickListener(this@CaliandarFull)
-            if (MenuCaliandar.getPositionCaliandar(position)[21] != "") {
+            if (MenuCaliandar.getPositionCaliandar(position)[21].isNotEmpty()) {
                 binding.textBlaslavenne.text = MenuCaliandar.getPositionCaliandar(position)[21]
                 binding.textBlaslavenne.visibility = View.VISIBLE
             }
@@ -286,18 +286,18 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             if (MenuCaliandar.getPositionCaliandar(position)[5].contains("2")) {
                 binding.textCviatyGlavnyia.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
-            if (MenuCaliandar.getPositionCaliandar(position)[8] != "") {
+            if (MenuCaliandar.getPositionCaliandar(position)[8].isNotEmpty()) {
                 binding.textPredsviaty.text = MainActivity.fromHtml(MenuCaliandar.getPositionCaliandar(position)[8])
                 binding.textPredsviaty.visibility = View.VISIBLE
             }
             binding.textChytanne.text = MenuCaliandar.getPositionCaliandar(position)[9]
             if (MenuCaliandar.getPositionCaliandar(position)[9] == getString(R.string.no_danyx) || MenuCaliandar.getPositionCaliandar(position)[9] == getString(R.string.no_lityrgii)) binding.textChytanne.isEnabled = false
             if (MenuCaliandar.getPositionCaliandar(position)[9] == "") binding.textChytanne.visibility = View.GONE
-            if (MenuCaliandar.getPositionCaliandar(position)[10] != "") {
+            if (MenuCaliandar.getPositionCaliandar(position)[10].isNotEmpty()) {
                 binding.textChytanneSviatyia.text = MenuCaliandar.getPositionCaliandar(position)[10]
                 binding.textChytanneSviatyia.visibility = View.VISIBLE
             }
-            if (MenuCaliandar.getPositionCaliandar(position)[11] != "") {
+            if (MenuCaliandar.getPositionCaliandar(position)[11].isNotEmpty()) {
                 binding.textChytanneSviatyiaDop.text = MenuCaliandar.getPositionCaliandar(position)[11]
                 binding.textChytanneSviatyiaDop.visibility = View.VISIBLE
             }
@@ -332,16 +332,16 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             if (k.getInt("pkc", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[19] != "") {
                 svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[19])
             }
-            if (k.getInt("pravas", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[14] != "") {
+            if (k.getInt("pravas", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[14].isNotEmpty()) {
                 if (svityDrugasnuia.isNotEmpty()) svityDrugasnuia.append("\n\n")
                 svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[14])
             }
             if (k.getInt("gosud", 0) == 1) {
-                if (MenuCaliandar.getPositionCaliandar(position)[16] != "") {
+                if (MenuCaliandar.getPositionCaliandar(position)[16].isNotEmpty()) {
                     if (svityDrugasnuia.isNotEmpty()) svityDrugasnuia.append("\n\n")
                     svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[16])
                 }
-                if (MenuCaliandar.getPositionCaliandar(position)[15] != "") {
+                if (MenuCaliandar.getPositionCaliandar(position)[15].isNotEmpty()) {
                     if (svityDrugasnuia.isNotEmpty()) svityDrugasnuia.append("\n\n")
                     val sviata = MenuCaliandar.getPositionCaliandar(position)[15]
                     val svityDrugasnuiaLength = svityDrugasnuia.length
@@ -350,7 +350,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     else svityDrugasnuia.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary)), svityDrugasnuiaLength, svityDrugasnuia.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
-            if (k.getInt("pafesii", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[17] != "") {
+            if (k.getInt("pafesii", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[17].isNotEmpty()) {
                 if (svityDrugasnuia.isNotEmpty()) svityDrugasnuia.append("\n\n")
                 svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[17])
             }
@@ -366,7 +366,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 if (extras?.getBoolean("sabytieView", false) == true) {
                     sabytieTitle = extras.getString("sabytieTitle", "") ?: ""
                 }
-                if (editCaliandarTitle != "") {
+                if (editCaliandarTitle.isNotEmpty()) {
                     sabytieTitle = editCaliandarTitle
                     editCaliandarTitle = ""
                 }

@@ -7,5 +7,5 @@
     android:drawablePadding="10dp"
     android:gravity="center_vertical"
     android:padding="10dp"
-    android:textSize="16sp"
+    android:textSize="14sp"
     app:drawableStartCompat="@drawable/stiker" />

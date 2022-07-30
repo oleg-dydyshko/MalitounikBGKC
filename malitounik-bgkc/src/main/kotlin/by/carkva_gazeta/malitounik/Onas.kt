@@ -1,7 +1,9 @@
 package by.carkva_gazeta.malitounik
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Spannable
@@ -60,19 +62,19 @@ class Onas : BaseActivity() {
         val reader = BufferedReader(isr)
         var line: String
         val builder = StringBuilder()
-        val version = BuildConfig.VERSION_NAME
         reader.use { bufferedReader ->
             bufferedReader.forEachLine {
                 line = it
                 if (dzenNoch) line = line.replace("#d00505", "#f44336")
                 if (line.contains("<!--<VERSION></VERSION>-->")) {
-                    line = line.replace("<!--<VERSION></VERSION>-->", "<em>Версія праграмы: $version</em><br><br>")
+                    line = line.replace("<!--<VERSION></VERSION>-->", "<em>Версія праграмы: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})</em><br><br>")
                 }
                 builder.append(line)
             }
         }
         val text = MainActivity.fromHtml(builder.toString())
-        val t1 = text.indexOf("carkva-gazeta.by")
+        val str = "https://carkva-gazeta.by"
+        val t1 = text.indexOf(str)
         val spannable = text.toSpannable()
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View) {
@@ -88,7 +90,31 @@ class Onas : BaseActivity() {
                 intent.putExtra("naviny", 0)
                 startActivity(intent)
             }
-        }, t1, t1 + 16, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }, t1, t1 + str.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val str2 = "Палітыка прыватнасьці"
+        val t2 = text.indexOf(str2)
+        spannable.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                val url = "https://docs.google.com/document/d/1y-6wcJXCZT03UHKkdARX_3c9OZcMqShQk3R7UKGsRUA/edit"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.setPackage("com.android.chrome")
+                try {
+                    startActivity(intent)
+                } catch (ex: ActivityNotFoundException) {
+                    try {
+                        intent.setPackage(null)
+                        startActivity(intent)
+                    } catch (ex: ActivityNotFoundException) {
+                        MainActivity.toastView(this@Onas, getString(R.string.error_ch2))
+                    }
+                }
+            }
+        }, t2, t2 + str2.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         binding.textView.text = spannable
     }
 

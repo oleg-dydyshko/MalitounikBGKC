@@ -3,7 +3,6 @@ package by.carkva_gazeta.malitounik
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -126,7 +125,6 @@ class MenuBogashlugbovya : ListFragment() {
             }
             val dzenNoch = context.getBaseDzenNoch()
             viewHolder.text.text = data[position].title
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }

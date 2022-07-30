@@ -122,7 +122,6 @@ class SlugbyVialikagaPostuSpis : BaseActivity() {
             }
             val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             viewHolder.text.text = data[position].title
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch)
                 viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
             return rootView

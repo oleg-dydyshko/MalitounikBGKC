@@ -464,7 +464,6 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
             }
             val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             viewHolder.text.text = adapterList[position].text
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }

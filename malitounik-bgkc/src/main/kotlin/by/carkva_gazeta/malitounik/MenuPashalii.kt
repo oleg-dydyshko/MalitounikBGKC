@@ -142,7 +142,6 @@ class MenuPashalii : Fragment() {
                 rootView = convertView
                 ea = rootView.tag as ViewHolder
             }
-            ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             var color = R.color.colorPrimary_text
             var colorP = R.color.colorPrimary
             if ((context as BaseActivity).getBaseDzenNoch()) {

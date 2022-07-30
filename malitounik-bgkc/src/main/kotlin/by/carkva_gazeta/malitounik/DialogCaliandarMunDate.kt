@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -101,7 +100,6 @@ class DialogCaliandarMunDate : DialogFragment() {
             }
             val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             viewHolder.text.text = arrayList[position]
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val c = Calendar.getInstance()
             if (data >= SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
                 if (c[Calendar.YEAR] == position + SettingsActivity.GET_CALIANDAR_YEAR_MIN) viewHolder.text.typeface = MainActivity.createFont(Typeface.BOLD)

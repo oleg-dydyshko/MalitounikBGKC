@@ -78,8 +78,8 @@ class MenuBibleSinoidal : Fragment() {
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
                     val gson = Gson()
-                    val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
-                    val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
+                    val type = object : TypeToken<ArrayMap<String, Int>>() {}.type
+                    val set = gson.fromJson<ArrayMap<String, Int>>(bibleTime, type)
                     if (set["zavet"] == 1) {
                         if (MainActivity.checkmoduleResources()) {
                             val intent = Intent(activity, NovyZapavietSinaidalList::class.java)

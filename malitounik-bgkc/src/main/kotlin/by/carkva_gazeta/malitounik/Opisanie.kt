@@ -130,7 +130,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         val type = object : TypeToken<ArrayList<String>>() {}.type
         var res = ""
         val arrayList = ArrayList<String>()
-        if (builder != "") {
+        if (builder.isNotEmpty()) {
             arrayList.addAll(gson.fromJson(builder, type))
             res = arrayList[day - 1]
         } else {
@@ -178,7 +178,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             val builder = fileOpisanieSviat.readText()
             val gson = Gson()
             val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-            val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
+            val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(builder, type)
             arrayList.forEach {
                 if (day == it[0].toInt() && mun == it[1].toInt()) {
                     var res = it[2]
@@ -241,12 +241,9 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             startTimer()
             var builder = ""
             val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
-            val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
             if (!MainActivity.isNetworkAvailable()) {
-                if (svity) {
-                    if (fileOpisanieSviat.exists()) builder = fileOpisanieSviat.readText()
-                } else {
-                    if (fileOpisanie.exists()) builder = fileOpisanie.readText()
+                if (!svity && fileOpisanie.exists()) {
+                    builder = fileOpisanie.readText()
                 }
             } else {
                 if (update) {
@@ -259,6 +256,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     try {
                         val dir = File("$filesDir/sviatyja/")
                         if (!dir.exists()) dir.mkdir()
+                        val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
                         if (!fileOpisanieSviat.exists() || update) {
                             val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
                             val conections = mURL.openConnection() as HttpURLConnection
@@ -282,8 +280,9 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                         }
                     } catch (e: Throwable) {
                     }
-                    builder = if (svity) fileOpisanieSviat.readText()
-                    else fileOpisanie.readText()
+                    if (!svity && fileOpisanie.exists()) {
+                        builder = fileOpisanie.readText()
+                    }
                 }
             }
             if (svity) loadOpisanieSviat()

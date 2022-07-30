@@ -275,18 +275,18 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             ea.textView.text = stix
         }
         if (!res.contains("+-+")) {
-            var zakladka: SpannableStringBuilder? = null
+            val zakladka = SpannableStringBuilder()
             var space = 1
             if (mPerevod == 1) {
                 res = MainActivity.translateToBelarus(res)
-                zakladka = setZakladkiSemuxa(position)
-                if (zakladka != null) space = 2
+                zakladka.append(setZakladkiSemuxa(position))
+                if (zakladka.isNotEmpty()) space = 2
             }
             if (mPerevod == 2) {
-                zakladka = setZakladkiSinoidal(position)
-                if (zakladka != null) space = 2
+                zakladka.append(setZakladkiSinoidal(position))
+                if (zakladka.isNotEmpty()) space = 2
             }
-            val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka ?: "").append("\n").append(res)
+            val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka).append("\n").append(res)
             val start = ea.textView.text?.length ?: 0
             val end = start + space + res.length
             ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorSecondary_text)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -302,12 +302,12 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             }
             ea.textView.text = ssb
         } else {
-            var zakladka: SpannableStringBuilder? = null
+            val zakladka = SpannableStringBuilder()
             if (mPerevod == 1) {
-                zakladka = setZakladkiSemuxa(position) ?: SpannableStringBuilder("")
+                zakladka.append(setZakladkiSemuxa(position))
             }
             if (mPerevod == 2) {
-                zakladka = setZakladkiSinoidal(position) ?: SpannableStringBuilder("")
+                zakladka.append(setZakladkiSinoidal(position))
             }
             val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka)
             val end = ea.textView.length()
@@ -374,8 +374,8 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         return rootView
     }
 
-    private fun setZakladkiSemuxa(position: Int): SpannableStringBuilder? {
-        var ssb: SpannableStringBuilder? = null
+    private fun setZakladkiSemuxa(position: Int): SpannableStringBuilder {
+        val ssb = SpannableStringBuilder()
         var zav = "0"
         if (Zapavet) zav = "1"
         if (BibleGlobalList.zakladkiSemuxa.size > 0) {
@@ -465,7 +465,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                 }
 
                 if (zavet.contains(zav) && knigaN == kniga && glava1 == glava && stix1 == position) {
-                    ssb = SpannableStringBuilder(".")
+                    ssb.append(".")
                     var d: Drawable? = null
                     val t5 = knigaName.lastIndexOf("<!--")
                     val color = if (t5 != -1) knigaName.substring(t5 + 4).toInt()
@@ -504,8 +504,8 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         return ssb
     }
 
-    private fun setZakladkiSinoidal(position: Int): SpannableStringBuilder? {
-        var ssb: SpannableStringBuilder? = null
+    private fun setZakladkiSinoidal(position: Int): SpannableStringBuilder {
+        val ssb = SpannableStringBuilder()
         var zav = "0"
         if (Zapavet) zav = "1"
         if (BibleGlobalList.zakladkiSinodal.size > 0) {
@@ -605,7 +605,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                     knigaN = knigaS
                 }
                 if (zavet.contains(zav) && knigaN == kniga && glava1 == glava && stix1 == position) {
-                    ssb = SpannableStringBuilder(".")
+                    ssb.append(".")
                     var d: Drawable? = null
                     val t5 = knigaName.lastIndexOf("<!--")
                     val color = if (t5 != -1) knigaName.substring(t5 + 4).toInt()

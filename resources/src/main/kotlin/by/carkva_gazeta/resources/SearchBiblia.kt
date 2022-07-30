@@ -1297,7 +1297,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             }
             val t1 = seash[position].indexOf("-->")
             viewHolder.text.text = seash[position].subSequence(t1 + 3, seash[position].length)
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }

@@ -287,7 +287,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                 if (zakladka.isNotEmpty()) space = 2
             }
             val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka).append("\n").append(res)
-            val start = ea.textView.text?.length ?: 0
+            val start = ea.textView.text.length
             val end = start + space + res.length
             ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorSecondary_text)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             ssb.setSpan(RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -310,7 +310,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                 zakladka.append(setZakladkiSinoidal(position))
             }
             val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka)
-            val end = ea.textView.length()
+            val end = ea.textView.text.length
             val pos = BibleGlobalList.checkPosition(glava, position)
             if (pos != -1) {
                 if (BibleGlobalList.vydelenie[pos][2] == 1) {

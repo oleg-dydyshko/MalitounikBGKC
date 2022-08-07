@@ -171,6 +171,8 @@ class SlugbovyiaTextu {
         datMinSV.add(SlugbovyiaTextuData(21, "Нядзеля расслабленага - Літургія", "ndz_rasslablenaha_liturhija", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(28, "Нядзеля самаранкі - Літургія", "ndz_samaranki_liturhija", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(35, "Нядзеля сьлепанароджанага - Літургія", "ndz_slepanarodz_liturhija", LITURGIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(217, "Перадсьвяцьце Перамяненьня і сьв. муч. Яўсігнея", "mm_05_08_pieramianiennie_liturhija", LITURGIA))
+        datMinSV.add(SlugbovyiaTextuData(217, "Перадсьвяцьце Перамяненьня і сьв. муч. Яўсігнея", "mm_05_08_pieramianiennie_viaczernia", VIACHERNIA))
         datMinSV.add(SlugbovyiaTextuData(218, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "mm_06_08_pieramianiennie_liturhija", LITURGIA))
         datMinSV.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "viachernia_mineia_sviatochnaia1", VIACHERNIA))
         datMinSV.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "viachernia_mineia_sviatochnaia4", VIACHERNIA))

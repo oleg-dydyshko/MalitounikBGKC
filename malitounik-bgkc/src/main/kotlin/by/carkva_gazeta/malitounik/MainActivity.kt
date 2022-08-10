@@ -339,31 +339,39 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
         val data = intent.data
         if (data != null) {
-            if (data.toString().contains("shortcuts=1")) {
-                idSelect = R.id.label12
-                selectFragment(binding.label12, true)
-            } else if (data.toString().contains("shortcuts=3")) {
-                idSelect = R.id.label7
-                shortcuts = true
-                selectFragment(binding.label7, true)
-            } else if (data.toString().contains("shortcuts=4")) {
-                idSelect = R.id.label1
-                shortcuts = true
-                selectFragment(binding.label1, true)
-            } else if (data.toString().contains("shortcuts=2")) {
-                idSelect = R.id.label2
-                shortcuts = true
-                selectFragment(binding.label2, true)
-            } else if (data.toString().contains("caliandar")) {
-                idSelect = R.id.label1
-                selectFragment(binding.label1, true)
-            } else if (data.toString().contains("biblija")) {
-                idSelect = R.id.label8
-                selectFragment(binding.label8, true)
-            } else if (!data.toString().contains("https://")) {
-                idSelect = R.id.label2
-                shortcuts = true
-                selectFragment(binding.label2, true)
+            when {
+                data.toString().contains("shortcuts=1") -> {
+                    idSelect = R.id.label12
+                    selectFragment(binding.label12, true)
+                }
+                data.toString().contains("shortcuts=3") -> {
+                    idSelect = R.id.label7
+                    shortcuts = true
+                    selectFragment(binding.label7, true)
+                }
+                data.toString().contains("shortcuts=4") -> {
+                    idSelect = R.id.label1
+                    shortcuts = true
+                    selectFragment(binding.label1, true)
+                }
+                data.toString().contains("shortcuts=2") -> {
+                    idSelect = R.id.label2
+                    shortcuts = true
+                    selectFragment(binding.label2, true)
+                }
+                data.toString().contains("caliandar") -> {
+                    idSelect = R.id.label1
+                    selectFragment(binding.label1, true)
+                }
+                data.toString().contains("biblija") -> {
+                    idSelect = R.id.label8
+                    selectFragment(binding.label8, true)
+                }
+                !data.toString().contains("https://") -> {
+                    idSelect = R.id.label2
+                    shortcuts = true
+                    selectFragment(binding.label2, true)
+                }
             }
             intent.data = null
         }

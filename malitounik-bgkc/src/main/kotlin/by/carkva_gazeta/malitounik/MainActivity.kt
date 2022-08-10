@@ -9,7 +9,6 @@ import android.content.pm.ActivityInfo
 import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.hardware.SensorEvent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -338,7 +337,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.label9a.setOnClickListener(this)
         binding.label10a.setOnClickListener(this)
 
-        val data: Uri? = intent.data
+        val data = intent.data
         if (data != null) {
             if (data.toString().contains("shortcuts=1")) {
                 idSelect = R.id.label12
@@ -366,6 +365,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 shortcuts = true
                 selectFragment(binding.label2, true)
             }
+            intent.data = null
         }
         val extras = intent.extras
         if (extras != null) {

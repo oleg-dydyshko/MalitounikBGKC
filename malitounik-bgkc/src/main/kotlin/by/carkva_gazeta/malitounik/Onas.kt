@@ -99,7 +99,7 @@ class Onas : BaseActivity() {
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                val url = "https://github.com/oleg-dydyshko/MalitounikBGKC/blob/master/PrivacyPolicy.md"
+                val url = "https://carkva.web.app/"
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 intent.setPackage("com.android.chrome")

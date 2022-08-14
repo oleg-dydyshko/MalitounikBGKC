@@ -381,10 +381,21 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                     }
                 }
                 if (intent.extras != null) {
-                    val title = intent.extras?.getString("title", "") ?: ""
+                    val res = intent.extras?.getString("resours", "") ?: ""
                     var exits = false
                     for (i in 0 until fileList.size) {
-                        if (fileList[i].contains(title)) {
+                        var resurs = fileList[i]
+                        val t1 = fileList[i].indexOf("(")
+                        if (t1 != -1) {
+                            val t2 = fileList[i].indexOf(")")
+                            resurs = fileList[i].substring(t1 + 1, t2)
+                        } else {
+                            val t3 = fileList[i].lastIndexOf(".")
+                            if (t3 != -1) {
+                                resurs = fileList[i].substring(0, t3)
+                            }
+                        }
+                        if (res == resurs) {
                             exits = true
                             break
                         }
@@ -393,7 +404,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                     intent.putExtra("text", this@PasochnicaList.intent.extras?.getString("text", "") ?: "")
                     intent.putExtra("resours", this@PasochnicaList.intent.extras?.getString("resours", "") ?: "")
                     intent.putExtra("exits", exits)
-                    intent.putExtra("title", title)
+                    intent.putExtra("title", this@PasochnicaList.intent.extras?.getString("title", "") ?: "")
                     startActivity(intent)
                 }
                 adapter.notifyDataSetChanged()

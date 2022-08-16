@@ -224,31 +224,33 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     private fun getFileCopyPostRequest(dirToFile: String, fileName: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                binding.progressBar2.visibility = View.VISIBLE
-                withContext(Dispatchers.IO) {
-                    try {
-                        var reqParam = URLEncoder.encode("copy", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("dirToFile", "UTF-8") + "=" + URLEncoder.encode(dirToFile, "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            val wr = OutputStreamWriter(outputStream)
-                            wr.write(reqParam)
-                            wr.flush()
-                            inputStream
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                runCatching {
+                    binding.progressBar2.visibility = View.VISIBLE
+                    withContext(Dispatchers.IO) {
+                        try {
+                            var reqParam = URLEncoder.encode("copy", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("dirToFile", "UTF-8") + "=" + URLEncoder.encode(dirToFile, "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
+                            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                            with(mURL.openConnection() as HttpURLConnection) {
+                                requestMethod = "POST"
+                                val wr = OutputStreamWriter(outputStream)
+                                wr.write(reqParam)
+                                wr.flush()
+                                inputStream
+                            }
+                        } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            }
                         }
                     }
+                    binding.progressBar2.visibility = View.GONE
+                    val intent = Intent(this@PasochnicaList, Pasochnica::class.java)
+                    intent.putExtra("isSite", true)
+                    intent.putExtra("fileName", fileName)
+                    startActivity(intent)
                 }
-                binding.progressBar2.visibility = View.GONE
-                val intent = Intent(this@PasochnicaList, Pasochnica::class.java)
-                intent.putExtra("isSite", true)
-                intent.putExtra("fileName", fileName)
-                startActivity(intent)
             }
         }
     }
@@ -256,32 +258,34 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     private fun getFileUnlinkPostRequest(fileName: String, isSite: Boolean) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                binding.progressBar2.visibility = View.VISIBLE
-                withContext(Dispatchers.IO) {
-                    try {
-                        var reqParam = URLEncoder.encode("unlink", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        if (isSite) {
-                            reqParam += "&" + URLEncoder.encode("isSite", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        }
-                        reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            val wr = OutputStreamWriter(outputStream)
-                            wr.write(reqParam)
-                            wr.flush()
-                            inputStream
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                runCatching {
+                    binding.progressBar2.visibility = View.VISIBLE
+                    withContext(Dispatchers.IO) {
+                        try {
+                            var reqParam = URLEncoder.encode("unlink", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            if (isSite) {
+                                reqParam += "&" + URLEncoder.encode("isSite", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            }
+                            reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
+                            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                            with(mURL.openConnection() as HttpURLConnection) {
+                                requestMethod = "POST"
+                                val wr = OutputStreamWriter(outputStream)
+                                wr.write(reqParam)
+                                wr.flush()
+                                inputStream
+                            }
+                        } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            }
                         }
                     }
+                    binding.progressBar2.visibility = View.GONE
+                    val dialogNetFileExplorer = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
+                    dialogNetFileExplorer?.getDirListRequest()
+                    getDirPostRequest()
                 }
-                binding.progressBar2.visibility = View.GONE
-                val dialogNetFileExplorer = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
-                dialogNetFileExplorer?.getDirListRequest()
-                getDirPostRequest()
             }
         }
     }
@@ -289,33 +293,35 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     private fun getFileRenamePostRequest(oldFileName: String, fileName: String, isSite: Boolean) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                binding.progressBar2.visibility = View.VISIBLE
-                withContext(Dispatchers.IO) {
-                    try {
-                        var reqParam = URLEncoder.encode("rename", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        if (isSite) {
-                            reqParam += "&" + URLEncoder.encode("isSite", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        }
-                        reqParam += "&" + URLEncoder.encode("oldFileName", "UTF-8") + "=" + URLEncoder.encode(oldFileName.replace("\n", " "), "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            val wr = OutputStreamWriter(outputStream)
-                            wr.write(reqParam)
-                            wr.flush()
-                            inputStream
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                runCatching {
+                    binding.progressBar2.visibility = View.VISIBLE
+                    withContext(Dispatchers.IO) {
+                        try {
+                            var reqParam = URLEncoder.encode("rename", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            if (isSite) {
+                                reqParam += "&" + URLEncoder.encode("isSite", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            }
+                            reqParam += "&" + URLEncoder.encode("oldFileName", "UTF-8") + "=" + URLEncoder.encode(oldFileName.replace("\n", " "), "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
+                            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                            with(mURL.openConnection() as HttpURLConnection) {
+                                requestMethod = "POST"
+                                val wr = OutputStreamWriter(outputStream)
+                                wr.write(reqParam)
+                                wr.flush()
+                                inputStream
+                            }
+                        } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            }
                         }
                     }
+                    binding.progressBar2.visibility = View.GONE
+                    val dialogNetFileExplorer = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
+                    dialogNetFileExplorer?.getDirListRequest()
+                    getDirPostRequest()
                 }
-                binding.progressBar2.visibility = View.GONE
-                val dialogNetFileExplorer = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
-                dialogNetFileExplorer?.getDirListRequest()
-                getDirPostRequest()
             }
         }
     }
@@ -346,70 +352,72 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         }
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                binding.progressBar2.visibility = View.VISIBLE
-                withContext(Dispatchers.IO) {
-                    try {
-                        val reqParam = URLEncoder.encode("file", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            val wr = OutputStreamWriter(outputStream)
-                            wr.write(reqParam)
-                            wr.flush()
-                            val sb = StringBuilder()
-                            BufferedReader(InputStreamReader(inputStream)).use {
-                                var inputLine = it.readLine()
-                                while (inputLine != null) {
-                                    sb.append(inputLine)
-                                    inputLine = it.readLine()
+                runCatching {
+                    binding.progressBar2.visibility = View.VISIBLE
+                    withContext(Dispatchers.IO) {
+                        try {
+                            val reqParam = URLEncoder.encode("file", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                            with(mURL.openConnection() as HttpURLConnection) {
+                                requestMethod = "POST"
+                                val wr = OutputStreamWriter(outputStream)
+                                wr.write(reqParam)
+                                wr.flush()
+                                val sb = StringBuilder()
+                                BufferedReader(InputStreamReader(inputStream)).use {
+                                    var inputLine = it.readLine()
+                                    while (inputLine != null) {
+                                        sb.append(inputLine)
+                                        inputLine = it.readLine()
+                                    }
+                                }
+                                val result = sb.toString()
+                                fileList.clear()
+                                if (result != "null") {
+                                    val gson = Gson()
+                                    val type = object : TypeToken<ArrayList<String>>() {}.type
+                                    fileList.addAll(gson.fromJson(result, type))
+                                    fileList.sort()
+                                }
+                                fileList.addAll(backCopy)
+                            }
+                        } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            }
+                        }
+                    }
+                    if (intent.extras != null) {
+                        val res = intent.extras?.getString("resours", "") ?: ""
+                        var exits = false
+                        for (i in 0 until fileList.size) {
+                            var resurs = fileList[i]
+                            val t1 = fileList[i].indexOf("(")
+                            if (t1 != -1) {
+                                val t2 = fileList[i].indexOf(")")
+                                resurs = fileList[i].substring(t1 + 1, t2)
+                            } else {
+                                val t3 = fileList[i].lastIndexOf(".")
+                                if (t3 != -1) {
+                                    resurs = fileList[i].substring(0, t3)
                                 }
                             }
-                            val result = sb.toString()
-                            fileList.clear()
-                            if (result != "null") {
-                                val gson = Gson()
-                                val type = object : TypeToken<ArrayList<String>>() {}.type
-                                fileList.addAll(gson.fromJson(result, type))
-                                fileList.sort()
-                            }
-                            fileList.addAll(backCopy)
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                        }
-                    }
-                }
-                if (intent.extras != null) {
-                    val res = intent.extras?.getString("resours", "") ?: ""
-                    var exits = false
-                    for (i in 0 until fileList.size) {
-                        var resurs = fileList[i]
-                        val t1 = fileList[i].indexOf("(")
-                        if (t1 != -1) {
-                            val t2 = fileList[i].indexOf(")")
-                            resurs = fileList[i].substring(t1 + 1, t2)
-                        } else {
-                            val t3 = fileList[i].lastIndexOf(".")
-                            if (t3 != -1) {
-                                resurs = fileList[i].substring(0, t3)
+                            if (res == resurs) {
+                                exits = true
+                                break
                             }
                         }
-                        if (res == resurs) {
-                            exits = true
-                            break
-                        }
+                        val intent = Intent(this@PasochnicaList, Pasochnica::class.java)
+                        intent.putExtra("text", this@PasochnicaList.intent.extras?.getString("text", "") ?: "")
+                        intent.putExtra("resours", this@PasochnicaList.intent.extras?.getString("resours", "") ?: "")
+                        intent.putExtra("exits", exits)
+                        intent.putExtra("title", this@PasochnicaList.intent.extras?.getString("title", "") ?: "")
+                        startActivity(intent)
                     }
-                    val intent = Intent(this@PasochnicaList, Pasochnica::class.java)
-                    intent.putExtra("text", this@PasochnicaList.intent.extras?.getString("text", "") ?: "")
-                    intent.putExtra("resours", this@PasochnicaList.intent.extras?.getString("resours", "") ?: "")
-                    intent.putExtra("exits", exits)
-                    intent.putExtra("title", this@PasochnicaList.intent.extras?.getString("title", "") ?: "")
-                    startActivity(intent)
+                    adapter.notifyDataSetChanged()
+                    binding.listView.invalidate()
+                    binding.progressBar2.visibility = View.GONE
                 }
-                adapter.notifyDataSetChanged()
-                binding.listView.invalidate()
-                binding.progressBar2.visibility = View.GONE
             }
         } else {
             fileList.addAll(backCopy)
@@ -504,31 +512,33 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
             if (MainActivity.isNetworkAvailable()) {
                 CoroutineScope(Dispatchers.IO).launch {
                     withContext(Dispatchers.IO) {
-                        try {
-                            val reqParam = URLEncoder.encode("findDir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                            with(mURL.openConnection() as HttpURLConnection) {
-                                requestMethod = "POST"
-                                val wr = OutputStreamWriter(outputStream)
-                                wr.write(reqParam)
-                                wr.flush()
-                                val sb = StringBuilder()
-                                BufferedReader(InputStreamReader(inputStream)).use {
-                                    var inputLine = it.readLine()
-                                    while (inputLine != null) {
-                                        sb.append(inputLine)
-                                        inputLine = it.readLine()
+                        runCatching {
+                            try {
+                                val reqParam = URLEncoder.encode("findDir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                                val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                                with(mURL.openConnection() as HttpURLConnection) {
+                                    requestMethod = "POST"
+                                    val wr = OutputStreamWriter(outputStream)
+                                    wr.write(reqParam)
+                                    wr.flush()
+                                    val sb = StringBuilder()
+                                    BufferedReader(InputStreamReader(inputStream)).use {
+                                        var inputLine = it.readLine()
+                                        while (inputLine != null) {
+                                            sb.append(inputLine)
+                                            inputLine = it.readLine()
+                                        }
+                                    }
+                                    if (responseCode == 200) {
+                                        findDirAsSave.clear()
+                                        val gson = Gson()
+                                        val type = object : TypeToken<ArrayList<String>>() {}.type
+                                        findDirAsSave.addAll(gson.fromJson<ArrayList<String>>(sb.toString(), type))
                                     }
                                 }
-                                if (responseCode == 200) {
-                                    findDirAsSave.clear()
-                                    val gson = Gson()
-                                    val type = object : TypeToken<ArrayList<String>>() {}.type
-                                    findDirAsSave.addAll(gson.fromJson<ArrayList<String>>(sb.toString(), type))
-                                }
+                            } catch (e: Throwable) {
+                                MainActivity.toastView(Malitounik.applicationContext(), Malitounik.applicationContext().getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                             }
-                        } catch (e: Throwable) {
-                            MainActivity.toastView(Malitounik.applicationContext(), Malitounik.applicationContext().getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }

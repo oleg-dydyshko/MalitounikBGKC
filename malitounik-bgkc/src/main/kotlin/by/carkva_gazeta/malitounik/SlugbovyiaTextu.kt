@@ -180,6 +180,7 @@ class SlugbovyiaTextu {
         datMinSV.add(SlugbovyiaTextuData(227, "Усьпеньне Найсьвяцейшай Багародзіцы і Заўсёды Дзевы Марыі", "mm_15_08_uspiennie_viaczernia", VIACHERNIA))
         datMinSV.add(SlugbovyiaTextuData(222, "Пасьвяцьце Перамяненьня і сьв. мучаніка Лаўрына", "mm_10_08_viaczernia", VIACHERNIA))
         datMinSV.add(SlugbovyiaTextuData(226, "Перадсьвяцьце Ўсьпеньня і сьв. прарока Міхея", "mm_14_08_pieradsv_uspiennia_viaczernia", VIACHERNIA))
+        datMinSV.add(SlugbovyiaTextuData(226, "Перадсьвяцьце Ўсьпеньня і сьв. прарока Міхея", "mm_14_08_pieradsv_uspiennia_liturhija", LITURGIA))
         datMinSV.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "viachernia_mineia_sviatochnaia1", VIACHERNIA))
         datMinSV.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "viachernia_mineia_sviatochnaia4", VIACHERNIA))
         datMinSV.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2", VIACHERNIA))
@@ -330,15 +331,17 @@ class SlugbovyiaTextu {
                 if (MainActivity.isNetworkAvailable()) {
                     loadOpisanieSviatJob = CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
-                            try {
-                                val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
-                                val conections = mURL.openConnection() as HttpURLConnection
-                                if (conections.responseCode == 200) {
-                                    fileOpisanieSviat.writer().use {
-                                        it.write(mURL.readText())
+                            kotlin.runCatching {
+                                try {
+                                    val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
+                                    val conections = mURL.openConnection() as HttpURLConnection
+                                    if (conections.responseCode == 200) {
+                                        fileOpisanieSviat.writer().use {
+                                            it.write(mURL.readText())
+                                        }
                                     }
+                                } catch (e: Throwable) {
                                 }
-                            } catch (e: Throwable) {
                             }
                         }
                         try {
@@ -371,15 +374,17 @@ class SlugbovyiaTextu {
                 if (MainActivity.isNetworkAvailable()) {
                     loadPiarlinyJob = CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
-                            try {
-                                val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
-                                val conections = mURL.openConnection() as HttpURLConnection
-                                if (conections.responseCode == 200) {
-                                    fileOpisanieSviat.writer().use {
-                                        it.write(mURL.readText())
+                            runCatching {
+                                try {
+                                    val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
+                                    val conections = mURL.openConnection() as HttpURLConnection
+                                    if (conections.responseCode == 200) {
+                                        fileOpisanieSviat.writer().use {
+                                            it.write(mURL.readText())
+                                        }
                                     }
+                                } catch (e: Throwable) {
                                 }
-                            } catch (e: Throwable) {
                             }
                         }
                         try {

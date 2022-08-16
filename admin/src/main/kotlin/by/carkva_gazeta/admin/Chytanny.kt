@@ -77,96 +77,98 @@ class Chytanny : AppCompatActivity() {
 
     private fun loadChytanny(year: Int) {
         urlJob = CoroutineScope(Dispatchers.Main).launch {
-            binding.progressBar2.visibility = View.VISIBLE
-            binding.linear.removeAllViewsInLayout()
-            startTimer()
-            val text = withContext(Dispatchers.IO) {
-                try {
-                    val url = "https://carkva-gazeta.by/admin/getFilesCaliandar.php?year=$year"
-                    val builder = URL(url).readText()
-                    val gson = Gson()
-                    val type = object : TypeToken<ArrayList<String>>() {}.type
-                    return@withContext gson.fromJson<ArrayList<String>>(builder, type)
-                } catch (e: Throwable) {
-                    return@withContext ArrayList<String>()
+            runCatching {
+                binding.progressBar2.visibility = View.VISIBLE
+                binding.linear.removeAllViewsInLayout()
+                startTimer()
+                val text = withContext(Dispatchers.IO) {
+                    try {
+                        val url = "https://carkva-gazeta.by/admin/getFilesCaliandar.php?year=$year"
+                        val builder = URL(url).readText()
+                        val gson = Gson()
+                        val type = object : TypeToken<ArrayList<String>>() {}.type
+                        return@withContext gson.fromJson<ArrayList<String>>(builder, type)
+                    } catch (e: Throwable) {
+                        return@withContext ArrayList<String>()
+                    }
                 }
-            }
-            if (text.isEmpty()) {
+                if (text.isEmpty()) {
+                    stopTimer()
+                    binding.progressBar2.visibility = View.GONE
+                    MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                    return@launch
+                }
+                val a = year % 19
+                val b = year % 4
+                val cx = year % 7
+                val k = year / 100
+                val p = (13 + 8 * k) / 25
+                val q = k / 4
+                val m = (15 - p + k - q) % 30
+                val n = (4 + k - q) % 7
+                val d = (19 * a + m) % 30
+                val ex = (2 * b + 4 * cx + 6 * d + n) % 7
+                var monthP: Int
+                var dataP: Int
+                if (d + ex <= 9) {
+                    dataP = d + ex + 22
+                    monthP = 3
+                } else {
+                    dataP = d + ex - 9
+                    if (d == 29 && ex == 6) dataP = 19
+                    if (d == 28 && ex == 6) dataP = 18
+                    monthP = 4
+                }
+                val fileLine = text[0].split("\n")
+                val nedelName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.dni_nedeli)
+                val monName2 = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
+                var countDay = 0
+                for (fw in fileLine) {
+                    if (fw.contains("\$calendar[]")) {
+                        val t1 = fw.indexOf("\"cviaty\"=>\"")
+                        val t2 = fw.indexOf("\", \"")
+                        val t3 = fw.indexOf("\".\$ahref.\"")
+                        val t4 = fw.indexOf("</a>\"")
+                        val c = GregorianCalendar(year, monthP - 1, dataP + countDay)
+                        var data = c[Calendar.DATE]
+                        var ned = c[Calendar.DAY_OF_WEEK]
+                        var mon = c[Calendar.MONTH]
+                        val data2 = c[Calendar.YEAR]
+                        var datefull = SpannableString(nedelName[ned] + ", " + data + " " + monName2[mon] + " " + year)
+                        countDay++
+                        if (data2 != year) {
+                            monthP = 1
+                            dataP = 1
+                            countDay = if (c.isLeapYear(year)) {
+                                1
+                            } else {
+                                0
+                            }
+                            data = c[Calendar.DATE]
+                            ned = c[Calendar.DAY_OF_WEEK]
+                            mon = c[Calendar.MONTH]
+                            datefull = SpannableString(nedelName[ned] + ", " + data + " " + monName2[mon] + " " + year)
+                            countDay++
+                        }
+                        val c1 = nedelName[ned].length
+                        val c2 = data.toString().length
+                        val c3 = monName2[mon].length
+                        datefull.setSpan(StyleSpan(Typeface.BOLD), c1 + 2, c1 + 2 + c2 + c3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        val font = MainActivity.createFont(Typeface.NORMAL)
+                        val font2 = MainActivity.createFont(Typeface.BOLD)
+                        datefull.setSpan(CustomTypefaceSpan("", font), 0, c1 + 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+                        datefull.setSpan(CustomTypefaceSpan("", font2), c1 + 2, c1 + 2 + c2 + c3 + 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+                        datefull.setSpan(CustomTypefaceSpan("", font), c1 + 2 + c2 + c3 + 1, datefull.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+                        binding.linear.addView(grateTextView(datefull))
+                        binding.linear.addView(grateEditView(1, fw.substring(t1 + 11, t2)))
+                        binding.linear.addView(grateEditView(2, fw.substring(t3 + 10, t4)))
+                    } else {
+                        binding.linear.addView(grateEditViewHidden(fw))
+                    }
+                }
                 stopTimer()
                 binding.progressBar2.visibility = View.GONE
-                MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                return@launch
             }
-            val a = year % 19
-            val b = year % 4
-            val cx = year % 7
-            val k = year / 100
-            val p = (13 + 8 * k) / 25
-            val q = k / 4
-            val m = (15 - p + k - q) % 30
-            val n = (4 + k - q) % 7
-            val d = (19 * a + m) % 30
-            val ex = (2 * b + 4 * cx + 6 * d + n) % 7
-            var monthP: Int
-            var dataP: Int
-            if (d + ex <= 9) {
-                dataP = d + ex + 22
-                monthP = 3
-            } else {
-                dataP = d + ex - 9
-                if (d == 29 && ex == 6) dataP = 19
-                if (d == 28 && ex == 6) dataP = 18
-                monthP = 4
-            }
-            val fileLine = text[0].split("\n")
-            val nedelName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.dni_nedeli)
-            val monName2 = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
-            var countDay = 0
-            for (fw in fileLine) {
-                if (fw.contains("\$calendar[]")) {
-                    val t1 = fw.indexOf("\"cviaty\"=>\"")
-                    val t2 = fw.indexOf("\", \"")
-                    val t3 = fw.indexOf("\".\$ahref.\"")
-                    val t4 = fw.indexOf("</a>\"")
-                    val c = GregorianCalendar(year, monthP - 1, dataP + countDay)
-                    var data = c[Calendar.DATE]
-                    var ned = c[Calendar.DAY_OF_WEEK]
-                    var mon = c[Calendar.MONTH]
-                    val data2 = c[Calendar.YEAR]
-                    var datefull = SpannableString(nedelName[ned] + ", " + data + " " + monName2[mon] + " " + year)
-                    countDay++
-                    if (data2 != year) {
-                        monthP = 1
-                        dataP = 1
-                        countDay = if (c.isLeapYear(year)) {
-                            1
-                        } else {
-                            0
-                        }
-                        data = c[Calendar.DATE]
-                        ned = c[Calendar.DAY_OF_WEEK]
-                        mon = c[Calendar.MONTH]
-                        datefull = SpannableString(nedelName[ned] + ", " + data + " " + monName2[mon] + " " + year)
-                        countDay++
-                    }
-                    val c1 = nedelName[ned].length
-                    val c2 = data.toString().length
-                    val c3 = monName2[mon].length
-                    datefull.setSpan(StyleSpan(Typeface.BOLD), c1 + 2, c1 + 2 + c2 + c3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    val font = MainActivity.createFont(Typeface.NORMAL)
-                    val font2 = MainActivity.createFont(Typeface.BOLD)
-                    datefull.setSpan(CustomTypefaceSpan("", font), 0, c1 + 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
-                    datefull.setSpan(CustomTypefaceSpan("", font2), c1 + 2, c1 + 2 + c2 + c3 + 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
-                    datefull.setSpan(CustomTypefaceSpan("", font), c1 + 2 + c2 + c3 + 1, datefull.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
-                    binding.linear.addView(grateTextView(datefull))
-                    binding.linear.addView(grateEditView(1, fw.substring(t1 + 11, t2)))
-                    binding.linear.addView(grateEditView(2, fw.substring(t3 + 10, t4)))
-                } else {
-                    binding.linear.addView(grateEditViewHidden(fw))
-                }
-            }
-            stopTimer()
-            binding.progressBar2.visibility = View.GONE
         }
     }
 
@@ -267,7 +269,7 @@ class Chytanny : AppCompatActivity() {
                 if (view is EditText) {
                     when (view.tag as Int) {
                         -1 -> {
-                            sb.append(view.text.toString()+ "\n")
+                            sb.append(view.text.toString() + "\n")
                         }
                         1 -> {
                             sb.append("\$calendar[]=array(\"cviaty\"=>\"${view.text}\", \"cytanne\"=>\"\".\$ahref.\"")
@@ -287,34 +289,36 @@ class Chytanny : AppCompatActivity() {
     private fun sendPostRequest(cytanni: String, year: Int) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                binding.progressBar2.visibility = View.VISIBLE
-                var responseCodeS = 500
-                withContext(Dispatchers.IO) {
-                    try {
-                        var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("4", "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("cytanni", "UTF-8") + "=" + URLEncoder.encode(cytanni, "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("year", "UTF-8") + "=" + URLEncoder.encode(year.toString(), "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/android.php")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            val wr = OutputStreamWriter(outputStream)
-                            wr.write(reqParam)
-                            wr.flush()
-                            responseCodeS = responseCode
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                runCatching {
+                    binding.progressBar2.visibility = View.VISIBLE
+                    var responseCodeS = 500
+                    withContext(Dispatchers.IO) {
+                        try {
+                            var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("4", "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("cytanni", "UTF-8") + "=" + URLEncoder.encode(cytanni, "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("year", "UTF-8") + "=" + URLEncoder.encode(year.toString(), "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                            with(mURL.openConnection() as HttpURLConnection) {
+                                requestMethod = "POST"
+                                val wr = OutputStreamWriter(outputStream)
+                                wr.write(reqParam)
+                                wr.flush()
+                                responseCodeS = responseCode
+                            }
+                        } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            }
                         }
                     }
+                    if (responseCodeS == 200) {
+                        MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    } else {
+                        MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }
+                    binding.progressBar2.visibility = View.GONE
                 }
-                if (responseCodeS == 200) {
-                    MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.save))
-                } else {
-                    MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
-                }
-                binding.progressBar2.visibility = View.GONE
             }
         }
     }

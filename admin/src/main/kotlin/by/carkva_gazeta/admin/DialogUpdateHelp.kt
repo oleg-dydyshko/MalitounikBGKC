@@ -69,27 +69,27 @@ class DialogUpdateHelp : DialogFragment() {
             alert = builder.create()
             if (MainActivity.isNetworkAvailable()) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val updeteArrayText = withContext(Dispatchers.IO) {
-                        var updeteArrayText = mapOf<String, String>()
-                        try {
-                            val mURL = URL("https://carkva-gazeta.by/updateMalitounikBGKC.json")
-                            val conections = mURL.openConnection() as HttpURLConnection
-                            if (conections.responseCode == 200) {
-                                val gson = Gson()
-                                val type = object : TypeToken<Map<String, String>>() {}.type
-                                updeteArrayText = gson.fromJson(mURL.readText(), type)
-                            }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                activity?.let {
+                    runCatching {
+                        val updeteArrayText = withContext(Dispatchers.IO) {
+                            var updeteArrayText = mapOf<String, String>()
+                            try {
+                                val mURL = URL("https://carkva-gazeta.by/updateMalitounikBGKC.json")
+                                val conections = mURL.openConnection() as HttpURLConnection
+                                if (conections.responseCode == 200) {
+                                    val gson = Gson()
+                                    val type = object : TypeToken<Map<String, String>>() {}.type
+                                    updeteArrayText = gson.fromJson(mURL.readText(), type)
+                                }
+                            } catch (e: Throwable) {
+                                withContext(Dispatchers.Main) {
                                     MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                                 }
                             }
+                            return@withContext updeteArrayText
                         }
-                        return@withContext updeteArrayText
+                        if (release) binding.edittext.setText(updeteArrayText["release"])
+                        else binding.edittext.setText(updeteArrayText["devel"])
                     }
-                    if (release) binding.edittext.setText(updeteArrayText["release"])
-                    else binding.edittext.setText(updeteArrayText["devel"])
                 }
             }
         }
@@ -101,31 +101,33 @@ class DialogUpdateHelp : DialogFragment() {
             CoroutineScope(Dispatchers.Main).launch {
                 var code = 500
                 withContext(Dispatchers.IO) {
-                    try {
-                        var reqParam: String = URLEncoder.encode("saveProgram", "UTF-8").toString() + "=" + URLEncoder.encode("1", "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("updateCode", "UTF-8").toString() + "=" + URLEncoder.encode("1", "UTF-8")
-                        reqParam += if (release) "&" + URLEncoder.encode("reliseApp", "UTF-8").toString() + "=" + URLEncoder.encode(releaseCode, "UTF-8")
-                        else "&" + URLEncoder.encode("devApp", "UTF-8").toString() + "=" + URLEncoder.encode(releaseCode, "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/android.php")
-                        val connection: HttpURLConnection = mURL.openConnection() as HttpURLConnection
-                        connection.doOutput = true
-                        connection.requestMethod = "POST"
-                        val osw = OutputStreamWriter(connection.outputStream)
-                        osw.write(reqParam)
-                        osw.flush()
-                        code = connection.responseCode
-                        val sb = StringBuilder()
-                        BufferedReader(InputStreamReader(connection.inputStream)).use {
-                            var inputLine = it.readLine()
-                            while (inputLine != null) {
-                                sb.append(inputLine)
-                                inputLine = it.readLine()
+                    runCatching {
+                        try {
+                            var reqParam: String = URLEncoder.encode("saveProgram", "UTF-8").toString() + "=" + URLEncoder.encode("1", "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("updateCode", "UTF-8").toString() + "=" + URLEncoder.encode("1", "UTF-8")
+                            reqParam += if (release) "&" + URLEncoder.encode("reliseApp", "UTF-8").toString() + "=" + URLEncoder.encode(releaseCode, "UTF-8")
+                            else "&" + URLEncoder.encode("devApp", "UTF-8").toString() + "=" + URLEncoder.encode(releaseCode, "UTF-8")
+                            val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                            val connection: HttpURLConnection = mURL.openConnection() as HttpURLConnection
+                            connection.doOutput = true
+                            connection.requestMethod = "POST"
+                            val osw = OutputStreamWriter(connection.outputStream)
+                            osw.write(reqParam)
+                            osw.flush()
+                            code = connection.responseCode
+                            val sb = StringBuilder()
+                            BufferedReader(InputStreamReader(connection.inputStream)).use {
+                                var inputLine = it.readLine()
+                                while (inputLine != null) {
+                                    sb.append(inputLine)
+                                    inputLine = it.readLine()
+                                }
                             }
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            activity?.let {
-                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                activity?.let {
+                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                                }
                             }
                         }
                     }

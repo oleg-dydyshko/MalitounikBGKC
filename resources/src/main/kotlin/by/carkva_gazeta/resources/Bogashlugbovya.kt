@@ -423,6 +423,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_15_08_uspiennie_viaczernia"] = R.raw.mm_15_08_uspiennie_viaczernia
             resursMap["mm_10_08_viaczernia"] = R.raw.mm_10_08_viaczernia
             resursMap["mm_14_08_pieradsv_uspiennia_viaczernia"] = R.raw.mm_14_08_pieradsv_uspiennia_viaczernia
+            resursMap["mm_14_08_pieradsv_uspiennia_liturhija"] = R.raw.mm_14_08_pieradsv_uspiennia_liturhija
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -1035,7 +1036,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     }
                 }
             }
-            inputStream.close()
             return@withContext builder.toString()
         }
         val text = MainActivity.fromHtml(res).toSpannable()

@@ -272,6 +272,11 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         val otstup = (10 * resources.displayMetrics.density).toInt()
         val otstup2 = if (autoscroll) (50 * resources.displayMetrics.density).toInt()
         else 0
+        val otstup3 = when {
+            fullscreenPage && autoscroll -> (160 * resources.displayMetrics.density).toInt()
+            autoscroll -> (110 * resources.displayMetrics.density).toInt()
+            else -> 0
+        }
         val y = event?.y?.toInt() ?: 0
         val x = event?.x?.toInt() ?: 0
         val id = v?.id ?: 0
@@ -297,7 +302,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                         bindingprogress.fontSize.visibility = View.VISIBLE
                         startProcent(3000)
                     }
-                    if (y > heightConstraintLayout - otstup) {
+                    if (y > heightConstraintLayout - otstup && x < widthConstraintLayout - otstup3) {
                         spid = k.getInt("autoscrollSpid", 60)
                         proc = 100 - (spid - 15) * 100 / 215
                         bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)

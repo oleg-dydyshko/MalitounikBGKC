@@ -256,24 +256,26 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
                 val base64 = Base64.encodeToString(ba, Base64.DEFAULT)
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
-                    try {
-                        var reqParam = URLEncoder.encode("image", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("base64", "UTF-8") + "=" + URLEncoder.encode(base64, "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(cal[Calendar.DATE].toString(), "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode((cal[Calendar.MONTH] + 1).toString(), "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("numar", "UTF-8") + "=" + URLEncoder.encode(image.toString(), "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            val wr = OutputStreamWriter(outputStream)
-                            wr.write(reqParam)
-                            wr.flush()
-                            responseCodeS = responseCode
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            activity?.let {
-                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                    runCatching {
+                        try {
+                            var reqParam = URLEncoder.encode("image", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("base64", "UTF-8") + "=" + URLEncoder.encode(base64, "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(cal[Calendar.DATE].toString(), "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode((cal[Calendar.MONTH] + 1).toString(), "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("numar", "UTF-8") + "=" + URLEncoder.encode(image.toString(), "UTF-8")
+                            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                            with(mURL.openConnection() as HttpURLConnection) {
+                                requestMethod = "POST"
+                                val wr = OutputStreamWriter(outputStream)
+                                wr.write(reqParam)
+                                wr.flush()
+                                responseCodeS = responseCode
+                            }
+                        } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                activity?.let {
+                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                                }
                             }
                         }
                     }
@@ -352,30 +354,32 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
-                    try {
-                        var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("0", "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(data.toString(), "UTF-8") //День месяца
-                        reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode(mun.toString(), "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("nomerdny", "UTF-8") + "=" + URLEncoder.encode(dayOfYear.toString(), "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("addksave", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("chtenie", "UTF-8") + "=" + URLEncoder.encode(chtenie, "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("bold", "UTF-8") + "=" + URLEncoder.encode(style.toString(), "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("tipicon", "UTF-8") + "=" + URLEncoder.encode(tipicon, "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(spaw, "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/android.php")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            val wr = OutputStreamWriter(outputStream)
-                            wr.write(reqParam)
-                            wr.flush()
-                            responseCodeS = responseCode
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            activity?.let {
-                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                    runCatching {
+                        try {
+                            var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("0", "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(data.toString(), "UTF-8") //День месяца
+                            reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode(mun.toString(), "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("nomerdny", "UTF-8") + "=" + URLEncoder.encode(dayOfYear.toString(), "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("addksave", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("chtenie", "UTF-8") + "=" + URLEncoder.encode(chtenie, "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("bold", "UTF-8") + "=" + URLEncoder.encode(style.toString(), "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("tipicon", "UTF-8") + "=" + URLEncoder.encode(tipicon, "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(spaw, "UTF-8")
+                            val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                            with(mURL.openConnection() as HttpURLConnection) {
+                                requestMethod = "POST"
+                                val wr = OutputStreamWriter(outputStream)
+                                wr.write(reqParam)
+                                wr.flush()
+                                responseCodeS = responseCode
+                            }
+                        } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                activity?.let {
+                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                                }
                             }
                         }
                     }
@@ -414,28 +418,30 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
                 startTimer()
                 var res = ""
                 withContext(Dispatchers.IO) {
-                    try {
-                        var url = "https://carkva-gazeta.by/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json"
-                        val builder = URL(url).readText()
-                        val gson = Gson()
-                        val type = object : TypeToken<ArrayList<String>>() {}.type
-                        val arrayList: ArrayList<String> = gson.fromJson(builder, type)
-                        res = arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
-                        url = "https://carkva-gazeta.by/calendarsviatyia.txt"
-                        val textfile = URL(url).readText().trim()
-                        val line = textfile.split("\n")
-                        for (element in line) {
-                            val reg = element.split("<>")
-                            val list = ArrayList<String>()
-                            for (element2 in reg) {
-                                list.add(element2)
+                    runCatching {
+                        try {
+                            var url = "https://carkva-gazeta.by/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json"
+                            val builder = URL(url).readText()
+                            val gson = Gson()
+                            val type = object : TypeToken<ArrayList<String>>() {}.type
+                            val arrayList: ArrayList<String> = gson.fromJson(builder, type)
+                            res = arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
+                            url = "https://carkva-gazeta.by/calendarsviatyia.txt"
+                            val textfile = URL(url).readText().trim()
+                            val line = textfile.split("\n")
+                            for (element in line) {
+                                val reg = element.split("<>")
+                                val list = ArrayList<String>()
+                                for (element2 in reg) {
+                                    list.add(element2)
+                                }
+                                sviatyiaNew1.add(list)
                             }
-                            sviatyiaNew1.add(list)
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            activity?.let {
-                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                activity?.let {
+                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                                }
                             }
                         }
                     }

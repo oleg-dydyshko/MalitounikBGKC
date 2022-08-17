@@ -120,54 +120,56 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
             if (hasFocus) edittext = v as? AppCompatEditText
         }
         urlJob = CoroutineScope(Dispatchers.Main).launch {
-            binding.progressBar2.visibility = View.VISIBLE
-            startTimer()
-            val arrayList: ArrayList<ArrayList<String>> = withContext(Dispatchers.IO) {
-                try {
-                    val url = "https://carkva-gazeta.by/opisanie_sviat.json"
-                    val builder = URL(url).readText()
-                    val gson = Gson()
-                    val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                    return@withContext gson.fromJson(builder, type)
-                } catch (e: Throwable) {
-                    withContext(Dispatchers.Main) {
-                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                    }
-                    return@withContext ArrayList<ArrayList<String>>()
-                }
-            }
-            for (i in 0 until arrayList.size) {
-                for (e in 0 until sviaty.size) {
-                    if (arrayList[i][0].toInt() == sviaty[e].data && arrayList[i][1].toInt() == sviaty[e].mun) {
-                        sviaty[e].opisanie = arrayList[i][2]
-                        sviaty[e].utran = arrayList[i][3]
-                        sviaty[e].liturgia = arrayList[i][4]
-                        sviaty[e].viachernia = arrayList[i][5]
-                        break
+            runCatching {
+                binding.progressBar2.visibility = View.VISIBLE
+                startTimer()
+                val arrayList: ArrayList<ArrayList<String>> = withContext(Dispatchers.IO) {
+                    try {
+                        val url = "https://carkva-gazeta.by/opisanie_sviat.json"
+                        val builder = URL(url).readText()
+                        val gson = Gson()
+                        val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                        return@withContext gson.fromJson(builder, type)
+                    } catch (e: Throwable) {
+                        withContext(Dispatchers.Main) {
+                            MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }
+                        return@withContext ArrayList<ArrayList<String>>()
                     }
                 }
-            }
-            binding.spinnerSviaty.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    binding.sviaty.setText(sviaty[position].opisanie)
+                for (i in 0 until arrayList.size) {
+                    for (e in 0 until sviaty.size) {
+                        if (arrayList[i][0].toInt() == sviaty[e].data && arrayList[i][1].toInt() == sviaty[e].mun) {
+                            sviaty[e].opisanie = arrayList[i][2]
+                            sviaty[e].utran = arrayList[i][3]
+                            sviaty[e].liturgia = arrayList[i][4]
+                            sviaty[e].viachernia = arrayList[i][5]
+                            break
+                        }
+                    }
                 }
+                binding.spinnerSviaty.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        binding.sviaty.setText(sviaty[position].opisanie)
+                    }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
-            }
-            binding.spinnerSviaty.adapter = SpinnerAdapter(this@Sviaty, sviaty)
-            if (intent.extras != null) {
-                for (i in 0 until sviaty.size) {
-                    if (intent.extras?.getInt("day") == sviaty[i].data && intent.extras?.getInt("mun") == sviaty[i].mun) {
-                        binding.spinnerSviaty.setSelection(i)
-                        break
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
                     }
                 }
-            } else {
-                binding.spinnerSviaty.setSelection(0)
+                binding.spinnerSviaty.adapter = SpinnerAdapter(this@Sviaty, sviaty)
+                if (intent.extras != null) {
+                    for (i in 0 until sviaty.size) {
+                        if (intent.extras?.getInt("day") == sviaty[i].data && intent.extras?.getInt("mun") == sviaty[i].mun) {
+                            binding.spinnerSviaty.setSelection(i)
+                            break
+                        }
+                    }
+                } else {
+                    binding.spinnerSviaty.setSelection(0)
+                }
+                binding.progressBar2.visibility = View.GONE
+                stopTimer()
             }
-            binding.progressBar2.visibility = View.GONE
-            stopTimer()
         }
         setTollbarTheme()
     }
@@ -218,22 +220,24 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
                 val base64 = Base64.encodeToString(ba, Base64.DEFAULT)
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
-                    try {
-                        var reqParam = URLEncoder.encode("imageSV", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("base64", "UTF-8") + "=" + URLEncoder.encode(base64, "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(sviaty[binding.spinnerSviaty.selectedItemPosition].data.toString(), "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode(sviaty[binding.spinnerSviaty.selectedItemPosition].mun.toString(), "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            val wr = OutputStreamWriter(outputStream)
-                            wr.write(reqParam)
-                            wr.flush()
-                            responseCodeS = responseCode
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                    runCatching {
+                        try {
+                            var reqParam = URLEncoder.encode("imageSV", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("base64", "UTF-8") + "=" + URLEncoder.encode(base64, "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(sviaty[binding.spinnerSviaty.selectedItemPosition].data.toString(), "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode(sviaty[binding.spinnerSviaty.selectedItemPosition].mun.toString(), "UTF-8")
+                            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                            with(mURL.openConnection() as HttpURLConnection) {
+                                requestMethod = "POST"
+                                val wr = OutputStreamWriter(outputStream)
+                                wr.write(reqParam)
+                                wr.flush()
+                                responseCodeS = responseCode
+                            }
+                        } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            }
                         }
                     }
                 }
@@ -374,22 +378,24 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
-                    try {
-                        var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("6", "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("setsvita", "UTF-8") + "=" + URLEncoder.encode(position.toString(), "UTF-8") //День месяца
-                        reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(apisanne, "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/android.php")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            val wr = OutputStreamWriter(outputStream)
-                            wr.write(reqParam)
-                            wr.flush()
-                            responseCodeS = responseCode
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                    runCatching {
+                        try {
+                            var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("6", "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("setsvita", "UTF-8") + "=" + URLEncoder.encode(position.toString(), "UTF-8") //День месяца
+                            reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(apisanne, "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                            with(mURL.openConnection() as HttpURLConnection) {
+                                requestMethod = "POST"
+                                val wr = OutputStreamWriter(outputStream)
+                                wr.write(reqParam)
+                                wr.flush()
+                                responseCodeS = responseCode
+                            }
+                        } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            }
                         }
                     }
                 }

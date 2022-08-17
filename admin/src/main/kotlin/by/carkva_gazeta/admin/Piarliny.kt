@@ -147,27 +147,29 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             binding.progressBar2.visibility = View.VISIBLE
             startTimer()
             withContext(Dispatchers.IO) {
-                try {
-                    var responseCodeS: Int
-                    val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
-                    with(mURL.openConnection() as HttpURLConnection) {
-                        requestMethod = "POST"
-                        responseCodeS = responseCode
-                    }
-                    if (responseCodeS == 200) {
-                        val builder = mURL.readText()
-                        val gson = Gson()
-                        val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                        val piarlin = ArrayList<ArrayList<String>>()
-                        piarlin.addAll(gson.fromJson(builder, type))
-                        piarlin.forEach {
-                            piarliny.add(PiarlinyData(it[0].toLong(), it[1]))
+                runCatching {
+                    try {
+                        var responseCodeS: Int
+                        val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
+                        with(mURL.openConnection() as HttpURLConnection) {
+                            requestMethod = "POST"
+                            responseCodeS = responseCode
                         }
-                        piarliny.sort()
-                    }
-                } catch (e: Throwable) {
-                    withContext(Dispatchers.Main) {
-                        MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        if (responseCodeS == 200) {
+                            val builder = mURL.readText()
+                            val gson = Gson()
+                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                            val piarlin = ArrayList<ArrayList<String>>()
+                            piarlin.addAll(gson.fromJson(builder, type))
+                            piarlin.forEach {
+                                piarliny.add(PiarlinyData(it[0].toLong(), it[1]))
+                            }
+                            piarliny.sort()
+                        }
+                    } catch (e: Throwable) {
+                        withContext(Dispatchers.Main) {
+                            MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }
                     }
                 }
             }
@@ -386,21 +388,23 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
-                    try {
-                        var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("5", "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("piarliny", "UTF-8") + "=" + URLEncoder.encode(piarliny, "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/android.php")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            val wr = OutputStreamWriter(outputStream)
-                            wr.write(reqParam)
-                            wr.flush()
-                            responseCodeS = responseCode
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                    runCatching {
+                        try {
+                            var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("5", "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("piarliny", "UTF-8") + "=" + URLEncoder.encode(piarliny, "UTF-8")
+                            reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                            val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                            with(mURL.openConnection() as HttpURLConnection) {
+                                requestMethod = "POST"
+                                val wr = OutputStreamWriter(outputStream)
+                                wr.write(reqParam)
+                                wr.flush()
+                                responseCodeS = responseCode
+                            }
+                        } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            }
                         }
                     }
                 }

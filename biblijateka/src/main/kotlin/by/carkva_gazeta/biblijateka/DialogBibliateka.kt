@@ -78,22 +78,24 @@ class DialogBibliateka : DialogFragment() {
                 binding.title.text = getString(R.string.download_file, "")
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        val format = withContext(Dispatchers.IO) {
-                            val storageManager = it.getSystemService(Context.STORAGE_SERVICE) as StorageManager
-                            val bates = storageManager.getAllocatableBytes(storageManager.getUuidForPath(it.filesDir))
-                            val bat = (bates.toFloat() / 1024).toDouble()
-                            return@withContext when {
-                                bat < 10000f -> getString(R.string.dastupna_bat, formatFigureTwoPlaces(BigDecimal(bat).setScale(2, RoundingMode.HALF_EVEN).toFloat()))
-                                bates < 1000L -> getString(R.string.dastupna_bates, bates)
-                                else -> ""
+                        runCatching {
+                            val format = withContext(Dispatchers.IO) {
+                                val storageManager = it.getSystemService(Context.STORAGE_SERVICE) as StorageManager
+                                val bates = storageManager.getAllocatableBytes(storageManager.getUuidForPath(it.filesDir))
+                                val bat = (bates.toFloat() / 1024).toDouble()
+                                return@withContext when {
+                                    bat < 10000f -> getString(R.string.dastupna_bat, formatFigureTwoPlaces(BigDecimal(bat).setScale(2, RoundingMode.HALF_EVEN).toFloat()))
+                                    bates < 1000L -> getString(R.string.dastupna_bates, bates)
+                                    else -> ""
+                                }
                             }
+                            binding.title.text = getString(R.string.download_file, format)
                         }
-                        binding.title.text = getString(R.string.download_file, format)
                     }
                 }
             }
             binding.content.text = MainActivity.fromHtml(listStr)
-            if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) 
+            if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             val dirCount = size.toInt()
             val izm = if (dirCount / 1024 > 1000) {

@@ -44,15 +44,17 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             if (MainActivity.isNetworkAvailable()) {
                 loadPiarlinyJob = CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {
-                        try {
-                            val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
-                            val conections = mURL.openConnection() as HttpURLConnection
-                            if (conections.responseCode == 200) {
-                                fileOpisanieSviat.writer().use {
-                                    it.write(mURL.readText())
+                        runCatching {
+                            try {
+                                val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
+                                val conections = mURL.openConnection() as HttpURLConnection
+                                if (conections.responseCode == 200) {
+                                    fileOpisanieSviat.writer().use {
+                                        it.write(mURL.readText())
+                                    }
                                 }
+                            } catch (e: Throwable) {
                             }
-                        } catch (e: Throwable) {
                         }
                     }
                     try {

@@ -1200,46 +1200,48 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
             CoroutineScope(Dispatchers.IO).launch {
                 withContext(Dispatchers.IO) {
-                    try {
-                        val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
-                        if (!fileOpisanieSviat.exists() || update) {
-                            val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
-                            val conections = mURL.openConnection() as HttpURLConnection
-                            if (conections.responseCode == 200) {
-                                try {
-                                    fileOpisanieSviat.writer().use {
-                                        it.write(mURL.readText())
-                                    }
-                                } catch (e: Throwable) {
-                                }
-                            }
-                        }
-                        val dir = File("$filesDir/sviatyja/")
-                        if (!dir.exists()) dir.mkdir()
-                        for (i in 1..12) {
-                            val fileS = File("$filesDir/sviatyja/opisanie$i.json")
-                            if (!fileS.exists() || update) {
-                                val mURL = URL("https://carkva-gazeta.by/chytanne/sviatyja/opisanie$i.json")
+                    runCatching {
+                        try {
+                            val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
+                            if (!fileOpisanieSviat.exists() || update) {
+                                val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
                                 val conections = mURL.openConnection() as HttpURLConnection
                                 if (conections.responseCode == 200) {
-                                    fileS.writer().use {
-                                        it.write(mURL.readText())
+                                    try {
+                                        fileOpisanieSviat.writer().use {
+                                            it.write(mURL.readText())
+                                        }
+                                    } catch (e: Throwable) {
                                     }
                                 }
                             }
-                        }
-                        val piarliny = File("$filesDir/piarliny.json")
-                        try {
-                            val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
-                            val conections = mURL.openConnection() as HttpURLConnection
-                            if (conections.responseCode == 200) {
-                                piarliny.writer().use {
-                                    it.write(mURL.readText())
+                            val dir = File("$filesDir/sviatyja/")
+                            if (!dir.exists()) dir.mkdir()
+                            for (i in 1..12) {
+                                val fileS = File("$filesDir/sviatyja/opisanie$i.json")
+                                if (!fileS.exists() || update) {
+                                    val mURL = URL("https://carkva-gazeta.by/chytanne/sviatyja/opisanie$i.json")
+                                    val conections = mURL.openConnection() as HttpURLConnection
+                                    if (conections.responseCode == 200) {
+                                        fileS.writer().use {
+                                            it.write(mURL.readText())
+                                        }
+                                    }
                                 }
+                            }
+                            val piarliny = File("$filesDir/piarliny.json")
+                            try {
+                                val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
+                                val conections = mURL.openConnection() as HttpURLConnection
+                                if (conections.responseCode == 200) {
+                                    piarliny.writer().use {
+                                        it.write(mURL.readText())
+                                    }
+                                }
+                            } catch (e: Throwable) {
                             }
                         } catch (e: Throwable) {
                         }
-                    } catch (e: Throwable) {
                     }
                 }
             }
@@ -1297,33 +1299,35 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private fun getVersionCode() {
         if (isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                val updeteArrayText = withContext(Dispatchers.IO) {
-                    var updeteArrayText = mapOf<String, String>()
-                    try {
-                        val mURL = URL("https://carkva-gazeta.by/updateMalitounikBGKC.json")
-                        val conections = mURL.openConnection() as HttpURLConnection
-                        if (conections.responseCode == 200) {
-                            val gson = Gson()
-                            val type = object : TypeToken<Map<String, String>>() {}.type
-                            updeteArrayText = gson.fromJson(mURL.readText(), type)
+                runCatching {
+                    val updeteArrayText = withContext(Dispatchers.IO) {
+                        var updeteArrayText = mapOf<String, String>()
+                        try {
+                            val mURL = URL("https://carkva-gazeta.by/updateMalitounikBGKC.json")
+                            val conections = mURL.openConnection() as HttpURLConnection
+                            if (conections.responseCode == 200) {
+                                val gson = Gson()
+                                val type = object : TypeToken<Map<String, String>>() {}.type
+                                updeteArrayText = gson.fromJson(mURL.readText(), type)
+                            }
+                        } catch (e: Throwable) {
                         }
-                    } catch (e: Throwable) {
+                        return@withContext updeteArrayText
                     }
-                    return@withContext updeteArrayText
-                }
-                val currentVersionName = BuildConfig.VERSION_NAME
-                val currentVersionCode = BuildConfig.VERSION_CODE
-                val versionSize = currentVersionName.split(".")
-                if (versionSize.size == 4) {
-                    val versionCode = updeteArrayText["devel"]?.toInt() ?: currentVersionCode
-                    if (currentVersionCode < versionCode) {
-                        popupSnackbarForCompleteUpdate(versionCode)
+                    val currentVersionName = BuildConfig.VERSION_NAME
+                    val currentVersionCode = BuildConfig.VERSION_CODE
+                    val versionSize = currentVersionName.split(".")
+                    if (versionSize.size == 4) {
+                        val versionCode = updeteArrayText["devel"]?.toInt() ?: currentVersionCode
+                        if (currentVersionCode < versionCode) {
+                            popupSnackbarForCompleteUpdate(versionCode)
+                        }
                     }
-                }
-                if (versionSize.size == 3) {
-                    val versionCode = updeteArrayText["release"]?.toInt() ?: currentVersionCode
-                    if (currentVersionCode < versionCode) {
-                        popupSnackbarForCompleteUpdate(versionCode)
+                    if (versionSize.size == 3) {
+                        val versionCode = updeteArrayText["release"]?.toInt() ?: currentVersionCode
+                        if (currentVersionCode < versionCode) {
+                            popupSnackbarForCompleteUpdate(versionCode)
+                        }
                     }
                 }
             }

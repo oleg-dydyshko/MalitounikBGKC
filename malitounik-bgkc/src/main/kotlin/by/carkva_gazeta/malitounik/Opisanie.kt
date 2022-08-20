@@ -253,35 +253,37 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     prefEditors.apply()
                 }
                 withContext(Dispatchers.IO) {
-                    try {
-                        val dir = File("$filesDir/sviatyja/")
-                        if (!dir.exists()) dir.mkdir()
-                        val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
-                        if (!fileOpisanieSviat.exists() || update) {
-                            val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
-                            val conections = mURL.openConnection() as HttpURLConnection
-                            if (conections.responseCode == 200) {
-                                fileOpisanieSviat.writer().use {
-                                    it.write(mURL.readText())
-                                }
-                            }
-                        }
-                        for (i in 1..12) {
-                            val fileS = File("$filesDir/sviatyja/opisanie$i.json")
-                            if (!fileS.exists() || (update && mun == i)) {
-                                val mURL = URL("https://carkva-gazeta.by/chytanne/sviatyja/opisanie$i.json")
+                    runCatching {
+                        try {
+                            val dir = File("$filesDir/sviatyja/")
+                            if (!dir.exists()) dir.mkdir()
+                            val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
+                            if (!fileOpisanieSviat.exists() || update) {
+                                val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
                                 val conections = mURL.openConnection() as HttpURLConnection
                                 if (conections.responseCode == 200) {
-                                    fileS.writer().use {
+                                    fileOpisanieSviat.writer().use {
                                         it.write(mURL.readText())
                                     }
                                 }
                             }
+                            for (i in 1..12) {
+                                val fileS = File("$filesDir/sviatyja/opisanie$i.json")
+                                if (!fileS.exists() || (update && mun == i)) {
+                                    val mURL = URL("https://carkva-gazeta.by/chytanne/sviatyja/opisanie$i.json")
+                                    val conections = mURL.openConnection() as HttpURLConnection
+                                    if (conections.responseCode == 200) {
+                                        fileS.writer().use {
+                                            it.write(mURL.readText())
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (e: Throwable) {
                         }
-                    } catch (e: Throwable) {
-                    }
-                    if (!svity && fileOpisanie.exists()) {
-                        builder = fileOpisanie.readText()
+                        if (!svity && fileOpisanie.exists()) {
+                            builder = fileOpisanie.readText()
+                        }
                     }
                 }
             }
@@ -319,68 +321,70 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 } else {
                     if (MainActivity.isNetworkAvailable()) {
                         withContext(Dispatchers.IO) {
-                            try {
-                                val mURL = if (svity) URL("https://carkva-gazeta.by/chytanne/icons/v_${day}_${mun}.jpg")
-                                else URL("https://carkva-gazeta.by/chytanne/icons/s_${day}_${mun}$schet.jpg")
-                                val file2 = if (svity) File(dir, "v_${day}_${mun}.jpg")
-                                else File(dir, "s_${day}_${mun}$schet.jpg")
-                                val conections = mURL.openConnection() as HttpURLConnection
-                                if (!loadIcons && MainActivity.isNetworkAvailable(true) && conections.responseCode == 200) {
-                                    withContext(Dispatchers.Main) {
-                                        if (supportFragmentManager.findFragmentByTag("dialogOpisanieWIFI") == null) {
-                                            val dialog = DialogOpisanieWIFI()
-                                            dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
-                                        }
-                                    }
-                                } else {
-                                    if (conections.responseCode == 200) {
-                                        val bufferedInputStream = BufferedInputStream(conections.inputStream)
-                                        val byteArrayOut = ByteArrayOutputStream()
-                                        var c2: Int
-                                        while (bufferedInputStream.read().also { c2 = it } != -1) {
-                                            byteArrayOut.write(c2)
-                                        }
-                                        val byteArray = byteArrayOut.toByteArray()
-                                        val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-                                        val out = FileOutputStream(file2)
-                                        bmp.compress(Bitmap.CompressFormat.JPEG, 90, out)
-                                        out.flush()
-                                        out.close()
+                            runCatching {
+                                try {
+                                    val mURL = if (svity) URL("https://carkva-gazeta.by/chytanne/icons/v_${day}_${mun}.jpg")
+                                    else URL("https://carkva-gazeta.by/chytanne/icons/s_${day}_${mun}$schet.jpg")
+                                    val file2 = if (svity) File(dir, "v_${day}_${mun}.jpg")
+                                    else File(dir, "s_${day}_${mun}$schet.jpg")
+                                    val conections = mURL.openConnection() as HttpURLConnection
+                                    if (!loadIcons && MainActivity.isNetworkAvailable(true) && conections.responseCode == 200) {
                                         withContext(Dispatchers.Main) {
-                                            val imageView = when (i) {
-                                                1 -> binding.image2
-                                                2 -> binding.image3
-                                                3 -> binding.image4
-                                                else -> binding.image1
+                                            if (supportFragmentManager.findFragmentByTag("dialogOpisanieWIFI") == null) {
+                                                val dialog = DialogOpisanieWIFI()
+                                                dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
                                             }
-                                            imageView.post {
-                                                imageView.setImageBitmap(resizeImage(bmp))
-                                                imageView.visibility = View.VISIBLE
-                                                imageView.setOnClickListener {
-                                                    if (file2.exists()) {
-                                                        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                                                        binding.imageViewFull.setImageBitmap(bitmap)
-                                                        binding.imageViewFull.visibility = View.VISIBLE
-                                                        slidr.lock()
+                                        }
+                                    } else {
+                                        if (conections.responseCode == 200) {
+                                            val bufferedInputStream = BufferedInputStream(conections.inputStream)
+                                            val byteArrayOut = ByteArrayOutputStream()
+                                            var c2: Int
+                                            while (bufferedInputStream.read().also { c2 = it } != -1) {
+                                                byteArrayOut.write(c2)
+                                            }
+                                            val byteArray = byteArrayOut.toByteArray()
+                                            val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                                            val out = FileOutputStream(file2)
+                                            bmp.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                                            out.flush()
+                                            out.close()
+                                            withContext(Dispatchers.Main) {
+                                                val imageView = when (i) {
+                                                    1 -> binding.image2
+                                                    2 -> binding.image3
+                                                    3 -> binding.image4
+                                                    else -> binding.image1
+                                                }
+                                                imageView.post {
+                                                    imageView.setImageBitmap(resizeImage(bmp))
+                                                    imageView.visibility = View.VISIBLE
+                                                    imageView.setOnClickListener {
+                                                        if (file2.exists()) {
+                                                            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                                                            binding.imageViewFull.setImageBitmap(bitmap)
+                                                            binding.imageViewFull.visibility = View.VISIBLE
+                                                            slidr.lock()
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                                if (conections.responseCode != 200 && file2.exists()) {
-                                    file2.delete()
-                                    val imageView = when (i) {
-                                        1 -> binding.image2
-                                        2 -> binding.image3
-                                        3 -> binding.image4
-                                        else -> binding.image1
+                                    if (conections.responseCode != 200 && file2.exists()) {
+                                        file2.delete()
+                                        val imageView = when (i) {
+                                            1 -> binding.image2
+                                            2 -> binding.image3
+                                            3 -> binding.image4
+                                            else -> binding.image1
+                                        }
+                                        imageView.post {
+                                            imageView.visibility = View.GONE
+                                        }
                                     }
-                                    imageView.post {
-                                        imageView.visibility = View.GONE
-                                    }
+                                } catch (e: Throwable) {
                                 }
-                            } catch (e: Throwable) {
                             }
                         }
                     }
@@ -420,17 +424,19 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             if (MainActivity.isNetworkAvailable()) {
                 loadPiarlinyJob = CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {
-                        try {
-                            val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
-                            val conections = mURL.openConnection() as HttpURLConnection
-                            if (conections.responseCode == 200) {
-                                fileOpisanieSviat.writer().use {
-                                    it.write(mURL.readText())
+                        runCatching {
+                            try {
+                                val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
+                                val conections = mURL.openConnection() as HttpURLConnection
+                                if (conections.responseCode == 200) {
+                                    fileOpisanieSviat.writer().use {
+                                        it.write(mURL.readText())
+                                    }
                                 }
+                            } catch (e: Throwable) {
                             }
-                        } catch (e: Throwable) {
+                            checkParliny()
                         }
-                        checkParliny()
                     }
                 }
             }

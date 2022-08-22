@@ -154,7 +154,7 @@ class Widget : AppWidgetProvider() {
             val month = data[0][2].toInt()
             val dayofmounth = data[0][1].toInt()
             val nedel = data[0][0].toInt()
-            val intent = Intent(context, MainActivity::class.java)
+            val intent = Intent(context, SplashActivity::class.java)
             val widgetDay = "widget_day"
             intent.putExtra(widgetDay, true)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK

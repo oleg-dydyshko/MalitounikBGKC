@@ -379,10 +379,10 @@ class WidgetMun : AppWidgetProvider() {
             } else {
                 PendingIntent.FLAG_UPDATE_CURRENT
             }
+            val dayIntent = Intent(context, SplashActivity::class.java)
+            dayIntent.putExtra(widgetMun, true)
             when (day) {
                 "start" -> {
-                    val dayIntent = Intent(context, MainActivity::class.java)
-                    dayIntent.putExtra(widgetMun, true)
                     val position = data[0][25].toInt() - (wik - e)
                     dayIntent.putExtra("position", position)
                     dayIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -395,8 +395,6 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorSecondary_text))
                 }
                 "end" -> {
-                    val dayIntent = Intent(context, MainActivity::class.java)
-                    dayIntent.putExtra(widgetMun, true)
                     val position = data[data.size - 1][25].toInt() + newDay
                     dayIntent.putExtra("position", position)
                     dayIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -456,8 +454,6 @@ class WidgetMun : AppWidgetProvider() {
                         }
                     }
                     if (prorok(i)) updateViews?.setTextViewText(idView(e), MainActivity.fromHtml("<strong>$i</strong>"))
-                    val dayIntent = Intent(context, MainActivity::class.java)
-                    dayIntent.putExtra(widgetMun, true)
                     val position = data[i - 1][25].toInt()
                     dayIntent.putExtra("position", position)
                     dayIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK

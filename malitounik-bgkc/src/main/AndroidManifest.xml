@@ -29,9 +29,9 @@
         tools:targetApi="m"
         tools:ignore="UnusedAttribute">
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme"
+            android:theme="@style/SplashTheme"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -163,6 +163,10 @@
             -->
         </activity>
         <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".Onas"
             android:label="@string/pra_nas"
             android:theme="@style/AppThemeSlider">
@@ -261,14 +265,14 @@
         </activity>
         <activity
             android:name=".NovyZapavietSemuxaList"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
             android:name=".StaryZapavietSemuxaList"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -424,5 +428,4 @@
                 android:resource="@xml/widget_mun_metadata" />
         </receiver>
     </application>
-
 </manifest>

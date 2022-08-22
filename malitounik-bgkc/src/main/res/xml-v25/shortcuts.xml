@@ -11,7 +11,7 @@
             android:action="android.intent.action.VIEW"
             android:data="content://by.carkva_gazeta.malitounik?shortcuts=1"
             android:targetPackage="by.carkva_gazeta.malitounik"
-            android:targetClass="by.carkva_gazeta.malitounik.MainActivity" />
+            android:targetClass="by.carkva_gazeta.malitounik.SplashActivity" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
     <shortcut
@@ -24,7 +24,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:data="content://by.carkva_gazeta.malitounik?shortcuts=4"
-            android:targetClass="by.carkva_gazeta.malitounik.MainActivity"
+            android:targetClass="by.carkva_gazeta.malitounik.SplashActivity"
             android:targetPackage="by.carkva_gazeta.malitounik" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
@@ -39,7 +39,7 @@
             android:action="android.intent.action.VIEW"
             android:data="content://by.carkva_gazeta.malitounik?shortcuts=3"
             android:targetPackage="by.carkva_gazeta.malitounik"
-            android:targetClass="by.carkva_gazeta.malitounik.MainActivity" />
+            android:targetClass="by.carkva_gazeta.malitounik.SplashActivity" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
     <shortcut
@@ -53,7 +53,7 @@
             android:action="android.intent.action.VIEW"
             android:data="content://by.carkva_gazeta.malitounik?shortcuts=2"
             android:targetPackage="by.carkva_gazeta.malitounik"
-            android:targetClass="by.carkva_gazeta.malitounik.MainActivity" />
+            android:targetClass="by.carkva_gazeta.malitounik.SplashActivity" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
 </shortcuts>

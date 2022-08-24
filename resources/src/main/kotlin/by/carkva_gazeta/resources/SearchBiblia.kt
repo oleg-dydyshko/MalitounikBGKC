@@ -779,12 +779,21 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     }
 
     private fun doInBackground(searche: String): ArrayList<Spannable> {
-        return when (zavet) {
+        var list = when (zavet) {
             1 -> semuxa(searche)
             2 -> sinoidal(searche)
             3 -> nadsan(searche)
-            else -> ArrayList()
+            else -> null
         }
+        if (list?.isEmpty() == true && chin.getInt("slovocalkam", 0) == 0) {
+            list = when (zavet) {
+                1 -> semuxa(searche, true)
+                2 -> sinoidal(searche, true)
+                3 -> nadsan(searche, true)
+                else -> null
+            }
+        }
+        return list ?: ArrayList()
     }
 
     private fun onPostExecute(result: ArrayList<Spannable>) {
@@ -813,17 +822,17 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         }
     }
 
-    private fun semuxa(poshuk: String): ArrayList<Spannable> {
+    private fun semuxa(poshuk: String, secondRun: Boolean = false): ArrayList<Spannable> {
         var poshuk1 = poshuk
         val seashpost = ArrayList<Spannable>()
         poshuk1 = MainActivity.zamena(poshuk1, chin.getBoolean("pegistrbukv", true))
         val registr = chin.getBoolean("pegistrbukv", true)
-        if (chin.getInt("slovocalkam", 0) == 0) {
+        if (secondRun) {
             val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
             for (aM in m) {
                 val r = poshuk1.length - 1
                 if (poshuk1.length >= 3) {
-                    if (poshuk1[r] == aM) {
+                    if (poshuk1[r] == aM && r >= 3) {
                         poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), registr)
                     }
                 }
@@ -995,16 +1004,16 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         return seashpost
     }
 
-    private fun sinoidal(poshuk: String): ArrayList<Spannable> {
+    private fun sinoidal(poshuk: String, secondRun: Boolean = false): ArrayList<Spannable> {
         var poshuk1 = poshuk
         val seashpost = ArrayList<Spannable>()
         val registr = chin.getBoolean("pegistrbukv", true)
         poshuk1 = poshuk1.replace("ё", "е", registr)
-        if (chin.getInt("slovocalkam", 0) == 0) {
+        if (secondRun) {
             val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
             for (aM in m) {
                 val r = poshuk1.length - 1
-                if (poshuk1[r] == aM) {
+                if (poshuk1[r] == aM && r >= 3) {
                     poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), registr)
                 }
             }
@@ -1181,17 +1190,17 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         return seashpost
     }
 
-    private fun nadsan(poshuk: String): ArrayList<Spannable> {
+    private fun nadsan(poshuk: String, secondRun: Boolean = false): ArrayList<Spannable> {
         var poshuk1 = poshuk
         val seashpost = ArrayList<Spannable>()
         poshuk1 = MainActivity.zamena(poshuk1)
         val registr = chin.getBoolean("pegistrbukv", true)
-        if (chin.getInt("slovocalkam", 0) == 0) {
+        if (secondRun) {
             val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
             for (aM in m) {
                 val r = poshuk1.length - 1
                 if (poshuk1.length >= 3) {
-                    if (poshuk1[r] == aM) {
+                    if (poshuk1[r] == aM && r >= 3) {
                         poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), registr)
                     }
                 }

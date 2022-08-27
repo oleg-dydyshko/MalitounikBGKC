@@ -651,6 +651,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
         val closeButton = searchView?.findViewById(androidx.appcompat.R.id.search_close_btn) as ImageView
         closeButton.setOnClickListener {
+            prefEditors.putString("search_string", "")
+            prefEditors.apply()
             searchJob?.cancel()
             searchView?.setQuery("", false)
             onPostExecute(ArrayList())
@@ -747,7 +749,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
 
     private fun execute(searcheString: String, run: Boolean = false) {
         if (searcheString.length >= 3) {
-            if (adapter.count == 0 || searcheString != history[0] || run) {
+            if (adapter.count == 0 || (history.isNotEmpty() && searcheString != history[0]) || run) {
                 binding.History.visibility = View.GONE
                 binding.ListView.visibility = View.VISIBLE
                 if (searchJob?.isActive == true) {
@@ -940,7 +942,14 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                         prepinanie = prepinanie.replace(".", "")
                         prepinanie = prepinanie.replace(";", "")
                         prepinanie = prepinanie.replace(":", "")
-                        prepinanie = prepinanie.replace("-", "")
+                        prepinanie = prepinanie.replace("--", "")
+                        val t5 = prepinanie.indexOf("-")
+                        if (t5 != -1) {
+                            prepinanie = if (prepinanie[t5 - 1].toString() == " ")
+                                prepinanie.replace("-", "")
+                            else
+                                prepinanie.replace("-", " ")
+                        }
                         prepinanie = prepinanie.replace("\"", "")
                         prepinanie = prepinanie.replace("?", "")
                         prepinanie = prepinanie.replace("ё", "е", registr)
@@ -1129,7 +1138,14 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                         prepinanie = prepinanie.replace(":", "")
                         prepinanie = prepinanie.replace("[", "")
                         prepinanie = prepinanie.replace("]", "")
-                        prepinanie = prepinanie.replace("-", "")
+                        prepinanie = prepinanie.replace("--", "")
+                        val t5 = prepinanie.indexOf("-")
+                        if (t5 != -1) {
+                            prepinanie = if (prepinanie[t5 - 1].toString() == " ")
+                                prepinanie.replace("-", "")
+                            else
+                                prepinanie.replace("-", " ")
+                        }
                         prepinanie = prepinanie.replace("\"", "")
                         prepinanie = prepinanie.replace("?", "")
                         prepinanie = prepinanie.replace("ё", "е", registr)
@@ -1226,7 +1242,14 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                 prepinanie = prepinanie.replace(".", "")
                 prepinanie = prepinanie.replace(";", "")
                 prepinanie = prepinanie.replace(":", "")
-                prepinanie = prepinanie.replace("-", "")
+                prepinanie = prepinanie.replace("--", "")
+                val t5 = prepinanie.indexOf("-")
+                if (t5 != -1) {
+                    prepinanie = if (prepinanie[t5 - 1].toString() == " ")
+                        prepinanie.replace("-", "")
+                    else
+                        prepinanie.replace("-", " ")
+                }
                 prepinanie = prepinanie.replace("\"", "")
                 prepinanie = prepinanie.replace("?", "")
                 prepinanie = prepinanie.replace("ё", "е")
@@ -1306,9 +1329,19 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             var edit = s.toString()
             if (editch) {
                 if (zavet == 1 || zavet == 3) {
-                    edit = edit.replace("и", "і", true)
-                    edit = edit.replace("щ", "ў", true)
-                    edit = edit.replace("ъ", "'", true)
+                    edit = edit.replace("и", "і")
+                    edit = edit.replace("щ", "ў")
+                    edit = edit.replace("И", "І")
+                    edit = edit.replace("Щ", "Ў")
+                    edit = edit.replace("ъ", "'")
+                    edit = edit.replace("Ъ", "'")
+                } else {
+                    edit = edit.replace("і", "и")
+                    edit = edit.replace("ў", "щ")
+                    edit = edit.replace("І", "И")
+                    edit = edit.replace("Ў", "Щ")
+                    edit = edit.replace("'", "ъ")
+                    edit = edit.replace("'", "Ъ")
                 }
                 if (check != 0) {
                     editText?.removeTextChangedListener(this)

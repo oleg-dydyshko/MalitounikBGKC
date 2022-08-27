@@ -50,7 +50,7 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
             if (binding.linearLayout4.visibility == View.VISIBLE) {
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(it.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 binding.linearLayout4.visibility = View.GONE
-                bibleListiner?.isPanelVisible(false)
+                bibleListiner?.isPanelVisible()
             }
         }
         adapter.notifyDataSetChanged()
@@ -100,7 +100,10 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
             if (binding.linearLayout4.visibility == View.GONE) {
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_top)
                 binding.linearLayout4.visibility = View.VISIBLE
-                bibleListiner?.isPanelVisible(true)
+                binding.linearLayout4.post {
+                    val width = binding.linearLayout4.width
+                    bibleListiner?.isPanelVisible(width)
+                }
             }
             var find = false
             BibleGlobalList.bibleCopyList.forEach {
@@ -427,7 +430,7 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
         BibleGlobalList.mPedakVisable = false
         BibleGlobalList.bibleCopyList.clear()
         binding.linearLayout4.visibility = View.GONE
-        bibleListiner?.isPanelVisible(false)
+        bibleListiner?.isPanelVisible()
         adapter.notifyDataSetChanged()
     }
 
@@ -552,7 +555,7 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
                     MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.copy))
                     binding.linearLayout4.visibility = View.GONE
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                    bibleListiner?.isPanelVisible(false)
+                    bibleListiner?.isPanelVisible()
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
@@ -600,7 +603,7 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
                     }
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     binding.linearLayout4.visibility = View.GONE
-                    bibleListiner?.isPanelVisible(false)
+                    bibleListiner?.isPanelVisible()
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
@@ -628,7 +631,7 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
                     }
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     binding.linearLayout4.visibility = View.GONE
-                    bibleListiner?.isPanelVisible(false)
+                    bibleListiner?.isPanelVisible()
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
@@ -656,7 +659,7 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
                     }
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     binding.linearLayout4.visibility = View.GONE
-                    bibleListiner?.isPanelVisible(false)
+                    bibleListiner?.isPanelVisible()
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
@@ -683,7 +686,7 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
                     }
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     binding.linearLayout4.visibility = View.GONE
-                    bibleListiner?.isPanelVisible(false)
+                    bibleListiner?.isPanelVisible()
                     adapter.notifyDataSetChanged()
                 } else {
                     MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
@@ -696,7 +699,7 @@ class StaryZapavietSinaidalFragment : Fragment(), OnItemLongClickListener, Adapt
                     natatka.show(childFragmentManager, "bible_natatka")
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     binding.linearLayout4.visibility = View.GONE
-                    bibleListiner?.isPanelVisible(false)
+                    bibleListiner?.isPanelVisible()
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                 } else {

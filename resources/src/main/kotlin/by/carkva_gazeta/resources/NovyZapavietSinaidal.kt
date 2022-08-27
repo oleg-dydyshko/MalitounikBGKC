@@ -121,17 +121,11 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
         binding.pager.setCurrentItem(glava, false)
     }
 
-    override fun isPanelVisible(visible: Boolean) {
-        if (fullscreenPage) {
-            val density = (resources.displayMetrics.density).toInt()
-            val params = binding.actionFullscreen.layoutParams as ConstraintLayout.LayoutParams
-            if (visible) {
-                params.setMargins(0, 0, 60 * density, 10 * density)
-            } else {
-                params.setMargins(0, 0, 10 * density, 10 * density)
-            }
-            binding.actionFullscreen.layoutParams = params
-        }
+    override fun isPanelVisible(widthPanel: Int) {
+        val density = (resources.displayMetrics.density).toInt()
+        val params = binding.actionFullscreen.layoutParams as ConstraintLayout.LayoutParams
+        params.setMargins(0, 0, widthPanel + 10 * density, 10 * density)
+        binding.actionFullscreen.layoutParams = params
     }
 
     override fun getListPosition(position: Int) {

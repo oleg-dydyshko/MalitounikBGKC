@@ -60,7 +60,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
             binding.linearLayout4.animation = AnimationUtils.loadAnimation(it.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
         }
         binding.linearLayout4.visibility = View.GONE
-        bibleListiner?.isPanelVisible(false)
+        bibleListiner?.isPanelVisible()
         adapter.notifyDataSetChanged()
     }
 
@@ -76,7 +76,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
         BibleGlobalList.mPedakVisable = false
         BibleGlobalList.bibleCopyList.clear()
         binding.linearLayout4.visibility = View.GONE
-        bibleListiner?.isPanelVisible(false)
+        bibleListiner?.isPanelVisible()
         adapter.notifyDataSetChanged()
     }
 
@@ -107,7 +107,10 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
             if (binding.linearLayout4.visibility == View.GONE) {
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(it.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_top)
                 binding.linearLayout4.visibility = View.VISIBLE
-                bibleListiner?.isPanelVisible(true)
+                binding.linearLayout4.post {
+                    val width = binding.linearLayout4.width
+                    bibleListiner?.isPanelVisible(width)
+                }
             }
         }
         var find = false
@@ -183,7 +186,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
                     MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.copy))
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     binding.linearLayout4.visibility = View.GONE
-                    bibleListiner?.isPanelVisible(false)
+                    bibleListiner?.isPanelVisible()
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()

@@ -36,7 +36,6 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.DialogClearHistoryListener {
-    private var seash = ArrayList<Spannable>()
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
     private lateinit var chin: SharedPreferences
@@ -230,26 +229,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             prefEditors.putString("search_string_filter", "")
             prefEditors.apply()
         }
-        if (chin.getString("search_string", "") != "") {
-            if (chin.getString("search_array", "") != "") {
-                val gson = Gson()
-                val json = chin.getString("search_array", "")
-                val type = object : TypeToken<ArrayList<String>>() {}.type
-                val arrayList = ArrayList<String>()
-                arrayList.addAll(gson.fromJson(json, type))
-                arrayList.forEach {
-                    val p = it
-                    val t2 = p.indexOf("<p")
-                    val t3 = p.indexOf(">", t2)
-                    val subP = p.substring(t2, t3 + 1)
-                    var str = p.replace(subP, "")
-                    str = str.replace("</p>", "<br>")
-                    val t1 = str.lastIndexOf("<br>")
-                    val span = MainActivity.fromHtml(str.substring(0, t1)) as Spannable
-                    seash.add(span)
-                }
-            }
-        }
         var biblia = "semuxa"
         zavet = intent.getIntExtra("zavet", 1)
         when (zavet) {
@@ -272,7 +251,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             val type = object : TypeToken<ArrayList<String>>() {}.type
             history.addAll(gson.fromJson(json, type))
         }
-        adapter = SearchBibliaListAdaprer(this)
+        adapter = SearchBibliaListAdaprer(this, ArrayList())
         binding.ListView.adapter = adapter
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
         else binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
@@ -287,6 +266,28 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
 
             override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
         })
+        if (chin.getString("search_string", "") != "") {
+            if (chin.getString("search_array", "") != "") {
+                val gson = Gson()
+                val json = chin.getString("search_array", "")
+                val type = object : TypeToken<ArrayList<String>>() {}.type
+                val arrayList = ArrayList<String>()
+                val arraySpan = ArrayList<Spannable>()
+                arrayList.addAll(gson.fromJson(json, type))
+                arrayList.forEach {
+                    val p = it
+                    val t2 = p.indexOf("<p")
+                    val t3 = p.indexOf(">", t2)
+                    val subP = p.substring(t2, t3 + 1)
+                    var str = p.replace(subP, "")
+                    str = str.replace("</p>", "<br>")
+                    val t1 = str.lastIndexOf("<br>")
+                    val span = MainActivity.fromHtml(str.substring(0, t1)) as Spannable
+                    arraySpan.add(span)
+                }
+                adapter.addAll(arraySpan)
+            }
+        }
         binding.editText2.setText(chin.getString("search_string_filter", ""))
         binding.editText2.addTextChangedListener(MyTextWatcher(binding.editText2, true))
         binding.ListView.setOnItemClickListener { adapterView: AdapterView<*>, _: View?, position: Int, _: Long ->
@@ -647,7 +648,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         searcheTextView.typeface = MainActivity.createFont(Typeface.NORMAL)
         textViewCount = menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextView
         textViewCount?.typeface = MainActivity.createFont(Typeface.NORMAL)
-        textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
+        textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
         val closeButton = searchView?.findViewById(androidx.appcompat.R.id.search_close_btn) as ImageView
         closeButton.setOnClickListener {
             searchJob?.cancel()
@@ -746,7 +747,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
 
     private fun execute(searcheString: String, run: Boolean = false) {
         if (searcheString.length >= 3) {
-            if (seash.size == 0 || searcheString != history[0] || run) {
+            if (adapter.count == 0 || searcheString != history[0] || run) {
                 binding.History.visibility = View.GONE
                 binding.ListView.visibility = View.VISIBLE
                 if (searchJob?.isActive == true) {
@@ -1316,11 +1317,16 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                     editText?.addTextChangedListener(this)
                 }
                 if (editText?.id == androidx.appcompat.R.id.search_src_text) {
-                    execute(edit)
+                    if (searchJob?.isActive == true && editText.text.length < 3) {
+                        searchJob?.cancel()
+                        binding.progressBar.visibility = View.GONE
+                    } else {
+                        execute(edit)
+                    }
                 }
             }
             if (editText?.id == androidx.appcompat.R.id.search_src_text) {
-                if (editPosition >= 3 && seash.size > 0) {
+                if (editPosition >= 3 && adapter.count > 0) {
                     binding.History.visibility = View.GONE
                     binding.ListView.visibility = View.VISIBLE
                 } else {
@@ -1333,8 +1339,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
 
     }
 
-    private inner class SearchBibliaListAdaprer(context: Activity) : ArrayAdapter<Spannable>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, seash) {
-        private val origData = ArrayList<Spannable>(seash)
+    private inner class SearchBibliaListAdaprer(context: Activity, private val arrayList: ArrayList<Spannable>) : ArrayAdapter<Spannable>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, arrayList) {
+        private val origData = ArrayList<Spannable>(arrayList)
         override fun addAll(collection: Collection<Spannable>) {
             super.addAll(collection)
             origData.clear()
@@ -1353,8 +1359,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val t1 = seash[position].indexOf("-->")
-            viewHolder.text.text = seash[position].subSequence(t1 + 3, seash[position].length)
+            val t1 = arrayList[position].indexOf("-->")
+            viewHolder.text.text = arrayList[position].subSequence(t1 + 3, arrayList[position].length)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }

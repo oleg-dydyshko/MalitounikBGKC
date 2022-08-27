@@ -36,7 +36,6 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
     private var searchView: SearchView? = null
     private var searchViewQwery = ""
     private var arrayLists = ArrayList<ArrayList<String>>()
-    private var arrayRes = ArrayList<Searche>()
     private lateinit var chin: SharedPreferences
     private var mLastClickTime: Long = 0
     private var history = ArrayList<String>()
@@ -115,7 +114,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         val density = resources.displayMetrics.density.toInt()
         textViewCount?.setPadding(0, 0, 10 * density, 0)
         menu.findItem(R.id.count).isVisible = true
-        textViewCount?.text = resources.getString(R.string.seash, arrayRes.size)
+        textViewCount?.text = resources.getString(R.string.seash, adapter.count)
         changeSearchViewElements(searchView)
         if (searchViewQwery != "") {
             menu.findItem(R.id.search).expandActionView()
@@ -191,13 +190,14 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
             val type = object : TypeToken<ArrayList<String>>() {}.type
             history.addAll(gson.fromJson(json, type))
         }
-        adapter = SearchListAdapter(this, arrayRes)
+        adapter = SearchListAdapter(this, ArrayList())
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         binding.ListView.adapter = adapter
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
-                if (i == 1) { // Скрываем клавиатуру
+                if (i == 1) {
+                    // Скрываем клавиатуру
                     val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
                 }
@@ -211,12 +211,13 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             actionExpandOn = false
+            val adapterRes = adapter.getItem(position) as Searche
             val g = Calendar.getInstance()
-            g.set(Calendar.DAY_OF_YEAR, arrayRes[position].dayOfYear)
+            g.set(Calendar.DAY_OF_YEAR, adapterRes.dayOfYear)
             val date = "<!--" + g[Calendar.DAY_OF_MONTH] + ":" + g[Calendar.MONTH] + "-->"
-            val result = date + arrayRes[position].text.toString()
+            val result = date + adapterRes.text.toString()
             val intent = Intent()
-            intent.putExtra("dayOfYear", arrayRes[position].dayOfYear)
+            intent.putExtra("dayOfYear", adapterRes.dayOfYear)
             setResult(Activity.RESULT_OK, intent)
             addHistory(result)
             saveHistopy()
@@ -314,22 +315,26 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
     private fun startPosukSviatyx(poshuk: String) {
         posukPesenJob = CoroutineScope(Dispatchers.Main).launch {
             rawAsset(poshuk)
+            if (adapter.count == 0) {
+                rawAsset(poshuk, true)
+            }
         }
     }
 
-    private fun rawAsset(poshukString: String) {
+    private fun rawAsset(poshukString: String, secondRun: Boolean = false) {
         val munName = resources.getStringArray(R.array.meciac_smoll)
         var poshuk = poshukString
         val posukOrig = poshuk
-        arrayRes.clear()
-        adapter.notifyDataSetChanged()
+        adapter.clear()
         poshuk = MainActivity.zamena(poshuk)
-        val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ў', 'ь', 'ы')
-        for (aM in m) {
-            val r = poshuk.length - 1
-            if (r >= 3) {
-                if (poshuk[r] == aM) {
-                    poshuk = poshuk.replace(poshuk, poshuk.substring(0, r), true)
+        if (secondRun) {
+            val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ў', 'ь', 'ы')
+            for (aM in m) {
+                val r = poshuk.length - 1
+                if (r >= 3) {
+                    if (poshuk[r] == aM) {
+                        poshuk = poshuk.replace(poshuk, poshuk.substring(0, r), true)
+                    }
                 }
             }
         }
@@ -351,7 +356,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
                     val str1 = SpannableStringBuilder(arrayLists[e][1] + " " + munName[arrayLists[e][2].toInt()])
                     str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     val result = Searche(g[Calendar.DAY_OF_YEAR], str1.append("\n").append(span))
-                    arrayRes.add(result)
+                    adapter.add(result)
                 }
             }
         }
@@ -385,14 +390,13 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
                 span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 resultSpan.append(str1).append("\n").append(span)
-                arrayRes.add(Searche(data[e].dayOfYear, resultSpan))
+                adapter.add(Searche(data[e].dayOfYear, resultSpan))
             }
         }
-        textViewCount?.text = resources.getString(R.string.seash, arrayRes.size)
+        textViewCount?.text = resources.getString(R.string.seash, adapter.count)
         val prefEditors = chin.edit()
         prefEditors.putString("search_svityx_string", posukOrig)
         prefEditors.apply()
-        adapter.notifyDataSetChanged()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -428,8 +432,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
                     binding.ListView.visibility = View.VISIBLE
                 } else {
                     if (actionExpandOn) {
-                        arrayRes.clear()
-                        adapter.notifyDataSetChanged()
+                        adapter.clear()
                         textViewCount?.text = resources.getString(R.string.seash, 0)
                         val prefEditors = chin.edit()
                         prefEditors.putString("search_svityx_string", edit)

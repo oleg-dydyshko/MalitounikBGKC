@@ -137,9 +137,16 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
     override fun myNatatkiEdit(position: Int) {
         binding.dragListView.resetSwipedViews(null)
         val f = adapter.itemList[position]
-        val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 2, position)
-        myNatatki.setMyNatatkiListener(this)
-        myNatatki.show(childFragmentManager, "myNatatki")
+        activity?.let {
+            if (File("${it.filesDir}/Malitva/Mae_malitvy_${f.id}").exists()) {
+                val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 2, position)
+                myNatatki.setMyNatatkiListener(this)
+                myNatatki.show(childFragmentManager, "myNatatki")
+            } else {
+                MainActivity.toastView(it, getString(R.string.no_file))
+                fileDelite(position)
+            }
+        }
     }
 
     override fun myNatatkiAdd() {
@@ -162,7 +169,7 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
             val f = adapter.itemList[position]
             adapter.itemList.removeAt(position)
             val filedel = File(fragmentActivity.filesDir.toString().plus("/Malitva/").plus("Mae_malitvy_").plus(f.id))
-            filedel.delete()
+            if (filedel.exists()) filedel.delete()
             val file = File(fragmentActivity.filesDir.toString().plus("/Natatki.json"))
             file.writer().use {
                 val gson = Gson()
@@ -290,9 +297,14 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
                 mLastClickTime = SystemClock.elapsedRealtime()
                 binding.dragListView.resetSwipedViews(null)
                 val f = itemList[adapterPosition]
-                val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 3, adapterPosition)
-                myNatatki.setMyNatatkiListener(this@MenuNatatki)
-                myNatatki.show(childFragmentManager, "myNatatki")
+                if (File("${activity.filesDir}/Malitva/Mae_malitvy_${f.id}").exists()) {
+                    val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 3, adapterPosition)
+                    myNatatki.setMyNatatkiListener(this@MenuNatatki)
+                    myNatatki.show(childFragmentManager, "myNatatki")
+                } else {
+                    MainActivity.toastView(activity, getString(R.string.no_file))
+                    fileDelite(adapterPosition)
+                }
             }
 
             override fun onItemLongClicked(view: View): Boolean {

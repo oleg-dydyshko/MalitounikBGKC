@@ -207,7 +207,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
         // Удаление кеша интернета
         val fileSite = File("$filesDir/Site")
-        if (fileSite.exists()) fileSite.deleteRecursively() // Создание нового формата нататок
+        if (fileSite.exists()) fileSite.deleteRecursively()
+        // Создание нового формата нататок
         val fileNatatki = File("$filesDir/Natatki.json")
         if (!fileNatatki.exists()) {
             File(filesDir.toString().plus("/Malitva")).walk().forEach { file ->

@@ -538,10 +538,13 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             binding.spinner6.setSelection(chin.getInt("biblia_seash", 0))
             binding.spinner6.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    prefEditors.putInt("biblia_seash", position)
-                    prefEditors.apply()
                     val edit = autoCompleteTextView?.text.toString()
-                    execute(edit, true)
+                    val bibliaSeash = chin.getInt("biblia_seash", 0)
+                    if (chin.getString("search_string", "") != edit || bibliaSeash != position) {
+                        prefEditors.putInt("biblia_seash", position)
+                        prefEditors.apply()
+                        execute(edit, true)
+                    }
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -773,9 +776,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         binding.progressBar.visibility = View.VISIBLE
         binding.History.visibility = View.GONE
         binding.ListView.visibility = View.GONE
-        var edit = autoCompleteTextView?.text.toString()
+        val edit = autoCompleteTextView?.text.toString()
         if (edit != "") {
-            edit = edit.trim()
             prefEditors.putString("search_string", edit)
             prefEditors.apply()
         }
@@ -942,11 +944,11 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                         prepinanie = prepinanie.replace(".", "")
                         prepinanie = prepinanie.replace(";", "")
                         prepinanie = prepinanie.replace(":", "")
-                        prepinanie = prepinanie.replace("--", "")
+                        prepinanie = prepinanie.replace(" --", "")
                         val t5 = prepinanie.indexOf("-")
                         if (t5 != -1) {
                             prepinanie = if (prepinanie[t5 - 1].toString() == " ")
-                                prepinanie.replace("-", "")
+                                prepinanie.replace(" -", "")
                             else
                                 prepinanie.replace("-", " ")
                         }
@@ -1138,11 +1140,11 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                         prepinanie = prepinanie.replace(":", "")
                         prepinanie = prepinanie.replace("[", "")
                         prepinanie = prepinanie.replace("]", "")
-                        prepinanie = prepinanie.replace("--", "")
+                        prepinanie = prepinanie.replace(" --", "")
                         val t5 = prepinanie.indexOf("-")
                         if (t5 != -1) {
                             prepinanie = if (prepinanie[t5 - 1].toString() == " ")
-                                prepinanie.replace("-", "")
+                                prepinanie.replace(" -", "")
                             else
                                 prepinanie.replace("-", " ")
                         }
@@ -1242,11 +1244,11 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                 prepinanie = prepinanie.replace(".", "")
                 prepinanie = prepinanie.replace(";", "")
                 prepinanie = prepinanie.replace(":", "")
-                prepinanie = prepinanie.replace("--", "")
+                prepinanie = prepinanie.replace(" --", "")
                 val t5 = prepinanie.indexOf("-")
                 if (t5 != -1) {
                     prepinanie = if (prepinanie[t5 - 1].toString() == " ")
-                        prepinanie.replace("-", "")
+                        prepinanie.replace(" -", "")
                     else
                         prepinanie.replace("-", " ")
                 }
@@ -1334,14 +1336,12 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                     edit = edit.replace("И", "І")
                     edit = edit.replace("Щ", "Ў")
                     edit = edit.replace("ъ", "'")
-                    edit = edit.replace("Ъ", "'")
                 } else {
                     edit = edit.replace("і", "и")
                     edit = edit.replace("ў", "щ")
                     edit = edit.replace("І", "И")
                     edit = edit.replace("Ў", "Щ")
                     edit = edit.replace("'", "ъ")
-                    edit = edit.replace("'", "Ъ")
                 }
                 if (check != 0) {
                     editText?.removeTextChangedListener(this)
@@ -1354,7 +1354,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                         searchJob?.cancel()
                         binding.progressBar.visibility = View.GONE
                     } else {
-                        execute(edit)
+                        if (chin.getString("search_string", "") != edit) execute(edit)
                     }
                 }
             }

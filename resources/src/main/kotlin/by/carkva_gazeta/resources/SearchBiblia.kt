@@ -35,7 +35,7 @@ import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.DialogClearHistoryListener {
+class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.DialogClearHistoryListener, DialogBibleSearshSettings.DiallogBibleSearshListiner {
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
     private lateinit var chin: SharedPreferences
@@ -538,13 +538,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             binding.spinner6.setSelection(chin.getInt("biblia_seash", 0))
             binding.spinner6.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val edit = autoCompleteTextView?.text.toString()
-                    val bibliaSeash = chin.getInt("biblia_seash", 0)
-                    if (chin.getString("search_string", "") != edit || bibliaSeash != position) {
-                        prefEditors.putInt("biblia_seash", position)
-                        prefEditors.apply()
-                        execute(edit, true)
-                    }
+                    setSettingsBibliaSeash(position)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -630,6 +624,27 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         }
     }
 
+    override fun setSettingsPegistrbukv(pegistrbukv: Boolean) {
+        binding.checkBox.isChecked = pegistrbukv
+    }
+
+    override fun setSettingsSlovocalkam(slovocalkam: Int) {
+        binding.checkBox2.isChecked = slovocalkam == 1
+    }
+
+    override fun setSettingsBibliaSeash(position: Int) {
+        if (zavet != 3) {
+            val edit = autoCompleteTextView?.text.toString()
+            val bibliaSeash = chin.getInt("biblia_seash", 0)
+            binding.spinner6.setSelection(position)
+            if (chin.getString("search_string", "") != edit || bibliaSeash != position) {
+                prefEditors.putInt("biblia_seash", position)
+                prefEditors.apply()
+                execute(edit, true)
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.search_biblia, menu)
@@ -683,6 +698,10 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         if (id == android.R.id.home) {
             onBackPressed()
             return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_search_bible) {
+            val dialogSearshBible = DialogBibleSearshSettings.getInstance(zavet)
+            dialogSearshBible.show(supportFragmentManager, "dialogSearshBible")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_clean_histopy) {
             val dialogClearHishory = DialogClearHishory.getInstance()
@@ -947,10 +966,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                         prepinanie = prepinanie.replace(" --", "")
                         val t5 = prepinanie.indexOf("-")
                         if (t5 != -1) {
-                            prepinanie = if (prepinanie[t5 - 1].toString() == " ")
-                                prepinanie.replace(" -", "")
-                            else
-                                prepinanie.replace("-", " ")
+                            prepinanie = if (prepinanie[t5 - 1].toString() == " ") prepinanie.replace(" -", "")
+                            else prepinanie.replace("-", " ")
                         }
                         prepinanie = prepinanie.replace("\"", "")
                         prepinanie = prepinanie.replace("?", "")
@@ -1143,10 +1160,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                         prepinanie = prepinanie.replace(" --", "")
                         val t5 = prepinanie.indexOf("-")
                         if (t5 != -1) {
-                            prepinanie = if (prepinanie[t5 - 1].toString() == " ")
-                                prepinanie.replace(" -", "")
-                            else
-                                prepinanie.replace("-", " ")
+                            prepinanie = if (prepinanie[t5 - 1].toString() == " ") prepinanie.replace(" -", "")
+                            else prepinanie.replace("-", " ")
                         }
                         prepinanie = prepinanie.replace("\"", "")
                         prepinanie = prepinanie.replace("?", "")
@@ -1247,10 +1262,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                 prepinanie = prepinanie.replace(" --", "")
                 val t5 = prepinanie.indexOf("-")
                 if (t5 != -1) {
-                    prepinanie = if (prepinanie[t5 - 1].toString() == " ")
-                        prepinanie.replace(" -", "")
-                    else
-                        prepinanie.replace("-", " ")
+                    prepinanie = if (prepinanie[t5 - 1].toString() == " ") prepinanie.replace(" -", "")
+                    else prepinanie.replace("-", " ")
                 }
                 prepinanie = prepinanie.replace("\"", "")
                 prepinanie = prepinanie.replace("?", "")

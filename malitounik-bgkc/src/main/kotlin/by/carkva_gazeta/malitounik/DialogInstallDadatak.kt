@@ -50,8 +50,12 @@ class DialogInstallDadatak : DialogFragment() {
                     intent.data = Uri.parse(url)
                     startActivity(intent)
                 } catch (ex: ActivityNotFoundException) {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    startActivity(intent)
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        startActivity(intent)
+                    } catch (ex: ActivityNotFoundException) {
+                        MainActivity.toastView(it, getString(R.string.error_ch2))
+                    }
                 }
             }
             ad.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }

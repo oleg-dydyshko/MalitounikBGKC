@@ -103,7 +103,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                 val dialogBibleVybranoeError = DialogBibleVybranoeError()
                 dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
             } else {
-                DialogVybranoeBibleList.biblia = 3
+                DialogVybranoeBibleList.biblia = "3"
                 val dialogVybranoeList = DialogVybranoeBibleList()
                 dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
             }

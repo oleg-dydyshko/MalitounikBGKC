@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:id="@+id/appBarLayout2"
@@ -29,10 +30,29 @@
             android:textSize="18sp" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appBarLayout2"
+        android:background="@drawable/selector_default_list"
+        android:drawablePadding="10dp"
+        android:padding="10dp"
+        android:text="@string/bible_time"
+        android:textSize="14sp"
+        app:drawableLeftCompat="@drawable/stiker"
+        app:drawableStartCompat="@drawable/stiker" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/textView"
+        android:background="@color/colorDivider" />
+
     <com.woxthebox.draglistview.DragListView
         android:id="@+id/drag_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appBarLayout2" />
-
+        android:layout_below="@id/view" />
 </RelativeLayout>

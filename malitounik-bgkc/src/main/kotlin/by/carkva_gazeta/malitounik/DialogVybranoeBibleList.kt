@@ -69,13 +69,13 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             val prefEditors = k.edit()
             if (arrayListVybranoe.isEmpty()) {
                 when (biblia) {
-                    1 -> prefEditors.remove("bibleVybranoeSemuxa")
-                    2 -> prefEditors.remove("bibleVybranoeSinoidal")
-                    3 -> prefEditors.remove("bibleVybranoeNadsan")
+                    "1" -> prefEditors.remove("bibleVybranoeSemuxa")
+                    "2" -> prefEditors.remove("bibleVybranoeSinoidal")
+                    "3" -> prefEditors.remove("bibleVybranoeNadsan")
                 }
                 var posDelite = -1
                 MenuVybranoe.vybranoe.forEachIndexed { index, it ->
-                    if (it.resurs == biblia.toString()) {
+                    if (it.resurs == biblia) {
                         posDelite = index
                         return@forEachIndexed
                     }
@@ -91,9 +91,9 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 dialog?.cancel()
             } else {
                 when (biblia) {
-                    1 -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe))
-                    2 -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe))
-                    3 -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe))
+                    "1" -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe))
+                    "2" -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe))
+                    "3" -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe))
                 }
             }
             prefEditors.apply()
@@ -101,25 +101,25 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        activity?.let {
-            _binding = DialogVybranoeBibleListBinding.inflate(LayoutInflater.from(it))
-            k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        activity?.let { activity ->
+            _binding = DialogVybranoeBibleListBinding.inflate(LayoutInflater.from(activity))
+            k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlackVybranoe
-            val builder = AlertDialog.Builder(it, style)
+            val builder = AlertDialog.Builder(activity, style)
             builder.setView(binding.root)
-            if (dzenNoch) binding.appBarLayout2.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+            if (dzenNoch) binding.appBarLayout2.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
             binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
             val gson = Gson()
             val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
             var bibleVybranoe = ""
             when (biblia) {
-                1 -> bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
-                2 -> bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
-                3 -> bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
+                "1" -> bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
+                "2" -> bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
+                "3" -> bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
             }
             if (bibleVybranoe != "") arrayListVybranoe = gson.fromJson(bibleVybranoe, type)
-            binding.dragListView.setLayoutManager(LinearLayoutManager(it))
+            binding.dragListView.setLayoutManager(LinearLayoutManager(activity))
             binding.dragListView.setAdapter(ItemAdapter(arrayListVybranoe, R.id.image, false), false)
             binding.dragListView.setCanDragHorizontally(false)
             binding.dragListView.setCanDragVertically(true)
@@ -147,14 +147,37 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
                     val prefEditors = k.edit()
                     when (biblia) {
-                        1 -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe))
-                        2 -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe))
-                        3 -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe))
+                        "1" -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe))
+                        "2" -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe))
+                        "3" -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe))
                     }
                     prefEditors.apply()
                 }
             })
             setTollbarTheme()
+            if (dzenNoch) {
+                binding.view.setBackgroundResource(R.color.colorprimary_material_dark)
+                binding.textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
+                binding.textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+                binding.textView.setBackgroundResource(R.drawable.selector_dark_list)
+            }
+            binding.textView.setOnClickListener {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return@setOnClickListener
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                if (MainActivity.checkmoduleResources()) {
+                    val intent = Intent()
+                    intent.setClassName(activity, MainActivity.BIBLIAVYBRANOE)
+                    intent.putExtra("biblia", biblia)
+                    intent.putExtra("title", binding.subtitleToolbar.text.toString())
+                    intent.putExtra("prodoljyt", true)
+                    startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(childFragmentManager, "dadatak")
+                }
+            }
             builder.setPositiveButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
         }
@@ -171,9 +194,9 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         binding.titleToolbar.text = resources.getText(R.string.str_short_label1)
         when (biblia) {
-            1 -> binding.subtitleToolbar.text = getString(R.string.title_biblia)
-            2 -> binding.subtitleToolbar.text = getString(R.string.bsinaidal)
-            3 -> binding.subtitleToolbar.text = getString(R.string.title_psalter)
+            "1" -> binding.subtitleToolbar.text = getString(R.string.title_biblia)
+            "2" -> binding.subtitleToolbar.text = getString(R.string.bsinaidal)
+            "3" -> binding.subtitleToolbar.text = getString(R.string.title_psalter)
         }
     }
 
@@ -263,7 +286,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
 
     companion object {
         var arrayListVybranoe = ArrayList<VybranoeBibliaData>()
-        var biblia = 1
+        var biblia = "1"
 
         fun checkVybranoe(kniga: Int, glava: Int, bibleName: Int = 1): Boolean {
             val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)

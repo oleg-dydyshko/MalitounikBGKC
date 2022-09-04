@@ -322,19 +322,19 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
                     if (MainActivity.checkmoduleResources()) {
                         when (itemList[adapterPosition].resurs) {
                             "1" -> {
-                                DialogVybranoeBibleList.biblia = 1
+                                DialogVybranoeBibleList.biblia = "1"
                                 val dialogVybranoeList = DialogVybranoeBibleList()
                                 dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
                                 dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                             }
                             "2" -> {
-                                DialogVybranoeBibleList.biblia = 2
+                                DialogVybranoeBibleList.biblia = "2"
                                 val dialogVybranoeList = DialogVybranoeBibleList()
                                 dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
                                 dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                             }
                             "3" -> {
-                                DialogVybranoeBibleList.biblia = 3
+                                DialogVybranoeBibleList.biblia = "3"
                                 val dialogVybranoeList = DialogVybranoeBibleList()
                                 dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
                                 dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")

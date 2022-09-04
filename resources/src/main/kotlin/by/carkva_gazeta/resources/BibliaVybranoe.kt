@@ -56,6 +56,8 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private var title = ""
     private var firstTextPosition = ""
     private var orientation = Configuration.ORIENTATION_UNDEFINED
+    private var positionY = 0
+    private var resurs = "0"
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -95,6 +97,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             fullscreenPage = k.getBoolean("fullscreenPage", false)
         }
         title = intent.extras?.getString("title", "") ?: ""
+        resurs = intent.extras?.getString("biblia", "1") ?: "1"
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.textSize = fontBiblia
         binding.constraint.setOnTouchListener(this)
@@ -227,10 +230,10 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.str_short_label1)
         binding.subtitleToolbar.visibility = View.VISIBLE
-        when (intent.extras?.getInt("biblia", 1) ?: 1) {
-            1 -> binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_biblia)
-            2 -> binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bsinaidal)
-            3 -> binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_psalter)
+        when (resurs) {
+            "1" -> binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_biblia)
+            "2" -> binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bsinaidal)
+            "3" -> binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_psalter)
         }
         if (dzenNoch) {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
@@ -507,6 +510,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             ssbTitle.append("\n")
             ssbTitle.append(MainActivity.fromHtml(split2[VybranoeBibliaData.glava])).append("\n")
         }
+        positionY = k.getInt(resurs + "BibleVybranoeScroll", 0)
         binding.textView.text = ssbTitle.trim()
         if (savedInstanceState != null) {
             binding.textView.post {
@@ -522,7 +526,11 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             binding.InteractiveScroll.post {
                 val strPosition = binding.textView.text.indexOf(title + "\n", ignoreCase = true)
                 val line = binding.textView.layout.getLineForOffset(strPosition)
-                val y = binding.textView.layout.getLineTop(line)
+                val y = if (intent?.extras?.getBoolean("prodoljyt", false) == true) {
+                    positionY
+                } else {
+                    binding.textView.layout.getLineTop(line)
+                }
                 val anim = ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", binding.InteractiveScroll.scrollY, y)
                 anim.setDuration(1000).start()
                 if (k.getBoolean("autoscrollAutostart", false)) {
@@ -688,6 +696,9 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
 
     override fun onPause() {
         super.onPause()
+        val prefEditor = k.edit()
+        prefEditor.putInt(resurs + "BibleVybranoeScroll", positionY)
+        prefEditor.apply()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         stopAutoStartScroll()
         procentJob?.cancel()
@@ -784,6 +795,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     }
 
     override fun onScroll(t: Int, oldt: Int) {
+        positionY = t
         val lineLayout = binding.textView.layout
         lineLayout?.let {
             val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(it.getLineForVertical(t)), binding.textView.layout.getLineEnd(it.getLineForVertical(t))).trim()

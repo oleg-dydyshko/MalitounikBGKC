@@ -755,7 +755,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     private fun selectFragment(view: View?, start: Boolean = false) {
-        idSelect = view?.id ?: 0
+        idSelect = view?.id ?: R.id.label1
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             if (dzenNoch) {

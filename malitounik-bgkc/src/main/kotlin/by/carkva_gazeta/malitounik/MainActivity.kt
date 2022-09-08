@@ -196,7 +196,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", MODE_PRIVATE)
         mkDir()
-        loadOpisanieSviatyiaISxiaty()
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain
         bindingcontent = binding.appBarMain.contentMain
@@ -232,8 +231,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     MenuNatatki.myNatatkiFiles.add(MyNatatkiFiles(index, lRTE, res[0]))
                 }
             }
-            val file = File("$filesDir/Natatki.json")
-            file.writer().use {
+            fileNatatki.writer().use {
                 val gson = Gson()
                 it.write(gson.toJson(MenuNatatki.myNatatkiFiles))
             }
@@ -498,6 +496,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
+        //loadSviatyia(2022)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
@@ -1189,65 +1188,76 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         selectFragment(view)
     }
 
-    private fun loadOpisanieSviatyiaISxiaty() {
-        if (isNetworkAvailable()) {
-            val timeUpdate = Calendar.getInstance().timeInMillis
-            val timeUpdateSave = k.getLong("OpisanieTimeUpdate", timeUpdate)
-            val update = timeUpdate - timeUpdateSave > (7 * 24 * 60 * 60 * 1000L)
-            if (update) {
-                prefEditors = k.edit()
-                prefEditors.putLong("OpisanieTimeUpdate", timeUpdate)
-                prefEditors.apply()
-            }
-            CoroutineScope(Dispatchers.IO).launch {
-                withContext(Dispatchers.IO) {
-                    runCatching {
-                        try {
-                            val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
-                            if (!fileOpisanieSviat.exists() || update) {
-                                val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
-                                val conections = mURL.openConnection() as HttpURLConnection
-                                if (conections.responseCode == 200) {
-                                    try {
-                                        fileOpisanieSviat.writer().use {
-                                            it.write(mURL.readText())
-                                        }
-                                    } catch (e: Throwable) {
-                                    }
-                                }
-                            }
-                            val dir = File("$filesDir/sviatyja/")
-                            if (!dir.exists()) dir.mkdir()
-                            for (i in 1..12) {
-                                val fileS = File("$filesDir/sviatyja/opisanie$i.json")
-                                if (!fileS.exists() || update) {
-                                    val mURL = URL("https://carkva-gazeta.by/chytanne/sviatyja/opisanie$i.json")
-                                    val conections = mURL.openConnection() as HttpURLConnection
-                                    if (conections.responseCode == 200) {
-                                        fileS.writer().use {
-                                            it.write(mURL.readText())
+    /*private fun loadSviatyia(year: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.IO) {
+                runCatching {
+                    try {
+                        val sviatyiaNew = Array(366) { Array(4) { "" } }
+                        val gregorianCalendar = Calendar.getInstance() as GregorianCalendar
+                        val mURL = URL("https://carkva-gazeta.by/admin/getFiles.php?sviatyia=1")
+                        val conections = mURL.openConnection() as HttpURLConnection
+                        if (conections.responseCode == 200) {
+                            val builderUrl = mURL.readText()
+                            val gson = Gson()
+                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                            val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(builderUrl, type)
+                            val urlName = arrayList[0][0]
+                            val urlTime = arrayList[0][1].toInt()
+                            val file = File("$filesDir/calendarsviatyia.txt")
+                            val time = file.lastModified() / 1000
+                            if (!file.exists() || time < urlTime) {
+                                try {
+                                    val mURL2 = URL(urlName)
+                                    val conections2 = mURL2.openConnection() as HttpURLConnection
+                                    if (conections2.responseCode == 200) {
+                                        try {
+                                            file.writer().use {
+                                                it.write(mURL2.readText())
+                                            }
+                                        } catch (e: Throwable) {
                                         }
                                     }
+                                } catch (e: Throwable) {
                                 }
                             }
-                            val piarliny = File("$filesDir/piarliny.json")
-                            try {
-                                val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
-                                val conections = mURL.openConnection() as HttpURLConnection
-                                if (conections.responseCode == 200) {
-                                    piarliny.writer().use {
-                                        it.write(mURL.readText())
+                            var e = 0
+                            var e2 = 59
+                            file.forEachLine lit@{
+                                val re1 = it.split("<>")
+                                if (gregorianCalendar.isLeapYear(year)) {
+                                    for (i in re1.indices) {
+                                        // исправление чтения на 1 января
+                                        if (e == 0) sviatyiaNew[e][i] = re1[i].trim().replace("<br>", "\n")
+                                        else sviatyiaNew[e][i] = re1[i].trim()
                                     }
+                                } else {
+                                    if (e == 59) {
+                                        e++
+                                        return@lit
+                                    }
+                                    if (e < 59) {
+                                        for (i in re1.indices) {
+                                            // исправление чтения на 1 января
+                                            if (e == 0) sviatyiaNew[e][i] = re1[i].trim().replace("<br>", "\n")
+                                            else sviatyiaNew[e][i] = re1[i].trim()
+                                        }
+                                    } else {
+                                        for (i in re1.indices) {
+                                            sviatyiaNew[e2][i] = re1[i].trim()
+                                        }
+                                        e2++
+                                    }
+                                    e++
                                 }
-                            } catch (e: Throwable) {
                             }
-                        } catch (e: Throwable) {
                         }
+                    } catch (e: Throwable) {
                     }
                 }
             }
         }
-    }
+    }*/
 
     private fun popupSnackbarForCompleteUpdate(code: Int) {
         val c = Calendar.getInstance()

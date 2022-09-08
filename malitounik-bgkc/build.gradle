@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildToolsVersion '32.0.0'
 
     defaultConfig {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 19
-        targetSdkVersion 32
-        versionCode 44144
-        versionName "4.1.0.17"
+        targetSdkVersion 33
+        versionCode 44145
+        versionName "4.1.0.18"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -57,13 +57,13 @@ android {
 dependencies {
     //implementation fileTree(dir: "libs", include: ["*.jar"])
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    api 'androidx.core:core-ktx:1.8.0'
-    api 'androidx.appcompat:appcompat:1.5.0'
+    api 'androidx.core:core-ktx:1.9.0'
+    api 'androidx.appcompat:appcompat:1.5.1'
     api 'androidx.constraintlayout:constraintlayout:2.1.4'
     api 'androidx.gridlayout:gridlayout:1.0.0'
     api 'com.google.android.material:material:1.6.1'
     api 'com.google.android.play:core-ktx:1.8.1'
-    api 'com.google.code.gson:gson:2.9.0'
+    api 'com.google.code.gson:gson:2.9.1'
     api 'androidx.webkit:webkit:1.5.0'
     api 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     api 'com.github.woxthebox:draglistview:1.7.2'

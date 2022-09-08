@@ -168,6 +168,9 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(181, "Сабор сьвятых 12-ці апосталаў", "mm_30_06_sabor_12_apostalau_liturhija", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(244, "Пачатак царкоўнага году і сьвятога айца нашага Сямёна Стоўпніка", "mm_01_09_novy_hod_viczernia", VIACHERNIA))
         datMinSH.add(SlugbovyiaTextuData(244, "Пачатак царкоўнага году і сьвятога айца нашага Сямёна Стоўпніка", "mm_01_09_novy_hod_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(248, "Сьвятога прарока Захара, бацькі Яна Хрысьціцеля, і праведнае Альжбеты, ягонае маці", "mm_05_09_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(250, "Перадсьвяцьце Нараджэньня Багародзіцы і сьвятога мучаніка Сазонта", "mm_07_09_pieradsv_naradz_baharodz_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(251, "Нараджэньне Найсьвяцейшае Багародзіцы", "mm_08_09_naradz_baharodzicy_liturhija", LITURGIA))
 
         datMinSV.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "ndz_miranosic_liturhija", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(21, "Нядзеля расслабленага - Літургія", "ndz_rasslablenaha_liturhija", LITURGIA, pasxa = true))

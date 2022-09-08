@@ -249,7 +249,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
             menu.findItem(R.id.count).isVisible = search
         }
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+            override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
                 search = true
                 getMenuListData()
                 textViewCount?.text = getString(R.string.seash, menuList.size)
@@ -258,7 +258,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
                 return true
             }
 
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+            override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
                 searchView?.setOnQueryTextListener(null)
                 search = false
                 getMenuListData(pesny)

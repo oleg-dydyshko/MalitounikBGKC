@@ -338,27 +338,29 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         CoroutineScope(Dispatchers.Main).launch {
             var error = false
             withContext(Dispatchers.IO) {
-                try {
-                    val dir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                    if (dir?.exists() != true) {
-                        dir?.mkdir()
+                runCatching {
+                    try {
+                        val dir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                        if (dir?.exists() != true) {
+                            dir?.mkdir()
+                        }
+                        val myUrl = URL(url)
+                        val last = url.lastIndexOf("/")
+                        val uplFilename = url.substring(last + 1)
+                        val inpstr: InputStream = myUrl.openStream()
+                        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), uplFilename)
+                        val outputStream = FileOutputStream(file)
+                        val buffer = ByteArray(1024)
+                        var bytesRead: Int
+                        while (inpstr.read(buffer).also { bytesRead = it } != -1) {
+                            outputStream.write(buffer, 0, bytesRead)
+                        }
+                        outputStream.close()
+                        filePath = file.path
+                        fileName = uplFilename
+                    } catch (t: Throwable) {
+                        error = true
                     }
-                    val myUrl = URL(url)
-                    val last = url.lastIndexOf("/")
-                    val uplFilename = url.substring(last + 1)
-                    val inpstr: InputStream = myUrl.openStream()
-                    val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), uplFilename)
-                    val outputStream = FileOutputStream(file)
-                    val buffer = ByteArray(1024)
-                    var bytesRead: Int
-                    while (inpstr.read(buffer).also { bytesRead = it } != -1) {
-                        outputStream.write(buffer, 0, bytesRead)
-                    }
-                    outputStream.close()
-                    filePath = file.path
-                    fileName = uplFilename
-                } catch (t: Throwable) {
-                    error = true
                 }
             }
             if (!error) {
@@ -1680,67 +1682,69 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         val showUrl = "https://carkva-gazeta.by/bibliotekaNew.php"
         sqlJob = CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
-                val temp: ArrayList<ArrayList<String>> = ArrayList()
-                val sb = URL(showUrl).readText()
-                val gson = Gson()
-                val type = object : TypeToken<ArrayList<ArrayMap<String, String>>>() {}.type
-                val biblioteka: ArrayList<ArrayMap<String, String>> = gson.fromJson(sb, type)
-                for (i in 0 until biblioteka.size) {
-                    val mySqlList: ArrayList<String> = ArrayList()
-                    val kniga = biblioteka[i]
-                    val id = kniga["bib"] ?: ""
-                    val rubrika = kniga["rubryka"] ?: ""
-                    val link = kniga["link"] ?: ""
-                    var str = kniga["str"] ?: ""
-                    val pdf = kniga["pdf"] ?: ""
-                    var image = kniga["image"] ?: ""
-                    mySqlList.add(link)
-                    val pos = str.indexOf("</span><br>")
-                    str = str.substring(pos + 11)
-                    mySqlList.add(str)
-                    mySqlList.add(pdf)
-                    val url = URL("https://carkva-gazeta.by/data/bibliateka/$pdf")
-                    var filesize: String
-                    val conn = url.openConnection()
-                    if (conn is HttpURLConnection) {
-                        (conn as HttpURLConnection?)?.requestMethod = "HEAD"
-                    }
-                    filesize = java.lang.String.valueOf(conn.contentLength)
-                    if (conn is HttpURLConnection) {
-                        (conn as HttpURLConnection?)?.disconnect()
-                    }
-                    mySqlList.add(filesize)
-                    mySqlList.add(rubrika)
-                    val im1 = image.indexOf("src=\"")
-                    val im2 = image.indexOf("\"", im1 + 5)
-                    image = "https://carkva-gazeta.by" + image.substring(im1 + 5, im2)
-                    val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
-                    val imageLocal: String = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png" //image.substring(t1 + 1)
-                    mySqlList.add(imageLocal)
-                    mySqlList.add(id)
-                    if (MainActivity.isNetworkAvailable()) {
-                        val dir = File("$filesDir/image_temp")
-                        if (!dir.exists()) dir.mkdir()
-                        var mIcon11: Bitmap
-                        val file = File(imageLocal)
-                        if (!file.exists()) {
-                            FileOutputStream("$filesDir/image_temp/" + pdf.substring(0, t1) + ".png").use { out ->
-                                val inputStream: InputStream = URL(image).openStream()
-                                mIcon11 = BitmapFactory.decodeStream(inputStream)
-                                mIcon11.compress(Bitmap.CompressFormat.PNG, 90, out)
+                runCatching {
+                    val temp: ArrayList<ArrayList<String>> = ArrayList()
+                    val sb = URL(showUrl).readText()
+                    val gson = Gson()
+                    val type = object : TypeToken<ArrayList<ArrayMap<String, String>>>() {}.type
+                    val biblioteka: ArrayList<ArrayMap<String, String>> = gson.fromJson(sb, type)
+                    for (i in 0 until biblioteka.size) {
+                        val mySqlList: ArrayList<String> = ArrayList()
+                        val kniga = biblioteka[i]
+                        val id = kniga["bib"] ?: ""
+                        val rubrika = kniga["rubryka"] ?: ""
+                        val link = kniga["link"] ?: ""
+                        var str = kniga["str"] ?: ""
+                        val pdf = kniga["pdf"] ?: ""
+                        var image = kniga["image"] ?: ""
+                        mySqlList.add(link)
+                        val pos = str.indexOf("</span><br>")
+                        str = str.substring(pos + 11)
+                        mySqlList.add(str)
+                        mySqlList.add(pdf)
+                        val url = URL("https://carkva-gazeta.by/data/bibliateka/$pdf")
+                        var filesize: String
+                        val conn = url.openConnection()
+                        if (conn is HttpURLConnection) {
+                            (conn as HttpURLConnection?)?.requestMethod = "HEAD"
+                        }
+                        filesize = java.lang.String.valueOf(conn.contentLength)
+                        if (conn is HttpURLConnection) {
+                            (conn as HttpURLConnection?)?.disconnect()
+                        }
+                        mySqlList.add(filesize)
+                        mySqlList.add(rubrika)
+                        val im1 = image.indexOf("src=\"")
+                        val im2 = image.indexOf("\"", im1 + 5)
+                        image = "https://carkva-gazeta.by" + image.substring(im1 + 5, im2)
+                        val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
+                        val imageLocal: String = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png" //image.substring(t1 + 1)
+                        mySqlList.add(imageLocal)
+                        mySqlList.add(id)
+                        if (MainActivity.isNetworkAvailable()) {
+                            val dir = File("$filesDir/image_temp")
+                            if (!dir.exists()) dir.mkdir()
+                            var mIcon11: Bitmap
+                            val file = File(imageLocal)
+                            if (!file.exists()) {
+                                FileOutputStream("$filesDir/image_temp/" + pdf.substring(0, t1) + ".png").use { out ->
+                                    val inputStream: InputStream = URL(image).openStream()
+                                    mIcon11 = BitmapFactory.decodeStream(inputStream)
+                                    mIcon11.compress(Bitmap.CompressFormat.PNG, 90, out)
+                                }
                             }
                         }
+                        if (rubrika.toInt() == rub) {
+                            arrayList.add(mySqlList)
+                        }
+                        temp.add(mySqlList)
                     }
-                    if (rubrika.toInt() == rub) {
-                        arrayList.add(mySqlList)
-                    }
-                    temp.add(mySqlList)
+                    val json: String = gson.toJson(temp)
+                    val prefEditors: SharedPreferences.Editor = k.edit()
+                    prefEditors.putString("Biblioteka", json)
+                    prefEditors.apply()
+                    runSql = false
                 }
-                val json: String = gson.toJson(temp)
-                val prefEditors: SharedPreferences.Editor = k.edit()
-                prefEditors.putString("Biblioteka", json)
-                prefEditors.apply()
-                runSql = false
             }
             stopTimer()
             adapter.notifyDataSetChanged()

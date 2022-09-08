@@ -700,7 +700,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         binding.editText.requestFocus()
         binding.toolbar.collapseActionView()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(binding.editText, InputMethodManager.SHOW_FORCED)
+        imm.showSoftInput(binding.editText, InputMethodManager.SHOW_IMPLICIT)
     }
 
     override fun fileDeliteCancel() {
@@ -867,12 +867,12 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             searchViewItem.expandActionView()
         }
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 actionExpandOn = true
                 return true
             }
 
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 actionExpandOn = false
                 return true
             }
@@ -2122,7 +2122,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         invalidateOptionsMenu()
         binding.editText.requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(binding.editText, InputMethodManager.SHOW_FORCED)
+        imm.showSoftInput(binding.editText, InputMethodManager.SHOW_IMPLICIT)
     }
 
     override fun sabytieDelAll() {

@@ -94,10 +94,6 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
         SabytieOnView = false
     }
 
-    override fun setMyTheme() {
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)

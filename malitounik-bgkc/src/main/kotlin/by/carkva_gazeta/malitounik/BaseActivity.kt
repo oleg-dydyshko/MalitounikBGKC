@@ -52,11 +52,11 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         setMyTheme()
     }
 
-    open fun setMyTheme() {
+    private fun setMyTheme() {
         if (k.getBoolean("auto_dzen_noch", false)) {
-            if (autoDzenNoch) setTheme(R.style.AppCompatDarkSlider)
+            if (autoDzenNoch) setTheme(R.style.AppCompatDark)
         } else {
-            if (dzenNoch) setTheme(R.style.AppCompatDarkSlider)
+            if (dzenNoch) setTheme(R.style.AppCompatDark)
         }
     }
 

@@ -13,7 +13,6 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
 class AktoixList : BaseActivity() {
@@ -43,7 +42,6 @@ class AktoixList : BaseActivity() {
         val dzenNoch = getBaseDzenNoch()
         binding = AkafistListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setOnClickListener {

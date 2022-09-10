@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
 class SubMenuBogashlugbovyaVialikiPost : BaseActivity() {
@@ -38,7 +37,6 @@ class SubMenuBogashlugbovyaVialikiPost : BaseActivity() {
         binding = AkafistListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        Slidr.attach(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams

@@ -21,8 +21,6 @@ import android.webkit.*
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.NavinyBinding
-import com.r0adkll.slidr.Slidr
-
 
 class Naviny : BaseActivity() {
 
@@ -37,7 +35,6 @@ class Naviny : BaseActivity() {
         dzenNoch = getBaseDzenNoch()
         binding = NavinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         binding.swipeRefreshLayout.setOnRefreshListener {
             if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
@@ -48,7 +45,7 @@ class Naviny : BaseActivity() {
         binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         if (dzenNoch) {
             if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                WebSettingsCompat.setForceDark(binding.viewWeb.settings, WebSettingsCompat.FORCE_DARK_ON)
+                @Suppress("DEPRECATION") WebSettingsCompat.setForceDark(binding.viewWeb.settings, WebSettingsCompat.FORCE_DARK_ON)
             }
             binding.toolbarprogress.setBackgroundResource(R.drawable.progress_bar_black)
         }
@@ -271,7 +268,7 @@ class Naviny : BaseActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
-            binding.toolbar.popupTheme = R.style.AppCompatDarkSlider
+            binding.toolbar.popupTheme = R.style.AppCompatDark
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.titleToolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }

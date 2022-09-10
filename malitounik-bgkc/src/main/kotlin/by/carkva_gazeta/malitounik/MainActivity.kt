@@ -181,10 +181,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         textView.setCompoundDrawables(leftDrawable, null, null, null)
     }
 
-    override fun setMyTheme() {
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
-    }
-
     /*override fun onSensorChanged(event: SensorEvent?) {
         super.onSensorChanged(event)
         event?.let { sensorEvent ->
@@ -1321,7 +1317,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                                 val type = object : TypeToken<Map<String, String>>() {}.type
                                 updeteArrayText = gson.fromJson(mURL.readText(), type)
                             }
-                        } catch (e: Throwable) {
+                        } catch (_: Throwable) {
                         }
                         return@withContext updeteArrayText
                     }

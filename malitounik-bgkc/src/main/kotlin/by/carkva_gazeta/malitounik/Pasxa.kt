@@ -15,7 +15,6 @@ import android.webkit.WebSettings
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.PasxaBinding
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -47,7 +46,6 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
         val dzenNoch = getBaseDzenNoch()
         binding = PasxaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
@@ -70,7 +68,7 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                WebSettingsCompat.setForceDark(binding.pasxa.settings, WebSettingsCompat.FORCE_DARK_ON)
+                @Suppress("DEPRECATION") WebSettingsCompat.setForceDark(binding.pasxa.settings, WebSettingsCompat.FORCE_DARK_ON)
             }
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }

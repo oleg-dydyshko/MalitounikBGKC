@@ -36,10 +36,6 @@ import by.carkva_gazeta.resources.databinding.AkafistMaranAtaBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.r0adkll.slidr.Slidr
-import com.r0adkll.slidr.model.SlidrConfig
-import com.r0adkll.slidr.model.SlidrInterface
-import com.r0adkll.slidr.model.SlidrListener
 import kotlinx.coroutines.*
 import java.io.*
 
@@ -76,7 +72,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private var scrolltosatrt = false
     private var vydelenie = ArrayList<ArrayList<Int>>()
     private var bibleCopyList = ArrayList<Int>()
-    private lateinit var slidr: SlidrInterface
     private var orientation = Configuration.ORIENTATION_UNDEFINED
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -122,24 +117,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         bindingprogress = binding.progressView
         setContentView(binding.root)
         setTollbarTheme()
-        val config = SlidrConfig.Builder().listener(object : SlidrListener {
-            override fun onSlideStateChanged(state: Int) {
-                mActionDown = true
-            }
-
-            override fun onSlideChange(percent: Float) {
-            }
-
-            override fun onSlideOpened() {
-                mActionDown = false
-            }
-
-            override fun onSlideClosed(): Boolean {
-                onBackPressed()
-                return false
-            }
-        }).build()
-        slidr = Slidr.attach(this, config)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.ListView.onItemClickListener = this
         binding.ListView.onItemLongClickListener = this
@@ -160,7 +137,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             binding.subtitleToolbar.text = savedInstanceState.getString("chtenie")
             orientation = savedInstanceState.getInt("orientation")
             if (paralel) {
-                slidr.lock()
                 paralelPosition = savedInstanceState.getInt("paralelPosition")
                 parralelMestaView(paralelPosition)
             }
@@ -1091,7 +1067,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     override fun onBackPressed() {
         when {
             paralel -> {
-                slidr.unlock()
                 binding.scroll.visibility = View.GONE
                 binding.ListView.visibility = View.VISIBLE
                 binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
@@ -1351,7 +1326,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             if (!autoscroll) {
                 val t1 = maranAta[position].indexOf("$")
                 if (t1 != -1) {
-                    slidr.lock()
                     paralel = true
                     val pm = ParalelnyeMesta()
                     val t2 = maranAta[position].indexOf("-->")

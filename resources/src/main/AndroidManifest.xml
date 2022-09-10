@@ -17,7 +17,7 @@
         <activity
             android:name="by.carkva_gazeta.resources.Chytanne"
             android:label="@string/czytanne"
-            android:theme="@style/AppThemeSlider">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -25,7 +25,7 @@
         <activity
             android:name="by.carkva_gazeta.resources.BibliaVybranoe"
             android:label="@string/str_short_label1"
-            android:theme="@style/AppThemeSlider">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -61,7 +61,7 @@
             android:name="by.carkva_gazeta.resources.NovyZapavietSinaidal"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:label="@string/novsinaidal"
-            android:theme="@style/AppThemeSlider">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -69,7 +69,7 @@
         <activity
             android:name="by.carkva_gazeta.resources.MaranAta"
             android:label="@string/maranata"
-            android:theme="@style/AppThemeSlider">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -77,7 +77,7 @@
         <activity
             android:name="by.carkva_gazeta.resources.Bogashlugbovya"
             android:label="@string/liturgikon"
-            android:theme="@style/AppThemeSlider"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -86,7 +86,7 @@
         <activity
             android:name="by.carkva_gazeta.resources.MalitvyPrynagodnyia"
             android:label="@string/prynagodnyia"
-            android:theme="@style/AppThemeSlider"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -95,7 +95,7 @@
         <activity
             android:name="by.carkva_gazeta.resources.SearchBiblia"
             android:label="@string/search"
-            android:theme="@style/AppThemeSlider"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -110,13 +110,13 @@
                 android:value="by.carkva_gazeta.malitounik.MalitvyPasliaPrychascia" />
         </activity>
         <activity android:name="by.carkva_gazeta.resources.BibleZakladki"
-            android:theme="@style/AppThemeSlider">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity android:name="by.carkva_gazeta.resources.BibleNatatki"
-            android:theme="@style/AppThemeSlider">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -124,7 +124,7 @@
         <activity
             android:name="by.carkva_gazeta.resources.PsalterNadsana"
             android:label="@string/title_psalter"
-            android:theme="@style/AppThemeSlider">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -140,7 +140,7 @@
         <activity
             android:name="by.carkva_gazeta.resources.NadsanMalitvyIPesni"
             android:label="@string/pesni"
-            android:theme="@style/AppThemeSlider">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -148,7 +148,7 @@
         <activity
             android:name="by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"
             android:label="@string/slugby_vialikaga_postu"
-            android:theme="@style/AppThemeSlider">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -156,7 +156,7 @@
         <activity
             android:name="by.carkva_gazeta.resources.NadsanMalitvyIPesniList"
             android:label="@string/pesni"
-            android:theme="@style/AppThemeSlider">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />

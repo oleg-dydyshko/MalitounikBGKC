@@ -171,6 +171,13 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(248, "Сьвятога прарока Захара, бацькі Яна Хрысьціцеля, і праведнае Альжбеты, ягонае маці", "mm_05_09_liturhija", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(250, "Перадсьвяцьце Нараджэньня Багародзіцы і сьвятога мучаніка Сазонта", "mm_07_09_pieradsv_naradz_baharodz_liturhija", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(251, "Нараджэньне Найсьвяцейшае Багародзіцы", "mm_08_09_naradz_baharodzicy_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(252, "Пасьвяцьце Нараджэньня Багародзіцы і сьвятых Якіма і Ганны", "mm_09_09_pasviaccie_naradz_baharodz_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(253, "Пасьвяцьце Нараджэньня Багародзіцы і сьвятых мучаніц Мінадоры, Мітрадоры і Німфадоры", "mm_10_09_pasviaccie_naradz_baharodz_viaczernia", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(254, "Пасьвяцьце Нараджэньня Багародзіцы і сьвятое маці нашае Тадоры", "mm_11_09_pasviaccie_naradz_baharodz_viaczernia", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(255, "Адданьне сьвята Нараджэньня Багародзіцы", "mm_12_09_addannie_naradz_baharodzicy_viaczernia", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(256, "Перадсьвяцьце Ўзвышэньня, памяць аднаўленьня царквы Ўваскрасеньня і сьвятога мучаніка Карніла", "mm_13_09_pieradsv_uzvyszennia_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(257, "Сусьветнае Ўзвышэньне Пачэснага і Жыцьцядайнага Крыжа", "mm_14_09_uzvyszennie_kryza_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(258, "Пасьвяцьце Ўзвышэньня і сьвятога вялікамучаніка Мікіты", "mm_15_09_pasviaccie_uzvyszennia_viaczernia", VIACHERNIA))
 
         datMinSV.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "ndz_miranosic_liturhija", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(21, "Нядзеля расслабленага - Літургія", "ndz_rasslablenaha_liturhija", LITURGIA, pasxa = true))
@@ -345,7 +352,7 @@ class SlugbovyiaTextu {
                                             it.write(mURL.readText())
                                         }
                                     }
-                                } catch (e: Throwable) {
+                                } catch (_: Throwable) {
                                 }
                             }
                         }
@@ -388,7 +395,7 @@ class SlugbovyiaTextu {
                                             it.write(mURL.readText())
                                         }
                                     }
-                                } catch (e: Throwable) {
+                                } catch (_: Throwable) {
                                 }
                             }
                         }

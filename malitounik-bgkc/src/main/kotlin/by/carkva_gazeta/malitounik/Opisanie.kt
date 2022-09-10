@@ -21,8 +21,6 @@ import androidx.core.graphics.drawable.toBitmap
 import by.carkva_gazeta.malitounik.databinding.OpisanieBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.r0adkll.slidr.Slidr
-import com.r0adkll.slidr.model.SlidrInterface
 import kotlinx.coroutines.*
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
@@ -47,7 +45,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private var timerCount = 0
     private var timer = Timer()
     private var timerTask: TimerTask? = null
-    private lateinit var slidr: SlidrInterface
 
     private fun startTimer() {
         timer = Timer()
@@ -93,7 +90,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                         val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                         binding.imageViewFull.setImageBitmap(bitmap)
                         binding.imageViewFull.visibility = View.VISIBLE
-                        slidr.lock()
                     }
                 }
             }
@@ -199,7 +195,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = OpisanieBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        slidr = Slidr.attach(this)
         val c = Calendar.getInstance()
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: (c[Calendar.MONTH] + 1)
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
@@ -214,7 +209,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             bmp?.let {
                 binding.imageViewFull.setImageBitmap(Bitmap.createScaledBitmap(it, it.width, it.height, false))
                 binding.imageViewFull.visibility = View.VISIBLE
-                slidr.lock()
             }
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
@@ -278,15 +272,15 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                                     file.writer().use {
                                                         it.write(mURL2.readText())
                                                     }
-                                                } catch (e: Throwable) {
+                                                } catch (_: Throwable) {
                                                 }
                                             }
-                                        } catch (e: Throwable) {
+                                        } catch (_: Throwable) {
                                         }
                                     }
                                 }
                             }
-                        } catch (e: Throwable) {
+                        } catch (_: Throwable) {
                         }
                         if (!svity && fileOpisanie.exists()) {
                             builder = fileOpisanie.readText()
@@ -376,7 +370,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                                         val bitmap = BitmapFactory.decodeFile(file2.absolutePath)
                                                         binding.imageViewFull.setImageBitmap(bitmap)
                                                         binding.imageViewFull.visibility = View.VISIBLE
-                                                        slidr.lock()
                                                     }
                                                 }
                                             }
@@ -384,7 +377,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                     }
                                 }
                             }
-                        } catch (e: Throwable) {
+                        } catch (_: Throwable) {
                         }
                     }
                 }
@@ -462,7 +455,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun onBackPressed() {
         if (binding.imageViewFull.visibility == View.VISIBLE) {
             binding.imageViewFull.visibility = View.GONE
-            slidr.unlock()
         } else {
             super.onBackPressed()
         }

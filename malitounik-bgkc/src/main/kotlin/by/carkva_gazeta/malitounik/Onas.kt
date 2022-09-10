@@ -15,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.toSpannable
 import by.carkva_gazeta.malitounik.databinding.HelpBinding
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -35,7 +34,6 @@ class Onas : BaseActivity() {
         val dzenNoch = getBaseDzenNoch()
         binding = HelpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         binding.textView.movementMethod = LinkMovementMethod.getInstance()
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

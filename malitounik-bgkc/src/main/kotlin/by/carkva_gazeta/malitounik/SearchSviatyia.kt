@@ -24,7 +24,6 @@ import by.carkva_gazeta.malitounik.databinding.SearchSviatyiaBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -137,7 +136,6 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         val c = Calendar.getInstance()
         binding = SearchSviatyiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         val searchSvityxString = chin.getString("search_svityx_string", "") ?: ""
         if (searchSvityxString != "") {
             if (searchSvityxString.length >= 3) {

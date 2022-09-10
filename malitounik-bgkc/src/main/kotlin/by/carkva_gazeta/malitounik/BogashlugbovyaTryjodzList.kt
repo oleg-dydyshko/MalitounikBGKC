@@ -17,7 +17,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
 class BogashlugbovyaTryjodzList : BaseActivity() {
@@ -46,7 +45,6 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
         val dzenNoch = getBaseDzenNoch()
         binding = AkafistListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setOnClickListener {

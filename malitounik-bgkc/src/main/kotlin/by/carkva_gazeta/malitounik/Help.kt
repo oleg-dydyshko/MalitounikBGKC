@@ -6,7 +6,6 @@ import android.util.TypedValue
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.HelpBinding
-import com.r0adkll.slidr.Slidr
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -19,7 +18,6 @@ class Help : BaseActivity() {
         val dzenNoch = getBaseDzenNoch()
         binding = HelpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         binding.textView.movementMethod = LinkMovementMethod.getInstance()
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)

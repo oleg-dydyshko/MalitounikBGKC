@@ -1,9 +1,11 @@
 package by.carkva_gazeta.malitounik
 
+import android.Manifest
 import android.app.*
 import android.appwidget.AppWidgetManager
 import android.content.*
 import android.content.SharedPreferences.Editor
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
 import android.hardware.Sensor
@@ -21,19 +23,17 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.SettingsActivityBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
-import com.r0adkll.slidr.Slidr
-import com.r0adkll.slidr.model.SlidrConfig
-import com.r0adkll.slidr.model.SlidrListener
 import kotlinx.coroutines.*
 import java.io.File
 import java.text.DecimalFormat
 import java.util.*
 
-class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
+class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
     private lateinit var k: SharedPreferences
     private lateinit var prefEditor: Editor
     private val dzenNoch get() = getBaseDzenNoch()
@@ -46,6 +46,20 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
     private var adminItemCount = 0
     private var edit = false
     private var editFull = false
+    private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (it) {
+            when(k.getInt("notification", 2)) {
+                1 -> setNotificationOnly()
+                2 -> setNotificationFull()
+                0 -> setNotificationNon()
+            }
+            binding.pavedamic3.visibility = View.GONE
+        } else {
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("permissionNotificationApi33", false)
+            prefEditor.apply()
+        }
+    }
 
     companion object {
         const val UPDATE_ALL_WIDGETS = "update_all_widgets"
@@ -689,25 +703,15 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val notification = k.getInt("notification", 2)
+        var notification = k.getInt("notification", 2)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            if (PackageManager.PERMISSION_DENIED == permissionCheck) {
+                notification = 0
+            }
+        }
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val config = SlidrConfig.Builder().listener(object : SlidrListener {
-            override fun onSlideStateChanged(state: Int) {
-            }
-
-            override fun onSlideChange(percent: Float) {
-            }
-
-            override fun onSlideOpened() {
-            }
-
-            override fun onSlideClosed(): Boolean {
-                onBackPressed()
-                return false
-            }
-        }).build()
-        Slidr.attach(this, config)
         prefEditor = k.edit()
         val vibr = k.getInt("vibra", 1)
         if (dzenNoch) binding.vibro.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -717,7 +721,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
         if (dzenNoch) binding.guk.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.guk.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (guk == 0) binding.guk.isChecked = false
-        if (k.getInt("notification", 2) == 0) binding.spinnerTime.visibility = View.GONE
+        if (notification == 0) binding.spinnerTime.visibility = View.GONE
         if (savedInstanceState != null) {
             edit = savedInstanceState.getBoolean("edit", false)
             editFull = savedInstanceState.getBoolean("editFull", false)
@@ -778,6 +782,14 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
                 }
             }
         }
+        binding.pavedamic3.setOnClickListener {
+            try {
+                val intent = Intent(Settings.ACTION_SETTINGS)
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                MainActivity.toastView(this, getString(R.string.error_ch2))
+            }
+        }
         binding.textView14.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.textView15.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.textView16.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
@@ -787,6 +799,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             binding.textView14.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.textView15.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.textView16.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.pavedamic3.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.notificationView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.secret.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
@@ -1096,12 +1109,41 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
         binding.notificationGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
                 R.id.notificationOnly -> {
-                    setNotificationOnly()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                        if (PackageManager.PERMISSION_DENIED == permissionCheck) {
+                            if (k.getBoolean("permissionNotificationApi33", true) && supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
+                                val dialogHelpNotificationApi33 = DialogHelpNotificationApi33.getInstance(1)
+                                dialogHelpNotificationApi33.show(supportFragmentManager, "dialogHelpNotificationApi33")
+                            }
+                            binding.pavedamic3.visibility = View.VISIBLE
+                        } else {
+                            binding.pavedamic3.visibility = View.GONE
+                            setNotificationOnly()
+                        }
+                    } else {
+                        setNotificationOnly()
+                    }
                 }
                 R.id.notificationFull -> {
-                    setNotificationFull()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                        if (PackageManager.PERMISSION_DENIED == permissionCheck) {
+                            if (k.getBoolean("permissionNotificationApi33", true) && supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
+                                val dialogHelpNotificationApi33 = DialogHelpNotificationApi33.getInstance(2)
+                                dialogHelpNotificationApi33.show(supportFragmentManager, "dialogHelpNotificationApi33")
+                            }
+                            binding.pavedamic3.visibility = View.VISIBLE
+                        } else {
+                            binding.pavedamic3.visibility = View.GONE
+                            setNotificationFull()
+                        }
+                    } else {
+                        setNotificationFull()
+                    }
                 }
                 R.id.notificationNon -> {
+                    binding.pavedamic3.visibility = View.GONE
                     setNotificationNon()
                 }
             }
@@ -1238,6 +1280,14 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             notifi.show(supportFragmentManager, "help_notification")
         }
         setTollbarTheme()
+    }
+
+    override fun onDialogHelpNotificationApi33(notification: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            prefEditor.putInt("notification", notification)
+            prefEditor.apply()
+            mPermissionResult.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
     }
 
     private fun setNotificationOnly() {

@@ -36,9 +36,6 @@ import by.carkva_gazeta.resources.databinding.BogasluzbovyaBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.r0adkll.slidr.Slidr
-import com.r0adkll.slidr.model.SlidrConfig
-import com.r0adkll.slidr.model.SlidrListener
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
@@ -429,6 +426,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_05_09_liturhija"] = R.raw.mm_05_09_liturhija
             resursMap["mm_07_09_pieradsv_naradz_baharodz_liturhija"] = R.raw.mm_07_09_pieradsv_naradz_baharodz_liturhija
             resursMap["mm_08_09_naradz_baharodzicy_liturhija"]= R.raw.mm_08_09_naradz_baharodzicy_liturhija
+            resursMap["mm_09_09_pasviaccie_naradz_baharodz_liturhija"] = R.raw.mm_09_09_pasviaccie_naradz_baharodz_liturhija
+            resursMap["mm_10_09_pasviaccie_naradz_baharodz_viaczernia"] = R.raw.mm_10_09_pasviaccie_naradz_baharodz_viaczernia
+            resursMap["mm_11_09_pasviaccie_naradz_baharodz_viaczernia"] = R.raw.mm_11_09_pasviaccie_naradz_baharodz_viaczernia
+            resursMap["mm_12_09_addannie_naradz_baharodzicy_viaczernia"] = R.raw.mm_12_09_addannie_naradz_baharodzicy_viaczernia
+            resursMap["mm_13_09_pieradsv_uzvyszennia_liturhija"] = R.raw.mm_13_09_pieradsv_uzvyszennia_liturhija
+            resursMap["mm_14_09_uzvyszennie_kryza_liturhija"] = R.raw.mm_14_09_uzvyszennie_kryza_liturhija
+            resursMap["mm_15_09_pasviaccie_uzvyszennia_viaczernia"] = R.raw.mm_15_09_pasviaccie_uzvyszennia_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -660,27 +664,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding = BogasluzbovyaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
-        val config = SlidrConfig.Builder().listener(object : SlidrListener {
-            override fun onSlideStateChanged(state: Int) {
-                mActionDown = true
-            }
-
-            override fun onSlideChange(percent: Float) {
-            }
-
-            override fun onSlideOpened() {
-                mActionDown = false
-            }
-
-            override fun onSlideClosed(): Boolean {
-                if (binding.find.visibility == View.VISIBLE) {
-                    binding.find.visibility = View.GONE
-                }
-                onBackPressed()
-                return false
-            }
-        }).build()
-        Slidr.attach(this, config)
         resurs = intent?.extras?.getString("resurs") ?: ""
         title = intent?.extras?.getString("title") ?: ""
         spid = k.getInt("autoscrollSpid", 60)

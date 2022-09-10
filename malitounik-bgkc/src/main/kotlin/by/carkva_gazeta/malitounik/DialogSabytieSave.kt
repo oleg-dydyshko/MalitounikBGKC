@@ -32,7 +32,7 @@ class DialogSabytieSave : DialogFragment() {
         super.onAttach(context)
         if (context is Activity) {
             mListener = try {
-                activity as DialogSabytieSaveListener
+                context as DialogSabytieSaveListener
             } catch (e: ClassCastException) {
                 throw ClassCastException(activity.toString() + " must implement DialogSabytieSaveListener")
             }

@@ -22,7 +22,6 @@ import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAl
 import by.carkva_gazeta.resources.DialogZakladkaDelite.ZakladkaDeliteListiner
 import by.carkva_gazeta.resources.databinding.BibleZakladkiBinding
 import com.google.gson.Gson
-import com.r0adkll.slidr.Slidr
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
@@ -70,7 +69,6 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
         super.onCreate(savedInstanceState)
         binding = BibleZakladkiBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         semuxa = intent.getIntExtra("semuxa", 1)
         if (semuxa == 1) {
             data = BibleGlobalList.zakladkiSemuxa

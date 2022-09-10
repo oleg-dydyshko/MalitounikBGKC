@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import by.carkva_gazeta.malitounik.databinding.ContentPsalterBinding
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
 class NadsanContent : BaseActivity() {
@@ -28,7 +27,6 @@ class NadsanContent : BaseActivity() {
         dzenNoch = getBaseDzenNoch()
         binding = ContentPsalterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         val arrayList = ArrayList<String>()
         for (i in 1..151) {
             arrayList.add(getString(R.string.psalom2) + " " + i)

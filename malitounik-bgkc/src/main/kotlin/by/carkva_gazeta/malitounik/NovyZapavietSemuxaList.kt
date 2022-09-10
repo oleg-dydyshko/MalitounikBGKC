@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
 import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
 class NovyZapavietSemuxaList : BaseActivity() {
@@ -33,7 +32,6 @@ class NovyZapavietSemuxaList : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)

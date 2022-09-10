@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
 class NadsanMalitvyIPesniList : BaseActivity() {
@@ -32,7 +31,6 @@ class NadsanMalitvyIPesniList : BaseActivity() {
         binding = AkafistListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        Slidr.attach(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         for (i in 1..9) {
             data.add(getString(R.string.pesnia, i))

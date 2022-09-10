@@ -705,5 +705,7 @@
     <string name="gl_tyt">Глядзіце тут</string>
     <string name="settings_poshuk">НАЛАДЫ ПОШУКУ</string>
     <string name="settings_poshuk_smoll">Налады пошуку</string>
+    <string name="help_notifications_api33">Для паказу апавяшчэньняў пра падзеі і сьвяты, патрабуецца дазвол на паказ апавяшчэньняў.</string>
+    <string name="no_notifikations">Апавяшчэньні адключаны. Для ўключэньня апавяшчэньняў перайдзіце ў налады Дадатка.</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

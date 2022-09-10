@@ -369,6 +369,18 @@
                 android:visibility="gone" />
 
             <TextView
+                android:id="@+id/pavedamic3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_default"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:text="@string/no_notifikations"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <TextView
                 android:id="@+id/help_notifi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

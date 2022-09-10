@@ -22,7 +22,6 @@ import by.carkva_gazeta.malitounik.databinding.PesnyBinding
 import by.carkva_gazeta.malitounik.databinding.ProgressPesnyAllBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
@@ -285,7 +284,6 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         binding = PesnyBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
-        Slidr.attach(this)
         binding.constraint.setOnTouchListener(this)
         fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)

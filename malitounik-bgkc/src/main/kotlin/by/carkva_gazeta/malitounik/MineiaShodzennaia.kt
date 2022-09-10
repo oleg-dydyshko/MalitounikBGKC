@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.ExpandableListView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -32,7 +31,6 @@ class MineiaShodzennaia : BaseActivity() {
         val dzenNoch = getBaseDzenNoch()
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         setTollbarTheme()
         val slugba = SlugbovyiaTextu()
         val mineiaList = slugba.getMineiaShtodzennia()

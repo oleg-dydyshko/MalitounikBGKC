@@ -20,7 +20,6 @@ import by.carkva_gazeta.malitounik.SlugbovyiaTextu
 import by.carkva_gazeta.malitounik.SlugbovyiaTextuData
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.resources.databinding.AkafistListBibleBinding
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
 class SlugbyVialikagaPostuSpis : BaseActivity() {
@@ -40,7 +39,6 @@ class SlugbyVialikagaPostuSpis : BaseActivity() {
         binding = AkafistListBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        Slidr.attach(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams

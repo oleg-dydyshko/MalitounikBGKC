@@ -61,7 +61,8 @@ class SplashActivity : BaseActivity() {
                         FileOutputStream(filePath).use { fout -> while (inputStream.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count) }
                     }
                     intent1.putExtra("filePath", filePath)
-                } catch (t: Throwable) {
+                    inputStream?.close()
+                } catch (_: Throwable) {
                 }
             }
         }

@@ -15,7 +15,6 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogNadsanPravila
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.NadsanPravilaBinding
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
 class PsalterNadsana : BaseActivity(), View.OnClickListener {
@@ -34,7 +33,6 @@ class PsalterNadsana : BaseActivity(), View.OnClickListener {
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = NadsanPravilaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         val pNadsana = k.getInt("pravalaNadsana", 1)
         binding.buttonleft.setOnClickListener(this)
         binding.buttonrighth.setOnClickListener(this)

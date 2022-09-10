@@ -74,10 +74,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         binding.pager.adapter?.notifyDataSetChanged()
     }
 
-    override fun setMyTheme() {
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

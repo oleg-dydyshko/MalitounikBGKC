@@ -23,7 +23,6 @@ import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.resources.databinding.AkafistListBibleBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
 class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistoryListener {
@@ -97,7 +96,6 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         binding = AkafistListBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        Slidr.attach(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (savedInstanceState != null) {
             searchViewQwery = savedInstanceState.getString("SearchViewQwery", "")

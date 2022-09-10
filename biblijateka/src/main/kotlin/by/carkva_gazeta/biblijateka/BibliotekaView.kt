@@ -499,10 +499,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         invalidateOptionsMenu()
     }
 
-    override fun setMyTheme() {
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-    }
-
     @Suppress("DEPRECATION")
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -841,9 +837,10 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                                         it.copyTo(fileOut)
                                     }
                                 }
+                                inputStream?.close()
                             }
                         }
-                    } catch (t: Throwable) {
+                    } catch (_: Throwable) {
                     } finally {
                         cursor?.close()
                     }

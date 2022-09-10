@@ -16,7 +16,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.databinding.NadsanMalitvyIPesnyBinding
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -40,7 +39,6 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = NadsanMalitvyIPesnyBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         if (intent.extras != null) {
             var pedsny = R.raw.nadsan_pered
             val malitva = intent.extras?.getInt("malitva", 0)

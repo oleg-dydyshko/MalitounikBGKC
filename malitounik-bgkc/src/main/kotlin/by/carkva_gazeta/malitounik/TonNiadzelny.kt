@@ -1,17 +1,22 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
-import com.r0adkll.slidr.Slidr
+import by.carkva_gazeta.malitounik.databinding.SimpleListItemTonBinding
 import kotlinx.coroutines.*
 
 class TonNiadzelny : BaseActivity() {
@@ -30,7 +35,6 @@ class TonNiadzelny : BaseActivity() {
         val dzenNoch = getBaseDzenNoch()
         binding = AkafistListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         for (i in 1..8) {
@@ -59,7 +63,7 @@ class TonNiadzelny : BaseActivity() {
         }
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
-        val adapter = MenuListAdaprer(this, data)
+        val adapter = TonListAdapter(this, data)
         binding.ListView.adapter = adapter
         binding.ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -97,4 +101,31 @@ class TonNiadzelny : BaseActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+    private class TonListAdapter(private val mContext: Activity, private val adapterList: ArrayList<String>) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, adapterList) {
+
+        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (mView == null) {
+                val binding = SimpleListItemTonBinding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.text, binding.play)
+                rootView.tag = viewHolder
+            } else {
+                rootView = mView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
+            viewHolder.text.text = adapterList[position]
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            viewHolder.play.setOnClickListener {
+                val intent = Intent(mContext, TonPlay::class.java)
+                intent.putExtra("ton", position + 1)
+                mContext.startActivity(intent)
+            }
+            return rootView
+        }
+    }
+
+    private class ViewHolder(var text: TextView, var play: ImageView)
 }

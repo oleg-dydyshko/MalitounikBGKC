@@ -142,10 +142,6 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
         fragment.addNatatka()
     }
 
-    override fun setMyTheme() {
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)

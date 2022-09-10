@@ -35,8 +35,8 @@
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -187,6 +187,19 @@
                 android:paddingBottom="10dp"
                 android:text="@string/sabytie_no_pavedam"
                 android:textSize="15sp"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/pavedamic3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_default"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:text="@string/no_notifikations"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp"
+                android:visibility="gone"
                 tools:ignore="RtlSymmetry" />
 
             <LinearLayout

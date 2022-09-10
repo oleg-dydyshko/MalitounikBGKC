@@ -77,10 +77,6 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
         fierstPosition = position
     }
 
-    override fun setMyTheme() {
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", MODE_PRIVATE)

@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -7,6 +8,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
@@ -46,7 +48,7 @@ import java.io.File
 import java.io.FileWriter
 import java.util.*
 
-class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener, DialogHelpAlarm.DialogHelpAlarmListener {
+class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener, DialogHelpAlarm.DialogHelpAlarmListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
     private lateinit var k: SharedPreferences
     private val dzenNoch get() = getBaseDzenNoch()
     private var konec = false
@@ -228,6 +230,22 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             binding.editText2.setText(edit2Save)
         }
     }
+    private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (it) {
+            binding.pavedamic3.visibility = View.GONE
+        } else {
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("permissionNotificationApi33", false)
+            prefEditor.apply()
+        }
+    }
+
+    override fun onDialogHelpNotificationApi33(notification: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            edit2Save = binding.editText2.text.toString()
+            mPermissionResult.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 
     override fun onSettingsAlarm(notification: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -304,10 +322,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 }
             }
         }
-    }
-
-    override fun setMyTheme() {
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -526,6 +540,14 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 }
             }
         }
+        binding.pavedamic3.setOnClickListener {
+            try {
+                val intent = Intent(Settings.ACTION_SETTINGS)
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                MainActivity.toastView(this, getString(R.string.error_ch2))
+            }
+        }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         binding.titleToolbar.text = resources.getString(R.string.sabytie)
         if (dzenNoch) {
@@ -533,6 +555,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             binding.pacatak.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
             binding.kanec.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
             binding.pavedamic.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.pavedamic3.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.pavtor.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
             binding.cvet.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
             binding.pazov.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
@@ -558,7 +581,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         val daInit = nol1 + c2[Calendar.DAY_OF_MONTH] + "." + nol2 + (c2[Calendar.MONTH] + 1) + "." + c2[Calendar.YEAR]
         var initPosition = -1
         for (i in 0 until MainActivity.padzeia.size) {
-            if (initPosition == -1 && daInit == MainActivity.padzeia[i].dat) {
+            if (daInit == MainActivity.padzeia[i].dat) {
                 initPosition = i
                 break
             }
@@ -2518,6 +2541,18 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                                 val dialogHelpAlarm = DialogHelpAlarm.getInstance(edit.toInt())
                                 dialogHelpAlarm.show(supportFragmentManager, "dialogHelpAlarm")
                                 return
+                            }
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            val permissionCheck = ContextCompat.checkSelfPermission(this@Sabytie, Manifest.permission.POST_NOTIFICATIONS)
+                            if (PackageManager.PERMISSION_DENIED == permissionCheck) {
+                                if (k.getBoolean("permissionNotificationApi33", true) && supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
+                                    val dialogHelpNotificationApi33 = DialogHelpNotificationApi33()
+                                    dialogHelpNotificationApi33.show(supportFragmentManager, "dialogHelpNotificationApi33")
+                                }
+                                binding.pavedamic3.visibility = View.VISIBLE
+                            } else {
+                                binding.pavedamic3.visibility = View.GONE
                             }
                         }
                         val days = binding.label1.text.toString().split(".")

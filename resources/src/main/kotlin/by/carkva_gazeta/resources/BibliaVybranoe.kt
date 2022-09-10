@@ -28,9 +28,6 @@ import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
 import by.carkva_gazeta.resources.databinding.AkafistChytanneBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
-import com.r0adkll.slidr.Slidr
-import com.r0adkll.slidr.model.SlidrConfig
-import com.r0adkll.slidr.model.SlidrListener
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -71,24 +68,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         binding = AkafistChytanneBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
-        val config = SlidrConfig.Builder().listener(object : SlidrListener {
-            override fun onSlideStateChanged(state: Int) {
-                mActionDown = true
-            }
-
-            override fun onSlideChange(percent: Float) {
-            }
-
-            override fun onSlideOpened() {
-                mActionDown = false
-            }
-
-            override fun onSlideClosed(): Boolean {
-                onBackPressed()
-                return false
-            }
-        }).build()
-        Slidr.attach(this, config)
         if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")

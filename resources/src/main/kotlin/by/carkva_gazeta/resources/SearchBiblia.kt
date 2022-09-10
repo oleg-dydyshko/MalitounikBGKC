@@ -30,7 +30,6 @@ import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -215,7 +214,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         prefEditors = chin.edit()
         binding = SearchBibliaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         binding.filterGrup.visibility = View.VISIBLE
         binding.buttonx2.setOnClickListener(this)
         DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))

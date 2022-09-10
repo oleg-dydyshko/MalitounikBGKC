@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import by.carkva_gazeta.malitounik.databinding.PiarlinyBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.File
 import java.net.HttpURLConnection
@@ -53,7 +52,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                         it.write(mURL.readText())
                                     }
                                 }
-                            } catch (e: Throwable) {
+                            } catch (_: Throwable) {
                             }
                         }
                     }
@@ -110,7 +109,6 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = PiarlinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         val c = Calendar.getInstance()
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: (c[Calendar.MONTH] + 1)
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]

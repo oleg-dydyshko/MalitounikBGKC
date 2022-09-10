@@ -28,11 +28,11 @@ class InteractiveScrollView : ScrollView {
         val diff = view.bottom - (height + scrollY)
         if (checkDiff && diff != 0) {
             checkDiff = false
-            mListener?.onBottomReached(checkDiff)
+            mListener?.onBottomReached(false)
         }
         if (diff == 0) {
             checkDiff = true
-            mListener?.onBottomReached(checkDiff)
+            mListener?.onBottomReached(true)
         }
         super.onScrollChanged(l, t, oldl, oldt)
         mOnInteractiveScrollChangedCallback?.onScroll(t, oldt)

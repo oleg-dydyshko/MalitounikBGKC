@@ -689,11 +689,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         }
     }
 
-    private fun formatFigureTwoPlaces(value: Float): String {
-        val myFormatter = DecimalFormat("##0.00")
-        return myFormatter.format(value.toDouble())
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("edit", edit)
@@ -832,26 +827,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 delay(3000L)
                 binding.titleToolbar.text = resources.getString(R.string.tools_item)
             }
-        }
-        binding.cheshe.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        val dir = File("$filesDir/icons/")
-        var sizeFiles = 0F
-        if (dir.exists()) {
-            val list = dir.listFiles()
-            list?.forEach {
-                sizeFiles += it.length()
-            }
-        }
-        if (sizeFiles / 1024 > 1000) {
-            val size = formatFigureTwoPlaces(sizeFiles / 1024 / 1024)
-            binding.cheshe.text = getString(R.string.remove_cashe, size, "Мб")
-        } else {
-            val size = formatFigureTwoPlaces(sizeFiles / 1024)
-            binding.cheshe.text = getString(R.string.remove_cashe, size, "Кб")
-        }
-        binding.cheshe.setOnClickListener {
-            if (dir.exists()) dir.deleteRecursively()
-            binding.cheshe.text = getString(R.string.remove_cashe, "0,00", "Кб")
         }
 
         if (k.getBoolean("admin", false)) {

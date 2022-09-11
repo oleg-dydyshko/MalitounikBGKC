@@ -305,6 +305,8 @@
     <string name="dazvolic">Дазволіць</string>
     <string name="download_bibliateka">Спампаваць з дапамогай мабільнай сеткі?</string>
     <string name="download_opisanie">Спампаваць%1$sз дапамогай мабільнай сеткі?</string>
+    <string name="download_opisanie_all">Спампаваць усе іконы</string>
+    <string name="download_opisanie_del">Выдаліць усе іконы</string>
     <string name="skid_brightness">СКІД</string>
     <string name="default_font">Па змаўчаньні</string>
     <string name="notifi_fix">Рамонт апавяшчэньняў</string>
@@ -599,7 +601,6 @@
     <string name="install_dadatak">УСТАЛЮЙЦЕ ДАДАТАК</string>
     <string name="install_dadatak_opis">Дадзеная функція не даступна, для яе працы усталюйце %1$s.</string>
     <string name="pre_view">Прадпрагляд</string>
-    <string name="remove_cashe">Выдаліць кэш (%1$s %2$s)</string>
     <string name="fing_count">%1$d/%2$d</string>
     <string name="pasochnica">Пясочніца</string>
     <string name="set_file_name">ВЫБЯРЫЦЕ ІМЯ ФАЙЛА</string>
@@ -694,8 +695,8 @@
     <string name="viaczernia_bierascie_3">На нядзельнай вячэрні вершапесьні сьпяваюцца з наступнымі вершамі:</string>
     <string name="del_all_back_copy">Вы сапраўды жадаеце выдаліць усё рэзервовыя копіі?</string>
     <string name="tryjodz">Трыёдзь</string>
-    <string name="admin_day_in_year">Дзень ад пачатку года(до і пасля Пасxi)</string>
-    <string name="admin_show_day_in_year">Год(Пасха): %1$s(%2$s)</string>
+    <string name="admin_day_in_year">Дзень ад пачатку года (да і пасля Пасxi)</string>
+    <string name="admin_show_day_in_year">Год (Пасха): %1$s(%2$s)</string>
     <string name="admin_set_name_link">СПАСЫЛКА</string>
     <string name="admin_link">Спасылка:</string>
     <string name="admin_title_link">Імя спасылкі:</string>

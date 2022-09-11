@@ -54,8 +54,10 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 if (loadIconsJob?.isActive == true && timerCount == 6) {
                     loadIconsJob?.cancel()
                     stopTimer()
-                    binding.progressBar2.visibility = View.INVISIBLE
-                    MainActivity.toastView(this@Opisanie, getString(R.string.bad_internet), Toast.LENGTH_LONG)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        binding.progressBar2.visibility = View.INVISIBLE
+                        MainActivity.toastView(this@Opisanie, getString(R.string.bad_internet), Toast.LENGTH_LONG)
+                    }
                 }
                 timerCount++
             }
@@ -83,13 +85,15 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     3 -> binding.image4
                     else -> binding.image1
                 }
-                imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file.absolutePath)))
-                imageView.visibility = View.VISIBLE
-                imageView.setOnClickListener {
-                    if (file.exists()) {
-                        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                        binding.imageViewFull.setImageBitmap(bitmap)
-                        binding.imageViewFull.visibility = View.VISIBLE
+                imageView.post {
+                    imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file.absolutePath)))
+                    imageView.visibility = View.VISIBLE
+                    imageView.setOnClickListener {
+                        if (file.exists()) {
+                            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                            binding.imageViewFull.setImageBitmap(bitmap)
+                            binding.imageViewFull.visibility = View.VISIBLE
+                        }
                     }
                 }
             }
@@ -109,13 +113,13 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         loadPiarlinyJob?.cancel()
     }
 
-    private fun resizeImage(bitmap: Bitmap): Bitmap {
+    private fun resizeImage(bitmap: Bitmap): Bitmap? {
         var newHeight = bitmap.height.toFloat()
         var newWidth = bitmap.width.toFloat()
         val widthLinear = binding.linearLayout.width.toFloat()
         val resoluton = newWidth / newHeight
-        newWidth = 500 * resoluton
-        newHeight = 500F
+        newWidth = 500f * resoluton
+        newHeight = 500f
         if (newWidth > widthLinear) {
             newWidth = widthLinear
             newHeight = newWidth / resoluton
@@ -222,7 +226,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         }
         viewSviaryiaIIcon()
-        startLoadIconsJob(!MainActivity.isNetworkAvailable(true))
+        if (savedInstanceState == null) startLoadIconsJob(!MainActivity.isNetworkAvailable(true))
         setTollbarTheme()
     }
 
@@ -230,7 +234,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         startLoadIconsJob(true)
     }
 
-    private fun startLoadIconsJob(loadIcons: Boolean) {
+    private fun startLoadIconsJob(loadIcons: Boolean, isFull: Boolean = false) {
         loadIconsJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             startTimer()
@@ -312,7 +316,13 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                     val file = File("$filesDir/icons/" + urlName.substring(t1 + 1))
                                     val time = file.lastModified() / 1000
                                     if (!file.exists() || time < urlTime) {
-                                        arrayListResult.add(arrayList[i])
+                                        if (isFull) {
+                                            arrayListResult.add(arrayList[i])
+                                        } else {
+                                            if (urlName.contains("_${day}_${mun}")) {
+                                                arrayListResult.add(arrayList[i])
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -494,6 +504,18 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         if (id == android.R.id.home) {
             onBackPressed()
             return true
+        }
+        if (id == R.id.action_download_all) {
+            startLoadIconsJob(true, isFull = true)
+        }
+        if (id == R.id.action_download_del) {
+            val dir = File("$filesDir/icons/")
+            if (dir.exists()) dir.deleteRecursively()
+            binding.image1.setImageBitmap(null)
+            binding.image2.setImageBitmap(null)
+            binding.image3.setImageBitmap(null)
+            binding.image4.setImageBitmap(null)
+            MainActivity.toastView(this, getString(R.string.remove_padzea))
         }
         if (id == R.id.action_piarliny) {
             val i = Intent(this, Piarliny::class.java)

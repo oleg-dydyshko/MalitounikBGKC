@@ -835,7 +835,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                 if (dzenNoch) binding.textView.setLinkTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
             }
             setTitleLinkToBible()
-            if (k.getBoolean("utran", true) && k.getInt("denNedeli", 0) == Calendar.SUNDAY && wOld.contains("На ютрані:") && savedInstanceState == null) {
+            if (k.getBoolean("utran", true) && intent?.extras?.getInt("denNedeli", 0) == Calendar.SUNDAY && wOld.contains("На ютрані:") && savedInstanceState == null) {
                 binding.textView.post {
                     val strPosition = binding.textView.text.indexOf(titleTwo.toString().trim(), ignoreCase = true)
                     val line = binding.textView.layout.getLineForOffset(strPosition)

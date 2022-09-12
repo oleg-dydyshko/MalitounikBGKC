@@ -9,7 +9,6 @@ import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -27,41 +26,13 @@ class DialogTipicon : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            val tipicon = arguments?.getInt("tipicon") ?: 0
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             _binding = TipiconBinding.inflate(LayoutInflater.from(it))
-            binding.line1.visibility = View.GONE
-            if (tipicon == 1) binding.t7.visibility = View.VISIBLE else binding.t7.visibility = View.GONE
-            if (tipicon == 2) binding.t5.visibility = View.VISIBLE else binding.t5.visibility = View.GONE
-            if (tipicon == 3) binding.t6.visibility = View.VISIBLE else binding.t6.visibility = View.GONE
-            if (tipicon == 4) binding.t8.visibility = View.VISIBLE else binding.t8.visibility = View.GONE
-            if (tipicon == 5) binding.t9.visibility = View.VISIBLE else binding.t9.visibility = View.GONE
-            binding.textView1.visibility = View.GONE
-            binding.textView2.visibility = View.GONE
-            binding.textView3.visibility = View.GONE
-            binding.textView4.visibility = View.GONE
-            binding.textView5.visibility = View.GONE
-            binding.textView6.visibility = View.GONE
             binding.textView3.text = getString(R.string.Strogi_post).replace("\n", " ")
             binding.textView4.text = getString(R.string.No_post).replace("\n", " ")
-            if (tipicon == 0) {
-                binding.line1.visibility = View.VISIBLE
-                binding.t5.visibility = View.VISIBLE
-                binding.t6.visibility = View.VISIBLE
-                binding.t7.visibility = View.VISIBLE
-                binding.t8.visibility = View.VISIBLE
-                binding.t9.visibility = View.VISIBLE
-                binding.textView1.visibility = View.VISIBLE
-                binding.textView2.visibility = View.VISIBLE
-                binding.textView3.visibility = View.VISIBLE
-                binding.textView4.visibility = View.VISIBLE
-                binding.textView5.visibility = View.VISIBLE
-                binding.textView6.visibility = View.VISIBLE
-            } else {
-                binding.textView7.setPadding(0,0,0,0)
-            }
+            binding.textView7.setPadding(0,0,0,0)
             val dvunaIVial = SpannableString(getString(R.string.dvuna_i_vial))
             dvunaIVial.setSpan(StyleSpan(Typeface.BOLD), 0, 13, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.textView8.text = dvunaIVial
@@ -101,15 +72,5 @@ class DialogTipicon : DialogFragment() {
             alert = builder.create()
         }
         return alert
-    }
-
-    companion object {
-        fun getInstance(tipicon: Int): DialogTipicon {
-            val dialogTipicon = DialogTipicon()
-            val bundle = Bundle()
-            bundle.putInt("tipicon", tipicon)
-            dialogTipicon.arguments = bundle
-            return dialogTipicon
-        }
     }
 }

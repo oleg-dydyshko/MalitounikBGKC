@@ -634,7 +634,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             prazdnik.show(supportFragmentManager, "prazdnik")
         }
         if (id == R.id.tipicon) {
-            val tipicon = DialogTipicon.getInstance(0)
+            val tipicon = DialogTipicon()
             tipicon.show(supportFragmentManager, "tipicon")
         }
         if (id == R.id.sabytie) {

@@ -649,17 +649,16 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             val sviatyia = MenuCaliandar.getPositionCaliandar(position)[4]
             val list = sviatyia.split("<br>")
             val density = resources.displayMetrics.density.toInt()
-            val realpadding = 10 * density
             for (i in list.indices) {
                 var spannable = SpannableStringBuilder(list[i])
                 val textView = TextView(activity)
                 textView.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_text))
                 textView.background = ContextCompat.getDrawable(activity, R.drawable.selector_default)
                 when {
-                    list.size == 1 -> textView.setPadding(5 * density, 5 * density, realpadding, 5 * density)
-                    i == 0 -> textView.setPadding(5 * density, 5 * density, realpadding, 0)
-                    i == list.size - 1 -> textView.setPadding(5 * density, 0, realpadding, 5 * density)
-                    else -> textView.setPadding(5 * density, 0, realpadding, 0)
+                    list.size == 1 -> textView.setPadding(5 * density, 5 * density, 10 * density, 5 * density)
+                    i == 0 -> textView.setPadding(5 * density, 5 * density, 10 * density, 0)
+                    i == list.size - 1 -> textView.setPadding(5 * density, 0, 10 * density, 5 * density)
+                    else -> textView.setPadding(5 * density, 0, 10 * density, 0)
                 }
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
                 if (dzenNoch) {
@@ -728,8 +727,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         else -> null
                     }
                 }
-                drawer?.setBounds(0, 0, 30 * density, 30 * density)
-                textView.compoundDrawablePadding = 10 * density
+                drawer?.setBounds(0, 0, 20 * density, 20 * density)
+                textView.compoundDrawablePadding = 5 * density
                 textView.setCompoundDrawables(drawer, null, null, null)
                 textView.setOnClickListener {
                     val intent = Intent(activity, Opisanie::class.java)

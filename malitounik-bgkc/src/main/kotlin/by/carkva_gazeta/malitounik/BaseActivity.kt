@@ -23,7 +23,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
     private var startTimeJob2: Job? = null
     private var startTimeJob3: Job? = null
     private var startTimeJob4: Job? = null
-    private var startTimeDelay: Long = 3000
+    private var startTimeDelay: Long = 5000
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -37,7 +37,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
         startTimeJob3?.cancel()
         startTimeJob3 = CoroutineScope(Dispatchers.IO).launch {
             delay(4000)
-            startTimeDelay = 3000
+            startTimeDelay = 5000
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (savedInstanceState != null) {
@@ -137,7 +137,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
     }
 
     private fun timeJob(isDzenNoch: Boolean) {
-        startTimeDelay = 3000
+        startTimeDelay = 5000
         mLastClickTime = SystemClock.elapsedRealtime()
         autoDzenNoch = isDzenNoch
         startAutoDzenNoch = isDzenNoch

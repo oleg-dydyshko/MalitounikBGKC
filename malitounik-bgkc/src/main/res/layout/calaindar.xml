@@ -60,11 +60,11 @@
 
             <ImageView
                 android:id="@+id/znakTipicona"
-                android:layout_width="27dp"
-                android:layout_height="27dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="10dp"
                 android:contentDescription="@string/empty"
-                android:src="@drawable/znaki_krest"
+                android:src="@drawable/znaki_krest_v_kruge"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

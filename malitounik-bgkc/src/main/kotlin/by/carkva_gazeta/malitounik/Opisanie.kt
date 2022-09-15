@@ -31,7 +31,7 @@ import java.net.URL
 import java.util.*
 
 
-class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener {
+class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener, DialogDeliteAllImagesOpisanie.DialogDeliteAllImagesOpisanieListener {
     private val dzenNoch get() = getBaseDzenNoch()
     private var mun = Calendar.getInstance()[Calendar.MONTH] + 1
     private var day = Calendar.getInstance()[Calendar.DATE]
@@ -326,16 +326,23 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                     }
                                 }
                             }
+                            var size = 0f
+                            for (i in 0 until arrayListResult.size) {
+                                size += arrayListResult[i][2].toFloat()
+                            }
+                            withContext(Dispatchers.Main) {
+                                val max = size.toInt()
+                                binding.progressBar2.isIndeterminate = false
+                                binding.progressBar2.progress = 0
+                                binding.progressBar2.max = max
+                            }
                             if (!loadIcons && MainActivity.isNetworkAvailable(true) && arrayListResult.isNotEmpty()) {
-                                var size = 0f
-                                for (i in 0 until arrayListResult.size) {
-                                    size += arrayListResult[i][2].toFloat()
-                                }
                                 withContext(Dispatchers.Main) {
                                     val dialog = DialogOpisanieWIFI.getInstance(size)
                                     dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
                                 }
                             } else {
+                                var progress = 0
                                 for (i in 0 until arrayListResult.size) {
                                     val urlName = arrayListResult[i][0]
                                     val mURL2 = URL(urlName)
@@ -355,6 +362,10 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                         bmp.compress(Bitmap.CompressFormat.JPEG, 90, out)
                                         out.flush()
                                         out.close()
+                                        withContext(Dispatchers.Main) {
+                                            progress += arrayListResult[i][2].toInt()
+                                            binding.progressBar2.progress = progress
+                                        }
                                     }
                                 }
                                 withContext(Dispatchers.Main) {
@@ -393,6 +404,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 }
             }
             binding.progressBar2.visibility = View.INVISIBLE
+            binding.progressBar2.isIndeterminate = true
             stopTimer()
         }
     }
@@ -509,13 +521,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             startLoadIconsJob(true, isFull = true)
         }
         if (id == R.id.action_download_del) {
-            val dir = File("$filesDir/icons/")
-            if (dir.exists()) dir.deleteRecursively()
-            binding.image1.setImageBitmap(null)
-            binding.image2.setImageBitmap(null)
-            binding.image3.setImageBitmap(null)
-            binding.image4.setImageBitmap(null)
-            MainActivity.toastView(this, getString(R.string.remove_padzea))
+            val dialogDeliteAllImagesOpisanie = DialogDeliteAllImagesOpisanie()
+            dialogDeliteAllImagesOpisanie.show(supportFragmentManager, "dialogDeliteAllImagesOpisanie")
         }
         if (id == R.id.action_piarliny) {
             val i = Intent(this, Piarliny::class.java)
@@ -571,5 +578,15 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             startActivity(Intent.createChooser(sendIntent, null))
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun deliteAllImagesOpisanie() {
+        val dir = File("$filesDir/icons/")
+        if (dir.exists()) dir.deleteRecursively()
+        binding.image1.setImageBitmap(null)
+        binding.image2.setImageBitmap(null)
+        binding.image3.setImageBitmap(null)
+        binding.image4.setImageBitmap(null)
+        MainActivity.toastView(this, getString(R.string.remove_padzea))
     }
 }

@@ -53,6 +53,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     private var edittext2Focus = false
     private var title = ""
     private var searchJob: Job? = null
+    private var histiryJob: Job? = null
 
     init {
         sinodalBible.add(R.raw.sinaidals1)
@@ -203,6 +204,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     override fun onPause() {
         super.onPause()
         searchJob?.cancel()
+        histiryJob?.cancel()
         prefEditors.putString("search_string_filter", binding.editText2.text.toString())
         prefEditors.putInt("search_bible_fierstPosition", fierstPosition)
         prefEditors.apply()
@@ -709,18 +711,25 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     }
 
     private fun addHistory(item: String) {
-        val temp = ArrayList<String>()
-        for (i in 0 until history.size) {
-            if (history[i] != item) temp.add(history[i])
+        if (histiryJob?.isActive == true) {
+            histiryJob?.cancel()
         }
-        history.clear()
-        history.add(item)
-        for (i in 0 until temp.size) {
-            history.add(temp[i])
-            if (history.size == 15) break
+        histiryJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(3000L)
+            val temp = ArrayList<String>()
+            for (i in 0 until history.size) {
+                if (history[i] != item) temp.add(history[i])
+            }
+            history.clear()
+            history.add(item)
+            for (i in 0 until temp.size) {
+                history.add(temp[i])
+                if (history.size == 15) break
+            }
+            if (history.size == 1) invalidateOptionsMenu()
+            historyAdapter.notifyDataSetChanged()
+            saveHistory()
         }
-        if (history.size == 1) invalidateOptionsMenu()
-        historyAdapter.notifyDataSetChanged()
     }
 
     private fun saveHistory() {
@@ -840,7 +849,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         if (search != "" && result.size != 0) {
             binding.ListView.visibility = View.VISIBLE
             addHistory(search)
-            saveHistory()
         }
     }
 

@@ -86,11 +86,11 @@ class SubMenuBogashlugbovyaViachernia : BaseActivity() {
                         }
                         2 -> {
                             intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "viachernia_na_kogny_dzen")
+                            intent.putExtra("resurs", "viachernia_na_kozny_dzen")
                         }
                         3 -> {
                             intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "viachernia_y_vialikim_poste")
+                            intent.putExtra("resurs", "viachernia_u_vialikim_poscie")
                         }
                         4 -> {
                             intent.putExtra("title", data[position])

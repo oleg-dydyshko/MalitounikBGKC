@@ -1369,6 +1369,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                     editText?.addTextChangedListener(this)
                 }
                 if (editText?.id == androidx.appcompat.R.id.search_src_text) {
+                    histiryJob?.cancel()
                     if (searchJob?.isActive == true && editText.text.length < 3) {
                         searchJob?.cancel()
                         binding.progressBar.visibility = View.GONE

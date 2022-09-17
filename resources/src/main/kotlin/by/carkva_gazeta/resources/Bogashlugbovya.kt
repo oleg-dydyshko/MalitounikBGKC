@@ -235,8 +235,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["ton8"] = R.raw.ton8
             resursMap["viachernia_niadzeli"] = R.raw.viachernia_niadzeli
             resursMap["viachernia_liccia_i_blaslavenne_xliabou"] = R.raw.viachernia_liccia_i_blaslavenne_xliabou
-            resursMap["viachernia_na_kogny_dzen"] = R.raw.viachernia_na_kozny_dzen
-            resursMap["viachernia_y_vialikim_poste"] = R.raw.viachernia_u_vialikim_poscie
+            resursMap["viachernia_na_kozny_dzen"] = R.raw.viachernia_na_kozny_dzen
+            resursMap["viachernia_u_vialikim_poscie"] = R.raw.viachernia_u_vialikim_poscie
             resursMap["viachernia_ton1"] = R.raw.viachernia_ton1
             resursMap["viachernia_ton2"] = R.raw.viachernia_ton2
             resursMap["viachernia_ton3"] = R.raw.viachernia_ton3
@@ -332,7 +332,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["vialikaja_subota_paunocznica"] = R.raw.vialikaja_subota_paunocznica
             resursMap["vialikaja_subota_viaczernia_liturhija"] = R.raw.vialikaja_subota_viaczernia_liturhija
             resursMap["vialikdzien_jutran"] = R.raw.vialikdzien_jutran
-            resursMap["vielikodnyja_hadziny"] = R.raw.vielikodnyja_hadziny
+            resursMap["viaczernia_vialikdzien"] = R.raw.viaczernia_vialikdzien
             resursMap["u_svietly_paniadzielak"] = R.raw.u_svietly_paniadzielak
             resursMap["l_svietly_paniadzielak"] = R.raw.l_svietly_paniadzielak
             resursMap["v_svietly_paniadzielak"] = R.raw.v_svietly_paniadzielak
@@ -350,7 +350,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["v_svietlaja_piatnica"] = R.raw.v_svietlaja_piatnica
             resursMap["u_svietlaja_subota"] = R.raw.u_svietlaja_subota
             resursMap["l_svietlaja_subota"] = R.raw.l_svietlaja_subota
-            resursMap["viaczernia_vialikdzien"] = R.raw.vialikdzien_viaczernia
+            resursMap["viaczernia_vialikdzien"] = R.raw.viaczernia_vialikdzien
             resursMap["ndz_tamasza_viaczernia_subota"] = R.raw.ndz_tamasza_viaczernia_subota
             resursMap["ndz_tamasza_paniadzielak"] = R.raw.ndz_tamasza_01paniadzielak
             resursMap["ndz_tamasza_autorak"] = R.raw.ndz_tamasza_02autorak

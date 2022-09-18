@@ -433,7 +433,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[10])
-                    intent.putExtra("denNedeli", MenuCaliandar.getPositionCaliandar(position)[0].toInt())
                     startActivity(intent)
                 }
             } else {
@@ -445,7 +444,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[9])
-                    intent.putExtra("denNedeli", MenuCaliandar.getPositionCaliandar(position)[0].toInt())
                     startActivity(intent)
                 }
             } else {
@@ -457,7 +455,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[11])
-                    intent.putExtra("denNedeli", MenuCaliandar.getPositionCaliandar(position)[0].toInt())
                     startActivity(intent)
                 }
             } else {

@@ -362,6 +362,31 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = R.id.label8
                     selectFragment(binding.label8, true)
                 }
+                data.toString().contains("bohasluzbovyja") -> {
+                    idSelect = R.id.label3
+                    selectFragment(binding.label3, true)
+                }
+                data.toString().contains("akafisty") -> {
+                    idSelect = R.id.label5
+                    selectFragment(binding.label5, true)
+                }
+                data.toString().contains("ruzaniec") -> {
+                    idSelect = R.id.label6
+                    selectFragment(binding.label6, true)
+                }
+                data.toString().contains("malitvy") -> {
+                    idSelect = R.id.label4
+                    selectFragment(binding.label4, true)
+                }
+                data.toString().contains("biblijateka") -> {
+                    idSelect = R.id.label2
+                    shortcuts = true
+                    selectFragment(binding.label2, true)
+                }
+                data.toString().contains("dzie_znajsci_hreka_katolikau_Bielarusi") -> {
+                    idSelect = R.id.label105
+                    selectFragment(binding.label105, true)
+                }
                 !data.toString().contains("https://") -> {
                     idSelect = R.id.label2
                     shortcuts = true
@@ -1183,77 +1208,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     override fun onClick(view: View?) {
         selectFragment(view)
     }
-
-    /*private fun loadSviatyia(year: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            withContext(Dispatchers.IO) {
-                runCatching {
-                    try {
-                        val sviatyiaNew = Array(366) { Array(4) { "" } }
-                        val gregorianCalendar = Calendar.getInstance() as GregorianCalendar
-                        val mURL = URL("https://carkva-gazeta.by/admin/getFiles.php?sviatyia=1")
-                        val conections = mURL.openConnection() as HttpURLConnection
-                        if (conections.responseCode == 200) {
-                            val builderUrl = mURL.readText()
-                            val gson = Gson()
-                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                            val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(builderUrl, type)
-                            val urlName = arrayList[0][0]
-                            val urlTime = arrayList[0][1].toInt()
-                            val file = File("$filesDir/calendarsviatyia.txt")
-                            val time = file.lastModified() / 1000
-                            if (!file.exists() || time < urlTime) {
-                                try {
-                                    val mURL2 = URL(urlName)
-                                    val conections2 = mURL2.openConnection() as HttpURLConnection
-                                    if (conections2.responseCode == 200) {
-                                        try {
-                                            file.writer().use {
-                                                it.write(mURL2.readText())
-                                            }
-                                        } catch (e: Throwable) {
-                                        }
-                                    }
-                                } catch (e: Throwable) {
-                                }
-                            }
-                            var e = 0
-                            var e2 = 59
-                            file.forEachLine lit@{
-                                val re1 = it.split("<>")
-                                if (gregorianCalendar.isLeapYear(year)) {
-                                    for (i in re1.indices) {
-                                        // исправление чтения на 1 января
-                                        if (e == 0) sviatyiaNew[e][i] = re1[i].trim().replace("<br>", "\n")
-                                        else sviatyiaNew[e][i] = re1[i].trim()
-                                    }
-                                } else {
-                                    if (e == 59) {
-                                        e++
-                                        return@lit
-                                    }
-                                    if (e < 59) {
-                                        for (i in re1.indices) {
-                                            // исправление чтения на 1 января
-                                            if (e == 0) sviatyiaNew[e][i] = re1[i].trim().replace("<br>", "\n")
-                                            else sviatyiaNew[e][i] = re1[i].trim()
-                                        }
-                                    } else {
-                                        for (i in re1.indices) {
-                                            sviatyiaNew[e2][i] = re1[i].trim()
-                                        }
-                                        e2++
-                                    }
-                                    e++
-                                }
-                            }
-                        }
-                    } catch (e: Throwable) {
-                    }
-                }
-            }
-        }
-    }*/
 
     private fun popupSnackbarForCompleteUpdate(code: Int) {
         val c = Calendar.getInstance()

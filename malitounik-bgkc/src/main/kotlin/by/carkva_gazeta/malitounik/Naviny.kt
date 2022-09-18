@@ -377,7 +377,7 @@ class Naviny : BaseActivity() {
                 startActivity(intent)
                 return true
             }
-            if (url.contains("https://carkva-gazeta.by/index.php?bib=")) {
+            if (url.contains("https://malitounik.page.link/biblijateka")) {
                 if (MainActivity.checkmoduleResources()) {
                     val prefEditors = k.edit()
                     prefEditors.putInt("id", R.id.label2)
@@ -393,6 +393,46 @@ class Naviny : BaseActivity() {
                         error()
                     }
                 }
+                return true
+            }
+            if (url.contains("https://malitounik.page.link/bohasluzbovyja")) {
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label3)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            if (url.contains("https://malitounik.page.link/akafisty")) {
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label5)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            if (url.contains("https://malitounik.page.link/ruzaniec")) {
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label6)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            if (url.contains("https://malitounik.page.link/malitvy")) {
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label4)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            if (url.contains("https://malitounik.page.link/dzie_znajsci_hreka_katolikau_Bielarusi")) {
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label105)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
                 return true
             }
             if (MainActivity.isNetworkAvailable()) {

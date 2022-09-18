@@ -146,7 +146,7 @@ class ParalelnyeMesta {
                         }
                     }
                     if (!semuxa || inputStream == null) {
-                        if (semuxa && inputStream == null) noKnigaSemuxi = true
+                        if (semuxa) noKnigaSemuxi = true
                         if (nomer == 1) inputStream = r.openRawResource(R.raw.sinaidals1)
                         if (nomer == 2) inputStream = r.openRawResource(R.raw.sinaidals2)
                         if (nomer == 3) inputStream = r.openRawResource(R.raw.sinaidals3)

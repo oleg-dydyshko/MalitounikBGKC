@@ -427,6 +427,46 @@ class Naviny : BaseActivity() {
                 startActivity(intent)
                 return true
             }
+            if (url.contains("https://malitounik.page.link/pesny_prasl")) {
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label91)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            if (url.contains("https://malitounik.page.link/pesny_bel")) {
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label92)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            if (url.contains("https://malitounik.page.link/pesny_bag")) {
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label93)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            if (url.contains("https://malitounik.page.link/pesny_kal")) {
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label94)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            if (url.contains("https://malitounik.page.link/pesny_taize")) {
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label95)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
             if (url.contains("https://malitounik.page.link/dzie_znajsci_hreka_katolikau_Bielarusi")) {
                 val prefEditors = k.edit()
                 prefEditors.putInt("id", R.id.label105)

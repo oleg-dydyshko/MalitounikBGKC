@@ -362,28 +362,48 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = R.id.label8
                     selectFragment(binding.label8, true)
                 }
-                data.toString().contains("bohasluzbovyja") -> {
+                data.toString().contains("carkva-gazeta.by/index.php?ie=9") -> {
                     idSelect = R.id.label3
                     selectFragment(binding.label3, true)
                 }
-                data.toString().contains("akafisty") -> {
+                data.toString().contains("carkva-gazeta.by/index.php?ie=17") -> {
                     idSelect = R.id.label5
                     selectFragment(binding.label5, true)
                 }
-                data.toString().contains("ruzaniec") -> {
+                data.toString().contains("carkva-gazeta.by/index.php?ie=18") -> {
                     idSelect = R.id.label6
                     selectFragment(binding.label6, true)
                 }
-                data.toString().contains("malitvy") -> {
+                data.toString().contains("carkva-gazeta.by/index.php?ie=19") -> {
                     idSelect = R.id.label4
                     selectFragment(binding.label4, true)
                 }
-                data.toString().contains("biblijateka") -> {
+                data.toString().contains("carkva-gazeta.by/index.php?ie=20&sub=1") -> {
+                    idSelect = R.id.label91
+                    selectFragment(binding.label91, true)
+                }
+                data.toString().contains("carkva-gazeta.by/index.php?ie=20&sub=2") -> {
+                    idSelect = R.id.label92
+                    selectFragment(binding.label92, true)
+                }
+                data.toString().contains("carkva-gazeta.by/index.php?ie=20&sub=3") -> {
+                    idSelect = R.id.label93
+                    selectFragment(binding.label93, true)
+                }
+                data.toString().contains("carkva-gazeta.by/index.php?ie=20&sub=4") -> {
+                    idSelect = R.id.label94
+                    selectFragment(binding.label94, true)
+                }
+                data.toString().contains("carkva-gazeta.by/index.php?ie=20&sub=5") -> {
+                    idSelect = R.id.label95
+                    selectFragment(binding.label95, true)
+                }
+                data.toString().contains("carkva-gazeta.by/index.php?bib") -> {
                     idSelect = R.id.label2
                     shortcuts = true
                     selectFragment(binding.label2, true)
                 }
-                data.toString().contains("dzie_znajsci_hreka_katolikau_Bielarusi") -> {
+                data.toString().contains("carkva-gazeta.by/index.php?ie=10") -> {
                     idSelect = R.id.label105
                     selectFragment(binding.label105, true)
                 }

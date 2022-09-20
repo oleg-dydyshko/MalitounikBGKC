@@ -308,7 +308,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["l_12_26_sabor_baharodzicy"] = R.raw.l_12_26_sabor_baharodzicy
             resursMap["mm_01_01_malebien_novy_hod"] = R.raw.mm_01_01_malebien_novy_hod
             resursMap["l_12_28"] = R.raw.l_12_28
-            resursMap["l_vasila_vialikaha"] = R.raw.lit_vasila_vialikaha
+            resursMap["lit_vasila_vialikaha"] = R.raw.lit_vasila_vialikaha
             resursMap["mm_02_01_liturhija"] = R.raw.mm_02_01_liturhija
             resursMap["mm_04_01_pieradsv_bohazjaulennia_liturhija"] = R.raw.mm_04_01_pieradsv_bohazjaulennia_liturhija
             resursMap["mm_06_01_bohazjaulennie_liturhija"] = R.raw.mm_06_01_bohazjaulennie_liturhija

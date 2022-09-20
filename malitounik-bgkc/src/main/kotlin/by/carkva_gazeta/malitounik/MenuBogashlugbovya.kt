@@ -26,7 +26,7 @@ class MenuBogashlugbovya : ListFragment() {
         activity?.let {
             data.add(MenuListData("Боская Літургія між сьвятымі айца нашага Яна Залатавуснага", "lit_jan_zalat"))
             data.add(MenuListData("Боская Літургія ў Велікодны перыяд", "lit_jan_zalat_vielikodn"))
-            data.add(MenuListData("Боская Літургія між сьвятымі айца нашага Базыля Вялікага", "l_vasila_vialikaha"))
+            data.add(MenuListData("Боская Літургія між сьвятымі айца нашага Базыля Вялікага", "lit_vasila_vialikaha"))
             data.add(MenuListData("Літургія раней асьвячаных дароў", "lit_ran_asv_dar"))
             data.add(MenuListData("Набажэнства ў гонар Маці Божай Нястомнай Дапамогі", "nabazenstva_maci_bozaj_niast_dap"))
             data.add(MenuListData("Малітвы пасьля сьвятога прычасьця", "1"))

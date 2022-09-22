@@ -51,6 +51,7 @@
                     android:gravity="center"
                     android:text="@string/http_carkva_gazeta_by"
                     android:textColor="@color/colorSecondary_text"
+                    android:textSize="14sp"
                     android:textStyle="italic" />
 
                 <TextView
@@ -61,7 +62,7 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/kaliandar2"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label2"
@@ -73,7 +74,7 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/sajt"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label3"
@@ -83,7 +84,7 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/liturgikon"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label4"
@@ -93,7 +94,7 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/malitvy"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label5"
@@ -103,7 +104,7 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/akafisty"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label6"
@@ -114,7 +115,7 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/ruzanec"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label7"
@@ -125,7 +126,7 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/maje_natatki"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label12"
@@ -136,7 +137,7 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/MenuVybranoe"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <View
                     android:layout_width="match_parent"
@@ -154,7 +155,7 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/title_biblia"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label13"
@@ -165,7 +166,7 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/title_psalter"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label11"
@@ -176,7 +177,7 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/bsinaidal"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:visibility="gone" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -193,7 +194,7 @@
                         android:gravity="center_vertical"
                         android:padding="10dp"
                         android:text="@string/song"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/image2"
                         app:layout_constraintStart_toStartOf="parent"
@@ -230,7 +231,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny1"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
 
@@ -245,7 +246,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny2"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
 
@@ -260,7 +261,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny3"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
 
@@ -275,7 +276,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny4"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
 
@@ -290,7 +291,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny5"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
                 </LinearLayout>
@@ -309,7 +310,7 @@
                         android:gravity="center_vertical"
                         android:padding="10dp"
                         android:text="@string/other"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/image3"
                         app:layout_constraintStart_toStartOf="parent"
@@ -346,7 +347,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/spovedz"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
 
@@ -361,7 +362,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pamiatka"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
 
@@ -376,7 +377,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/sviaty"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
 
@@ -391,7 +392,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/parafii"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
 
@@ -406,7 +407,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pascha"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
                 </LinearLayout>

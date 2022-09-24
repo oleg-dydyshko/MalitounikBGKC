@@ -1379,7 +1379,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
                 }
             }
             if (editText?.id == androidx.appcompat.R.id.search_src_text) {
-                if (editPosition >= 3 && adapter.count > 0) {
+                if (editPosition >= 3) {
                     binding.History.visibility = View.GONE
                     binding.ListView.visibility = View.VISIBLE
                 } else {

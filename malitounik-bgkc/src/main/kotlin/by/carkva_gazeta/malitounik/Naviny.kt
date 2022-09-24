@@ -351,15 +351,7 @@ class Naviny : BaseActivity() {
                 prefEditors.apply()
                 val intent = Intent(this@Naviny, MainActivity::class.java)
                 startActivity(intent)
-                return true
-            }
-            if (url.contains("https://malitounik.page.link/biblija")) {
-                val prefEditors = k.edit()
-                prefEditors.putInt("id", R.id.label8)
-                prefEditors.apply()
-                val intent = Intent(this@Naviny, MainActivity::class.java)
-                startActivity(intent)
-                return true
+               return true
             }
             if (url.contains("https://carkva-gazeta.by/index.php?ie=14")) {
                 val prefEditors = k.edit()
@@ -375,24 +367,29 @@ class Naviny : BaseActivity() {
                 prefEditors.apply()
                 val intent = Intent(this@Naviny, MainActivity::class.java)
                 startActivity(intent)
-                return true
+               return true
+            }
+            if (url.contains("https://malitounik.page.link/biblijateka1")) {
+                return setBiblioteka("https://carkva-gazeta.by/index.php?bib&rub=1")
+            }
+            if (url.contains("https://malitounik.page.link/biblijateka2")) {
+                return setBiblioteka("https://carkva-gazeta.by/index.php?bib&rub=2")
+            }
+            if (url.contains("https://malitounik.page.link/biblijateka3")) {
+                return setBiblioteka("https://carkva-gazeta.by/index.php?bib&rub=3")
+            }
+            if (url.contains("https://malitounik.page.link/biblijateka4")) {
+                return setBiblioteka("https://carkva-gazeta.by/index.php?bib&rub=4")
             }
             if (url.contains("https://malitounik.page.link/biblijateka")) {
-                if (MainActivity.checkmoduleResources()) {
-                    val prefEditors = k.edit()
-                    prefEditors.putInt("id", R.id.label2)
-                    prefEditors.apply()
-                    val intent = Intent(this@Naviny, MainActivity::class.java)
-                    intent.putExtra("site", true)
-                    startActivity(intent)
-                } else {
-                    if (MainActivity.isNetworkAvailable()) {
-                        invalidateOptionsMenu()
-                        return false
-                    } else {
-                        error()
-                    }
-                }
+                return setBiblioteka("https://carkva-gazeta.by/index.php?bib")
+            }
+            if (url.contains("https://malitounik.page.link/biblija")) {
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label8)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
                 return true
             }
             if (url.contains("https://malitounik.page.link/bohasluzbovyja")) {
@@ -484,6 +481,26 @@ class Naviny : BaseActivity() {
                 }
             } else {
                 error()
+            }
+            return true
+        }
+
+        private fun setBiblioteka(rubrika: String): Boolean {
+            if (MainActivity.checkmoduleResources()) {
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label2)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                intent.data = Uri.parse(rubrika)
+                intent.putExtra("site", true)
+                startActivity(intent)
+            } else {
+                if (MainActivity.isNetworkAvailable()) {
+                    invalidateOptionsMenu()
+                    return false
+                } else {
+                    error()
+                }
             }
             return true
         }

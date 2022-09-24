@@ -65,7 +65,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private var idOld = -1
     private val dzenNoch get() = getBaseDzenNoch()
     private var tolbarTitle = ""
-    private var shortcuts = false
     private var mLastClickTime: Long = 0
     private var resetTollbarJob: Job? = null
     private var snackbar: Snackbar? = null
@@ -316,18 +315,15 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
                 data.toString().contains("shortcuts=3") -> {
                     idSelect = R.id.label7
-                    shortcuts = true
-                    selectFragment(binding.label7, true)
+                    selectFragment(binding.label7, true, shortcuts = true)
                 }
                 data.toString().contains("shortcuts=4") -> {
                     idSelect = R.id.label1
-                    shortcuts = true
-                    selectFragment(binding.label1, true)
+                    selectFragment(binding.label1, true, shortcuts = true)
                 }
                 data.toString().contains("shortcuts=2") -> {
                     idSelect = R.id.label2
-                    shortcuts = true
-                    selectFragment(binding.label2, true)
+                    selectFragment(binding.label2, true, shortcuts = true)
                 }
                 data.toString().contains("caliandar") -> {
                     idSelect = R.id.label1
@@ -373,10 +369,25 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = R.id.label95
                     selectFragment(binding.label95, true)
                 }
+                data.toString().contains("carkva-gazeta.by/index.php?bib&rub=1") -> {
+                    idSelect = R.id.label2
+                    selectFragment(binding.label2, true, 1, true)
+                }
+                data.toString().contains("carkva-gazeta.by/index.php?bib&rub=2") -> {
+                    idSelect = R.id.label2
+                    selectFragment(binding.label2, true, 2, true)
+                }
+                data.toString().contains("carkva-gazeta.by/index.php?bib&rub=3") -> {
+                    idSelect = R.id.label2
+                    selectFragment(binding.label2, true, 3, true)
+                }
+                data.toString().contains("carkva-gazeta.by/index.php?bib&rub=4") -> {
+                    idSelect = R.id.label2
+                    selectFragment(binding.label2, true, 4, true)
+                }
                 data.toString().contains("carkva-gazeta.by/index.php?bib") -> {
                     idSelect = R.id.label2
-                    shortcuts = true
-                    selectFragment(binding.label2, true)
+                    selectFragment(binding.label2, true, shortcuts = true)
                 }
                 data.toString().contains("carkva-gazeta.by/index.php?ie=10") -> {
                     idSelect = R.id.label105
@@ -384,8 +395,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
                 !data.toString().contains("https://") -> {
                     idSelect = R.id.label2
-                    shortcuts = true
-                    selectFragment(binding.label2, true)
+                    selectFragment(binding.label2, true, shortcuts = true)
                 }
             }
             intent.data = null
@@ -769,7 +779,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         return true
     }
 
-    private fun selectFragment(view: View?, start: Boolean = false) {
+    private fun selectFragment(view: View?, start: Boolean = false, biblijatekaRubrika: Int = 0, shortcuts: Boolean = false) {
         idSelect = view?.id ?: R.id.label1
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -979,9 +989,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     prefEditors.putInt("id", idSelect)
                     if (shortcuts) {
                         val i = Intent(this, Sabytie::class.java)
-                        i.putExtra("shortcuts", shortcuts)
+                        i.putExtra("shortcuts", true)
                         startActivity(i)
-                        shortcuts = false
                     }
                 }
                 R.id.label2 -> {
@@ -992,6 +1001,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                                 val intentBib = Intent()
                                 intentBib.setClassName(this, BIBLIOTEKAVIEW)
                                 intentBib.data = intent.data
+                                intentBib.putExtra("rubrika", biblijatekaRubrika)
                                 if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
                                 if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
                                 startActivity(intentBib)
@@ -1002,7 +1012,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                             val dadatak = DialogInstallDadatak()
                             dadatak.show(supportFragmentManager, "dadatak")
                         }
-                        shortcuts = false
                     }
                     val menuGlavnoe = MenuGlavnoe()
                     ftrans.replace(R.id.conteiner, menuGlavnoe)
@@ -1031,7 +1040,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     prefEditors.putInt("id", idSelect)
                     val menuNatatki = MenuNatatki()
                     ftrans.replace(R.id.conteiner, menuNatatki, "MenuNatatki")
-                    shortcuts = false
                 }
                 R.id.label8 -> {
                     val file = File("$filesDir/BibliaSemuxaNatatki.json")

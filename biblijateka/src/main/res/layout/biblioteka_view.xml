@@ -54,6 +54,7 @@
                     android:gravity="center"
                     android:text="@string/http_carkva_gazeta_by"
                     android:textColor="@color/colorSecondary_text"
+                    android:textSize="14sp"
                     android:textStyle="italic" />
 
                 <TextView
@@ -64,7 +65,7 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/bibliateka_niadaunia"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label2"
@@ -74,7 +75,7 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/bibliateka_gistoryia_carkvy"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label3"
@@ -85,7 +86,7 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/bibliateka_malitouniki"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label4"
@@ -96,7 +97,7 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/bibliateka_speuniki"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label5"
@@ -107,7 +108,7 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/bibliateka_rel_litaratura"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/label6"
@@ -117,7 +118,7 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/bibliateka_file"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
         </ScrollView>
     </com.google.android.material.navigation.NavigationView>

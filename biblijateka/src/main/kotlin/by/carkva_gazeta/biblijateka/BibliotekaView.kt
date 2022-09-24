@@ -513,7 +513,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             val file = File("$filesDir/Biblijateka")
             if (file.exists()) file.copyRecursively(it, overwrite = true)
         }
-        File("$filesDir/Biblijateka").deleteRecursively() ////////////////////////////////////
+        File("$filesDir/Biblijateka").deleteRecursively()
+        ////////////////////////////////////
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding = BibliotekaViewBinding.inflate(layoutInflater)
@@ -700,12 +701,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = fontBiblia.toInt()
         webSettings.allowFileAccess = true
-        binding.label1.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        binding.label2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        binding.label3.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        binding.label4.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        binding.label5.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        binding.label6.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
 
         var drawable = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.krest)
         if (dzenNoch) {
@@ -878,6 +873,12 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             site = intent.getBooleanExtra("site", false)
             if (site) binding.drawerLayout.openDrawer(GravityCompat.START)
         }
+        when (intent?.extras?.getInt("rubrika", 0) ?: 0) {
+            1 -> onClick(binding.label2)
+            2 -> onClick(binding.label3)
+            3 -> onClick(binding.label4)
+            4 -> onClick(binding.label5)
+        }
         if (filePath != "" && savedInstance != 0) {
             if (filePath.contains("raw:")) {
                 val t1 = filePath.indexOf("raw:")
@@ -1046,7 +1047,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             }
         }
         val gson = Gson()
-        val temp: ArrayList<String> = ArrayList()
+        val temp = ArrayList<String>()
         temp.add(biblioteka?.bookTitle ?: "")
         temp.add(filePath)
         temp.add(biblioteka?.titleImage ?: "")

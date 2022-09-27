@@ -60,7 +60,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private lateinit var binding: ActivityMainBinding
     private lateinit var bindingappbar: AppBarMainBinding
     private lateinit var bindingcontent: ContentMainBinding
-    private var idSelect = 0
+    private var idSelect = R.id.label1
     private var backPressed: Long = 0
     private var idOld = -1
     private val dzenNoch get() = getBaseDzenNoch()
@@ -163,13 +163,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         val density = resources.displayMetrics.density
 
         binding.logosite.post {
-            val bd: BitmapDrawable = ContextCompat.getDrawable(this, R.drawable.logotip) as BitmapDrawable
+            val bd = ContextCompat.getDrawable(this, R.drawable.logotip) as BitmapDrawable
             val imageHeight = bd.bitmap.height / density
             val imageWidth = bd.bitmap.width / density
             val widthDp = binding.logosite.width / density
             val kooficient = widthDp / imageWidth
             val hidch = imageHeight * kooficient
-            val layoutParams: ViewGroup.LayoutParams = binding.logosite.layoutParams
+            val layoutParams = binding.logosite.layoutParams
             layoutParams.height = (hidch * density).toInt()
             binding.logosite.layoutParams = layoutParams
         }
@@ -232,12 +232,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
         bindingappbar.titleToolbar.setOnClickListener {
-            val layoutParams = bindingappbar.toolbar.layoutParams
+            val layoutParams: ViewGroup.LayoutParams? = bindingappbar.toolbar.layoutParams
             if (bindingappbar.titleToolbar.isSelected) {
                 resetTollbarJob?.cancel()
                 resetTollbar(layoutParams)
             } else {
-                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                layoutParams?.height = ViewGroup.LayoutParams.WRAP_CONTENT
                 bindingappbar.titleToolbar.isSingleLine = false
                 bindingappbar.titleToolbar.isSelected = true
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
@@ -525,11 +525,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         //loadSviatyia(2022)
     }
 
-    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
+    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams?) {
         val tv = TypedValue()
         if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
             val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
-            layoutParams.height = actionBarHeight
+            layoutParams?.height = actionBarHeight
         }
         bindingappbar.titleToolbar.isSelected = false
         bindingappbar.titleToolbar.isSingleLine = true
@@ -1571,6 +1571,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             cytanne = cytanne.replace("Першамуч.", "")
             cytanne = cytanne.replace("Суб.", "")
             cytanne = cytanne.replace("Нядз.", "")
+            cytanne = cytanne.replace("Абр", "")
             cytanne = cytanne.trim()
             return cytanne
         }

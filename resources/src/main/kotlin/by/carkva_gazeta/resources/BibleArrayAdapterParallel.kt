@@ -2,7 +2,6 @@ package by.carkva_gazeta.resources
 
 import android.app.Activity
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.*
@@ -466,30 +465,30 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
 
                 if (zavet.contains(zav) && knigaN == kniga && glava1 == glava && stix1 == position) {
                     ssb.append(".")
-                    var d: Drawable? = null
                     val t5 = knigaName.lastIndexOf("<!--")
                     val color = if (t5 != -1) knigaName.substring(t5 + 4).toInt()
                     else 0
-                    when (color) {
+                    val d = when (color) {
                         0 -> {
-                            d = if (dzenNoch) ContextCompat.getDrawable(context, R.drawable.bookmark)
+                            if (dzenNoch) ContextCompat.getDrawable(context, R.drawable.bookmark)
                             else ContextCompat.getDrawable(context, R.drawable.bookmark_black)
                         }
                         1 -> {
-                            d = if (dzenNoch) ContextCompat.getDrawable(context, R.drawable.bookmark1_black)
+                            if (dzenNoch) ContextCompat.getDrawable(context, R.drawable.bookmark1_black)
                             else ContextCompat.getDrawable(context, R.drawable.bookmark1)
                         }
-                        2 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark2)
-                        3 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark3)
-                        4 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark4)
-                        5 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark5)
-                        6 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark6)
-                        7 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark7)
-                        8 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark8)
-                        9 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark9)
-                        10 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark10)
-                        11 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark11)
-                        12 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark12)
+                        2 -> ContextCompat.getDrawable(context, R.drawable.bookmark2)
+                        3 -> ContextCompat.getDrawable(context, R.drawable.bookmark3)
+                        4 -> ContextCompat.getDrawable(context, R.drawable.bookmark4)
+                        5 -> ContextCompat.getDrawable(context, R.drawable.bookmark5)
+                        6 -> ContextCompat.getDrawable(context, R.drawable.bookmark6)
+                        7 -> ContextCompat.getDrawable(context, R.drawable.bookmark7)
+                        8 -> ContextCompat.getDrawable(context, R.drawable.bookmark8)
+                        9 -> ContextCompat.getDrawable(context, R.drawable.bookmark9)
+                        10 -> ContextCompat.getDrawable(context, R.drawable.bookmark10)
+                        11 -> ContextCompat.getDrawable(context, R.drawable.bookmark11)
+                        12 -> ContextCompat.getDrawable(context, R.drawable.bookmark12)
+                        else -> null
                     }
                     val realpadding = (SettingsActivity.GET_FONT_SIZE_DEFAULT * context.resources.displayMetrics.density).toInt()
                     d?.setBounds(0, 0, realpadding, realpadding)
@@ -606,30 +605,30 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                 }
                 if (zavet.contains(zav) && knigaN == kniga && glava1 == glava && stix1 == position) {
                     ssb.append(".")
-                    var d: Drawable? = null
                     val t5 = knigaName.lastIndexOf("<!--")
                     val color = if (t5 != -1) knigaName.substring(t5 + 4).toInt()
                     else 0
-                    when (color) {
+                    val d = when (color) {
                         0 -> {
-                            d = if (dzenNoch) ContextCompat.getDrawable(context, R.drawable.bookmark)
+                            if (dzenNoch) ContextCompat.getDrawable(context, R.drawable.bookmark)
                             else ContextCompat.getDrawable(context, R.drawable.bookmark_black)
                         }
                         1 -> {
-                            d = if (dzenNoch) ContextCompat.getDrawable(context, R.drawable.bookmark1_black)
+                            if (dzenNoch) ContextCompat.getDrawable(context, R.drawable.bookmark1_black)
                             else ContextCompat.getDrawable(context, R.drawable.bookmark1)
                         }
-                        2 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark2)
-                        3 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark3)
-                        4 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark4)
-                        5 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark5)
-                        6 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark6)
-                        7 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark7)
-                        8 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark8)
-                        9 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark9)
-                        10 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark10)
-                        11 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark11)
-                        12 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark12)
+                        2 -> ContextCompat.getDrawable(context, R.drawable.bookmark2)
+                        3 -> ContextCompat.getDrawable(context, R.drawable.bookmark3)
+                        4 -> ContextCompat.getDrawable(context, R.drawable.bookmark4)
+                        5 -> ContextCompat.getDrawable(context, R.drawable.bookmark5)
+                        6 -> ContextCompat.getDrawable(context, R.drawable.bookmark6)
+                        7 -> ContextCompat.getDrawable(context, R.drawable.bookmark7)
+                        8 -> ContextCompat.getDrawable(context, R.drawable.bookmark8)
+                        9 -> ContextCompat.getDrawable(context, R.drawable.bookmark9)
+                        10 -> ContextCompat.getDrawable(context, R.drawable.bookmark10)
+                        11 -> ContextCompat.getDrawable(context, R.drawable.bookmark11)
+                        12 -> ContextCompat.getDrawable(context, R.drawable.bookmark12)
+                        else -> null
                     }
                     val realpadding = (SettingsActivity.GET_FONT_SIZE_DEFAULT * context.resources.displayMetrics.density).toInt()
                     d?.setBounds(0, 0, realpadding, realpadding)

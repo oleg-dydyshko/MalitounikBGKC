@@ -271,6 +271,15 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             }
             if (MenuCaliandar.getPositionCaliandar(position)[5].contains("2")) {
                 binding.textCviatyGlavnyia.typeface = MainActivity.createFont(Typeface.NORMAL)
+                if(MenuCaliandar.getPositionCaliandar(position)[6].contains("<strong>")) {
+                    val t1 = MenuCaliandar.getPositionCaliandar(position)[6].indexOf("<strong>")
+                    val t2 = MenuCaliandar.getPositionCaliandar(position)[6].indexOf("</strong>")
+                    val spannable = SpannableStringBuilder(binding.textCviatyGlavnyia.text)
+                    spannable.setSpan(CustomTypefaceSpan("", MainActivity.createFont(Typeface.BOLD)), t1 + 8, t2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+                    spannable.replace(t2, t2 + 9, "")
+                    spannable.replace(t1, t1 + 8, "")
+                    binding.textCviatyGlavnyia.text = spannable
+                }
             }
             if (MenuCaliandar.getPositionCaliandar(position)[8].isNotEmpty()) {
                 binding.textPredsviaty.text = MainActivity.fromHtml(MenuCaliandar.getPositionCaliandar(position)[8])

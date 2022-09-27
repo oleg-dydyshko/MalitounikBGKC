@@ -30,7 +30,6 @@ import by.carkva_gazeta.malitounik.databinding.SettingsActivityBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import kotlinx.coroutines.*
 import java.io.File
-import java.text.DecimalFormat
 import java.util.*
 
 class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
@@ -68,8 +67,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         const val GET_FONT_SIZE_MIN = 14F
         const val GET_FONT_SIZE_MAX = 54F
         const val GET_FONT_SIZE_TOAST = 12F
-        const val GET_CALIANDAR_YEAR_MIN = 2020
-        const val GET_CALIANDAR_YEAR_MAX = 2023
+        const val GET_CALIANDAR_YEAR_MIN = 2021
+        const val GET_CALIANDAR_YEAR_MAX = 2024
         const val NOTIFICATION_CHANNEL_ID_SABYTIE = "3001"
         const val NOTIFICATION_CHANNEL_ID_SVIATY = "2001"
 

@@ -54,15 +54,17 @@ class MineiaShodzennaia : BaseActivity() {
                 continue
             } else {
                 day = mineiaList[i].day
-            } //Айцоў першых 6-ці Ўсяленскіх сабораў
+            }
             when {
-                mineiaList[i].day == 1000 -> {
+                //Айцоў VII Сусьветнага Сабору
+                mineiaList[i].day == SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY -> {
                     val pasha = Calendar.getInstance()
-                    for (dny in 13..19) {
-                        pasha.set(pasha[Calendar.YEAR], Calendar.JULY, dny)
+                    for (dny in 11..17) {
+                        pasha.set(pasha[Calendar.YEAR], Calendar.OCTOBER, dny)
                         val wik = pasha.get(Calendar.DAY_OF_WEEK)
                         if (wik == Calendar.SUNDAY) {
                             day = pasha[Calendar.DAY_OF_YEAR]
+                            c.set(Calendar.DAY_OF_YEAR, day)
                         }
                     }
                 }
@@ -81,7 +83,7 @@ class MineiaShodzennaia : BaseActivity() {
             //c.set(Calendar.DAY_OF_YEAR, day)
             val id = c.timeInMillis
             //val positionCaliandar = MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[24].toInt()
-            day = mineiaList[i].day
+            //day = mineiaList[i].day
             when (c[Calendar.MONTH]) {
                 Calendar.JANUARY -> child0.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACHERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.UTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURGIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALIKIAGADZINY)))
                 Calendar.FEBRUARY -> child1.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACHERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.UTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURGIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALIKIAGADZINY)))

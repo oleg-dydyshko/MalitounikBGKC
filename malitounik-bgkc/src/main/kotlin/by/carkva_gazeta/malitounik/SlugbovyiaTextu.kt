@@ -27,6 +27,7 @@ class SlugbovyiaTextu {
         const val ABEDNICA = 5
         const val VIALIKIAGADZINY = 6
         const val PAUNOCHNICA = 7
+        const val AICOU_VII_SUSVETNAGA_SABORY = 1000
     }
 
     init {
@@ -159,11 +160,11 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня; Сабор 70-ці апосталаў, пачэснага Тэактыста - Літургія", "mm_04_01_pieradsv_bohazjaulennia_liturhija", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(127, "Жырoвiцкaй iкoны Maцi Бoжae - Літургія", "mm_07_05_liturhija", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(131, "Сьвятых і роўных апосталам настаўнікаў славянскіх Кірылы і Мятода - Літургія", "mm_11_05_liturhija", LITURGIA))
-        datMinSH.add(SlugbovyiaTextuData(141, "Сьвятых роўнаапостальных Канстанціна і Алены" , "mm_21_05_liturhija", LITURGIA))
-        datMinSH.add(SlugbovyiaTextuData(141, "Сьвятых роўнаапостальных Канстанціна і Алены" , "mm_21_05_viaczernia", VIACHERNIA))
-        datMinSH.add(SlugbovyiaTextuData(143, "Сьвятое маці нашае Еўфрасіньні Полацкай" , "mm_23_05_jutran", UTRAN))
-        datMinSH.add(SlugbovyiaTextuData(143, "Сьвятое маці нашае Еўфрасіньні Полацкай" , "mm_23_05_liturhija", LITURGIA))
-        datMinSH.add(SlugbovyiaTextuData(143, "Сьвятое маці нашае Еўфрасіньні Полацкай" , "mm_23_05_viaczernia", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(141, "Сьвятых роўнаапостальных Канстанціна і Алены", "mm_21_05_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(141, "Сьвятых роўнаапостальных Канстанціна і Алены", "mm_21_05_viaczernia", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(143, "Сьвятое маці нашае Еўфрасіньні Полацкай", "mm_23_05_jutran", UTRAN))
+        datMinSH.add(SlugbovyiaTextuData(143, "Сьвятое маці нашае Еўфрасіньні Полацкай", "mm_23_05_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(143, "Сьвятое маці нашае Еўфрасіньні Полацкай", "mm_23_05_viaczernia", VIACHERNIA))
         datMinSH.add(SlugbovyiaTextuData(180, "Сьвятых слаўных i годных пахвалы апосталаў Пятра i Паўла", "mm_29_06_piatra_i_paula_liturhija", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(181, "Сабор сьвятых 12-ці апосталаў", "mm_30_06_sabor_12_apostalau_liturhija", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(244, "Пачатак царкоўнага году і сьвятога айца нашага Сямёна Стоўпніка", "mm_01_09_novy_hod_viczernia", VIACHERNIA))
@@ -178,6 +179,7 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(256, "Перадсьвяцьце Ўзвышэньня, памяць аднаўленьня царквы Ўваскрасеньня і сьвятога мучаніка Карніла", "mm_13_09_pieradsv_uzvyszennia_liturhija", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(257, "Сусьветнае Ўзвышэньне Пачэснага і Жыцьцядайнага Крыжа", "mm_14_09_uzvyszennie_kryza_liturhija", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(258, "Пасьвяцьце Ўзвышэньня і сьвятога вялікамучаніка Мікіты", "mm_15_09_pasviaccie_uzvyszennia_viaczernia", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(AICOU_VII_SUSVETNAGA_SABORY, "Нядзеля сьвятых айцоў VII Сусьветнага сабору", "mm_11_17_10_ajcou_7_susviet_saboru_liturhija", LITURGIA))
 
         datMinSV.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "ndz_miranosic_liturhija", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(21, "Нядзеля расслабленага - Літургія", "ndz_rasslablenaha_liturhija", LITURGIA, pasxa = true))
@@ -211,7 +213,7 @@ class SlugbovyiaTextu {
         datMinSV.add(SlugbovyiaTextuData(42, "Нядзеля сьвятых айцоў I-га Усяленскага Сабору", "ndz_ajcou_1susviet_saboru", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(56, "Нядзеля ўсіх сьвятых", "ndz_usich_sviatych_liturhija", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(63, "Нядзеля ўсіх сьвятых беларускага народу", "ndz_usich_sv_biel_narodu_liturhija", LITURGIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(274, "Покрыва Найсьвяцейшай Багародзіцы - Літургія", "mm_01_10_liturhija", LITURGIA))
+        datMinSV.add(SlugbovyiaTextuData(274, "Покрыва Найсьвяцейшай Багародзіцы - Літургія", "mm_01_10_pokryva_baharodzicy_liturhija", LITURGIA))
         datMinSV.add(SlugbovyiaTextuData(325, "Уваход у храм Найсьвяцейшай Багародзіцы - Літургія", "mm_21_11_liturhija", LITURGIA))
         datMinSV.add(SlugbovyiaTextuData(33, "Сустрэча Госпада нашага Ісуса Хрыста (ГРАМНІЦЫ) - Літургія", "mm_02_02_liturhija", LITURGIA))
         datMinSV.add(SlugbovyiaTextuData(354, "Перадсьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста і сьв. сьвятамучаніка Ігната Баганосца - Літургія", "l_rastvo_peradsviaccie_20_12", LITURGIA))
@@ -291,6 +293,9 @@ class SlugbovyiaTextu {
             }
         }
         datMinSH.forEach {
+            if (it.day == AICOU_VII_SUSVETNAGA_SABORY) {
+                return false
+            }
             if (it.day == day) {
                 return it.pasxa
             }
@@ -311,6 +316,9 @@ class SlugbovyiaTextu {
             }
         }
         datMinSH.forEach {
+            if (AICOU_VII_SUSVETNAGA_SABORY == it.day && pasxa == it.pasxa) {
+                if (it.sluzba == sluzba) resource = it.resource
+            }
             if (day == it.day && pasxa == it.pasxa) {
                 if (it.sluzba == sluzba) resource = it.resource
             }
@@ -461,6 +469,15 @@ class SlugbovyiaTextu {
             }
         }
         datMinSH.forEach {
+            //Айцоў VII Сусьветнага Сабору
+            val calendar = Calendar.getInstance()
+            for (i in 11..17) {
+                calendar.set(calendar.get(Calendar.YEAR), Calendar.OCTOBER, i)
+                val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                if (wik == Calendar.SUNDAY && calendar.get(Calendar.DAY_OF_YEAR) == dayOfYear.toInt() && AICOU_VII_SUSVETNAGA_SABORY == it.day && pasxa == it.pasxa) {
+                    if (it.sluzba == LITURGIA) return true
+                }
+            }
             if (dayOfYear.toInt() == it.day && pasxa == it.pasxa) {
                 if (it.sluzba == LITURGIA) return true
             }

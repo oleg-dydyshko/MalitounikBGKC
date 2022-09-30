@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.storage.StorageManager
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
@@ -25,10 +26,10 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 
 class DialogBibliateka : DialogFragment() {
-    private var listPosition: String = "0"
-    private var title: String = "0"
-    private var listStr: String = "0"
-    private var size: String = "0"
+    private var listPosition = "0"
+    private var title = "0"
+    private var listStr = "0"
+    private var size = "0"
     private var mListener: DialogBibliatekaListener? = null
     private lateinit var builder: AlertDialog.Builder
     private var _binding: DialogTextviewDisplayBinding? = null
@@ -71,7 +72,7 @@ class DialogBibliateka : DialogFragment() {
             builder = AlertDialog.Builder(it, style)
             if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
-            val file = File(it.filesDir.toString() + "/Biblijateka/" + listPosition)
+            val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), listPosition)
             if (file.exists()) {
                 binding.title.text = getString(R.string.opisanie).uppercase()
             } else {
@@ -127,7 +128,7 @@ class DialogBibliateka : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(listPosition: String?, listStr: String?, title: String?, size: String?): DialogBibliateka {
+        fun getInstance(listPosition: String, listStr: String, title: String, size: String): DialogBibliateka {
             val instance = DialogBibliateka()
             val args = Bundle()
             args.putString("listPosition", listPosition)

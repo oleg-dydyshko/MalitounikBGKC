@@ -48,7 +48,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private val dzenNoch get() = getBaseDzenNoch()
     private var autoscroll = false
     private lateinit var adapter: MaranAtaListAdaprer
-    private val maranAta = ArrayList<String>()
+    private val maranAta = ArrayList<MaranAtaData>()
     private var n = 0
     private var spid = 60
     private var belarus = true
@@ -256,7 +256,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             val copyString = StringBuilder()
             bibleCopyList.sort()
             bibleCopyList.forEach {
-                var textView = maranAta[it]
+                var textView = maranAta[it].bible
                 textView = textView.replace("+-+", "")
                 val t1 = textView.indexOf("$")
                 if (t1 != -1) textView = textView.substring(0, t1)
@@ -278,7 +278,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val copyString = StringBuilder()
                 bibleCopyList.sort()
                 bibleCopyList.forEach {
-                    var textView = maranAta[it]
+                    var textView = maranAta[it].bible
                     textView = textView.replace("+-+", "")
                     val t1 = textView.indexOf("$")
                     if (t1 != -1) textView = textView.substring(0, t1)
@@ -433,27 +433,19 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 if (!onsave) {
                     var nazva = ""
                     if (scroll == 1) {
-                        nazva = maranAta[list.firstVisiblePosition]
+                        nazva = maranAta[list.firstVisiblePosition].title
                     }
                     val oldtollBarText = binding.titleToolbar.text.toString()
                     if (oldtollBarText == "") {
-                        nazva = maranAta[list.firstVisiblePosition + 2]
-                        if (nazva.contains("nazva+++")) {
-                            val t1 = nazva.indexOf("nazva+++")
-                            val t2 = nazva.indexOf("-->", t1 + 8)
-                            tollBarText = nazva.substring(t1 + 8, t2)
-                            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
-                            binding.subtitleToolbar.text = tollBarText
-                        }
+                        nazva = maranAta[list.firstVisiblePosition].title
+                        tollBarText = nazva
+                        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+                        binding.subtitleToolbar.text = tollBarText
                     }
                     if (!nazva.contains(tollBarText) && scroll == 1) {
-                        if (nazva.contains("nazva+++")) {
-                            val t1 = nazva.indexOf("nazva+++")
-                            val t2 = nazva.indexOf("-->", t1 + 8)
-                            tollBarText = nazva.substring(t1 + 8, t2)
-                            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
-                            binding.subtitleToolbar.text = tollBarText
-                        }
+                        tollBarText = nazva
+                        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+                        binding.subtitleToolbar.text = tollBarText
                     }
                     mPosition = position
                     mOffset = offset
@@ -703,7 +695,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     inputStream = getSinoidalResource(nomer)
                 }
                 if (replace) {
-                    maranAta.add("<!--no--><br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>")
+                    maranAta.add(MaranAtaData("", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>"))
                 }
                 val builder = StringBuilder()
                 var line: String
@@ -723,9 +715,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 }
                 if (chten.size == 6 && i == 3) {
                     if (belarus) {
-                        maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n")
+                        maranAta.add(MaranAtaData("", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n"))
                     } else {
-                        maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n")
+                        maranAta.add(MaranAtaData("", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n"))
                     }
                 }
                 val split2Pre = builder.toString().split("===")
@@ -773,24 +765,24 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         }
                     } else {
                         if (belarus) {
-                            if (addGlava == e) maranAta.add("<!--no--><br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>")
-                            maranAta.add("<!--no--><!--nazva+++$nazvaBel $e--><br><strong>$nazvaFullBel $e</strong><br>\n")
+                            if (addGlava == e) maranAta.add(MaranAtaData("", "$nazvaBel $e", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>"))
+                            maranAta.add(MaranAtaData("", "$nazvaBel $e", "<br><strong>$nazvaFullBel $e</strong><br>\n"))
                         } else {
-                            maranAta.add("<!--no--><!--nazva+++$nazva $e--><br><strong>$nazvaFull $e</strong><br>\n")
+                            maranAta.add(MaranAtaData("", "$nazva $e", "<br><strong>$nazvaFull $e</strong><br>\n"))
                         }
                         val splitline = split2[e].trim().split("\n")
                         for (i2 in splitline.indices) {
-                            if (belarus) maranAta.add("<!--" + kniga + "." + e + "." + (i2 + 1) + "--><!--nazva+++" + nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
-                            else maranAta.add("<!--" + kniga + "." + e + "." + (i2 + 1) + "--><!--nazva+++" + nazva + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
+                            if (belarus) maranAta.add(MaranAtaData(kniga + "." + e + "." + (i2 + 1), "$nazvaBel $e", splitline[i2] + getParallel(nomer, e, i2) + "\n"))
+                            else maranAta.add(MaranAtaData(kniga + "." + e + "." + (i2 + 1), "$nazva $e", splitline[i2] + getParallel(nomer, e, i2) + "\n"))
                         }
                     }
                 }
                 if (stixn != -1) {
                     val t1 = fit.indexOf(".")
                     if (belarus) {
-                        maranAta.add("<!--no--><!--nazva+++$nazvaBel " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFullBel + " " + fit.substring(s2 + 1) + "</strong><br>\n")
+                        maranAta.add(MaranAtaData("", "$nazvaBel " + fit.substring(s2 + 1, t1), "<br><strong>" + nazvaFullBel + " " + fit.substring(s2 + 1) + "</strong><br>\n"))
                     } else {
-                        maranAta.add("<!--no--><!--nazva+++$nazva " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n")
+                        maranAta.add(MaranAtaData("", "$nazva " + fit.substring(s2 + 1, t1), "<br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n"))
                     }
                     val res1 = r1.toString().trim().split("\n")
                     var i3 = stixn
@@ -817,26 +809,29 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             glava = resbib.substring(t2 + 1, t3).toInt()
                             resbib = resbib.substring(t3 + 1)
                         }
-                        if (belarus) maranAta.add("<!--$kniga.$glava.$i3--><!--nazva+++$nazvaBel " + glava + "-->" + resbib + getParallel(nomer, glava, i3 - 1) + "\n")
-                        else maranAta.add("<!--$kniga.$glava.$i3--><!--nazva+++$nazva " + glava + "-->" + resbib + getParallel(nomer, glava, i3 - 1) + "\n")
+                        if (belarus) maranAta.add(MaranAtaData("$kniga.$glava.$i3", "$nazvaBel $glava", resbib + getParallel(nomer, glava, i3 - 1) + "\n"))
+                        else maranAta.add(MaranAtaData("$kniga.$glava.$i3", "$nazva $glava", resbib + getParallel(nomer, glava, i3 - 1) + "\n"))
                         i3++
                     }
                     if (konec - nachalo != 0) {
                         val res2 = r2.trim().split("\n")
                         for (i21 in res2.indices) {
-                            if (belarus) maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n")
-                            else maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazva + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n")
+                            if (belarus) maranAta.add(MaranAtaData(kniga + "." + konec + "." + (i21 + 1), "$nazvaBel $konec", res2[i21] + getParallel(nomer, konec, i21) + "\n"))
+                            else maranAta.add(MaranAtaData(kniga + "." + konec + "." + (i21 + 1), "$nazva $konec", res2[i21] + getParallel(nomer, konec, i21) + "\n"))
                         }
                     }
                 }
             } catch (t: Throwable) {
                 val t1 = fit.lastIndexOf(" ")
+                val title: String
                 if (belarus) {
-                    maranAta.add("<!--no--><br><strong>$nazvaFullBel ${fit.substring(t1 + 1)}</strong><br>\n")
+                    title = "$nazvaFullBel ${fit.substring(t1 + 1)}"
+                    maranAta.add(MaranAtaData("", title, "<br><strong>$nazvaFullBel ${fit.substring(t1 + 1)}</strong><br>\n"))
                 } else {
-                    maranAta.add("<!--no--><br><strong>$nazvaFull ${fit.substring(t1 + 1)}</strong><br>\n")
+                    title = "$nazvaFull ${fit.substring(t1 + 1)}"
+                    maranAta.add(MaranAtaData("", title, "<br><strong>$nazvaFull ${fit.substring(t1 + 1)}</strong><br>\n"))
                 }
-                maranAta.add("<!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n")
+                maranAta.add(MaranAtaData("", title, resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n"))
             }
         }
         adapter.notifyDataSetChanged()
@@ -1324,15 +1319,13 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private fun parralelMestaView(position: Int) {
         if (k.getBoolean("paralel_maranata", true)) {
             if (!autoscroll) {
-                val t1 = maranAta[position].indexOf("$")
+                val t1 = maranAta[position].bible.indexOf("$")
                 if (t1 != -1) {
                     paralel = true
                     val pm = ParalelnyeMesta()
-                    val t2 = maranAta[position].indexOf("-->")
-                    val t3 = maranAta[position].indexOf("<!--")
-                    val ch = maranAta[position].substring(t3 + 4, t2)
+                    val ch = maranAta[position].paralel
                     val biblia = ch.split(".")
-                    binding.conteiner.text = pm.paralel(maranAta[position].substring(t1 + 1).trim(), belarus).trim()
+                    binding.conteiner.text = pm.paralel(maranAta[position].bible.substring(t1 + 1).trim(), belarus).trim()
                     binding.scroll.visibility = View.VISIBLE
                     binding.ListView.visibility = View.GONE
                     binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, biblia[0] + " " + biblia[1] + "." + biblia[2])
@@ -1344,7 +1337,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
         if (!autoscroll) {
-            if (!maranAta[position].contains("<!--no-->") && maranAta[position].trim() != "") {
+            if (maranAta[position].paralel != "") {
                 mPedakVisable = true
                 if (binding.linearLayout4.visibility == View.GONE) {
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_top)
@@ -1620,10 +1613,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         return res
     }
 
-    private inner class MaranAtaListAdaprer(private val activity: Activity) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_maranata, maranAta) {
+    private inner class MaranAtaListAdaprer(private val activity: Activity) : ArrayAdapter<MaranAtaData>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_maranata, maranAta) {
         override fun isEnabled(position: Int): Boolean {
             return when {
-                maranAta[position].contains("<!--no-->") -> false
+                maranAta[position].paralel == "" -> false
                 !autoscroll -> super.isEnabled(position)
                 else -> false
             }
@@ -1641,18 +1634,14 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            var textView = maranAta[position]
+            var textView = maranAta[position].bible
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             textView = textView.replace("+-+", "")
             var t1 = textView.indexOf("$")
             val ssb: SpannableStringBuilder
             var end: Int
             if (t1 != -1) {
-                val t2 = textView.indexOf("-->")
-                if (t2 != -1) {
-                    textView = textView.substring(t2 + 3)
-                    t1 = textView.indexOf("$")
-                }
+                t1 = textView.indexOf("$")
                 val paralelLeg = textView.substring(t1 + 1).length
                 textView = textView.replace("$", "<br>")
                 val spanned = MainActivity.fromHtml(textView.trim())
@@ -1700,10 +1689,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             } else {
                 if (dzenNoch) {
                     viewHolder.text.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
-                    if (!maranAta[position].contains("$")) viewHolder.text.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+                    if (maranAta[position].bible != "") viewHolder.text.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
                     else viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
                 } else {
-                    if (!maranAta[position].contains("$")) viewHolder.text.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                    if (maranAta[position].bible != "") viewHolder.text.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
                     else viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
                 }
             }
@@ -1712,6 +1701,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     }
 
     private class ViewHolder(var text: TextView)
+
+    private data class MaranAtaData(val paralel: String, val title: String, val bible: String)
 
     companion object {
         private var mPedakVisable = false

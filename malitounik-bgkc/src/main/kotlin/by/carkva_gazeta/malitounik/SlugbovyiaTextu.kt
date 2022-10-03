@@ -14,7 +14,6 @@ class SlugbovyiaTextu {
     private val datMinVP = ArrayList<SlugbovyiaTextuData>()
     private val datMinSH = ArrayList<SlugbovyiaTextuData>()
     private val datMinSV = ArrayList<SlugbovyiaTextuData>()
-    private val opisanieSviat = ArrayList<ArrayList<String>>()
     private val piarliny = ArrayList<ArrayList<String>>()
     private var loadOpisanieSviatJob: Job? = null
     private var loadPiarlinyJob: Job? = null
@@ -342,49 +341,6 @@ class SlugbovyiaTextu {
             if (resource == it.resource) return it.title
         }
         return ""
-    }
-
-    fun loadOpisanieSviat() {
-        if (opisanieSviat.size == 0 && loadOpisanieSviatJob?.isActive != true) {
-            val fileOpisanieSviat = File("${Malitounik.applicationContext().filesDir}/opisanie_sviat.json")
-            if (!fileOpisanieSviat.exists()) {
-                if (MainActivity.isNetworkAvailable()) {
-                    loadOpisanieSviatJob = CoroutineScope(Dispatchers.Main).launch {
-                        withContext(Dispatchers.IO) {
-                            kotlin.runCatching {
-                                try {
-                                    val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
-                                    val conections = mURL.openConnection() as HttpURLConnection
-                                    if (conections.responseCode == 200) {
-                                        fileOpisanieSviat.writer().use {
-                                            it.write(mURL.readText())
-                                        }
-                                    }
-                                } catch (_: Throwable) {
-                                }
-                            }
-                        }
-                        try {
-                            val builder = fileOpisanieSviat.readText()
-                            val gson = Gson()
-                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                            opisanieSviat.addAll(gson.fromJson(builder, type))
-                        } catch (t: Throwable) {
-                            fileOpisanieSviat.delete()
-                        }
-                    }
-                }
-            } else {
-                try {
-                    val builder = fileOpisanieSviat.readText()
-                    val gson = Gson()
-                    val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                    opisanieSviat.addAll(gson.fromJson(builder, type))
-                } catch (t: Throwable) {
-                    fileOpisanieSviat.delete()
-                }
-            }
-        }
     }
 
     fun loadPiarliny() {

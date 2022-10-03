@@ -3,12 +3,8 @@ package by.carkva_gazeta.malitounik
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.Shader
-import android.graphics.Typeface
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -17,18 +13,20 @@ import android.text.method.LinkMovementMethod
 import android.text.style.AlignmentSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.text.style.LeadingMarginSpan.LeadingMarginSpan2
 import android.text.style.StrikethroughSpan
 import android.util.TypedValue
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver.OnPreDrawListener
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
+import androidx.core.text.toSpannable
 import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.CalaindarBinding
 import kotlinx.coroutines.CoroutineScope
@@ -131,11 +129,57 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 binding.textDayInYear.text = getString(R.string.admin_show_day_in_year, MenuCaliandar.getPositionCaliandar(position)[24], MenuCaliandar.getPositionCaliandar(position)[22])
             }
             if (!MenuCaliandar.getPositionCaliandar(position)[4].contains("no_sviatyia")) {
-                sviatyiaView()
+                if (dzenNoch) {
+                    binding.sviatyia.setBackgroundResource(R.drawable.selector_dark)
+                    binding.sviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                }
+                val drawer = when (MenuCaliandar.getPositionCaliandar(position)[12].toInt()) {
+                    1 -> {
+                        if (dzenNoch) ContextCompat.getDrawable(it, R.drawable.znaki_krest_black)
+                        else ContextCompat.getDrawable(it, R.drawable.znaki_krest)
+                    }
+                    3 -> {
+                        if (dzenNoch) ContextCompat.getDrawable(it, R.drawable.znaki_krest_v_polukruge_black)
+                        else ContextCompat.getDrawable(it, R.drawable.znaki_krest_v_polukruge)
+                    }
+                    4 -> {
+                        if (dzenNoch) ContextCompat.getDrawable(it, R.drawable.znaki_ttk_black_black)
+                        else ContextCompat.getDrawable(it, R.drawable.znaki_ttk)
+                    }
+                    5 -> {
+                        if (dzenNoch) ContextCompat.getDrawable(it, R.drawable.znaki_ttk_whate)
+                        else ContextCompat.getDrawable(it, R.drawable.znaki_ttk_black)
+                    }
+                    else -> null
+                }
+                var dataSviatyia = MenuCaliandar.getPositionCaliandar(position)[4]
+                if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
+                val sviatyia = MainActivity.fromHtml(dataSviatyia).toSpannable()
+                if (drawer != null) {
+                    binding.znakTipicona2.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
+                        override fun onPreDraw(): Boolean {
+                            val density = resources.displayMetrics.density.toInt()
+                            val finalWidth = binding.znakTipicona2.measuredWidth
+                            val leftMargin = finalWidth + 5 * density
+                            if (finalWidth > 0) binding.znakTipicona2.viewTreeObserver.removeOnPreDrawListener(this)
+                            val t1 = sviatyia.indexOf("\n")
+                            val length = if (t1 != -1) t1
+                            else sviatyia.length
+                            sviatyia.setSpan(MarginSviatyia(1, leftMargin), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            binding.znakTipicona2.setImageDrawable(drawer)
+                            binding.znakTipicona2.visibility = View.VISIBLE
+                            binding.sviatyia.text = sviatyia
+                            return true
+                        }
+                    })
+                } else {
+                    binding.sviatyia.text = sviatyia
+                }
+                binding.sviatyia.setOnClickListener(this)
             } else {
                 binding.polosa1.visibility = View.GONE
                 binding.polosa2.visibility = View.GONE
-                binding.listSviatyia.visibility = View.GONE
+                binding.sviatyiaView.visibility = View.GONE
             }
             if (!MenuCaliandar.getPositionCaliandar(position)[6].contains("no_sviaty")) {
                 binding.textCviatyGlavnyia.text = MenuCaliandar.getPositionCaliandar(position)[6]
@@ -271,7 +315,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             }
             if (MenuCaliandar.getPositionCaliandar(position)[5].contains("2")) {
                 binding.textCviatyGlavnyia.typeface = MainActivity.createFont(Typeface.NORMAL)
-                if(MenuCaliandar.getPositionCaliandar(position)[6].contains("<strong>")) {
+                if (MenuCaliandar.getPositionCaliandar(position)[6].contains("<strong>")) {
                     val t1 = MenuCaliandar.getPositionCaliandar(position)[6].indexOf("<strong>")
                     val t2 = MenuCaliandar.getPositionCaliandar(position)[6].indexOf("</strong>")
                     val spannable = SpannableStringBuilder(binding.textCviatyGlavnyia.text)
@@ -434,6 +478,13 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 i.putExtra("glavnyia", true)
                 i.putExtra("mun", munsv)
                 i.putExtra("day", daysv)
+                i.putExtra("year", MenuCaliandar.getPositionCaliandar(position)[3].toInt())
+                startActivity(i)
+            }
+            R.id.sviatyia -> activity?.let {
+                val i = Intent(it, Opisanie::class.java)
+                i.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1)
+                i.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
                 i.putExtra("year", MenuCaliandar.getPositionCaliandar(position)[3].toInt())
                 startActivity(i)
             }
@@ -650,105 +701,16 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun sviatyiaView() {
-        activity?.let { activity ->
-            val sviatyia = MenuCaliandar.getPositionCaliandar(position)[4]
-            val list = sviatyia.split("<br>")
-            val density = resources.displayMetrics.density.toInt()
-            for (i in list.indices) {
-                var spannable = SpannableStringBuilder(list[i])
-                val textView = TextView(activity)
-                textView.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_text))
-                textView.background = ContextCompat.getDrawable(activity, R.drawable.selector_default)
-                when {
-                    list.size == 1 -> textView.setPadding(5 * density, 5 * density, 10 * density, 5 * density)
-                    i == 0 -> textView.setPadding(5 * density, 5 * density, 10 * density, 0)
-                    i == list.size - 1 -> textView.setPadding(5 * density, 0, 10 * density, 5 * density)
-                    else -> textView.setPadding(5 * density, 0, 10 * density, 0)
-                }
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
-                if (dzenNoch) {
-                    textView.setBackgroundResource(R.drawable.selector_dark)
-                    textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
-                }
-                textView.typeface = MainActivity.createFont(Typeface.NORMAL)
-                if (spannable.contains("<font")) {
-                    val t1 = spannable.indexOf("<font color=#d00505>")
-                    var t2 = spannable.indexOf("</font>")
-                    if (t2 == -1) {
-                        t2 = spannable.length
-                    } else {
-                        spannable = spannable.replace(t2, t2 + 7, "")
-                    }
-                    if (dzenNoch) {
-                        spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary_black)), t1, t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    } else {
-                        spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary)), t1, t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }
-                    spannable = spannable.replace(t1, t1 + 20, "")
-                } else if (spannable.contains("</font>")) {
-                    val t2 = spannable.indexOf("</font>")
-                    if (dzenNoch) {
-                        spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary_black)), 0, t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    } else {
-                        spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary)), 0, t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }
-                    spannable = spannable.replace(t2, t2 + 7, "")
-                }
-                if (spannable.contains("<strong>")) {
-                    val t1 = spannable.indexOf("<strong>")
-                    var t2 = spannable.indexOf("</strong>")
-                    if (t2 == -1) {
-                        t2 = spannable.length
-                    } else {
-                        spannable = spannable.replace(t2, t2 + 9, "")
-                    }
-                    spannable.setSpan(CustomTypefaceSpan("", MainActivity.createFont(Typeface.BOLD)), t1, t2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
-                    spannable = spannable.replace(t1, t1 + 8, "")
-                } else if (spannable.contains("</strong>")) {
-                    val t2 = spannable.indexOf("</strong>")
-                    spannable.setSpan(CustomTypefaceSpan("", MainActivity.createFont(Typeface.BOLD)), 0, t2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
-                    spannable = spannable.replace(t2, t2 + 9, "")
-                }
-                textView.text = spannable
-                var drawer: Drawable? = null
-                if (i == 0) {
-                    drawer = when (MenuCaliandar.getPositionCaliandar(position)[12].toInt()) {
-                        1 -> {
-                            if (dzenNoch) ContextCompat.getDrawable(activity, R.drawable.znaki_krest_black)
-                            else ContextCompat.getDrawable(activity, R.drawable.znaki_krest)
-                        }
-                        3 -> {
-                            if (dzenNoch) ContextCompat.getDrawable(activity, R.drawable.znaki_krest_v_polukruge_black)
-                            else ContextCompat.getDrawable(activity, R.drawable.znaki_krest_v_polukruge)
-                        }
-                        4 -> {
-                            if (dzenNoch) ContextCompat.getDrawable(activity, R.drawable.znaki_ttk_black_black)
-                            else ContextCompat.getDrawable(activity, R.drawable.znaki_ttk)
-                        }
-                        5 -> {
-                            if (dzenNoch) ContextCompat.getDrawable(activity, R.drawable.znaki_ttk_whate)
-                            else ContextCompat.getDrawable(activity, R.drawable.znaki_ttk_black)
-                        }
-                        else -> null
-                    }
-                }
-                drawer?.setBounds(0, 0, 20 * density, 20 * density)
-                textView.compoundDrawablePadding = 5 * density
-                textView.setCompoundDrawables(drawer, null, null, null)
-                textView.setOnClickListener {
-                    val intent = Intent(activity, Opisanie::class.java)
-                    intent.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1)
-                    intent.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
-                    intent.putExtra("year", MenuCaliandar.getPositionCaliandar(position)[3].toInt())
-                    startActivity(intent)
-                }
-                binding.listSviatyia.addView(textView)
-                val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                llp.gravity = Gravity.START or Gravity.CENTER_HORIZONTAL
-                textView.layoutParams = llp
-            }
+    private class MarginSviatyia(val lines: Int, val margin: Int) : LeadingMarginSpan2 {
+        override fun getLeadingMargin(first: Boolean): Int {
+            return if (first) margin
+            else 0
         }
+
+        override fun drawLeadingMargin(c: Canvas?, p: Paint?, x: Int, dir: Int, top: Int, baseline: Int, bottom: Int, text: CharSequence?, start: Int, end: Int, first: Boolean, layout: Layout?) {
+        }
+
+        override fun getLeadingMarginLineCount() = lines
     }
 
     companion object {

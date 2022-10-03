@@ -38,8 +38,8 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
 
     private fun loadPiarliny(update: Boolean = false) {
         val piarliny = ArrayList<ArrayList<String>>()
-        val fileOpisanieSviat = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
-        if (!fileOpisanieSviat.exists() || update) {
+        val filePiarliny = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
+        if (!filePiarliny.exists() || update) {
             if (MainActivity.isNetworkAvailable()) {
                 loadPiarlinyJob = CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {
@@ -48,7 +48,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                 val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
                                 val conections = mURL.openConnection() as HttpURLConnection
                                 if (conections.responseCode == 200) {
-                                    fileOpisanieSviat.writer().use {
+                                    filePiarliny.writer().use {
                                         it.write(mURL.readText())
                                     }
                                 }
@@ -57,12 +57,12 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                         }
                     }
                     try {
-                        val builder = fileOpisanieSviat.readText()
+                        val builder = filePiarliny.readText()
                         val gson = Gson()
                         val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
                         piarliny.addAll(gson.fromJson(builder, type))
                     } catch (t: Throwable) {
-                        fileOpisanieSviat.delete()
+                        filePiarliny.delete()
                     }
                     val cal = GregorianCalendar()
                     val sb = StringBuilder()
@@ -75,19 +75,17 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                             i++
                         }
                     }
-                    withContext(Dispatchers.Main) {
-                        binding.textView.text = MainActivity.fromHtml(sb.toString())
-                    }
+                    binding.textView.text = MainActivity.fromHtml(sb.toString())
                 }
             }
         } else {
             try {
-                val builder = fileOpisanieSviat.readText()
+                val builder = filePiarliny.readText()
                 val gson = Gson()
                 val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
                 piarliny.addAll(gson.fromJson(builder, type))
             } catch (t: Throwable) {
-                fileOpisanieSviat.delete()
+                filePiarliny.delete()
             }
             val cal = GregorianCalendar()
             val sb = StringBuilder()

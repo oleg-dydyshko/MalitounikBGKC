@@ -673,7 +673,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (autoscrollOFF) {
             mAutoScroll = false
         }
-        loadData(savedInstanceState)
+        binding.textView.post {
+            loadData(savedInstanceState)
+        }
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {

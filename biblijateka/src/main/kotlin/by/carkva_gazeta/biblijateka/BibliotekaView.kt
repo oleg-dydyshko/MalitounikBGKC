@@ -63,7 +63,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import javax.xml.parsers.ParserConfigurationException
 
-class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
+class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener {
 
     private lateinit var pdfView: PDFView
     private var mLastClickTime: Long = 0
@@ -73,7 +73,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     private var fileName = ""
     private val bookTitle = ArrayList<String>()
     private var menu = false
-    private val popup: PopupMenu? = null
     private val arrayList = ArrayList<ArrayList<String>>()
     private var width = 0
     private lateinit var adapter: BibliotekaAdapter
@@ -263,24 +262,32 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     override fun fileDeliteCancel() {
     }
 
+    override fun deliteNiadaunia(position: Int, file: String) {
+        deliteCashe(position, file)
+    }
+
     override fun fileDelite(position: Int, file: String) {
-        var file1 = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), file)
+        val file1 = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), file)
         if (file1.exists()) {
             file1.delete()
+        }
+        deliteCashe(position, file)
+    }
+
+    private fun deliteCashe(position: Int, file: String) {
+        val t1 = file.lastIndexOf(".")
+        val dirName = if (t1 == -1) file
+        else file.substring(0, t1)
+        var t2 = dirName.lastIndexOf("/")
+        var patch = "$filesDir/Book/" + dirName.substring(t2 + 1)
+        var file1 = File(patch)
+        if (file1.exists() && file1.isDirectory) {
+            file1.deleteRecursively()
         } else {
-            val t1 = file.lastIndexOf(".")
-            val dirName = file.substring(0, t1)
-            var t2 = dirName.lastIndexOf("/")
-            var patch = "$filesDir/Book/" + dirName.substring(t2 + 1)
+            t2 = file.lastIndexOf("/")
+            patch = "$filesDir/Book/" + file.substring(t2 + 1)
             file1 = File(patch)
-            if (file1.exists() && file1.isDirectory) {
-                file1.deleteRecursively()
-            } else {
-                t2 = file.lastIndexOf("/")
-                patch = "$filesDir/Book/" + file.substring(t2 + 1)
-                file1 = File(patch)
-                if (file1.exists()) file1.delete()
-            }
+            if (file1.exists()) file1.delete()
         }
         var position1 = -1
         naidaunia.forEachIndexed { index, arrayList1 ->
@@ -301,7 +308,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
             prefEditor.apply()
         }
-        popup?.menu?.getItem(2)?.isVisible = false
     }
 
     override fun onDialogPositiveClick(listPosition: String?) {
@@ -920,8 +926,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     }
 
     override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
-        val dd = DialogDelite.getInstance(position, arrayList[position][1], "з нядаўніх кніг", arrayList[position][0])
-        dd.show(supportFragmentManager, "dialog_dilite")
+        val dd = DialogDeliteNiadaunia.getInstance(position, arrayList[position][1], arrayList[position][0])
+        dd.show(supportFragmentManager, "dialog_delite_niadaunia")
         return true
     }
 

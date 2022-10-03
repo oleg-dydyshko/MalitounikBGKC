@@ -33,9 +33,9 @@ import java.util.*
 
 class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener, DialogDeliteAllImagesOpisanie.DialogDeliteAllImagesOpisanieListener {
     private val dzenNoch get() = getBaseDzenNoch()
-    private var mun = Calendar.getInstance()[Calendar.MONTH] + 1
-    private var day = Calendar.getInstance()[Calendar.DATE]
-    private var year = Calendar.getInstance()[Calendar.YEAR]
+    private var mun = 1
+    private var day = 1
+    private var year = 2022
     private var svity = false
     private lateinit var binding: OpisanieBinding
     private lateinit var chin: SharedPreferences
@@ -181,15 +181,19 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             val gson = Gson()
             val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
             val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(builder, type)
-            arrayList.forEach {
-                if (day == it[0].toInt() && mun == it[1].toInt()) {
-                    var res = it[2]
-                    if (dzenNoch) res = res.replace("#d00505", "#f44336")
-                    val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-                    val spanned = MainActivity.fromHtml(res)
-                    binding.TextView1.textSize = fontBiblia
-                    binding.TextView1.text = spanned.trim()
+            if (arrayList != null) {
+                arrayList.forEach {
+                    if (day == it[0].toInt() && mun == it[1].toInt()) {
+                        var res = it[2]
+                        if (dzenNoch) res = res.replace("#d00505", "#f44336")
+                        val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                        val spanned = MainActivity.fromHtml(res)
+                        binding.TextView1.textSize = fontBiblia
+                        binding.TextView1.text = spanned.trim()
+                    }
                 }
+            } else {
+                fileOpisanieSviat.delete()
             }
         }
     }
@@ -205,7 +209,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         year = intent.extras?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
         svity = intent.extras?.getBoolean("glavnyia", false) ?: false
         if (savedInstanceState?.getBoolean("imageViewFullVisable") == true) {
-            val bmp: Bitmap? = if (Build.VERSION.SDK_INT >= 33) {
+            val bmp = if (Build.VERSION.SDK_INT >= 33) {
                 savedInstanceState.getParcelable("bitmap", Bitmap::class.java)
             } else {
                 @Suppress("DEPRECATION") savedInstanceState.getParcelable("bitmap")
@@ -282,6 +286,17 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                         } catch (_: Throwable) {
                                         }
                                     }
+                                }
+                            }
+                        } catch (_: Throwable) {
+                        }
+                        try {
+                            val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
+                            val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
+                            val conections = mURL.openConnection() as HttpURLConnection
+                            if (conections.responseCode == 200) {
+                                fileOpisanieSviat.writer().use {
+                                    it.write(mURL.readText())
                                 }
                             }
                         } catch (_: Throwable) {

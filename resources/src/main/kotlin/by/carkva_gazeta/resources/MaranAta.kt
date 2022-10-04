@@ -53,14 +53,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private var spid = 60
     private var belarus = true
     private var mActionDown = false
-    private var setFont = false
     private var paralel = false
-    private var onsave = false
     private var paralelPosition = 0
-    private var tollBarText = ""
-    private var mPosition = 0
     private var maranAtaScrollPosition = 0
-    private var mOffset = 0
     private lateinit var binding: AkafistMaranAtaBinding
     private lateinit var bindingprogress: ProgressBinding
     private var autoScrollJob: Job? = null
@@ -76,7 +71,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
-        setFont = true
         adapter.notifyDataSetChanged()
     }
 
@@ -128,11 +122,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         cytanne = intent.extras?.getString("cytanneMaranaty") ?: ""
         setMaranata(cytanne)
         if (savedInstanceState != null) {
-            onsave = true
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            tollBarText = savedInstanceState.getString("tollBarText") ?: ""
-            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+            binding.titleToolbar.text = savedInstanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.maranata2)) ?: getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+            binding.subtitleToolbar.text = savedInstanceState.getString("subTollBarText", "") ?: ""
             paralel = savedInstanceState.getBoolean("paralel", paralel)
             binding.subtitleToolbar.text = savedInstanceState.getString("chtenie")
             orientation = savedInstanceState.getInt("orientation")
@@ -141,6 +134,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 parralelMestaView(paralelPosition)
             }
         } else {
+            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             if (k.getBoolean("autoscrollAutostart", false)) {
                 autoStartScroll()
@@ -420,37 +414,11 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     stopAutoScroll()
                     invalidateOptionsMenu()
                 }
-                setFont = false
-                val offset = list.getChildAt(0).top
-                if (mPosition < position) {
-                    mOffset = 0
+                val nazva = maranAta[list.firstVisiblePosition].title
+                val nazvaView = binding.subtitleToolbar.text.toString()
+                if (!nazva.contains(nazvaView) || nazvaView == "") {
+                    binding.subtitleToolbar.text = nazva
                 }
-                val scroll = if (mPosition == position && mOffset == offset) {
-                    0
-                } else {
-                    1
-                }
-                if (!onsave) {
-                    var nazva = ""
-                    if (scroll == 1) {
-                        nazva = maranAta[list.firstVisiblePosition].title
-                    }
-                    val oldtollBarText = binding.titleToolbar.text.toString()
-                    if (oldtollBarText == "") {
-                        nazva = maranAta[list.firstVisiblePosition].title
-                        tollBarText = nazva
-                        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
-                        binding.subtitleToolbar.text = tollBarText
-                    }
-                    if (!nazva.contains(tollBarText) && scroll == 1) {
-                        tollBarText = nazva
-                        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
-                        binding.subtitleToolbar.text = tollBarText
-                    }
-                    mPosition = position
-                    mOffset = offset
-                }
-                onsave = false
             }
         })
         binding.ListView.post {
@@ -1103,10 +1071,13 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
         mPedakVisable = false
         binding.linearLayout4.visibility = View.GONE
-        val prefEditors = k.edit()
-        maranAtaScrollPosition = binding.ListView.firstVisiblePosition
-        prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
-        prefEditors.apply()
+        val firstVisiblePosition = binding.ListView.firstVisiblePosition
+        if (firstVisiblePosition != 0) {
+            maranAtaScrollPosition = firstVisiblePosition
+            val prefEditors = k.edit()
+            prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
+            prefEditors.apply()
+        }
         stopAutoStartScroll()
         procentJob?.cancel()
         resetTollbarJob?.cancel()
@@ -1278,7 +1249,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         super.onSaveInstanceState(outState)
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
-        outState.putString("tollBarText", tollBarText)
+        outState.putString("tollBarText", binding.titleToolbar.text.toString())
+        outState.putString("subTollBarText", binding.subtitleToolbar.text.toString())
         outState.putBoolean("paralel", paralel)
         outState.putInt("paralelPosition", paralelPosition)
         outState.putString("chtenie", binding.subtitleToolbar.text.toString())
@@ -1625,7 +1597,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
-            if (mView == null || setFont) {
+            if (mView == null) {
                 val binding = SimpleListItemMaranataBinding.inflate(LayoutInflater.from(context), parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label)

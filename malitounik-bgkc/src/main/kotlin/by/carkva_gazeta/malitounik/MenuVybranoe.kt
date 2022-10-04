@@ -80,15 +80,21 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
         var indexVybranoe = 0
         var remove = false
         if (bibleVybranoe != "") {
-            val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
-            if (arrayListVybranoe.isEmpty()) {
-                vybranoe.forEachIndexed { index, vybranoeData ->
-                    if (vybranoeData.resurs == "1") {
-                        indexVybranoe = index
-                        remove = true
-                        return@forEachIndexed
+            try {
+                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
+                if (arrayListVybranoe.isEmpty()) {
+                    vybranoe.forEachIndexed { index, vybranoeData ->
+                        if (vybranoeData.resurs == "1") {
+                            indexVybranoe = index
+                            remove = true
+                            return@forEachIndexed
+                        }
                     }
                 }
+            } catch (_: Throwable) {
+                val edit = k.edit()
+                edit.remove("bibleVybranoeSemuxa")
+                edit.apply()
             }
         } else {
             vybranoe.forEachIndexed { index, vybranoeData ->
@@ -105,15 +111,21 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
         }
         bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
         if (bibleVybranoe != "") {
-            val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
-            if (arrayListVybranoe.isEmpty()) {
-                vybranoe.forEachIndexed { index, vybranoeData ->
-                    if (vybranoeData.resurs == "2") {
-                        indexVybranoe = index
-                        remove = true
-                        return@forEachIndexed
+            try {
+                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
+                if (arrayListVybranoe.isEmpty()) {
+                    vybranoe.forEachIndexed { index, vybranoeData ->
+                        if (vybranoeData.resurs == "2") {
+                            indexVybranoe = index
+                            remove = true
+                            return@forEachIndexed
+                        }
                     }
                 }
+            } catch (_: Throwable) {
+                val edit = k.edit()
+                edit.remove("bibleVybranoeSinoidal")
+                edit.apply()
             }
         } else {
             vybranoe.forEachIndexed { index, vybranoeData ->
@@ -130,15 +142,21 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
         }
         bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
         if (bibleVybranoe != "") {
-            val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
-            if (arrayListVybranoe.isEmpty()) {
-                vybranoe.forEachIndexed { index, vybranoeData ->
-                    if (vybranoeData.resurs == "3") {
-                        indexVybranoe = index
-                        remove = true
-                        return@forEachIndexed
+            try {
+                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
+                if (arrayListVybranoe.isEmpty()) {
+                    vybranoe.forEachIndexed { index, vybranoeData ->
+                        if (vybranoeData.resurs == "3") {
+                            indexVybranoe = index
+                            remove = true
+                            return@forEachIndexed
+                        }
                     }
                 }
+            } catch (_: Throwable) {
+                val edit = k.edit()
+                edit.remove("bibleVybranoeNadsan")
+                edit.apply()
             }
         } else {
             vybranoe.forEachIndexed { index, vybranoeData ->
@@ -178,15 +196,12 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
             k = fragmentActivity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val gson = Gson()
             val file = File(fragmentActivity.filesDir.toString() + "/Vybranoe.json")
-            if (file.exists()) {
+            if (file.exists() && vybranoe.isEmpty()) {
                 try {
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    vybranoe = gson.fromJson(file.readText(), type)
-                } catch (t: Throwable) {
-                    vybranoe = ArrayList()
-                    file.writer().use {
-                        it.write(gson.toJson(vybranoe))
-                    }
+                    vybranoe.addAll(gson.fromJson(file.readText(), type))
+                } catch (_: Throwable) {
+                    file.delete()
                 }
             }
             checkBibleVybranoe()
@@ -393,7 +408,7 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
     }
 
     companion object {
-        var vybranoe = ArrayList<VybranoeData>()
+        val vybranoe = ArrayList<VybranoeData>()
         var vybranoeSort = 1
     }
 }

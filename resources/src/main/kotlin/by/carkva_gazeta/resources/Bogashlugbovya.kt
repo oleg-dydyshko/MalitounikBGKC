@@ -442,9 +442,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
             try {
                 val gson = Gson()
-                if (file.exists()) {
+                if (file.exists() && MenuVybranoe.vybranoe.isEmpty()) {
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
+                    MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
                     if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
@@ -481,10 +481,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         fun checkVybranoe(context: Context, resurs: String): Boolean {
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
             try {
-                if (file.exists()) {
+                if (file.exists() && MenuVybranoe.vybranoe.isEmpty()) {
                     val gson = Gson()
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
+                    MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 } else {
                     return false
                 }

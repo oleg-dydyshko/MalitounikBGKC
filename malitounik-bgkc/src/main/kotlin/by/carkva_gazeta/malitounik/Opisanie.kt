@@ -113,18 +113,21 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         loadPiarlinyJob?.cancel()
     }
 
-    private fun resizeImage(bitmap: Bitmap): Bitmap? {
-        var newHeight = bitmap.height.toFloat()
-        var newWidth = bitmap.width.toFloat()
-        val widthLinear = binding.linearLayout.width.toFloat()
-        val resoluton = newWidth / newHeight
-        newWidth = 500f * resoluton
-        newHeight = 500f
-        if (newWidth > widthLinear) {
-            newWidth = widthLinear
-            newHeight = newWidth / resoluton
+    private fun resizeImage(bitmap: Bitmap?): Bitmap? {
+        bitmap?.let {
+            var newHeight = it.height.toFloat()
+            var newWidth = it.width.toFloat()
+            val widthLinear = binding.linearLayout.width.toFloat()
+            val resoluton = newWidth / newHeight
+            newWidth = 500f * resoluton
+            newHeight = 500f
+            if (newWidth > widthLinear) {
+                newWidth = widthLinear
+                newHeight = newWidth / resoluton
+            }
+            return Bitmap.createScaledBitmap(it, newWidth.toInt(), newHeight.toInt(), false)
         }
-        return Bitmap.createScaledBitmap(bitmap, newWidth.toInt(), newHeight.toInt(), false)
+        return null
     }
 
     private fun loadOpisanieSviatyia(builder: String) {

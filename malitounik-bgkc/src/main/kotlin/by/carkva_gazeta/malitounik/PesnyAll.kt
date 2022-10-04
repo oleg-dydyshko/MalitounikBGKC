@@ -196,9 +196,9 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
             try {
                 val gson = Gson()
-                if (file.exists()) {
+                if (file.exists() && MenuVybranoe.vybranoe.isEmpty()) {
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
+                    MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
                     if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
@@ -237,14 +237,14 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
             try {
                 val gson = Gson()
-                if (file.exists()) {
+                if (file.exists() && MenuVybranoe.vybranoe.isEmpty()) {
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
+                    MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 } else {
                     return false
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
-                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
+                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
                         check = true
                         break
                     }

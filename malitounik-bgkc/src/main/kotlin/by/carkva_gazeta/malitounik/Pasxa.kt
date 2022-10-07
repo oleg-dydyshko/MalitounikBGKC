@@ -9,6 +9,7 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.webkit.WebSettings
@@ -102,10 +103,8 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.pasxa, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.pasxa, menu)
         for (i in 0 until menu.size()) {
             val item: MenuItem = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -113,17 +112,14 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_dzen_noch).isChecked = getBaseDzenNoch()
         if (chin.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
@@ -132,6 +128,7 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
         if (id == R.id.action_font) {
             val dialogFontSize = DialogFontSize()
             dialogFontSize.show(supportFragmentManager, "font")
+            return true
         }
         if (id == R.id.action_dzen_noch) {
             val prefEditor = chin.edit()
@@ -143,13 +140,15 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
             }
             prefEditor.apply()
             recreate()
+            return true
         }
         if (id == R.id.action_share) {
             val sendIntent = Intent(Intent.ACTION_SEND)
             sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=5")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 }

@@ -19,7 +19,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnPreDrawListener
+import android.view.ViewTreeObserver
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -27,7 +27,6 @@ import android.widget.TextView
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpannable
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.CalaindarBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,15 +35,9 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 
-class CaliandarFull : Fragment(), View.OnClickListener {
+class CaliandarFull : BaseFragment(), View.OnClickListener {
     private val dzenNoch: Boolean
-        get() {
-            var dzn = false
-            activity?.let {
-                dzn = (it as BaseActivity).getBaseDzenNoch()
-            }
-            return dzn
-        }
+        get() = (requireActivity() as BaseActivity).getBaseDzenNoch()
     private var rColorColorprimary = R.drawable.selector_red
     private var sabytieTitle = ""
     private var position = 0
@@ -65,12 +58,16 @@ class CaliandarFull : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         position = arguments?.getInt("position") ?: 0
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = CalaindarBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let {
             val nedelName = it.resources.getStringArray(R.array.dni_nedeli)
             val monthName = it.resources.getStringArray(R.array.meciac)
@@ -156,7 +153,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
                 val sviatyia = MainActivity.fromHtml(dataSviatyia).toSpannable()
                 if (drawer != null) {
-                    binding.znakTipicona2.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
+                    binding.znakTipicona2.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
                         override fun onPreDraw(): Boolean {
                             val density = resources.displayMetrics.density.toInt()
                             val finalWidth = binding.znakTipicona2.measuredWidth
@@ -398,7 +395,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 }
             }
         }
-        return binding.root
     }
 
     override fun onClick(v: View?) {

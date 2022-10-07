@@ -1,6 +1,5 @@
 package by.carkva_gazeta.admin
 
-import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
@@ -9,17 +8,17 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.admin.databinding.AdminMainBinding
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.android.play.core.splitcompat.SplitCompat
 import kotlinx.coroutines.*
 
-class AdminMain : AppCompatActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
+class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
     private lateinit var binding: AdminMainBinding
     private var resetTollbarJob: Job? = null
 
@@ -113,7 +112,7 @@ class AdminMain : AppCompatActivity(), DialogUpdateHelp.DialogUpdateHelpListener
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
@@ -122,18 +121,18 @@ class AdminMain : AppCompatActivity(), DialogUpdateHelp.DialogUpdateHelpListener
         if (id == R.id.action_beta) {
             val dialogUpdateHelp = DialogUpdateHelp.newInstance(false)
             dialogUpdateHelp.show(supportFragmentManager, "dialogUpdateHelp")
+            return true
         }
         if (id == R.id.action_release) {
             val dialogUpdateHelp = DialogUpdateHelp.newInstance(true)
             dialogUpdateHelp.show(supportFragmentManager, "dialogUpdateHelp")
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.edit_admin_main, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.edit_admin_main, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -141,13 +140,5 @@ class AdminMain : AppCompatActivity(), DialogUpdateHelp.DialogUpdateHelpListener
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }

@@ -10,19 +10,14 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.ListFragment
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 
-class MenuBogashlugbovya : ListFragment() {
+class MenuBogashlugbovya : BaseListFragment() {
     private var mLastClickTime: Long = 0
     private val data = ArrayList<MenuListData>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let {
             data.add(MenuListData("Боская Літургія між сьвятымі айца нашага Яна Залатавуснага", "lit_jan_zalat"))
             data.add(MenuListData("Боская Літургія ў Велікодны перыяд", "lit_jan_zalat_vielikodn"))
@@ -36,11 +31,10 @@ class MenuBogashlugbovya : ListFragment() {
             data.add(MenuListData("Служба за памерлых — Малая паніхіда", "panichida_mal"))
             data.add(MenuListData("Трапары і кандакі нядзельныя васьмі тонаў", "3"))
             data.add(MenuListData("Трапары і кандакі штодзённыя - на кожны дзень тыдня", "4"))
-            data.add(MenuListData("Мінэя Вялікага посту", "5"))
-            data.add(MenuListData("Мінэя месячная", "6"))
+            data.add(MenuListData("Мінэя месячная", "5"))
             data.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы", "kanon_malebny_baharodzicy"))
             data.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага", "kanon_a_kryckaha"))
-            data.add(MenuListData("Трыёдзь", "7"))
+            data.add(MenuListData("Трыёдзь", "6"))
             data.add(MenuListData("Малебен сьвятым айцам нашым, роўным апосталам Кірылу і Мятоду, настаўнікам славянскім", "malebien_kiryla_miatod"))
             data.add(MenuListData("Служба за памерлых на кожны дзень тыдня", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
             data.add(MenuListData("Служба Найсьвяцейшай Багародзіцы", "sluzba_najsviaciejszaj_baharodzicy"))
@@ -78,16 +72,12 @@ class MenuBogashlugbovya : ListFragment() {
                 startActivity(intent)
             }
             "5" -> {
-                val intent = Intent(activity, SubMenuBogashlugbovyaVialikiPost::class.java)
-                startActivity(intent)
-            }
-            "6" -> {
                 activity?.let {
                     val intent = Intent(it, MineiaShodzennaia::class.java)
                     startActivity(intent)
                 }
             }
-            "7" -> {
+            "6" -> {
                 activity?.let {
                     val intent = Intent(it, BogashlugbovyaTryjodz::class.java)
                     startActivity(intent)
@@ -109,6 +99,7 @@ class MenuBogashlugbovya : ListFragment() {
             }
         }
     }
+
     private class MenuListAdaprer(private val context: BaseActivity, private val data: ArrayList<MenuListData>) : ArrayAdapter<MenuListData>(context, R.layout.simple_list_item_2, R.id.label, data) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {

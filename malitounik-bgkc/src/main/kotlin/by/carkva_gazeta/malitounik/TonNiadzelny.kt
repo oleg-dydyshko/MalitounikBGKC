@@ -94,12 +94,12 @@ class TonNiadzelny : BaseActivity() {
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             onBackPressed()
             return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
     private class TonListAdapter(private val mContext: Activity, private val adapterList: ArrayList<String>) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, adapterList) {
 

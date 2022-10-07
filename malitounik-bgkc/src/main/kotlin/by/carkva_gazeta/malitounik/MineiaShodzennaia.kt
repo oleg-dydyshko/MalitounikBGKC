@@ -63,8 +63,7 @@ class MineiaShodzennaia : BaseActivity() {
                         pasha.set(pasha[Calendar.YEAR], Calendar.OCTOBER, dny)
                         val wik = pasha.get(Calendar.DAY_OF_WEEK)
                         if (wik == Calendar.SUNDAY) {
-                            day = pasha[Calendar.DAY_OF_YEAR]
-                            c.set(Calendar.DAY_OF_YEAR, day)
+                            c.set(Calendar.DAY_OF_YEAR, pasha[Calendar.DAY_OF_YEAR])
                         }
                     }
                 }
@@ -245,13 +244,13 @@ class MineiaShodzennaia : BaseActivity() {
         month = null
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
             return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     companion object {

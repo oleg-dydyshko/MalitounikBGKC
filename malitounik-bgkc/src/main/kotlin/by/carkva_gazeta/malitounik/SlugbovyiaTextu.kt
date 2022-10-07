@@ -122,16 +122,6 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(6, "Сьветлая субота - Ютрань", "u_svietlaja_subota", UTRAN, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(6, "Сьветлая субота - Літургія", "l_svietlaja_subota", LITURGIA, pasxa = true))
 
-        datMinVP.add(SlugbovyiaTextuData(6, "Нядзеля Тамаша (Антыпасха) вячэрня ў суботу", "ndz_tamasza_viaczernia_subota", VIACHERNIA, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха) - Ютрань", "ndz_tamasza_jutran", UTRAN, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха) - Літургія", "ndz_tamasza_liturhija", LITURGIA, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша ўвечары", "ndz_tamasza_uvieczary", VIACHERNIA, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(8, "Панядзелак пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_paniadzielak", VIACHERNIA, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(9, "Аўторак пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_autorak", VIACHERNIA, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(10, "Серада пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_sierada", VIACHERNIA, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(11, "Чацьвер пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_czacvier", VIACHERNIA, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(12, "Пятніца пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_piatnica", VIACHERNIA, pasxa = true))
-
         datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
         datMinVP.add(SlugbovyiaTextuData(2, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
         datMinVP.add(SlugbovyiaTextuData(3, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
@@ -179,52 +169,61 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(257, "Сусьветнае Ўзвышэньне Пачэснага і Жыцьцядайнага Крыжа", "mm_14_09_uzvyszennie_kryza_liturhija", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(258, "Пасьвяцьце Ўзвышэньня і сьвятога вялікамучаніка Мікіты", "mm_15_09_pasviaccie_uzvyszennia_viaczernia", VIACHERNIA))
         datMinSH.add(SlugbovyiaTextuData(AICOU_VII_SUSVETNAGA_SABORY, "Нядзеля сьвятых айцоў VII Сусьветнага сабору", "mm_11_17_10_ajcou_7_susviet_saboru_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(217, "Перадсьвяцьце Перамяненьня і сьв. муч. Яўсігнея", "mm_05_08_pieradsv_pieramianiennia_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(217, "Перадсьвяцьце Перамяненьня і сьв. муч. Яўсігнея", "mm_05_08_pieradsv_pieramianiennia_viaczernia", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(218, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "mm_06_08_pieramianiennie_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(221, "Пасьвяцьце Перамяненьня і сьв. апостала Мацея", "mm_09_08_pasviaccie_pieramianiennia_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(221, "Пасьвяцьце Перамяненьня і сьв. апостала Мацея", "mm_09_08_pasviaccie_pieramianennia_viaczernia", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(227, "Усьпеньне Найсьвяцейшай Багародзіцы і Заўсёды Дзевы Марыі", "mm_15_08_uspiennie_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(227, "Усьпеньне Найсьвяцейшай Багародзіцы і Заўсёды Дзевы Марыі", "mm_15_08_uspiennie_viaczernia", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(222, "Пасьвяцьце Перамяненьня і сьв. мучаніка Лаўрына", "mm_10_08_viaczernia", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(226, "Перадсьвяцьце Ўсьпеньня і сьв. прарока Міхея", "mm_14_08_pieradsv_uspiennia_viaczernia", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(226, "Перадсьвяцьце Ўсьпеньня і сьв. прарока Міхея", "mm_14_08_pieradsv_uspiennia_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "viachernia_mineia_sviatochnaia1", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "viachernia_mineia_sviatochnaia4", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(3, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "viachernia_mineia_sviatochnaia3", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "viachernia_mineia_sviatochnaia5", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(16, "Пакланеньне кайданам апостала Пятра", "viachernia_mineia_sviatochnaia6", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(30, "Трох сьвятаначальнікаў: Васіля Вялікага, Рыгора Багаслова і Яна Залатавуснага", "viachernia_mineia_sviatochnaia7", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста - Ютрань", "uzniasienne_jutran", UTRAN, pasxa = true))
+        datMinSH.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста - Літургія", "uzniasienne_liturhija", LITURGIA, pasxa = true))
+        datMinSH.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста", "uzniasienne_viaczernia", VIACHERNIA, pasxa = true))
+        datMinSH.add(SlugbovyiaTextuData(42, "Нядзеля сьвятых айцоў I-га Усяленскага Сабору", "ndz_ajcou_1susviet_saboru", LITURGIA, pasxa = true))
+        datMinSH.add(SlugbovyiaTextuData(56, "Нядзеля ўсіх сьвятых", "ndz_usich_sviatych_liturhija", LITURGIA, pasxa = true))
+        datMinSH.add(SlugbovyiaTextuData(63, "Нядзеля ўсіх сьвятых беларускага народу", "ndz_usich_sv_biel_narodu_liturhija", LITURGIA, pasxa = true))
+        datMinSH.add(SlugbovyiaTextuData(274, "Покрыва Найсьвяцейшай Багародзіцы - Літургія", "mm_01_10_pokryva_baharodzicy_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(325, "Уваход у храм Найсьвяцейшай Багародзіцы - Літургія", "mm_21_11_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(33, "Сустрэча Госпада нашага Ісуса Хрыста (ГРАМНІЦЫ) - Літургія", "mm_02_02_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(354, "Перадсьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста і сьв. сьвятамучаніка Ігната Баганосца - Літургія", "l_rastvo_peradsviaccie_20_12", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(354, "Перадсьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста і сьв. сьвятамучаніка Ігната Баганосца", "v_rastvo_peradsviaccie_20_12", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі - Ютрань", "ju_rastvo_sv_vieczar_24_12", UTRAN))
+        datMinSH.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "v_rastvo_sv_vieczar_24_12", VIACHERNIA))
+        datMinSH.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі - Вялікія гадзіны", "vial_hadziny_rastvo_sv_vieczar_24_12", VIALIKIAGADZINY, checkVialikiaGadziny = true))
+        datMinSH.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі - Абедніца", "abed_rastvo_sv_vieczar_24_12", ABEDNICA))
+        datMinSH.add(SlugbovyiaTextuData(359, "Нараджэньне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "l_naradzennie_chrystova", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "mm_06_01_bohazjaulennie_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем) - Вялікія гадзіны", "mm_05_01_sv_vieczar_bohazjaulennia_vial_hadziny", VIALIKIAGADZINY, checkVialikiaGadziny = true))
+        datMinSH.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем) - Абедніца", "mm_05_01_sv_vieczar_bohazjaulennia_abiednica", ABEDNICA))
 
+        datMinSV.add(SlugbovyiaTextuData(6, "Нядзеля Тамаша (Антыпасха) вячэрня ў суботу", "ndz_tamasza_viaczernia_subota", VIACHERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха) - Ютрань", "ndz_tamasza_jutran", UTRAN, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха) - Літургія", "ndz_tamasza_liturhija", LITURGIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша ўвечары", "ndz_tamasza_uvieczary", VIACHERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(8, "Панядзелак пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_paniadzielak", VIACHERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(9, "Аўторак пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_autorak", VIACHERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(10, "Серада пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_sierada", VIACHERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(11, "Чацьвер пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_czacvier", VIACHERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(12, "Пятніца пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_piatnica", VIACHERNIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "ndz_miranosic_liturhija", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(21, "Нядзеля расслабленага - Літургія", "ndz_rasslablenaha_liturhija", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(28, "Нядзеля самаранкі - Літургія", "ndz_samaranki_liturhija", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(35, "Нядзеля сьлепанароджанага - Літургія", "ndz_slepanarodz_liturhija", LITURGIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(217, "Перадсьвяцьце Перамяненьня і сьв. муч. Яўсігнея", "mm_05_08_pieradsv_pieramianiennia_liturhija", LITURGIA))
-        datMinSV.add(SlugbovyiaTextuData(217, "Перадсьвяцьце Перамяненьня і сьв. муч. Яўсігнея", "mm_05_08_pieradsv_pieramianiennia_viaczernia", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(218, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "mm_06_08_pieramianiennie_liturhija", LITURGIA))
-        datMinSV.add(SlugbovyiaTextuData(221, "Пасьвяцьце Перамяненьня і сьв. апостала Мацея", "mm_09_08_pasviaccie_pieramianiennia_liturhija", LITURGIA))
-        datMinSV.add(SlugbovyiaTextuData(221, "Пасьвяцьце Перамяненьня і сьв. апостала Мацея", "mm_09_08_pasviaccie_pieramianennia_viaczernia", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(227, "Усьпеньне Найсьвяцейшай Багародзіцы і Заўсёды Дзевы Марыі", "mm_15_08_uspiennie_liturhija", LITURGIA))
-        datMinSV.add(SlugbovyiaTextuData(227, "Усьпеньне Найсьвяцейшай Багародзіцы і Заўсёды Дзевы Марыі", "mm_15_08_uspiennie_viaczernia", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(222, "Пасьвяцьце Перамяненьня і сьв. мучаніка Лаўрына", "mm_10_08_viaczernia", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(226, "Перадсьвяцьце Ўсьпеньня і сьв. прарока Міхея", "mm_14_08_pieradsv_uspiennia_viaczernia", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(226, "Перадсьвяцьце Ўсьпеньня і сьв. прарока Міхея", "mm_14_08_pieradsv_uspiennia_liturhija", LITURGIA))
-        datMinSV.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "viachernia_mineia_sviatochnaia1", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "viachernia_mineia_sviatochnaia4", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(3, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "viachernia_mineia_sviatochnaia3", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "viachernia_mineia_sviatochnaia5", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(16, "Пакланеньне кайданам апостала Пятра", "viachernia_mineia_sviatochnaia6", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(30, "Трох сьвятаначальнікаў: Васіля Вялікага, Рыгора Багаслова і Яна Залатавуснага", "viachernia_mineia_sviatochnaia7", VIACHERNIA))
         datMinSV.add(SlugbovyiaTextuData(49, "Тройца (Сёмуха) - Ютрань", "zychod_sv_ducha_jutran", UTRAN, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(49, "Тройца (СЁМУХА) - Літургія", "zychod_sv_ducha_liturhija", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(49, "Тройца (Сёмуха)", "paniadzielak_sv_ducha_ndz_viaczaram", VIACHERNIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста - Ютрань", "uzniasienne_jutran", UTRAN, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста - Літургія", "uzniasienne_liturhija", LITURGIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста", "uzniasienne_viaczernia", VIACHERNIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(42, "Нядзеля сьвятых айцоў I-га Усяленскага Сабору", "ndz_ajcou_1susviet_saboru", LITURGIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(56, "Нядзеля ўсіх сьвятых", "ndz_usich_sviatych_liturhija", LITURGIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(63, "Нядзеля ўсіх сьвятых беларускага народу", "ndz_usich_sv_biel_narodu_liturhija", LITURGIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(274, "Покрыва Найсьвяцейшай Багародзіцы - Літургія", "mm_01_10_pokryva_baharodzicy_liturhija", LITURGIA))
-        datMinSV.add(SlugbovyiaTextuData(325, "Уваход у храм Найсьвяцейшай Багародзіцы - Літургія", "mm_21_11_liturhija", LITURGIA))
-        datMinSV.add(SlugbovyiaTextuData(33, "Сустрэча Госпада нашага Ісуса Хрыста (ГРАМНІЦЫ) - Літургія", "mm_02_02_liturhija", LITURGIA))
-        datMinSV.add(SlugbovyiaTextuData(354, "Перадсьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста і сьв. сьвятамучаніка Ігната Баганосца - Літургія", "l_rastvo_peradsviaccie_20_12", LITURGIA))
-        datMinSV.add(SlugbovyiaTextuData(354, "Перадсьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста і сьв. сьвятамучаніка Ігната Баганосца", "v_rastvo_peradsviaccie_20_12", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі - Ютрань", "ju_rastvo_sv_vieczar_24_12", UTRAN))
-        datMinSV.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "v_rastvo_sv_vieczar_24_12", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі - Вялікія гадзіны", "vial_hadziny_rastvo_sv_vieczar_24_12", VIALIKIAGADZINY, checkVialikiaGadziny = true))
-        datMinSV.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі - Абедніца", "abed_rastvo_sv_vieczar_24_12", ABEDNICA))
-        datMinSV.add(SlugbovyiaTextuData(359, "Нараджэньне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "l_naradzennie_chrystova", LITURGIA))
-        datMinSV.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "mm_06_01_bohazjaulennie_liturhija", LITURGIA))
-        datMinSV.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем) - Вялікія гадзіны", "mm_05_01_sv_vieczar_bohazjaulennia_vial_hadziny", VIALIKIAGADZINY, checkVialikiaGadziny = true))
-        datMinSV.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем) - Абедніца", "mm_05_01_sv_vieczar_bohazjaulennia_abiednica", ABEDNICA))
     }
 
     fun getTydzen1(): ArrayList<SlugbovyiaTextuData> {
@@ -275,12 +274,6 @@ class SlugbovyiaTextu {
         return list
     }
 
-    fun getNiadzeliaTamasha(): ArrayList<SlugbovyiaTextuData> {
-        val list = ArrayList<SlugbovyiaTextuData>()
-        for (i in 84..92) list.add(datMinVP[i])
-        return list
-    }
-
     fun getMineiaShtodzennia() = datMinSH
 
     fun getMineiaSviatochnaia() = datMinSV
@@ -292,9 +285,6 @@ class SlugbovyiaTextu {
             }
         }
         datMinSH.forEach {
-            if (it.day == AICOU_VII_SUSVETNAGA_SABORY) {
-                return false
-            }
             if (it.day == day) {
                 return it.pasxa
             }
@@ -315,9 +305,6 @@ class SlugbovyiaTextu {
             }
         }
         datMinSH.forEach {
-            if (AICOU_VII_SUSVETNAGA_SABORY == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == sluzba) resource = it.resource
-            }
             if (day == it.day && pasxa == it.pasxa) {
                 if (it.sluzba == sluzba) resource = it.resource
             }

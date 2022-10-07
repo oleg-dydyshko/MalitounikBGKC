@@ -435,6 +435,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mltv_za_chrosnikau"] = R.raw.mltv_za_chrosnikau
             resursMap["mm_01_10_pokryva_baharodzicy_liturhija"] = R.raw.mm_01_10_pokryva_baharodzicy_liturhija
             resursMap["mm_11_17_10_ajcou_7_susviet_saboru_liturhija"] = R.raw.mm_11_17_10_ajcou_7_susviet_saboru_liturhija
+            resursMap["mltv_mb_barunskaja"] = R.raw.mltv_mb_barunskaja
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -1664,8 +1665,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         val itemVybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
@@ -1700,7 +1700,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         itemVybranoe.title = spanString
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_zmena).isVisible = chechZmena
-        return true
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
@@ -1716,8 +1715,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.akafist, menu)
         for (i in 0 until menu.size()) {
             val item: MenuItem = menu.getItem(i)
@@ -1726,10 +1724,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val prefEditor = k.edit()
         val id = item.itemId
         if (id == android.R.id.home) {
@@ -1763,6 +1760,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }
             }
             startActivity(intent)
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             item.isChecked = !item.isChecked
@@ -1773,6 +1771,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
             prefEditor.apply()
             recreate()
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_find) {
             stopAutoScroll()
@@ -1780,6 +1779,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             binding.find.visibility = View.VISIBLE
             binding.textSearch.requestFocus()
             EditTextCustom.focusAndShowKeyboard(binding.textSearch)
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
@@ -1789,6 +1789,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 startAutoScroll()
             }
             invalidateOptionsMenu()
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             men = setVybranoe(this, resurs, title)
@@ -1796,17 +1797,21 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
             }
             invalidateOptionsMenu()
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
             val dialogFontSize = DialogFontSize()
             dialogFontSize.show(supportFragmentManager, "font")
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_bright) {
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
             hide()
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             val sendIntent = Intent()
@@ -1815,6 +1820,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=2&title=$shareTitle&file=$resurs")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
+            return true
         }
         prefEditor.apply()
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
@@ -1833,8 +1839,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
             }
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onBackPressed() {

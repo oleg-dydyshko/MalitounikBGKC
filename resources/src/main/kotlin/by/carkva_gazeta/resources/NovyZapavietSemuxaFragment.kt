@@ -14,16 +14,12 @@ import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.widget.TooltipCompat
-import androidx.fragment.app.Fragment
-import by.carkva_gazeta.malitounik.BaseActivity
-import by.carkva_gazeta.malitounik.BibleGlobalList
-import by.carkva_gazeta.malitounik.BibleZakladkiData
-import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.databinding.ActivityBiblePageFragmentBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterView.OnItemClickListener {
+class NovyZapavietSemuxaFragment : BaseFragment(), OnItemLongClickListener, AdapterView.OnItemClickListener {
     private var kniga = 0
     private var page = 0
     private var pazicia = 0
@@ -87,7 +83,6 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         knigaBible = arguments?.getString("title") ?: ""
         kniga = arguments?.getInt("kniga") ?: 0
         page = arguments?.getInt("page") ?: 0
@@ -325,6 +320,7 @@ class NovyZapavietSemuxaFragment : Fragment(), OnItemLongClickListener, AdapterV
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         BibleGlobalList.bibleCopyList.clear()
         binding.listView.onItemLongClickListener = this
         binding.listView.onItemClickListener = this

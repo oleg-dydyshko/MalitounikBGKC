@@ -7,19 +7,21 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.ExpandableListView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
 import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
 import kotlinx.coroutines.*
 
-class NovyZapavietSemuxaList : AppCompatActivity() {
+class NovyZapavietSemuxaList : BaseActivity() {
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
     private val groups = ArrayList<ArrayList<String>>()
@@ -218,25 +220,18 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
             return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onResume() {
         super.onResume()
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         setTollbarTheme()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private inner class ExpListAdapterNovyZapaviet(private val mContext: Activity) : BaseExpandableListAdapter() {

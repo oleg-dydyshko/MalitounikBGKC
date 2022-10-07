@@ -27,7 +27,7 @@ import java.io.FileWriter
 import java.io.InputStreamReader
 import java.util.*
 
-class MenuCaliandar : Fragment() {
+class MenuCaliandar : BaseFragment() {
     private var listinner: MenuCaliandarPageListinner? = null
     private lateinit var adapter: MyCalendarAdapter
     private var page = 0
@@ -136,6 +136,7 @@ class MenuCaliandar : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         adapter = MyCalendarAdapter(this)
         binding.pager.offscreenPageLimit = 3
         binding.pager.adapter = adapter
@@ -149,12 +150,10 @@ class MenuCaliandar : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         page = arguments?.getInt("page") ?: 0
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         val c = Calendar.getInstance() as GregorianCalendar
         var dayyear = 0
         for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until c[Calendar.YEAR]) {
@@ -187,9 +186,9 @@ class MenuCaliandar : Fragment() {
         return i
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return super.onOptionsItemSelected(item)
+            return false
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
@@ -211,6 +210,7 @@ class MenuCaliandar : Fragment() {
                     MainActivity.toastView(it, getString(R.string.error))
                 }
             }
+            return true
         }
         if (id == R.id.action_mun) {
             activity?.let {
@@ -221,8 +221,9 @@ class MenuCaliandar : Fragment() {
                 i.putExtra("year", data[3].toInt())
                 caliandarMunLauncher.launch(i)
             }
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private class MyCalendarAdapter(val fragment: Fragment) : FragmentStateAdapter(fragment) {

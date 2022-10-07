@@ -8,21 +8,21 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.admin.databinding.AdminBibleBinding
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
 
-class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRazdelListener {
+class StaryZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelListener {
     private var trak = false
     private var fullglav = 0
     private var kniga = 0
@@ -278,7 +278,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
         binding.subtitleToolbar.isSingleLine = true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
@@ -287,21 +287,18 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
         if (id == R.id.action_glava) {
             val dialogBibleRazdel = DialogBibleRazdel.getInstance(fullglav)
             dialogBibleRazdel.show(supportFragmentManager, "full_glav")
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.edit_bible, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.edit_bible, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -309,7 +306,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {

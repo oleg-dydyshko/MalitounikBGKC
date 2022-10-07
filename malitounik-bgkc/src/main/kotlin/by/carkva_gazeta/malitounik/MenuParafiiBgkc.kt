@@ -13,30 +13,18 @@ import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.ExpandableListView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
 import by.carkva_gazeta.malitounik.databinding.MenuParafiiBgkcBinding
 
-class MenuParafiiBgkc : Fragment() {
+class MenuParafiiBgkc : BaseFragment() {
     private var mLastClickTime: Long = 0
     private val dzenNoch: Boolean
-        get() {
-            var dzn = false
-            activity?.let {
-                dzn = (it as BaseActivity).getBaseDzenNoch()
-            }
-            return dzn
-        }
+        get() = (requireActivity() as BaseActivity).getBaseDzenNoch()
     private lateinit var k: SharedPreferences
     private var _binding: MenuParafiiBgkcBinding? = null
     private val binding get() = _binding!!
     private val groups = ArrayList<ArrayList<MenuListData>>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MenuParafiiBgkcBinding.inflate(inflater, container, false)
@@ -44,6 +32,7 @@ class MenuParafiiBgkc : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (dzenNoch) binding.elvMain.selector = ContextCompat.getDrawable(activity, R.drawable.selector_dark)

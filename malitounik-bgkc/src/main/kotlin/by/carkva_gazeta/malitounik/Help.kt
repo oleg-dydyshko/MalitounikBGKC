@@ -42,12 +42,12 @@ class Help : BaseActivity() {
         binding.titleToolbar.text = resources.getString(R.string.help)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
             return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 }

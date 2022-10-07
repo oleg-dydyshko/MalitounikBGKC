@@ -645,8 +645,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.search_biblia, menu)
         val searchViewItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.search)
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
@@ -683,17 +682,14 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         val histopy = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_clean_histopy)
         histopy.isVisible = history.size != 0
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
@@ -702,12 +698,14 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         if (id == by.carkva_gazeta.malitounik.R.id.action_search_bible) {
             val dialogSearshBible = DialogBibleSearshSettings.getInstance(zavet)
             dialogSearshBible.show(supportFragmentManager, "dialogSearshBible")
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_clean_histopy) {
             val dialogClearHishory = DialogClearHishory.getInstance()
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private fun addHistory(item: String) {

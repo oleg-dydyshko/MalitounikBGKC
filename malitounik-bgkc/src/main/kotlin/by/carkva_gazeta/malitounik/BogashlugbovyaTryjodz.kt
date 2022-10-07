@@ -26,12 +26,12 @@ class BogashlugbovyaTryjodz : BaseActivity() {
         resetTollbarJob?.cancel()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             onBackPressed()
             return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,8 +74,9 @@ class BogashlugbovyaTryjodz : BaseActivity() {
             mLastClickTime = SystemClock.elapsedRealtime()
             val intent: Intent
             if (position == 0) {
-                intent = Intent(this, MineiaSviatochnaia::class.java)
+                intent = Intent(this, SubMenuBogashlugbovyaVialikiPost::class.java)
             } else {
+                //intent = Intent(this, MineiaSviatochnaia::class.java)
                 intent = Intent(this, BogashlugbovyaTryjodzList::class.java)
                 intent.putExtra("tryjodz", position)
                 intent.putExtra("title", data[position])

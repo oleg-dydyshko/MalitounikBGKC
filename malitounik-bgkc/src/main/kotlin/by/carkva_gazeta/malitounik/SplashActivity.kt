@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.MenuItem
 import java.io.File
 import java.io.FileOutputStream
 
@@ -69,4 +70,6 @@ class SplashActivity : BaseActivity() {
         startActivity(intent1)
         finish()
     }
+
+    override fun onMenuItemSelected(menuItem: MenuItem) = false
 }

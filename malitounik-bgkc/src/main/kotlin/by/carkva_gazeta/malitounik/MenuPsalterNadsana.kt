@@ -9,12 +9,11 @@ import android.util.ArrayMap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.MenuPsalterBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class MenuPsalterNadsana : Fragment(), View.OnClickListener {
+class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
     private lateinit var k: SharedPreferences
     private var mLastClickTime: Long = 0
     private var _binding: MenuPsalterBinding? = null
@@ -31,6 +30,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let {
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()

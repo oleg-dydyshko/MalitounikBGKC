@@ -28,12 +28,12 @@ class AktoixList : BaseActivity() {
         resetTollbarJob?.cancel()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             onBackPressed()
             return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

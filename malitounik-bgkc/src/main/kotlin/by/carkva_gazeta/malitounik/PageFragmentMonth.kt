@@ -9,24 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.CalendarMunBinding
 import java.util.*
 
-class PageFragmentMonth : Fragment() {
+class PageFragmentMonth : BaseFragment() {
     private var wik = 0
     private var date = 0
     private var mun = 0
     private var year = 0
     private var pageNumberFull = 0
     private val dzenNoch: Boolean
-        get() {
-            var dzn = false
-            activity?.let {
-                dzn = (it as BaseActivity).getBaseDzenNoch()
-            }
-            return dzn
-        }
+        get() = (requireActivity() as BaseActivity).getBaseDzenNoch()
     private val data = ArrayList<ArrayList<String>>()
     private val padzei = ArrayList<Padzeia>()
     private var _binding: CalendarMunBinding? = null
@@ -121,6 +114,7 @@ class PageFragmentMonth : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
             if (dzenNoch) {
                 binding.textView2.setBackgroundResource(R.drawable.calendar_red_black)

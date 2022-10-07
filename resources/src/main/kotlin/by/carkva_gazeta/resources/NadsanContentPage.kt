@@ -18,17 +18,13 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import by.carkva_gazeta.malitounik.BaseActivity
-import by.carkva_gazeta.malitounik.BibleGlobalList
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibleBinding
 import by.carkva_gazeta.resources.databinding.ActivityBiblePageFragmentBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnItemClickListener {
+class NadsanContentPage : BaseFragment(), OnItemLongClickListener, AdapterView.OnItemClickListener {
     private var page = 0
     private var pazicia = 0
     private var bibleListiner: BibleListiner? = null
@@ -66,7 +62,6 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         page = arguments?.getInt("page") ?: 0
         pazicia = arguments?.getInt("pos") ?: 0
     }
@@ -128,6 +123,7 @@ class NadsanContentPage : Fragment(), OnItemLongClickListener, AdapterView.OnIte
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.listView.onItemLongClickListener = this
         binding.listView.onItemClickListener = this
         binding.listView.setOnScrollListener(object : AbsListView.OnScrollListener {

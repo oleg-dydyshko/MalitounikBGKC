@@ -145,12 +145,13 @@ class PsalterNadsana : BaseActivity(), View.OnClickListener {
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == by.carkva_gazeta.malitounik.R.id.action_glava) {
             val pravila = DialogNadsanPravila()
             pravila.show(supportFragmentManager, "pravila")
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

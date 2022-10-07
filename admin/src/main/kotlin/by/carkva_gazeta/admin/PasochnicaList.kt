@@ -18,9 +18,9 @@ import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaListBinding
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -38,7 +38,7 @@ import java.net.URLEncoder
 import java.util.*
 
 
-class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener {
+class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaListBinding
@@ -88,14 +88,9 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         getFindFileListAsSave()
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
-        super.onCreate(savedInstanceState)
         binding = AdminPasochnicaListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setTollbarTheme()
@@ -217,8 +212,6 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun getFileCopyPostRequest(dirToFile: String, fileName: String) {
@@ -426,28 +419,28 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         val itemDelite = menu.findItem(R.id.action_delite_all)
         val dir = getExternalFilesDir("PiasochnicaBackCopy")
         if (dir?.exists() == true) {
             val list = dir.list()
             itemDelite.isVisible = list?.isNotEmpty() ?: true
         }
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_plus) {
             val intent = Intent(this, Pasochnica::class.java)
             intent.putExtra("newFile", true)
             intent.putExtra("fileName", "newFile.html")
             startActivity(intent)
+            return true
         }
         if (id == R.id.action_open_net_file) {
             val dialogNetFileExplorer = DialogNetFileExplorer()
             dialogNetFileExplorer.show(supportFragmentManager, "dialogNetFileExplorer")
+            return true
         }
         if (id == R.id.action_open_file) {
             val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -457,18 +450,18 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                 val fileExplorer = DialogFileExplorer()
                 fileExplorer.show(supportFragmentManager, "file_explorer")
             }
+            return true
         }
         if (id == R.id.action_delite_all) {
             val dialogDeliteAllBackCopy = DialogDeliteAllBackCopy()
             dialogDeliteAllBackCopy.show(supportFragmentManager, "dialogDeliteAllBackCopy")
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.edit_piasochnica_list, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.edit_piasochnica_list, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -476,7 +469,6 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
     private inner class PasochnicaListAdaprer(context: Activity) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, fileList) {

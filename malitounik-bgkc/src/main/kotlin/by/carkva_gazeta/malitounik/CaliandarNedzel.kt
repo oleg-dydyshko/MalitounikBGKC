@@ -13,12 +13,11 @@ import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.CalaindarNedelBinding
 import by.carkva_gazeta.malitounik.databinding.CaliandarNedzeliaBinding
 import java.util.*
 
-class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
+class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
     private var year = 0
     private var mun = 0
     private var dateInt = 0
@@ -40,6 +39,11 @@ class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = CaliandarNedzeliaBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         niadzelia.addAll(MenuCaliandar.getDataCalaindar(dateInt, mun, year))
         activity?.let {
             binding.listView.adapter = CaliandarNedzelListAdapter(it, niadzelia)
@@ -53,7 +57,6 @@ class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
         }
         binding.listView.isVerticalScrollBarEnabled = false
         binding.listView.onItemClickListener = this
-        return binding.root
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

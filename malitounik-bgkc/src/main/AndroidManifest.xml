@@ -374,14 +374,6 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".MineiaSviatochnaia"
-            android:label="@string/mineia_sviatochnaia"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
             android:name=".TonPlay"
             android:label="@string/ton_n"
             android:theme="@style/AppTheme">

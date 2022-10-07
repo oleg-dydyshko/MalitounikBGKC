@@ -625,9 +625,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         menuCviaty?.setCviatyYear(year)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return super.onOptionsItemSelected(item)
+            return false
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
@@ -636,64 +636,75 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             setDataCalendar = arrayList[0][25].toInt()
             idOld = -1
             selectFragment(binding.label1, true)
+            return true
         }
         if (id == R.id.settings) {
             val i = Intent(this, SettingsActivity::class.java)
             mainActivityLauncher.launch(i)
+            return true
         }
         if (id == R.id.onas) {
             val i = Intent(this@MainActivity, Onas::class.java)
             startActivity(i)
+            return true
         }
         if (id == R.id.help) {
             val i = Intent(this, Help::class.java)
             startActivity(i)
+            return true
         }
         if (id == R.id.pasxa_opis) {
             val intent = Intent(this, Pasxa::class.java)
             startActivity(intent)
+            return true
         }
         if (id == R.id.pasxa) {
             val pasxa = DialogPasxa()
             pasxa.show(supportFragmentManager, "pasxa")
+            return true
         }
         if (id == R.id.prazdnik) {
             val menuCviaty = supportFragmentManager.findFragmentByTag("MenuCviaty") as? MenuSviaty
             val year = menuCviaty?.getCviatyYear() ?: Calendar.getInstance()[Calendar.YEAR]
             val prazdnik = DialogPrazdnik.getInstance(year)
             prazdnik.show(supportFragmentManager, "prazdnik")
+            return true
         }
         if (id == R.id.tipicon) {
             val tipicon = DialogTipicon()
             tipicon.show(supportFragmentManager, "tipicon")
+            return true
         }
         if (id == R.id.sabytie) {
             val i = Intent(this, Sabytie::class.java)
             startActivity(i)
+            return true
         }
         if (id == R.id.search_sviatyia) {
             val i = Intent(this, SearchSviatyia::class.java)
             searchSviatyiaLauncher.launch(i)
+            return true
         }
         if (id == R.id.action_help) {
             val dialogHelpListView = DialogHelpListView.getInstance(1)
             dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
-    override fun cleanFullHistory() {
-        val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesny
-        fragment?.cleanFullHistory()
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.main, menu)
+        for (i in 0 until menu.size()) {
+            val item = menu.getItem(i)
+            val spanString = SpannableString(menu.getItem(i).title.toString())
+            val end = spanString.length
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            item.title = spanString
+        }
     }
 
-    override fun cleanHistory(position: Int) {
-        val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesny
-        fragment?.cleanHistory(position)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
             menu.findItem(R.id.action_add).isVisible = false
             menu.findItem(R.id.action_mun).isVisible = false
@@ -762,21 +773,16 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
             if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
         }
-        return true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl: MenuInflater = menuInflater
-        infl.inflate(R.menu.main, menu)
-        for (i in 0 until menu.size()) {
-            val item: MenuItem = menu.getItem(i)
-            val spanString = SpannableString(menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
-        }
-        return true
+    override fun cleanFullHistory() {
+        val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesny
+        fragment?.cleanFullHistory()
+    }
+
+    override fun cleanHistory(position: Int) {
+        val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesny
+        fragment?.cleanHistory(position)
     }
 
     private fun selectFragment(view: View?, start: Boolean = false, biblijatekaRubrika: Int = 0, shortcuts: Boolean = false) {

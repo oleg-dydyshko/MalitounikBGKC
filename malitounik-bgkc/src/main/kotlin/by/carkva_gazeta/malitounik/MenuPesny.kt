@@ -18,7 +18,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.MenuPesnyBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
@@ -30,7 +29,7 @@ import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
+class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
     private var mLastClickTime: Long = 0
     private var editText: AutoCompleteTextView? = null
     private var textViewCount: TextView? = null
@@ -60,6 +59,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let { fraragment ->
             chin = fraragment.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             pesny = arguments?.getString("pesny") ?: "prasl"
@@ -203,12 +203,13 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_clean_histopy) {
             val dialogClearHishory = DialogClearHishory.getInstance()
             dialogClearHishory.show(childFragmentManager, "dialogClearHishory")
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -217,21 +218,14 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener {
         outState.putBoolean("search", search)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.count).isVisible = search
         val histopy = menu.findItem(R.id.action_clean_histopy)
         histopy.isVisible = history.size != 0
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.pesny, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.pesny, menu)
         val searchViewItem = menu.findItem(R.id.search)
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = getString(R.string.search)

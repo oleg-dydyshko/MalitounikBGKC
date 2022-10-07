@@ -8,12 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.collection.ArrayMap
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.MenuBibleBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class MenuBibleSemuxa : Fragment() {
+class MenuBibleSemuxa : BaseFragment() {
     private var mLastClickTime: Long = 0
     private var _binding: MenuBibleBinding? = null
     private val binding get() = _binding!!
@@ -29,6 +28,7 @@ class MenuBibleSemuxa : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()

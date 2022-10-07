@@ -10,25 +10,21 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaBinding
-import by.carkva_gazeta.malitounik.CaliandarMun
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.MenuCaliandar
-import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.*
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
 import java.util.*
 
-class Sviatyia : AppCompatActivity(), DialogImageFileLoad.DialogFileExplorerListener, DialogSviatyiaImageHelp.DialodSviatyiaImageHelpListener {
+class Sviatyia : BaseActivity(), DialogImageFileLoad.DialogFileExplorerListener, DialogSviatyiaImageHelp.DialodSviatyiaImageHelpListener {
     private lateinit var k: SharedPreferences
     private var setedit = false
     private var checkSetDzenNoch = false
@@ -140,7 +136,7 @@ class Sviatyia : AppCompatActivity(), DialogImageFileLoad.DialogFileExplorerList
         if (fragment.onBackPressedFragment()) super.onBackPressed()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
@@ -149,6 +145,7 @@ class Sviatyia : AppCompatActivity(), DialogImageFileLoad.DialogFileExplorerList
         if (id == R.id.action_bible) {
             val dialogSvityiaBible = DialogSvityiaBible()
             dialogSvityiaBible.show(supportFragmentManager, "dialogSvityiaBible")
+            return true
         }
         if (id == R.id.action_glava) {
             val i = Intent(this, CaliandarMun::class.java)
@@ -159,21 +156,18 @@ class Sviatyia : AppCompatActivity(), DialogImageFileLoad.DialogFileExplorerList
             i.putExtra("mun", cal[Calendar.MONTH])
             i.putExtra("sabytie", true)
             caliandarMunLauncher.launch(i)
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.edit_sviatyia, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.edit_sviatyia, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -181,7 +175,6 @@ class Sviatyia : AppCompatActivity(), DialogImageFileLoad.DialogFileExplorerList
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {

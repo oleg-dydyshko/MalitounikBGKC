@@ -541,6 +541,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         adapter = BibliotekaAdapter(this)
         bindingcontent.listView.adapter = adapter
         if (dzenNoch) {
+            bindingcontent.textViewB.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
             bindingcontent.listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
             bindingcontent.swipeRefreshLayout.setColorSchemeResources(by.carkva_gazeta.malitounik.R.color.colorPrimary_black)
         } else {
@@ -1309,8 +1310,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         return sb.toString()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         autoscroll = k.getBoolean("autoscroll", false)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_trash).isVisible = bindingcontent.swipeRefreshLayout.visibility == View.VISIBLE && idSelect == R.id.label1
@@ -1360,13 +1360,10 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isVisible = false
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isChecked = k.getBoolean("inversion", false)
-        return true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl: MenuInflater = menuInflater
-        infl.inflate(by.carkva_gazeta.malitounik.R.menu.bibliotekaview, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.bibliotekaview, menu)
         for (i in 0 until menu.size()) {
             val item: MenuItem = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -1374,7 +1371,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
     private fun setTollbarTheme() {
@@ -1415,12 +1411,13 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         bindingappbar.titleToolbar.isSingleLine = true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val prefEditor: SharedPreferences.Editor = k.edit()
-        val id: Int = item.itemId
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
+        val prefEditor = k.edit()
+        val id = item.itemId
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
             val dialogFontSize = DialogFontSize()
             dialogFontSize.show(supportFragmentManager, "font")
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_trash) {
             naidaunia.clear()
@@ -1438,14 +1435,17 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 }
                 bindingcontent.progressBar2.visibility = View.GONE
             }
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_title) {
             val titleBiblioteka: DialogTitleBiblioteka = DialogTitleBiblioteka.getInstance(bookTitle)
             titleBiblioteka.show(supportFragmentManager, "title_biblioteka")
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_set_page) {
             val biblioteka: DialogSetPageBiblioteka = DialogSetPageBiblioteka.getInstance(pdfView.currentPage, pdfView.pageCount)
             biblioteka.show(supportFragmentManager, "set_page_biblioteka")
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_inversion) {
             item.isChecked = !item.isChecked
@@ -1456,11 +1456,14 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 pdfView.setNightMode(false)
                 prefEditor.putBoolean("inversion", false)
             }
+            prefEditor.apply()
             pdfView.loadPages()
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_bright) {
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
@@ -1471,10 +1474,11 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 startAutoScroll()
                 prefEditor.putBoolean("autoscroll", true)
             }
+            prefEditor.apply()
             invalidateOptionsMenu()
+            return true
         }
-        prefEditor.apply()
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onPause() {

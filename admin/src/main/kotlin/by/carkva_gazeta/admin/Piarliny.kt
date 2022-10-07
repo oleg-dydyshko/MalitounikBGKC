@@ -1,7 +1,6 @@
 package by.carkva_gazeta.admin
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Spannable
@@ -13,12 +12,8 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.admin.databinding.AdminPiarlinyBinding
-import by.carkva_gazeta.malitounik.CaliandarMun
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.MenuCaliandar
-import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -29,7 +24,7 @@ import java.net.URL
 import java.net.URLEncoder
 import java.util.*
 
-class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener {
+class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener {
 
     private lateinit var binding: AdminPiarlinyBinding
     private var urlJob: Job? = null
@@ -51,13 +46,6 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
                 binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, timeListCalendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[timeListCalendar.get(Calendar.MONTH)])
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun startTimer() {
@@ -236,8 +224,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         val plus = menu.findItem(R.id.action_plus)
         val save = menu.findItem(R.id.action_save)
         val glava = menu.findItem(R.id.action_glava)
@@ -250,13 +237,10 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             save.isVisible = false
             glava.isVisible = false
         }
-        return true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.edit_piarliny, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.edit_piarliny, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -264,10 +248,9 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
@@ -298,6 +281,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             binding.linearLayout2.visibility = View.GONE
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny)
             invalidateOptionsMenu()
+            return true
         }
         if (id == R.id.action_glava) {
             val i = Intent(this, CaliandarMun::class.java)
@@ -307,6 +291,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             i.putExtra("mun", cal[Calendar.MONTH])
             i.putExtra("sabytie", true)
             caliandarMunLauncher.launch(i)
+            return true
         }
         if (id == R.id.action_plus) {
             edit = -1
@@ -317,8 +302,9 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             val calendar = Calendar.getInstance()
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, calendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)])
             invalidateOptionsMenu()
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onClick(v: View?) {

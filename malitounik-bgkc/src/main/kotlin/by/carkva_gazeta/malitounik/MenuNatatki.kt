@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.*
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
@@ -23,7 +22,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 
-class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
+class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
     private lateinit var adapter: ItemAdapter
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
@@ -37,7 +36,6 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
@@ -47,6 +45,7 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val file = File(activity.filesDir.toString() + "/Natatki.json")
@@ -184,16 +183,15 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
         dd.show(childFragmentManager, "dialog_delite")
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         activity?.let {
             menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return true
+            return false
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
@@ -202,6 +200,7 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
             val myNatatki = MyNatatki.getInstance("", 1, 0)
             myNatatki.setMyNatatkiListener(this)
             myNatatki.show(childFragmentManager, "myNatatki")
+            return true
         }
         if (id == R.id.sortdate) {
             activity?.let { activity ->
@@ -223,6 +222,7 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
                 myNatatkiFiles.sort()
                 adapter.updateList(myNatatkiFiles)
             }
+            return true
         }
         if (id == R.id.sorttime) {
             activity?.let { activity ->
@@ -244,6 +244,7 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
                 myNatatkiFiles.sort()
                 adapter.updateList(myNatatkiFiles)
             }
+            return true
         }
         if (id == R.id.action_carkva) {
             activity?.let {
@@ -255,8 +256,9 @@ class MenuNatatki : Fragment(), MyNatatki.MyNatatkiListener {
                     MainActivity.toastView(it, getString(R.string.error))
                 }
             }
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private inner class ItemAdapter(private val activity: Activity, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<MyNatatkiFiles, ItemAdapter.ViewHolder>() {

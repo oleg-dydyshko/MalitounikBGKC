@@ -25,6 +25,7 @@ class PsalterNadsana4 : Fragment(), View.OnClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let {
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             binding.textView1.setOnClickListener(this)

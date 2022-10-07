@@ -6,13 +6,13 @@ import android.os.SystemClock
 import android.view.View
 import android.widget.ListView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.ListFragment
 
-class MenuRuzanec : ListFragment() {
+class MenuRuzanec : BaseListFragment() {
     private var mLastClickTime: Long = 0
     private val data get() = resources.getStringArray(R.array.ruzanec)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let {
             val adapter = MenuListAdaprer(it, data)
             listAdapter = adapter
@@ -23,11 +23,6 @@ class MenuRuzanec : ListFragment() {
                 listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
             }
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
     }
 
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {

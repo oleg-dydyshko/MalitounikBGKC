@@ -6,13 +6,13 @@ import android.os.SystemClock
 import android.view.View
 import android.widget.ListView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.ListFragment
 
-class MenuAkafisty : ListFragment() {
+class MenuAkafisty : BaseListFragment() {
     private val data get() = resources.getStringArray(R.array.akafisty)
     private var mLastClickTime: Long = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let {
             val adapter = MenuListAdaprer(it, data)
             listAdapter = adapter
@@ -23,11 +23,6 @@ class MenuAkafisty : ListFragment() {
                 listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
             }
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
     }
 
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
@@ -84,5 +79,4 @@ class MenuAkafisty : ListFragment() {
             dadatak.show(childFragmentManager, "dadatak")
         }
     }
-
 }

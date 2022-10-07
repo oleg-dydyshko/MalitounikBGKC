@@ -11,10 +11,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -500,10 +497,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.opisanie, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.opisanie, menu)
         for (i in 0 until menu.size()) {
             val item: MenuItem = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -511,16 +506,13 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_piarliny).isVisible = checkParliny()
         menu.findItem(R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         if (chin.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
-        return true
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -529,7 +521,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         outState.putBoolean("imageViewFullVisable", binding.imageViewFull.visibility == View.VISIBLE)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
@@ -537,16 +529,19 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
         if (id == R.id.action_download_all) {
             startLoadIconsJob(true, isFull = true)
+            return true
         }
         if (id == R.id.action_download_del) {
             val dialogDeliteAllImagesOpisanie = DialogDeliteAllImagesOpisanie()
             dialogDeliteAllImagesOpisanie.show(supportFragmentManager, "dialogDeliteAllImagesOpisanie")
+            return true
         }
         if (id == R.id.action_piarliny) {
             val i = Intent(this, Piarliny::class.java)
             i.putExtra("mun", mun)
             i.putExtra("day", day)
             startActivity(i)
+            return true
         }
         if (id == R.id.action_carkva) {
             if (MainActivity.checkmodulesAdmin()) {
@@ -571,6 +566,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             } else {
                 MainActivity.toastView(this, getString(R.string.error))
             }
+            return true
         }
         if (id == R.id.action_dzen_noch) {
             val prefEditor = chin.edit()
@@ -582,10 +578,12 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             }
             prefEditor.apply()
             recreate()
+            return true
         }
         if (id == R.id.action_font) {
             val dialogFontSize = DialogFontSize()
             dialogFontSize.show(supportFragmentManager, "font")
+            return true
         }
         if (id == R.id.action_share) {
             val sendIntent = Intent(Intent.ACTION_SEND)
@@ -594,8 +592,9 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=3$sviatylink&date=$day&month=$mun")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun deliteAllImagesOpisanie() {

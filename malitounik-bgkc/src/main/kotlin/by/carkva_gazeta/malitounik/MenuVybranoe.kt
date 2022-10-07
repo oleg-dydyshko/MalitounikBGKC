@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
@@ -24,7 +23,7 @@ import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
 import java.io.File
 
-class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleListListener {
+class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBibleListListener {
     private lateinit var adapter: ItemAdapter
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
@@ -43,11 +42,6 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
     }
 
     fun fileDeliteCancel() {
@@ -192,6 +186,7 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let { fragmentActivity ->
             k = fragmentActivity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val gson = Gson()
@@ -249,9 +244,9 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return true
+            return false
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
@@ -259,6 +254,7 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
             if (adapter.itemList.size > 0) {
                 DialogDeliteAllVybranoe().show(childFragmentManager, "DeliteVybranoe")
             }
+            return true
         }
         if (id == R.id.sortdate) {
             activity?.let { fragmentActivity ->
@@ -285,9 +281,10 @@ class MenuVybranoe : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleList
                 }
                 vybranoe.sort()
                 adapter.updateList(vybranoe)
+                return true
             }
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private inner class ItemAdapter(private val activity: BaseActivity, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<VybranoeData, ItemAdapter.ViewHolder>() {

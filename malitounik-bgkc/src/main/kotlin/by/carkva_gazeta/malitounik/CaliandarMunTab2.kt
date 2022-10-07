@@ -10,7 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.databinding.CalendarTab2Binding
 import java.util.*
 
-class CaliandarMunTab2 : Fragment() {
+class CaliandarMunTab2 : BaseFragment() {
     private lateinit var adapterViewPagerNedel: FragmentStateAdapter
     private var day = 0
     private var posMun = 0
@@ -25,7 +25,6 @@ class CaliandarMunTab2 : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         day = arguments?.getInt("day") ?: 0
         posMun = arguments?.getInt("posMun") ?: 0
         yearG = arguments?.getInt("yearG") ?: 0
@@ -49,8 +48,13 @@ class CaliandarMunTab2 : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = CalendarTab2Binding.inflate(inflater, container, false)
-        binding.pagerNedel.offscreenPageLimit = 3
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
+            binding.pagerNedel.offscreenPageLimit = 3
             adapterViewPagerNedel = MyCalendarNedelAdapter(this)
             binding.pagerNedel.adapter = adapterViewPagerNedel
             binding.pagerNedel.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -63,24 +67,24 @@ class CaliandarMunTab2 : Fragment() {
             val firstPosition = MenuCaliandar.getFirstPositionNiadzel(MenuCaliandar.getPositionCaliandarNiadzel(day, posMun, yearG))
             binding.pagerNedel.setCurrentItem(firstPosition[26].toInt(), false)
         }
-        return binding.root
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_right).isVisible = adapterViewPagerNedel.itemCount - 1 != binding.pagerNedel.currentItem
         menu.findItem(R.id.action_left).isVisible = 0 != binding.pagerNedel.currentItem
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_left) {
             binding.pagerNedel.setCurrentItem(binding.pagerNedel.currentItem - 1, false)
+            return true
         }
         if (id == R.id.action_right) {
             binding.pagerNedel.setCurrentItem(binding.pagerNedel.currentItem + 1, false)
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private class MyCalendarNedelAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

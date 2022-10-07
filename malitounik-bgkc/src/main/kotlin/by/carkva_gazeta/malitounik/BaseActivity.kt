@@ -8,11 +8,14 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
 import kotlinx.coroutines.*
 
-abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
+abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProvider {
 
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
@@ -25,6 +28,9 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
     private var startTimeJob4: Job? = null
     private var startTimeDelay: Long = 5000
 
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putLong("mLastClickTime", mLastClickTime)
@@ -33,6 +39,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        addMenuProvider(this)
         startTimeDelay = 0
         startTimeJob3?.cancel()
         startTimeJob3 = CoroutineScope(Dispatchers.IO).launch {

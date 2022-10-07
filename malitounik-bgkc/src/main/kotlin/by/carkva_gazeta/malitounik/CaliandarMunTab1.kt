@@ -14,7 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.databinding.CalendarTab1Binding
 import java.util.*
 
-class CaliandarMunTab1 : Fragment() {
+class CaliandarMunTab1 : BaseFragment() {
     private val names get() = resources.getStringArray(R.array.meciac2)
     private var day = 0
     private var posMun = 0
@@ -45,7 +45,6 @@ class CaliandarMunTab1 : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         day = arguments?.getInt("day") ?: 0
         posMun = arguments?.getInt("posMun") ?: 0
         yearG = arguments?.getInt("yearG") ?: 0
@@ -82,6 +81,11 @@ class CaliandarMunTab1 : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = CalendarTab1Binding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             val c = Calendar.getInstance()
@@ -130,10 +134,9 @@ class CaliandarMunTab1 : Fragment() {
                 }
             })
         }
-        return binding.root
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_padzeia) {
             activity?.let {
                 CaliandarMun.SabytieOnView = !CaliandarMun.SabytieOnView
@@ -145,8 +148,9 @@ class CaliandarMunTab1 : Fragment() {
                 MainActivity.toastView(it, messege)
                 it.invalidateOptionsMenu()
             }
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private class MyPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

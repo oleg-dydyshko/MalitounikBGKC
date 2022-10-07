@@ -12,33 +12,29 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.ListFragment
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class MenuPadryxtoukaDaSpovedzi : ListFragment() {
+class MenuPadryxtoukaDaSpovedzi : BaseListFragment() {
     private lateinit var adapter: MyArrayAdapter
     private lateinit var k: SharedPreferences
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     fun onDialogFontSize() {
         adapter.notifyDataSetChanged()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_font) {
             val dialogFontSize = DialogFontSize()
             dialogFontSize.show(childFragmentManager, "font")
+            return true
         }
         if (id == R.id.action_bright) {
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(childFragmentManager, "brightness")
+            return true
         }
         if (id == R.id.action_dzen_noch) {
             item.isChecked = !item.isChecked
@@ -50,11 +46,13 @@ class MenuPadryxtoukaDaSpovedzi : ListFragment() {
             }
             prefEditor?.apply()
             activity?.recreate()
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         listView.isVerticalScrollBarEnabled = false
         listView.isHorizontalScrollBarEnabled = false
         activity?.let { it ->

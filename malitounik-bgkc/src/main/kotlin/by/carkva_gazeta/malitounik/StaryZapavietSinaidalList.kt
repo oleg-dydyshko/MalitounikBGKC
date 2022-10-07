@@ -358,13 +358,13 @@ class StaryZapavietSinaidalList : BaseActivity() {
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
             return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private class ExpListAdapterStaryZapavietSinaidal(private val mContext: Activity, private val groups: ArrayList<ArrayList<String>>) : BaseExpandableListAdapter() {

@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.BaseFragment
 import by.carkva_gazeta.resources.databinding.NadsanPravila5Binding
 
-class PsalterNadsana5 : Fragment(), View.OnClickListener {
+class PsalterNadsana5 : BaseFragment(), View.OnClickListener {
 
     private var _binding: NadsanPravila5Binding? = null
     private val binding get() = _binding!!
@@ -25,6 +25,7 @@ class PsalterNadsana5 : Fragment(), View.OnClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let {
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             binding.textView1.setOnClickListener(this)

@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.admin.databinding.AdminBiblePageFragmentBinding
+import by.carkva_gazeta.malitounik.BaseFragment
 import by.carkva_gazeta.malitounik.MainActivity
 import kotlinx.coroutines.*
 import java.io.OutputStreamWriter
@@ -15,7 +15,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-class StaryZapavietSemuxaFragment : Fragment() {
+class StaryZapavietSemuxaFragment : BaseFragment() {
     private var kniga = 0
     private var page = 0
     private var pazicia = 0
@@ -32,7 +32,6 @@ class StaryZapavietSemuxaFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         kniga = arguments?.getInt("kniga") ?: 0
         page = arguments?.getInt("page") ?: 0
         pazicia = arguments?.getInt("pazicia") ?: 0
@@ -43,16 +42,17 @@ class StaryZapavietSemuxaFragment : Fragment() {
         return binding.root
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return super.onOptionsItemSelected(item)
+            return false
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_save) {
             sendPostRequest(kniga + 1, binding.textView.text.toString(), page + 1)
+            return true
         }
-        return true
+        return false
     }
 
     private fun sendPostRequest(id: Int, spaw: String, sv: Int) {

@@ -632,10 +632,8 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(by.carkva_gazeta.malitounik.R.menu.chtenia, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.chtenia, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -643,7 +641,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
@@ -659,8 +656,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         autoscroll = k.getBoolean("autoscroll", false)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         when {
@@ -670,7 +666,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
         if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = false
-        return true
     }
 
     override fun onPause() {
@@ -703,7 +698,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         orientation = resources.configuration.orientation
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         val prefEditor = k.edit()
         if (id == android.R.id.home) {
@@ -719,6 +714,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             }
             prefEditor.apply()
             recreate()
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
@@ -728,20 +724,24 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 startAutoScroll()
             }
             invalidateOptionsMenu()
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
             val dialogFontSize = DialogFontSize()
             dialogFontSize.show(supportFragmentManager, "font")
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_bright) {
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
             hide()
+            return true
         }
         prefEditor.apply()
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private fun hide() {

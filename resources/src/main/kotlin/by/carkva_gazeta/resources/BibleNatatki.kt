@@ -196,16 +196,12 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.trash).isVisible = data.size != 0
-        return true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.zakladki_i_natatki, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.zakladki_i_natatki, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -213,10 +209,9 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
@@ -225,8 +220,9 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
         if (id == R.id.trash) {
             val natatki = DialogDeliteAllZakladkiINatatki.getInstance(resources.getString(R.string.natatki_biblii).lowercase(), semuxa)
             natatki.show(supportFragmentManager, "delite_all_zakladki_i_natatki")
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onResume() {

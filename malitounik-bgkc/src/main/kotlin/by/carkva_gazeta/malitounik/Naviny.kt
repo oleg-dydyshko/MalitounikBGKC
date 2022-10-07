@@ -13,6 +13,7 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -39,7 +40,10 @@ class Naviny : BaseActivity() {
             if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
                 binding.viewWeb.reload()
-            } else error()
+            } else {
+                val dialogNoInternet = DialogNoInternet()
+                dialogNoInternet.show(supportFragmentManager, "no_internet")
+            }
             binding.swipeRefreshLayout.isRefreshing = false
         }
         binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
@@ -104,14 +108,13 @@ class Naviny : BaseActivity() {
             }
         }
         if (error) {
-            error()
+            val dialogNoInternet = DialogNoInternet()
+            dialogNoInternet.show(supportFragmentManager, "no_internet")
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.naviny, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.naviny, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -119,7 +122,6 @@ class Naviny : BaseActivity() {
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
     override fun onResume() {
@@ -138,53 +140,72 @@ class Naviny : BaseActivity() {
         super.onDestroy()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_forward).isVisible = binding.viewWeb.canGoForward()
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        var error = false
         if (id == android.R.id.home) {
             onBackPressed()
             return true
         }
         if (id == R.id.action_forward) {
             binding.viewWeb.goForward()
+            return true
         }
         if (id == R.id.action_update) {
             if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
                 binding.viewWeb.clearCache(true)
                 binding.viewWeb.reload()
-            } else error = true
+            } else {
+                val dialogNoInternet = DialogNoInternet()
+                dialogNoInternet.show(supportFragmentManager, "no_internet")
+            }
+            return true
         }
         if (id == R.id.action_chrome) {
             val webBackForwardList = binding.viewWeb.copyBackForwardList()
             val webHistoryItem = webBackForwardList.currentItem
             onChrome(webHistoryItem?.url ?: "https://carkva-gazeta.by")
+            return true
         }
         if (id == R.id.num) {
             if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
-            } else error = true
+            } else {
+                val dialogNoInternet = DialogNoInternet()
+                dialogNoInternet.show(supportFragmentManager, "no_internet")
+            }
+            return true
         }
         if (id == R.id.sva) {
             if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
-            } else error = true
+            } else {
+                val dialogNoInternet = DialogNoInternet()
+                dialogNoInternet.show(supportFragmentManager, "no_internet")
+            }
+            return true
         }
         if (id == R.id.his) {
             if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
-            } else error = true
+            } else {
+                val dialogNoInternet = DialogNoInternet()
+                dialogNoInternet.show(supportFragmentManager, "no_internet")
+            }
+            return true
         }
         if (id == R.id.gra) {
             if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
-            } else error = true
+            } else {
+                val dialogNoInternet = DialogNoInternet()
+                dialogNoInternet.show(supportFragmentManager, "no_internet")
+            }
+            return true
         }
         if (id == R.id.calendar) {
             val prefEditors = k.edit()
@@ -192,6 +213,7 @@ class Naviny : BaseActivity() {
             prefEditors.apply()
             val intent = Intent(this@Naviny, MainActivity::class.java)
             startActivity(intent)
+            return true
         }
         if (id == R.id.biblia) {
             val prefEditors = k.edit()
@@ -199,16 +221,25 @@ class Naviny : BaseActivity() {
             prefEditors.apply()
             val intent = Intent(this@Naviny, MainActivity::class.java)
             startActivity(intent)
+            return true
         }
         if (id == R.id.it) {
             if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
-            } else error = true
+            } else {
+                val dialogNoInternet = DialogNoInternet()
+                dialogNoInternet.show(supportFragmentManager, "no_internet")
+            }
+            return true
         }
         if (id == R.id.ik) {
             if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
-            } else error = true
+            } else {
+                val dialogNoInternet = DialogNoInternet()
+                dialogNoInternet.show(supportFragmentManager, "no_internet")
+            }
+            return true
         }
         if (id == R.id.bib) {
             if (MainActivity.checkmoduleResources()) {
@@ -221,11 +252,9 @@ class Naviny : BaseActivity() {
             } else {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?bib=")
             }
+            return true
         }
-        if (error) {
-            error()
-        }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private fun onChrome(url: String) {
@@ -243,11 +272,6 @@ class Naviny : BaseActivity() {
                 MainActivity.toastView(this, getString(R.string.error_ch2))
             }
         }
-    }
-
-    private fun error() {
-        val dialogNoInternet = DialogNoInternet()
-        dialogNoInternet.show(supportFragmentManager, "no_internet")
     }
 
     private fun setTollbarTheme() {
@@ -351,7 +375,7 @@ class Naviny : BaseActivity() {
                 prefEditors.apply()
                 val intent = Intent(this@Naviny, MainActivity::class.java)
                 startActivity(intent)
-               return true
+                return true
             }
             if (url.contains("https://carkva-gazeta.by/index.php?ie=14")) {
                 val prefEditors = k.edit()
@@ -367,7 +391,7 @@ class Naviny : BaseActivity() {
                 prefEditors.apply()
                 val intent = Intent(this@Naviny, MainActivity::class.java)
                 startActivity(intent)
-               return true
+                return true
             }
             if (url.contains("https://malitounik.page.link/biblijateka1")) {
                 return setBiblioteka("https://carkva-gazeta.by/index.php?bib&rub=1")
@@ -480,7 +504,8 @@ class Naviny : BaseActivity() {
                     return false
                 }
             } else {
-                error()
+                val dialogNoInternet = DialogNoInternet()
+                dialogNoInternet.show(supportFragmentManager, "no_internet")
             }
             return true
         }
@@ -499,7 +524,8 @@ class Naviny : BaseActivity() {
                     invalidateOptionsMenu()
                     return false
                 } else {
-                    error()
+                    val dialogNoInternet = DialogNoInternet()
+                    dialogNoInternet.show(supportFragmentManager, "no_internet")
                 }
             }
             return true

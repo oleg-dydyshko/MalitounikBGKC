@@ -217,10 +217,8 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(by.carkva_gazeta.malitounik.R.menu.akafist, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.akafist, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -228,10 +226,9 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val prefEditor = k.edit()
         val id = item.itemId
         if (id == android.R.id.home) {
@@ -247,6 +244,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             }
             prefEditor.apply()
             recreate()
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             men = Bogashlugbovya.setVybranoe(this, malitvy[pasliaPrychascia].resourse, malitvy[pasliaPrychascia].title)
@@ -254,19 +252,22 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
             }
             invalidateOptionsMenu()
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
             val dialogFontSize = DialogFontSize()
             dialogFontSize.show(supportFragmentManager, "font")
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_bright) {
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
             hide()
+            return true
         }
-        prefEditor.apply()
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
             if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
@@ -282,12 +283,12 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
             }
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = false
         if (men) {
@@ -305,7 +306,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         item.title = spanString
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
-        return true
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {

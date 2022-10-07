@@ -462,8 +462,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_share).isVisible = true
         menu.findItem(R.id.action_auto).isVisible = false
         menu.findItem(R.id.action_find).isVisible = false
@@ -482,13 +481,10 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         item.title = spanString
         menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
-        return true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.akafist, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.akafist, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -496,10 +492,9 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val prefEditor = k.edit()
         val id = item.itemId
         if (id == android.R.id.home) {
@@ -515,6 +510,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             }
             prefEditor.apply()
             recreate()
+            return true
         }
         if (id == R.id.action_vybranoe) {
             men = setVybranoe(this, resurs, title)
@@ -522,17 +518,21 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                 MainActivity.toastView(this, getString(R.string.addVybranoe))
             }
             invalidateOptionsMenu()
+            return true
         }
         if (id == R.id.action_font) {
             val dialogFontSize = DialogFontSize()
             dialogFontSize.show(supportFragmentManager, "font")
+            return true
         }
         if (id == R.id.action_bright) {
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
+            return true
         }
         if (id == R.id.action_fullscreen) {
             hide()
+            return true
         }
         if (id == R.id.action_share) {
             val sendIntent = Intent()
@@ -540,6 +540,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=1&file=$resurs")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
+            return true
         }
         prefEditor.apply()
         if (id == R.id.action_carkva) {
@@ -557,8 +558,9 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             } else {
                 MainActivity.toastView(this, getString(R.string.error))
             }
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onBackPressed() {

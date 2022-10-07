@@ -15,11 +15,11 @@ import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.text.toSpannable
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaBinding
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -37,7 +37,7 @@ import java.net.URL
 import java.net.URLEncoder
 
 
-class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener {
+class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
@@ -283,8 +283,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         super.onResume()
         findDirAsSave()
         setTollbarTheme()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onBackPressed() {
@@ -803,7 +801,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         return result
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_save) {
             if (fileName == "newFile.html") {
@@ -812,8 +810,9 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             } else {
                 saveResult(fileName)
             }
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private fun saveResult(fileName: String) {
@@ -1002,10 +1001,8 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.edit_piasochnica, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.edit_piasochnica, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -1013,7 +1010,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
     private data class History(val spannable: Spannable, val editPosition: Int)

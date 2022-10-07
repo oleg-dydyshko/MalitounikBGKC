@@ -8,15 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.BaseFragment
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.AkafistFragmentPasliaPrichBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class PasliaPrychasciaFragment : Fragment() {
+class PasliaPrychasciaFragment : BaseFragment() {
 
     private var resursID = R.raw.paslia_prychascia1
     private lateinit var k: SharedPreferences
@@ -36,11 +36,11 @@ class PasliaPrychasciaFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         resursID = arguments?.getInt("resursID") ?: R.raw.paslia_prychascia1
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()

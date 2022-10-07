@@ -7,19 +7,21 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.ExpandableListView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
 import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
 import kotlinx.coroutines.*
 
-class StaryZapavietSemuxaList : AppCompatActivity() {
+class StaryZapavietSemuxaList : BaseActivity() {
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
     private val groups = ArrayList<ArrayList<String>>()
@@ -247,26 +249,8 @@ class StaryZapavietSemuxaList : AppCompatActivity() {
             intent.putExtra("kniga", groupPosition)
             intent.putExtra("glava", childPosition)
             startActivity(intent)
-            /*if (MainActivity.checkmoduleResources(this)) {
-                val intent = Intent()
-                intent.setClassName(this, MainActivity.STARYZAPAVIETSEMUXA)
-                intent.putExtra("kniga", groupPosition)
-                intent.putExtra("glava", childPosition)
-                startActivity(intent)
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(supportFragmentManager, "dadatak")
-            }*/
             false
         }
-        /*if (intent.extras?.getBoolean("prodolzyt", false) == true) {
-            val intent1 = Intent()
-            intent1.setClassName(this, MainActivity.STARYZAPAVIETSEMUXA)
-            intent1.putExtra("kniga", intent.extras?.getInt("kniga"))
-            intent1.putExtra("glava", intent.extras?.getInt("glava"))
-            intent1.putExtra("stix", intent.extras?.getInt("stix"))
-            startActivity(intent1)
-        }*/
     }
 
     private fun setTollbarTheme() {
@@ -304,25 +288,18 @@ class StaryZapavietSemuxaList : AppCompatActivity() {
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
             return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onResume() {
         super.onResume()
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         setTollbarTheme()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private inner class ExpListAdapterStaryZapaviet(private val mContext: Activity) : BaseExpandableListAdapter() {

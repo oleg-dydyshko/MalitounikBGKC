@@ -838,7 +838,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
 
     override fun onDialogPositiveClick() {
         menu?.let {
-            val item: MenuItem = if (save) it.findItem(R.id.action_save_redak) else it.findItem(R.id.action_save)
+            val item: MenuItem = if (save) it.findItem(R.id.action_save_redak)
+            else it.findItem(R.id.action_save)
             onOptionsItemSelected(item)
         }
     }
@@ -880,9 +881,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         this.menu = menu
-        super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.sabytie, menu)
         val searchViewItem = menu.findItem(R.id.action_seashe_text)
         searchView = searchViewItem.actionView as SearchView
@@ -913,11 +913,9 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_add).isVisible = false
         menu.findItem(R.id.action_delite).isVisible = false
         menu.findItem(R.id.action_save).isVisible = false
@@ -939,13 +937,12 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 menu.findItem(R.id.action_cansel).isVisible = true
             }
         }
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (!home) {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return true
+                return false
             }
         }
         mLastClickTime = SystemClock.elapsedRealtime()
@@ -982,6 +979,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 val settings = DialogSabytieSettings()
                 settings.show(supportFragmentManager, "settings")
             }
+            return true
         }
         if (id == R.id.action_save) {
             redak = true
@@ -1496,6 +1494,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             } else {
                 binding.editText.startAnimation(shakeanimation)
             }
+            return true
         }
         if (id == R.id.action_save_redak) {
             redak = true
@@ -2046,6 +2045,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 CaliandarFull.editCaliandarTitle = edit
                 onSupportNavigateUp()
             }
+            return true
         }
         if (id == R.id.action_cansel) {
             back = false
@@ -2076,20 +2076,24 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             if (editCaliandar) {
                 onSupportNavigateUp()
             }
+            return true
         }
         if (id == R.id.action_delite) {
             if (actionExpandOn) binding.toolbar.collapseActionView()
             val delite = DialogSabytieDelite()
             delite.show(supportFragmentManager, "delite")
+            return true
         }
         if (id == R.id.action_add) {
             addSabytie()
+            return true
         }
         if (id == R.id.action_help) {
             val dialogHelpListView = DialogHelpListView.getInstance(2)
             dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private fun getPadzeaiPosition(position: Int, padz: String, dat: String): Int {

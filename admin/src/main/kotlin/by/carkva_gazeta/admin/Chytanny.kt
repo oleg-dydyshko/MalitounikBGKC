@@ -1,7 +1,6 @@
 package by.carkva_gazeta.admin
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -12,13 +11,9 @@ import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEachIndexed
 import by.carkva_gazeta.admin.databinding.AdminChytannyBinding
-import by.carkva_gazeta.malitounik.CustomTypefaceSpan
-import by.carkva_gazeta.malitounik.EditTextCustom
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -29,7 +24,7 @@ import java.net.URL
 import java.net.URLEncoder
 import java.util.*
 
-class Chytanny : AppCompatActivity() {
+class Chytanny : BaseActivity() {
     private lateinit var binding: AdminChytannyBinding
     private var timerCount = 0
     private var timer = Timer()
@@ -37,13 +32,6 @@ class Chytanny : AppCompatActivity() {
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
     private val data = ArrayList<String>()
-
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
 
     private fun startTimer() {
         timerTask = object : TimerTask() {
@@ -261,7 +249,7 @@ class Chytanny : AppCompatActivity() {
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_save) {
             val sb = StringBuilder()
@@ -282,8 +270,9 @@ class Chytanny : AppCompatActivity() {
             }
             val year = data[binding.spinnerYear.selectedItemPosition].toInt()
             sendPostRequest(sb.toString().trim(), year)
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private fun sendPostRequest(cytanni: String, year: Int) {
@@ -323,10 +312,8 @@ class Chytanny : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.edit_chytanny, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.edit_chytanny, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -334,7 +321,6 @@ class Chytanny : AppCompatActivity() {
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
     private class SpinnerAdapter(activity: Activity, private val data: ArrayList<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {

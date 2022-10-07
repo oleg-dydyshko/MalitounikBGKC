@@ -6,18 +6,13 @@ import android.os.SystemClock
 import android.view.View
 import android.widget.ListView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.ListFragment
 
-class MenuMalitvy : ListFragment() {
+class MenuMalitvy : BaseListFragment() {
     private var mLastClickTime: Long = 0
     private val data get() = resources.getStringArray(R.array.malitvy)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let {
             listAdapter = MenuListAdaprer(it, data)
             listView.isVerticalScrollBarEnabled = false

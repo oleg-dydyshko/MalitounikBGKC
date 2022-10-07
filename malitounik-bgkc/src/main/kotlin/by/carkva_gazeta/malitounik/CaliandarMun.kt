@@ -174,10 +174,9 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
         transaction.commit()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.caliandar_mun, menu)
+        menuInflater.inflate(R.menu.caliandar_mun, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -185,11 +184,9 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         val pos = chin.getInt("nedelia", 0)
         if (MainActivity.padzeia.size > 0 && pos == 0 && !sabytue) {
             menu.findItem(R.id.action_padzeia).isVisible = true
@@ -203,16 +200,15 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
             menu.findItem(R.id.action_left).isVisible = true
             menu.findItem(R.id.action_right).isVisible = true
         }
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
             return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

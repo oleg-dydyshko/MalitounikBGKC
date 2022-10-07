@@ -16,21 +16,15 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.ListFragment
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemSviatyBinding
 import java.util.*
 
-class MenuSviaty : ListFragment() {
+class MenuSviaty : BaseListFragment() {
     private var year = Calendar.getInstance()[Calendar.YEAR]
     private lateinit var mListener: CarkvaCarkvaListener
     private var mLastClickTime: Long = 0
     private lateinit var myArrayAdapter: MyArrayAdapter
     private var list = ArrayList<Prazdniki>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -60,6 +54,7 @@ class MenuSviaty : ListFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         listView.isVerticalScrollBarEnabled = false
         listView.isHorizontalScrollBarEnabled = false
         activity?.let {

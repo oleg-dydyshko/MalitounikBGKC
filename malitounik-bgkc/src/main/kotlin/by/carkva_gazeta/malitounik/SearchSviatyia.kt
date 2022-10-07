@@ -49,7 +49,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         resetTollbarJob?.cancel()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             onBackPressed()
             return true
@@ -57,8 +57,9 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         if (item.itemId == R.id.action_clean_histopy) {
             val dialogClearHishory = DialogClearHishory.getInstance()
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private fun changeSearchViewElements(view: View?) {
@@ -91,8 +92,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.pesny, menu)
         val searchViewItem = menu.findItem(R.id.search)
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
@@ -127,7 +127,6 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -260,11 +259,9 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         val histopy = menu.findItem(R.id.action_clean_histopy)
         histopy.isVisible = history.size != 0
-        return true
     }
 
     private fun addHistory(item: String) {

@@ -171,6 +171,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         data.add(MenuListData("Малітва за Царкву", "mltv_za_carkvu"))
         data.add(MenuListData("Малітва да Маці Божай Будслаўскай", "mltv_mb_budslauskaja"))
         data.add(MenuListData("Малітва за хросьнікаў", "mltv_za_chrosnikau"))
+        data.add(MenuListData("Малітва да Найсьвяцейшай Дзевы Марыі Барунскай", "mltv_mb_barunskaja"))
         data.sort()
         adapter = MenuListAdaprer(this, data)
         binding.ListView.adapter = adapter
@@ -275,14 +276,12 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         val histopy = menu.findItem(R.id.action_clean_histopy)
         histopy.isVisible = history.size != 0
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
@@ -291,12 +290,12 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         if (id == R.id.action_clean_histopy) {
             val dialogClearHishory = DialogClearHishory.getInstance()
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.malitvy_prynagodnyia, menu)
         val searchViewItem = menu.findItem(R.id.action_seashe_text)
         searchView = searchViewItem.actionView as SearchView
@@ -331,7 +330,6 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

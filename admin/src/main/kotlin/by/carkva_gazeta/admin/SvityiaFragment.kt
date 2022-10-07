@@ -16,8 +16,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaPageFragmentBinding
+import by.carkva_gazeta.malitounik.BaseFragment
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
@@ -33,7 +33,7 @@ import java.net.URLEncoder
 import java.util.*
 
 
-class SvityiaFragment : Fragment(), View.OnClickListener {
+class SvityiaFragment : BaseFragment(), View.OnClickListener {
     private var dayOfYear = 1
     private var _binding: AdminSviatyiaPageFragmentBinding? = null
     private val binding get() = _binding!!
@@ -120,17 +120,11 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         dayOfYear = arguments?.getInt("day_of_year", 1) ?: 1
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = AdminSviatyiaPageFragmentBinding.inflate(inflater, container, false)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            binding.actionKeyword.visibility = View.GONE
-        } else {
-            binding.apisanne.showSoftInputOnFocus = false
-        }
         return binding.root
     }
 
@@ -234,8 +228,7 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
         return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         val editItem = menu.findItem(R.id.action_preview)
         activity?.let {
             if (binding.scrollpreView.visibility == View.GONE) {
@@ -299,9 +292,9 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
         dialogImageFileExplorer?.dialog?.cancel()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return super.onOptionsItemSelected(item)
+            return false
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
@@ -315,9 +308,11 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
                     dialogImageFileExplorer.show(childFragmentManager, "dialogImageFileExplorer")
                 }
             }
+            return true
         }
         if (id == R.id.action_save) {
             sendPostRequest(cal[Calendar.DAY_OF_MONTH], cal[Calendar.MONTH], dayOfYear - 1, binding.sviaty.text.toString(), binding.chytanne.text.toString(), binding.spinnerStyle.selectedItemPosition, binding.spinnerZnak.selectedItemPosition.toString(), binding.apisanne.text.toString())
+            return true
         }
         if (id == R.id.action_preview) {
             if (binding.scrollpreView.visibility == View.VISIBLE) {
@@ -338,8 +333,9 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
                     it.invalidateOptionsMenu()
                 }
             }
+            return true
         }
-        return true
+        return false
     }
 
     private fun sendPostRequest(data: Int, mun: Int, dayOfYear: Int, name: String, chtenie: String, bold: Int, tipicon: String, spaw: String) {
@@ -398,6 +394,11 @@ class SvityiaFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            binding.actionKeyword.visibility = View.GONE
+        } else {
+            binding.apisanne.showSoftInputOnFocus = false
+        }
         cal.set(Calendar.YEAR, 2020)
         cal.set(Calendar.DAY_OF_YEAR, dayOfYear)
         arrayList.add(Tipicon(0, "Няма"))

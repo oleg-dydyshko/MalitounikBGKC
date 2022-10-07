@@ -235,8 +235,7 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_glava).isVisible = true
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
@@ -249,12 +248,10 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
             itemVybranoe.title = resources.getString(R.string.vybranoe)
         }
         menu.findItem(R.id.action_carkva).isVisible = false
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        val prefEditors = k.edit()
         if (id == R.id.action_vybranoe) {
             men = DialogVybranoeBibleList.setVybranoe(resources.getString(R.string.psalom2), 0, binding.pager.currentItem, bibleName = 3)
             if (men) {
@@ -269,6 +266,7 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
                 }
             }
             invalidateOptionsMenu()
+            return true
         }
         if (id == R.id.action_dzen_noch) {
             val prefEditor = k.edit()
@@ -280,6 +278,7 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
             }
             prefEditor.apply()
             recreate()
+            return true
         }
         if (id == android.R.id.home) {
             onBackPressed()
@@ -288,20 +287,23 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
         if (id == R.id.action_glava) {
             val dialogBibleRazdel = getInstance(151)
             dialogBibleRazdel.show(supportFragmentManager, "full_glav")
+            return true
         }
         if (id == R.id.action_font) {
             val dialogFontSize = DialogFontSize()
             dialogFontSize.show(supportFragmentManager, "font")
+            return true
         }
         if (id == R.id.action_bright) {
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
+            return true
         }
         if (id == R.id.action_fullscreen) {
             hide()
+            return true
         }
-        prefEditors.apply()
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onResume() {
@@ -316,10 +318,8 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.biblia, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.biblia, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -327,7 +327,6 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
     private fun hide() {

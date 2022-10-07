@@ -323,7 +323,7 @@
     <string name="bibliateka_file">Выбраць файл</string>
     <string name="del_all_vybranoe">Вы сапраўды жадаеце выдаліць усё Выбранае?</string>
     <string name="share">Падзяліцца&#8230;</string>
-    <string name="slugby_vialikaga_postu">Мінэя Вялікага посту</string>
+    <string name="slugby_vialikaga_postu">Трыёдзь посная</string>
     <string name="bad_internet">ДРЭННАЕ ІНТЭРНЭТ ЗЛУЧЭНЬНЕ\nПраверце якасьць сігналу</string>
     <string name="copy_big">Cкапіяваць</string>
     <string name="copy_big_full">Вылучыць усё</string>
@@ -420,10 +420,11 @@
         <item>Службы 6-га тыдня Вялікага посту</item>
     </string-array>
     <string-array name="bogaslugbovuia_tryjodz">
-        <item>Трыёдзь Сьвяточная</item>
+        <item>Трыёдзь посная</item>
         <item>Службы Вялікага тыдня</item>
         <item>Службы Сьветлага тыдня</item>
-        <item>Службы нядзелі Тамаша</item>
+        <item>Трыёдзь Сьвяточная</item>
+        <!--<item>Службы нядзелі Тамаша</item>-->
     </string-array>
     <string-array name="galounae">
         <item>Апошнія навіны</item>

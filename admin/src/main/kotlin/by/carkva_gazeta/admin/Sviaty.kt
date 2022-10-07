@@ -19,10 +19,10 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminSviatyBinding
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
@@ -36,7 +36,7 @@ import java.net.URL
 import java.net.URLEncoder
 import java.util.*
 
-class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.DialogFileExplorerListener {
+class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogFileExplorerListener {
     private lateinit var binding: AdminSviatyBinding
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
@@ -50,13 +50,6 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
             val fileExplorer = DialogImageFileExplorer.getInstance(true)
             fileExplorer.show(supportFragmentManager, "file_explorer")
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun startTimer() {
@@ -330,18 +323,16 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
+    override fun onPrepareMenu(menu: Menu) {
         val editItem = menu.findItem(R.id.action_preview)
         if (binding.scrollpreView.visibility == View.GONE) {
             editItem.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.natatka_edit)
         } else {
             editItem.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.natatka)
         }
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_upload_image) {
             val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -351,9 +342,11 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
                 val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(true)
                 dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
             }
+            return true
         }
         if (id == R.id.action_save) {
             sendPostRequest(binding.spinnerSviaty.selectedItemPosition, binding.sviaty.text.toString())
+            return true
         }
         if (id == R.id.action_preview) {
             if (binding.scrollpreView.visibility == View.VISIBLE) {
@@ -368,8 +361,9 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
                 imm.hideSoftInputFromWindow(binding.sviaty.windowToken, 0)
                 invalidateOptionsMenu()
             }
+            return true
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private fun sendPostRequest(position: Int, apisanne: String) {
@@ -409,10 +403,8 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.edit_sviaty, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.edit_sviaty, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -420,7 +412,6 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
-        return true
     }
 
     private class SpinnerAdapter(activity: Activity, private val data: ArrayList<SviatyData>) : ArrayAdapter<SviatyData>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {

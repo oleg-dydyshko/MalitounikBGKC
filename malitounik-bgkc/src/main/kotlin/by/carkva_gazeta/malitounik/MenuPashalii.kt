@@ -14,12 +14,11 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.PashaliiBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemPaschaliiBinding
 import java.util.*
 
-class MenuPashalii : Fragment() {
+class MenuPashalii : BaseFragment() {
     private val pasxi = ArrayList<Pashalii>()
     private lateinit var myArrayAdapter: MyArrayAdapter
     private var _binding: PashaliiBinding? = null
@@ -28,11 +27,6 @@ class MenuPashalii : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -46,6 +40,7 @@ class MenuPashalii : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let {
             binding.gri.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.ula.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)

@@ -724,15 +724,19 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             menu.findItem(R.id.action_help).isVisible = false
             menu.findItem(R.id.action_carkva).isVisible = false
             when (idSelect) {
-                R.id.label101 -> {
-                    menu.findItem(R.id.action_font).isVisible = true
-                    menu.findItem(R.id.action_bright).isVisible = true
-                    menu.findItem(R.id.action_dzen_noch).isVisible = true
+                R.id.label1 -> {
+                    val arrayList = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])
+                    val dataCalendar = arrayList[0][25].toInt()
+                    menu.findItem(R.id.action_glava).isVisible = dataCalendar != setDataCalendar
+                    menu.findItem(R.id.action_mun).isVisible = true
                 }
-                R.id.label102 -> {
+                R.id.label101 or R.id.label102 -> {
                     menu.findItem(R.id.action_font).isVisible = true
                     menu.findItem(R.id.action_bright).isVisible = true
-                    menu.findItem(R.id.action_dzen_noch).isVisible = true
+                    if (!k.getBoolean("auto_dzen_noch", false)) {
+                        menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
+                        menu.findItem(R.id.action_dzen_noch).isVisible = true
+                    }
                 }
                 R.id.label103 -> menu.findItem(R.id.prazdnik).isVisible = true
                 R.id.label104 -> {
@@ -766,12 +770,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     menu.findItem(R.id.sortdate).isChecked = k.getInt("vybranoe_sort", 1) == 1
                 }
             }
-            if (dzenNoch) {
-                menu.findItem(R.id.action_mun).setIcon(R.drawable.calendar_black_full)
-                menu.findItem(R.id.action_glava).setIcon(R.drawable.calendar_black)
-            }
-            menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
-            if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
         }
     }
 

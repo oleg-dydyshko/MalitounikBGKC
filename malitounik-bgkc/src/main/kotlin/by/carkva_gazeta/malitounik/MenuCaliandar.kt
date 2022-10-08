@@ -154,19 +154,17 @@ class MenuCaliandar : BaseFragment() {
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        val c = Calendar.getInstance() as GregorianCalendar
-        var dayyear = 0
-        for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until c[Calendar.YEAR]) {
-            dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
-        }
-        menu.findItem(R.id.action_glava).isVisible = dayyear + c[Calendar.DAY_OF_YEAR] - 1 != binding.pager.currentItem
-        menu.findItem(R.id.action_mun).isVisible = true
         menu.findItem(R.id.tipicon).isVisible = true
         menu.findItem(R.id.sabytie).isVisible = true
         menu.findItem(R.id.search_sviatyia).isVisible = true
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
+            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
+            if (dzenNoch) {
+                menu.findItem(R.id.action_mun).setIcon(R.drawable.calendar_black_full)
+                menu.findItem(R.id.action_glava).setIcon(R.drawable.calendar_black)
+            }
         }
     }
 

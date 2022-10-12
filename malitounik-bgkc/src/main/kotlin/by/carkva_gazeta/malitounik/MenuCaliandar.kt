@@ -153,21 +153,6 @@ class MenuCaliandar : BaseFragment() {
         page = arguments?.getInt("page") ?: 0
     }
 
-    override fun onPrepareMenu(menu: Menu) {
-        menu.findItem(R.id.tipicon).isVisible = true
-        menu.findItem(R.id.sabytie).isVisible = true
-        menu.findItem(R.id.search_sviatyia).isVisible = true
-        activity?.let {
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
-            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
-            if (dzenNoch) {
-                menu.findItem(R.id.action_mun).setIcon(R.drawable.calendar_black_full)
-                menu.findItem(R.id.action_glava).setIcon(R.drawable.calendar_black)
-            }
-        }
-    }
-
     private fun createIntent(action: String, extra: String, data: String, time: String): Intent {
         var i = Intent()
         activity?.let {
@@ -247,7 +232,7 @@ class MenuCaliandar : BaseFragment() {
                 it.readText()
             }
             val gson = Gson()
-            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
             data.addAll(gson.fromJson(builder, type))
         }
 

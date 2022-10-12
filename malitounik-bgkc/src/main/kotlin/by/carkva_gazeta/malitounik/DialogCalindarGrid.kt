@@ -157,7 +157,7 @@ class DialogCalindarGrid : DialogFragment() {
             if (k.getString("caliandarGrid", "") != "") {
                 try {
                     val gson = Gson()
-                    val type = object : TypeToken<ArrayList<Int>>() {}.type
+                    val type = TypeToken.getParameterized(ArrayList::class.java, Integer::class.java).type
                     mItemArray = gson.fromJson(k.getString("caliandarGrid", ""), type)
                 } catch (e: Throwable) {
                     val edit = k.edit()

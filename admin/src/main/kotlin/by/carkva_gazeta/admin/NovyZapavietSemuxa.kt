@@ -34,6 +34,9 @@ class NovyZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelLi
     private lateinit var binding: AdminBibleBinding
     private var resetTollbarJob: Job? = null
 
+    override fun setMyTheme() {
+    }
+
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
@@ -233,7 +236,7 @@ class NovyZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelLi
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            super.onBackPressed()
             return true
         }
         if (id == R.id.action_glava) {

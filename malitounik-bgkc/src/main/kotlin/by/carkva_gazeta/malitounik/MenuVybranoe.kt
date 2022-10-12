@@ -69,7 +69,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
 
     private fun checkBibleVybranoe() {
         val gson = Gson()
-        val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
+        val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
         var bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
         var indexVybranoe = 0
         var remove = false
@@ -85,7 +85,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                         }
                     }
                 }
-            } catch (_: Throwable) {
+            } catch (e: Throwable) {
                 val edit = k.edit()
                 edit.remove("bibleVybranoeSemuxa")
                 edit.apply()
@@ -116,7 +116,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                         }
                     }
                 }
-            } catch (_: Throwable) {
+            } catch (e: Throwable) {
                 val edit = k.edit()
                 edit.remove("bibleVybranoeSinoidal")
                 edit.apply()
@@ -147,7 +147,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                         }
                     }
                 }
-            } catch (_: Throwable) {
+            } catch (e: Throwable) {
                 val edit = k.edit()
                 edit.remove("bibleVybranoeNadsan")
                 edit.apply()
@@ -193,9 +193,9 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
             val file = File(fragmentActivity.filesDir.toString() + "/Vybranoe.json")
             if (file.exists() && vybranoe.isEmpty()) {
                 try {
-                    val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
+                    val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
                     vybranoe.addAll(gson.fromJson(file.readText(), type))
-                } catch (_: Throwable) {
+                } catch (e: Throwable) {
                     file.delete()
                 }
             }
@@ -215,7 +215,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                 override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
                     if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
                         val adapterItem = item.tag as VybranoeData
-                        val pos: Int = binding.dragListView.adapter.getPositionForItem(adapterItem)
+                        val pos = binding.dragListView.adapter.getPositionForItem(adapterItem)
                         val dd = DialogDelite.getInstance(pos, "", "з выбранага", adapter.itemList[pos].data)
                         dd.show(childFragmentManager, "dialog_dilite")
                     }
@@ -267,7 +267,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                     if (file.exists()) {
                         try {
                             vybranoe.clear()
-                            val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
                             vybranoe.addAll(gson.fromJson(file.readText(), type))
                             vybranoeSort = 0
                         } catch (t: Throwable) {

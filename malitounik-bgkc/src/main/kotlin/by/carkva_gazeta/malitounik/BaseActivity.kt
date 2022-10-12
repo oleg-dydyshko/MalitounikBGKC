@@ -31,6 +31,10 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
     }
 
+    override fun onBackPressed() {
+        onBackPressedDispatcher.onBackPressed()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putLong("mLastClickTime", mLastClickTime)
@@ -59,7 +63,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         setMyTheme()
     }
 
-    private fun setMyTheme() {
+    open fun setMyTheme() {
         if (k.getBoolean("auto_dzen_noch", false)) {
             if (autoDzenNoch) setTheme(R.style.AppCompatDark)
         } else {

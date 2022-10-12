@@ -51,7 +51,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            onBackPressed()
+            super.onBackPressed()
             return true
         }
         if (item.itemId == R.id.action_clean_histopy) {
@@ -184,7 +184,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         if (chin.getString("history_sviatyia", "") != "") {
             val gson = Gson()
             val json = chin.getString("history_sviatyia", "")
-            val type = object : TypeToken<ArrayList<String>>() {}.type
+            val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
             history.addAll(gson.fromJson(json, type))
         }
         adapter = SearchListAdapter(this, ArrayList())

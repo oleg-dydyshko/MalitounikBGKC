@@ -48,6 +48,9 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
         }
     }
 
+    override fun setMyTheme() {
+    }
+
     private fun startTimer() {
         timerTask = object : TimerTask() {
             override fun run() {
@@ -146,7 +149,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                         if (responseCodeS == 200) {
                             val builder = mURL.readText()
                             val gson = Gson()
-                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                             val piarlin = ArrayList<ArrayList<String>>()
                             piarlin.addAll(gson.fromJson(builder, type))
                             piarlin.forEach {

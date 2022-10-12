@@ -211,7 +211,7 @@ class MyNatatki : DialogFragment() {
             } else {
                 MenuNatatki.myNatatkiFiles.clear()
                 val gson = Gson()
-                val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
+                val type = TypeToken.getParameterized(ArrayList::class.java, MyNatatkiFiles::class.java).type
                 MenuNatatki.myNatatkiFiles.addAll(gson.fromJson(fileName.readText(), type))
                 MenuNatatki.myNatatkiFiles.add(0, MyNatatkiFiles(i, gc.timeInMillis, nazva))
                 File("${context.filesDir}/Malitva/$imiafile")

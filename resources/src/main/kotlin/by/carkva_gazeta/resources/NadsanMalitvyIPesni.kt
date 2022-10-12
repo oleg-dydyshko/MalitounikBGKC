@@ -79,7 +79,7 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
             show()
         }
         binding.actionBack.setOnClickListener {
-            onBackPressed()
+            super.onBackPressed()
         }
         setTollbarTheme()
     }
@@ -156,7 +156,7 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
         val prefEditor = k.edit()
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            super.onBackPressed()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {

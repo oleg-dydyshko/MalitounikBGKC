@@ -45,6 +45,9 @@ class Sviatyia : BaseActivity(), DialogImageFileLoad.DialogFileExplorerListener,
         }
     }
 
+    override fun setMyTheme() {
+    }
+
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()

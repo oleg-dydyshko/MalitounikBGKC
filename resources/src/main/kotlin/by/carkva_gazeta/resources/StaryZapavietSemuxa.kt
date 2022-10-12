@@ -345,7 +345,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
             val inputStream = FileReader(file)
             val reader = BufferedReader(inputStream)
             val gson = Gson()
-            val type = object : TypeToken<ArrayList<ArrayList<Int?>?>?>() {}.type
+            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, Integer::class.java).type).type
             BibleGlobalList.vydelenie = gson.fromJson(reader.readText(), type)
             inputStream.close()
         }

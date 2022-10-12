@@ -444,7 +444,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             try {
                 val gson = Gson()
                 if (file.exists() && MenuVybranoe.vybranoe.isEmpty()) {
-                    val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
+                    val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
@@ -484,7 +484,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             try {
                 if (file.exists() && MenuVybranoe.vybranoe.isEmpty()) {
                     val gson = Gson()
-                    val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
+                    val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 } else {
                     return false

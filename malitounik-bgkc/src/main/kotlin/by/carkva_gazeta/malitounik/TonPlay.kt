@@ -93,7 +93,7 @@ class TonPlay : BaseActivity() {
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            super.onBackPressed()
             return true
         }
         return false

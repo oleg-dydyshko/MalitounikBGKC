@@ -424,7 +424,7 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
                             var url = "https://carkva-gazeta.by/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json"
                             val builder = URL(url).readText()
                             val gson = Gson()
-                            val type = object : TypeToken<ArrayList<String>>() {}.type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
                             val arrayList: ArrayList<String> = gson.fromJson(builder, type)
                             res = arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
                             url = "https://carkva-gazeta.by/calendarsviatyia.txt"

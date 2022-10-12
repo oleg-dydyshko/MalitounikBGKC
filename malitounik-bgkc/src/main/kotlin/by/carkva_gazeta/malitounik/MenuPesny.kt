@@ -95,7 +95,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
             if (chin.getString("history_pesny", "") != "") {
                 val gson = Gson()
                 val json = chin.getString("history_pesny", "")
-                val type = object : TypeToken<ArrayList<String>>() {}.type
+                val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
                 history.addAll(gson.fromJson(json, type))
             }
             if (savedInstanceState != null) {
@@ -218,11 +218,9 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
         outState.putBoolean("search", search)
     }
 
-    override fun onPrepareMenu(menu: Menu) {
-        menu.findItem(R.id.count).isVisible = search
-        val histopy = menu.findItem(R.id.action_clean_histopy)
-        histopy.isVisible = history.size != 0
-    }
+    fun isHistory() = history.size != 0
+
+    fun isSearch() = search
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.pesny, menu)

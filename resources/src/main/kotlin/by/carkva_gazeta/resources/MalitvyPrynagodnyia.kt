@@ -209,7 +209,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         if (chin.getString("history_prynagodnyia", "") != "") {
             val gson = Gson()
             val json = chin.getString("history_prynagodnyia", "")
-            val type = object : TypeToken<ArrayList<String>>() {}.type
+            val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
             history.addAll(gson.fromJson(json, type))
         }
         historyAdapter = HistoryAdapter(this, history)
@@ -284,7 +284,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            super.onBackPressed()
             return true
         }
         if (id == R.id.action_clean_histopy) {

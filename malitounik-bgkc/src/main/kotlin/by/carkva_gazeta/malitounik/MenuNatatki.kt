@@ -50,7 +50,7 @@ class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val file = File(activity.filesDir.toString() + "/Natatki.json")
             val gson = Gson()
-            val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, MyNatatkiFiles::class.java).type
             if (file.exists()) {
                 try {
                     myNatatkiFiles = gson.fromJson(file.readText(), type)
@@ -155,7 +155,7 @@ class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
                 myNatatkiFiles.clear()
                 val file = File(it.filesDir.toString() + "/Natatki.json")
                 val gson = Gson()
-                val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, MyNatatkiFiles::class.java).type
                 myNatatkiFiles.addAll(gson.fromJson(file.readText(), type))
             }
         }
@@ -183,12 +183,6 @@ class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
         dd.show(childFragmentManager, "dialog_delite")
     }
 
-    override fun onPrepareMenu(menu: Menu) {
-        activity?.let {
-            menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
-        }
-    }
-
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return false
@@ -212,7 +206,7 @@ class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
                     myNatatkiFiles.clear()
                     val file = File(activity.filesDir.toString() + "/Natatki.json")
                     val gson = Gson()
-                    val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, MyNatatkiFiles::class.java).type
                     myNatatkiFiles.addAll(gson.fromJson(file.readText(), type))
                 } else {
                     prefEditors.putInt("natatki_sort", 1)
@@ -234,7 +228,7 @@ class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
                     myNatatkiFiles.clear()
                     val file = File(activity.filesDir.toString() + "/Natatki.json")
                     val gson = Gson()
-                    val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, MyNatatkiFiles::class.java).type
                     myNatatkiFiles.addAll(gson.fromJson(file.readText(), type))
                 } else {
                     prefEditors.putInt("natatki_sort", 2)

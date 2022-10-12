@@ -353,7 +353,7 @@ class SlugbovyiaTextu {
                         try {
                             val builder = fileOpisanieSviat.readText()
                             val gson = Gson()
-                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                             piarliny.addAll(gson.fromJson(builder, type))
                         } catch (t: Throwable) {
                             fileOpisanieSviat.delete()
@@ -364,7 +364,7 @@ class SlugbovyiaTextu {
                 try {
                     val builder = fileOpisanieSviat.readText()
                     val gson = Gson()
-                    val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                    val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                     piarliny.addAll(gson.fromJson(builder, type))
                 } catch (t: Throwable) {
                     fileOpisanieSviat.delete()

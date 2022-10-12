@@ -41,7 +41,7 @@ class MenuBibleSinoidal : Fragment() {
                 val bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
                 if (bibleVybranoe != "") {
                     val gson = Gson()
-                    val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
+                    val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
                     arrayListVybranoe.addAll(gson.fromJson(bibleVybranoe, type))
                 }
                 if (bibleVybranoe == "" || arrayListVybranoe.isEmpty()) {
@@ -78,7 +78,7 @@ class MenuBibleSinoidal : Fragment() {
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
                     val gson = Gson()
-                    val type = object : TypeToken<ArrayMap<String, Int>>() {}.type
+                    val type = TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(Int::class.java).type).type
                     val set = gson.fromJson<ArrayMap<String, Int>>(bibleTime, type)
                     if (set["zavet"] == 1) {
                         if (MainActivity.checkmoduleResources()) {

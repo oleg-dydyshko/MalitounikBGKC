@@ -52,6 +52,9 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
         }
     }
 
+    override fun setMyTheme() {
+    }
+
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
@@ -368,7 +371,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                                 fileList.clear()
                                 if (result != "null") {
                                     val gson = Gson()
-                                    val type = object : TypeToken<ArrayList<String>>() {}.type
+                                    val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
                                     fileList.addAll(gson.fromJson(result, type))
                                     fileList.sort()
                                 }
@@ -524,7 +527,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                                     if (responseCode == 200) {
                                         findDirAsSave.clear()
                                         val gson = Gson()
-                                        val type = object : TypeToken<ArrayList<String>>() {}.type
+                                        val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
                                         findDirAsSave.addAll(gson.fromJson<ArrayList<String>>(sb.toString(), type))
                                     }
                                 }

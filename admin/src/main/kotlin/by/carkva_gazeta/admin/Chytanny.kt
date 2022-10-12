@@ -33,6 +33,9 @@ class Chytanny : BaseActivity() {
     private var resetTollbarJob: Job? = null
     private val data = ArrayList<String>()
 
+    override fun setMyTheme() {
+    }
+
     private fun startTimer() {
         timerTask = object : TimerTask() {
             override fun run() {
@@ -74,7 +77,7 @@ class Chytanny : BaseActivity() {
                         val url = "https://carkva-gazeta.by/admin/getFilesCaliandar.php?year=$year"
                         val builder = URL(url).readText()
                         val gson = Gson()
-                        val type = object : TypeToken<ArrayList<String>>() {}.type
+                        val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
                         return@withContext gson.fromJson<ArrayList<String>>(builder, type)
                     } catch (e: Throwable) {
                         return@withContext ArrayList<String>()

@@ -193,7 +193,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             show()
         }
         binding.actionBack.setOnClickListener {
-            onBackPressed()
+            super.onBackPressed()
         }
         binding.InteractiveScroll.setOnScrollChangedCallback(this)
     }
@@ -1090,7 +1090,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         val id = item.itemId
         val prefEditor = k.edit()
         if (id == android.R.id.home) {
-            onBackPressed()
+            super.onBackPressed()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {

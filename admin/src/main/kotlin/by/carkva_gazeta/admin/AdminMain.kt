@@ -22,6 +22,9 @@ class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
     private lateinit var binding: AdminMainBinding
     private var resetTollbarJob: Job? = null
 
+    override fun setMyTheme() {
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         SplitCompat.install(this)
         if (!MainActivity.checkBrightness) {
@@ -115,7 +118,7 @@ class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            super.onBackPressed()
             return true
         }
         if (id == R.id.action_beta) {

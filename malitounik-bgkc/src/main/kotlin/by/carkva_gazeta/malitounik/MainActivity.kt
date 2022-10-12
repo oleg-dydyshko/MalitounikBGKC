@@ -723,52 +723,65 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             menu.findItem(R.id.action_dzen_noch).isVisible = false
             menu.findItem(R.id.action_help).isVisible = false
             menu.findItem(R.id.action_carkva).isVisible = false
-            when (idSelect) {
-                R.id.label1 -> {
-                    val arrayList = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])
-                    val dataCalendar = arrayList[0][25].toInt()
-                    menu.findItem(R.id.action_glava).isVisible = dataCalendar != setDataCalendar
-                    menu.findItem(R.id.action_mun).isVisible = true
+            if (idSelect == R.id.label1) {
+                val arrayList = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])
+                val dataCalendar = arrayList[0][25].toInt()
+                menu.findItem(R.id.action_glava).isVisible = dataCalendar != setDataCalendar
+                menu.findItem(R.id.action_mun).isVisible = true
+                menu.findItem(R.id.tipicon).isVisible = true
+                menu.findItem(R.id.sabytie).isVisible = true
+                menu.findItem(R.id.search_sviatyia).isVisible = true
+                menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
+                if (dzenNoch) {
+                    menu.findItem(R.id.action_mun).setIcon(R.drawable.calendar_black_full)
+                    menu.findItem(R.id.action_glava).setIcon(R.drawable.calendar_black)
                 }
-                R.id.label101 or R.id.label102 -> {
-                    menu.findItem(R.id.action_font).isVisible = true
-                    menu.findItem(R.id.action_bright).isVisible = true
-                    if (!k.getBoolean("auto_dzen_noch", false)) {
-                        menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
-                        menu.findItem(R.id.action_dzen_noch).isVisible = true
+            }
+            if (idSelect == R.id.label91 || idSelect == R.id.label92 || idSelect == R.id.label93 || idSelect == R.id.label94 || idSelect == R.id.label95) {
+                val menuPesny = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesny
+                menu.findItem(R.id.count).isVisible = menuPesny?.isSearch() ?: false
+                val history = menu.findItem(R.id.action_clean_histopy)
+                history.isVisible = menuPesny?.isHistory() ?: false
+            }
+            if (idSelect == R.id.label101 || idSelect == R.id.label102) {
+                menu.findItem(R.id.action_font).isVisible = true
+                menu.findItem(R.id.action_bright).isVisible = true
+                if (!k.getBoolean("auto_dzen_noch", false)) {
+                    menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
+                    menu.findItem(R.id.action_dzen_noch).isVisible = true
+                }
+            }
+            if (idSelect == R.id.label103) menu.findItem(R.id.prazdnik).isVisible = true
+            if (idSelect == R.id.label104) {
+                menu.findItem(R.id.pasxa_opis).isVisible = true
+                menu.findItem(R.id.pasxa).isVisible = true
+            }
+            if (idSelect == R.id.label7) {
+                menu.findItem(R.id.action_add).isVisible = true
+                menu.findItem(R.id.sortdate).isVisible = true
+                menu.findItem(R.id.sorttime).isVisible = true
+                menu.findItem(R.id.action_help).isVisible = true
+                menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
+                when (k.getInt("natatki_sort", 0)) {
+                    1 -> {
+                        menu.findItem(R.id.sortdate).isChecked = true
+                        menu.findItem(R.id.sorttime).isChecked = false
+                    }
+                    2 -> {
+                        menu.findItem(R.id.sortdate).isChecked = false
+                        menu.findItem(R.id.sorttime).isChecked = true
+                    }
+                    else -> {
+                        menu.findItem(R.id.sortdate).isChecked = false
+                        menu.findItem(R.id.sorttime).isChecked = false
                     }
                 }
-                R.id.label103 -> menu.findItem(R.id.prazdnik).isVisible = true
-                R.id.label104 -> {
-                    menu.findItem(R.id.pasxa_opis).isVisible = true
-                    menu.findItem(R.id.pasxa).isVisible = true
-                }
-                R.id.label7 -> {
-                    menu.findItem(R.id.action_add).isVisible = true
-                    menu.findItem(R.id.sortdate).isVisible = true
-                    menu.findItem(R.id.sorttime).isVisible = true
-                    menu.findItem(R.id.action_help).isVisible = true
-                    when (k.getInt("natatki_sort", 0)) {
-                        1 -> {
-                            menu.findItem(R.id.sortdate).isChecked = true
-                            menu.findItem(R.id.sorttime).isChecked = false
-                        }
-                        2 -> {
-                            menu.findItem(R.id.sortdate).isChecked = false
-                            menu.findItem(R.id.sorttime).isChecked = true
-                        }
-                        else -> {
-                            menu.findItem(R.id.sortdate).isChecked = false
-                            menu.findItem(R.id.sorttime).isChecked = false
-                        }
-                    }
-                }
-                R.id.label12 -> {
-                    menu.findItem(R.id.trash).isVisible = true
-                    menu.findItem(R.id.sortdate).isVisible = true
-                    menu.findItem(R.id.action_help).isVisible = true
-                    menu.findItem(R.id.sortdate).isChecked = k.getInt("vybranoe_sort", 1) == 1
-                }
+            }
+            if (idSelect == R.id.label12) {
+                menu.findItem(R.id.trash).isVisible = true
+                menu.findItem(R.id.sortdate).isVisible = true
+                menu.findItem(R.id.action_help).isVisible = true
+                menu.findItem(R.id.sortdate).isChecked = k.getInt("vybranoe_sort", 1) == 1
             }
         }
     }
@@ -1050,12 +1063,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     if (file.exists()) {
                         try {
                             val gson = Gson()
-                            val type = object : TypeToken<ArrayList<BibleNatatkiData>>() {}.type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, BibleNatatkiData::class.java).type
                             BibleGlobalList.natatkiSemuxa = gson.fromJson(file.readText(), type)
                         } catch (t: Throwable) {
                             try {
                                 val gson = Gson()
-                                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                                 val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(file.readText(), type)
                                 for (i in 0 until arrayList.size) BibleGlobalList.natatkiSemuxa.add(BibleNatatkiData(i.toLong(), arrayList[i]))
                             } catch (t: Throwable) {
@@ -1067,12 +1080,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     if (file2.exists()) {
                         try {
                             val gson = Gson()
-                            val type = object : TypeToken<ArrayList<BibleZakladkiData>>() {}.type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, BibleZakladkiData::class.java).type
                             BibleGlobalList.zakladkiSemuxa = gson.fromJson(file2.readText(), type)
                         } catch (t: Throwable) {
                             try {
                                 val gson = Gson()
-                                val type = object : TypeToken<ArrayList<String>>() {}.type
+                                val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
                                 val arrayList = gson.fromJson<ArrayList<String>>(file2.readText(), type)
                                 for (i in 0 until arrayList.size) BibleGlobalList.zakladkiSemuxa.add(BibleZakladkiData(i.toLong(), arrayList[i]))
                             } catch (t: Throwable) {
@@ -1148,12 +1161,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     if (file.exists()) {
                         try {
                             val gson = Gson()
-                            val type = object : TypeToken<ArrayList<BibleNatatkiData>>() {}.type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, BibleNatatkiData::class.java).type
                             BibleGlobalList.natatkiSinodal = gson.fromJson(file.readText(), type)
                         } catch (t: Throwable) {
                             try {
                                 val gson = Gson()
-                                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                                 val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(file.readText(), type)
                                 for (i in 0 until arrayList.size) BibleGlobalList.natatkiSinodal.add(BibleNatatkiData(i.toLong(), arrayList[i]))
                             } catch (t: Throwable) {
@@ -1165,12 +1178,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     if (file2.exists()) {
                         try {
                             val gson = Gson()
-                            val type = object : TypeToken<ArrayList<BibleZakladkiData>>() {}.type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, BibleZakladkiData::class.java).type
                             BibleGlobalList.zakladkiSinodal = gson.fromJson(file2.readText(), type)
                         } catch (t: Throwable) {
                             try {
                                 val gson = Gson()
-                                val type = object : TypeToken<ArrayList<String>>() {}.type
+                                val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
                                 val arrayList = gson.fromJson<ArrayList<String>>(file2.readText(), type)
                                 for (i in 0 until arrayList.size) BibleGlobalList.zakladkiSinodal.add(BibleZakladkiData(i.toLong(), arrayList[i]))
                             } catch (t: Throwable) {
@@ -1196,7 +1209,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             if (start) {
                 ftrans.commit()
             } else {
-                bindingappbar.toolbar.postDelayed({ ftrans.commitAllowingStateLoss() }, 300)
+                bindingappbar.toolbar.postDelayed({
+                    ftrans.commitAllowingStateLoss()
+                }, 300)
             }
             prefEditors.apply()
         }
@@ -1275,7 +1290,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                             val conections = mURL.openConnection() as HttpURLConnection
                             if (conections.responseCode == 200) {
                                 val gson = Gson()
-                                val type = object : TypeToken<Map<String, String>>() {}.type
+                                val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
                                 updeteArrayText = gson.fromJson(mURL.readText(), type)
                             }
                         } catch (_: Throwable) {
@@ -1368,7 +1383,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 val file = File(Malitounik.applicationContext().filesDir.toString() + "/Sabytie.json")
                 if (file.exists()) {
                     try {
-                        val type = object : TypeToken<ArrayList<Padzeia>>() {}.type
+                        val type = TypeToken.getParameterized(ArrayList::class.java, Padzeia::class.java).type
                         padzeia = gson.fromJson(file.readText(), type)
                     } catch (t: Throwable) {
                         file.delete()

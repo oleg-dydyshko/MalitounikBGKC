@@ -77,7 +77,7 @@ class DialogUpdateHelp : DialogFragment() {
                                 val conections = mURL.openConnection() as HttpURLConnection
                                 if (conections.responseCode == 200) {
                                     val gson = Gson()
-                                    val type = object : TypeToken<Map<String, String>>() {}.type
+                                    val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
                                     updeteArrayText = gson.fromJson(mURL.readText(), type)
                                 }
                             } catch (e: Throwable) {

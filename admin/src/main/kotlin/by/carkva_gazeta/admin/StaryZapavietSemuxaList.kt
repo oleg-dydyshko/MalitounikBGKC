@@ -29,6 +29,9 @@ class StaryZapavietSemuxaList : BaseActivity() {
     private var resetTollbarJob: Job? = null
     private lateinit var k: SharedPreferences
 
+    override fun setMyTheme() {
+    }
+
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
@@ -291,7 +294,7 @@ class StaryZapavietSemuxaList : BaseActivity() {
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            super.onBackPressed()
             return true
         }
         return false

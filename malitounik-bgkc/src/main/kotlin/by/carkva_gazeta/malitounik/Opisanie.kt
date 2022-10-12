@@ -129,7 +129,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
 
     private fun loadOpisanieSviatyia(builder: String) {
         val gson = Gson()
-        val type = object : TypeToken<ArrayList<String>>() {}.type
+        val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
         var res = ""
         val arrayList = ArrayList<String>()
         if (builder.isNotEmpty()) {
@@ -179,7 +179,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         if (fileOpisanieSviat.exists()) {
             val builder = fileOpisanieSviat.readText()
             val gson = Gson()
-            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
             val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(builder, type)
             if (arrayList != null) {
                 arrayList.forEach {
@@ -259,7 +259,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                 if (!dir.exists()) dir.mkdir()
                                 val builderUrl = mURL.readText()
                                 val gson = Gson()
-                                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                                 val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(builderUrl, type)
                                 for (i in 0 until arrayList.size) {
                                     val urlName = arrayList[i][0]
@@ -322,7 +322,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                             if (conections.responseCode == 200) {
                                 val builderUrl = mURL.readText()
                                 val gson = Gson()
-                                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                                 val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(builderUrl, type)
                                 for (i in 0 until arrayList.size) {
                                     val urlName = arrayList[i][0]
@@ -431,7 +431,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             try {
                 val builder = fileOpisanieSviat.readText()
                 val gson = Gson()
-                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                 piarliny.addAll(gson.fromJson(builder, type))
             } catch (t: Throwable) {
                 fileOpisanieSviat.delete()

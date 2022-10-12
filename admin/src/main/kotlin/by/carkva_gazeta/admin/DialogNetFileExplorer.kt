@@ -132,7 +132,7 @@ class DialogNetFileExplorer : DialogFragment() {
                                 val temp = ArrayList<MyNetFile>()
                                 if (result != "null") {
                                     val gson = Gson()
-                                    val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                                     val arrayList = ArrayList<ArrayList<String>>()
                                     arrayList.addAll(gson.fromJson(result, type))
                                     arrayList.forEach {

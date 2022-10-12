@@ -96,7 +96,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
             val bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
             if (bibleVybranoe != "") {
                 val gson = Gson()
-                val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
+                val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeBibliaData::class.java).type
                 arrayListVybranoe.addAll(gson.fromJson(bibleVybranoe, type))
             }
             if (bibleVybranoe == "" || arrayListVybranoe.isEmpty()) {
@@ -118,7 +118,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                 dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
             } else {
                 val gson = Gson()
-                val type = object : TypeToken<ArrayMap<String, Int>>() {}.type
+                val type = TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(Int::class.java).type).type
                 val set = gson.fromJson<ArrayMap<String, Int>>(bibleTime, type)
                 if (MainActivity.checkmoduleResources()) {
                     val intent = Intent(activity, NadsanContent::class.java)

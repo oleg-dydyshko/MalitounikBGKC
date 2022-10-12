@@ -111,7 +111,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             if (dzenNoch) binding.appBarLayout2.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
             binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
             val gson = Gson()
-            val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
+            val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeBibliaData::class.java).type
             var bibleVybranoe = ""
             when (biblia) {
                 "1" -> bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
@@ -292,7 +292,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val knigaglava = "${kniga + 1}${glava + 1}".toLong()
             val gson = Gson()
-            val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
+            val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeBibliaData::class.java).type
             var bibleVybranoe = ""
             when (bibleName) {
                 1 -> bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
@@ -334,10 +334,11 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             val gson = Gson()
             val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val prefEditors = k.edit()
+            val gsonSave = gson.toJson(arrayListVybranoe)
             when (bibleName) {
-                1 -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe))
-                2 -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe))
-                3 -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe))
+                1 -> prefEditors.putString("bibleVybranoeSemuxa", gsonSave)
+                2 -> prefEditors.putString("bibleVybranoeSinoidal", gsonSave)
+                3 -> prefEditors.putString("bibleVybranoeNadsan", gsonSave)
             }
             prefEditors.apply()
             return remove

@@ -214,7 +214,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                         val gson = Gson()
                         val json: String = k.getString("Biblioteka", "") ?: ""
                         arrayList.clear()
-                        val type: Type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
+                        val type: Type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                         arrayList.addAll(gson.fromJson(json, type))
                         val temp: ArrayList<ArrayList<String>> = ArrayList()
                         for (i in 0 until arrayList.size) {
@@ -804,7 +804,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             }
             saveindep = false
             if (!json.equals("")) {
-                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                 naidaunia.addAll(gson.fromJson(json, type))
             }
             if (idSelect != R.id.label6) onClick(findViewById(idSelect))
@@ -861,12 +861,12 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     bindingcontent.webView.visibility = View.VISIBLE
                 }
                 if (!json.equals("")) {
-                    val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                    val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                     naidaunia.addAll(gson.fromJson(json, type))
                 }
             } else {
                 if (!json.equals("")) {
-                    val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                    val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                     naidaunia.addAll(gson.fromJson(json, type))
                     if (naidaunia.size == 0) {
                         binding.drawerLayout.openDrawer(GravityCompat.START)
@@ -1652,7 +1652,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     }
                 } else {
                     arrayList.clear()
-                    val type: Type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                    val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                     arrayList.addAll(gson.fromJson(json, type))
                     val temp: ArrayList<ArrayList<String>> = ArrayList()
                     for (i in 0 until arrayList.size) {
@@ -1694,7 +1694,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     val temp: ArrayList<ArrayList<String>> = ArrayList()
                     val sb = URL(showUrl).readText()
                     val gson = Gson()
-                    val type = object : TypeToken<ArrayList<ArrayMap<String, String>>>() {}.type
+                    val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
                     val biblioteka: ArrayList<ArrayMap<String, String>> = gson.fromJson(sb, type)
                     for (i in 0 until biblioteka.size) {
                         val mySqlList: ArrayList<String> = ArrayList()

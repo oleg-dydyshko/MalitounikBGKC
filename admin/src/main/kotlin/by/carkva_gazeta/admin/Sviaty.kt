@@ -52,6 +52,9 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
         }
     }
 
+    override fun setMyTheme() {
+    }
+
     private fun startTimer() {
         timerTask = object : TimerTask() {
             override fun run() {
@@ -121,7 +124,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                         val url = "https://carkva-gazeta.by/opisanie_sviat.json"
                         val builder = URL(url).readText()
                         val gson = Gson()
-                        val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                         return@withContext gson.fromJson(builder, type)
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {

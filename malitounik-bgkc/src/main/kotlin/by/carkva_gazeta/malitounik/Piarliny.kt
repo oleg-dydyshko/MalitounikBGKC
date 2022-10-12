@@ -60,7 +60,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     try {
                         val builder = filePiarliny.readText()
                         val gson = Gson()
-                        val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                         piarliny.addAll(gson.fromJson(builder, type))
                     } catch (t: Throwable) {
                         filePiarliny.delete()
@@ -83,7 +83,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             try {
                 val builder = filePiarliny.readText()
                 val gson = Gson()
-                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                 piarliny.addAll(gson.fromJson(builder, type))
             } catch (t: Throwable) {
                 filePiarliny.delete()
@@ -193,7 +193,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            super.onBackPressed()
             return true
         }
         if (id == R.id.action_carkva) {

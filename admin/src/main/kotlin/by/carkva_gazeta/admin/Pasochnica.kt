@@ -67,6 +67,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         }
     }
 
+    override fun setMyTheme() {
+    }
+
     override fun setUrl(url: String, titleUrl: String) {
         val startSelect = binding.apisanne.selectionStart
         val endSelect = binding.apisanne.selectionEnd
@@ -384,7 +387,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                                     }
                                 }
                                 val gson = Gson()
-                                val type = object : TypeToken<String>() {}.type
+                                val type = TypeToken.getParameterized(String::class.java).type
                                 result = gson.fromJson(sb.toString(), type)
                             }
                         } catch (e: Throwable) {
@@ -490,7 +493,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                                         }
                                     }
                                     val gson = Gson()
-                                    val type = object : TypeToken<String>() {}.type
+                                    val type = TypeToken.getParameterized(String::class.java).type
                                     result = gson.fromJson(sb.toString(), type)
                                     if (result == "false") result = ""
                                     responseCodeS = responseCode
@@ -599,7 +602,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     }
                 }
                 val gson = Gson()
-                val type = object : TypeToken<String>() {}.type
+                val type = TypeToken.getParameterized(String::class.java).type
                 text = gson.fromJson(sb.toString(), type)
             }
         } catch (e: Throwable) {

@@ -96,7 +96,7 @@ class TonNiadzelny : BaseActivity() {
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            onBackPressed()
+            super.onBackPressed()
             return true
         }
         return false

@@ -2,6 +2,7 @@ package by.carkva_gazeta.admin
 
 import android.app.Activity
 import android.graphics.Typeface
+import android.hardware.SensorEvent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -32,6 +33,9 @@ class Chytanny : BaseActivity() {
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
     private val data = ArrayList<String>()
+
+    override fun onSensorChanged(event: SensorEvent?) {
+    }
 
     override fun setMyTheme() {
     }

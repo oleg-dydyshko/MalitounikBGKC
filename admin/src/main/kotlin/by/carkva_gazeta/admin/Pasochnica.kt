@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Typeface
+import android.hardware.SensorEvent
 import android.os.Build
 import android.os.Bundle
 import android.text.*
@@ -65,6 +66,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 binding.actionBack.visibility = View.GONE
             }
         }
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
     }
 
     override fun setMyTheme() {

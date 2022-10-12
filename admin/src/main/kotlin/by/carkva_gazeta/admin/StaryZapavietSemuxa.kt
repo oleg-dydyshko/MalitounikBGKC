@@ -2,6 +2,7 @@ package by.carkva_gazeta.admin
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.hardware.SensorEvent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -33,6 +34,9 @@ class StaryZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelL
     private var title = ""
     private lateinit var binding: AdminBibleBinding
     private var resetTollbarJob: Job? = null
+
+    override fun onSensorChanged(event: SensorEvent?) {
+    }
 
     override fun setMyTheme() {
     }

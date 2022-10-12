@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.hardware.SensorEvent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -50,6 +51,9 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
             val fileExplorer = DialogImageFileExplorer.getInstance(true)
             fileExplorer.show(supportFragmentManager, "file_explorer")
         }
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
     }
 
     override fun setMyTheme() {

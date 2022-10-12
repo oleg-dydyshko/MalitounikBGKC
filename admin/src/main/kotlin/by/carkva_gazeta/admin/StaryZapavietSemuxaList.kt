@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.hardware.SensorEvent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -28,6 +29,9 @@ class StaryZapavietSemuxaList : BaseActivity() {
     private lateinit var binding: ContentBibleBinding
     private var resetTollbarJob: Job? = null
     private lateinit var k: SharedPreferences
+
+    override fun onSensorChanged(event: SensorEvent?) {
+    }
 
     override fun setMyTheme() {
     }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.hardware.SensorEvent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -43,6 +44,9 @@ class Sviatyia : BaseActivity(), DialogImageFileLoad.DialogFileExplorerListener,
                 binding.pager.setCurrentItem(cal[Calendar.DAY_OF_YEAR] - 1, false)
             }
         }
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
     }
 
     override fun setMyTheme() {

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Typeface
+import android.hardware.SensorEvent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -50,6 +51,9 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             val fileExplorer = DialogFileExplorer()
             fileExplorer.show(supportFragmentManager, "file_explorer")
         }
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
     }
 
     override fun setMyTheme() {

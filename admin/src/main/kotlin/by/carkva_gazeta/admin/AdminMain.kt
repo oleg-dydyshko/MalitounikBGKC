@@ -2,6 +2,7 @@ package by.carkva_gazeta.admin
 
 import android.content.Intent
 import android.content.res.Resources
+import android.hardware.SensorEvent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -21,6 +22,9 @@ import kotlinx.coroutines.*
 class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
     private lateinit var binding: AdminMainBinding
     private var resetTollbarJob: Job? = null
+
+    override fun onSensorChanged(event: SensorEvent?) {
+    }
 
     override fun setMyTheme() {
     }

@@ -319,16 +319,20 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                             val arrayListResult = ArrayList<ArrayList<String>>()
                             val mURL = URL("https://carkva-gazeta.by/admin/getFiles.php?image=1")
                             val conections = mURL.openConnection() as HttpURLConnection
+
                             if (conections.responseCode == 200) {
                                 val builderUrl = mURL.readText()
                                 val gson = Gson()
                                 val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                                 val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(builderUrl, type)
+                                val fileString = StringBuilder()
                                 for (i in 0 until arrayList.size) {
                                     val urlName = arrayList[i][0]
                                     val urlTime = arrayList[i][1].toInt()
                                     val t1 = urlName.lastIndexOf("/")
-                                    val file = File("$filesDir/icons/" + urlName.substring(t1 + 1))
+                                    val filePatch = "$filesDir/icons/" + urlName.substring(t1 + 1)
+                                    fileString.append(urlName.substring(t1 + 1))
+                                    val file = File(filePatch)
                                     val time = file.lastModified() / 1000
                                     if (!file.exists() || time < urlTime) {
                                         if (isFull) {
@@ -338,6 +342,11 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                                 arrayListResult.add(arrayList[i])
                                             }
                                         }
+                                    }
+                                }
+                                dir.walk().forEach {
+                                    if (it.isFile && !fileString.toString().contains(it.name)) {
+                                        it.delete()
                                     }
                                 }
                             }
@@ -391,13 +400,13 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                         if (e > 0) schet = "_${e + 1}"
                                         val file2 = if (svity) File("$filesDir/icons/v_${day}_${mun}.jpg")
                                         else File("$filesDir/icons/s_${day}_${mun}$schet.jpg")
+                                        val imageView = when (e) {
+                                            1 -> binding.image2
+                                            2 -> binding.image3
+                                            3 -> binding.image4
+                                            else -> binding.image1
+                                        }
                                         if (file2.exists()) {
-                                            val imageView = when (e) {
-                                                1 -> binding.image2
-                                                2 -> binding.image3
-                                                3 -> binding.image4
-                                                else -> binding.image1
-                                            }
                                             imageView.post {
                                                 imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file2.absolutePath)))
                                                 imageView.visibility = View.VISIBLE
@@ -408,6 +417,12 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                                         binding.imageViewFull.visibility = View.VISIBLE
                                                     }
                                                 }
+                                            }
+                                        } else {
+                                            imageView.post {
+                                                imageView.setImageBitmap(null)
+                                                imageView.visibility = View.GONE
+                                                imageView.setOnClickListener(null)
                                             }
                                         }
                                     }

@@ -2,6 +2,7 @@ package by.carkva_gazeta.admin
 
 import android.app.Activity
 import android.content.Intent
+import android.hardware.SensorEvent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -46,6 +47,9 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                 binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, timeListCalendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[timeListCalendar.get(Calendar.MONTH)])
             }
         }
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
     }
 
     override fun setMyTheme() {

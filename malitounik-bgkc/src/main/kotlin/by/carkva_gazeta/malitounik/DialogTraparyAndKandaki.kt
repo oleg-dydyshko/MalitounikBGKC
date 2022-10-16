@@ -31,8 +31,6 @@ class DialogTraparyAndKandaki : DialogFragment() {
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
 
-
-
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()

@@ -1577,6 +1577,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             cytanne = cytanne.replace("Вялікамуч.", "")
             cytanne = cytanne.replace("Ап.", "")
             cytanne = cytanne.replace("Айцам.", "")
+            cytanne = cytanne.replace("Айцам", "")
             cytanne = cytanne.replace("Прар.", "")
             cytanne = cytanne.replace("Муч.", "")
             cytanne = cytanne.replace("Крыжу", "")

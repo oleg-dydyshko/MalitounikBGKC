@@ -58,14 +58,7 @@ class MineiaShodzennaia : BaseActivity() {
             when {
                 //Айцоў VII Сусьветнага Сабору
                 mineiaList[i].day == SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY -> {
-                    val pasha = Calendar.getInstance()
-                    for (dny in 11..17) {
-                        pasha.set(pasha[Calendar.YEAR], Calendar.OCTOBER, dny)
-                        val wik = pasha.get(Calendar.DAY_OF_WEEK)
-                        if (wik == Calendar.SUNDAY) {
-                            c.set(Calendar.DAY_OF_YEAR, pasha[Calendar.DAY_OF_YEAR])
-                        }
-                    }
+                    c.set(Calendar.DAY_OF_YEAR, SlugbovyiaTextu().getRealDay(SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY))
                 }
                 mineiaList[i].pasxa -> {
                     MenuCaliandar.getDataCalaindar(year = c[Calendar.YEAR]).forEach {

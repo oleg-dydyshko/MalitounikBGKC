@@ -285,7 +285,7 @@ class SlugbovyiaTextu {
             }
         }
         datMinSH.forEach {
-            if (it.day == day) {
+            if (getRealDay(it.day) == day) {
                 return it.pasxa
             }
         }
@@ -305,7 +305,7 @@ class SlugbovyiaTextu {
             }
         }
         datMinSH.forEach {
-            if (day == it.day && pasxa == it.pasxa) {
+            if (day == getRealDay(it.day) && pasxa == it.pasxa) {
                 if (it.sluzba == sluzba) resource = it.resource
             }
         }
@@ -315,6 +315,26 @@ class SlugbovyiaTextu {
             }
         }
         return resource
+    }
+
+    fun getResource(dayOfYear: Int, sluzba: Int): String {
+        var resource = "0"
+        datMinVP.forEach {
+            if (dayOfYear == it.day) {
+                if (it.sluzba == sluzba) resource = it.resource
+            }
+        }
+        datMinSH.forEach {
+            if (dayOfYear == getRealDay(it.day)) {
+                if (it.sluzba == sluzba) resource = it.resource
+            }
+        }
+        datMinSV.forEach {
+            if (dayOfYear == it.day) {
+                if (it.sluzba == sluzba) resource = it.resource
+            }
+        }
+       return resource
     }
 
     fun getTitle(resource: String): String {
@@ -412,16 +432,7 @@ class SlugbovyiaTextu {
             }
         }
         datMinSH.forEach {
-            //Айцоў VII Сусьветнага Сабору
-            val calendar = Calendar.getInstance()
-            for (i in 11..17) {
-                calendar.set(calendar.get(Calendar.YEAR), Calendar.OCTOBER, i)
-                val wik = calendar.get(Calendar.DAY_OF_WEEK)
-                if (wik == Calendar.SUNDAY && calendar.get(Calendar.DAY_OF_YEAR) == dayOfYear.toInt() && AICOU_VII_SUSVETNAGA_SABORY == it.day && pasxa == it.pasxa) {
-                    if (it.sluzba == LITURGIA) return true
-                }
-            }
-            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa) {
+            if (dayOfYear.toInt() == getRealDay(it.day) && pasxa == it.pasxa) {
                 if (it.sluzba == LITURGIA) return true
             }
         }
@@ -503,6 +514,20 @@ class SlugbovyiaTextu {
             if (day == it.day && it.checkVialikiaGadziny) return true
         }
         return false
+    }
+
+    fun getRealDay(day: Int): Int {
+        var realDay = day
+        val calendar = Calendar.getInstance()
+        //Айцоў VII Сусьветнага Сабору
+        for (i in 11..17) {
+            calendar.set(calendar.get(Calendar.YEAR), Calendar.OCTOBER, i)
+            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+            if (wik == Calendar.SUNDAY && (calendar.get(Calendar.DAY_OF_YEAR) == day || day == AICOU_VII_SUSVETNAGA_SABORY)) {
+                realDay = calendar.get(Calendar.DAY_OF_YEAR)
+            }
+        }
+        return realDay
     }
 
     fun checkFullChtenia(resource: Int): Boolean {

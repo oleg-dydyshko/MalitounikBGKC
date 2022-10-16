@@ -312,7 +312,7 @@ class DialogCalindarGrid : DialogFragment() {
                             slugba.checkViachernia(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
                                 val intent = Intent()
                                 var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.VIACHERNIA)
-                                if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.VIACHERNIA)
+                                if (resours == "0") resours = slugba.getResource(dayOfYear.toInt(), SlugbovyiaTextu.VIACHERNIA)
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("resurs", resours)
                                 intent.putExtra("zmena_chastki", true)
@@ -330,7 +330,7 @@ class DialogCalindarGrid : DialogFragment() {
                             slugba.checkPavichrrnica(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
                                 val intent = Intent()
                                 var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.PAVIACHERNICA)
-                                if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.PAVIACHERNICA)
+                                if (resours == "0") resours = slugba.getResource(dayOfYear.toInt(), SlugbovyiaTextu.PAVIACHERNICA)
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("resurs", resours)
                                 intent.putExtra("zmena_chastki", true)
@@ -344,7 +344,7 @@ class DialogCalindarGrid : DialogFragment() {
                             slugba.checkPaunochnica(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
                                 val intent = Intent()
                                 var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.PAUNOCHNICA)
-                                if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.PAUNOCHNICA)
+                                if (resours == "0") resours = slugba.getResource(dayOfYear.toInt(), SlugbovyiaTextu.PAUNOCHNICA)
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("resurs", resours)
                                 intent.putExtra("zmena_chastki", true)
@@ -358,7 +358,7 @@ class DialogCalindarGrid : DialogFragment() {
                             slugba.checkVialikiaGadziny(raznicia) -> {
                                 val intent = Intent()
                                 var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.VIALIKIAGADZINY)
-                                if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.VIALIKIAGADZINY)
+                                if (resours == "0") resours = slugba.getResource(dayOfYear.toInt(), SlugbovyiaTextu.VIALIKIAGADZINY)
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("resurs", resours)
                                 intent.putExtra("zmena_chastki", true)
@@ -372,13 +372,13 @@ class DialogCalindarGrid : DialogFragment() {
                             slugba.checkLiturgia(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
                                 if (denNedzeli == Calendar.SUNDAY && ton != 0) {
                                     var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
-                                    if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
+                                    if (resours == "0") resours = slugba.getResource(dayOfYear.toInt(), SlugbovyiaTextu.LITURGIA)
                                     val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(4, slugba.getTitle(resours), ton, true, ton_na_sviaty = false, ton_na_viliki_post = true, resurs = resours)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 } else {
                                     val intent = Intent()
                                     var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
-                                    if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
+                                    if (resours == "0") resours = slugba.getResource(dayOfYear.toInt(), SlugbovyiaTextu.LITURGIA)
                                     intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                     intent.putExtra("resurs", resours)
                                     intent.putExtra("zmena_chastki", true)
@@ -418,7 +418,7 @@ class DialogCalindarGrid : DialogFragment() {
                             slugba.checkUtran(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
                                 val intent = Intent()
                                 var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.UTRAN)
-                                if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.UTRAN)
+                                if (resours == "0") resours = slugba.getResource(dayOfYear.toInt(), SlugbovyiaTextu.UTRAN)
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("resurs", resours)
                                 intent.putExtra("zmena_chastki", true)

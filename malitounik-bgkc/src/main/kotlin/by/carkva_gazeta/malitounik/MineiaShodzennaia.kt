@@ -161,7 +161,6 @@ class MineiaShodzennaia : BaseActivity() {
                         intent.putExtra("zmena_chastki", true)
                         intent.putExtra("title", groups[groupPosition][childPosition].titleResource)
                         startActivity(intent)
-
                     } else {
                         val dadatak = DialogInstallDadatak()
                         dadatak.show(supportFragmentManager, "dadatak")

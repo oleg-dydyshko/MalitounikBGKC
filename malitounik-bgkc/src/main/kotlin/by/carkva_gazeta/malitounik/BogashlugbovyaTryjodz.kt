@@ -76,7 +76,6 @@ class BogashlugbovyaTryjodz : BaseActivity() {
             if (position == 0) {
                 intent = Intent(this, SubMenuBogashlugbovyaVialikiPost::class.java)
             } else {
-                //intent = Intent(this, MineiaSviatochnaia::class.java)
                 intent = Intent(this, BogashlugbovyaTryjodzList::class.java)
                 intent.putExtra("tryjodz", position)
                 intent.putExtra("title", data[position])

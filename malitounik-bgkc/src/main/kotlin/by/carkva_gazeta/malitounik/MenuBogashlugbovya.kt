@@ -30,14 +30,13 @@ class MenuBogashlugbovya : BaseListFragment() {
             data.add(MenuListData("Абедніца", "abiednica"))
             data.add(MenuListData("Служба за памерлых — Малая паніхіда", "panichida_mal"))
             data.add(MenuListData("Трапары і кандакі нядзельныя васьмі тонаў", "3"))
-            data.add(MenuListData("Трапары і кандакі штодзённыя - на кожны дзень тыдня", "4"))
-            data.add(MenuListData("Мінэя месячная", "5"))
+            data.add(MenuListData("Мінэя месячная", "4"))
             data.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы", "kanon_malebny_baharodzicy"))
             data.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага", "kanon_a_kryckaha"))
-            data.add(MenuListData("Трыёдзь", "6"))
+            data.add(MenuListData("Трыёдзь", "5"))
             data.add(MenuListData("Малебен сьвятым айцам нашым, роўным апосталам Кірылу і Мятоду, настаўнікам славянскім", "malebien_kiryla_miatod"))
             data.add(MenuListData("Служба за памерлых на кожны дзень тыдня", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
-            data.add(MenuListData("Служба Найсьвяцейшай Багародзіцы", "sluzba_najsviaciejszaj_baharodzicy"))
+            data.add(MenuListData("Мінэя агульная", "6"))
             data.sort()
             listAdapter = MenuListAdaprer(it as BaseActivity, data)
             val dzenNoch = it.getBaseDzenNoch()
@@ -54,47 +53,43 @@ class MenuBogashlugbovya : BaseListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        when (data[position].resurs) {
-            "1" -> {
-                val intent = Intent(activity, MalitvyPasliaPrychascia::class.java)
-                startActivity(intent)
-            }
-            "2" -> {
-                val intent = Intent(activity, SubMenuBogashlugbovyaViachernia::class.java)
-                startActivity(intent)
-            }
-            "3" -> {
-                val intent = Intent(activity, TonNiadzelny::class.java)
-                startActivity(intent)
-            }
-            "4" -> {
-                val intent = Intent(activity, TonNaKoznyDzen::class.java)
-                startActivity(intent)
-            }
-            "5" -> {
-                activity?.let {
+        activity?.let {
+            when (data[position].resurs) {
+                "1" -> {
+                    val intent = Intent(it, MalitvyPasliaPrychascia::class.java)
+                    startActivity(intent)
+                }
+                "2" -> {
+                    val intent = Intent(it, SubMenuBogashlugbovyaViachernia::class.java)
+                    startActivity(intent)
+                }
+                "3" -> {
+                    val intent = Intent(it, TonNiadzelny::class.java)
+                    startActivity(intent)
+                }
+                "4" -> {
                     val intent = Intent(it, MineiaShodzennaia::class.java)
                     startActivity(intent)
                 }
-            }
-            "6" -> {
-                activity?.let {
+                "5" -> {
                     val intent = Intent(it, BogashlugbovyaTryjodz::class.java)
                     startActivity(intent)
                 }
-            }
-            else -> {
-                if (MainActivity.checkmoduleResources()) {
-                    activity?.let {
+                "6" -> {
+                    val intent = Intent(it, MineiaAgulnaia::class.java)
+                    startActivity(intent)
+                }
+                else -> {
+                    if (MainActivity.checkmoduleResources()) {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                         intent.putExtra("title", data[position].title)
                         intent.putExtra("resurs", data[position].resurs)
                         startActivity(intent)
+                    } else {
+                        val dadatak = DialogInstallDadatak()
+                        dadatak.show(childFragmentManager, "dadatak")
                     }
-                } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
                 }
             }
         }

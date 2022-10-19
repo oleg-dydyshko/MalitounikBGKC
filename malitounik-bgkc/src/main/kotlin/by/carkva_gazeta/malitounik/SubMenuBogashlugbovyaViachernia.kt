@@ -69,33 +69,28 @@ class SubMenuBogashlugbovyaViachernia : BaseActivity() {
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             if (MainActivity.checkmoduleResources()) {
-                val intent: Intent
-                if (position == 5) {
-                    intent = Intent(this, AktoixList::class.java)
-                } else {
-                    intent = Intent()
-                    intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
-                    when (position) {
-                        0 -> {
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "viachernia_niadzeli")
-                        }
-                        1 -> {
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "viachernia_liccia_i_blaslavenne_xliabou")
-                        }
-                        2 -> {
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "viachernia_na_kozny_dzen")
-                        }
-                        3 -> {
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "viachernia_u_vialikim_poscie")
-                        }
-                        4 -> {
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "viaczernia_bierascie")
-                        }
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
+                when (position) {
+                    0 -> {
+                        intent.putExtra("title", data[position])
+                        intent.putExtra("resurs", "viachernia_niadzeli")
+                    }
+                    1 -> {
+                        intent.putExtra("title", data[position])
+                        intent.putExtra("resurs", "viachernia_liccia_i_blaslavenne_xliabou")
+                    }
+                    2 -> {
+                        intent.putExtra("title", data[position])
+                        intent.putExtra("resurs", "viachernia_na_kozny_dzen")
+                    }
+                    3 -> {
+                        intent.putExtra("title", data[position])
+                        intent.putExtra("resurs", "viachernia_u_vialikim_poscie")
+                    }
+                    4 -> {
+                        intent.putExtra("title", data[position])
+                        intent.putExtra("resurs", "viaczernia_bierascie")
                     }
                 }
                 startActivity(intent)

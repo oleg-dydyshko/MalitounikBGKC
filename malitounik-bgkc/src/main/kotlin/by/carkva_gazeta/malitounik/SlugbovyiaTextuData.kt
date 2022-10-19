@@ -1,6 +1,6 @@
 package by.carkva_gazeta.malitounik
 
-data class SlugbovyiaTextuData(val day: Int, val title: String, val resource: String, val sluzba: Int, val pasxa: Boolean = false, val checkVialikiaGadziny: Boolean = false) : Comparable<SlugbovyiaTextuData> {
+data class SlugbovyiaTextuData(val day: Int, val title: String, val resource: String, val sluzba: Int, val pasxa: Boolean = false) : Comparable<SlugbovyiaTextuData> {
     override fun compareTo(other: SlugbovyiaTextuData): Int {
         if (this.day > other.day) {
             return 1

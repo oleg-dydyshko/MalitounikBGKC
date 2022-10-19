@@ -15,7 +15,6 @@ class SlugbovyiaTextu {
     private val datMinSH = ArrayList<SlugbovyiaTextuData>()
     private val datMinSV = ArrayList<SlugbovyiaTextuData>()
     private val piarliny = ArrayList<ArrayList<String>>()
-    private var loadOpisanieSviatJob: Job? = null
     private var loadPiarlinyJob: Job? = null
 
     companion object {
@@ -91,10 +90,10 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(-8, "Субота Лазара - Літургія", "bogashlugbovya17_8", LITURGIA, pasxa = true))
 
         datMinVP.add(SlugbovyiaTextuData(-7, "Уваход у Ерусалім Госпада, Бога і Збаўцы нашага Ісуса Хрыста (Вербніца) - Літургія", "bogashlugbovya17_9", LITURGIA, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(-6, "Ютрань Вялікага панядзелака", "vialiki_paniadzielak", UTRAN, pasxa = true, checkVialikiaGadziny = true))
-        datMinVP.add(SlugbovyiaTextuData(-5, "Ютрань Вялікага аўторака", "vialiki_autorak", UTRAN, pasxa = true, checkVialikiaGadziny = true))
-        datMinVP.add(SlugbovyiaTextuData(-4, "Ютрань Вялікай серады", "vialikaja_sierada", UTRAN, pasxa = true, checkVialikiaGadziny = true))
-        datMinVP.add(SlugbovyiaTextuData(-3, "Ютрань Вялікага чацьверга", "vialiki_czacvier", UTRAN, pasxa = true, checkVialikiaGadziny = true))
+        datMinVP.add(SlugbovyiaTextuData(-6, "Ютрань Вялікага панядзелака", "vialiki_paniadzielak", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-5, "Ютрань Вялікага аўторака", "vialiki_autorak", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-4, "Ютрань Вялікай серады", "vialikaja_sierada", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-3, "Ютрань Вялікага чацьверга", "vialiki_czacvier", UTRAN, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-2, "Ютрань Вялікай пятніцы", "jutran_vial_piatn_12jevanhellau", UTRAN, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_viaczernia", VIACHERNIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-2, "Вялікая пятніца. Малая павячэрніца", "vialikaja_piatnica_mal_paviaczernica", PAVIACHERNICA, pasxa = true))
@@ -103,7 +102,7 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(-1, "Вялікая субота - Літургія", "vialikaja_subota_viaczernia_liturhija", LITURGIA, pasxa = true))
 
         datMinVP.add(SlugbovyiaTextuData(0, "Уваскрасеньне Госпада Бога і Збаўцы нашага Ісуса Хрыста (Вялікдзень) - Ютрань", "vialikdzien_jutran", UTRAN, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(0, "Сьветлы тыдзень - Велікодныя гадзіны", "viaczernia_vialikdzien", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
+        datMinVP.add(SlugbovyiaTextuData(0, "Уваскрасеньне Госпада Бога і Збаўцы нашага Ісуса Хрыста (Вялікдзень) - Вячэрня", "viaczernia_vialikdzien", VIACHERNIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак - Ютрань", "u_svietly_paniadzielak", UTRAN, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак - Літургія", "l_svietly_paniadzielak", LITURGIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак - Вячэрня", "v_svietly_paniadzielak", VIACHERNIA, pasxa = true))
@@ -122,12 +121,12 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(6, "Сьветлая субота - Ютрань", "u_svietlaja_subota", UTRAN, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(6, "Сьветлая субота - Літургія", "l_svietlaja_subota", LITURGIA, pasxa = true))
 
-        datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
-        datMinVP.add(SlugbovyiaTextuData(2, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
-        datMinVP.add(SlugbovyiaTextuData(3, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
-        datMinVP.add(SlugbovyiaTextuData(4, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
-        datMinVP.add(SlugbovyiaTextuData(5, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
-        datMinVP.add(SlugbovyiaTextuData(6, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
+        datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(2, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(3, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(4, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(5, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(6, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true))
 
         datMinVP.add(SlugbovyiaTextuData(98, "Айцы першых 6-ці Ўсяленскіх сабораў - Літургія", "l_ajcy_6_saborau", LITURGIA, pasxa = true))
 
@@ -201,11 +200,11 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(354, "Перадсьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста і сьв. сьвятамучаніка Ігната Баганосца", "v_rastvo_peradsviaccie_20_12", VIACHERNIA))
         datMinSH.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі - Ютрань", "ju_rastvo_sv_vieczar_24_12", UTRAN))
         datMinSH.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "v_rastvo_sv_vieczar_24_12", VIACHERNIA))
-        datMinSH.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі - Вялікія гадзіны", "vial_hadziny_rastvo_sv_vieczar_24_12", VIALIKIAGADZINY, checkVialikiaGadziny = true))
+        datMinSH.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі - Вялікія гадзіны", "vial_hadziny_rastvo_sv_vieczar_24_12", VIALIKIAGADZINY))
         datMinSH.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі - Абедніца", "abed_rastvo_sv_vieczar_24_12", ABEDNICA))
         datMinSH.add(SlugbovyiaTextuData(359, "Нараджэньне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "l_naradzennie_chrystova", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "mm_06_01_bohazjaulennie_liturhija", LITURGIA))
-        datMinSH.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем) - Вялікія гадзіны", "mm_05_01_sv_vieczar_bohazjaulennia_vial_hadziny", VIALIKIAGADZINY, checkVialikiaGadziny = true))
+        datMinSH.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем) - Вялікія гадзіны", "mm_05_01_sv_vieczar_bohazjaulennia_vial_hadziny", VIALIKIAGADZINY))
         datMinSH.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем) - Абедніца", "mm_05_01_sv_vieczar_bohazjaulennia_abiednica", ABEDNICA))
 
         datMinSV.add(SlugbovyiaTextuData(6, "Нядзеля Тамаша (Антыпасха) вячэрня ў суботу", "ndz_tamasza_viaczernia_subota", VIACHERNIA, pasxa = true))
@@ -229,54 +228,72 @@ class SlugbovyiaTextu {
     fun getTydzen1(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
         for (i in 0..8) list.add(datMinVP[i])
+        list.sort()
         return list
     }
 
     fun getTydzen2(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
         for (i in 9..16) list.add(datMinVP[i])
+        list.sort()
         return list
     }
 
     fun getTydzen3(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
         for (i in 17..25) list.add(datMinVP[i])
+        list.sort()
         return list
     }
 
     fun getTydzen4(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
         for (i in 26..34) list.add(datMinVP[i])
+        list.sort()
         return list
     }
 
     fun getTydzen5(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
         for (i in 35..45) list.add(datMinVP[i])
+        list.sort()
         return list
     }
 
     fun getTydzen6(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
         for (i in 46..53) list.add(datMinVP[i])
+        list.sort()
         return list
     }
 
     fun getVilikiTydzen(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
         for (i in 54..64) list.add(datMinVP[i])
+        list.sort()
         return list
     }
 
     fun getSvetlyTydzen(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
-        for (i in 65..83) list.add(datMinVP[i])
+        for (i in 65..84) list.add(datMinVP[i])
+        list.sort()
         return list
     }
 
-    fun getMineiaShtodzennia() = datMinSH
+    fun getMineiaShtodzennia(): ArrayList<SlugbovyiaTextuData> {
+        val list = ArrayList<SlugbovyiaTextuData>()
+        for (i in 0 until datMinSH.size) list.add(datMinSH[i])
+        list.sort()
+        return list
+    }
 
-    fun getMineiaSviatochnaia() = datMinSV
+    fun getMineiaSviatochnaia(): ArrayList<SlugbovyiaTextuData> {
+        val list = ArrayList<SlugbovyiaTextuData>()
+        for (i in 0 until datMinSV.size) list.add(datMinSV[i])
+        list.sort()
+        return list
+    }
 
     fun isPasxa(day: Int): Boolean {
         datMinVP.forEach {
@@ -299,19 +316,21 @@ class SlugbovyiaTextu {
 
     fun getResource(day: Int, pasxa: Boolean, sluzba: Int): String {
         var resource = "0"
+        val checkDay = if (day == AICOU_VII_SUSVETNAGA_SABORY) getRealDay(day)
+        else day
         datMinVP.forEach {
-            if (day == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == sluzba) resource = it.resource
+            if (day == it.day && pasxa == it.pasxa && it.sluzba == sluzba) {
+                resource = it.resource
             }
         }
         datMinSH.forEach {
-            if (day == getRealDay(it.day) && pasxa == it.pasxa) {
-                if (it.sluzba == sluzba) resource = it.resource
+            if (checkDay == getRealDay(it.day) && pasxa == it.pasxa && it.sluzba == sluzba) {
+                resource = it.resource
             }
         }
         datMinSV.forEach {
-            if (day == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == sluzba) resource = it.resource
+            if (day == it.day && pasxa == it.pasxa && it.sluzba == sluzba) {
+                resource = it.resource
             }
         }
         return resource
@@ -320,21 +339,21 @@ class SlugbovyiaTextu {
     fun getResource(dayOfYear: Int, sluzba: Int): String {
         var resource = "0"
         datMinVP.forEach {
-            if (dayOfYear == it.day) {
-                if (it.sluzba == sluzba) resource = it.resource
+            if (dayOfYear == it.day && it.sluzba == sluzba) {
+                resource = it.resource
             }
         }
         datMinSH.forEach {
-            if (dayOfYear == getRealDay(it.day)) {
-                if (it.sluzba == sluzba) resource = it.resource
+            if (dayOfYear == getRealDay(it.day) && it.sluzba == sluzba) {
+                resource = it.resource
             }
         }
         datMinSV.forEach {
-            if (dayOfYear == it.day) {
-                if (it.sluzba == sluzba) resource = it.resource
+            if (dayOfYear == it.day && it.sluzba == sluzba) {
+                resource = it.resource
             }
         }
-       return resource
+        return resource
     }
 
     fun getTitle(resource: String): String {
@@ -352,8 +371,8 @@ class SlugbovyiaTextu {
 
     fun loadPiarliny() {
         if (piarliny.size == 0 && loadPiarlinyJob?.isActive != true) {
-            val fileOpisanieSviat = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
-            if (!fileOpisanieSviat.exists()) {
+            val filePiarliny = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
+            if (!filePiarliny.exists()) {
                 if (MainActivity.isNetworkAvailable()) {
                     loadPiarlinyJob = CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
@@ -362,7 +381,7 @@ class SlugbovyiaTextu {
                                     val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
                                     val conections = mURL.openConnection() as HttpURLConnection
                                     if (conections.responseCode == 200) {
-                                        fileOpisanieSviat.writer().use {
+                                        filePiarliny.writer().use {
                                             it.write(mURL.readText())
                                         }
                                     }
@@ -371,23 +390,23 @@ class SlugbovyiaTextu {
                             }
                         }
                         try {
-                            val builder = fileOpisanieSviat.readText()
+                            val builder = filePiarliny.readText()
                             val gson = Gson()
                             val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                             piarliny.addAll(gson.fromJson(builder, type))
                         } catch (t: Throwable) {
-                            fileOpisanieSviat.delete()
+                            filePiarliny.delete()
                         }
                     }
                 }
             } else {
                 try {
-                    val builder = fileOpisanieSviat.readText()
+                    val builder = filePiarliny.readText()
                     val gson = Gson()
                     val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                     piarliny.addAll(gson.fromJson(builder, type))
                 } catch (t: Throwable) {
-                    fileOpisanieSviat.delete()
+                    filePiarliny.delete()
                 }
             }
         }
@@ -406,20 +425,20 @@ class SlugbovyiaTextu {
 
     fun checkUtran(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
         datMinVP.forEach {
-            if (day == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == UTRAN) return true
+            if (day == it.day && pasxa == it.pasxa && it.sluzba == UTRAN) {
+                return true
             }
         }
         datMinSH.forEach {
-            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == UTRAN) return true
+            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa && it.sluzba == UTRAN) {
+                return true
             }
         }
         datMinSV.forEach {
             val dayR = if (it.pasxa) day
             else dayOfYear.toInt()
-            if (dayR == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == UTRAN) return true
+            if (dayR == it.day && pasxa == it.pasxa && it.sluzba == UTRAN) {
+                return true
             }
         }
         return false
@@ -427,20 +446,20 @@ class SlugbovyiaTextu {
 
     fun checkLiturgia(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
         datMinVP.forEach {
-            if (day == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == LITURGIA) return true
+            if (day == it.day && pasxa == it.pasxa && it.sluzba == LITURGIA) {
+                return true
             }
         }
         datMinSH.forEach {
-            if (dayOfYear.toInt() == getRealDay(it.day) && pasxa == it.pasxa) {
-                if (it.sluzba == LITURGIA) return true
+            if (dayOfYear.toInt() == getRealDay(it.day) && pasxa == it.pasxa && it.sluzba == LITURGIA) {
+                return true
             }
         }
         datMinSV.forEach {
             val dayR = if (it.pasxa) day
             else dayOfYear.toInt()
-            if (dayR == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == LITURGIA) return true
+            if (dayR == it.day && pasxa == it.pasxa && it.sluzba == LITURGIA) {
+                return true
             }
         }
         return false
@@ -448,20 +467,20 @@ class SlugbovyiaTextu {
 
     fun checkViachernia(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
         datMinVP.forEach {
-            if (day == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == VIACHERNIA) return true
+            if (day == it.day && pasxa == it.pasxa && it.sluzba == VIACHERNIA) {
+                return true
             }
         }
         datMinSH.forEach {
-            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == VIACHERNIA) return true
+            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa && it.sluzba == VIACHERNIA) {
+                return true
             }
         }
         datMinSV.forEach {
             val dayR = if (it.pasxa) day
             else dayOfYear.toInt()
-            if (dayR == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == VIACHERNIA) return true
+            if (dayR == it.day && pasxa == it.pasxa && it.sluzba == VIACHERNIA) {
+                return true
             }
         }
         return false
@@ -469,20 +488,20 @@ class SlugbovyiaTextu {
 
     fun checkPavichrrnica(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
         datMinVP.forEach {
-            if (day == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == PAVIACHERNICA) return true
+            if (day == it.day && pasxa == it.pasxa && it.sluzba == PAVIACHERNICA) {
+                return true
             }
         }
         datMinSH.forEach {
-            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == PAVIACHERNICA) return true
+            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa && it.sluzba == PAVIACHERNICA) {
+                return true
             }
         }
         datMinSV.forEach {
             val dayR = if (it.pasxa) day
             else dayOfYear.toInt()
-            if (dayR == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == PAVIACHERNICA) return true
+            if (dayR == it.day && pasxa == it.pasxa && it.sluzba == PAVIACHERNICA) {
+                return true
             }
         }
         return false
@@ -490,20 +509,20 @@ class SlugbovyiaTextu {
 
     fun checkPaunochnica(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
         datMinVP.forEach {
-            if (day == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == PAUNOCHNICA) return true
+            if (day == it.day && pasxa == it.pasxa && it.sluzba == PAUNOCHNICA) {
+                return true
             }
         }
         datMinSH.forEach {
-            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == PAUNOCHNICA) return true
+            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa && it.sluzba == PAUNOCHNICA) {
+                return true
             }
         }
         datMinSV.forEach {
             val dayR = if (it.pasxa) day
             else dayOfYear.toInt()
-            if (dayR == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == PAUNOCHNICA) return true
+            if (dayR == it.day && pasxa == it.pasxa && it.sluzba == PAUNOCHNICA) {
+                return true
             }
         }
         return false
@@ -511,7 +530,9 @@ class SlugbovyiaTextu {
 
     fun checkVialikiaGadziny(day: Int): Boolean {
         datMinVP.forEach {
-            if (day == it.day && it.checkVialikiaGadziny) return true
+            if (day == it.day && it.sluzba == VIALIKIAGADZINY) {
+                return true
+            }
         }
         return false
     }
@@ -539,7 +560,6 @@ class SlugbovyiaTextu {
     }
 
     fun onDestroy() {
-        loadOpisanieSviatJob?.cancel()
         loadPiarlinyJob?.cancel()
     }
 }

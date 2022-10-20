@@ -38,7 +38,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
     private var men = false
-    private val malitvy = ArrayList<Malitvy>()
+    private val malitvy = ArrayList<MenuListData>()
     private val dzenNoch get() = getBaseDzenNoch()
     private var pasliaPrychascia = 0
     private var n = 0
@@ -82,13 +82,9 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         binding = AkafistActivityPasliaPrichBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
-        malitvy.add(Malitvy(R.raw.paslia_prychascia1, "paslia_prychascia1", "Малітва падзякі"))
-        malitvy.add(Malitvy(R.raw.paslia_prychascia2, "paslia_prychascia2", "Малітва сьв. Васіля Вялікага"))
-        malitvy.add(Malitvy(R.raw.paslia_prychascia3, "paslia_prychascia3", "Малітва Сымона Мэтафраста"))
-        malitvy.add(Malitvy(R.raw.paslia_prychascia4, "paslia_prychascia4", "Iншая малітва"))
-        malitvy.add(Malitvy(R.raw.paslia_prychascia5, "paslia_prychascia5", "Малітва да Найсьвяцейшай Багародзіцы"))
+        malitvy.addAll(MenuBogashlugbovya.getTextPasliaPrychascia())
         pasliaPrychascia = savedInstanceState?.getInt("pasliaPrychascia") ?: (intent.extras?.getInt("paslia_prychascia") ?: 0)
-        men = Bogashlugbovya.checkVybranoe(this, malitvy[pasliaPrychascia].resourse)
+        men = Bogashlugbovya.checkVybranoe(this, malitvy[pasliaPrychascia].resurs)
         binding.constraint.setOnTouchListener(this)
         val adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
@@ -105,7 +101,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                men = Bogashlugbovya.checkVybranoe(this@PasliaPrychascia, malitvy[position].resourse)
+                men = Bogashlugbovya.checkVybranoe(this@PasliaPrychascia, malitvy[position].resurs)
                 pasliaPrychascia = position
                 invalidateOptionsMenu()
             }
@@ -247,7 +243,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            men = Bogashlugbovya.setVybranoe(this, malitvy[pasliaPrychascia].resourse, malitvy[pasliaPrychascia].title)
+            men = Bogashlugbovya.setVybranoe(this, malitvy[pasliaPrychascia].resurs, malitvy[pasliaPrychascia].title)
             if (men) {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
             }
@@ -272,11 +268,11 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
-                val inputStream = resources.openRawResource(malitvy[pasliaPrychascia].resourseID)
+                val inputStream = resources.openRawResource(Bogashlugbovya.resursMap[malitvy[pasliaPrychascia].resurs] ?: R.raw.bogashlugbovya_error)
                 val text = inputStream.use {
                     it.reader().readText()
                 }
-                intent.putExtra("resours", malitvy[pasliaPrychascia].resourse)
+                intent.putExtra("resours", malitvy[pasliaPrychascia].resurs)
                 intent.putExtra("title", malitvy[pasliaPrychascia].title)
                 intent.putExtra("text", text)
                 startActivity(intent)
@@ -393,8 +389,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
 
         override fun getItemCount() = malitvy.size
 
-        override fun createFragment(position: Int) = PasliaPrychasciaFragment.newInstance(malitvy[position].resourseID)
+        override fun createFragment(position: Int) = PasliaPrychasciaFragment.newInstance(Bogashlugbovya.resursMap[malitvy[position].resurs] ?: R.raw.bogashlugbovya_error)
     }
-
-    private data class Malitvy(val resourseID: Int, val resourse: String, val title: String)
 }

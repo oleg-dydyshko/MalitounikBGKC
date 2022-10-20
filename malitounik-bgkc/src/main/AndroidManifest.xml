@@ -366,12 +366,20 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".MineiaShodzennaia"
+            android:name=".MineiaMesiachnaia"
             android:label="@string/mineia_shtodzennaia"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Aktoix"
+            android:label="@string/aktoix"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.SubMenuBogashlugbovyaViachernia" />
         </activity>
         <activity
             android:name=".TonPlay"

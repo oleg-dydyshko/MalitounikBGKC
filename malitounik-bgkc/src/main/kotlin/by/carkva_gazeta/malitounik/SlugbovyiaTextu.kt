@@ -102,7 +102,7 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(-1, "Вялікая субота - Літургія", "vialikaja_subota_viaczernia_liturhija", LITURGIA, pasxa = true))
 
         datMinVP.add(SlugbovyiaTextuData(0, "Уваскрасеньне Госпада Бога і Збаўцы нашага Ісуса Хрыста (Вялікдзень) - Ютрань", "vialikdzien_jutran", UTRAN, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(0, "Уваскрасеньне Госпада Бога і Збаўцы нашага Ісуса Хрыста (Вялікдзень) - Вячэрня", "viaczernia_vialikdzien", VIACHERNIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(0, "Уваскрасеньне Госпада Бога і Збаўцы нашага Ісуса Хрыста (Вялікдзень) - Вячэрня", "vialikdzien_viaczernia", VIACHERNIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак - Ютрань", "u_svietly_paniadzielak", UTRAN, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак - Літургія", "l_svietly_paniadzielak", LITURGIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак - Вячэрня", "v_svietly_paniadzielak", VIACHERNIA, pasxa = true))
@@ -281,7 +281,7 @@ class SlugbovyiaTextu {
         return list
     }
 
-    fun getMineiaShtodzennia(): ArrayList<SlugbovyiaTextuData> {
+    fun getMineiaMesiachnaia(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
         for (i in 0 until datMinSH.size) list.add(datMinSH[i])
         list.sort()

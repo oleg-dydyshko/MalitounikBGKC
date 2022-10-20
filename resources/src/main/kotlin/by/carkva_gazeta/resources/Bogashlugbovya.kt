@@ -331,7 +331,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["vialikaja_subota_paunocznica"] = R.raw.vialikaja_subota_paunocznica
             resursMap["vialikaja_subota_viaczernia_liturhija"] = R.raw.vialikaja_subota_viaczernia_liturhija
             resursMap["vialikdzien_jutran"] = R.raw.vialikdzien_jutran
-            resursMap["viaczernia_vialikdzien"] = R.raw.viaczernia_vialikdzien
+            resursMap["vialikdzien_viaczernia"] = R.raw.vialikdzien_viaczernia
             resursMap["u_svietly_paniadzielak"] = R.raw.u_svietly_paniadzielak
             resursMap["l_svietly_paniadzielak"] = R.raw.l_svietly_paniadzielak
             resursMap["v_svietly_paniadzielak"] = R.raw.v_svietly_paniadzielak

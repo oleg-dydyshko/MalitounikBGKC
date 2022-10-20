@@ -43,7 +43,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private lateinit var chin: SharedPreferences
-    private val textWatcher: TextWatcher = MyTextWatcher()
+    private val textWatcher = MyTextWatcher()
     private var _binding: MenuPesnyBinding? = null
     private val binding get() = _binding!!
     private var posukPesenJob: Job? = null

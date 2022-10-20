@@ -337,6 +337,7 @@
     <string name="all_clean_histopy">Вы сапраўды жадаеце выдаліць усю гісторыю пошуку?</string>
     <string name="all_clean_item_histopy">Вы сапраўды жадаеце выдаліць \"%1$s\" із гісторыі пошуку?</string>
     <string name="search_malitv">Пошук малітвы</string>
+    <string name="searche_bogasluz_text">Пошук тэкстаў</string>
     <string name="registr">Улічваць рэгістар</string>
     <string name="dakladnae_supadzenne">Дакладнае супадзеньне</string>
     <string name="pavedamic">Паведамляць а %1$d-й гадзіне</string>
@@ -409,6 +410,7 @@
         <item>Вячэрня ў звычайныя дні</item>
         <item>Вячэрня ў вялікім посьце</item>
         <item>Вячэрняя служба штодзённая (без сьвятара)</item>
+        <item>Aktoix</item>
     </string-array>
     <string-array name="sub_bogaslugbovuia_vialiki_post">
         <item>Службы 1-га тыдня Вялікага посту</item>
@@ -626,9 +628,9 @@
     <string name="hint_pesny_title">Імя песьні як у сказах</string>
     <string name="zmena_chastki">Зьменныя часткі</string>
     <string name="add_piarliny">Дадаць пярліну</string>
-    <string name="actiox">Мінэя агульная</string>
-    <string-array name="viachernia_list">
-        <item>Служба Найсьвяцейшай Багародзіцы</item>
+    <string name="mineia_agulnaia">Мінэя агульная</string>
+    <string name="aktoix">Aktoix</string>
+    <string-array name="aktoix_list">
         <item>Вячэрня Тон 1</item>
         <item>Вячэрня Тон 2</item>
         <item>Вячэрня Тон 3</item>
@@ -638,6 +640,8 @@
         <item>Вячэрня Тон 7</item>
         <item>Вячэрня Тон 8</item>
         <item>Багародзічныя адпушчальныя</item>
+    </string-array>
+    <string-array name="viachernia_list">
         <item>Вячэрня агульная Найсьвяцейшай Багародзіцы</item>
         <item>Вячэрня агульная Яну Хрысьціцелю</item>
         <item>Вячэрня агульная прароку</item>

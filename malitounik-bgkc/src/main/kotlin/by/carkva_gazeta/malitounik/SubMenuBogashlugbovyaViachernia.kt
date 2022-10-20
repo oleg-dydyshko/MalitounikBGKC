@@ -4,16 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import kotlinx.coroutines.*
 
 class SubMenuBogashlugbovyaViachernia : BaseActivity() {
-    private val data get() = resources.getStringArray(R.array.sub_bogaslugbovuia_vichernia)
+    private val data = ArrayList<MenuListData>()
     private var mLastClickTime: Long = 0
     private lateinit var binding: AkafistListBinding
     private var resetTollbarJob: Job? = null
@@ -62,41 +66,27 @@ class SubMenuBogashlugbovyaViachernia : BaseActivity() {
         } else {
             binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         }
-        binding.ListView.adapter = MenuListAdaprer(this, data)
+        data.addAll(MenuBogashlugbovya.getTextSubBogaslugbovuiaVichernia())
+        binding.ListView.adapter = MenuListAdaprer(this)
         binding.ListView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources()) {
-                val intent = Intent()
-                intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
-                when (position) {
-                    0 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_niadzeli")
-                    }
-                    1 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_liccia_i_blaslavenne_xliabou")
-                    }
-                    2 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_na_kozny_dzen")
-                    }
-                    3 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_u_vialikim_poscie")
-                    }
-                    4 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viaczernia_bierascie")
-                    }
-                }
+            if (position == 5) {
+                val intent = Intent(this, Aktoix::class.java)
                 startActivity(intent)
             } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(supportFragmentManager, "dadatak")
+                if (MainActivity.checkmoduleResources()) {
+                    val intent = Intent()
+                    intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
+                    intent.putExtra("title", data[position].title)
+                    intent.putExtra("resurs", data[position].resurs)
+                    startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(supportFragmentManager, "dadatak")
+                }
             }
         }
     }
@@ -110,4 +100,27 @@ class SubMenuBogashlugbovyaViachernia : BaseActivity() {
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
     }
+
+    private inner class MenuListAdaprer(private val context: BaseActivity) : ArrayAdapter<MenuListData>(context, R.layout.simple_list_item_2, R.id.label, data) {
+
+        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (mView == null) {
+                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.label)
+                rootView.tag = viewHolder
+            } else {
+                rootView = mView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            val dzenNoch = context.getBaseDzenNoch()
+            viewHolder.text.text = data[position].title
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            return rootView
+        }
+    }
+
+    private class ViewHolder(var text: TextView)
 }

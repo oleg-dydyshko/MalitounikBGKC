@@ -78,7 +78,7 @@ class MineiaAgulnaia : BaseActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (position == 24) {
+            if (data[position].resurs == "1") {
                 val intent = Intent(this, TonNaKoznyDzen::class.java)
                 startActivity(intent)
             } else {

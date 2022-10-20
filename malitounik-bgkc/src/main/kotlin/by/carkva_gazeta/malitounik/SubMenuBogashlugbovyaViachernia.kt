@@ -73,7 +73,7 @@ class SubMenuBogashlugbovyaViachernia : BaseActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (position == 5) {
+            if (data[position].resurs == "1") {
                 val intent = Intent(this, Aktoix::class.java)
                 startActivity(intent)
             } else {

@@ -55,7 +55,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.add(MenuListData(r1[2], "viachernia_na_kozny_dzen"))
             dataSearch.add(MenuListData(r1[3], "viachernia_u_vialikim_poscie"))
             dataSearch.add(MenuListData(r1[4], "viaczernia_bierascie"))
-            if (!isSearch) dataSearch.add(MenuListData(r1[5], ""))
+            if (!isSearch) dataSearch.add(MenuListData(r1[5], "1"))
             return dataSearch
         }
 
@@ -101,7 +101,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.add(MenuListData(r1[21], "viachernia_mineia_agulnaia22"))
             dataSearch.add(MenuListData(r1[22], "viachernia_mineia_agulnaia23"))
             dataSearch.add(MenuListData(r1[23], "viachernia_mineia_agulnaia24"))
-            if (!isSearch) dataSearch.add(MenuListData(r1[24], ""))
+            if (!isSearch) dataSearch.add(MenuListData(r1[24], "1"))
             return dataSearch
         }
     }

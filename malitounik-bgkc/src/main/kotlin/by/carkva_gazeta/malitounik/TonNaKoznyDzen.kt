@@ -4,18 +4,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import kotlinx.coroutines.*
 
 class TonNaKoznyDzen : BaseActivity() {
     private var mLastClickTime: Long = 0
-    private val data get() = resources.getStringArray(R.array.ton_kogny_dzen)
+    private val data = ArrayList<MenuListData>()
     private lateinit var binding: AkafistListBinding
     private var resetTollbarJob: Job? = null
 
@@ -54,7 +58,8 @@ class TonNaKoznyDzen : BaseActivity() {
         }
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
-        val adapter = MenuListAdaprer(this, data)
+        data.addAll(MenuBogashlugbovya.getTextTonNaKoznyDzenList())
+        val adapter = MenuListAdaprer(this)
         binding.ListView.adapter = adapter
         binding.ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -64,16 +69,8 @@ class TonNaKoznyDzen : BaseActivity() {
             if (MainActivity.checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
-                intent.putExtra("resurs", "ton${position + 1}_budni")
-                val title = when (position + 1) {
-                    1 -> "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
-                    2 -> "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю"
-                    3 -> "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу"
-                    4 -> "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю"
-                    5 -> "ПЯТНІЦА\nСлужба Крыжу Гасподняму"
-                    else -> "Субота\nСлужба ўсім сьвятым і памёрлым"
-                }
-                intent.putExtra("title", title)
+                intent.putExtra("title", data[position].title)
+                intent.putExtra("resurs", data[position].resurs)
                 intent.putExtra("zmena_chastki", true)
                 startActivity(intent)
             } else {
@@ -100,4 +97,27 @@ class TonNaKoznyDzen : BaseActivity() {
         }
         return false
     }
+
+    private inner class MenuListAdaprer(private val context: BaseActivity) : ArrayAdapter<MenuListData>(context, R.layout.simple_list_item_2, R.id.label, data) {
+
+        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (mView == null) {
+                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.label)
+                rootView.tag = viewHolder
+            } else {
+                rootView = mView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            val dzenNoch = context.getBaseDzenNoch()
+            viewHolder.text.text = data[position].title
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            return rootView
+        }
+    }
+
+    private class ViewHolder(var text: TextView)
 }

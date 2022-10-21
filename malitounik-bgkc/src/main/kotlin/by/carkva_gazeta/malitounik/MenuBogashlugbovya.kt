@@ -2,6 +2,7 @@ package by.carkva_gazeta.malitounik
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Editable
@@ -9,6 +10,8 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -37,73 +40,123 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
     private val textWatcher = MyTextWatcher()
 
     companion object {
-        fun getTextPasliaPrychascia(): ArrayList<MenuListData> {
+        fun getTextPasliaPrychascia(isSearch: Boolean = false): ArrayList<MenuListData> {
+            var opisanie = ""
+            if (isSearch) opisanie = "\nМалітвы пасьля сьвятога прычасьця"
             val dataSearch = ArrayList<MenuListData>()
-            dataSearch.add(MenuListData("Малітва падзякі", "paslia_prychascia1"))
-            dataSearch.add(MenuListData("Малітва сьв. Васіля Вялікага", "paslia_prychascia2"))
-            dataSearch.add(MenuListData("Малітва Сымона Мэтафраста", "paslia_prychascia3"))
-            dataSearch.add(MenuListData("Iншая малітва", "paslia_prychascia4"))
-            dataSearch.add(MenuListData("Малітва да Найсьвяцейшай Багародзіцы", "paslia_prychascia5"))
+            dataSearch.add(MenuListData("Малітва падзякі$opisanie", "paslia_prychascia1"))
+            dataSearch.add(MenuListData("Малітва сьв. Васіля Вялікага$opisanie", "paslia_prychascia2"))
+            dataSearch.add(MenuListData("Малітва Сымона Мэтафраста$opisanie", "paslia_prychascia3"))
+            dataSearch.add(MenuListData("Iншая малітва$opisanie", "paslia_prychascia4"))
+            dataSearch.add(MenuListData("Малітва да Найсьвяцейшай Багародзіцы$opisanie", "paslia_prychascia5"))
             return dataSearch
         }
 
         fun getTextSubBogaslugbovuiaVichernia(isSearch: Boolean = false): ArrayList<MenuListData> {
+            var opisanie = ""
+            if (isSearch) opisanie = "\nВячэрня"
             val dataSearch = ArrayList<MenuListData>()
             val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.sub_bogaslugbovuia_vichernia)
-            dataSearch.add(MenuListData(r1[0], "viachernia_niadzeli"))
-            dataSearch.add(MenuListData(r1[1], "viachernia_liccia_i_blaslavenne_xliabou"))
-            dataSearch.add(MenuListData(r1[2], "viachernia_na_kozny_dzen"))
-            dataSearch.add(MenuListData(r1[3], "viachernia_u_vialikim_poscie"))
-            dataSearch.add(MenuListData(r1[4], "viaczernia_bierascie"))
-            if (!isSearch) dataSearch.add(MenuListData(r1[5], "1"))
+            dataSearch.add(MenuListData(r1[0] + opisanie, "viachernia_niadzeli"))
+            dataSearch.add(MenuListData(r1[1] + opisanie, "viachernia_liccia_i_blaslavenne_xliabou"))
+            dataSearch.add(MenuListData(r1[2] + opisanie, "viachernia_na_kozny_dzen"))
+            dataSearch.add(MenuListData(r1[3] + opisanie, "viachernia_u_vialikim_poscie"))
+            dataSearch.add(MenuListData(r1[4] + opisanie, "viaczernia_bierascie"))
+            if (!isSearch) dataSearch.add(MenuListData(r1[5] + opisanie, "1"))
             return dataSearch
         }
 
-        fun getTextAktoixList(): ArrayList<MenuListData> {
+        fun getTextAktoixList(isSearch: Boolean = false): ArrayList<MenuListData> {
+            var opisanie = ""
+            if (isSearch) opisanie = "\nВячэрня -> Aktoix"
             val dataSearch = ArrayList<MenuListData>()
             val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.aktoix_list)
-            dataSearch.add(MenuListData(r1[0], "viachernia_ton1"))
-            dataSearch.add(MenuListData(r1[1], "viachernia_ton2"))
-            dataSearch.add(MenuListData(r1[2], "viachernia_ton3"))
-            dataSearch.add(MenuListData(r1[3], "viachernia_ton4"))
-            dataSearch.add(MenuListData(r1[4], "viachernia_ton5"))
-            dataSearch.add(MenuListData(r1[5], "viachernia_ton6"))
-            dataSearch.add(MenuListData(r1[6], "viachernia_ton7"))
-            dataSearch.add(MenuListData(r1[7], "viachernia_ton8"))
-            dataSearch.add(MenuListData(r1[8], "viachernia_bagarodzichnia_adpushchalnyia"))
+            dataSearch.add(MenuListData(r1[0] + opisanie, "viachernia_ton1"))
+            dataSearch.add(MenuListData(r1[1] + opisanie, "viachernia_ton2"))
+            dataSearch.add(MenuListData(r1[2] + opisanie, "viachernia_ton3"))
+            dataSearch.add(MenuListData(r1[3] + opisanie, "viachernia_ton4"))
+            dataSearch.add(MenuListData(r1[4] + opisanie, "viachernia_ton5"))
+            dataSearch.add(MenuListData(r1[5] + opisanie, "viachernia_ton6"))
+            dataSearch.add(MenuListData(r1[6] + opisanie, "viachernia_ton7"))
+            dataSearch.add(MenuListData(r1[7] + opisanie, "viachernia_ton8"))
+            dataSearch.add(MenuListData(r1[8] + opisanie, "viachernia_bagarodzichnia_adpushchalnyia"))
+            return dataSearch
+        }
+
+        fun getTextTonNaKoznyDzenList(isSearch: Boolean = false): ArrayList<MenuListData> {
+            var opisanie = ""
+            if (isSearch) opisanie = "\nМінэя агульная -> Трапары і кандакі штодзённыя - на кожны дзень тыдня"
+            val dataSearch = ArrayList<MenuListData>()
+            val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.ton_kogny_dzen)
+            dataSearch.add(MenuListData(r1[0] + opisanie, "ton1_budni"))
+            dataSearch.add(MenuListData(r1[1] + opisanie, "ton2_budni"))
+            dataSearch.add(MenuListData(r1[2] + opisanie, "ton3_budni"))
+            dataSearch.add(MenuListData(r1[3] + opisanie, "ton4_budni"))
+            dataSearch.add(MenuListData(r1[4] + opisanie, "ton5_budni"))
+            dataSearch.add(MenuListData(r1[5] + opisanie, "ton6_budni"))
             return dataSearch
         }
 
         fun getTextViacherniaList(isSearch: Boolean = false): ArrayList<MenuListData> {
+            var opisanie = ""
+            if (isSearch) opisanie = "\nМінэя агульная"
             val dataSearch = ArrayList<MenuListData>()
             val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.viachernia_list)
-            dataSearch.add(MenuListData(r1[0], "viachernia_mineia_agulnaia1"))
-            dataSearch.add(MenuListData(r1[1], "viachernia_mineia_agulnaia2"))
-            dataSearch.add(MenuListData(r1[2], "viachernia_mineia_agulnaia3"))
-            dataSearch.add(MenuListData(r1[3], "viachernia_mineia_agulnaia4"))
-            dataSearch.add(MenuListData(r1[4], "viachernia_mineia_agulnaia5"))
-            dataSearch.add(MenuListData(r1[5], "viachernia_mineia_agulnaia6"))
-            dataSearch.add(MenuListData(r1[6], "viachernia_mineia_agulnaia7"))
-            dataSearch.add(MenuListData(r1[7], "viachernia_mineia_agulnaia8"))
-            dataSearch.add(MenuListData(r1[8], "viachernia_mineia_agulnaia9"))
-            dataSearch.add(MenuListData(r1[9], "viachernia_mineia_agulnaia10"))
-            dataSearch.add(MenuListData(r1[10], "viachernia_mineia_agulnaia11"))
-            dataSearch.add(MenuListData(r1[11], "viachernia_mineia_agulnaia12"))
-            dataSearch.add(MenuListData(r1[12], "viachernia_mineia_agulnaia13"))
-            dataSearch.add(MenuListData(r1[13], "viachernia_mineia_agulnaia14"))
-            dataSearch.add(MenuListData(r1[14], "viachernia_mineia_agulnaia15"))
-            dataSearch.add(MenuListData(r1[15], "viachernia_mineia_agulnaia16"))
-            dataSearch.add(MenuListData(r1[16], "viachernia_mineia_agulnaia17"))
-            dataSearch.add(MenuListData(r1[17], "viachernia_mineia_agulnaia18"))
-            dataSearch.add(MenuListData(r1[18], "viachernia_mineia_agulnaia19"))
-            dataSearch.add(MenuListData(r1[19], "viachernia_mineia_agulnaia20"))
-            dataSearch.add(MenuListData(r1[20], "viachernia_mineia_agulnaia21"))
-            dataSearch.add(MenuListData(r1[21], "viachernia_mineia_agulnaia22"))
-            dataSearch.add(MenuListData(r1[22], "viachernia_mineia_agulnaia23"))
-            dataSearch.add(MenuListData(r1[23], "viachernia_mineia_agulnaia24"))
+            dataSearch.add(MenuListData(r1[0] + opisanie, "viachernia_mineia_agulnaia1"))
+            dataSearch.add(MenuListData(r1[1] + opisanie, "viachernia_mineia_agulnaia2"))
+            dataSearch.add(MenuListData(r1[2] + opisanie, "viachernia_mineia_agulnaia3"))
+            dataSearch.add(MenuListData(r1[3] + opisanie, "viachernia_mineia_agulnaia4"))
+            dataSearch.add(MenuListData(r1[4] + opisanie, "viachernia_mineia_agulnaia5"))
+            dataSearch.add(MenuListData(r1[5] + opisanie, "viachernia_mineia_agulnaia6"))
+            dataSearch.add(MenuListData(r1[6] + opisanie, "viachernia_mineia_agulnaia7"))
+            dataSearch.add(MenuListData(r1[7] + opisanie, "viachernia_mineia_agulnaia8"))
+            dataSearch.add(MenuListData(r1[8] + opisanie, "viachernia_mineia_agulnaia9"))
+            dataSearch.add(MenuListData(r1[9] + opisanie, "viachernia_mineia_agulnaia10"))
+            dataSearch.add(MenuListData(r1[10] + opisanie, "viachernia_mineia_agulnaia11"))
+            dataSearch.add(MenuListData(r1[11] + opisanie, "viachernia_mineia_agulnaia12"))
+            dataSearch.add(MenuListData(r1[12] + opisanie, "viachernia_mineia_agulnaia13"))
+            dataSearch.add(MenuListData(r1[13] + opisanie, "viachernia_mineia_agulnaia14"))
+            dataSearch.add(MenuListData(r1[14] + opisanie, "viachernia_mineia_agulnaia15"))
+            dataSearch.add(MenuListData(r1[15] + opisanie, "viachernia_mineia_agulnaia16"))
+            dataSearch.add(MenuListData(r1[16] + opisanie, "viachernia_mineia_agulnaia17"))
+            dataSearch.add(MenuListData(r1[17] + opisanie, "viachernia_mineia_agulnaia18"))
+            dataSearch.add(MenuListData(r1[18] + opisanie, "viachernia_mineia_agulnaia19"))
+            dataSearch.add(MenuListData(r1[19] + opisanie, "viachernia_mineia_agulnaia20"))
+            dataSearch.add(MenuListData(r1[20] + opisanie, "viachernia_mineia_agulnaia21"))
+            dataSearch.add(MenuListData(r1[21] + opisanie, "viachernia_mineia_agulnaia22"))
+            dataSearch.add(MenuListData(r1[22] + opisanie, "viachernia_mineia_agulnaia23"))
+            dataSearch.add(MenuListData(r1[23] + opisanie, "viachernia_mineia_agulnaia24"))
             if (!isSearch) dataSearch.add(MenuListData(r1[24], "1"))
             return dataSearch
         }
+    }
+
+    private fun getTextBogaslugbovyiaList(isSearch: Boolean = false): ArrayList<MenuListData> {
+        var opisanie = ""
+        if (isSearch) opisanie = "\nБогаслужбовыя тэксты"
+        val dataSearch = ArrayList<MenuListData>()
+        dataSearch.add(MenuListData("Боская Літургія між сьвятымі айца нашага Яна Залатавуснага$opisanie", "lit_jan_zalat"))
+        dataSearch.add(MenuListData("Боская Літургія ў Велікодны перыяд$opisanie", "lit_jan_zalat_vielikodn"))
+        dataSearch.add(MenuListData("Боская Літургія між сьвятымі айца нашага Базыля Вялікага$opisanie", "lit_vasila_vialikaha"))
+        dataSearch.add(MenuListData("Літургія раней асьвячаных дароў$opisanie", "lit_ran_asv_dar"))
+        dataSearch.add(MenuListData("Набажэнства ў гонар Маці Божай Нястомнай Дапамогі$opisanie", "nabazenstva_maci_bozaj_niast_dap"))
+        dataSearch.add(MenuListData("Ютрань нядзельная (у скароце)$opisanie", "jutran_niadzelnaja"))
+        dataSearch.add(MenuListData("Абедніца$opisanie", "abiednica"))
+        dataSearch.add(MenuListData("Служба за памерлых — Малая паніхіда$opisanie", "panichida_mal"))
+        dataSearch.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы$opisanie", "kanon_malebny_baharodzicy"))
+        dataSearch.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага$opisanie", "kanon_a_kryckaha"))
+        dataSearch.add(MenuListData("Малебен сьвятым айцам нашым, роўным апосталам Кірылу і Мятоду, настаўнікам славянскім$opisanie", "malebien_kiryla_miatod"))
+        dataSearch.add(MenuListData("Служба за памерлых на кожны дзень тыдня$opisanie", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
+        dataSearch.add(MenuListData("Служба Найсьвяцейшай Багародзіцы$opisanie", "sluzba_najsviaciejszaj_baharodzicy"))
+        if (!isSearch) {
+            dataSearch.add(MenuListData("Малітвы пасьля сьвятога прычасьця", "1"))
+            dataSearch.add(MenuListData("Вячэрня", "2"))
+            dataSearch.add(MenuListData("Трапары і кандакі нядзельныя васьмі тонаў", "3"))
+            dataSearch.add(MenuListData("Мінэя месячная", "4"))
+            dataSearch.add(MenuListData("Трыёдзь", "5"))
+            dataSearch.add(MenuListData("Мінэя агульная", "6"))
+        }
+        return dataSearch
     }
 
     override fun onDestroyView() {
@@ -119,25 +172,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            data.add(MenuListData("Боская Літургія між сьвятымі айца нашага Яна Залатавуснага", "lit_jan_zalat"))
-            data.add(MenuListData("Боская Літургія ў Велікодны перыяд", "lit_jan_zalat_vielikodn"))
-            data.add(MenuListData("Боская Літургія між сьвятымі айца нашага Базыля Вялікага", "lit_vasila_vialikaha"))
-            data.add(MenuListData("Літургія раней асьвячаных дароў", "lit_ran_asv_dar"))
-            data.add(MenuListData("Набажэнства ў гонар Маці Божай Нястомнай Дапамогі", "nabazenstva_maci_bozaj_niast_dap"))
-            data.add(MenuListData("Малітвы пасьля сьвятога прычасьця", "1"))
-            data.add(MenuListData("Ютрань нядзельная (у скароце)", "jutran_niadzelnaja"))
-            data.add(MenuListData("Вячэрня", "2"))
-            data.add(MenuListData("Абедніца", "abiednica"))
-            data.add(MenuListData("Служба за памерлых — Малая паніхіда", "panichida_mal"))
-            data.add(MenuListData("Трапары і кандакі нядзельныя васьмі тонаў", "3"))
-            data.add(MenuListData("Мінэя месячная", "4"))
-            data.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы", "kanon_malebny_baharodzicy"))
-            data.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага", "kanon_a_kryckaha"))
-            data.add(MenuListData("Трыёдзь", "5"))
-            data.add(MenuListData("Малебен сьвятым айцам нашым, роўным апосталам Кірылу і Мятоду, настаўнікам славянскім", "malebien_kiryla_miatod"))
-            data.add(MenuListData("Служба за памерлых на кожны дзень тыдня", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
-            data.add(MenuListData("Мінэя агульная", "6"))
-            data.add(MenuListData("Служба Найсьвяцейшай Багародзіцы", "sluzba_najsviaciejszaj_baharodzicy"))
+            data.addAll(getTextBogaslugbovyiaList())
             data.sort()
             dataOriginal.addAll(data)
             adapter = MenuListAdaprer(it as BaseActivity)
@@ -174,60 +209,67 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
     }
 
     private fun searchText() {
-        for (i in data.indices) {
-            val res = data[i].resurs
-            if (!(res == "1" || res == "2" || res == "3" || res == "4" || res == "5" || res == "6")) {
-                dataSearch.add(data[i])
-            }
-        }
-        dataSearch.addAll(getTextPasliaPrychascia())
+        dataSearch.addAll(getTextBogaslugbovyiaList(true))
+        dataSearch.addAll(getTextPasliaPrychascia(true))
         dataSearch.addAll(getTextSubBogaslugbovuiaVichernia(true))
-        dataSearch.addAll(getTextAktoixList())
+        dataSearch.addAll(getTextAktoixList(true))
+        dataSearch.addAll(getTextViacherniaList(true))
+        dataSearch.addAll(getTextTonNaKoznyDzenList(true))
+        var opisanie = "\nТрапары і кандакі нядзельныя васьмі тонаў"
         for (i in 1..8) {
-            dataSearch.add(MenuListData(getString(R.string.ton, i.toString()), "ton$i"))
+            dataSearch.add(MenuListData(getString(R.string.ton, i.toString() + opisanie), "ton$i"))
         }
         val sluzba = SlugbovyiaTextu()
         var mesiach = sluzba.getMineiaMesiachnaia()
+        opisanie = "\nМінэя месячная"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getVilikiTydzen()
+        opisanie = "\nТрыёдзь -> Службы Вялікага тыдня"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getSvetlyTydzen()
+        opisanie = "\nТрыёдзь -> Службы Сьветлага тыдня"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getMineiaSviatochnaia()
+        opisanie = "\nТрыёдзь -> Трыёдзь Сьвяточная"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getTydzen1()
+        opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 1-га тыдня Вялікага посту"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getTydzen2()
+        opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 2-га тыдня Вялікага посту"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getTydzen3()
+        opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 3-га тыдня Вялікага посту"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getTydzen4()
+        opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 4-га тыдня Вялікага посту"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getTydzen5()
+        opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 5-га тыдня Вялікага посту"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getTydzen6()
+        opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 6-га тыдня Вялікага посту"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
         }
-        dataSearch.addAll(getTextViacherniaList(true))
         dataSearch.sort()
     }
 
@@ -339,7 +381,12 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                     if (MainActivity.checkmoduleResources()) {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                        intent.putExtra("title", data[position].title)
+                        var title = data[position].title
+                        val t1 = title.lastIndexOf("\n")
+                        if (t1 != -1) {
+                            title = title.substring(0, t1)
+                        }
+                        intent.putExtra("title", title)
                         intent.putExtra("resurs", data[position].resurs)
                         startActivity(intent)
                     } else {
@@ -416,7 +463,13 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = context.getBaseDzenNoch()
-            viewHolder.text.text = data[position].title
+            val spanString = SpannableString(data[position].title)
+            val nachalo = spanString.lastIndexOf("\n")
+            if (nachalo != -1) {
+                spanString.setSpan(StyleSpan(Typeface.ITALIC), nachalo, spanString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                spanString.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorSecondary_text)), nachalo, spanString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            viewHolder.text.text = spanString
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }

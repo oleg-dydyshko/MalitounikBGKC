@@ -12,6 +12,8 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -22,10 +24,7 @@ import by.carkva_gazeta.malitounik.databinding.MenuPesnyBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -70,7 +69,13 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
             reader.forEachLine {
                 line = it
                 val split = line.split("<>")
-                menuListOrig.add(MenuListData(split[1], split[0]))
+                var opisanie = ""
+                if (split[0].contains("prasl")) opisanie = "\nПесьні праслаўленьня"
+                if (split[0].contains("bel")) opisanie = "\nЗ малітвай за Беларусь"
+                if (split[0].contains("bag")) opisanie = "\nДа Багародзіцы"
+                if (split[0].contains("kal")) opisanie = "\nКалядныя"
+                if (split[0].contains("taize")) opisanie = "\nСьпевы Taize"
+                menuListOrig.add(MenuListData(split[1] + opisanie, split[0]))
             }
             getMenuListData(pesny)
             adapter = MenuPesnyListAdapter(fraragment, menuList)
@@ -203,6 +208,11 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
         }
     }
 
+    override fun onPrepareMenu(menu: Menu) {
+        menu.findItem(R.id.count).isVisible = isSearch()
+        menu.findItem(R.id.action_clean_histopy).isVisible = isHistory()
+    }
+
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_clean_histopy) {
             val dialogClearHishory = DialogClearHishory.getInstance()
@@ -218,9 +228,9 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
         outState.putBoolean("search", search)
     }
 
-    fun isHistory() = history.size != 0
+    private fun isHistory() = history.size != 0
 
-    fun isSearch() = search
+    private fun isSearch() = search
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.pesny, menu)
@@ -297,6 +307,15 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
             saveHistopy()
         }
         startActivity(intent)
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(1000L)
+            searchView?.setOnQueryTextListener(null)
+            search = false
+            getMenuListData(pesny)
+            adapter.notifyDataSetChanged()
+            binding.History.visibility = View.GONE
+            binding.ListView.visibility = View.VISIBLE
+        }
     }
 
     private fun getTypeHistory(item: String): String {
@@ -421,7 +440,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
         }
     }
 
-    private class MenuPesnyListAdapter(private val activity: Activity, private val menuList: ArrayList<MenuListData>) : ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
+    private inner class MenuPesnyListAdapter(private val activity: Activity, private val menuList: ArrayList<MenuListData>) : ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -435,7 +454,17 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
-            viewHolder.text.text = menuList[position].title
+            var spanString = SpannableString(menuList[position].title)
+            val nachalo = spanString.lastIndexOf("\n")
+            if (nachalo != -1) {
+                if (search) {
+                    spanString.setSpan(StyleSpan(Typeface.ITALIC), nachalo, spanString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spanString.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorSecondary_text)), nachalo, spanString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                } else {
+                    spanString = SpannableString(spanString.substring(0, nachalo))
+                }
+            }
+            viewHolder.text.text = spanString
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }

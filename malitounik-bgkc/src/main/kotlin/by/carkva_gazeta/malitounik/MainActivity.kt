@@ -737,12 +737,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     menu.findItem(R.id.action_glava).setIcon(R.drawable.calendar_black)
                 }
             }
-            if (idSelect == R.id.label91 || idSelect == R.id.label92 || idSelect == R.id.label93 || idSelect == R.id.label94 || idSelect == R.id.label95) {
-                val menuPesny = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesny
-                menu.findItem(R.id.count).isVisible = menuPesny?.isSearch() ?: false
-                val history = menu.findItem(R.id.action_clean_histopy)
-                history.isVisible = menuPesny?.isHistory() ?: false
-            }
             if (idSelect == R.id.label101 || idSelect == R.id.label102) {
                 menu.findItem(R.id.action_font).isVisible = true
                 menu.findItem(R.id.action_bright).isVisible = true

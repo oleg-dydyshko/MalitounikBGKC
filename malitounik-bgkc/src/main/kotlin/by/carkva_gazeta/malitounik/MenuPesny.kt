@@ -142,6 +142,8 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
     private fun addHistory(item: String) {
         var st = item.replace("<font color=#d00505>", "")
         st = st.replace("</font>", "")
+        val nachalo = st.lastIndexOf("\n")
+        if (nachalo != -1) st = st.substring(0, nachalo)
         val temp = ArrayList<String>()
         for (i in 0 until history.size) {
             if (history[i] != st) {
@@ -294,7 +296,10 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
         editText?.removeTextChangedListener(textWatcher)
         val intent = Intent(activity, PesnyAll::class.java)
         if (parent?.id == R.id.ListView) {
-            intent.putExtra("pesny", menuList[position].title)
+            var title = menuList[position].title
+            val nachalo = title.lastIndexOf("\n")
+            if (nachalo != -1) title = title.substring(0, nachalo)
+            intent.putExtra("pesny", title)
             intent.putExtra("type", menuList[position].resurs)
             if (search) {
                 addHistory(menuList[position].title)

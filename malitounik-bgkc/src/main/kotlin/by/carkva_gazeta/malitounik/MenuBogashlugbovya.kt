@@ -32,6 +32,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
     private val dataSearch = ArrayList<MenuListData>()
     private var editText: AutoCompleteTextView? = null
     private var searchView: SearchView? = null
+    private var textViewCount: TextView? = null
     private var searchViewQwery = ""
     private var actionExpandOn = false
     private var _binding: MenuPesnyBinding? = null
@@ -193,6 +194,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                     if (firstVisibleItem == 1) {
                         val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm1.hideSoftInputFromWindow(binding.ListView.windowToken, 0)
+                        searchView?.clearFocus()
                     }
                 }
 
@@ -303,11 +305,19 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.malitvy_prynagodnyia, menu)
-        val searchViewItem = menu.findItem(R.id.action_seashe_text)
+        menuInflater.inflate(R.menu.pesny, menu)
+        val searchViewItem = menu.findItem(R.id.search)
         searchView = searchViewItem.actionView as SearchView
+        textViewCount = menu.findItem(R.id.count).actionView as TextView
+        activity?.let {
+            val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView
+            searcheTextView.typeface = MainActivity.createFont(Typeface.NORMAL)
+            textViewCount?.typeface = MainActivity.createFont(Typeface.NORMAL)
+        }
         if (actionExpandOn) {
             searchViewItem.expandActionView()
+            textViewCount?.text = getString(R.string.seash, dataSearch.size)
+            menu.findItem(R.id.count).isVisible = actionExpandOn
         }
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
@@ -316,6 +326,8 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                 searchText()
                 data.clear()
                 data.addAll(dataSearch)
+                textViewCount?.text = getString(R.string.seash, dataSearch.size)
+                menu.findItem(R.id.count).isVisible = actionExpandOn
                 adapter.notifyDataSetChanged()
                 return true
             }
@@ -326,6 +338,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                 dataSearch.clear()
                 data.addAll(dataOriginal)
                 dataSearch.addAll(dataOriginal)
+                menu.findItem(R.id.count).isVisible = actionExpandOn
                 adapter.notifyDataSetChanged()
                 return true
             }
@@ -492,6 +505,9 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                     } else {
                         result.values = dataSearch
                         result.count = dataSearch.size
+                    }
+                    CoroutineScope(Dispatchers.Main).launch {
+                        textViewCount?.text = resources.getString(R.string.seash, result.count)
                     }
                     return result
                 }

@@ -92,6 +92,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
                     if (i == 1) {
                         val imm1 = fraragment.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
+                        searchView?.clearFocus()
                     }
                 }
 

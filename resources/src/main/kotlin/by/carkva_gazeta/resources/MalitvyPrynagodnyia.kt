@@ -182,6 +182,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                 if (firstVisibleItem == 1) {
                     val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm1.hideSoftInputFromWindow(binding.ListView.windowToken, 0)
+                    searchView?.clearFocus()
                 }
             }
 

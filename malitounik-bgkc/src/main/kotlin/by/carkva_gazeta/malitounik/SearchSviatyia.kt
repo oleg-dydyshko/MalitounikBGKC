@@ -194,9 +194,9 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                 if (i == 1) {
-                    // Скрываем клавиатуру
                     val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
+                    searchView?.clearFocus()
                 }
             }
 

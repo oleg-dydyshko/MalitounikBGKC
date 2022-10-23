@@ -258,9 +258,10 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                 fierstPosition = absListView.firstVisiblePosition
-                if (i == 1) { // Скрываем клавиатуру
+                if (i == 1) {
                     val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm1.hideSoftInputFromWindow(autoCompleteTextView?.windowToken, 0)
+                    searchView?.clearFocus()
                 }
             }
 

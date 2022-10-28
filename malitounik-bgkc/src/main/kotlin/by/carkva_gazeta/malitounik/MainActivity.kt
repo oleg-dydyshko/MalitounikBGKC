@@ -62,7 +62,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private lateinit var bindingcontent: ContentMainBinding
     private var idSelect = R.id.label1
     private var backPressed: Long = 0
-    private var idOld = -1
     private val dzenNoch get() = getBaseDzenNoch()
     private var tolbarTitle = ""
     private var mLastClickTime: Long = 0
@@ -84,8 +83,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 val data = MenuCaliandar.getPositionCaliandar(dayOfYear, c.get(Calendar.YEAR))
                 if (setDataCalendar != data[25].toInt()) {
                     setDataCalendar = data[25].toInt()
-                    idOld = -1
-                    selectFragment(binding.label1, true)
+                    val menuCaliandar = supportFragmentManager.findFragmentByTag("menuCaliandar") as? MenuCaliandar
+                    if (menuCaliandar == null) {
+                        selectFragment(binding.label1, true)
+                    } else {
+                        menuCaliandar.setPage(setDataCalendar)
+                    }
                 }
             }
         }
@@ -95,8 +98,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         val data = MenuCaliandar.getPositionCaliandar(dayOfYear, year)
         idSelect = R.id.label1
         setDataCalendar = data[25].toInt()
-        idOld = -1
-        selectFragment(binding.label1, true)
+        val menuCaliandar = supportFragmentManager.findFragmentByTag("menuCaliandar") as? MenuCaliandar
+        if (menuCaliandar == null) {
+            selectFragment(binding.label1, true)
+        } else {
+            menuCaliandar.setPage(setDataCalendar)
+        }
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -144,7 +151,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt("id", idSelect)
-        outState.putInt("idOld", idOld)
     }
 
     override fun onResume() {
@@ -197,7 +203,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         setContentView(binding.root)
         if (savedInstanceState != null) {
             idSelect = savedInstanceState.getInt("id")
-            idOld = savedInstanceState.getInt("idOld")
         }
         // Удаление кеша интернета
         val fileSite = File("$filesDir/Site")
@@ -522,7 +527,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
-        //loadSviatyia(2022)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams?) {
@@ -603,7 +607,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 prefEditors.putBoolean("autoscroll", false)
                 prefEditors.putBoolean("setAlarm", true)
                 prefEditors.apply()
-                setDataCalendar = -1
                 checkBrightness = true
                 super.onBackPressed()
             } else {
@@ -634,8 +637,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (id == R.id.action_glava) {
             val arrayList = MenuCaliandar.getDataCalaindar(c[Calendar.DATE])
             setDataCalendar = arrayList[0][25].toInt()
-            idOld = -1
-            selectFragment(binding.label1, true)
+            val menuCaliandar = supportFragmentManager.findFragmentByTag("menuCaliandar") as? MenuCaliandar
+            if (menuCaliandar == null) {
+                selectFragment(binding.label1, true)
+            } else {
+                menuCaliandar.setPage(setDataCalendar)
+            }
             return true
         }
         if (id == R.id.settings) {
@@ -781,13 +788,21 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     override fun cleanFullHistory() {
-        val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesny
-        fragment?.cleanFullHistory()
+        supportFragmentManager.fragments.forEach {
+            val tag = it.tag
+            if (tag == "menuPesnyPrasl" || tag == "menuPesnyBel" || tag == "menuPesnyBag" || tag == "menuPesnyKal" || tag == "menuPesnyTaize") {
+                (it as? MenuPesny)?.cleanFullHistory()
+            }
+        }
     }
 
     override fun cleanHistory(position: Int) {
-        val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesny
-        fragment?.cleanHistory(position)
+        supportFragmentManager.fragments.forEach {
+            val tag = it.tag
+            if (tag == "menuPesnyPrasl" || tag == "menuPesnyBel" || tag == "menuPesnyBag" || tag == "menuPesnyKal" || tag == "menuPesnyTaize") {
+                (it as? MenuPesny)?.cleanHistory(position)
+            }
+        }
     }
 
     private fun selectFragment(view: View?, start: Boolean = false, biblijatekaRubrika: Int = 0, shortcuts: Boolean = false) {
@@ -986,15 +1001,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
 
-        if (idOld != idSelect) {
-            val ftrans = supportFragmentManager.beginTransaction()
-            ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
+        val ftrans = supportFragmentManager.beginTransaction()
+        ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
 
-            if (idSelect != R.id.label2 && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
-            when (idSelect) {
-                R.id.label1 -> {
-                    val arrayList = MenuCaliandar.getDataCalaindar(c[Calendar.DATE])
-                    if (setDataCalendar == -1) setDataCalendar = arrayList[0][25].toInt()
+        if (idSelect != R.id.label2 && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
+        when (idSelect) {
+            R.id.label1 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
+                if (fragment == null) {
                     val caliandar = MenuCaliandar.newInstance(setDataCalendar)
                     ftrans.replace(R.id.conteiner, caliandar, "menuCaliandar")
                     prefEditors.putInt("id", idSelect)
@@ -1004,8 +1018,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         startActivity(i)
                     }
                 }
-                R.id.label2 -> {
-                    prefEditors.putInt("id", idSelect)
+            }
+            R.id.label2 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("menuGlavnoe")
+                if (fragment == null) {
                     if (shortcuts || intent.extras?.containsKey("site") == true) {
                         if (checkmoduleResources()) {
                             if (checkmodulesBiblijateka()) {
@@ -1025,34 +1041,53 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         }
                     }
                     val menuGlavnoe = MenuGlavnoe()
-                    ftrans.replace(R.id.conteiner, menuGlavnoe)
-                }
-                R.id.label3 -> {
+                    ftrans.replace(R.id.conteiner, menuGlavnoe, "menuGlavnoe")
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label3 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("bogaslus")
+                if (fragment == null) {
                     val bogaslus = MenuBogashlugbovya()
-                    ftrans.replace(R.id.conteiner, bogaslus)
-                }
-                R.id.label4 -> {
+                    ftrans.replace(R.id.conteiner, bogaslus, "bogaslus")
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label4 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("menuMalitvy")
+                if (fragment == null) {
                     val menuMalitvy = MenuMalitvy()
-                    ftrans.replace(R.id.conteiner, menuMalitvy)
-                }
-                R.id.label5 -> {
+                    ftrans.replace(R.id.conteiner, menuMalitvy, "menuMalitvy")
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label5 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("menuAkafisty")
+                if (fragment == null) {
                     val menuAkafisty = MenuAkafisty()
-                    ftrans.replace(R.id.conteiner, menuAkafisty)
-                }
-                R.id.label6 -> {
+                    ftrans.replace(R.id.conteiner, menuAkafisty, "menuAkafisty)")
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label6 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("ruzanec")
+                if (fragment == null) {
                     val ruzanec = MenuRuzanec()
-                    ftrans.replace(R.id.conteiner, ruzanec)
-                }
-                R.id.label7 -> {
+                    ftrans.replace(R.id.conteiner, ruzanec, "ruzanec")
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label7 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("MenuNatatki")
+                if (fragment == null) {
                     val menuNatatki = MenuNatatki()
                     ftrans.replace(R.id.conteiner, menuNatatki, "MenuNatatki")
+                    prefEditors.putInt("id", idSelect)
                 }
-                R.id.label8 -> {
+            }
+            R.id.label8 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("semuxa")
+                if (fragment == null) {
                     val file = File("$filesDir/BibliaSemuxaNatatki.json")
                     if (file.exists()) {
                         try {
@@ -1087,70 +1122,104 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                             }
                         }
                     }
-                    prefEditors.putInt("id", idSelect)
-                    prefEditors.putBoolean("novyzavet", false)
                     val semuxa = MenuBibleSemuxa()
-                    ftrans.replace(R.id.conteiner, semuxa)
-                }
-                R.id.label13 -> {
+                    ftrans.replace(R.id.conteiner, semuxa, "semuxa")
                     prefEditors.putInt("id", idSelect)
                     prefEditors.putBoolean("novyzavet", false)
+                }
+            }
+            R.id.label13 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("nadsana")
+                if (fragment == null) {
                     val nadsana = MenuPsalterNadsana()
-                    ftrans.replace(R.id.conteiner, nadsana)
-                }
-                R.id.label91 -> {
+                    ftrans.replace(R.id.conteiner, nadsana, "nadsana")
                     prefEditors.putInt("id", idSelect)
+                    prefEditors.putBoolean("novyzavet", false)
+                }
+            }
+            R.id.label91 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("menuPesnyPrasl")
+                if (fragment == null) {
                     val menuPesny = MenuPesny.getInstance("prasl")
-                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesny")
-                }
-                R.id.label92 -> {
+                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesnyPrasl")
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label92 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("menuPesnyBel")
+                if (fragment == null) {
                     val menuPesny = MenuPesny.getInstance("bel")
-                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesny")
-
-                }
-                R.id.label93 -> {
+                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesnyBel")
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label93 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("menuPesnyBag")
+                if (fragment == null) {
                     val menuPesny = MenuPesny.getInstance("bag")
-                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesny")
-                }
-                R.id.label94 -> {
+                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesnyBag")
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label94 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("menuPesnyKal")
+                if (fragment == null) {
                     val menuPesny = MenuPesny.getInstance("kal")
-                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesny")
-
-                }
-                R.id.label95 -> {
+                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesnyKal")
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label95 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("menuPesnyTaize")
+                if (fragment == null) {
                     val menuPesny = MenuPesny.getInstance("taize")
-                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesny")
-                }
-                R.id.label103 -> {
+                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesnyTaize")
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label103 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("MenuCviaty")
+                if (fragment == null) {
                     val menuCviaty = MenuSviaty()
                     ftrans.replace(R.id.conteiner, menuCviaty, "MenuCviaty")
-                }
-                R.id.label104 -> {
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label104 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("MenuPashalii")
+                if (fragment == null) {
                     val menuPashalii = MenuPashalii()
                     ftrans.replace(R.id.conteiner, menuPashalii, "MenuPashalii")
-                }
-                R.id.label105 -> {
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label105 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("parafiiBgkc")
+                if (fragment == null) {
                     val parafiiBgkc = MenuParafiiBgkc()
-                    ftrans.replace(R.id.conteiner, parafiiBgkc)
-                }
-                R.id.label102 -> {
+                    ftrans.replace(R.id.conteiner, parafiiBgkc, "parafiiBgkc")
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label102 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("MenuPamiatka")
+                if (fragment == null) {
                     val menuPamiatka = MenuPamiatka()
                     ftrans.replace(R.id.conteiner, menuPamiatka, "MenuPamiatka")
-                }
-                R.id.label101 -> {
                     prefEditors.putInt("id", idSelect)
+                }
+            }
+            R.id.label101 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("MenuPadryxtoukaDaSpovedzi")
+                if (fragment == null) {
                     val menuPadryxtoukaDaSpovedzi = MenuPadryxtoukaDaSpovedzi()
                     ftrans.replace(R.id.conteiner, menuPadryxtoukaDaSpovedzi, "MenuPadryxtoukaDaSpovedzi")
+                    prefEditors.putInt("id", idSelect)
                 }
-                R.id.label11 -> {
+            }
+            R.id.label11 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("sinoidal")
+                if (fragment == null) {
                     val file = File("$filesDir/BibliaSinodalNatatki.json")
                     if (file.exists()) {
                         try {
@@ -1185,30 +1254,33 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                             }
                         }
                     }
+                    val sinoidal = MenuBibleSinoidal()
+                    ftrans.replace(R.id.conteiner, sinoidal, "sinoidal")
                     prefEditors.putInt("id", idSelect)
                     prefEditors.putBoolean("novyzavet", false)
-                    val sinoidal = MenuBibleSinoidal()
-                    ftrans.replace(R.id.conteiner, sinoidal)
                 }
-                R.id.label12 -> {
-                    prefEditors.putInt("id", idSelect)
+            }
+            R.id.label12 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("MenuVybranoe")
+                if (fragment == null) {
                     val vybranoe = MenuVybranoe()
                     ftrans.replace(R.id.conteiner, vybranoe, "MenuVybranoe")
-                }
-                else -> {
-                    idSelect = idOld
                     prefEditors.putInt("id", idSelect)
                 }
             }
-            if (start) {
-                ftrans.commit()
-            } else {
-                bindingappbar.toolbar.postDelayed({
-                    ftrans.commitAllowingStateLoss()
-                }, 300)
+            else -> {
+                prefEditors.putInt("id", idSelect)
             }
-            prefEditors.apply()
         }
+        if (start) {
+            ftrans.commit()
+        } else {
+            bindingappbar.toolbar.postDelayed({
+                ftrans.commitAllowingStateLoss()
+            }, 300)
+        }
+        prefEditors.apply()
+
         bindingappbar.titleToolbar.text = tolbarTitle
         if (idSelect == R.id.label7 || idSelect == R.id.label12) {
             if (k.getBoolean("help_main_list_view", true)) {
@@ -1218,7 +1290,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 prefEditors.apply()
             }
         }
-        idOld = idSelect
     }
 
     override fun onClick(view: View?) {
@@ -1339,7 +1410,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val STARYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.StaryZapavietSinaidal"
         const val BIBLIAVYBRANOE = "by.carkva_gazeta.resources.BibliaVybranoe"
         var padzeia = ArrayList<Padzeia>()
-        var setDataCalendar = -1
+        private var setDataCalendar = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])[0][25].toInt()
         var checkBrightness = true
         private var sessionId = 0
         var brightness = 15

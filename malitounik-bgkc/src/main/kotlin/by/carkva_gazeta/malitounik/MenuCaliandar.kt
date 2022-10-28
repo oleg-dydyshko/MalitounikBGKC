@@ -69,6 +69,10 @@ class MenuCaliandar : BaseFragment() {
         return binding.root
     }
 
+    fun setPage(page: Int) {
+        binding.pager.setCurrentItem(page, false)
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     fun delitePadzeia(position: Int) {
         activity?.let {

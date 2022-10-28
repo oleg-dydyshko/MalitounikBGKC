@@ -450,6 +450,11 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                 edit = edit.replace("И", "І")
                 edit = edit.replace("Щ", "Ў")
                 edit = edit.replace("Ъ", "'")
+                val preLength = edit.length
+                edit = MainActivity.zamena(edit)
+                if (preLength != edit.length) {
+                    editPosition = edit.length
+                }
                 if (check != 0) {
                     editText?.removeTextChangedListener(this)
                     editText?.setText(edit)

@@ -90,6 +90,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                             val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                             binding.imageViewFull.setImageBitmap(bitmap)
                             binding.imageViewFull.visibility = View.VISIBLE
+                            binding.progressBar2.visibility = View.INVISIBLE
+                            binding.swipeRefreshLayout.visibility = View.GONE
                         }
                     }
                 }
@@ -217,6 +219,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             bmp?.let {
                 binding.imageViewFull.setImageBitmap(Bitmap.createScaledBitmap(it, it.width, it.height, false))
                 binding.imageViewFull.visibility = View.VISIBLE
+                binding.progressBar2.visibility = View.INVISIBLE
+                binding.swipeRefreshLayout.visibility = View.GONE
             }
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
@@ -415,6 +419,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                                         val bitmap = BitmapFactory.decodeFile(file2.absolutePath)
                                                         binding.imageViewFull.setImageBitmap(bitmap)
                                                         binding.imageViewFull.visibility = View.VISIBLE
+                                                        binding.progressBar2.visibility = View.INVISIBLE
+                                                        binding.swipeRefreshLayout.visibility = View.GONE
                                                     }
                                                 }
                                             }
@@ -507,6 +513,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun onBackPressed() {
         if (binding.imageViewFull.visibility == View.VISIBLE) {
             binding.imageViewFull.visibility = View.GONE
+            binding.swipeRefreshLayout.visibility = View.VISIBLE
+            viewSviaryiaIIcon()
         } else {
             super.onBackPressed()
         }

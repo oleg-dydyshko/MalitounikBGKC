@@ -46,18 +46,14 @@ class MyNatatki : DialogFragment() {
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
+        val oldredak = redak
+        if (redak != 3) write()
+        if (oldredak == 1 || oldredak == 2) mListener?.myNatatkiAdd()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        val oldredak = redak
-        if (redak != 3) write()
-        if (oldredak == 1 || oldredak == 2) mListener?.myNatatkiAdd()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -231,11 +227,10 @@ class MyNatatki : DialogFragment() {
     }
 
     private fun md5Sum(st: String): String {
-        val digest: ByteArray
-        val messageDigest: MessageDigest = MessageDigest.getInstance("MD5")
+        val messageDigest = MessageDigest.getInstance("MD5")
         messageDigest.reset()
         messageDigest.update(st.toByteArray())
-        digest = messageDigest.digest()
+        val digest = messageDigest.digest()
         val bigInt = BigInteger(1, digest)
         val md5Hex = StringBuilder(bigInt.toString(16))
         while (md5Hex.length < 32) {

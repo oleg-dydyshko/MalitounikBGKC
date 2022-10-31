@@ -233,27 +233,22 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         }
 
         private fun checkVybranoe(context: Context, resurs: String): Boolean {
-            var check = false
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
+            if (!file.exists()) return false
             try {
                 val gson = Gson()
-                if (file.exists() && MenuVybranoe.vybranoe.isEmpty()) {
+                if (MenuVybranoe.vybranoe.isEmpty()) {
                     val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
-                } else {
-                    return false
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
-                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
-                        check = true
-                        break
-                    }
+                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) return true
                 }
             } catch (t: Throwable) {
                 file.delete()
-                check = false
+                return false
             }
-            return check
+            return false
         }
     }
 

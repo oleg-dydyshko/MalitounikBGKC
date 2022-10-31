@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.ScrollView
 import kotlinx.coroutines.*
@@ -19,13 +20,32 @@ class InteractiveScrollView : ScrollView {
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?) : super(context)
 
+    interface OnInteractiveScrollChangedCallback {
+        fun onScroll(t: Int, oldt: Int)
+    }
+
+    interface OnBottomReachedListener {
+        fun onBottomReached(checkDiff: Boolean)
+        fun onTouch(action: Boolean)
+    }
+
+    fun setOnScrollChangedCallback(onInteractiveScrollChangedCallback: OnInteractiveScrollChangedCallback?) {
+        mOnInteractiveScrollChangedCallback = onInteractiveScrollChangedCallback
+    }
+
+    fun setOnBottomReachedListener(onBottomReachedListener: OnBottomReachedListener?) {
+        mListener = onBottomReachedListener
+    }
+
     override fun computeScrollDeltaToGetChildRectOnScreen(rect: Rect?): Int {
         return 0
     }
 
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
+        super.onScrollChanged(l, t, oldl, oldt)
         val view = getChildAt(childCount - 1)
         val diff = view.bottom - (height + scrollY)
+        Log.d("Oleg", height.toString())
         if (checkDiff && diff != 0) {
             checkDiff = false
             mListener?.onBottomReached(false)
@@ -34,7 +54,6 @@ class InteractiveScrollView : ScrollView {
             checkDiff = true
             mListener?.onBottomReached(true)
         }
-        super.onScrollChanged(l, t, oldl, oldt)
         mOnInteractiveScrollChangedCallback?.onScroll(t, oldt)
     }
 
@@ -69,22 +88,5 @@ class InteractiveScrollView : ScrollView {
                 }
             }
         }
-    }
-
-    fun setOnScrollChangedCallback(onInteractiveScrollChangedCallback: OnInteractiveScrollChangedCallback?) {
-        mOnInteractiveScrollChangedCallback = onInteractiveScrollChangedCallback
-    }
-
-    fun setOnBottomReachedListener(onBottomReachedListener: OnBottomReachedListener?) {
-        mListener = onBottomReachedListener
-    }
-
-    interface OnInteractiveScrollChangedCallback {
-        fun onScroll(t: Int, oldt: Int)
-    }
-
-    interface OnBottomReachedListener {
-        fun onBottomReached(checkDiff: Boolean)
-        fun onTouch(action: Boolean)
     }
 }

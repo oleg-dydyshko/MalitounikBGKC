@@ -481,13 +481,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
         fun checkVybranoe(context: Context, resurs: String): Boolean {
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
+            if (!file.exists()) return false
             try {
-                if (file.exists() && MenuVybranoe.vybranoe.isEmpty()) {
+                if (MenuVybranoe.vybranoe.isEmpty()) {
                     val gson = Gson()
                     val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
-                } else {
-                    return false
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
                     if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) return true
@@ -674,9 +673,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (autoscrollOFF) {
             mAutoScroll = false
         }
-        binding.textView.post {
-            loadData(savedInstanceState)
-        }
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {
@@ -808,6 +804,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
         })
         binding.textView.movementMethod = setLinkMovementMethodCheck()
+        loadData(savedInstanceState)
     }
 
     override fun linkMovementMethodCheckOnTouch(onTouch: Boolean) {
@@ -867,14 +864,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya_error
             var nochenia = false
             val inputStream = resources.openRawResource(id)
-            val gregorian = Calendar.getInstance()
-            val dayOfWeek = gregorian.get(Calendar.DAY_OF_WEEK)
+            val cal = Calendar.getInstance()
+            val dayOfWeek = cal.get(Calendar.DAY_OF_WEEK)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val color = if (dzenNoch) "<font color=\"#f44336\">"
             else "<font color=\"#d00505\">"
             val slugbovyiaTextu = SlugbovyiaTextu()
-            val cal = Calendar.getInstance()
             raznica = zmenyiaChastki.raznica()
             dayOfYear = zmenyiaChastki.dayOfYear()
             checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), dayOfYear, slugbovyiaTextu.isPasxa(dayOfYear.toInt()))
@@ -1370,8 +1366,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
         binding.textView.text = text
         positionY = k.getInt(resurs + "Scroll", 0)
-        if (savedInstanceState != null) {
-            binding.textView.post {
+        binding.scrollView2.post {
+            if (savedInstanceState != null) {
                 val textline = savedInstanceState.getString("textLine", "")
                 if (textline != "") {
                     val index = binding.textView.text.indexOf(textline)
@@ -1391,10 +1387,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 } else if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
                     autoStartScroll()
                 }
-            }
-        } else {
-            if (resurs.contains("viachernia_ton")) {
-                binding.textView.post {
+            } else {
+                if (resurs.contains("viachernia_ton")) {
                     val cal = Calendar.getInstance()
                     val dzenNedeliname = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.dni_nedeli)
                     val textline = dzenNedeliname[cal[Calendar.DAY_OF_WEEK]]
@@ -1409,19 +1403,15 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     } else if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
                         autoStartScroll()
                     }
-                }
-            } else {
-                binding.scrollView2.post {
-                    binding.scrollView2.scrollBy(0, positionY)
-                    if (((k.getBoolean("autoscrollAutostart", false) && mAutoScroll) || autoscroll) && !diffScroll) {
-                        autoStartScroll()
-                    }
-                }
-                binding.textView.post {
+                } else {
                     if (binding.textView.bottom <= binding.scrollView2.height) {
                         stopAutoStartScroll()
                         mAutoScroll = false
                         invalidateOptionsMenu()
+                    }
+                    binding.scrollView2.scrollBy(0, positionY)
+                    if (((k.getBoolean("autoscrollAutostart", false) && mAutoScroll) || autoscroll) && !diffScroll) {
+                        autoStartScroll()
                     }
                 }
             }
@@ -1439,8 +1429,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 edit = edit.replace("щ", "ў")
                 edit = edit.replace("ъ", "'")
                 edit = edit.replace("И", "І")
-                edit = edit.replace("Щ", "Ў")
-                edit = edit.replace("Ъ", "'")
                 if (editch) {
                     if (check != 0) {
                         binding.textSearch.removeTextChangedListener(this)

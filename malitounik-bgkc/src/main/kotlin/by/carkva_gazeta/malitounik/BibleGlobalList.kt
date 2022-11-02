@@ -1,16 +1,16 @@
 package by.carkva_gazeta.malitounik
 
-class BibleGlobalList {
+ abstract class BibleGlobalList {
     companion object {
         var listPosition = 0
         var mListGlava = 0
         var mPedakVisable = false
-        var bibleCopyList = ArrayList<Int>()
-        var vydelenie = ArrayList<ArrayList<Int>>()
-        var zakladkiSemuxa = ArrayList<BibleZakladkiData>()
-        var zakladkiSinodal = ArrayList<BibleZakladkiData>()
-        var natatkiSemuxa = ArrayList<BibleNatatkiData>()
-        var natatkiSinodal = ArrayList<BibleNatatkiData>()
+        val bibleCopyList = ArrayList<Int>()
+        val vydelenie = ArrayList<ArrayList<Int>>()
+        val zakladkiSemuxa = ArrayList<BibleZakladkiData>()
+        val zakladkiSinodal = ArrayList<BibleZakladkiData>()
+        val natatkiSemuxa = ArrayList<BibleNatatkiData>()
+        val natatkiSinodal = ArrayList<BibleNatatkiData>()
 
         fun checkPosition(glava: Int = mListGlava, position: Int = bibleCopyList[0]): Int {
             for (i in vydelenie.indices) {

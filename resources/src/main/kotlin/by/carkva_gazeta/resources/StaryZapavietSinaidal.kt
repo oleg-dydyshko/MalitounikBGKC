@@ -386,11 +386,12 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
         binding.pager.setCurrentItem(glava, false)
         val file = File("$filesDir/BibliaSinodalStaryZavet/$kniga.json")
         if (file.exists()) {
+            BibleGlobalList.vydelenie.clear()
             val inputStream = FileReader(file)
             val reader = BufferedReader(inputStream)
             val gson = Gson()
             val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, Integer::class.java).type).type
-            BibleGlobalList.vydelenie = gson.fromJson(reader.readText(), type)
+            BibleGlobalList.vydelenie.addAll(gson.fromJson(reader.readText(), type))
             inputStream.close()
         }
         binding.actionFullscreen.setOnClickListener {

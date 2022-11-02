@@ -1089,11 +1089,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 val fragment = supportFragmentManager.findFragmentByTag("semuxa")
                 if (fragment == null) {
                     val file = File("$filesDir/BibliaSemuxaNatatki.json")
-                    if (file.exists()) {
+                    if (file.exists() && BibleGlobalList.natatkiSemuxa.size == 0) {
                         try {
                             val gson = Gson()
                             val type = TypeToken.getParameterized(ArrayList::class.java, BibleNatatkiData::class.java).type
-                            BibleGlobalList.natatkiSemuxa = gson.fromJson(file.readText(), type)
+                            BibleGlobalList.natatkiSemuxa.addAll(gson.fromJson(file.readText(), type))
                         } catch (t: Throwable) {
                             try {
                                 val gson = Gson()
@@ -1106,11 +1106,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         }
                     }
                     val file2 = File("$filesDir/BibliaSemuxaZakladki.json")
-                    if (file2.exists()) {
+                    if (file2.exists() && BibleGlobalList.zakladkiSemuxa.size == 0) {
                         try {
                             val gson = Gson()
                             val type = TypeToken.getParameterized(ArrayList::class.java, BibleZakladkiData::class.java).type
-                            BibleGlobalList.zakladkiSemuxa = gson.fromJson(file2.readText(), type)
+                            BibleGlobalList.zakladkiSemuxa.addAll(gson.fromJson(file2.readText(), type))
                         } catch (t: Throwable) {
                             try {
                                 val gson = Gson()
@@ -1221,11 +1221,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 val fragment = supportFragmentManager.findFragmentByTag("sinoidal")
                 if (fragment == null) {
                     val file = File("$filesDir/BibliaSinodalNatatki.json")
-                    if (file.exists()) {
+                    if (file.exists() && BibleGlobalList.natatkiSinodal.size == 0) {
                         try {
                             val gson = Gson()
                             val type = TypeToken.getParameterized(ArrayList::class.java, BibleNatatkiData::class.java).type
-                            BibleGlobalList.natatkiSinodal = gson.fromJson(file.readText(), type)
+                            BibleGlobalList.natatkiSinodal.addAll(gson.fromJson(file.readText(), type))
                         } catch (t: Throwable) {
                             try {
                                 val gson = Gson()
@@ -1238,11 +1238,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         }
                     }
                     val file2 = File("$filesDir/BibliaSinodalZakladki.json")
-                    if (file2.exists()) {
+                    if (file2.exists() && BibleGlobalList.zakladkiSinodal.size == 0) {
                         try {
                             val gson = Gson()
                             val type = TypeToken.getParameterized(ArrayList::class.java, BibleZakladkiData::class.java).type
-                            BibleGlobalList.zakladkiSinodal = gson.fromJson(file2.readText(), type)
+                            BibleGlobalList.zakladkiSinodal.addAll(gson.fromJson(file2.readText(), type))
                         } catch (t: Throwable) {
                             try {
                                 val gson = Gson()

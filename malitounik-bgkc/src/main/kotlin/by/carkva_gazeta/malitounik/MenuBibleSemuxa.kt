@@ -78,7 +78,7 @@ class MenuBibleSemuxa : BaseFragment() {
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
                     val gson = Gson()
-                    val type = TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(Int::class.java).type).type
+                    val type = TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(Integer::class.java).type).type
                     val set = gson.fromJson<ArrayMap<String, Int>>(bibleTime, type)
                     if (set["zavet"] == 1) {
                         if (MainActivity.checkmoduleResources()) {

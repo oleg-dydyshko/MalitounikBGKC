@@ -187,6 +187,8 @@ class Sviatyia : BaseActivity(), DialogImageFileLoad.DialogFileExplorerListener,
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
         override fun getItemCount() = 366
 
+        override fun getItemId(position: Int) = position.hashCode().toLong()
+
         override fun createFragment(position: Int) = SvityiaFragment.newInstance(position + 1)
     }
 

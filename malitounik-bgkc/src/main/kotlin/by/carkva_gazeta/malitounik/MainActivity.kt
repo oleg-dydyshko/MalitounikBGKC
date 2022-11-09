@@ -148,11 +148,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         menuNatatki?.onDialogDeliteClick(position, name)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt("id", idSelect)
-    }
-
     override fun onResume() {
         super.onResume()
         if (checkBrightness) {
@@ -201,9 +196,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         bindingappbar = binding.appBarMain
         bindingcontent = binding.appBarMain.contentMain
         setContentView(binding.root)
-        if (savedInstanceState != null) {
-            idSelect = savedInstanceState.getInt("id")
-        }
         // Удаление кеша интернета
         val fileSite = File("$filesDir/Site")
         if (fileSite.exists()) fileSite.deleteRecursively()
@@ -1612,7 +1604,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             cytanne = cytanne.replace("Строгі пост", "")
             cytanne = cytanne.replace("Вялікі", "")
             cytanne = cytanne.replace("канон", "")
-            cytanne = cytanne.replace("сьв.", "")
             cytanne = cytanne.replace("Чын", "")
             cytanne = cytanne.replace("паднясеньня", "")
             cytanne = cytanne.replace("Пачэснага", "")
@@ -1635,7 +1626,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             cytanne = cytanne.replace("На ютрані", "")
             cytanne = cytanne.replace("Посту няма", "")
             cytanne = cytanne.replace("Пам.", "")
-            cytanne = cytanne.replace("Сьв.", "")
+            cytanne = cytanne.replace("Перадсьв.", "")
+            cytanne = cytanne.replace("Сьв.", "", true)
             cytanne = cytanne.replace("Вялеб.", "")
             cytanne = cytanne.replace("Пакл.", "")
             cytanne = cytanne.replace("Багар.", "")

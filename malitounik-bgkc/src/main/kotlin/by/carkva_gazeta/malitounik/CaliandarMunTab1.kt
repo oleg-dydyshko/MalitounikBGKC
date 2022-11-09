@@ -156,6 +156,8 @@ class CaliandarMunTab1 : BaseFragment() {
     private class MyPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
         override fun getItemCount() = (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
 
+        override fun getItemId(position: Int) = MenuCaliandar.getPositionCaliandarMun(position).hashCode().toLong()
+
         override fun createFragment(position: Int): Fragment {
             val caliandarMun = MenuCaliandar.getPositionCaliandarMun(position)
             return PageFragmentMonth.newInstance(caliandarMun[1].toInt(), caliandarMun[2].toInt(), caliandarMun[3].toInt())

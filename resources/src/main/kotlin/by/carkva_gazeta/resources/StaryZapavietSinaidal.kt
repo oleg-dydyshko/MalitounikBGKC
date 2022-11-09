@@ -627,8 +627,11 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
 
         override fun getItemCount() = fullglav
 
+        override fun getItemId(position: Int) = position.hashCode().toLong()
+
         override fun createFragment(position: Int): StaryZapavietSinaidalFragment {
-            val styx = if (glava != position) 0 else fierstPosition
+            val styx = if (glava != position) 0
+            else fierstPosition
             return StaryZapavietSinaidalFragment.newInstance(title, position, kniga, styx)
         }
     }

@@ -12,7 +12,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -269,35 +268,14 @@ class NovyZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelLi
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
-        override fun getItemCount(): Int {
-            var fullglav = 1
-            when (kniga) {
-                0, 4 -> fullglav = 28
-                1, 13, 12 -> fullglav = 16
-                2 -> fullglav = 24
-                3 -> fullglav = 21
-                5, 19, 8, 6 -> fullglav = 5
-                7, 23, 20 -> fullglav = 3
-                9, 24, 11, 10 -> {
-                }
-                14, 25 -> fullglav = 13
-                15, 21, 16 -> fullglav = 6
-                17, 22, 18 -> fullglav = 4
-                26 -> fullglav = 22
-            }
-            return fullglav
-        }
+        override fun getItemCount() = fullglav
 
-        override fun createFragment(position: Int): Fragment {
-            for (i in 0 until itemCount) {
-                if (position == i) {
-                    val pazicia: Int = if (trak) {
-                        if (glava != i) 0 else fierstPosition
-                    } else 0
-                    return NovyZapavietSemuxaFragment.newInstance(i, kniga, pazicia)
-                }
-            }
-            return NovyZapavietSemuxaFragment.newInstance(0, kniga, 1)
+        override fun getItemId(position: Int) = position.hashCode().toLong()
+
+        override fun createFragment(position: Int): NovyZapavietSemuxaFragment {
+            val styx = if (glava != position) 0
+            else fierstPosition
+            return NovyZapavietSemuxaFragment.newInstance(position, kniga, styx)
         }
     }
 

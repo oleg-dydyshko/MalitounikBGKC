@@ -365,8 +365,11 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
 
         override fun getItemCount() = 151
 
+        override fun getItemId(position: Int) = position.hashCode().toLong()
+
         override fun createFragment(position: Int): NadsanContentPage {
-            val styx = if (glava != position) 0 else fierstPosition
+            val styx = if (glava != position) 0
+            else fierstPosition
             return NadsanContentPage.newInstance(position, styx)
         }
     }

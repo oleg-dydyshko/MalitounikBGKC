@@ -12,7 +12,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -317,61 +316,14 @@ class StaryZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelL
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
-        override fun getItemCount(): Int {
-            var fullglav = 1
-            when (kniga) {
-                0 -> fullglav = 50
-                1 -> fullglav = 40
-                2 -> fullglav = 27
-                3, 13 -> fullglav = 36
-                4 -> fullglav = 34
-                5, 9 -> fullglav = 24
-                6 -> fullglav = 21
-                7 -> fullglav = 4
-                8 -> fullglav = 31
-                10 -> fullglav = 22
-                11 -> fullglav = 25
-                12 -> fullglav = 29
-                14 -> fullglav = 10
-                15 -> fullglav = 13
-                16 -> fullglav = 10
-                17 -> fullglav = 42
-                18 -> fullglav = 151
-                19 -> fullglav = 31
-                20 -> fullglav = 12
-                21 -> fullglav = 8
-                22 -> fullglav = 66
-                23 -> fullglav = 52
-                24 -> fullglav = 5
-                25 -> fullglav = 48
-                26 -> fullglav = 12
-                27 -> fullglav = 14
-                28 -> fullglav = 3
-                29 -> fullglav = 9
-                30 -> {
-                }
-                31 -> fullglav = 4
-                32 -> fullglav = 7
-                33 -> fullglav = 3
-                34 -> fullglav = 3
-                35 -> fullglav = 3
-                36 -> fullglav = 2
-                37 -> fullglav = 14
-                38 -> fullglav = 4
-            }
-            return fullglav
-        }
+        override fun getItemCount() = fullglav
 
-        override fun createFragment(position: Int): Fragment {
-            for (i in 0 until itemCount) {
-                if (position == i) {
-                    val pazicia: Int = if (trak) {
-                        if (glava != i) 0 else fierstPosition
-                    } else 0
-                    return StaryZapavietSemuxaFragment.newInstance(i, kniga, pazicia)
-                }
-            }
-            return StaryZapavietSemuxaFragment.newInstance(0, kniga, 1)
+        override fun getItemId(position: Int) = position.hashCode().toLong()
+
+        override fun createFragment(position: Int): StaryZapavietSemuxaFragment {
+            val styx = if (glava != position) 0
+            else fierstPosition
+            return StaryZapavietSemuxaFragment.newInstance(position, kniga, styx)
         }
     }
 

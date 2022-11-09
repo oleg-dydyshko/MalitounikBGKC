@@ -95,6 +95,8 @@ class CaliandarMunTab2 : BaseFragment() {
             return count
         }
 
+        override fun getItemId(position: Int) = MenuCaliandar.getPositionCaliandar(position).hashCode().toLong()
+
         override fun createFragment(position: Int): Fragment {
             val arrayList = MenuCaliandar.getFirstPositionNiadzel(position)
             return CaliandarNedzel.newInstance(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt())

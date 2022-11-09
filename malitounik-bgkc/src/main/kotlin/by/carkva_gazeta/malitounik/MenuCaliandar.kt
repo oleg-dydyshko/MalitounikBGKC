@@ -142,6 +142,7 @@ class MenuCaliandar : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = MyCalendarAdapter(this)
+        adapter.saveState()
         binding.pager.offscreenPageLimit = 3
         binding.pager.adapter = adapter
         binding.pager.setCurrentItem(page, false)
@@ -219,6 +220,8 @@ class MenuCaliandar : BaseFragment() {
             val fragment = fragment.childFragmentManager.findFragmentByTag("f" + holder.itemId) as? CaliandarFull
             fragment?.sabytieView("") ?: super.onBindViewHolder(holder, position, payloads)
         }
+
+        override fun getItemId(position: Int) = getPositionCaliandar(position).hashCode().toLong()
 
         override fun getItemCount() = getDataCalaindar().size
 

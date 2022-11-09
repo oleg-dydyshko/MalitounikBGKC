@@ -592,8 +592,11 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
 
         override fun getItemCount() = fullglav
 
+        override fun getItemId(position: Int) = position.hashCode().toLong()
+
         override fun createFragment(position: Int): StaryZapavietSemuxaFragment {
-            val styx = if (glava != position) 0 else fierstPosition
+            val styx = if (glava != position) 0
+            else fierstPosition
             return StaryZapavietSemuxaFragment.newInstance(title, position, kniga, styx)
         }
     }

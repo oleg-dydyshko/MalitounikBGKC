@@ -383,13 +383,12 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
         override fun onBindViewHolder(holder: FragmentViewHolder, position: Int, payloads: MutableList<Any>) {
+            super.onBindViewHolder(holder, position, payloads)
             val fragment = supportFragmentManager.findFragmentByTag("f" + holder.itemId) as? PasliaPrychasciaFragment
-            fragment?.upDateTextView() ?: super.onBindViewHolder(holder, position, payloads)
+            fragment?.upDateTextView()
         }
 
         override fun getItemCount() = malitvy.size
-
-        override fun getItemId(position: Int) = malitvy[position].hashCode().toLong()
 
         override fun createFragment(position: Int) = PasliaPrychasciaFragment.newInstance(Bogashlugbovya.resursMap[malitvy[position].resurs] ?: R.raw.bogashlugbovya_error)
     }

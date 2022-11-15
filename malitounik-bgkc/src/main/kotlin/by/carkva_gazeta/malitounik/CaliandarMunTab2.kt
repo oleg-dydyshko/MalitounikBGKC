@@ -4,7 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.databinding.CalendarTab2Binding
@@ -55,7 +56,7 @@ class CaliandarMunTab2 : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
             binding.pagerNedel.offscreenPageLimit = 3
-            adapterViewPagerNedel = MyCalendarNedelAdapter(this)
+            adapterViewPagerNedel = MyCalendarNedelAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
             binding.pagerNedel.adapter = adapterViewPagerNedel
             binding.pagerNedel.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -87,7 +88,8 @@ class CaliandarMunTab2 : BaseFragment() {
         return false
     }
 
-    private class MyCalendarNedelAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+    private class MyCalendarNedelAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
+
         override fun getItemCount(): Int {
             var count = MenuCaliandar.getDataCalaindar().size / 7
             if (MenuCaliandar.getDataCalaindar()[0][0].toInt() != Calendar.SUNDAY) count++
@@ -95,9 +97,7 @@ class CaliandarMunTab2 : BaseFragment() {
             return count
         }
 
-        override fun getItemId(position: Int) = MenuCaliandar.getPositionCaliandar(position).hashCode().toLong()
-
-        override fun createFragment(position: Int): Fragment {
+        override fun createFragment(position: Int): CaliandarNedzel {
             val arrayList = MenuCaliandar.getFirstPositionNiadzel(position)
             return CaliandarNedzel.newInstance(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt())
         }

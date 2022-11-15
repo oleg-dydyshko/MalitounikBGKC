@@ -270,8 +270,6 @@ class NovyZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelLi
 
         override fun getItemCount() = fullglav
 
-        override fun getItemId(position: Int) = position.hashCode().toLong()
-
         override fun createFragment(position: Int): NovyZapavietSemuxaFragment {
             val styx = if (glava != position) 0
             else fierstPosition

@@ -586,13 +586,12 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
         override fun onBindViewHolder(holder: FragmentViewHolder, position: Int, payloads: MutableList<Any>) {
+            super.onBindViewHolder(holder, position, payloads)
             val fragment = supportFragmentManager.findFragmentByTag("f" + holder.itemId) as? StaryZapavietSemuxaFragment
-            fragment?.upDateListView() ?: super.onBindViewHolder(holder, position, payloads)
+            fragment?.upDateListView()
         }
 
         override fun getItemCount() = fullglav
-
-        override fun getItemId(position: Int) = position.hashCode().toLong()
 
         override fun createFragment(position: Int): StaryZapavietSemuxaFragment {
             val styx = if (glava != position) 0

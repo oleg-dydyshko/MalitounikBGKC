@@ -1,10 +1,12 @@
 package by.carkva_gazeta.resources
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.*
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +18,7 @@ import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibleBinding
 
 internal class BibleArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val Zapavet: Boolean, private val mPerevod: Int) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) { // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана
+    private val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     private val dzenNoch get() = (context as BaseActivity).getBaseDzenNoch()
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup): View {
@@ -30,6 +33,8 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             rootView = convertView
             ea = rootView.tag as BibleArrayAdapterParallelItems
         }
+        val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+        ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
         val parallel = BibliaParallelChtenia()
         var res = "+-+"
         if (Zapavet) {
@@ -490,7 +495,8 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                         12 -> ContextCompat.getDrawable(context, R.drawable.bookmark12)
                         else -> null
                     }
-                    val realpadding = (SettingsActivity.GET_FONT_SIZE_DEFAULT * context.resources.displayMetrics.density).toInt()
+                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                    val realpadding = (fontSize * context.resources.displayMetrics.density).toInt()
                     d?.setBounds(0, 0, realpadding, realpadding)
                     d?.let {
                         val span = ImageSpan(it, DynamicDrawableSpan.ALIGN_BASELINE)
@@ -630,7 +636,8 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                         12 -> ContextCompat.getDrawable(context, R.drawable.bookmark12)
                         else -> null
                     }
-                    val realpadding = (SettingsActivity.GET_FONT_SIZE_DEFAULT * context.resources.displayMetrics.density).toInt()
+                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                    val realpadding = (fontSize * context.resources.displayMetrics.density).toInt()
                     d?.setBounds(0, 0, realpadding, realpadding)
                     d?.let {
                         val span = ImageSpan(it, DynamicDrawableSpan.ALIGN_BASELINE)

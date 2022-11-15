@@ -621,13 +621,12 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
         override fun onBindViewHolder(holder: FragmentViewHolder, position: Int, payloads: MutableList<Any>) {
+            super.onBindViewHolder(holder, position, payloads)
             val fragment = supportFragmentManager.findFragmentByTag("f" + holder.itemId) as? StaryZapavietSinaidalFragment
-            fragment?.upDateListView() ?: super.onBindViewHolder(holder, position, payloads)
+            fragment?.upDateListView()
         }
 
         override fun getItemCount() = fullglav
-
-        override fun getItemId(position: Int) = position.hashCode().toLong()
 
         override fun createFragment(position: Int): StaryZapavietSinaidalFragment {
             val styx = if (glava != position) 0

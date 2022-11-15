@@ -8,7 +8,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.databinding.CalendarTab1Binding
@@ -108,7 +109,7 @@ class CaliandarMunTab1 : BaseFragment() {
                 showDialog(yearG)
             }
             binding.pager.offscreenPageLimit = 3
-            val adapterViewPager = MyPagerAdapter(this)
+            val adapterViewPager = MyPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
             binding.pager.adapter = adapterViewPager
 
             val son = (yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + posMun
@@ -153,12 +154,11 @@ class CaliandarMunTab1 : BaseFragment() {
         return false
     }
 
-    private class MyPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+    private class MyPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
+
         override fun getItemCount() = (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
 
-        override fun getItemId(position: Int) = MenuCaliandar.getPositionCaliandarMun(position).hashCode().toLong()
-
-        override fun createFragment(position: Int): Fragment {
+        override fun createFragment(position: Int): PageFragmentMonth {
             val caliandarMun = MenuCaliandar.getPositionCaliandarMun(position)
             return PageFragmentMonth.newInstance(caliandarMun[1].toInt(), caliandarMun[2].toInt(), caliandarMun[3].toInt())
         }

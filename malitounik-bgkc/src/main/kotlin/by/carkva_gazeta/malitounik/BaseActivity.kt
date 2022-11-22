@@ -10,7 +10,9 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.WindowManager
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import kotlinx.coroutines.*
@@ -31,8 +33,10 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
     }
 
-    override fun onBackPressed() {
-        onBackPressedDispatcher.onBackPressed()
+    override fun onMenuItemSelected(item: MenuItem) = false
+
+    open fun onBack() {
+        finish()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -44,6 +48,11 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addMenuProvider(this)
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                onBack()
+            }
+        })
         startTimeDelay = 0
         startTimeJob3?.cancel()
         startTimeJob3 = CoroutineScope(Dispatchers.IO).launch {

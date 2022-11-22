@@ -122,7 +122,7 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            super.onBackPressed()
+            onBack()
             return true
         }
         if (id == R.id.action_font) {

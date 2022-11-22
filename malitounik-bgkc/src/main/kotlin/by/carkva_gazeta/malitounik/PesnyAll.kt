@@ -374,7 +374,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             show()
         }
         binding.actionBack.setOnClickListener {
-            onBackPressed()
+            onBack()
         }
         setTollbarTheme()
     }
@@ -493,7 +493,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         val prefEditor = k.edit()
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            onBack()
             return true
         }
         if (id == R.id.action_dzen_noch) {
@@ -558,13 +558,11 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         return false
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         if (intent.extras?.getBoolean("chekVybranoe", false) == true && men != checkVybranoe) {
             setResult(200)
-            finish()
-        } else {
-            super.onBackPressed()
         }
+        super.onBack()
     }
 
     private fun hide() {

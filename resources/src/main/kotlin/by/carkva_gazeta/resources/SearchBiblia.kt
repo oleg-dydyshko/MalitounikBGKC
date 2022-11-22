@@ -526,6 +526,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         if (savedInstanceState != null) {
             val listView = savedInstanceState.getBoolean("list_view")
             if (listView) binding.ListView.visibility = View.VISIBLE
+            val noResultView = savedInstanceState.getBoolean("no_result_view")
+            if (noResultView) binding.noVynik.visibility = View.VISIBLE
             fierstPosition = savedInstanceState.getInt("fierstPosition")
         } else {
             fierstPosition = chin.getInt("search_bible_fierstPosition", 0)
@@ -650,12 +652,12 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.search_biblia, menu)
         val searchViewItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.search)
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 return true
             }
 
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                finish()
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                onBack()
                 return false
             }
         })
@@ -693,7 +695,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            super.onBackPressed()
+            onBack()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_search_bible) {
@@ -770,6 +772,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("list_view", binding.ListView.visibility == View.VISIBLE)
+        outState.putBoolean("no_result_view", binding.noVynik.visibility == View.VISIBLE)
         outState.putInt("fierstPosition", fierstPosition)
         prefEditors.putString("search_string", autoCompleteTextView?.text.toString())
         prefEditors.apply()
@@ -801,6 +804,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         binding.progressBar.visibility = View.VISIBLE
         binding.History.visibility = View.GONE
         binding.ListView.visibility = View.GONE
+        binding.noVynik.visibility = View.GONE
         val edit = autoCompleteTextView?.text.toString()
         if (edit != "") {
             prefEditors.putString("search_string", edit)
@@ -848,6 +852,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         if (search != "" && result.size != 0) {
             binding.ListView.visibility = View.VISIBLE
             addHistory(search)
+        } else {
+            binding.noVynik.visibility = View.VISIBLE
         }
     }
 

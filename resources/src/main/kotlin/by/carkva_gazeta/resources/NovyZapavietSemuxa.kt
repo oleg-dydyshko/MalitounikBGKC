@@ -306,7 +306,7 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
             show()
         }
         binding.actionBack.setOnClickListener {
-            onBackPressed()
+            onBack()
         }
         binding.titleToolbar.text = savedInstanceState?.getString("title") ?: getString(by.carkva_gazeta.malitounik.R.string.novy_zapaviet)
     }
@@ -368,7 +368,7 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
         outState.putString("title", binding.titleToolbar.text.toString())
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         when {
             paralel -> {
                 binding.scroll.visibility = View.GONE
@@ -384,7 +384,7 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
                 val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as NovyZapavietSemuxaFragment
                 fragment.onBackPressedFragment()
             }
-            else -> super.onBackPressed()
+            else -> super.onBack()
         }
     }
 
@@ -435,10 +435,6 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
             }
             prefEditor.apply()
             recreate()
-            return true
-        }
-        if (id == android.R.id.home) {
-            onBackPressed()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_glava) {

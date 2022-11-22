@@ -11,8 +11,8 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 44187
-        versionName "4.1.2.0"
+        versionCode 44188
+        versionName "4.1.2.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -56,12 +56,12 @@ android {
 
 dependencies {
     //implementation fileTree(dir: "libs", include: ["*.jar"])
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    api 'androidx.core:core-ktx:1.9.0'
-    api 'androidx.appcompat:appcompat:1.6.0-rc01'
-    api 'androidx.constraintlayout:constraintlayout:2.1.4'
+    //api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    //api 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.material:material:1.7.0'
+    api 'androidx.appcompat:appcompat:1.7.0-alpha01'
     api 'androidx.gridlayout:gridlayout:1.0.0'
-    api 'com.google.android.material:material:1.7.0'
     api 'com.google.android.play:core-ktx:1.8.1'
     api 'com.google.code.gson:gson:2.10'
     api 'androidx.webkit:webkit:1.5.0'

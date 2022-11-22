@@ -287,7 +287,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelL
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            super.onBackPressed()
+            onBack()
             return true
         }
         if (id == R.id.action_glava) {

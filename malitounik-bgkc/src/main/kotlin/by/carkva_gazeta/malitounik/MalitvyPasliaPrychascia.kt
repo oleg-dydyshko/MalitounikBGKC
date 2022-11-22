@@ -73,10 +73,6 @@ class MalitvyPasliaPrychascia : BaseActivity() {
         }
     }
 
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return false
-    }
-
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
         val tv = TypedValue()
         if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {

@@ -231,15 +231,15 @@ class MineiaMesiachnaia : BaseActivity() {
         binding.elvMain.expandGroup(month ?: 0)
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
+    override fun onBack() {
+        super.onBack()
         month = null
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            onBack()
             return true
         }
         return false

@@ -292,7 +292,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         setTollbarTheme()
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         onSupportNavigateUp()
     }
 

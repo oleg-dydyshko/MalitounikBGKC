@@ -47,7 +47,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
     private var editFull = false
     private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (it) {
-            when(k.getInt("notification", 2)) {
+            when (k.getInt("notification", 2)) {
                 1 -> setNotificationOnly()
                 2 -> setNotificationFull()
                 0 -> setNotificationNon()
@@ -668,24 +668,18 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            onBackPressed()
+            onBack()
             return true
         }
         return false
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         when {
-            editFull -> {
-                setResult(300)
-                finish()
-            }
-            edit -> {
-                setResult(200)
-                finish()
-            }
-            else -> super.onBackPressed()
+            editFull -> setResult(300)
+            edit -> setResult(200)
         }
+        super.onBack()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -4,8 +4,8 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion '31.0.0'
+    compileSdkVersion 33
+    buildToolsVersion '33.0.0'
 
     defaultConfig {
         minSdkVersion 19
@@ -35,6 +35,12 @@ android {
 dependencies {
     //implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(":malitounik-bgkc")
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
     implementation files('libs/fb2parser.jar')
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 }

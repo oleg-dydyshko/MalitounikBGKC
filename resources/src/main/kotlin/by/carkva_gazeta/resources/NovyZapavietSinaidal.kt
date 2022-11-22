@@ -305,7 +305,7 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
             show()
         }
         binding.actionBack.setOnClickListener {
-            onBackPressed()
+            onBack()
         }
         binding.titleToolbar.text = savedInstanceState?.getString("title") ?: getString(by.carkva_gazeta.malitounik.R.string.novsinaidal)
     }
@@ -367,7 +367,7 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
         outState.putString("title", binding.titleToolbar.text.toString())
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         when {
             paralel -> {
                 binding.scroll.visibility = View.GONE
@@ -383,7 +383,7 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
                 val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as NovyZapavietSinaidalFragment
                 fragment.onBackPressedFragment()
             }
-            else -> super.onBackPressed()
+            else -> super.onBack()
         }
     }
 
@@ -436,7 +436,7 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
             return true
         }
         if (id == android.R.id.home) {
-            onBackPressed()
+            onBack()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_glava) {

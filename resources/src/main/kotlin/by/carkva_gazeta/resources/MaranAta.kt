@@ -224,7 +224,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             show()
         }
         binding.actionBack.setOnClickListener {
-            onBackPressed()
+            onBack()
         }
         binding.constraint.setOnTouchListener(this)
         if (dzenNoch) {
@@ -1024,7 +1024,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         when {
             paralel -> {
                 binding.scroll.visibility = View.GONE
@@ -1043,7 +1043,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 }
                 invalidateOptionsMenu()
             }
-            else -> super.onBackPressed()
+            else -> super.onBack()
         }
     }
 
@@ -1150,7 +1150,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         val id = item.itemId
         val prefEditor = k.edit()
         if (id == android.R.id.home) {
-            onBackPressed()
+            onBack()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_semuxa) {

@@ -510,13 +510,13 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         if (binding.imageViewFull.visibility == View.VISIBLE) {
             binding.imageViewFull.visibility = View.GONE
             binding.swipeRefreshLayout.visibility = View.VISIBLE
             viewSviaryiaIIcon()
         } else {
-            super.onBackPressed()
+            super.onBack()
         }
     }
 
@@ -547,7 +547,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            onBack()
             return true
         }
         if (id == R.id.action_download_all) {

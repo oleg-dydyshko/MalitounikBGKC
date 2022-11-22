@@ -33,7 +33,7 @@ class Aktoix : BaseActivity() {
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            super.onBackPressed()
+            onBack()
             return true
         }
         return false

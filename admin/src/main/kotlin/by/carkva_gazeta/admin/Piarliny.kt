@@ -85,7 +85,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
         urlJob?.cancel()
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         if (binding.addPiarliny.visibility == View.VISIBLE) {
             binding.listView.visibility = View.VISIBLE
             binding.addPiarliny.visibility = View.GONE
@@ -93,7 +93,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny)
             invalidateOptionsMenu()
         } else {
-            super.onBackPressed()
+            super.onBack()
         }
     }
 
@@ -260,7 +260,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            onBack()
             return true
         }
         if (id == R.id.action_save) {

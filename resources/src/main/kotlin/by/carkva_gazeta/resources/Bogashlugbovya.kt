@@ -580,18 +580,18 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val y = binding.textView.layout.getLineTop(line)
             val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
             anim.addListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator?) {
+                override fun onAnimationStart(animation: Animator) {
                     animatopRun = true
                 }
 
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     animatopRun = false
                 }
 
-                override fun onAnimationCancel(animation: Animator?) {
+                override fun onAnimationCancel(animation: Animator) {
                 }
 
-                override fun onAnimationRepeat(animation: Animator?) {
+                override fun onAnimationRepeat(animation: Animator) {
                 }
             })
             anim.setDuration(1000).start()
@@ -789,7 +789,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             show()
         }
         binding.actionBack.setOnClickListener {
-            onBackPressed()
+            onBack()
         }
         binding.scrollView2.setOnBottomReachedListener(object : InteractiveScrollView.OnBottomReachedListener {
             override fun onBottomReached(checkDiff: Boolean) {
@@ -1718,7 +1718,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         val prefEditor = k.edit()
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            onBack()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_zmena) {
@@ -1832,7 +1832,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         return false
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         when {
             binding.find.visibility == View.VISIBLE -> {
                 binding.find.visibility = View.GONE
@@ -1843,10 +1843,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
             intent.extras?.getBoolean("chekVybranoe", false) == true && men != checkVybranoe -> {
                 setResult(200)
-                finish()
+                super.onBack()
             }
             else -> {
-                super.onBackPressed()
+                super.onBack()
             }
         }
     }

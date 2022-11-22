@@ -174,7 +174,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             show()
         }
         binding.actionBack.setOnClickListener {
-            super.onBackPressed()
+            onBack()
         }
     }
 
@@ -228,7 +228,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         val prefEditor = k.edit()
         val id = item.itemId
         if (id == android.R.id.home) {
-            super.onBackPressed()
+            onBack()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {

@@ -10,6 +10,7 @@ import android.content.SharedPreferences.Editor
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -36,7 +37,8 @@ class DialogSabytieSettings : DialogFragment(), View.OnClickListener {
 
     private val ringtoneManagerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            uri = result.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+            uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) result.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri::class.java)
+            else @Suppress("DEPRECATION") result.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
             activity?.let {
                 ringTone = RingtoneManager.getRingtone(it, uri)
                 binding.notificationPicker.text = getString(R.string.uriPicker, ringTone.getTitle(it))

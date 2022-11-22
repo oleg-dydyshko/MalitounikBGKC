@@ -116,7 +116,7 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
             show()
         }
         binding.actionBack.setOnClickListener {
-            onBackPressed()
+            onBack()
         }
         binding.pager.setCurrentItem(glava, false)
     }
@@ -226,12 +226,12 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
         outState.putBoolean("dialog", dialog)
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         if (BibleGlobalList.mPedakVisable) {
             val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as NadsanContentPage
             fragment.onBackPressedFragment()
         } else {
-            super.onBackPressed()
+            super.onBack()
         }
     }
 
@@ -281,7 +281,7 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
             return true
         }
         if (id == android.R.id.home) {
-            onBackPressed()
+            onBack()
             return true
         }
         if (id == R.id.action_glava) {

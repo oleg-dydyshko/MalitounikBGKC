@@ -51,7 +51,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            super.onBackPressed()
+            onBack()
             return true
         }
         if (item.itemId == R.id.action_clean_histopy) {
@@ -101,7 +101,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                finish()
+                onBack()
                 actionExpandOn = false
                 return true
             }
@@ -172,7 +172,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
             setResult(Activity.RESULT_OK, intent)
             addHistory(result)
             saveHistopy()
-            finish()
+            onBack()
         }
         binding.History.setOnItemLongClickListener { _, _, position, _ ->
             val t1 = history[position].indexOf("</em><br>")
@@ -218,7 +218,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
             setResult(Activity.RESULT_OK, intent)
             addHistory(result)
             saveHistopy()
-            finish()
+            onBack()
         }
         arrayLists = MenuCaliandar.getDataCalaindar(year = c[Calendar.YEAR])
         setTollbarTheme()

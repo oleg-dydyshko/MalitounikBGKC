@@ -321,12 +321,12 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
         }
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         if (binding.scrollpreView.visibility == View.VISIBLE) {
             binding.scrollpreView.visibility = View.GONE
             binding.scrollView.visibility = View.VISIBLE
         } else {
-            super.onBackPressed()
+            super.onBack()
         }
     }
 

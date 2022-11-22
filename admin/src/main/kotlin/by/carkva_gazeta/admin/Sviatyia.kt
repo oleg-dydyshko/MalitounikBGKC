@@ -138,15 +138,15 @@ class Sviatyia : BaseActivity(), DialogImageFileLoad.DialogFileExplorerListener,
         sviatyiaFragment.insertIMG()
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as SvityiaFragment
-        if (fragment.onBackPressedFragment()) super.onBackPressed()
+        if (fragment.onBackPressedFragment()) super.onBack()
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            onBack()
             return true
         }
         if (id == R.id.action_bible) {

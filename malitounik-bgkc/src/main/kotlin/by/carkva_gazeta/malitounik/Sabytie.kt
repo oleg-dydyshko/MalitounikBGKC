@@ -807,7 +807,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         dd.show(supportFragmentManager, "dialig_delite")
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         val editSaveN = binding.editText.text.toString().trim()
         val edit2SaveN = binding.editText2.text.toString()
         val edit4SaveN = binding.editText4.text.toString()
@@ -831,7 +831,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 MainActivity.setListPadzeia()
                 onSupportNavigateUp()
             } else {
-                super.onBackPressed()
+                super.onBack()
             }
         }
     }
@@ -955,7 +955,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         c = Calendar.getInstance()
         val shakeanimation = AnimationUtils.loadAnimation(this, R.anim.shake)
         if (id == android.R.id.home) {
-            onBackPressed()
+            onBack()
             return true
         }
         if (id == R.id.action_settings) {

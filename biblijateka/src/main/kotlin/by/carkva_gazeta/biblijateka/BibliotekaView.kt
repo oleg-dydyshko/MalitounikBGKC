@@ -529,7 +529,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         try {
             setContentView(binding.root)
         } catch (t: Resources.NotFoundException) {
-            finish()
+            super.onBack()
             val i = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
             i?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             i?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -1499,7 +1499,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         sqlJob?.cancel()
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         val prefEditor = k.edit()
         if (pdfView.visibility == View.VISIBLE) {
             prefEditor.putInt(fileName, pdfView.currentPage)
@@ -1509,7 +1509,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         }
         prefEditor.apply()
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            super.onBackPressed()
+            super.onBack()
         } else if (bindingcontent.swipeRefreshLayout.visibility == View.GONE) {
             invalidateOptionsMenu()
             if (arrayList.size == 0) {
@@ -1519,10 +1519,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     if (site) {
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
-                        finish()
-                    } else {
-                        super.onBackPressed()
                     }
+                    super.onBack()
                 }
             } else {
                 if (idSelect == R.id.label1 || idSelect == R.id.label6) {
@@ -1544,10 +1542,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             if (site) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-                finish()
-            } else {
-                super.onBackPressed()
             }
+            super.onBack()
         }
     }
 

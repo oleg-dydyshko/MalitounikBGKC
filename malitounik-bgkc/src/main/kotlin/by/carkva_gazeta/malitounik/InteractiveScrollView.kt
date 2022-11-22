@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.widget.ScrollView
 import kotlinx.coroutines.*
@@ -45,7 +44,6 @@ class InteractiveScrollView : ScrollView {
         super.onScrollChanged(l, t, oldl, oldt)
         val view = getChildAt(childCount - 1)
         val diff = view.bottom - (height + scrollY)
-        Log.d("Oleg", height.toString())
         if (checkDiff && diff != 0) {
             checkDiff = false
             mListener?.onBottomReached(false)

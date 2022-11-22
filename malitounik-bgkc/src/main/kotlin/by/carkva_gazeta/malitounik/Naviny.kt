@@ -147,7 +147,7 @@ class Naviny : BaseActivity() {
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            onBack()
             return true
         }
         if (id == R.id.action_forward) {
@@ -298,12 +298,12 @@ class Naviny : BaseActivity() {
         }
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         if (binding.viewWeb.canGoBack()) {
             binding.viewWeb.goBack()
             invalidateOptionsMenu()
         } else {
-            super.onBackPressed()
+            super.onBack()
         }
     }
 

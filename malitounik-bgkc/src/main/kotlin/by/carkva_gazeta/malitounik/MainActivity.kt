@@ -578,7 +578,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         ajustCompoundDrawableSizeWithText(binding.label13, drawable)
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         if (snackbar?.isShown == true) {
             snackbar?.dismiss()
         }
@@ -600,7 +600,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 prefEditors.putBoolean("setAlarm", true)
                 prefEditors.apply()
                 checkBrightness = true
-                super.onBackPressed()
+                super.onBack()
             } else {
                 backPressed = System.currentTimeMillis()
                 toastView(this, getString(R.string.exit))

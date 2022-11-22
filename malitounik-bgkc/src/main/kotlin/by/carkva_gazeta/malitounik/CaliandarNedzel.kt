@@ -62,8 +62,10 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val intent = Intent()
         intent.putExtra("position", niadzelia[position][25].toInt())
-        activity?.setResult(Activity.RESULT_OK, intent)
-        activity?.finish()
+        activity?.let {
+            it.setResult(Activity.RESULT_OK, intent)
+            it.finish()
+        }
     }
 
     private class CaliandarNedzelListAdapter(private val mContext: Context, private val niadzelia: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.calaindar_nedel, niadzelia) {

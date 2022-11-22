@@ -230,7 +230,7 @@ class NovyZapavietSemuxaList : BaseActivity() {
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            super.onBackPressed()
+            onBack()
             return true
         }
         return false

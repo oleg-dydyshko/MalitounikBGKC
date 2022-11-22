@@ -192,7 +192,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             show()
         }
         binding.actionBack.setOnClickListener {
-            super.onBackPressed()
+            onBack()
         }
         binding.InteractiveScroll.setOnScrollChangedCallback(this)
     }
@@ -702,7 +702,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         val id = item.itemId
         val prefEditor = k.edit()
         if (id == android.R.id.home) {
-            super.onBackPressed()
+            onBack()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {

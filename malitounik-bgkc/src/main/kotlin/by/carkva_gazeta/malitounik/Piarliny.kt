@@ -193,7 +193,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            super.onBackPressed()
+            onBack()
             return true
         }
         if (id == R.id.action_carkva) {

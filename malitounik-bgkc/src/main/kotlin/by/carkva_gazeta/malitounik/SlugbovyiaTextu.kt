@@ -295,23 +295,44 @@ class SlugbovyiaTextu {
         return list
     }
 
-    fun isPasxa(day: Int): Boolean {
+    fun getResource(day: Int, dayOfYear: Int, sluzba: Int): String {
+        var resource = "0"
+        val checkDay = if (day == AICOU_VII_SUSVETNAGA_SABORY) getRealDay(day)
+        else day
         datMinVP.forEach {
-            if (it.day == day) {
-                return it.pasxa
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == sluzba) {
+                    resource = it.resource
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == sluzba) {
+                    resource = it.resource
+                }
             }
         }
         datMinSH.forEach {
-            if (getRealDay(it.day) == day) {
-                return it.pasxa
+            if (it.pasxa) {
+                if (checkDay == it.day && it.sluzba == sluzba) {
+                    resource = it.resource
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == sluzba) {
+                    resource = it.resource
+                }
             }
         }
         datMinSV.forEach {
-            if (it.day == day) {
-                return it.pasxa
+            if (it.pasxa) {
+                if (checkDay == it.day && it.sluzba == sluzba) {
+                    resource = it.resource
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == sluzba) {
+                    resource = it.resource
+                }
             }
         }
-        return true
+        return resource
     }
 
     fun getResource(day: Int, pasxa: Boolean, sluzba: Int): String {
@@ -324,32 +345,12 @@ class SlugbovyiaTextu {
             }
         }
         datMinSH.forEach {
-            if (checkDay == getRealDay(it.day) && pasxa == it.pasxa && it.sluzba == sluzba) {
+            if (checkDay == it.day && pasxa == it.pasxa && it.sluzba == sluzba) {
                 resource = it.resource
             }
         }
         datMinSV.forEach {
             if (day == it.day && pasxa == it.pasxa && it.sluzba == sluzba) {
-                resource = it.resource
-            }
-        }
-        return resource
-    }
-
-    fun getResource(dayOfYear: Int, sluzba: Int): String {
-        var resource = "0"
-        datMinVP.forEach {
-            if (dayOfYear == it.day && it.sluzba == sluzba) {
-                resource = it.resource
-            }
-        }
-        datMinSH.forEach {
-            if (dayOfYear == getRealDay(it.day) && it.sluzba == sluzba) {
-                resource = it.resource
-            }
-        }
-        datMinSV.forEach {
-            if (dayOfYear == it.day && it.sluzba == sluzba) {
                 resource = it.resource
             }
         }
@@ -423,106 +424,186 @@ class SlugbovyiaTextu {
         return false
     }
 
-    fun checkUtran(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
+    fun checkUtran(day: Int, dayOfYear: Int): Boolean {
         datMinVP.forEach {
-            if (day == it.day && pasxa == it.pasxa && it.sluzba == UTRAN) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == UTRAN) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == UTRAN) {
+                    return true
+                }
             }
         }
         datMinSH.forEach {
-            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa && it.sluzba == UTRAN) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == UTRAN) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == UTRAN) {
+                    return true
+                }
             }
         }
         datMinSV.forEach {
-            val dayR = if (it.pasxa) day
-            else dayOfYear.toInt()
-            if (dayR == it.day && pasxa == it.pasxa && it.sluzba == UTRAN) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == UTRAN) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == UTRAN) {
+                    return true
+                }
             }
         }
         return false
     }
 
-    fun checkLiturgia(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
+    fun checkLiturgia(day: Int, dayOfYear: Int): Boolean {
         datMinVP.forEach {
-            if (day == it.day && pasxa == it.pasxa && it.sluzba == LITURGIA) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == LITURGIA) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == LITURGIA) {
+                    return true
+                }
             }
         }
         datMinSH.forEach {
-            if (dayOfYear.toInt() == getRealDay(it.day) && pasxa == it.pasxa && it.sluzba == LITURGIA) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == LITURGIA) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == LITURGIA) {
+                    return true
+                }
             }
         }
         datMinSV.forEach {
-            val dayR = if (it.pasxa) day
-            else dayOfYear.toInt()
-            if (dayR == it.day && pasxa == it.pasxa && it.sluzba == LITURGIA) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == LITURGIA) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == LITURGIA) {
+                    return true
+                }
             }
         }
         return false
     }
 
-    fun checkViachernia(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
+    fun checkViachernia(day: Int, dayOfYear: Int): Boolean {
         datMinVP.forEach {
-            if (day == it.day && pasxa == it.pasxa && it.sluzba == VIACHERNIA) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == VIACHERNIA) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == VIACHERNIA) {
+                    return true
+                }
             }
         }
         datMinSH.forEach {
-            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa && it.sluzba == VIACHERNIA) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == VIACHERNIA) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == VIACHERNIA) {
+                    return true
+                }
             }
         }
         datMinSV.forEach {
-            val dayR = if (it.pasxa) day
-            else dayOfYear.toInt()
-            if (dayR == it.day && pasxa == it.pasxa && it.sluzba == VIACHERNIA) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == VIACHERNIA) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == VIACHERNIA) {
+                    return true
+                }
             }
         }
         return false
     }
 
-    fun checkPavichrrnica(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
+    fun checkPavichrrnica(day: Int, dayOfYear: Int): Boolean {
         datMinVP.forEach {
-            if (day == it.day && pasxa == it.pasxa && it.sluzba == PAVIACHERNICA) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == PAVIACHERNICA) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == PAVIACHERNICA) {
+                    return true
+                }
             }
         }
         datMinSH.forEach {
-            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa && it.sluzba == PAVIACHERNICA) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == PAVIACHERNICA) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == PAVIACHERNICA) {
+                    return true
+                }
             }
         }
         datMinSV.forEach {
-            val dayR = if (it.pasxa) day
-            else dayOfYear.toInt()
-            if (dayR == it.day && pasxa == it.pasxa && it.sluzba == PAVIACHERNICA) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == PAVIACHERNICA) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == PAVIACHERNICA) {
+                    return true
+                }
             }
         }
         return false
     }
 
-    fun checkPaunochnica(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
+    fun checkPaunochnica(day: Int, dayOfYear: Int): Boolean {
         datMinVP.forEach {
-            if (day == it.day && pasxa == it.pasxa && it.sluzba == PAUNOCHNICA) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == PAUNOCHNICA) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == PAUNOCHNICA) {
+                    return true
+                }
             }
         }
         datMinSH.forEach {
-            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa && it.sluzba == PAUNOCHNICA) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == PAUNOCHNICA) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == PAUNOCHNICA) {
+                    return true
+                }
             }
         }
         datMinSV.forEach {
-            val dayR = if (it.pasxa) day
-            else dayOfYear.toInt()
-            if (dayR == it.day && pasxa == it.pasxa && it.sluzba == PAUNOCHNICA) {
-                return true
+            if (it.pasxa) {
+                if (day == it.day && it.sluzba == PAUNOCHNICA) {
+                    return true
+                }
+            } else {
+                if (dayOfYear == it.day && it.sluzba == PAUNOCHNICA) {
+                    return true
+                }
             }
         }
         return false

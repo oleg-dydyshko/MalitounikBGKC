@@ -43,7 +43,7 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
         posMun2 = mun
         yearG2 = year
         if (!cviatyGlavnyia.contains("no_sviaty")) {
-            binding.subtitleToolbar.text = cviatyGlavnyia
+            binding.subtitleToolbar.text = MainActivity.fromHtml(cviatyGlavnyia)
             binding.subtitleToolbar.visibility = View.VISIBLE
         } else {
             binding.subtitleToolbar.visibility = View.GONE

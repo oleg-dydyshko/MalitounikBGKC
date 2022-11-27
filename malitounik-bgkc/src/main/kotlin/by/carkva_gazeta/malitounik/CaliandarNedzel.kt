@@ -115,7 +115,8 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
             viewHolder.textPraz.text = MainActivity.fromHtml(niadzelia[position][6])
             if (!niadzelia[position][6].contains("no_sviaty")) viewHolder.textPraz.visibility = View.VISIBLE // убот = субота
             if (niadzelia[position][6].contains("Пачатак") || niadzelia[position][6].contains("Вялікі") || niadzelia[position][6].contains("Вялікая") || niadzelia[position][6].contains("убот") || niadzelia[position][6].contains("ВЕЧАР") || niadzelia[position][6].contains("Палова")) {
-                viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                if (dzenNoch) viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
+                else viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
                 viewHolder.textPraz.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
             when (niadzelia[position][7].toInt()) {

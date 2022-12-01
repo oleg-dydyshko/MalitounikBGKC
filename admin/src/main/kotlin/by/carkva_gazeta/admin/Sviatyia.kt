@@ -73,7 +73,7 @@ class Sviatyia : BaseActivity(), DialogImageFileLoad.DialogFileExplorerListener,
         super.onCreate(savedInstanceState)
         binding = AdminSviatyiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.pager.offscreenPageLimit = 3
+        binding.pager.offscreenPageLimit = 1
         adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
         binding.pager.isUserInputEnabled = false

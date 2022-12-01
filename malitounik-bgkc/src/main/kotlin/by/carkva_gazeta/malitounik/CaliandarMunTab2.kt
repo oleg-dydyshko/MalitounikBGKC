@@ -55,7 +55,7 @@ class CaliandarMunTab2 : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
-            binding.pagerNedel.offscreenPageLimit = 3
+            binding.pagerNedel.offscreenPageLimit = 1
             adapterViewPagerNedel = MyCalendarNedelAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
             binding.pagerNedel.adapter = adapterViewPagerNedel
             binding.pagerNedel.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

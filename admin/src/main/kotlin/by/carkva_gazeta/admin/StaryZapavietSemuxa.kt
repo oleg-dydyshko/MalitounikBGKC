@@ -69,7 +69,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelL
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
             trak = true
         }
-        binding.pager.offscreenPageLimit = 3
+        binding.pager.offscreenPageLimit = 1
         val adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->

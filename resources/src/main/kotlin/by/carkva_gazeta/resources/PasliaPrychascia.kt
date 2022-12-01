@@ -95,7 +95,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             binding.tabLayout.setTabTextColors(Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorSecondary_text))), Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))))
         }
-        binding.pager.offscreenPageLimit = 3
+        binding.pager.offscreenPageLimit = 1
         binding.pager.setCurrentItem(pasliaPrychascia, false)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)

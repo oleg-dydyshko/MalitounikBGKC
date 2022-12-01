@@ -836,21 +836,25 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             setTitleLinkToBible()
             if (k.getBoolean("utran", true) && wOld.contains("На ютрані:") && savedInstanceState == null) {
                 binding.textView.post {
-                    val strPosition = binding.textView.text.indexOf(titleTwo.toString().trim(), ignoreCase = true)
-                    val line = binding.textView.layout.getLineForOffset(strPosition)
-                    val y = binding.textView.layout.getLineTop(line)
-                    val anim = ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", binding.InteractiveScroll.scrollY, y)
-                    anim.setDuration(1000).start()
+                    binding.textView.layout?.let { layout ->
+                        val strPosition = binding.textView.text.indexOf(titleTwo.toString().trim(), ignoreCase = true)
+                        val line = layout.getLineForOffset(strPosition)
+                        val y = layout.getLineTop(line)
+                        val anim = ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", binding.InteractiveScroll.scrollY, y)
+                        anim.setDuration(1000).start()
+                    }
                 }
             }
             if (savedInstanceState != null) {
                 binding.textView.post {
                     val textline = savedInstanceState.getString("textLine", "")
                     if (textline != "") {
-                        val index = binding.textView.text.indexOf(textline)
-                        val line = binding.textView.layout.getLineForOffset(index)
-                        val y = binding.textView.layout.getLineTop(line)
-                        binding.InteractiveScroll.scrollY = y
+                        binding.textView.layout?.let { layout ->
+                            val index = binding.textView.text.indexOf(textline)
+                            val line = layout.getLineForOffset(index)
+                            val y = layout.getLineTop(line)
+                            binding.InteractiveScroll.scrollY = y
+                        }
                     }
                 }
             } else {
@@ -1171,9 +1175,8 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     }
 
     override fun onScroll(t: Int, oldt: Int) {
-        val lineLayout = binding.textView.layout
-        lineLayout?.let {
-            val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(it.getLineForVertical(t)), binding.textView.layout.getLineEnd(it.getLineForVertical(t))).trim()
+        binding.textView.layout?.let {
+            val textForVertical = binding.textView.text.substring(it.getLineStart(it.getLineForVertical(t)), it.getLineEnd(it.getLineForVertical(t))).trim()
             if (textForVertical != "") firstTextPosition = textForVertical
         }
     }

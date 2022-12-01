@@ -143,7 +143,7 @@ class MenuCaliandar : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = MyCalendarAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
-        binding.pager.offscreenPageLimit = 3
+        binding.pager.offscreenPageLimit = 1
         binding.pager.adapter = adapter
         binding.pager.setCurrentItem(page, false)
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

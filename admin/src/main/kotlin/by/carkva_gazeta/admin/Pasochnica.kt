@@ -122,8 +122,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
 
     override fun onScroll(t: Int, oldt: Int) {
         positionY = t
-        val laneLayout = binding.apisanne.layout
-        laneLayout?.let { layout ->
+        binding.apisanne.layout?.let { layout ->
             val textForVertical = binding.apisanne.text.toString().substring(layout.getLineStart(layout.getLineForVertical(positionY)), layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
             if (textForVertical != "") firstTextPosition = textForVertical
         }
@@ -211,10 +210,12 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
             binding.apisanne.post {
                 val textline = savedInstanceState.getString("textLine", "")
                 if (textline != "") {
-                    val index = binding.apisanne.text.toString().indexOf(textline)
-                    val line = binding.apisanne.layout.getLineForOffset(index)
-                    val y = binding.apisanne.layout.getLineTop(line)
-                    binding.scrollView.smoothScrollBy(0, y)
+                    binding.apisanne.layout?.let { layout ->
+                        val index = binding.apisanne.text.toString().indexOf(textline)
+                        val line = layout.getLineForOffset(index)
+                        val y = layout.getLineTop(line)
+                        binding.scrollView.smoothScrollBy(0, y)
+                    }
                 } else {
                     binding.scrollView.smoothScrollBy(0, positionY)
                 }

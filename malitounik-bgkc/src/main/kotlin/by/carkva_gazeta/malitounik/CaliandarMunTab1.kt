@@ -108,7 +108,7 @@ class CaliandarMunTab1 : BaseFragment() {
             binding.year.setOnClickListener {
                 showDialog(yearG)
             }
-            binding.pager.offscreenPageLimit = 3
+            binding.pager.offscreenPageLimit = 1
             val adapterViewPager = MyPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
             binding.pager.adapter = adapterViewPager
 

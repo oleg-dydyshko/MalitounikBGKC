@@ -317,7 +317,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
             tab.text = if (kniga == 18) resources.getString(by.carkva_gazeta.malitounik.R.string.psalom) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
         }.attach()
-        binding.pager.offscreenPageLimit = 3
+        binding.pager.offscreenPageLimit = 1
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 BibleGlobalList.mListGlava = position

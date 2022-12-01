@@ -436,6 +436,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_01_10_pokryva_baharodzicy_liturhija"] = R.raw.mm_01_10_pokryva_baharodzicy_liturhija
             resursMap["mm_11_17_10_ajcou_7_susviet_saboru_liturhija"] = R.raw.mm_11_17_10_ajcou_7_susviet_saboru_liturhija
             resursMap["mltv_mb_barunskaja"] = R.raw.mltv_mb_barunskaja
+            resursMap["mltv_za_carkvu_2"] = R.raw.mltv_za_carkvu_2
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -531,11 +532,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
     private fun findCheckPosition() {
         if (findListSpans.isNotEmpty()) {
-            val lineForVertical = binding.textView.layout.getLineForVertical(positionY)
-            for (i in 0 until findListSpans.size) {
-                if (lineForVertical <= binding.textView.layout.getLineForOffset(findListSpans[i].start)) {
-                    findPosition = i
-                    break
+            binding.textView.layout?.let { layout ->
+                val lineForVertical = layout.getLineForVertical(positionY)
+                for (i in 0 until findListSpans.size) {
+                    if (lineForVertical <= layout.getLineForOffset(findListSpans[i].start)) {
+                        findPosition = i
+                        break
+                    }
                 }
             }
         } else {
@@ -576,25 +579,27 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld].start, findListSpans[findPositionOld].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, findPosition + 1, findListSpans.size)
             text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta2)), findListSpans[findPosition].start, findListSpans[findPosition].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            val line = binding.textView.layout.getLineForOffset(findListSpans[findPosition].start)
-            val y = binding.textView.layout.getLineTop(line)
-            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-            anim.addListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator) {
-                    animatopRun = true
-                }
+            binding.textView.layout?.let { layout ->
+                val line = layout.getLineForOffset(findListSpans[findPosition].start)
+                val y = layout.getLineTop(line)
+                val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                anim.addListener(object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {
+                        animatopRun = true
+                    }
 
-                override fun onAnimationEnd(animation: Animator) {
-                    animatopRun = false
-                }
+                    override fun onAnimationEnd(animation: Animator) {
+                        animatopRun = false
+                    }
 
-                override fun onAnimationCancel(animation: Animator) {
-                }
+                    override fun onAnimationCancel(animation: Animator) {
+                    }
 
-                override fun onAnimationRepeat(animation: Animator) {
-                }
-            })
-            anim.setDuration(1000).start()
+                    override fun onAnimationRepeat(animation: Animator) {
+                    }
+                })
+                anim.setDuration(1000).start()
+            }
         }
     }
 
@@ -609,8 +614,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
-        val laneLayout = binding.textView.layout
-        laneLayout?.let { layout ->
+        binding.textView.layout?.let { layout ->
             var lineForVertical = layout.getLineForVertical(positionY)
             var textForVertical = binding.textView.text.substring(layout.getLineStart(lineForVertical), layout.getLineEnd(lineForVertical)).trim()
             if (textForVertical == "" && lineForVertical != 0) {
@@ -619,12 +623,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
             binding.textView.textSize = fontBiblia
             binding.textView.post {
-                binding.textView.layout?.let {
-                    val strPosition = binding.textView.text.indexOf(textForVertical, ignoreCase = true)
-                    val line = it.getLineForOffset(strPosition)
-                    val y = it.getLineTop(line)
-                    binding.scrollView2.scrollTo(0, y)
-                }
+                val strPosition = binding.textView.text.indexOf(textForVertical, ignoreCase = true)
+                val line = layout.getLineForOffset(strPosition)
+                val y = layout.getLineTop(line)
+                binding.scrollView2.scrollTo(0, y)
             }
         }
     }
@@ -632,8 +634,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     override fun onScroll(t: Int, oldt: Int) {
         positionY = t
         setMovementMethodscrollY()
-        val laneLayout = binding.textView.layout
-        laneLayout?.let { layout ->
+        binding.textView.layout?.let { layout ->
             val textForVertical = binding.textView.text.substring(layout.getLineStart(layout.getLineForVertical(positionY)), layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
             if (textForVertical != "") firstTextPosition = textForVertical
             if (binding.find.visibility == View.VISIBLE && !animatopRun) {
@@ -1075,11 +1076,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (bsat1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val strPosition = text.indexOf("Заканчэньне абедніцы", bsat1 + strLigBSA, true)
-                        val line = binding.textView.layout.getLineForOffset(strPosition)
-                        val y = binding.textView.layout.getLineTop(line)
-                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-                        anim.setDuration(1500).start()
+                        binding.textView.layout?.let { layout ->
+                            val strPosition = text.indexOf("Заканчэньне абедніцы", bsat1 + strLigBSA, true)
+                            val line = layout.getLineForOffset(strPosition)
+                            val y = layout.getLineTop(line)
+                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            anim.setDuration(1500).start()
+                        }
                     }
                 }, bsat1, bsat1 + strLigBSA, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
@@ -1107,11 +1110,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (vbt1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val strPosition = text.indexOf("Калі ёсьць 10 песьняў", vbt1 + strLigVB, true)
-                        val line = binding.textView.layout.getLineForOffset(strPosition)
-                        val y = binding.textView.layout.getLineTop(line)
-                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-                        anim.setDuration(1500).start()
+                        binding.textView.layout?.let { layout ->
+                            val strPosition = text.indexOf("Калі ёсьць 10 песьняў", vbt1 + strLigVB, true)
+                            val line = layout.getLineForOffset(strPosition)
+                            val y = layout.getLineTop(line)
+                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            anim.setDuration(1500).start()
+                        }
                     }
                 }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
@@ -1156,11 +1161,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (vbt1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val strPosition = text.indexOf("Псалом 140", vbt1 + strLigVB, true)
-                        val line = binding.textView.layout.getLineForOffset(strPosition)
-                        val y = binding.textView.layout.getLineTop(line)
-                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-                        anim.setDuration(1500).start()
+                        binding.textView.layout?.let { layout ->
+                            val strPosition = text.indexOf("Псалом 140", vbt1 + strLigVB, true)
+                            val line = layout.getLineForOffset(strPosition)
+                            val y = layout.getLineTop(line)
+                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            anim.setDuration(1500).start()
+                        }
                     }
                 }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
@@ -1170,11 +1177,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (vbt2 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val strPosition = text.indexOf("ЗАКАНЧЭНЬНЕ ВЯЧЭРНІ Ў ВЯЛІКІ ПОСТ", vbt2 + strLigVB2, true)
-                        val line = binding.textView.layout.getLineForOffset(strPosition)
-                        val y = binding.textView.layout.getLineTop(line)
-                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-                        anim.setDuration(1500).start()
+                        binding.textView.layout?.let { layout ->
+                            val strPosition = text.indexOf("ЗАКАНЧЭНЬНЕ ВЯЧЭРНІ Ў ВЯЛІКІ ПОСТ", vbt2 + strLigVB2, true)
+                            val line = layout.getLineForOffset(strPosition)
+                            val y = layout.getLineTop(line)
+                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            anim.setDuration(1500).start()
+                        }
                     }
                 }, vbt2, vbt2 + strLigVB2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
@@ -1285,12 +1294,14 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (bst2 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        var strPosition = text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
-                        if (resurs == "lit_jan_zalat") strPosition = text.indexOf("Адзінародны Сыне", strPosition + 16, true)
-                        val line = binding.textView.layout.getLineForOffset(strPosition)
-                        val y = binding.textView.layout.getLineTop(line)
-                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-                        anim.setDuration(1500).start()
+                        binding.textView.layout?.let { layout ->
+                            var strPosition = text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
+                            if (resurs == "lit_jan_zalat") strPosition = text.indexOf("Адзінародны Сыне", strPosition + 16, true)
+                            val line = layout.getLineForOffset(strPosition)
+                            val y = layout.getLineTop(line)
+                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            anim.setDuration(1500).start()
+                        }
                     }
                 }, bst2, bst2 + strLigBS2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
@@ -1313,11 +1324,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (t11 != -1) {
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val strPosition = text.indexOf("ПЕРШАЯ ГАДЗІНА", t11 + strLig11, true)
-                    val line = binding.textView.layout.getLineForOffset(strPosition)
-                    val y = binding.textView.layout.getLineTop(line)
-                    val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-                    anim.setDuration(1500).start()
+                    binding.textView.layout?.let { layout ->
+                        val strPosition = text.indexOf("ПЕРШАЯ ГАДЗІНА", t11 + strLig11, true)
+                        val line = layout.getLineForOffset(strPosition)
+                        val y = layout.getLineTop(line)
+                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        anim.setDuration(1500).start()
+                    }
                 }
             }, t11, t11 + strLig11, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
@@ -1327,11 +1340,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (t3 != -1) {
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val strPosition = text.indexOf("ТРЭЦЯЯ ГАДЗІНА", t3 + strLig3, true)
-                    val line = binding.textView.layout.getLineForOffset(strPosition)
-                    val y = binding.textView.layout.getLineTop(line)
-                    val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-                    anim.setDuration(1500).start()
+                    binding.textView.layout?.let { layout ->
+                        val strPosition = text.indexOf("ТРЭЦЯЯ ГАДЗІНА", t3 + strLig3, true)
+                        val line = layout.getLineForOffset(strPosition)
+                        val y = layout.getLineTop(line)
+                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        anim.setDuration(1500).start()
+                    }
                 }
             }, t3, t3 + strLig3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
@@ -1341,11 +1356,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (t6 != -1) {
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val strPosition = text.indexOf("ШОСТАЯ ГАДЗІНА", t6 + strLig6, true)
-                    val line = binding.textView.layout.getLineForOffset(strPosition)
-                    val y = binding.textView.layout.getLineTop(line)
-                    val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-                    anim.setDuration(1500).start()
+                    binding.textView.layout?.let { layout ->
+                        val strPosition = text.indexOf("ШОСТАЯ ГАДЗІНА", t6 + strLig6, true)
+                        val line = layout.getLineForOffset(strPosition)
+                        val y = layout.getLineTop(line)
+                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        anim.setDuration(1500).start()
+                    }
                 }
             }, t6, t6 + strLig6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
@@ -1355,11 +1372,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (t9 != -1) {
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val strPosition = text.indexOf("ДЗЕВЯТАЯ ГАДЗІНА", t9 + strLig9, true)
-                    val line = binding.textView.layout.getLineForOffset(strPosition)
-                    val y = binding.textView.layout.getLineTop(line)
-                    val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-                    anim.setDuration(1500).start()
+                    binding.textView.layout?.let { layout ->
+                        val strPosition = text.indexOf("ДЗЕВЯТАЯ ГАДЗІНА", t9 + strLig9, true)
+                        val line = layout.getLineForOffset(strPosition)
+                        val y = layout.getLineTop(line)
+                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        anim.setDuration(1500).start()
+                    }
                 }
             }, t9, t9 + strLig9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
@@ -1369,10 +1388,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (savedInstanceState != null) {
                 val textline = savedInstanceState.getString("textLine", "")
                 if (textline != "") {
-                    val index = binding.textView.text.indexOf(textline)
-                    val line = binding.textView.layout.getLineForOffset(index)
-                    val y = binding.textView.layout.getLineTop(line)
-                    binding.scrollView2.smoothScrollBy(0, y)
+                    binding.textView.layout?.let { layout ->
+                        val index = binding.textView.text.indexOf(textline)
+                        val line = layout.getLineForOffset(index)
+                        val y = layout.getLineTop(line)
+                        binding.scrollView2.smoothScrollBy(0, y)
+                    }
                 } else {
                     binding.scrollView2.smoothScrollBy(0, positionY)
                 }
@@ -1388,13 +1409,15 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }
             } else {
                 if (resurs.contains("viachernia_ton")) {
-                    val cal = Calendar.getInstance()
-                    val dzenNedeliname = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.dni_nedeli)
-                    val textline = dzenNedeliname[cal[Calendar.DAY_OF_WEEK]]
-                    val index = binding.textView.text.indexOf(textline, ignoreCase = true)
-                    val line = binding.textView.layout.getLineForOffset(index)
-                    val y = binding.textView.layout.getLineTop(line)
-                    binding.scrollView2.smoothScrollBy(0, y)
+                    binding.textView.layout?.let { layout ->
+                        val cal = Calendar.getInstance()
+                        val dzenNedeliname = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.dni_nedeli)
+                        val textline = dzenNedeliname[cal[Calendar.DAY_OF_WEEK]]
+                        val index = binding.textView.text.indexOf(textline, ignoreCase = true)
+                        val line = layout.getLineForOffset(index)
+                        val y = layout.getLineTop(line)
+                        binding.scrollView2.smoothScrollBy(0, y)
+                    }
                     if (binding.textView.bottom <= binding.scrollView2.height) {
                         stopAutoStartScroll()
                         mAutoScroll = false

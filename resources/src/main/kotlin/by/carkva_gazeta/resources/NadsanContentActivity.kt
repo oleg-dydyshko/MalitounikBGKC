@@ -94,7 +94,7 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
             tab.text = resources.getString(R.string.psalom2) + " " + (position + 1)
         }.attach()
-        binding.pager.offscreenPageLimit = 3
+        binding.pager.offscreenPageLimit = 1
         binding.titleToolbar.text = getString(R.string.psalter)
         binding.subtitleToolbar.text = getString(R.string.kafizma2, getKafizma(glava))
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

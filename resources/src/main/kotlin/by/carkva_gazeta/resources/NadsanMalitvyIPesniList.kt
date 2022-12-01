@@ -78,7 +78,7 @@ class NadsanMalitvyIPesniList : BaseActivity() {
         }
     }
 
-    override fun onMenuItemSelected(menuItem: MenuItem) = false
+    override fun onMenuItemSelected(item: MenuItem) = false
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
         val tv = TypedValue()

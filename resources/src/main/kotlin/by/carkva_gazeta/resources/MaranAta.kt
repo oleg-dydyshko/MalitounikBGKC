@@ -38,6 +38,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.*
+import java.util.*
 
 class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener {
 
@@ -68,6 +69,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private var vydelenie = ArrayList<ArrayList<Int>>()
     private var bibleCopyList = ArrayList<Int>()
     private var orientation = Configuration.ORIENTATION_UNDEFINED
+    private var mun = 0
+    private var day = 1
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -121,25 +124,28 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         binding.ListView.setSelection(maranAtaScrollPosition)
         cytanne = intent.extras?.getString("cytanneMaranaty") ?: ""
         setMaranata(cytanne)
+        val c = Calendar.getInstance()
+        mun = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
+        day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            binding.titleToolbar.text = savedInstanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.maranata2)) ?: getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+            binding.titleToolbar.text = savedInstanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])) ?: getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
             binding.subtitleToolbar.text = savedInstanceState.getString("subTollBarText", "") ?: ""
             paralel = savedInstanceState.getBoolean("paralel", paralel)
-            binding.subtitleToolbar.text = savedInstanceState.getString("chtenie")
             orientation = savedInstanceState.getInt("orientation")
             if (paralel) {
                 paralelPosition = savedInstanceState.getInt("paralelPosition")
                 parralelMestaView(paralelPosition)
             }
         } else {
-            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             if (k.getBoolean("autoscrollAutostart", false)) {
                 autoStartScroll()
             }
         }
+        checkDay()
         bindingprogress.fontSizePlus.setOnClickListener {
             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
@@ -467,6 +473,18 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
         binding.subtitleToolbar.isSingleLine = true
+    }
+
+    private fun checkDay() {
+        val c = Calendar.getInstance()
+        if (!(mun == c[Calendar.MONTH] && day == c[Calendar.DATE])) {
+            val text = SpannableString(binding.titleToolbar.text)
+            val t1 = text.indexOf(",")
+            if (t1 != -1) {
+                text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorSecondary_text)), t1 + 1, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                binding.titleToolbar.text = text
+            }
+        }
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -1029,7 +1047,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             paralel -> {
                 binding.scroll.visibility = View.GONE
                 binding.ListView.visibility = View.VISIBLE
-                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
+                checkDay()
                 paralel = false
                 invalidateOptionsMenu()
             }
@@ -1254,7 +1273,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         outState.putString("subTollBarText", binding.subtitleToolbar.text.toString())
         outState.putBoolean("paralel", paralel)
         outState.putInt("paralelPosition", paralelPosition)
-        outState.putString("chtenie", binding.subtitleToolbar.text.toString())
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

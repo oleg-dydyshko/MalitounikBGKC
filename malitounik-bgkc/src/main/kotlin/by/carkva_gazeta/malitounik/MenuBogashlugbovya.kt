@@ -149,6 +149,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         dataSearch.add(MenuListData("Малебен сьвятым айцам нашым, роўным апосталам Кірылу і Мятоду, настаўнікам славянскім$opisanie", "malebien_kiryla_miatod"))
         dataSearch.add(MenuListData("Служба за памерлых на кожны дзень тыдня$opisanie", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
         dataSearch.add(MenuListData("Служба Найсьвяцейшай Багародзіцы$opisanie", "sluzba_najsviaciejszaj_baharodzicy"))
+        dataSearch.add(MenuListData("Служба аб вызваленьні бязьвінна зьняволеных$opisanie", "sluzba_vyzvalen_biazvinna_zniavolenych"))
         if (!isSearch) {
             dataSearch.add(MenuListData("Малітвы пасьля сьвятога прычасьця", "1"))
             dataSearch.add(MenuListData("Вячэрня", "2"))

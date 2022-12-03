@@ -522,6 +522,8 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.MARANATA)
                     intent.putExtra("cytanneMaranaty", MenuCaliandar.getPositionCaliandar(position)[13])
+                    intent.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt())
+                    intent.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
                     startActivity(intent)
                 }
             } else {

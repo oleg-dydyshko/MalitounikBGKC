@@ -147,7 +147,7 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(143, "Сьвятое маці нашае Еўфрасіньні Полацкай", "mm_23_05_viaczernia", VIACZERNIA))
         datMinSH.add(SlugbovyiaTextuData(180, "Сьвятых слаўных i годных пахвалы апосталаў Пятра i Паўла", "mm_29_06_piatra_i_paula_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(181, "Сабор сьвятых 12-ці апосталаў", "mm_30_06_sabor_12_apostalau_liturhija", LITURHIJA))
-        datMinSH.add(SlugbovyiaTextuData(244, "Пачатак царкоўнага году і сьвятога айца нашага Сямёна Стоўпніка", "mm_01_09_novy_hod_viczernia", VIACZERNIA))
+        datMinSH.add(SlugbovyiaTextuData(244, "Пачатак царкоўнага году і сьвятога айца нашага Сямёна Стоўпніка", "mm_01_09_novy_hod_viaczernia", VIACZERNIA))
         datMinSH.add(SlugbovyiaTextuData(244, "Пачатак царкоўнага году і сьвятога айца нашага Сямёна Стоўпніка", "mm_01_09_novy_hod_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(248, "Сьвятога прарока Захара, бацькі Яна Хрысьціцеля, і праведнае Альжбеты, ягонае маці", "mm_05_09_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(250, "Перадсьвяцьце Нараджэньня Багародзіцы і сьвятога мучаніка Сазонта", "mm_07_09_pieradsv_naradz_baharodz_liturhija", LITURHIJA))

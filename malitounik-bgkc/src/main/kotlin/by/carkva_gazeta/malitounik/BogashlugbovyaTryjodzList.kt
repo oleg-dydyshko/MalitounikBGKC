@@ -127,7 +127,14 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            viewHolder.text.text = data[position].title
+            val opisanie = when (data[position].sluzba) {
+                SlugbovyiaTextu.JUTRAN -> " - Ютрань"
+                SlugbovyiaTextu.LITURHIJA -> " - Літургія"
+                SlugbovyiaTextu.VIACZERNIA -> " - Вячэрня"
+                SlugbovyiaTextu.VIALHADZINY -> " - Вялікія гадзіны"
+                else -> ""
+            }
+            viewHolder.text.text = context.resources.getString(R.string.tryjodz_opisanie, data[position].title, opisanie)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }

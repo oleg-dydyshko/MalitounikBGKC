@@ -23,6 +23,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
@@ -84,6 +85,25 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private var munsv = 0
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
     private var orientation = Configuration.ORIENTATION_UNDEFINED
+    private val zmenyiaChastki = ZmenyiaChastki()
+    private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            if (intent != null) {
+                val position = intent.getIntExtra("position", 0)
+                val arrayList = MenuCaliandar.getPositionCaliandar(position)
+                val c = GregorianCalendar(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0, 0)
+                zmenyiaChastki.setArrayData(MenuCaliandar.getDataCalaindar(c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR]))
+                loadData(null)
+                val c2 = Calendar.getInstance()
+                if (c[Calendar.DAY_OF_YEAR] == c2[Calendar.DAY_OF_YEAR]) {
+                    binding.titleToolbar.text = title
+                } else {
+                    binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bogaslujbovyia_data, title, c[Calendar.DATE], resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[c[Calendar.MONTH]], c[Calendar.YEAR])
+                }
+            }
+        }
+    }
 
     companion object {
         val resursMap = ArrayMap<String, Int>()
@@ -197,7 +217,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["prynagodnyia_22"] = R.raw.prynagodnyia_22
             resursMap["prynagodnyia_23"] = R.raw.prynagodnyia_23
             resursMap["prynagodnyia_24"] = R.raw.prynagodnyia_24
-            resursMap["prynagodnyia_25"] = R.raw.prynagodnyia_25
             resursMap["prynagodnyia_26"] = R.raw.prynagodnyia_26
             resursMap["prynagodnyia_28"] = R.raw.prynagodnyia_28
             resursMap["prynagodnyia_29"] = R.raw.prynagodnyia_29
@@ -811,6 +830,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         })
         binding.textView.movementMethod = setLinkMovementMethodCheck()
         loadData(savedInstanceState)
+        setTollbarTheme()
     }
 
     override fun linkMovementMethodCheckOnTouch(onTouch: Boolean) {
@@ -864,8 +884,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
         val liturgia = resurs == "lit_jan_zalat" || resurs == "lit_jan_zalat_vielikodn" || resurs == "l_vasila_vialikaha" || resurs == "abiednica"
-        val zmenyiaChastki = ZmenyiaChastki(dzenNoch)
         val res = withContext(Dispatchers.IO) {
+            zmenyiaChastki.setDzenNoch(dzenNoch)
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya_error
             var nochenia = false
@@ -1714,6 +1734,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         itemVybranoe.title = spanString
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_zmena).isVisible = chechZmena
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_mun).isVisible = true
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
@@ -1745,6 +1766,15 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_mun) {
+            val c = Calendar.getInstance()
+            val i = Intent(this, CaliandarMun::class.java)
+            i.putExtra("mun", c[Calendar.MONTH])
+            i.putExtra("day", c[Calendar.DATE])
+            i.putExtra("year", c[Calendar.YEAR])
+            caliandarMunLauncher.launch(i)
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_zmena) {
@@ -1883,14 +1913,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         prefEditor.apply()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         autoStartScrollJob?.cancel()
-        procentJob?.cancel()
-        resetTollbarJob?.cancel()
-        resetScreenJob?.cancel()
     }
 
     override fun onResume() {
         super.onResume()
-        setTollbarTheme()
         if (fullscreenPage) {
             binding.constraint.post {
                 hide()

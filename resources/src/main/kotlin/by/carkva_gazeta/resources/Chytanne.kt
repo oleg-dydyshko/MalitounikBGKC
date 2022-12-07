@@ -1067,9 +1067,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         super.onPause()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         stopAutoStartScroll()
-        procentJob?.cancel()
-        resetTollbarJob?.cancel()
-        resetScreenJob?.cancel()
     }
 
     override fun onResume() {

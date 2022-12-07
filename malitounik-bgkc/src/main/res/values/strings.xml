@@ -717,5 +717,6 @@
     <string name="del_all_image_opisanie">Вы сапраўды жадаеце выдаліць усё іконкі?</string>
     <string name="searsh_null_vynik">Вынікаў няма</string>
     <string name="tryjodz_opisanie">%1$s%2$s</string>
+    <string name="bogaslujbovyia_data">%1$s за %2$d %3$s %4$d года</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

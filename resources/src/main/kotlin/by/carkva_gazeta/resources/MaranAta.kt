@@ -1095,9 +1095,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             prefEditors.apply()
         }
         stopAutoStartScroll()
-        procentJob?.cancel()
-        resetTollbarJob?.cancel()
-        resetScreenJob?.cancel()
     }
 
     override fun onResume() {

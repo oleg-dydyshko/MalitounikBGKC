@@ -8,9 +8,14 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
 
-internal class ZmenyiaChastki(private val dzenNoch: Boolean) {
+internal class ZmenyiaChastki {
+    private var dzenNoch: Boolean = false
     private val data: ArrayMap<String, Int> = ArrayMap()
     private val arrayData = ArrayList<ArrayList<String>>()
+
+    fun setDzenNoch(dzenNoch: Boolean) {
+        this.dzenNoch = dzenNoch
+    }
 
     fun sviatyia(): String {
         return if (arrayData[0][10] != "") arrayData[0][10]
@@ -23,6 +28,11 @@ internal class ZmenyiaChastki(private val dzenNoch: Boolean) {
         val data = arrayData[0][9]
         return if (data == "" || data.contains(Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
         else chtenia(arrayData[0][9], apostal)
+    }
+
+    fun setArrayData(arrayList: ArrayList<ArrayList<String>>) {
+        arrayData.clear()
+        arrayData.addAll(arrayList)
     }
 
     fun raznica() = arrayData[0][22].toInt()
@@ -576,6 +586,6 @@ internal class ZmenyiaChastki(private val dzenNoch: Boolean) {
         data["Кніга прарока Ёіля"] = R.raw.biblias29
         data["Кніга прарока Сафона"] = R.raw.biblias36
         data["Кніга прарока Ісаі"] = R.raw.biblias23
-        arrayData.addAll(MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE]))
+        setArrayData(MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE]))
     }
 }

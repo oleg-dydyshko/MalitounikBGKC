@@ -29,7 +29,7 @@
     <item
         android:id="@+id/action_save_redak"
         android:icon="@drawable/save"
-        android:title="Захаваць"
+        android:title="@string/save_sabytie"
         android:orderInCategory="100"
         app:showAsAction="always" />
     <item
@@ -49,9 +49,4 @@
         android:orderInCategory="100"
         android:title="@string/help_davedka"
         app:showAsAction="never" />
-    <!--<item
-        android:id="@+id/update"
-        android:orderInCategory="100"
-        android:title="@string/update_bibliateka"
-        app:showAsAction="never" />-->
 </menu>

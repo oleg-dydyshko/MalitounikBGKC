@@ -147,7 +147,6 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         data.add(MenuListData("Малітва перад іспытамі", "prynagodnyia_22"))
         data.add(MenuListData("Малітва ранішняга намеру (Опціных старцаў)", "prynagodnyia_23"))
         data.add(MenuListData("Малітвы за сьвятароў і сьвятарскія пакліканьні", "prynagodnyia_24"))
-        data.add(MenuListData("Малітвы ў часе хваробы і за хворых", "prynagodnyia_25"))
         data.add(MenuListData("Намер ісьці за Хрыстом", "prynagodnyia_26"))
         data.add(MenuListData("Цябе, Бога, хвалім", "pesny_prasl_70"))
         data.add(MenuListData("Малітва падчас згубнай пошасьці", "prynagodnyia_28"))

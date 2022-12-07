@@ -83,12 +83,14 @@ class DialogLiturgia : DialogFragment() {
                 }
                 8 -> {
                     binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne).uppercase()
-                    val zch = ZmenyiaChastki(dzenNoch)
+                    val zch = ZmenyiaChastki()
+                    zch.setDzenNoch(dzenNoch)
                     builder.append(zch.sviatyiaView(1))
                 }
                 9 -> {
                     binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne).uppercase()
-                    val zch = ZmenyiaChastki(dzenNoch)
+                    val zch = ZmenyiaChastki()
+                    zch.setDzenNoch(dzenNoch)
                     builder.append(zch.sviatyiaView(0))
                 }
                 10 -> {

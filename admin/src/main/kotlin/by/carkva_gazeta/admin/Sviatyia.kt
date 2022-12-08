@@ -161,7 +161,7 @@ class Sviatyia : BaseActivity(), DialogImageFileLoad.DialogFileExplorerListener,
             i.putExtra("day", cal[Calendar.DATE])
             i.putExtra("year", cal[Calendar.YEAR])
             i.putExtra("mun", cal[Calendar.MONTH])
-            i.putExtra("sabytie", true)
+            i.putExtra("getData", true)
             caliandarMunLauncher.launch(i)
             return true
         }

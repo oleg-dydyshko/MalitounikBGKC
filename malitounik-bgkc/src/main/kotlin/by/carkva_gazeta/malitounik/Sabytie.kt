@@ -345,7 +345,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             i.putExtra("day", gc[Calendar.DATE])
             i.putExtra("year", yearG)
             i.putExtra("mun", munG)
-            i.putExtra("sabytie", true)
+            i.putExtra("getData", true)
             labelbutton12Launcher.launch(i)
         })
         binding.radioGroup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
@@ -372,7 +372,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                         i.putExtra("day", gc[Calendar.DATE])
                         i.putExtra("year", yearG)
                         i.putExtra("mun", munG)
-                        i.putExtra("sabytie", true)
+                        i.putExtra("getData", true)
                         labelbutton12Launcher.launch(i)
                     }
                     radio = 3
@@ -470,7 +470,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             i.putExtra("day", gc[Calendar.DATE])
             i.putExtra("year", yearG)
             i.putExtra("mun", munG)
-            i.putExtra("sabytie", true)
+            i.putExtra("getData", true)
             labelbutton1Launcher.launch(i)
         }
         binding.label2.text = ta
@@ -500,7 +500,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             i.putExtra("day", gc[Calendar.DATE])
             i.putExtra("year", yearG)
             i.putExtra("mun", munG)
-            i.putExtra("sabytie", true)
+            i.putExtra("getData", true)
             labelbutton12bLauncher.launch(i)
         }
         binding.label22.text = ta

@@ -23,7 +23,7 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
     private var day2 = 0
     private val dzenNoch get() = getBaseDzenNoch()
     private lateinit var chin: SharedPreferences
-    private var sabytue = false
+    private var getData = false
     private lateinit var binding: CalendarBinding
     private var resetTollbarJob: Job? = null
 
@@ -109,8 +109,9 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
         binding.subtitleToolbar.setOnClickListener {
             fullTextTollbar()
         }
-        sabytue = intent.getBooleanExtra("sabytie", false)
-        if (sabytue) binding.titleToolbar.setText(R.string.get_date) else binding.titleToolbar.setText(R.string.kaliandar)
+        getData = intent.getBooleanExtra("getData", false)
+        if (getData) binding.titleToolbar.setText(R.string.get_date)
+        else binding.titleToolbar.setText(R.string.kaliandar)
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
@@ -188,7 +189,7 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
 
     override fun onPrepareMenu(menu: Menu) {
         val pos = chin.getInt("nedelia", 0)
-        if (MainActivity.padzeia.size > 0 && pos == 0 && !sabytue) {
+        if (MainActivity.padzeia.size > 0 && pos == 0 && !getData) {
             menu.findItem(R.id.action_padzeia).isVisible = true
             if (SabytieOnView) {
                 if (dzenNoch) menu.findItem(R.id.action_padzeia).setIcon(R.drawable.calendar_padzea_black_on) else menu.findItem(R.id.action_padzeia).setIcon(R.drawable.calendar_padzea_on)

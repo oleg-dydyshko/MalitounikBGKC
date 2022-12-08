@@ -86,21 +86,15 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private val zmenyiaChastki = ZmenyiaChastki()
+    private val c = Calendar.getInstance()
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
                 val position = intent.getIntExtra("position", 0)
                 val arrayList = MenuCaliandar.getPositionCaliandar(position)
-                val c = GregorianCalendar(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0, 0)
-                zmenyiaChastki.setArrayData(MenuCaliandar.getDataCalaindar(c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR]))
-                loadData(null)
-                val c2 = Calendar.getInstance()
-                if (c[Calendar.DAY_OF_YEAR] == c2[Calendar.DAY_OF_YEAR]) {
-                    binding.titleToolbar.text = title
-                } else {
-                    binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bogaslujbovyia_data, title, c[Calendar.DATE], resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[c[Calendar.MONTH]], c[Calendar.YEAR])
-                }
+                c.set(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0, 0)
+                setDatacalendar(null)
             }
         }
     }
@@ -684,6 +678,17 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
     }
 
+    private fun setDatacalendar(savedInstanceState: Bundle?) {
+        zmenyiaChastki.setArrayData(MenuCaliandar.getDataCalaindar(c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR]))
+        loadData(savedInstanceState)
+        val c2 = Calendar.getInstance()
+        if (c[Calendar.DAY_OF_YEAR] == c2[Calendar.DAY_OF_YEAR] && c[Calendar.YEAR] == c2[Calendar.YEAR]) {
+            binding.titleToolbar.text = title
+        } else {
+            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bogaslujbovyia_data, title, c[Calendar.DATE], resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[c[Calendar.MONTH]], c[Calendar.YEAR])
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -707,9 +712,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (savedInstanceState.getBoolean("seach")) {
                 binding.find.visibility = View.VISIBLE
             }
+            c.set(Calendar.DAY_OF_YEAR, savedInstanceState.getInt("day_of_year"))
+            c.set(Calendar.YEAR, savedInstanceState.getInt("year"))
         } else {
             fullscreenPage = k.getBoolean("fullscreenPage", false)
         }
+        setDatacalendar(savedInstanceState)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.textSize = fontBiblia
         DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
@@ -829,7 +837,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
         })
         binding.textView.movementMethod = setLinkMovementMethodCheck()
-        loadData(savedInstanceState)
         setTollbarTheme()
     }
 
@@ -866,7 +873,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.text = title
         if (dzenNoch) {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
@@ -1774,6 +1780,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             i.putExtra("mun", c[Calendar.MONTH])
             i.putExtra("day", c[Calendar.DATE])
             i.putExtra("year", c[Calendar.YEAR])
+            i.putExtra("getData", true)
             caliandarMunLauncher.launch(i)
             return true
         }
@@ -1968,6 +1975,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)
         outState.putString("textLine", firstTextPosition)
+        outState.putInt("day_of_year", c[Calendar.DAY_OF_YEAR])
+        outState.putInt("year", c[Calendar.YEAR])
     }
 
     private data class SpanStr(val color: Int, val start: Int, val size: Int)

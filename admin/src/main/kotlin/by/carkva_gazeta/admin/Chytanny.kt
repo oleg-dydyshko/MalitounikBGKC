@@ -78,7 +78,7 @@ class Chytanny : BaseActivity() {
                 startTimer()
                 val text = withContext(Dispatchers.IO) {
                     try {
-                        val url = "https://carkva-gazeta.by/admin/getFilesCaliandar.php?year=$year"
+                        val url = "https://android.carkva-gazeta.by/admin/getFilesCaliandar.php?year=$year"
                         val builder = URL(url).readText()
                         val gson = Gson()
                         val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
@@ -294,7 +294,7 @@ class Chytanny : BaseActivity() {
                             reqParam += "&" + URLEncoder.encode("cytanni", "UTF-8") + "=" + URLEncoder.encode(cytanni, "UTF-8")
                             reqParam += "&" + URLEncoder.encode("year", "UTF-8") + "=" + URLEncoder.encode(year.toString(), "UTF-8")
                             reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                            val mURL = URL("https://android.carkva-gazeta.by/admin/android.php")
                             with(mURL.openConnection() as HttpURLConnection) {
                                 requestMethod = "POST"
                                 val wr = OutputStreamWriter(outputStream)

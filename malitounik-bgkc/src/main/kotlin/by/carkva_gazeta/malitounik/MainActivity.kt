@@ -318,7 +318,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = R.id.label1
                     selectFragment(binding.label1, true, shortcuts = true)
                 }
-                data.toString().contains("shortcuts=2") -> {
+                /*data.toString().contains("shortcuts=2") -> {
                     idSelect = R.id.label2
                     selectFragment(binding.label2, true, shortcuts = true)
                 }
@@ -393,7 +393,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 !data.toString().contains("https://") -> {
                     idSelect = R.id.label2
                     selectFragment(binding.label2, true, shortcuts = true)
-                }
+                }*/
             }
             intent.data = null
         }
@@ -1343,7 +1343,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     val updeteArrayText = withContext(Dispatchers.IO) {
                         var updeteArrayText = mapOf<String, String>()
                         try {
-                            val mURL = URL("https://carkva-gazeta.by/updateMalitounikBGKC.json")
+                            val mURL = URL("https://android.carkva-gazeta.by/updateMalitounikBGKC.json")
                             val conections = mURL.openConnection() as HttpURLConnection
                             if (conections.responseCode == 200) {
                                 val gson = Gson()

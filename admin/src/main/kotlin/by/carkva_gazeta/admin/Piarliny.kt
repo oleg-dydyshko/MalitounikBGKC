@@ -145,7 +145,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                 runCatching {
                     try {
                         var responseCodeS: Int
-                        val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
+                        val mURL = URL("https://android.carkva-gazeta.by/chytanne/piarliny.json")
                         with(mURL.openConnection() as HttpURLConnection) {
                             requestMethod = "POST"
                             responseCodeS = responseCode
@@ -386,7 +386,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                             var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("5", "UTF-8")
                             reqParam += "&" + URLEncoder.encode("piarliny", "UTF-8") + "=" + URLEncoder.encode(piarliny, "UTF-8")
                             reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                            val mURL = URL("https://android.carkva-gazeta.by/admin/android.php")
                             with(mURL.openConnection() as HttpURLConnection) {
                                 requestMethod = "POST"
                                 val wr = OutputStreamWriter(outputStream)

@@ -256,7 +256,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 withContext(Dispatchers.IO) {
                     runCatching {
                         try {
-                            val mURL = URL("https://carkva-gazeta.by/admin/getFiles.php?update=1")
+                            val mURL = URL("https://android.carkva-gazeta.by/admin/getFiles.php?update=1")
                             val conections = mURL.openConnection() as HttpURLConnection
                             if (conections.responseCode == 200) {
                                 val dir = File("$filesDir/sviatyja/")
@@ -296,7 +296,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                         }
                         try {
                             val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
-                            val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
+                            val mURL = URL("https://android.carkva-gazeta.by/opisanie_sviat.json")
                             val conections = mURL.openConnection() as HttpURLConnection
                             if (conections.responseCode == 200) {
                                 fileOpisanieSviat.writer().use {
@@ -321,7 +321,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     runCatching {
                         try {
                             val arrayListResult = ArrayList<ArrayList<String>>()
-                            val mURL = URL("https://carkva-gazeta.by/admin/getFiles.php?image=1")
+                            val mURL = URL("https://android.carkva-gazeta.by/admin/getFiles.php?image=1")
                             val conections = mURL.openConnection() as HttpURLConnection
 
                             if (conections.responseCode == 200) {
@@ -608,7 +608,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             dialogFontSize.show(supportFragmentManager, "font")
             return true
         }
-        if (id == R.id.action_share) {
+        /*if (id == R.id.action_share) {
             val sendIntent = Intent(Intent.ACTION_SEND)
             var sviatylink = ""
             if (svity) sviatylink = "&sviata=1"
@@ -616,7 +616,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
             return true
-        }
+        }*/
         return false
     }
 

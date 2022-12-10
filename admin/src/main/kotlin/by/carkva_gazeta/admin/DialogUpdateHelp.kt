@@ -73,7 +73,7 @@ class DialogUpdateHelp : DialogFragment() {
                         val updeteArrayText = withContext(Dispatchers.IO) {
                             var updeteArrayText = mapOf<String, String>()
                             try {
-                                val mURL = URL("https://carkva-gazeta.by/updateMalitounikBGKC.json")
+                                val mURL = URL("https://android.carkva-gazeta.by/updateMalitounikBGKC.json")
                                 val conections = mURL.openConnection() as HttpURLConnection
                                 if (conections.responseCode == 200) {
                                     val gson = Gson()
@@ -107,7 +107,7 @@ class DialogUpdateHelp : DialogFragment() {
                             reqParam += "&" + URLEncoder.encode("updateCode", "UTF-8").toString() + "=" + URLEncoder.encode("1", "UTF-8")
                             reqParam += if (release) "&" + URLEncoder.encode("reliseApp", "UTF-8").toString() + "=" + URLEncoder.encode(releaseCode, "UTF-8")
                             else "&" + URLEncoder.encode("devApp", "UTF-8").toString() + "=" + URLEncoder.encode(releaseCode, "UTF-8")
-                            val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                            val mURL = URL("https://android.carkva-gazeta.by/admin/android.php")
                             val connection: HttpURLConnection = mURL.openConnection() as HttpURLConnection
                             connection.doOutput = true
                             connection.requestMethod = "POST"

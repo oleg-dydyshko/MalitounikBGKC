@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Spannable
@@ -142,13 +141,13 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
             recreate()
             return true
         }
-        if (id == R.id.action_share) {
+        /*if (id == R.id.action_share) {
             val sendIntent = Intent(Intent.ACTION_SEND)
             sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=5")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
             return true
-        }
+        }*/
         return false
     }
 }

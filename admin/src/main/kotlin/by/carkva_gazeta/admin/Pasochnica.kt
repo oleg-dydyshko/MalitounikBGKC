@@ -331,7 +331,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                             reqParam += "&" + URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(title, "UTF-8")
                             reqParam += "&" + URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode(pesny, "UTF-8")
                             reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
-                            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                            val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
                             with(mURL.openConnection() as HttpURLConnection) {
                                 requestMethod = "POST"
                                 val wr = OutputStreamWriter(outputStream)
@@ -377,7 +377,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                             var reqParam = URLEncoder.encode("isset", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
                             reqParam += "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode(dir, "UTF-8")
                             reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
-                            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                            val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
                             with(mURL.openConnection() as HttpURLConnection) {
                                 requestMethod = "POST"
                                 val wr = OutputStreamWriter(outputStream)
@@ -424,7 +424,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                             var reqParam = URLEncoder.encode("saveas", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
                             reqParam += "&" + URLEncoder.encode("dirToFile", "UTF-8") + "=" + URLEncoder.encode(dirToFile, "UTF-8")
                             reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
-                            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                            val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
                             with(mURL.openConnection() as HttpURLConnection) {
                                 requestMethod = "POST"
                                 val wr = OutputStreamWriter(outputStream)
@@ -483,7 +483,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                             try {
                                 var reqParam = URLEncoder.encode("get", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
                                 reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName, "UTF-8")
-                                val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                                val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
                                 with(mURL.openConnection() as HttpURLConnection) {
                                     requestMethod = "POST"
                                     val wr = OutputStreamWriter(outputStream)
@@ -522,7 +522,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                                 var reqParam = URLEncoder.encode("save", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
                                 reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
                                 reqParam += "&" + URLEncoder.encode("content", "UTF-8") + "=" + URLEncoder.encode(gson.toJson(result), "UTF-8")
-                                val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                                val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
                                 with(mURL.openConnection() as HttpURLConnection) {
                                     requestMethod = "POST"
                                     val wr = OutputStreamWriter(outputStream)
@@ -592,7 +592,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         try {
             var reqParam = URLEncoder.encode("getFile", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
             reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName, "UTF-8")
-            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+            val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
             with(mURL.openConnection() as HttpURLConnection) {
                 requestMethod = "POST"
                 val wr = OutputStreamWriter(outputStream)

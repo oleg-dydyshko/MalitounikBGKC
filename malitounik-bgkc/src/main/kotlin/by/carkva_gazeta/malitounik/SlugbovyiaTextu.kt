@@ -379,7 +379,7 @@ class SlugbovyiaTextu {
                         withContext(Dispatchers.IO) {
                             runCatching {
                                 try {
-                                    val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
+                                    val mURL = URL("https://android.carkva-gazeta.by/chytanne/piarliny.json")
                                     val conections = mURL.openConnection() as HttpURLConnection
                                     if (conections.responseCode == 200) {
                                         filePiarliny.writer().use {

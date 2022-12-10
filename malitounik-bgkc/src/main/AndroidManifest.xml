@@ -212,7 +212,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
-        <activity
+        <!--<activity
             android:name=".Naviny"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme"
@@ -220,7 +220,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
+        </activity>-->
         <activity
             android:name=".SearchSviatyia"
             android:label="@string/search_svityia"

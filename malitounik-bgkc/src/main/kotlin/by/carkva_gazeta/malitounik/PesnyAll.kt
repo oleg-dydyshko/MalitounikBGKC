@@ -458,7 +458,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        menu.findItem(R.id.action_share).isVisible = true
+        //menu.findItem(R.id.action_share).isVisible = true
         menu.findItem(R.id.action_auto).isVisible = false
         menu.findItem(R.id.action_find).isVisible = false
         if (men) {
@@ -529,14 +529,14 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             hide()
             return true
         }
-        if (id == R.id.action_share) {
+        /*if (id == R.id.action_share) {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
             sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=1&file=$resurs")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
             return true
-        }
+        }*/
         prefEditor.apply()
         if (id == R.id.action_carkva) {
             if (MainActivity.checkmodulesAdmin()) {

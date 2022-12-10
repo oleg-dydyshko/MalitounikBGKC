@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -71,9 +70,9 @@ class Onas : BaseActivity() {
             }
         }
         val text = MainActivity.fromHtml(builder.toString())
-        val str = "https://carkva-gazeta.by"
-        val t1 = text.indexOf(str)
         val spannable = text.toSpannable()
+        /*val str = "https://carkva-gazeta.by"
+        val t1 = text.indexOf(str)
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View) {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -88,7 +87,7 @@ class Onas : BaseActivity() {
                 intent.putExtra("naviny", 0)
                 startActivity(intent)
             }
-        }, t1, t1 + str.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }, t1, t1 + str.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)*/
         val str2 = "Палітыка прыватнасьці"
         val t2 = text.indexOf(str2)
         spannable.setSpan(object : ClickableSpan() {

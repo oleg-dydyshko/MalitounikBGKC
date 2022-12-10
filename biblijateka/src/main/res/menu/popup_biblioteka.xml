@@ -16,9 +16,9 @@
         android:orderInCategory="100"
         android:title="@string/delite"
         app:showAsAction="always" />
-    <item
+    <!--<item
         android:id="@+id/menu_share"
         android:orderInCategory="100"
         android:title="@string/share"
-        app:showAsAction="always" />
+        app:showAsAction="always" />-->
 </menu>

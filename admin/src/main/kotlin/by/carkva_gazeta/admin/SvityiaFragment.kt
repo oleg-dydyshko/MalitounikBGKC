@@ -256,7 +256,7 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
                             reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(cal[Calendar.DATE].toString(), "UTF-8")
                             reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode((cal[Calendar.MONTH] + 1).toString(), "UTF-8")
                             reqParam += "&" + URLEncoder.encode("numar", "UTF-8") + "=" + URLEncoder.encode(image.toString(), "UTF-8")
-                            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                            val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
                             with(mURL.openConnection() as HttpURLConnection) {
                                 requestMethod = "POST"
                                 val wr = OutputStreamWriter(outputStream)
@@ -363,7 +363,7 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
                             reqParam += "&" + URLEncoder.encode("bold", "UTF-8") + "=" + URLEncoder.encode(style.toString(), "UTF-8")
                             reqParam += "&" + URLEncoder.encode("tipicon", "UTF-8") + "=" + URLEncoder.encode(tipicon, "UTF-8")
                             reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(spaw, "UTF-8")
-                            val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                            val mURL = URL("https://android.carkva-gazeta.by/admin/android.php")
                             with(mURL.openConnection() as HttpURLConnection) {
                                 requestMethod = "POST"
                                 val wr = OutputStreamWriter(outputStream)
@@ -421,13 +421,13 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
                 withContext(Dispatchers.IO) {
                     runCatching {
                         try {
-                            var url = "https://carkva-gazeta.by/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json"
+                            var url = "https://android.carkva-gazeta.by/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json"
                             val builder = URL(url).readText()
                             val gson = Gson()
                             val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
                             val arrayList: ArrayList<String> = gson.fromJson(builder, type)
                             res = arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
-                            url = "https://carkva-gazeta.by/calendarsviatyia.txt"
+                            url = "https://android.carkva-gazeta.by/calendarsviatyia.txt"
                             val textfile = URL(url).readText().trim()
                             val line = textfile.split("\n")
                             for (element in line) {

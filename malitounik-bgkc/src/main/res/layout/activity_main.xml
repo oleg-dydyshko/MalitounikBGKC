@@ -40,10 +40,11 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
                     app:srcCompat="@drawable/logotip"
                     tools:ignore="ContentDescription" />
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/carkva_link"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -52,7 +53,7 @@
                     android:text="@string/http_carkva_gazeta_by"
                     android:textColor="@color/colorSecondary_text"
                     android:textSize="14sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic" />-->
 
                 <TextView
                     android:id="@+id/label1"

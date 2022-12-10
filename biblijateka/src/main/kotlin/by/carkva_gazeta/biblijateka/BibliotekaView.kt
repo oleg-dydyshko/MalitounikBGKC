@@ -315,7 +315,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             val dialogNoInternet = DialogNoInternet()
             dialogNoInternet.show(supportFragmentManager, "no_internet")
         } else {
-            writeFile("https://carkva-gazeta.by/data/bibliateka/$listPosition")
+            writeFile("https://android.carkva-gazeta.by/data/bibliateka/$listPosition")
         }
     }
 
@@ -334,7 +334,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 val bibliotekaWiFi: DialogBibliotekaWIFI = DialogBibliotekaWIFI.getInstance(listPosition)
                 bibliotekaWiFi.show(supportFragmentManager, "biblioteka_WI_FI")
             } else {
-                writeFile("https://carkva-gazeta.by/data/bibliateka/$listPosition")
+                writeFile("https://android.carkva-gazeta.by/data/bibliateka/$listPosition")
             }
         }
     }
@@ -1683,7 +1683,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         arrayList.clear()
         adapter.notifyDataSetChanged()
         bindingcontent.progressBar2.visibility = View.VISIBLE
-        val showUrl = "https://carkva-gazeta.by/bibliotekaNew.php"
+        val showUrl = "https://android.carkva-gazeta.by/bibliotekaNew.php"
         sqlJob = CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 runCatching {
@@ -1706,7 +1706,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                         str = str.substring(pos + 11)
                         mySqlList.add(str)
                         mySqlList.add(pdf)
-                        val url = URL("https://carkva-gazeta.by/data/bibliateka/$pdf")
+                        val url = URL("https://android.carkva-gazeta.by/data/bibliateka/$pdf")
                         var filesize: String
                         val conn = url.openConnection()
                         if (conn is HttpURLConnection) {
@@ -1720,7 +1720,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                         mySqlList.add(rubrika)
                         val im1 = image.indexOf("src=\"")
                         val im2 = image.indexOf("\"", im1 + 5)
-                        image = "https://carkva-gazeta.by" + image.substring(im1 + 5, im2)
+                        image = "https://android.carkva-gazeta.by" + image.substring(im1 + 5, im2)
                         val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
                         val imageLocal: String = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png" //image.substring(t1 + 1)
                         mySqlList.add(imageLocal)
@@ -1892,14 +1892,14 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     dd.show(supportFragmentManager, "dialog_delite")
                     return@setOnMenuItemClickListener true
                 }
-                R.id.menu_share -> {
+                /*R.id.menu_share -> {
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/index.php?bib=${arrayList[position][6]}")
                     sendIntent.type = "text/plain"
                     startActivity(Intent.createChooser(sendIntent, null))
                     return@setOnMenuItemClickListener true
-                }
+                }*/
             }
             false
         }

@@ -72,7 +72,7 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                             reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(spaw, "UTF-8")
                             reqParam += "&" + URLEncoder.encode("zag", "UTF-8") + "=" + URLEncoder.encode(zag, "UTF-8")
                             reqParam += "&" + URLEncoder.encode("sv", "UTF-8") + "=" + URLEncoder.encode(sv.toString(), "UTF-8")
-                            val mURL = URL("https://carkva-gazeta.by/biblija/index.php")
+                            val mURL = URL("https://android.carkva-gazeta.by/biblija/index.php")
                             with(mURL.openConnection() as HttpURLConnection) {
                                 requestMethod = "POST"
                                 val wr = OutputStreamWriter(outputStream)
@@ -105,35 +105,35 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         if (MainActivity.isNetworkAvailable()) {
             binding.progressBar2.visibility = View.VISIBLE
-            var url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian1.txt"
+            var url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian1.txt"
             when (kniga) {
-                0 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian1.txt"
-                1 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian2.txt"
-                2 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian3.txt"
-                3 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian4.txt"
-                4 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian5.txt"
-                5 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian6.txt"
-                6 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian7.txt"
-                7 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian8.txt"
-                8 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian9.txt"
-                9 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian10.txt"
-                10 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian11.txt"
-                11 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian12.txt"
-                12 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian13.txt"
-                13 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian14.txt"
-                14 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian15.txt"
-                15 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian16.txt"
-                16 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian17.txt"
-                17 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian18.txt"
-                18 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian19.txt"
-                19 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian20.txt"
-                20 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian21.txt"
-                21 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian22.txt"
-                22 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian23.txt"
-                23 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian24.txt"
-                24 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian25.txt"
-                25 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian26.txt"
-                26 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblian27.txt"
+                0 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian1.txt"
+                1 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian2.txt"
+                2 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian3.txt"
+                3 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian4.txt"
+                4 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian5.txt"
+                5 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian6.txt"
+                6 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian7.txt"
+                7 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian8.txt"
+                8 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian9.txt"
+                9 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian10.txt"
+                10 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian11.txt"
+                11 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian12.txt"
+                12 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian13.txt"
+                13 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian14.txt"
+                14 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian15.txt"
+                15 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian16.txt"
+                16 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian17.txt"
+                17 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian18.txt"
+                18 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian19.txt"
+                19 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian20.txt"
+                20 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian21.txt"
+                21 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian22.txt"
+                22 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian23.txt"
+                23 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian24.txt"
+                24 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian25.txt"
+                25 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian26.txt"
+                26 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblian27.txt"
             }
             urlJob = CoroutineScope(Dispatchers.Main).launch {
                 val sb = StringBuilder()

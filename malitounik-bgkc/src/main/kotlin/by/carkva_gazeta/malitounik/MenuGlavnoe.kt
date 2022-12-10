@@ -29,27 +29,27 @@ class MenuGlavnoe : BaseListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (position == 7) {
-            if (MainActivity.checkmoduleResources()) {
-                if (MainActivity.checkmodulesBiblijateka()) {
-                    activity?.let {
-                        val intent = Intent()
-                        intent.setClassName(it, MainActivity.BIBLIOTEKAVIEW)
-                        startActivity(intent)
-                    }
-                } else {
-                    activity?.let {
-                        MainActivity.downloadDynamicModule(it)
-                    }
+        //if (position == 7) {
+        if (MainActivity.checkmoduleResources()) {
+            if (MainActivity.checkmodulesBiblijateka()) {
+                activity?.let {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.BIBLIOTEKAVIEW)
+                    startActivity(intent)
                 }
             } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
+                activity?.let {
+                    MainActivity.downloadDynamicModule(it)
+                }
             }
         } else {
+            val dadatak = DialogInstallDadatak()
+            dadatak.show(childFragmentManager, "dadatak")
+        }
+        /*} else {
             val intent = Intent(activity, Naviny::class.java)
             intent.putExtra("naviny", position)
             startActivity(intent)
-        }
+        }*/
     }
 }

@@ -41,11 +41,13 @@ import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
 import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 import java.util.*
 
-class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener {
+class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogErrorData.DialogErrorDataListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -888,16 +890,59 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding.titleToolbar.isSingleLine = true
     }
 
+    override fun setDataKaliandara() {
+        val c = Calendar.getInstance()
+        val i = Intent(this, CaliandarMun::class.java)
+        i.putExtra("mun", c[Calendar.MONTH])
+        i.putExtra("day", c[Calendar.DATE])
+        i.putExtra("year", c[Calendar.YEAR])
+        i.putExtra("getData", true)
+        caliandarMunLauncher.launch(i)
+    }
+
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
-        val liturgia = resurs == "lit_jan_zalat" || resurs == "lit_jan_zalat_vielikodn" || resurs == "l_vasila_vialikaha" || resurs == "abiednica"
+        val liturgia = resurs == "lit_jan_zalat" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica"
         val res = withContext(Dispatchers.IO) {
+            var result = 0L
+            withContext(Dispatchers.IO) {
+                try {
+                    var reqParam = URLEncoder.encode("getData", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    val mURL = URL("https://android.carkva-gazeta.by/admin/android.php")
+                    with(mURL.openConnection() as HttpURLConnection) {
+                        requestMethod = "POST"
+                        val wr = OutputStreamWriter(outputStream)
+                        wr.write(reqParam)
+                        wr.flush()
+                        val sb = StringBuilder()
+                        BufferedReader(InputStreamReader(inputStream)).use {
+                            var inputLine = it.readLine()
+                            while (inputLine != null) {
+                                sb.append(inputLine)
+                                inputLine = it.readLine()
+                            }
+                        }
+                        val gson = Gson()
+                        val type = TypeToken.getParameterized(Long::class.java).type
+                        result = gson.fromJson<Long>(sb.toString(), type).toLong()
+                    }
+                } catch (_: Throwable) {
+                }
+                withContext(Dispatchers.Main) {
+                    val kalSite = Calendar.getInstance()
+                    kalSite.timeInMillis = result * 1000
+                    if (!(c[Calendar.DAY_OF_YEAR] == kalSite[Calendar.DAY_OF_YEAR] && c[Calendar.YEAR] == kalSite[Calendar.YEAR])) {
+                        val dialogErrorData = DialogErrorData.getInstance(kalSite[Calendar.DATE], kalSite[Calendar.MONTH], kalSite[Calendar.YEAR])
+                        dialogErrorData.show(supportFragmentManager, "dialogErrorData")
+                    }
+                }
+            }
             zmenyiaChastki.setDzenNoch(dzenNoch)
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya_error
             var nochenia = false
             val inputStream = resources.openRawResource(id)
-            val cal = Calendar.getInstance()
-            val dayOfWeek = cal.get(Calendar.DAY_OF_WEEK)
+            val dayOfWeek = c.get(Calendar.DAY_OF_WEEK)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val color = if (dzenNoch) "<font color=\"#f44336\">"
@@ -905,14 +950,14 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val slugbovyiaTextu = SlugbovyiaTextu()
             raznica = zmenyiaChastki.raznica()
             dayOfYear = zmenyiaChastki.dayOfYear()
-            checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
-            if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR]))) {
+            checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
+            if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR]))) {
                 chechZmena = true
                 val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
                 val idZmenyiaChastki = resursMap[resours] ?: R.raw.bogashlugbovya_error
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
             }
-            if ((resurs == "lit_ran_asv_dar" || resurs == "viaczernia_bierascie") && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, cal[Calendar.DAY_OF_YEAR]))) {
+            if ((resurs == "lit_ran_asv_dar" || resurs == "viaczernia_bierascie") && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, c[Calendar.DAY_OF_YEAR]))) {
                 chechZmena = true
                 checkLiturgia = 1
             }
@@ -1441,9 +1486,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             } else {
                 if (resurs.contains("viachernia_ton")) {
                     binding.textView.layout?.let { layout ->
-                        val cal = Calendar.getInstance()
                         val dzenNedeliname = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.dni_nedeli)
-                        val textline = dzenNedeliname[cal[Calendar.DAY_OF_WEEK]]
+                        val textline = dzenNedeliname[c[Calendar.DAY_OF_WEEK]]
                         val index = binding.textView.text.indexOf(textline, ignoreCase = true)
                         val line = layout.getLineForOffset(index)
                         val y = layout.getLineTop(line)
@@ -1708,7 +1752,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     override fun onPrepareMenu(menu: Menu) {
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         val itemVybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
+        //menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
         if (mAutoScroll) {
             autoscroll = k.getBoolean("autoscroll", false)
             when {
@@ -1863,7 +1907,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             hide()
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
+        /*if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
             val shareTitle = URLEncoder.encode(title, StandardCharsets.UTF_8.toString())
@@ -1871,7 +1915,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
             return true
-        }
+        }*/
         prefEditor.apply()
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
             if (MainActivity.checkmodulesAdmin()) {

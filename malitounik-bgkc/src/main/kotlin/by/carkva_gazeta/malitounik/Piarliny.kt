@@ -46,7 +46,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     withContext(Dispatchers.IO) {
                         runCatching {
                             try {
-                                val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
+                                val mURL = URL("https://android.carkva-gazeta.by/chytanne/piarliny.json")
                                 val conections = mURL.openConnection() as HttpURLConnection
                                 if (conections.responseCode == 200) {
                                     filePiarliny.writer().use {
@@ -223,13 +223,13 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             dialogFontSize.show(supportFragmentManager, "font")
             return true
         }
-        if (id == R.id.action_share) {
+        /*if (id == R.id.action_share) {
             val sendIntent = Intent(Intent.ACTION_SEND)
             sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=6&date=$day&month=$mun")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
             return true
-        }
+        }*/
         return false
     }
 }

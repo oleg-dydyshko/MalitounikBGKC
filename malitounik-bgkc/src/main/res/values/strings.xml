@@ -261,7 +261,7 @@
     <string name="natatka_bersha_biblii">НАТАТКА ДЛЯ ВЕРША</string>
     <string name="zakladki_bible">Закладкі</string>
     <string name="natatki_biblii">Нататкі</string>
-    <string name="http_carkva_gazeta_by">https://carkva-gazeta.by/</string>
+<!--    <string name="http_carkva_gazeta_by">https://carkva-gazeta.by/</string>-->
     <string name="helpbible">Каб дадаць нататку або закладку, скапіяваць, выдзяліць або падкрэсьліць тэкст, націсьніце на патрэбны верш і ўтрымлівайце, тады зьнізу зьявіцца панэль дзеяньняў.</string>
     <string name="delite_natatki_i_zakladki">Вы сапраўды жадаеце выдаліць %1$s\n\"%2$s\"?</string>
     <string name="delite_all_natatki_i_zakladki">Вы сапраўды жадаеце выдаліць усе %1$s?</string>
@@ -427,13 +427,13 @@
         <item>Трыёдзь Сьвяточная</item>
     </string-array>
     <string-array name="galounae">
-        <item>Апошнія навіны</item>
+        <!--<item>Апошнія навіны</item>
         <item>Навіны хрысьціянскага сьвету</item>
         <item>Гісторыя Царквы</item>
         <item>Сьвятло Ўсходу</item>
         <item>Царква і грамадзтва</item>
         <item>Катэдральны пляц</item>
-        <item>Відэа</item>
+        <item>Відэа</item>-->
         <item>Бібліятэка</item>
     </string-array>
     <string-array name="malitvy">
@@ -690,7 +690,6 @@
     <string name="admin_update_ok">Апублікаваць</string>
     <string name="mineia_shtodzennaia">Мінэя месячная</string>
     <string name="mineia_sviatochnaia">Трыёдзь Сьвяточная</string>
-    <string name="carkva_gazeta">«Царква» — беларуская грэка-каталіцкая газета</string>
     <string-array name="admin_svity">
         <item>Чырвоны</item>
         <item>Чырвоны тоўсты</item>
@@ -718,5 +717,8 @@
     <string name="searsh_null_vynik">Вынікаў няма</string>
     <string name="tryjodz_opisanie">%1$s%2$s</string>
     <string name="bogaslujbovyia_data">%1$s за %2$d %3$s %4$d года</string>
+    <string name="dialog_error_data">ПАМЫЛКА КАЛЕНДАРА</string>
+    <string name="dialog_error_data_opisanie">Праверце сістэмную дату або абярыце дату %1$d %2$s %3$d года у меню.</string>
+    <string name="dialog_error_data_ok">Абраць</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

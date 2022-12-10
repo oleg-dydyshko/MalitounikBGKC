@@ -103,7 +103,7 @@ class DialogPasochnicaMkDir : DialogFragment() {
                                 try {
                                     var reqParam = URLEncoder.encode("mkdir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
                                     reqParam += "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode("$dir/$dirName", "UTF-8")
-                                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                                    val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
                                     with(mURL.openConnection() as HttpURLConnection) {
                                         requestMethod = "POST"
                                         val wr = OutputStreamWriter(outputStream)

@@ -87,6 +87,14 @@ class MineiaMesiachnaia : BaseActivity() {
                 mineiaList[i].day == SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY -> {
                     c.set(Calendar.DAY_OF_YEAR, SlugbovyiaTextu().getRealDay(SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY))
                 }
+                //Нядзеля праайцоў
+                mineiaList[i].day == SlugbovyiaTextu.NIADZELIA_PRA_AICOU -> {
+                    c.set(Calendar.DAY_OF_YEAR, SlugbovyiaTextu().getRealDay(SlugbovyiaTextu.NIADZELIA_PRA_AICOU))
+                }
+                //Нядзеля сьвятых Айцоў першых шасьці Сабораў
+                mineiaList[i].day == SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY -> {
+                    c.set(Calendar.DAY_OF_YEAR, SlugbovyiaTextu().getRealDay(SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY))
+                }
                 mineiaList[i].pasxa -> {
                     MenuCaliandar.getDataCalaindar(year = c[Calendar.YEAR]).forEach {
                         if (it[22].toInt() == day) {

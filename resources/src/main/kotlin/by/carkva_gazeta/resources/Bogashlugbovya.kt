@@ -41,13 +41,9 @@ import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
 import java.util.*
 
-class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogErrorData.DialogErrorDataListener {
+class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -457,6 +453,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_26_12_sabor_baharodzicy_liturhija"] = R.raw.mm_26_12_sabor_baharodzicy_liturhija
             resursMap["mm_28_12_liturhija"] = R.raw.mm_28_12_liturhija
             resursMap["sluzba_vyzvalen_biazvinna_zniavolenych"] = R.raw.sluzba_vyzvalen_biazvinna_zniavolenych
+            resursMap["mm_11_17_12_ndz_praajcou_liturhija"] = R.raw.mm_11_17_12_ndz_praajcou_liturhija
+            resursMap["mm_13_19_07_ndz_ajcou_6_saborau_liturhija"] = R.raw.mm_13_19_07_ndz_ajcou_6_saborau_liturhija
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -890,53 +888,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun setDataKaliandara() {
-        val c = Calendar.getInstance()
-        val i = Intent(this, CaliandarMun::class.java)
-        i.putExtra("mun", c[Calendar.MONTH])
-        i.putExtra("day", c[Calendar.DATE])
-        i.putExtra("year", c[Calendar.YEAR])
-        i.putExtra("getData", true)
-        caliandarMunLauncher.launch(i)
-    }
-
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
         val liturgia = resurs == "lit_jan_zalat" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica"
         val res = withContext(Dispatchers.IO) {
-            var result = 0L
-            withContext(Dispatchers.IO) {
-                try {
-                    var reqParam = URLEncoder.encode("getData", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    val mURL = URL("https://android.carkva-gazeta.by/admin/android.php")
-                    with(mURL.openConnection() as HttpURLConnection) {
-                        requestMethod = "POST"
-                        val wr = OutputStreamWriter(outputStream)
-                        wr.write(reqParam)
-                        wr.flush()
-                        val sb = StringBuilder()
-                        BufferedReader(InputStreamReader(inputStream)).use {
-                            var inputLine = it.readLine()
-                            while (inputLine != null) {
-                                sb.append(inputLine)
-                                inputLine = it.readLine()
-                            }
-                        }
-                        val gson = Gson()
-                        val type = TypeToken.getParameterized(Long::class.java).type
-                        result = gson.fromJson<Long>(sb.toString(), type).toLong()
-                    }
-                } catch (_: Throwable) {
-                }
-                withContext(Dispatchers.Main) {
-                    val kalSite = Calendar.getInstance()
-                    kalSite.timeInMillis = result * 1000
-                    if (!(c[Calendar.DAY_OF_YEAR] == kalSite[Calendar.DAY_OF_YEAR] && c[Calendar.YEAR] == kalSite[Calendar.YEAR])) {
-                        val dialogErrorData = DialogErrorData.getInstance(kalSite[Calendar.DATE], kalSite[Calendar.MONTH], kalSite[Calendar.YEAR])
-                        dialogErrorData.show(supportFragmentManager, "dialogErrorData")
-                    }
-                }
-            }
             zmenyiaChastki.setDzenNoch(dzenNoch)
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya_error

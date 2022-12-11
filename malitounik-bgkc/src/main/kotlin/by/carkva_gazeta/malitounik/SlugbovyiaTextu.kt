@@ -26,6 +26,8 @@ class SlugbovyiaTextu {
         const val VIALHADZINY = 6
         const val PAUNOCHNICA = 7
         const val AICOU_VII_SUSVETNAGA_SABORY = 1000
+        const val NIADZELIA_PRA_AICOU = 1001
+        const val NIADZELIA_AICOU_VI_SABORY = 1002
     }
 
     init {
@@ -160,6 +162,8 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(257, "Сусьветнае Ўзвышэньне Пачэснага і Жыцьцядайнага Крыжа", "mm_14_09_uzvyszennie_kryza_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(258, "Пасьвяцьце Ўзвышэньня і сьвятога вялікамучаніка Мікіты", "mm_15_09_pasviaccie_uzvyszennia_viaczernia", VIACZERNIA))
         datMinSH.add(SlugbovyiaTextuData(AICOU_VII_SUSVETNAGA_SABORY, "Нядзеля сьвятых айцоў VII Сусьветнага сабору", "mm_11_17_10_ajcou_7_susviet_saboru_liturhija", LITURHIJA))
+        datMinSH.add(SlugbovyiaTextuData(NIADZELIA_PRA_AICOU, "Нядзеля праайцоў", "mm_11_17_12_ndz_praajcou_liturhija", LITURHIJA))
+        datMinSH.add(SlugbovyiaTextuData(NIADZELIA_AICOU_VI_SABORY, "Нядзеля сьвятых Айцоў першых шасьці Сабораў", "mm_13_19_07_ndz_ajcou_6_saborau_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(217, "Перадсьвяцьце Перамяненьня і сьв. муч. Яўсігнея", "mm_05_08_pieradsv_pieramianiennia_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(217, "Перадсьвяцьце Перамяненьня і сьв. муч. Яўсігнея", "mm_05_08_pieradsv_pieramianiennia_viaczernia", VIACZERNIA))
         datMinSH.add(SlugbovyiaTextuData(218, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "mm_06_08_pieramianiennie_liturhija", LITURHIJA))
@@ -297,8 +301,7 @@ class SlugbovyiaTextu {
 
     fun getResource(day: Int, dayOfYear: Int, sluzba: Int): String {
         var resource = "0"
-        val checkDay = if (day == AICOU_VII_SUSVETNAGA_SABORY) getRealDay(day)
-        else day
+        val checkDay = getRealDay(day)
         datMinVP.forEach {
             if (it.pasxa) {
                 if (day == it.day && it.sluzba == sluzba) {
@@ -316,7 +319,7 @@ class SlugbovyiaTextu {
                     resource = it.resource
                 }
             } else {
-                if (dayOfYear == it.day && it.sluzba == sluzba) {
+                if (getFictionalDay(dayOfYear) == it.day && it.sluzba == sluzba) {
                     resource = it.resource
                 }
             }
@@ -337,8 +340,7 @@ class SlugbovyiaTextu {
 
     fun getResource(day: Int, pasxa: Boolean, sluzba: Int): String {
         var resource = "0"
-        val checkDay = if (day == AICOU_VII_SUSVETNAGA_SABORY) getRealDay(day)
-        else day
+        val checkDay = getFictionalDay(day)
         datMinVP.forEach {
             if (day == it.day && pasxa == it.pasxa && it.sluzba == sluzba) {
                 resource = it.resource
@@ -479,7 +481,7 @@ class SlugbovyiaTextu {
                     return true
                 }
             } else {
-                if (dayOfYear == it.day && it.sluzba == LITURHIJA) {
+                if (getFictionalDay(dayOfYear) == it.day && it.sluzba == LITURHIJA) {
                     return true
                 }
             }
@@ -638,15 +640,69 @@ class SlugbovyiaTextu {
     fun getRealDay(day: Int): Int {
         var realDay = day
         val calendar = Calendar.getInstance()
+        when (day) {
+            AICOU_VII_SUSVETNAGA_SABORY -> {
+                //Айцоў VII Сусьветнага Сабору
+                for (i in 11..17) {
+                    calendar.set(calendar.get(Calendar.YEAR), Calendar.OCTOBER, i)
+                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                    if (wik == Calendar.SUNDAY) {
+                        realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                    }
+                }
+            }
+           NIADZELIA_PRA_AICOU -> {
+                //Нядзеля праайцоў
+                for (i in 11..17) {
+                    calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
+                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                    if (wik == Calendar.SUNDAY) {
+                        realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                    }
+                }
+            }
+            NIADZELIA_AICOU_VI_SABORY -> {
+                //Нядзеля сьвятых Айцоў першых шасьці Сабораў
+                for (i in 13..19) {
+                    calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
+                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                    if (wik == Calendar.SUNDAY) {
+                        realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                    }
+                }
+            }
+        }
+        return realDay
+    }
+
+    fun getFictionalDay(dayOfYear: Int): Int {
+        var fictionalDay = dayOfYear
+        val calendar = Calendar.getInstance()
         //Айцоў VII Сусьветнага Сабору
         for (i in 11..17) {
             calendar.set(calendar.get(Calendar.YEAR), Calendar.OCTOBER, i)
             val wik = calendar.get(Calendar.DAY_OF_WEEK)
-            if (wik == Calendar.SUNDAY && (calendar.get(Calendar.DAY_OF_YEAR) == day || day == AICOU_VII_SUSVETNAGA_SABORY)) {
-                realDay = calendar.get(Calendar.DAY_OF_YEAR)
+            if (wik == Calendar.SUNDAY) {
+                fictionalDay = AICOU_VII_SUSVETNAGA_SABORY
             }
         }
-        return realDay
+        //Нядзеля праайцоў
+        for (i in 11..17) {
+            calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
+            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+            if (wik == Calendar.SUNDAY) {
+                fictionalDay = NIADZELIA_PRA_AICOU
+            }
+        }
+        //Нядзеля сьвятых Айцоў першых шасьці Сабораў
+        for (i in 13..19) {
+            calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
+            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+            if (wik == Calendar.SUNDAY) {
+                fictionalDay = NIADZELIA_AICOU_VI_SABORY
+            }
+        }
+        return fictionalDay
     }
 
     fun checkFullChtenia(resource: Int): Boolean {

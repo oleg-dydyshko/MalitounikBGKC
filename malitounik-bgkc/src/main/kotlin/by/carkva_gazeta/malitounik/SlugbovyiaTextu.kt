@@ -675,14 +675,14 @@ class SlugbovyiaTextu {
         return realDay
     }
 
-    fun getFictionalDay(dayOfYear: Int): Int {
+    private fun getFictionalDay(dayOfYear: Int): Int {
         var fictionalDay = dayOfYear
         val calendar = Calendar.getInstance()
         //Айцоў VII Сусьветнага Сабору
         for (i in 11..17) {
             calendar.set(calendar.get(Calendar.YEAR), Calendar.OCTOBER, i)
             val wik = calendar.get(Calendar.DAY_OF_WEEK)
-            if (wik == Calendar.SUNDAY) {
+            if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR]) {
                 fictionalDay = AICOU_VII_SUSVETNAGA_SABORY
             }
         }
@@ -690,7 +690,7 @@ class SlugbovyiaTextu {
         for (i in 11..17) {
             calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
             val wik = calendar.get(Calendar.DAY_OF_WEEK)
-            if (wik == Calendar.SUNDAY) {
+            if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR]) {
                 fictionalDay = NIADZELIA_PRA_AICOU
             }
         }
@@ -698,7 +698,7 @@ class SlugbovyiaTextu {
         for (i in 13..19) {
             calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
             val wik = calendar.get(Calendar.DAY_OF_WEEK)
-            if (wik == Calendar.SUNDAY) {
+            if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR]) {
                 fictionalDay = NIADZELIA_AICOU_VI_SABORY
             }
         }

@@ -11,11 +11,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuCaliandar
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.util.*
 
 class DialogLiturgia : DialogFragment() {
     private var chast = 1
@@ -84,12 +86,18 @@ class DialogLiturgia : DialogFragment() {
                 8 -> {
                     binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne).uppercase()
                     val zch = ZmenyiaChastki()
+                    arguments?.let {
+                        zch.setArrayData(MenuCaliandar.getDataCalaindar(it.getInt("date"), it.getInt("month"), it.getInt("year")))
+                    }
                     zch.setDzenNoch(dzenNoch)
                     builder.append(zch.sviatyiaView(1))
                 }
                 9 -> {
                     binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne).uppercase()
                     val zch = ZmenyiaChastki()
+                    arguments?.let {
+                        zch.setArrayData(MenuCaliandar.getDataCalaindar(it.getInt("date"), it.getInt("month"), it.getInt("year")))
+                    }
                     zch.setDzenNoch(dzenNoch)
                     builder.append(zch.sviatyiaView(0))
                 }
@@ -136,10 +144,13 @@ class DialogLiturgia : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(chast: Int): DialogLiturgia {
+        fun getInstance(chast: Int, date: Int = Calendar.getInstance()[Calendar.DATE], month: Int = Calendar.getInstance()[Calendar.MONTH], year: Int = Calendar.getInstance()[Calendar.YEAR]): DialogLiturgia {
             val instance = DialogLiturgia()
             val args = Bundle()
             args.putInt("chast", chast)
+            args.putInt("date", date)
+            args.putInt("month", month)
+            args.putInt("year", year)
             instance.arguments = args
             return instance
         }

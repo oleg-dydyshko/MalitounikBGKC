@@ -1509,6 +1509,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         }
         prefEditor.apply()
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            setResult(RESULT_OK)
             super.onBack()
         } else if (bindingcontent.swipeRefreshLayout.visibility == View.GONE) {
             invalidateOptionsMenu()
@@ -1520,6 +1521,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     }
+                    setResult(RESULT_OK)
                     super.onBack()
                 }
             } else {
@@ -1543,6 +1545,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
+            setResult(RESULT_OK)
             super.onBack()
         }
     }

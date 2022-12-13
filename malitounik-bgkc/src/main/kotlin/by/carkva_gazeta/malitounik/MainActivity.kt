@@ -78,19 +78,18 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private val searchSviatyiaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
-            if (intent != null) {
-                val dayOfYear = intent.getIntExtra("dayOfYear", 0)
-                val data = MenuCaliandar.getPositionCaliandar(dayOfYear, c.get(Calendar.YEAR))
-                if (setDataCalendar != data[25].toInt()) {
-                    setDataCalendar = data[25].toInt()
-                    val menuCaliandar = supportFragmentManager.findFragmentByTag("menuCaliandar") as? MenuCaliandar
-                    if (menuCaliandar == null) {
-                        selectFragment(binding.label1, true)
-                    } else {
-                        menuCaliandar.setPage(setDataCalendar)
-                    }
-                }
+            val dayOfYear = intent?.getIntExtra("dayOfYear", 0) ?: 0
+            val data = MenuCaliandar.getPositionCaliandar(dayOfYear, c.get(Calendar.YEAR))
+            if (setDataCalendar != data[25].toInt()) {
+                setDataCalendar = data[25].toInt()
+                val menuCaliandar = supportFragmentManager.findFragmentByTag("menuCaliandar") as? MenuCaliandar
+                menuCaliandar?.setPage(setDataCalendar) ?: selectFragment(binding.label1, true)
             }
+        }
+    }
+    private val bibliatekaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            binding.drawerLayout.openDrawer(GravityCompat.START)
         }
     }
 
@@ -892,7 +891,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 else binding.label1.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label2 -> {
-                tolbarTitle = getString(R.string.sajt)
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
                 if (dzenNoch) binding.label2.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label2.setBackgroundResource(R.drawable.selector_gray)
             }
@@ -1013,25 +1012,25 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
             R.id.label2 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuGlavnoe")
-                if (fragment == null) {
-                    if (shortcuts || intent.extras?.containsKey("site") == true) {
-                        if (checkmoduleResources()) {
-                            if (checkmodulesBiblijateka()) {
-                                val intentBib = Intent()
-                                intentBib.setClassName(this, BIBLIOTEKAVIEW)
-                                intentBib.data = intent.data
-                                intentBib.putExtra("rubrika", biblijatekaRubrika)
-                                if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
-                                if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
-                                startActivity(intentBib)
-                            } else {
-                                downloadDynamicModule(this)
-                            }
-                        } else {
-                            val dadatak = DialogInstallDadatak()
-                            dadatak.show(supportFragmentManager, "dadatak")
+                if (checkmoduleResources()) {
+                    if (checkmodulesBiblijateka()) {
+                        val intentBib = Intent()
+                        intentBib.setClassName(this, BIBLIOTEKAVIEW)
+                        if (shortcuts || intent.extras?.containsKey("site") == true) {
+                            intentBib.data = intent.data
+                            intentBib.putExtra("rubrika", biblijatekaRubrika)
+                            if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
+                            if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
                         }
+                        bibliatekaLauncher.launch(intentBib)
+                    } else {
+                        downloadDynamicModule(this)
                     }
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(supportFragmentManager, "dadatak")
+                }
+                if (fragment == null) {
                     val menuGlavnoe = MenuGlavnoe()
                     ftrans.replace(R.id.conteiner, menuGlavnoe, "menuGlavnoe")
                     prefEditors.putInt("id", idSelect)

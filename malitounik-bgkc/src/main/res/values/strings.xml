@@ -21,7 +21,7 @@
     <string name="data_search">ВЫБЯРЫЦЕ РАЗЬДЗЕЛ.\nУСЯГО: %1$d</string>
     <string name="razdzel">Разьдзел</string>
     <string name="psalom">Псальма</string>
-    <string name="sajt">ГАЛОЎНАЯ - сайт</string>
+    <!--<string name="sajt">ГАЛОЎНАЯ - сайт</string>-->
     <string name="liturgikon">БОГАСЛУЖБОВЫЯ ТЭКСТЫ</string>
     <string name="liturgikon2">Богаслужбовыя тэксты</string>
     <string name="malitvy">МАЛІТВЫ</string>

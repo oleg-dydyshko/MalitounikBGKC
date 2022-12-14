@@ -317,11 +317,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = R.id.label1
                     selectFragment(binding.label1, true, shortcuts = true)
                 }
-                /*data.toString().contains("shortcuts=2") -> {
+                data.toString().contains("shortcuts=2") -> {
                     idSelect = R.id.label2
                     selectFragment(binding.label2, true, shortcuts = true)
                 }
-                data.toString().contains("caliandar") -> {
+                /*data.toString().contains("caliandar") -> {
                     idSelect = R.id.label1
                     selectFragment(binding.label1, true)
                 }
@@ -425,7 +425,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         var scroll = false
         when (idSelect) {
             R.id.label1 -> selectFragment(binding.label1, true)
-            R.id.label2 -> selectFragment(binding.label2, true)
+            R.id.label2 -> {
+                if (!data.toString().contains("shortcuts=2"))
+                    selectFragment(binding.label2, true)
+            }
             R.id.label3 -> selectFragment(binding.label3, true)
             R.id.label4 -> {
                 if (!binding.label4.isShown) scroll = true

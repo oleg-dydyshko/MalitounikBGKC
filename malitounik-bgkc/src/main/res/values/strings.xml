@@ -426,16 +426,16 @@
         <item>Службы Сьветлага тыдня</item>
         <item>Трыёдзь Сьвяточная</item>
     </string-array>
-    <string-array name="galounae">
-        <!--<item>Апошнія навіны</item>
+    <!--<string-array name="galounae">
+        <item>Апошнія навіны</item>
         <item>Навіны хрысьціянскага сьвету</item>
         <item>Гісторыя Царквы</item>
         <item>Сьвятло Ўсходу</item>
         <item>Царква і грамадзтва</item>
         <item>Катэдральны пляц</item>
-        <item>Відэа</item>-->
+        <item>Відэа</item>
         <item>Бібліятэка</item>
-    </string-array>
+    </string-array>-->
     <string-array name="malitvy">
         <item>Ранішняя малітвы</item>
         <item>Вячэрнія малітвы</item>

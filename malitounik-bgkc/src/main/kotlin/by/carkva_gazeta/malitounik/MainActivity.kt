@@ -797,7 +797,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     private fun selectFragment(view: View?, start: Boolean = false, biblijatekaRubrika: Int = 0, shortcuts: Boolean = false) {
-        idSelect = view?.id ?: R.id.label1
+        val id = view?.id ?: R.id.label1
+        if (id != R.id.label2)
+            idSelect = id
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             if (dzenNoch) {
@@ -890,11 +892,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (dzenNoch) binding.label1.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label1.setBackgroundResource(R.drawable.selector_gray)
             }
-            R.id.label2 -> {
+            /*R.id.label2 -> {
                 tolbarTitle = getString(R.string.bibliateka_carkvy)
                 if (dzenNoch) binding.label2.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label2.setBackgroundResource(R.drawable.selector_gray)
-            }
+            }*/
             R.id.label3 -> {
                 tolbarTitle = getString(R.string.liturgikon)
                 if (dzenNoch) binding.label3.setBackgroundResource(R.drawable.selector_dark_maranata)
@@ -996,6 +998,32 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
 
         if (idSelect != R.id.label2 && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
+        if (id == R.id.label2) {
+            //val fragment = supportFragmentManager.findFragmentByTag("menuGlavnoe")
+            if (checkmoduleResources()) {
+                if (checkmodulesBiblijateka()) {
+                    val intentBib = Intent()
+                    intentBib.setClassName(this, BIBLIOTEKAVIEW)
+                    if (shortcuts || intent.extras?.containsKey("site") == true) {
+                        intentBib.data = intent.data
+                        intentBib.putExtra("rubrika", biblijatekaRubrika)
+                        if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
+                        if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
+                    }
+                    bibliatekaLauncher.launch(intentBib)
+                } else {
+                    downloadDynamicModule(this)
+                }
+            } else {
+                val dadatak = DialogInstallDadatak()
+                dadatak.show(supportFragmentManager, "dadatak")
+            }
+            /*if (fragment == null) {
+                val menuGlavnoe = MenuGlavnoe()
+                ftrans.replace(R.id.conteiner, menuGlavnoe, "menuGlavnoe")
+                prefEditors.putInt("id", idSelect)
+            }*/
+        }
         when (idSelect) {
             R.id.label1 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
@@ -1008,32 +1036,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         i.putExtra("shortcuts", true)
                         startActivity(i)
                     }
-                }
-            }
-            R.id.label2 -> {
-                val fragment = supportFragmentManager.findFragmentByTag("menuGlavnoe")
-                if (checkmoduleResources()) {
-                    if (checkmodulesBiblijateka()) {
-                        val intentBib = Intent()
-                        intentBib.setClassName(this, BIBLIOTEKAVIEW)
-                        if (shortcuts || intent.extras?.containsKey("site") == true) {
-                            intentBib.data = intent.data
-                            intentBib.putExtra("rubrika", biblijatekaRubrika)
-                            if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
-                            if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
-                        }
-                        bibliatekaLauncher.launch(intentBib)
-                    } else {
-                        downloadDynamicModule(this)
-                    }
-                } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(supportFragmentManager, "dadatak")
-                }
-                if (fragment == null) {
-                    val menuGlavnoe = MenuGlavnoe()
-                    ftrans.replace(R.id.conteiner, menuGlavnoe, "menuGlavnoe")
-                    prefEditors.putInt("id", idSelect)
                 }
             }
             R.id.label3 -> {

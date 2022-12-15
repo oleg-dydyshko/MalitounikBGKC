@@ -1265,7 +1265,15 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
             }
             else -> {
-                prefEditors.putInt("id", idSelect)
+                val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
+                if (fragment == null) {
+                    val caliandar = MenuCaliandar.newInstance(setDataCalendar)
+                    ftrans.replace(R.id.conteiner, caliandar, "menuCaliandar")
+                    prefEditors.putInt("id", idSelect)
+                    tolbarTitle = getString(R.string.kaliandar2)
+                    if (dzenNoch) binding.label1.setBackgroundResource(R.drawable.selector_dark_maranata)
+                    else binding.label1.setBackgroundResource(R.drawable.selector_gray)
+                }
             }
         }
         if (start) {

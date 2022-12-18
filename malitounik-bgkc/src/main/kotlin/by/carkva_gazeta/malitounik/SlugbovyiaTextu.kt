@@ -664,7 +664,7 @@ class SlugbovyiaTextu {
             NIADZELIA_AICOU_VI_SABORY -> {
                 //Нядзеля сьвятых Айцоў першых шасьці Сабораў
                 for (i in 13..19) {
-                    calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
+                    calendar.set(calendar.get(Calendar.YEAR), Calendar.JULY, i)
                     val wik = calendar.get(Calendar.DAY_OF_WEEK)
                     if (wik == Calendar.SUNDAY) {
                         realDay = calendar.get(Calendar.DAY_OF_YEAR)
@@ -696,7 +696,7 @@ class SlugbovyiaTextu {
         }
         //Нядзеля сьвятых Айцоў першых шасьці Сабораў
         for (i in 13..19) {
-            calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
+            calendar.set(calendar.get(Calendar.YEAR), Calendar.JULY, i)
             val wik = calendar.get(Calendar.DAY_OF_WEEK)
             if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR]) {
                 fictionalDay = NIADZELIA_AICOU_VI_SABORY

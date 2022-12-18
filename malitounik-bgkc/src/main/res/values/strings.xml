@@ -708,7 +708,7 @@
     <string name="malitva_za_paclicanyx_i_jyvyx">УСПАМІН ПАМЕРЛЫХ І ЖЫВЫХ</string>
     <string name="bible_time_error">Няма захаванай старонкі</string>
     <string name="bible_vybranoe_error">Каб дадаць у Выбранае, націсьніце на зорачку ці \"Дадаць у Выбранае\"</string>
-    <string name="gl_tyt">Глядзіце тут</string>
+    <string name="gl_tyt">%1$s: Глядзіце тут</string>
     <string name="settings_poshuk">НАЛАДЫ ПОШУКУ</string>
     <string name="settings_poshuk_smoll">Налады пошуку</string>
     <string name="help_notifications_api33">Для паказу апавяшчэньняў пра падзеі і сьвяты, патрабуецца дазвол на паказ апавяшчэньняў.</string>

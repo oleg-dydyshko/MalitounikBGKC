@@ -9,16 +9,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.content.res.Configuration
+import android.graphics.Typeface
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextWatcher
-import android.text.style.AbsoluteSizeSpan
-import android.text.style.BackgroundColorSpan
-import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
+import android.text.style.*
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -904,11 +902,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val slugbovyiaTextu = SlugbovyiaTextu()
             raznica = zmenyiaChastki.raznica()
             dayOfYear = zmenyiaChastki.dayOfYear()
+            var zmennyiaCastkiTitle = ""
             checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
             if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR]))) {
                 chechZmena = true
                 val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
                 val idZmenyiaChastki = resursMap[resours] ?: R.raw.bogashlugbovya_error
+                zmennyiaCastkiTitle = slugbovyiaTextu.getTitle(resours)
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
             }
             if ((resurs == "lit_ran_asv_dar" || resurs == "viaczernia_bierascie") && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, c[Calendar.DAY_OF_YEAR]))) {
@@ -937,7 +937,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             line = line.replace("KANDAK", "")
                             builder.append(line)
                             if (chechZmena) {
-                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt)).append("<br><br>\n")
+                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
                             }
                             try {
                                 if (dayOfWeek == 1) {
@@ -953,7 +953,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             line = line.replace("PRAKIMEN", "")
                             builder.append(line)
                             if (chechZmena) {
-                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt)).append("<br><br>\n")
+                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
                             }
                             try {
                                 if (dayOfWeek == 1) {
@@ -969,7 +969,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             line = line.replace("ALILUIA", "")
                             builder.append(line)
                             if (chechZmena) {
-                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt)).append("<br><br>\n")
+                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
                             }
                             try {
                                 if (dayOfWeek == 1) {
@@ -985,7 +985,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             line = line.replace("PRICHASNIK", "")
                             builder.append(line)
                             if (chechZmena) {
-                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt)).append("<br><br>\n")
+                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
                             }
                             try {
                                 if (dayOfWeek == 1) {
@@ -1001,7 +1001,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             line.contains("APCH") -> {
                                 line = line.replace("APCH", "")
                                 if (chechZmena && !nochenia) {
-                                    builder.append("<br>").append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt)).append("<br><br>\n")
+                                    builder.append("<br>").append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
                                 }
                                 var sv = zmenyiaChastki.sviatyia()
                                 if (sv != "") {
@@ -1021,7 +1021,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             line.contains("EVCH") -> {
                                 line = line.replace("EVCH", "")
                                 if (chechZmena && !nochenia) {
-                                    builder.append("<br>").append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt)).append("<br><br>\n")
+                                    builder.append("<br>").append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
                                 }
                                 var sv = zmenyiaChastki.sviatyia()
                                 if (sv != "") {
@@ -1503,10 +1503,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun runZmennyiaChastki(text: Spannable, index: Int): Int {
-        val stringGTA1 = getString(by.carkva_gazeta.malitounik.R.string.gl_tyt)
+        val stringGTA1 = "Глядзіце тут"
         val strLigGTA1 = stringGTA1.length
         val bsatGTA1 = text.indexOf(stringGTA1, index)
         if (bsatGTA1 != -1) {
+            val t1 = text.lastIndexOf("\n", bsatGTA1)
+            if (t1 != -1) {
+                if (dzenNoch) text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t1, bsatGTA1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                else text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t1, bsatGTA1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                text.setSpan(StyleSpan(Typeface.BOLD), t1, bsatGTA1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
                     val slugbovyiaTextu = SlugbovyiaTextu()

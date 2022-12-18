@@ -318,7 +318,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     selectFragment(binding.label1, true, shortcuts = true)
                 }
                 data.toString().contains("shortcuts=2") -> {
-                    idSelect = R.id.label2
+                    //idSelect = R.id.label2
                     selectFragment(binding.label2, true, shortcuts = true)
                 }
                 /*data.toString().contains("caliandar") -> {
@@ -425,10 +425,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         var scroll = false
         when (idSelect) {
             R.id.label1 -> selectFragment(binding.label1, true)
-            R.id.label2 -> {
-                if (!data.toString().contains("shortcuts=2"))
-                    selectFragment(binding.label2, true)
-            }
+            /*R.id.label2 -> {
+                if (!data.toString().contains("shortcuts=2")) selectFragment(binding.label2, true)
+            }*/
             R.id.label3 -> selectFragment(binding.label3, true)
             R.id.label4 -> {
                 if (!binding.label4.isShown) scroll = true
@@ -801,8 +800,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     private fun selectFragment(view: View?, start: Boolean = false, biblijatekaRubrika: Int = 0, shortcuts: Boolean = false) {
         val id = view?.id ?: R.id.label1
-        if (id != R.id.label2)
-            idSelect = id
+        if (id != R.id.label2) idSelect = id
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             if (dzenNoch) {
@@ -1027,6 +1025,17 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 prefEditors.putInt("id", idSelect)
             }*/
         }
+        if (tolbarTitle == "") {
+            val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
+            if (fragment == null) {
+                val caliandar = MenuCaliandar.newInstance(setDataCalendar)
+                ftrans.replace(R.id.conteiner, caliandar, "menuCaliandar")
+                prefEditors.putInt("id", idSelect)
+                tolbarTitle = getString(R.string.kaliandar2)
+                if (dzenNoch) binding.label1.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label1.setBackgroundResource(R.drawable.selector_gray)
+            }
+        }
         when (idSelect) {
             R.id.label1 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
@@ -1051,7 +1060,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
             R.id.label4 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuMalitvy")
-                if (fragment == null) {
+               if (fragment == null) {
                     val menuMalitvy = MenuMalitvy()
                     ftrans.replace(R.id.conteiner, menuMalitvy, "menuMalitvy")
                     prefEditors.putInt("id", idSelect)
@@ -1083,7 +1092,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
             R.id.label8 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("semuxa")
-                if (fragment == null) {
+               if (fragment == null) {
                     val file = File("$filesDir/BibliaSemuxaNatatki.json")
                     if (file.exists() && BibleGlobalList.natatkiSemuxa.size == 0) {
                         try {
@@ -1191,7 +1200,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
             R.id.label105 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("parafiiBgkc")
-                if (fragment == null) {
+               if (fragment == null) {
                     val parafiiBgkc = MenuParafiiBgkc()
                     ftrans.replace(R.id.conteiner, parafiiBgkc, "parafiiBgkc")
                     prefEditors.putInt("id", idSelect)
@@ -1262,17 +1271,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     val vybranoe = MenuVybranoe()
                     ftrans.replace(R.id.conteiner, vybranoe, "MenuVybranoe")
                     prefEditors.putInt("id", idSelect)
-                }
-            }
-            else -> {
-                val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
-                if (fragment == null) {
-                    val caliandar = MenuCaliandar.newInstance(setDataCalendar)
-                    ftrans.replace(R.id.conteiner, caliandar, "menuCaliandar")
-                    prefEditors.putInt("id", idSelect)
-                    tolbarTitle = getString(R.string.kaliandar2)
-                    if (dzenNoch) binding.label1.setBackgroundResource(R.drawable.selector_dark_maranata)
-                    else binding.label1.setBackgroundResource(R.drawable.selector_gray)
                 }
             }
         }

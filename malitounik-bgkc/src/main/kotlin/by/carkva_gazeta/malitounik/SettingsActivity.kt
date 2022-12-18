@@ -69,8 +69,9 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         const val GET_FONT_SIZE_TOAST = 12F
         const val GET_CALIANDAR_YEAR_MIN = 2021
         const val GET_CALIANDAR_YEAR_MAX = 2024
-        const val NOTIFICATION_CHANNEL_ID_SABYTIE = "3001"
-        const val NOTIFICATION_CHANNEL_ID_SVIATY = "2001"
+        const val NOTIFICATION_CHANNEL_ID_SABYTIE = "3003"
+        const val NOTIFICATION_CHANNEL_ID_SVIATY = "2003"
+        val vibrate = longArrayOf(0, 1000, 700, 1000)
 
         private fun mkTime(year: Int, month: Int, day: Int, hour: Int): Long {
             val calendar = Calendar.getInstance()
@@ -642,7 +643,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             val context = Malitounik.applicationContext()
             val name = if (channelID == NOTIFICATION_CHANNEL_ID_SVIATY) context.getString(R.string.sviaty)
             else context.getString(R.string.sabytie)
-            val vibrate = longArrayOf(0, 1000, 700, 1000, 700, 1000)
             val channel = NotificationChannel(channelID, name, NotificationManager.IMPORTANCE_HIGH)
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             channel.description = name
@@ -658,6 +658,10 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             notificationManager.deleteNotificationChannel("by.carkva-gazeta")
             notificationManager.deleteNotificationChannel("3000")
             notificationManager.deleteNotificationChannel("2000")
+            notificationManager.deleteNotificationChannel("3001")
+            notificationManager.deleteNotificationChannel("2001")
+            notificationManager.deleteNotificationChannel("3002")
+            notificationManager.deleteNotificationChannel("2002")
         }
     }
 

@@ -48,7 +48,6 @@ class ReceiverBroad : BroadcastReceiver() {
         val contentIntent = PendingIntent.getActivity(context, id, notificationIntent, flags)
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         var uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val vibrate = longArrayOf(0, 1000, 700, 1000)
         var bigIcon = R.drawable.calendar_full
         if (!sabytieSet) {
             bigIcon = R.drawable.krest
@@ -76,8 +75,8 @@ class ReceiverBroad : BroadcastReceiver() {
         }
         builder.setContentIntent(contentIntent).setWhen(System.currentTimeMillis()).setShowWhen(true).setSmallIcon(R.drawable.krest).setLargeIcon(BitmapFactory.decodeResource(context.resources, bigIcon)).setAutoCancel(true).setPriority(NotificationManagerCompat.IMPORTANCE_HIGH).setLights(ContextCompat.getColor(context, R.color.colorPrimary), 1000, 1000).setContentTitle(Name).setContentText(Sviata)
         if (sabytieSet) builder.setStyle(NotificationCompat.BigTextStyle().bigText(Sviata))
-        if (chin.getInt("guk", 1) == 1) builder.setSound(uri)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || chin.getInt("vibra", 1) == 1) builder.setVibrate(vibrate)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || chin.getInt("guk", 1) == 1) builder.setSound(uri)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || chin.getInt("vibra", 1) == 1) builder.setVibrate(SettingsActivity.vibrate)
         val notification = builder.build()
         val notificationManager = NotificationManagerCompat.from(context)
         notificationManager.notify(id, notification)

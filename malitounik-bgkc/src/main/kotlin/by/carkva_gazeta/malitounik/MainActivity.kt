@@ -228,7 +228,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
         bindingappbar.titleToolbar.setOnClickListener {
-            val layoutParams: ViewGroup.LayoutParams? = bindingappbar.toolbar.layoutParams
+            val layoutParams = bindingappbar.toolbar.layoutParams
             if (bindingappbar.titleToolbar.isSelected) {
                 resetTollbarJob?.cancel()
                 resetTollbar(layoutParams)
@@ -705,78 +705,76 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
-            menu.findItem(R.id.action_add).isVisible = false
-            menu.findItem(R.id.action_mun).isVisible = false
-            menu.findItem(R.id.action_glava).isVisible = false
-            menu.findItem(R.id.tipicon).isVisible = false
-            menu.findItem(R.id.pasxa_opis).isVisible = false
-            menu.findItem(R.id.pasxa).isVisible = false
-            menu.findItem(R.id.trash).isVisible = false
-            menu.findItem(R.id.sabytie).isVisible = false
-            menu.findItem(R.id.prazdnik).isVisible = false
-            menu.findItem(R.id.search_sviatyia).isVisible = false
-            menu.findItem(R.id.sortdate).isVisible = false
-            menu.findItem(R.id.sorttime).isVisible = false
-            menu.findItem(R.id.action_font).isVisible = false
-            menu.findItem(R.id.action_bright).isVisible = false
-            menu.findItem(R.id.action_dzen_noch).isVisible = false
-            menu.findItem(R.id.action_help).isVisible = false
-            menu.findItem(R.id.action_carkva).isVisible = false
-            if (idSelect == R.id.label1) {
-                val arrayList = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])
-                val dataCalendar = arrayList[0][25].toInt()
-                menu.findItem(R.id.action_glava).isVisible = dataCalendar != setDataCalendar
-                menu.findItem(R.id.action_mun).isVisible = true
-                menu.findItem(R.id.tipicon).isVisible = true
-                menu.findItem(R.id.sabytie).isVisible = true
-                menu.findItem(R.id.search_sviatyia).isVisible = true
-                menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
-                if (dzenNoch) {
-                    menu.findItem(R.id.action_mun).setIcon(R.drawable.calendar_black_full)
-                    menu.findItem(R.id.action_glava).setIcon(R.drawable.calendar_black)
+        menu.findItem(R.id.action_add).isVisible = false
+        menu.findItem(R.id.action_mun).isVisible = false
+        menu.findItem(R.id.action_glava).isVisible = false
+        menu.findItem(R.id.tipicon).isVisible = false
+        menu.findItem(R.id.pasxa_opis).isVisible = false
+        menu.findItem(R.id.pasxa).isVisible = false
+        menu.findItem(R.id.trash).isVisible = false
+        menu.findItem(R.id.sabytie).isVisible = false
+        menu.findItem(R.id.prazdnik).isVisible = false
+        menu.findItem(R.id.search_sviatyia).isVisible = false
+        menu.findItem(R.id.sortdate).isVisible = false
+        menu.findItem(R.id.sorttime).isVisible = false
+        menu.findItem(R.id.action_font).isVisible = false
+        menu.findItem(R.id.action_bright).isVisible = false
+        menu.findItem(R.id.action_dzen_noch).isVisible = false
+        menu.findItem(R.id.action_help).isVisible = false
+        menu.findItem(R.id.action_carkva).isVisible = false
+        if (idSelect == R.id.label1) {
+            val arrayList = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])
+            val dataCalendar = arrayList[0][25].toInt()
+            menu.findItem(R.id.action_glava).isVisible = dataCalendar != setDataCalendar
+            menu.findItem(R.id.action_mun).isVisible = true
+            menu.findItem(R.id.tipicon).isVisible = true
+            menu.findItem(R.id.sabytie).isVisible = true
+            menu.findItem(R.id.search_sviatyia).isVisible = true
+            menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
+            if (dzenNoch) {
+                menu.findItem(R.id.action_mun).setIcon(R.drawable.calendar_black_full)
+                menu.findItem(R.id.action_glava).setIcon(R.drawable.calendar_black)
+            }
+        }
+        if (idSelect == R.id.label101 || idSelect == R.id.label102) {
+            menu.findItem(R.id.action_font).isVisible = true
+            menu.findItem(R.id.action_bright).isVisible = true
+            if (!k.getBoolean("auto_dzen_noch", false)) {
+                menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
+                menu.findItem(R.id.action_dzen_noch).isVisible = true
+            }
+        }
+        if (idSelect == R.id.label103) menu.findItem(R.id.prazdnik).isVisible = true
+        if (idSelect == R.id.label104) {
+            menu.findItem(R.id.pasxa_opis).isVisible = true
+            menu.findItem(R.id.pasxa).isVisible = true
+        }
+        if (idSelect == R.id.label7) {
+            menu.findItem(R.id.action_add).isVisible = true
+            menu.findItem(R.id.sortdate).isVisible = true
+            menu.findItem(R.id.sorttime).isVisible = true
+            menu.findItem(R.id.action_help).isVisible = true
+            menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
+            when (k.getInt("natatki_sort", 0)) {
+                1 -> {
+                    menu.findItem(R.id.sortdate).isChecked = true
+                    menu.findItem(R.id.sorttime).isChecked = false
+                }
+                2 -> {
+                    menu.findItem(R.id.sortdate).isChecked = false
+                    menu.findItem(R.id.sorttime).isChecked = true
+                }
+                else -> {
+                    menu.findItem(R.id.sortdate).isChecked = false
+                    menu.findItem(R.id.sorttime).isChecked = false
                 }
             }
-            if (idSelect == R.id.label101 || idSelect == R.id.label102) {
-                menu.findItem(R.id.action_font).isVisible = true
-                menu.findItem(R.id.action_bright).isVisible = true
-                if (!k.getBoolean("auto_dzen_noch", false)) {
-                    menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
-                    menu.findItem(R.id.action_dzen_noch).isVisible = true
-                }
-            }
-            if (idSelect == R.id.label103) menu.findItem(R.id.prazdnik).isVisible = true
-            if (idSelect == R.id.label104) {
-                menu.findItem(R.id.pasxa_opis).isVisible = true
-                menu.findItem(R.id.pasxa).isVisible = true
-            }
-            if (idSelect == R.id.label7) {
-                menu.findItem(R.id.action_add).isVisible = true
-                menu.findItem(R.id.sortdate).isVisible = true
-                menu.findItem(R.id.sorttime).isVisible = true
-                menu.findItem(R.id.action_help).isVisible = true
-                menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
-                when (k.getInt("natatki_sort", 0)) {
-                    1 -> {
-                        menu.findItem(R.id.sortdate).isChecked = true
-                        menu.findItem(R.id.sorttime).isChecked = false
-                    }
-                    2 -> {
-                        menu.findItem(R.id.sortdate).isChecked = false
-                        menu.findItem(R.id.sorttime).isChecked = true
-                    }
-                    else -> {
-                        menu.findItem(R.id.sortdate).isChecked = false
-                        menu.findItem(R.id.sorttime).isChecked = false
-                    }
-                }
-            }
-            if (idSelect == R.id.label12) {
-                menu.findItem(R.id.trash).isVisible = true
-                menu.findItem(R.id.sortdate).isVisible = true
-                menu.findItem(R.id.action_help).isVisible = true
-                menu.findItem(R.id.sortdate).isChecked = k.getInt("vybranoe_sort", 1) == 1
-            }
+        }
+        if (idSelect == R.id.label12) {
+            menu.findItem(R.id.trash).isVisible = true
+            menu.findItem(R.id.sortdate).isVisible = true
+            menu.findItem(R.id.action_help).isVisible = true
+            menu.findItem(R.id.sortdate).isChecked = k.getInt("vybranoe_sort", 1) == 1
         }
     }
 
@@ -800,8 +798,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     private fun selectFragment(view: View?, start: Boolean = false, biblijatekaRubrika: Int = 0, shortcuts: Boolean = false) {
         val id = view?.id ?: R.id.label1
-        if (id != R.id.label2) idSelect = id
-        if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
+        val idOld = if (id == R.id.label2) idSelect
+        else id
+        if (!(id == R.id.label9a || id == R.id.label10a)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             if (dzenNoch) {
                 binding.label1.setBackgroundResource(R.drawable.selector_dark)
@@ -850,18 +849,18 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
         prefEditors = k.edit()
-        if (idSelect == R.id.label91 || idSelect == R.id.label92 || idSelect == R.id.label93 || idSelect == R.id.label94 || idSelect == R.id.label95) {
+        if (id == R.id.label91 || id == R.id.label92 || id == R.id.label93 || id == R.id.label94 || id == R.id.label95) {
             binding.title9.visibility = View.VISIBLE
             if (dzenNoch) binding.image2.setImageResource(R.drawable.arrow_up_float_black)
             else binding.image2.setImageResource(R.drawable.arrow_up_float)
         }
-        if (idSelect == R.id.label101 || idSelect == R.id.label102 || idSelect == R.id.label103 || idSelect == R.id.label104 || idSelect == R.id.label105) {
+        if (id == R.id.label101 || id == R.id.label102 || id == R.id.label103 || id == R.id.label104 || id == R.id.label105) {
             binding.title10.visibility = View.VISIBLE
             if (dzenNoch) binding.image3.setImageResource(R.drawable.arrow_up_float_black)
             else binding.image3.setImageResource(R.drawable.arrow_up_float)
         }
 
-        if (idSelect == R.id.label9a) {
+        if (id == R.id.label9a) {
             if (binding.title9.visibility == View.VISIBLE) {
                 binding.title9.visibility = View.GONE
                 binding.image2.setImageResource(R.drawable.arrow_down_float)
@@ -874,7 +873,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
             }
         }
-        if (idSelect == R.id.label10a) {
+        if (id == R.id.label10a) {
             if (binding.title10.visibility == View.VISIBLE) {
                 binding.title10.visibility = View.GONE
                 binding.image3.setImageResource(R.drawable.arrow_down_float)
@@ -887,7 +886,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
             }
         }
-        when (idSelect) {
+        when (idOld) {
             R.id.label1 -> {
                 tolbarTitle = getString(R.string.kaliandar2)
                 if (dzenNoch) binding.label1.setBackgroundResource(R.drawable.selector_dark_maranata)
@@ -998,33 +997,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         val ftrans = supportFragmentManager.beginTransaction()
         ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
 
-        if (idSelect != R.id.label2 && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
-        if (id == R.id.label2) {
-            //val fragment = supportFragmentManager.findFragmentByTag("menuGlavnoe")
-            if (checkmoduleResources()) {
-                if (checkmodulesBiblijateka()) {
-                    val intentBib = Intent()
-                    intentBib.setClassName(this, BIBLIOTEKAVIEW)
-                    if (shortcuts || intent.extras?.containsKey("site") == true) {
-                        intentBib.data = intent.data
-                        intentBib.putExtra("rubrika", biblijatekaRubrika)
-                        if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
-                        if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
-                    }
-                    bibliatekaLauncher.launch(intentBib)
-                } else {
-                    downloadDynamicModule(this)
-                }
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(supportFragmentManager, "dadatak")
-            }
-            /*if (fragment == null) {
-                val menuGlavnoe = MenuGlavnoe()
-                ftrans.replace(R.id.conteiner, menuGlavnoe, "menuGlavnoe")
-                prefEditors.putInt("id", idSelect)
-            }*/
-        }
+        if (id != R.id.label2 && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
         if (tolbarTitle == "") {
             val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
             if (fragment == null) {
@@ -1036,34 +1009,63 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 else binding.label1.setBackgroundResource(R.drawable.selector_gray)
             }
         }
-        when (idSelect) {
+        when (id) {
             R.id.label1 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
                 if (fragment == null) {
                     val caliandar = MenuCaliandar.newInstance(setDataCalendar)
                     ftrans.replace(R.id.conteiner, caliandar, "menuCaliandar")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
                     if (shortcuts) {
                         val i = Intent(this, Sabytie::class.java)
                         i.putExtra("shortcuts", true)
                         startActivity(i)
                     }
+                    idSelect = id
                 }
+            }
+            R.id.label2 -> {
+                //val fragment = supportFragmentManager.findFragmentByTag("menuGlavnoe")
+                if (checkmoduleResources()) {
+                    if (checkmodulesBiblijateka()) {
+                        val intentBib = Intent()
+                        intentBib.setClassName(this, BIBLIOTEKAVIEW)
+                        if (shortcuts || intent.extras?.containsKey("site") == true) {
+                            intentBib.data = intent.data
+                            intentBib.putExtra("rubrika", biblijatekaRubrika)
+                            if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
+                            if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
+                        }
+                        bibliatekaLauncher.launch(intentBib)
+                    } else {
+                        downloadDynamicModule(this)
+                    }
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(supportFragmentManager, "dadatak")
+                }
+                /*if (fragment == null) {
+                    val menuGlavnoe = MenuGlavnoe()
+                    ftrans.replace(R.id.conteiner, menuGlavnoe, "menuGlavnoe")
+                    prefEditors.putInt("id", idSelect)
+                }*/
             }
             R.id.label3 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("bogaslus")
                 if (fragment == null) {
                     val bogaslus = MenuBogashlugbovya()
                     ftrans.replace(R.id.conteiner, bogaslus, "bogaslus")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label4 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuMalitvy")
-               if (fragment == null) {
+                if (fragment == null) {
                     val menuMalitvy = MenuMalitvy()
                     ftrans.replace(R.id.conteiner, menuMalitvy, "menuMalitvy")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label5 -> {
@@ -1071,7 +1073,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val menuAkafisty = MenuAkafisty()
                     ftrans.replace(R.id.conteiner, menuAkafisty, "menuAkafisty)")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label6 -> {
@@ -1079,7 +1082,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val ruzanec = MenuRuzanec()
                     ftrans.replace(R.id.conteiner, ruzanec, "ruzanec")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label7 -> {
@@ -1087,12 +1091,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val menuNatatki = MenuNatatki()
                     ftrans.replace(R.id.conteiner, menuNatatki, "MenuNatatki")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label8 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("semuxa")
-               if (fragment == null) {
+                if (fragment == null) {
                     val file = File("$filesDir/BibliaSemuxaNatatki.json")
                     if (file.exists() && BibleGlobalList.natatkiSemuxa.size == 0) {
                         try {
@@ -1129,7 +1134,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     }
                     val semuxa = MenuBibleSemuxa()
                     ftrans.replace(R.id.conteiner, semuxa, "semuxa")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                     prefEditors.putBoolean("novyzavet", false)
                 }
             }
@@ -1138,7 +1144,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val nadsana = MenuPsalterNadsana()
                     ftrans.replace(R.id.conteiner, nadsana, "nadsana")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                     prefEditors.putBoolean("novyzavet", false)
                 }
             }
@@ -1147,7 +1154,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val menuPesny = MenuPesny.getInstance("prasl")
                     ftrans.replace(R.id.conteiner, menuPesny, "menuPesnyPrasl")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label92 -> {
@@ -1155,7 +1163,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val menuPesny = MenuPesny.getInstance("bel")
                     ftrans.replace(R.id.conteiner, menuPesny, "menuPesnyBel")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label93 -> {
@@ -1163,7 +1172,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val menuPesny = MenuPesny.getInstance("bag")
                     ftrans.replace(R.id.conteiner, menuPesny, "menuPesnyBag")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label94 -> {
@@ -1171,7 +1181,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val menuPesny = MenuPesny.getInstance("kal")
                     ftrans.replace(R.id.conteiner, menuPesny, "menuPesnyKal")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label95 -> {
@@ -1179,7 +1190,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val menuPesny = MenuPesny.getInstance("taize")
                     ftrans.replace(R.id.conteiner, menuPesny, "menuPesnyTaize")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label103 -> {
@@ -1187,7 +1199,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val menuCviaty = MenuSviaty()
                     ftrans.replace(R.id.conteiner, menuCviaty, "MenuCviaty")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label104 -> {
@@ -1195,15 +1208,17 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val menuPashalii = MenuPashalii()
                     ftrans.replace(R.id.conteiner, menuPashalii, "MenuPashalii")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label105 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("parafiiBgkc")
-               if (fragment == null) {
+                if (fragment == null) {
                     val parafiiBgkc = MenuParafiiBgkc()
                     ftrans.replace(R.id.conteiner, parafiiBgkc, "parafiiBgkc")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label102 -> {
@@ -1211,7 +1226,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val menuPamiatka = MenuPamiatka()
                     ftrans.replace(R.id.conteiner, menuPamiatka, "MenuPamiatka")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label101 -> {
@@ -1219,7 +1235,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val menuPadryxtoukaDaSpovedzi = MenuPadryxtoukaDaSpovedzi()
                     ftrans.replace(R.id.conteiner, menuPadryxtoukaDaSpovedzi, "MenuPadryxtoukaDaSpovedzi")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
             R.id.label11 -> {
@@ -1261,7 +1278,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     }
                     val sinoidal = MenuBibleSinoidal()
                     ftrans.replace(R.id.conteiner, sinoidal, "sinoidal")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                     prefEditors.putBoolean("novyzavet", false)
                 }
             }
@@ -1270,7 +1288,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val vybranoe = MenuVybranoe()
                     ftrans.replace(R.id.conteiner, vybranoe, "MenuVybranoe")
-                    prefEditors.putInt("id", idSelect)
+                    prefEditors.putInt("id", id)
+                    idSelect = id
                 }
             }
         }
@@ -1284,7 +1303,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         prefEditors.apply()
 
         bindingappbar.titleToolbar.text = tolbarTitle
-        if (idSelect == R.id.label7 || idSelect == R.id.label12) {
+        if (id == R.id.label7 || id == R.id.label12) {
             if (k.getBoolean("help_main_list_view", true)) {
                 val dialogHelpListView = DialogHelpListView.getInstance(1)
                 dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")

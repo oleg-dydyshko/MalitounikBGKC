@@ -890,6 +890,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         val liturgia = resurs == "lit_jan_zalat" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica"
         val res = withContext(Dispatchers.IO) {
             zmenyiaChastki.setDzenNoch(dzenNoch)
+            chechZmena = false
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya_error
             var nochenia = false

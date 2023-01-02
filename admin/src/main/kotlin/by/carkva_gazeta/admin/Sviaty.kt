@@ -493,6 +493,27 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     localFile.writer().use {
                         it.write(gson.toJson(array))
                     }
+                    val logFile = withContext(Dispatchers.IO) {
+                        File.createTempFile("piasochnica", "json")
+                    }
+                    val sb = StringBuilder()
+                    val url = "/opisanie_sviat.json"
+                    referens.child("/admin/log.txt").getFile(logFile).await()
+                    var ref = true
+                    logFile.readLines().forEach {
+                        sb.append("$it\n")
+                        if (it.contains(url)) {
+                            ref = false
+                        }
+                    }
+                    if (ref) {
+                        sb.append("$url\n")
+                    }
+                    logFile.writer().use {
+                        it.write(sb.toString())
+                    }
+                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+
                     referens.child("/opisanie_sviat.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                         if (it.isSuccessful) {
                             MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.save))

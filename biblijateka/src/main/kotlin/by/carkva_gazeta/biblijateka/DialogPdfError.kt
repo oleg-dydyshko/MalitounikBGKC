@@ -38,7 +38,7 @@ class DialogPdfError : DialogFragment() {
             val ad = AlertDialog.Builder(it, style)
             if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
-            binding.title.text = "ПАМЫЛКА"
+            binding.title.text = getString(R.string.error_up)
             binding.content.text = getString(R.string.pdf_error, format)
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))

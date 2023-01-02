@@ -377,9 +377,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     }
 
     private suspend fun downloadPdfFile(url: String) {
-        FirebaseApp.initializeApp(this)
-        val storage = Firebase.storage
-        val referens = storage.reference
         val pathReference = referens.child("/data/bibliateka/$url")
         val localFile = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
         pathReference.getFile(localFile).await()

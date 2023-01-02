@@ -421,6 +421,27 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     val localFile = withContext(Dispatchers.IO) {
                         File.createTempFile("piasochnica", "json")
                     }
+                    val logFile = withContext(Dispatchers.IO) {
+                        File.createTempFile("piasochnica", "json")
+                    }
+                    val sb = StringBuilder()
+                    val url = "/$dirToFile"
+                    referens.child("/admin/log.txt").getFile(logFile).await()
+                    var ref = true
+                    logFile.readLines().forEach {
+                        sb.append("$it\n")
+                        if (it.contains(url)) {
+                            ref = false
+                        }
+                    }
+                    if (ref) {
+                        sb.append("$url\n")
+                    }
+                    logFile.writer().use {
+                        it.write(sb.toString())
+                    }
+                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+
                     referens.child("/admin/piasochnica/" + fileName.replace("\n", " ")).getFile(localFile).await()
                     referens.child("/$dirToFile").putFile(Uri.fromFile(localFile)).await()
                     var oldFile = ""

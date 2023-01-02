@@ -723,5 +723,8 @@
     <string name="citata">\"Каб усе былі адно\" (Ян 17, 21)</string>
     <string name="malitounik_name">Малітоўнік.\nКаляндар БГКЦ</string>
     <string name="bgkc_resource">БЕЛАРУСКІ ГРЭКА-КАТАЛІЦКІ РЭСУРС</string>
+    <string name="log">ЛОГ</string>
+    <string name="log_m">Лог праграмы</string>
+    <string name="clear_log">Ачысьціць</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

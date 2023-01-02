@@ -101,6 +101,27 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
                         it.write(fileNew.toString())
                     }
                 }.await()
+                val logFile = withContext(Dispatchers.IO) {
+                    File.createTempFile("piasochnica", "json")
+                }
+                val sb = StringBuilder()
+                val url = "/chytanne/Semucha/biblias$id.txt"
+                referens.child("/admin/log.txt").getFile(logFile).await()
+                var ref = true
+                logFile.readLines().forEach {
+                    sb.append("$it\n")
+                    if (it.contains(url)) {
+                        ref = false
+                    }
+                }
+                if (ref) {
+                    sb.append("$url\n")
+                }
+                logFile.writer().use {
+                    it.write(sb.toString())
+                }
+                referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+
                 referens.child("/chytanne/Semucha/biblias$id.txt").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
                     activity?.let {
                         if (task.isSuccessful) {

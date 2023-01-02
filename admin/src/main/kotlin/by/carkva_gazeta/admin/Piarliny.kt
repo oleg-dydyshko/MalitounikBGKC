@@ -360,6 +360,27 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                     localFile.writer().use {
                         it.write(piarliny)
                     }
+                    val logFile = withContext(Dispatchers.IO) {
+                        File.createTempFile("piasochnica", "json")
+                    }
+                    val sb = StringBuilder()
+                    val url = "/chytanne/piarliny.json"
+                    referens.child("/admin/log.txt").getFile(logFile).await()
+                    var ref = true
+                    logFile.readLines().forEach {
+                        sb.append("$it\n")
+                        if (it.contains(url)) {
+                            ref = false
+                        }
+                    }
+                    if (ref) {
+                        sb.append("$url\n")
+                    }
+                    logFile.writer().use {
+                        it.write(sb.toString())
+                    }
+                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+
                     referens.child("/chytanne/piarliny.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                         if (it.isSuccessful) {
                             MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.save))

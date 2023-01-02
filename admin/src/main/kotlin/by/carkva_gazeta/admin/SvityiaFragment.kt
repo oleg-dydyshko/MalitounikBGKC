@@ -227,10 +227,6 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
-                /*val bao = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao)
-                val ba = bao.toByteArray()
-                val base64 = Base64.encodeToString(ba, Base64.DEFAULT)*/
                 val localFile = withContext(Dispatchers.IO) {
                     File.createTempFile("imageSave", "jpeg")
                 }
@@ -418,6 +414,44 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
                         it.write(gson.toJson(arrayList))
                     }
                 }
+                val logFile = withContext(Dispatchers.IO) {
+                    File.createTempFile("piasochnica", "json")
+                }
+                val stringBuilder = StringBuilder()
+                var url = "/calendarsviatyia.txt"
+                referens.child("/admin/log.txt").getFile(logFile).await()
+                var ref = true
+                logFile.readLines().forEach {
+                    stringBuilder.append("$it\n")
+                    if (it.contains(url)) {
+                        ref = false
+                    }
+                }
+                if (ref) {
+                    stringBuilder.append("$url\n")
+                }
+                logFile.writer().use {
+                    it.write(stringBuilder.toString())
+                }
+                referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+                sb.clear()
+                url = "/chytanne/sviatyja/opisanie" + (mun + 1) + ".json"
+                referens.child("/admin/log.txt").getFile(logFile).await()
+                ref = true
+                logFile.readLines().forEach {
+                    sb.append("$it\n")
+                    if (it.contains(url)) {
+                        ref = false
+                    }
+                }
+                if (ref) {
+                    sb.append("$url\n")
+                }
+                logFile.writer().use {
+                    it.write(sb.toString())
+                }
+                referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+
                 referens.child("/calendarsviatyia.txt").putFile(Uri.fromFile(localFile3)).await()
                 referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").putFile(Uri.fromFile(localFile4)).addOnCompleteListener { task ->
                     activity?.let {

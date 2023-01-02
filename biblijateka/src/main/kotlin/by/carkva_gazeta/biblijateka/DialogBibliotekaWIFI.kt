@@ -28,7 +28,7 @@ class DialogBibliotekaWIFI : DialogFragment() {
     }
 
     internal interface DialogBibliotekaWIFIListener {
-        fun onDialogPositiveClick(listPosition: String?)
+        fun onDialogPositiveClick(listPosition: String)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +69,7 @@ class DialogBibliotekaWIFI : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(listPosition: String?): DialogBibliotekaWIFI {
+        fun getInstance(listPosition: String): DialogBibliotekaWIFI {
             val instance = DialogBibliotekaWIFI()
             val args = Bundle()
             args.putString("listPosition", listPosition)

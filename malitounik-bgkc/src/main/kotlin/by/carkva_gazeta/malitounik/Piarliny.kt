@@ -13,12 +13,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import by.carkva_gazeta.malitounik.databinding.PiarlinyBinding
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.*
 
 
@@ -39,29 +41,17 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
 
     private fun loadPiarliny(update: Boolean = false) {
         val piarliny = ArrayList<ArrayList<String>>()
-        val filePiarliny = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
+        val filePiarliny = File("$filesDir/piarliny.json")
         if (!filePiarliny.exists() || update) {
             if (MainActivity.isNetworkAvailable()) {
                 loadPiarlinyJob = CoroutineScope(Dispatchers.Main).launch {
-                    withContext(Dispatchers.IO) {
-                        runCatching {
-                            try {
-                                val mURL = URL("https://android.carkva-gazeta.by/chytanne/piarliny.json")
-                                val conections = mURL.openConnection() as HttpURLConnection
-                                if (conections.responseCode == 200) {
-                                    filePiarliny.writer().use {
-                                        it.write(mURL.readText())
-                                    }
-                                }
-                            } catch (_: Throwable) {
-                            }
-                        }
-                    }
                     try {
-                        val builder = filePiarliny.readText()
-                        val gson = Gson()
-                        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-                        piarliny.addAll(gson.fromJson(builder, type))
+                        val builder = getPiarliny()
+                        if (builder != "") {
+                            val gson = Gson()
+                            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                            piarliny.addAll(gson.fromJson(builder, type))
+                        }
                     } catch (t: Throwable) {
                         filePiarliny.delete()
                     }
@@ -103,6 +93,19 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
     }
 
+    private suspend fun getPiarliny(): String {
+        FirebaseApp.initializeApp(this)
+        val storage = Firebase.storage
+        val referens = storage.reference
+        val pathReference = referens.child("/chytanne/piarliny.json")
+        var text = ""
+        val localFile = File("$filesDir/piarliny.json")
+        pathReference.getFile(localFile).addOnSuccessListener {
+            text = localFile.readText()
+        }.await()
+        return text
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -130,8 +133,11 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         setTollbarTheme()
     }
 
-    override fun onDialogPositiveOpisanieWIFI() {
+    override fun onDialogPositiveOpisanieWIFI(isFull: Boolean) {
         loadPiarliny(true)
+    }
+
+    override fun onDialogNegativeOpisanieWIFI() {
     }
 
     override fun onDialogFontSize(fontSize: Float) {

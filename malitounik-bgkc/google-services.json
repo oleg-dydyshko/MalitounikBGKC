@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "689523317223",
+    "firebase_url": "https://malitounik.firebaseio.com",
+    "project_id": "malitounik",
+    "storage_bucket": "malitounik.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689523317223:android:36267727b7ddf917",
+        "android_client_info": {
+          "package_name": "by.carkva_gazeta.malitounik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "689523317223-i4r5llmvu3bsp4t0gbdl0kuftsj2qufj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "by.carkva_gazeta.malitounik",
+            "certificate_hash": "bbe8e598d246a94150161c2aa8aecc4d7430c289"
+          }
+        },
+        {
+          "client_id": "689523317223-np0oeibniqku3oegl99norpdsgm1e0o6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "by.carkva_gazeta.malitounik",
+            "certificate_hash": "6f91d2fafaf2287c504b3b9b26dea26a74f391d3"
+          }
+        },
+        {
+          "client_id": "689523317223-g57pqat9o2sepaisae3103e6psu0mffn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM7DOV6ADmLhBcZIihW0vi-zub12cF3Lc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "689523317223-g57pqat9o2sepaisae3103e6psu0mffn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

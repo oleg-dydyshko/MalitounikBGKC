@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -11,8 +12,8 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 441957
-        versionName "4.2.0.0"
+        versionCode 441958
+        versionName "4.2.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -65,6 +66,9 @@ dependencies {
     api 'androidx.webkit:webkit:1.5.0'
     api 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     api 'com.github.woxthebox:draglistview:1.7.2'
+    api platform('com.google.firebase:firebase-bom:31.1.1')
+    //api 'com.google.firebase:firebase-core:21.1.1'
+    api 'com.google.firebase:firebase-storage-ktx'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'

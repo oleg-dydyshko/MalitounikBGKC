@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -15,19 +16,22 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
+import java.io.File
 
 class DialogPasochnicaMkDir : DialogFragment() {
     private var mListener: DialogPasochnicaMkDirListener? = null
     private lateinit var builder: AlertDialog.Builder
     private var dir = ""
+    private var oldName = ""
+    private var newName = ""
     private var _binding: DialogEditviewDisplayBinding? = null
     private val binding get() = _binding!!
 
@@ -37,7 +41,7 @@ class DialogPasochnicaMkDir : DialogFragment() {
     }
 
     internal interface DialogPasochnicaMkDirListener {
-        fun setDir(oldDir: String)
+        fun setDir()
     }
 
     override fun onAttach(context: Context) {
@@ -65,13 +69,15 @@ class DialogPasochnicaMkDir : DialogFragment() {
             if (savedInstanceState != null) {
                 binding.content.setText(savedInstanceState.getString("fileName"))
             }
-            dir = arguments?.getString("dir", "")?: ""
+            dir = arguments?.getString("dir", "") ?: ""
+            oldName = arguments?.getString("oldName", "") ?: ""
+            newName = arguments?.getString("newName", "") ?: ""
             binding.content.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             binding.content.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorWhite)
             binding.content.requestFocus()
             binding.content.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {
-                    sendMkDirPostRequest(dir)
+                    sendMkDirPostRequest()
                     dialog?.cancel()
                 }
                 false
@@ -83,7 +89,7 @@ class DialogPasochnicaMkDir : DialogFragment() {
                 dialog.cancel()
             }
             builder.setPositiveButton(resources.getString(by.carkva_gazeta.malitounik.R.string.ok)) { _: DialogInterface?, _: Int ->
-                sendMkDirPostRequest(dir)
+                sendMkDirPostRequest()
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)
             }
@@ -92,35 +98,27 @@ class DialogPasochnicaMkDir : DialogFragment() {
         return builder.create()
     }
 
-    private fun sendMkDirPostRequest(dir: String) {
+    private fun sendMkDirPostRequest() {
         val dirName = binding.content.text.toString()
         if (dirName != "") {
             activity?.let {
                 if (MainActivity.isNetworkAvailable()) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        withContext(Dispatchers.IO) {
-                            runCatching {
-                                try {
-                                    var reqParam = URLEncoder.encode("mkdir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                                    reqParam += "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode("$dir/$dirName", "UTF-8")
-                                    val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
-                                    with(mURL.openConnection() as HttpURLConnection) {
-                                        requestMethod = "POST"
-                                        val wr = OutputStreamWriter(outputStream)
-                                        wr.write(reqParam)
-                                        wr.flush()
-                                        inputStream
-                                    }
-                                } catch (e: Throwable) {
-                                    withContext(Dispatchers.Main) {
-                                        activity?.let {
-                                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                                        }
-                                    }
-                                }
+                        try {
+                            FirebaseApp.initializeApp(it)
+                            val storage = Firebase.storage
+                            val referens = storage.reference
+                            val localFile = withContext(Dispatchers.IO) {
+                                File.createTempFile("mkdir", "html")
+                            }
+                            referens.child("/admin/piasochnica/$oldName").getFile(localFile).await()
+                            referens.child("/$dir/$dirName/$newName").putFile(Uri.fromFile(localFile)).await()
+                        } catch (e: Throwable) {
+                            activity?.let {
+                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                             }
                         }
-                        mListener?.setDir(dir)
+                        mListener?.setDir()
                     }
                 }
             }
@@ -128,10 +126,12 @@ class DialogPasochnicaMkDir : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(dir: String): DialogPasochnicaMkDir {
+        fun getInstance(dir: String, oldName: String, newName: String): DialogPasochnicaMkDir {
             val instance = DialogPasochnicaMkDir()
             val args = Bundle()
             args.putString("dir", dir)
+            args.putString("oldName", oldName)
+            args.putString("newName", newName)
             instance.arguments = args
             return instance
         }

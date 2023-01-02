@@ -23,7 +23,6 @@ import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
 import kotlinx.coroutines.*
 
 class StaryZapavietSemuxaList : BaseActivity() {
-    private var dzenNoch = false
     private var mLastClickTime: Long = 0
     private val groups = ArrayList<ArrayList<String>>()
     private lateinit var binding: ContentBibleBinding
@@ -44,12 +43,9 @@ class StaryZapavietSemuxaList : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (dzenNoch) binding.elvMain.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-        else binding.elvMain.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+        binding.elvMain.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
         val children1 = ArrayList<String>()
         val children2 = ArrayList<String>()
         val children3 = ArrayList<String>()
@@ -280,9 +276,6 @@ class StaryZapavietSemuxaList : BaseActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setText(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
-        if (dzenNoch) {
-            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
-        }
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

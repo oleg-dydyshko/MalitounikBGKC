@@ -29,7 +29,6 @@ class StaryZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelL
     private var glava = 0
     private lateinit var k: SharedPreferences
     private var setedit = false
-    private var checkSetDzenNoch = false
     private var title = ""
     private lateinit var binding: AdminBibleBinding
     private var resetTollbarJob: Job? = null
@@ -57,7 +56,6 @@ class StaryZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelL
             window.attributes = lp
         }
         if (savedInstanceState != null) {
-            checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
             setedit = savedInstanceState.getBoolean("setedit")
         }
         super.onCreate(savedInstanceState)
@@ -72,15 +70,6 @@ class StaryZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelL
         binding.pager.offscreenPageLimit = 1
         val adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
-        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
-            tab.text = if (kniga == 18) resources.getString(by.carkva_gazeta.malitounik.R.string.psalom) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
-        }.attach()
-        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                if (glava != position) fierstPosition = 0
-                invalidateOptionsMenu()
-            }
-        })
         when (kniga) {
             0 -> {
                 title = "Быцьцё"
@@ -239,6 +228,15 @@ class StaryZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelL
                 fullglav = 4
             }
         }
+        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
+            tab.text = if (kniga == 18) resources.getString(by.carkva_gazeta.malitounik.R.string.psalom) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
+        }.attach()
+        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                if (glava != position) fierstPosition = 0
+                invalidateOptionsMenu()
+            }
+        })
         binding.pager.setCurrentItem(glava, false)
     }
 

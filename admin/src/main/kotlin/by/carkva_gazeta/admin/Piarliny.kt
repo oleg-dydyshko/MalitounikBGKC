@@ -3,6 +3,7 @@ package by.carkva_gazeta.admin
 import android.app.Activity
 import android.content.Intent
 import android.hardware.SensorEvent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -11,18 +12,20 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import by.carkva_gazeta.admin.databinding.AdminPiarlinyBinding
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
+import kotlinx.coroutines.tasks.await
+import java.io.File
 import java.util.*
 
 class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener {
@@ -31,11 +34,12 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
     private val piarliny = ArrayList<PiarlinyData>()
-    private var timerCount = 0
-    private var timer = Timer()
-    private var timerTask: TimerTask? = null
     private var edit = -1
     private var timeListCalendar = Calendar.getInstance()
+    private val storage: FirebaseStorage
+        get() = Firebase.storage
+    private val referens: StorageReference
+        get() = storage.reference
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
@@ -55,32 +59,8 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
     override fun setMyTheme() {
     }
 
-    private fun startTimer() {
-        timerTask = object : TimerTask() {
-            override fun run() {
-                if (urlJob?.isActive == true && timerCount == 6) {
-                    urlJob?.cancel()
-                    stopTimer()
-                    CoroutineScope(Dispatchers.Main).launch {
-                        MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
-                        binding.progressBar2.visibility = View.GONE
-                    }
-                }
-                timerCount++
-            }
-        }
-        timer = Timer()
-        timer.schedule(timerTask, 0, 5000)
-    }
-
-    private fun stopTimer() {
-        timer.cancel()
-        timerTask = null
-    }
-
     override fun onPause() {
         super.onPause()
-        stopTimer()
         resetTollbarJob?.cancel()
         urlJob?.cancel()
     }
@@ -131,6 +111,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
         binding = AdminPiarlinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.actionBold.setOnClickListener(this)
@@ -140,37 +121,30 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
 
         urlJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
-            startTimer()
-            withContext(Dispatchers.IO) {
-                runCatching {
-                    try {
-                        var responseCodeS: Int
-                        val mURL = URL("https://android.carkva-gazeta.by/chytanne/piarliny.json")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            responseCodeS = responseCode
-                        }
-                        if (responseCodeS == 200) {
-                            val builder = mURL.readText()
-                            val gson = Gson()
-                            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-                            val piarlin = ArrayList<ArrayList<String>>()
-                            piarlin.addAll(gson.fromJson(builder, type))
-                            piarlin.forEach {
-                                piarliny.add(PiarlinyData(it[0].toLong(), it[1]))
-                            }
-                            piarliny.sort()
-                        }
-                    } catch (e: Throwable) {
-                        withContext(Dispatchers.Main) {
-                            MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                        }
-                    }
+            try {
+                val localFile = withContext(Dispatchers.IO) {
+                    File.createTempFile("piarliny", "json")
                 }
+                referens.child("/chytanne/piarliny.json").getFile(localFile).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val jsonFile = localFile.readText()
+                        val gson = Gson()
+                        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                        val piarlin = ArrayList<ArrayList<String>>()
+                        piarlin.addAll(gson.fromJson(jsonFile, type))
+                        piarlin.forEach {
+                            piarliny.add(PiarlinyData(it[0].toLong(), it[1]))
+                        }
+                        piarliny.sort()
+                        binding.listView.adapter = PiarlinyListAdaprer(this@Piarliny)
+                    } else {
+                        MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                    }
+                    binding.progressBar2.visibility = View.GONE
+                }.await()
+            } catch (e: Throwable) {
+                MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
             }
-            binding.listView.adapter = PiarlinyListAdaprer(this@Piarliny)
-            binding.progressBar2.visibility = View.GONE
-            stopTimer()
         }
         binding.listView.setOnItemLongClickListener { _, _, position, _ ->
             var text = piarliny[position].data
@@ -379,34 +353,24 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
-                var responseCodeS = 500
-                withContext(Dispatchers.IO) {
-                    runCatching {
-                        try {
-                            var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("5", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("piarliny", "UTF-8") + "=" + URLEncoder.encode(piarliny, "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            val mURL = URL("https://android.carkva-gazeta.by/admin/android.php")
-                            with(mURL.openConnection() as HttpURLConnection) {
-                                requestMethod = "POST"
-                                val wr = OutputStreamWriter(outputStream)
-                                wr.write(reqParam)
-                                wr.flush()
-                                responseCodeS = responseCode
-                            }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                            }
-                        }
+                try {
+                    val localFile = withContext(Dispatchers.IO) {
+                        File.createTempFile("piarliny", "json")
                     }
-                }
-                if (responseCodeS == 200) {
-                    binding.addPiarliny.setText("")
-                    edit = -1
-                    MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.save))
-                } else {
-                    MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    localFile.writer().use {
+                        it.write(piarliny)
+                    }
+                    referens.child("/chytanne/piarliny.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.save))
+                            binding.addPiarliny.setText("")
+                            edit = -1
+                        } else {
+                            MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        }
+                    }.await()
+                } catch (e: Throwable) {
+                    MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
                 val adapter = binding.listView.adapter as PiarlinyListAdaprer
                 adapter.notifyDataSetChanged()

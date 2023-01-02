@@ -6,30 +6,38 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Base64
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaPageFragmentBinding
 import by.carkva_gazeta.malitounik.BaseFragment
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemTipiconBinding
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
-import java.io.ByteArrayOutputStream
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
+import kotlinx.coroutines.tasks.await
+import java.io.File
+import java.io.FileOutputStream
+import java.lang.reflect.Type
 import java.util.*
 
 
@@ -43,9 +51,6 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
     private val array: Array<String>
         get() = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.admin_svity)
     private val arrayList = ArrayList<Tipicon>()
-    private var timerCount = 0
-    private var timer = Timer()
-    private var timerTask: TimerTask? = null
     private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (it) {
             val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(false)
@@ -53,35 +58,13 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
         }
     }
     private var mLastClickTime: Long = 0
-
-    private fun startTimer() {
-        timerTask = object : TimerTask() {
-            override fun run() {
-                if (urlJob?.isActive == true && timerCount == 6) {
-                    urlJob?.cancel()
-                    stopTimer()
-                    CoroutineScope(Dispatchers.Main).launch {
-                        activity?.let {
-                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
-                        }
-                        binding.progressBar2.visibility = View.GONE
-                    }
-                }
-                timerCount++
-            }
-        }
-        timer = Timer()
-        timer.schedule(timerTask, 0, 5000)
-    }
-
-    private fun stopTimer() {
-        timer.cancel()
-        timerTask = null
-    }
+    private val storage: FirebaseStorage
+        get() = Firebase.storage
+    private val referens: StorageReference
+        get() = storage.reference
 
     override fun onDestroyView() {
         super.onDestroyView()
-        stopTimer()
         urlJob?.cancel()
         _binding = null
     }
@@ -120,6 +103,7 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(Malitounik.applicationContext())
         dayOfYear = arguments?.getInt("day_of_year", 1) ?: 1
     }
 
@@ -243,41 +227,77 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
-                val bao = ByteArrayOutputStream()
+                /*val bao = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao)
                 val ba = bao.toByteArray()
-                val base64 = Base64.encodeToString(ba, Base64.DEFAULT)
-                var responseCodeS = 500
+                val base64 = Base64.encodeToString(ba, Base64.DEFAULT)*/
+                val localFile = withContext(Dispatchers.IO) {
+                    File.createTempFile("imageSave", "jpeg")
+                }
                 withContext(Dispatchers.IO) {
-                    runCatching {
-                        try {
-                            var reqParam = URLEncoder.encode("image", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("base64", "UTF-8") + "=" + URLEncoder.encode(base64, "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(cal[Calendar.DATE].toString(), "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode((cal[Calendar.MONTH] + 1).toString(), "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("numar", "UTF-8") + "=" + URLEncoder.encode(image.toString(), "UTF-8")
-                            val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
-                            with(mURL.openConnection() as HttpURLConnection) {
-                                requestMethod = "POST"
-                                val wr = OutputStreamWriter(outputStream)
-                                wr.write(reqParam)
-                                wr.flush()
-                                responseCodeS = responseCode
-                            }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                activity?.let {
-                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                                }
+                    val out = FileOutputStream(localFile)
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                    out.flush()
+                    out.close()
+                }
+                var fileName = File("/chytanne/icons/s_" + cal[Calendar.DATE] + "_" + (cal[Calendar.MONTH] + 1) + ".jpg")
+                if (image > 1) {
+                    fileName = File("/chytanne/icons/s_" + cal[Calendar.DATE] + "_" + (cal[Calendar.MONTH] + 1) + "_" + image + ".jpg")
+                } else {
+                    if (image != 1) {
+                        var run = true
+                        var i = 1
+                        while (run) {
+                            if (fileName.exists()) {
+                                i++
+                                fileName = File("/chytanne/icons/s_" + cal[Calendar.DATE] + "_" + (cal[Calendar.MONTH] + 1) + "_" + i + ".jpg")
+                            } else {
+                                run = false
                             }
                         }
                     }
                 }
-                activity?.let {
-                    if (responseCodeS == 200) {
-                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
-                    } else {
-                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                val localFile2 = withContext(Dispatchers.IO) {
+                    File.createTempFile("icons", "json")
+                }
+                referens.child("/chytanne/icons/" + fileName.name).putFile(Uri.fromFile(localFile)).await()
+                val arrayListIcon = ArrayList<ArrayList<String>>()
+                referens.child("/icons.json").getFile(localFile2).addOnSuccessListener {
+                    val gson = Gson()
+                    val json = localFile.readText()
+                    val type: Type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                    arrayListIcon.addAll(gson.fromJson(json, type))
+                }.await()
+                var chek = false
+                arrayListIcon.forEach { result ->
+                    if (fileName.name == result[0]) {
+                        referens.child("/chytanne/icons/" + fileName.name).metadata.addOnSuccessListener {
+                            result[1] = it.sizeBytes.toString()
+                            result[2] = it.updatedTimeMillis.toString()
+                            chek = true
+                        }.await()
+                    }
+                }
+                if (!chek) {
+                    referens.child("/chytanne/icons/" + fileName.name).metadata.addOnSuccessListener {
+                        val result = ArrayList<String>()
+                        result.add(it.name ?: "")
+                        result.add(it.sizeBytes.toString())
+                        result.add(it.updatedTimeMillis.toString())
+                        arrayListIcon.add(result)
+                    }.await()
+                }
+                localFile2.writer().use {
+                    val gson = Gson()
+                    it.write(gson.toJson(arrayListIcon))
+                }
+                referens.child("/icons.json").putFile(Uri.fromFile(localFile2)).addOnCompleteListener { task ->
+                    activity?.let {
+                        if (task.isSuccessful) {
+                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
+                        } else {
+                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        }
                     }
                 }
                 binding.progressBar2.visibility = View.GONE
@@ -348,43 +368,64 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
                     2 -> style = 8
                 }
                 binding.progressBar2.visibility = View.VISIBLE
-                var responseCodeS = 500
-                withContext(Dispatchers.IO) {
-                    runCatching {
-                        try {
-                            var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("0", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(data.toString(), "UTF-8") //День месяца
-                            reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode(mun.toString(), "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("nomerdny", "UTF-8") + "=" + URLEncoder.encode(dayOfYear.toString(), "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("addksave", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("chtenie", "UTF-8") + "=" + URLEncoder.encode(chtenie, "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("bold", "UTF-8") + "=" + URLEncoder.encode(style.toString(), "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("tipicon", "UTF-8") + "=" + URLEncoder.encode(tipicon, "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(spaw, "UTF-8")
-                            val mURL = URL("https://android.carkva-gazeta.by/admin/android.php")
-                            with(mURL.openConnection() as HttpURLConnection) {
-                                requestMethod = "POST"
-                                val wr = OutputStreamWriter(outputStream)
-                                wr.write(reqParam)
-                                wr.flush()
-                                responseCodeS = responseCode
-                            }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                activity?.let {
-                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                                }
-                            }
+                val localFile2 = withContext(Dispatchers.IO) {
+                    File.createTempFile("calendarsviatyiaEdit", "json")
+                }
+                val sviatyiaNewList = ArrayList<ArrayList<String>>()
+                referens.child("/calendarsviatyia.txt").getFile(localFile2).addOnSuccessListener {
+                    val sviatyiaNew = localFile2.readLines()
+                    for (element in sviatyiaNew) {
+                        val re1 = element.split("<>")
+                        val list = ArrayList<String>()
+                        for (element2 in re1) {
+                            list.add(element2)
                         }
+                        sviatyiaNewList.add(list)
+                    }
+                    sviatyiaNewList[dayOfYear][0] = name
+                    sviatyiaNewList[dayOfYear][1] = chtenie
+                    sviatyiaNewList[dayOfYear][2] = style.toString()
+                    sviatyiaNewList[dayOfYear][3] = tipicon
+                }.await()
+                var sw3 = ""
+                val sb = StringBuilder()
+                for (i in 0 until 366) {
+                    if (sviatyiaNewList[i][3] != "0") sw3 = sviatyiaNewList[i][3]
+                    sb.append(sviatyiaNewList[i][0] + "<>" + sviatyiaNewList[i][1] + "<>" + sviatyiaNewList[i][2] + "<>" + sw3 + "\n")
+                }
+                val localFile3 = withContext(Dispatchers.IO) {
+                    File.createTempFile("calendarsviatyiaSave", "txt")
+                }
+                localFile3.writer().use {
+                    it.write(sb.toString())
+                }
+                val localFile = withContext(Dispatchers.IO) {
+                    File.createTempFile("opisanieEdit", "json")
+                }
+                val localFile4 = withContext(Dispatchers.IO) {
+                    File.createTempFile("opisanieSave", "json")
+                }
+                var builder = ""
+                referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").getFile(localFile).addOnSuccessListener {
+                    builder = localFile.readText()
+                }.await()
+                val gson = Gson()
+                if (builder != "") {
+                    val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+                    val arrayList: ArrayList<String> = gson.fromJson(builder, type)
+                    arrayList[data - 1] = spaw
+                    localFile4.writer().use {
+                        it.write(gson.toJson(arrayList))
                     }
                 }
-                activity?.let {
-                    if (responseCodeS == 200) {
-                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
-                    } else {
-                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                referens.child("/calendarsviatyia.txt").putFile(Uri.fromFile(localFile3)).await()
+                referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").putFile(Uri.fromFile(localFile4)).addOnCompleteListener { task ->
+                    activity?.let {
+                        if (task.isSuccessful) {
+                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
+                        } else {
+                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        }
                     }
                 }
                 binding.progressBar2.visibility = View.GONE
@@ -416,59 +457,68 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
             binding.actionKeyword.setOnClickListener(this)
             binding.progressBar2.visibility = View.VISIBLE
             urlJob = CoroutineScope(Dispatchers.Main).launch {
-                startTimer()
                 var res = ""
-                withContext(Dispatchers.IO) {
-                    runCatching {
-                        try {
-                            var url = "https://android.carkva-gazeta.by/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json"
-                            val builder = URL(url).readText()
-                            val gson = Gson()
-                            val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
-                            val arrayList: ArrayList<String> = gson.fromJson(builder, type)
-                            res = arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
-                            url = "https://android.carkva-gazeta.by/calendarsviatyia.txt"
-                            val textfile = URL(url).readText().trim()
-                            val line = textfile.split("\n")
-                            for (element in line) {
-                                val reg = element.split("<>")
-                                val list = ArrayList<String>()
-                                for (element2 in reg) {
-                                    list.add(element2)
-                                }
-                                sviatyiaNew1.add(list)
+                try {
+                    val localFile = withContext(Dispatchers.IO) {
+                        File.createTempFile("opisanieEdit", "json")
+                    }
+                    var builder = ""
+                    referens.child("/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json").getFile(localFile).addOnSuccessListener {
+                        builder = localFile.readText()
+                    }.await()
+                    val gson = Gson()
+                    if (builder != "") {
+                        val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+                        val arrayList: ArrayList<String> = gson.fromJson(builder, type)
+                        res = arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
+                    }
+                    val localFile2 = withContext(Dispatchers.IO) {
+                        File.createTempFile("calendarsviatyiaEdit", "json")
+                    }
+                    referens.child("/calendarsviatyia.txt").getFile(localFile2).addOnSuccessListener {
+                        builder = localFile2.readText()
+                    }.await()
+                    if (builder != "") {
+                        val line = builder.split("\n")
+                        for (element in line) {
+                            val reg = element.split("<>")
+                            val list = ArrayList<String>()
+                            for (element2 in reg) {
+                                list.add(element2)
                             }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                activity?.let {
-                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                                }
-                            }
+                            sviatyiaNew1.add(list)
+                        }
+                        binding.sviaty.setSelection(0)
+                        binding.chytanne.setSelection(0)
+                        activity?.let {
+                            binding.spinnerStyle.adapter = SpinnerAdapter(it, array)
+                            binding.spinnerZnak.adapter = SpinnerAdapterTipicon(it, arrayList)
+                        }
+                        binding.sviaty.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][0])
+                        binding.chytanne.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][1])
+                        var position = 0
+                        when (sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][2].toInt()) {
+                            6 -> position = 0
+                            7 -> position = 1
+                            8 -> position = 2
+                        }
+                        binding.spinnerStyle.setSelection(position)
+                        val znaki = sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][3]
+                        val position2 = if (znaki == "") 0
+                        else znaki.toInt()
+                        binding.spinnerZnak.setSelection(position2)
+                    } else {
+                        activity?.let {
+                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
-                }
-                binding.sviaty.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][0])
-                binding.chytanne.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][1])
-                binding.sviaty.setSelection(0)
-                binding.chytanne.setSelection(0)
-                activity?.let {
-                    binding.spinnerStyle.adapter = SpinnerAdapter(it, array)
-                    var position = 0
-                    when (sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][2].toInt()) {
-                        6 -> position = 0
-                        7 -> position = 1
-                        8 -> position = 2
+                } catch (e: Throwable) {
+                    activity?.let {
+                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
-                    binding.spinnerStyle.setSelection(position)
-                    binding.spinnerZnak.adapter = SpinnerAdapterTipicon(it, arrayList)
-                    val znaki = sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][3]
-                    val position2 = if (znaki == "") 0
-                    else znaki.toInt()
-                    binding.spinnerZnak.setSelection(position2)
                 }
                 binding.apisanne.setText(res)
                 binding.progressBar2.visibility = View.GONE
-                stopTimer()
             }
         }
     }

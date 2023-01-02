@@ -1,47 +1,41 @@
 package by.carkva_gazeta.admin
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminDialogEditviewDisplayBinding
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
+import java.io.File
 
 class DialogUpdateHelp : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var _binding: AdminDialogEditviewDisplayBinding? = null
     private val binding get() = _binding!!
-    private var mListener: DialogUpdateHelpListener? = null
+    private val storage: FirebaseStorage
+        get() = Firebase.storage
+    private val referens: StorageReference
+        get() = storage.reference
 
-    internal interface DialogUpdateHelpListener {
-        fun onUpdate(error: Boolean)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is Activity) {
-            mListener = try {
-                context as DialogUpdateHelpListener
-            } catch (e: ClassCastException) {
-                throw ClassCastException("$context must implement DialogUpdateHelpListener")
-            }
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(Malitounik.applicationContext())
     }
 
     override fun onDestroyView() {
@@ -69,26 +63,21 @@ class DialogUpdateHelp : DialogFragment() {
             alert = builder.create()
             if (MainActivity.isNetworkAvailable()) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    runCatching {
-                        val updeteArrayText = withContext(Dispatchers.IO) {
-                            var updeteArrayText = mapOf<String, String>()
-                            try {
-                                val mURL = URL("https://android.carkva-gazeta.by/updateMalitounikBGKC.json")
-                                val conections = mURL.openConnection() as HttpURLConnection
-                                if (conections.responseCode == 200) {
-                                    val gson = Gson()
-                                    val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
-                                    updeteArrayText = gson.fromJson(mURL.readText(), type)
-                                }
-                            } catch (e: Throwable) {
-                                withContext(Dispatchers.Main) {
-                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                                }
-                            }
-                            return@withContext updeteArrayText
+                    //var updeteArrayText = mapOf<String, String>()
+                    try {
+                        val localFile = withContext(Dispatchers.IO) {
+                            File.createTempFile("updateMalitounik", "json")
                         }
-                        if (release) binding.edittext.setText(updeteArrayText["release"])
-                        else binding.edittext.setText(updeteArrayText["devel"])
+                        referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnSuccessListener {
+                            val jsonFile = localFile.readText()
+                            val gson = Gson()
+                            val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
+                            val updeteArrayText = gson.fromJson<Map<String, String>>(jsonFile, type)
+                            if (release) binding.edittext.setText(updeteArrayText["release"])
+                            else binding.edittext.setText(updeteArrayText["devel"])
+                        }.await()
+                    } catch (_: Throwable) {
+                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                 }
             }
@@ -99,40 +88,38 @@ class DialogUpdateHelp : DialogFragment() {
     private fun setViersionApp(releaseCode: String, release: Boolean) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                var code = 500
-                withContext(Dispatchers.IO) {
-                    runCatching {
-                        try {
-                            var reqParam: String = URLEncoder.encode("saveProgram", "UTF-8").toString() + "=" + URLEncoder.encode("1", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("updateCode", "UTF-8").toString() + "=" + URLEncoder.encode("1", "UTF-8")
-                            reqParam += if (release) "&" + URLEncoder.encode("reliseApp", "UTF-8").toString() + "=" + URLEncoder.encode(releaseCode, "UTF-8")
-                            else "&" + URLEncoder.encode("devApp", "UTF-8").toString() + "=" + URLEncoder.encode(releaseCode, "UTF-8")
-                            val mURL = URL("https://android.carkva-gazeta.by/admin/android.php")
-                            val connection: HttpURLConnection = mURL.openConnection() as HttpURLConnection
-                            connection.doOutput = true
-                            connection.requestMethod = "POST"
-                            val osw = OutputStreamWriter(connection.outputStream)
-                            osw.write(reqParam)
-                            osw.flush()
-                            code = connection.responseCode
-                            val sb = StringBuilder()
-                            BufferedReader(InputStreamReader(connection.inputStream)).use {
-                                var inputLine = it.readLine()
-                                while (inputLine != null) {
-                                    sb.append(inputLine)
-                                    inputLine = it.readLine()
-                                }
-                            }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                activity?.let {
-                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                                }
+                try {
+                    val localFile = withContext(Dispatchers.IO) {
+                        File.createTempFile("updateMalitounik", "json")
+                    }
+                    referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnSuccessListener {
+                        val jsonFile = localFile.readText()
+                        val gson = Gson()
+                        val type = TypeToken.getParameterized(MutableMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
+                        val updeteArrayText = gson.fromJson<MutableMap<String, String>>(jsonFile, type)
+                        if (release) {
+                            updeteArrayText["release"] = releaseCode
+                        } else {
+                            updeteArrayText["devel"] = releaseCode
+                        }
+                        localFile.writer().use {
+                            it.write(gson.toJson(updeteArrayText))
+                        }
+                    }.await()
+                    referens.child("/updateMalitounikBGKC.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
+                        activity?.let {
+                            if (task.isSuccessful) {
+                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
+                            } else {
+                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
                             }
                         }
+                    }.await()
+                } catch (e: Throwable) {
+                    activity?.let {
+                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                 }
-                mListener?.onUpdate(code != 200)
             }
         }
     }

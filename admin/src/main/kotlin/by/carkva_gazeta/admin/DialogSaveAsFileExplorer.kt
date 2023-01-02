@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -18,19 +20,17 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminDialigSaveAsBinding
 import by.carkva_gazeta.admin.databinding.AdminSimpleListItemBinding
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
+import kotlinx.coroutines.tasks.await
 
 class DialogSaveAsFileExplorer : DialogFragment() {
 
@@ -44,6 +44,43 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     private var filenameTitle = ""
     private var _binding: AdminDialigSaveAsBinding? = null
     private val binding get() = _binding!!
+    private val storage: FirebaseStorage
+        get() = Firebase.storage
+    private val referens: StorageReference
+        get() = storage.reference
+    private val textWatcher = object : TextWatcher {
+        private var editPosition = 0
+        private var check = 0
+        private var editch = true
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            editch = count != after
+            check = after
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            editPosition = start + count
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            if (editch) {
+                var edit = s.toString()
+                edit = edit.replace("-", "_")
+                edit = edit.replace(" ", "_").lowercase()
+                if (check != 0) {
+                    binding.edittext.removeTextChangedListener(this)
+                    binding.edittext.setText(edit)
+                    binding.edittext.setSelection(editPosition)
+                    binding.edittext.addTextChangedListener(this)
+                }
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(Malitounik.applicationContext())
+    }
 
     internal interface DialogSaveAsFileExplorerListener {
         fun onDialogSaveAsFile(dir: String, oldFileName: String, fileName: String)
@@ -72,7 +109,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.save_as_up)
             binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.mk_dir)
             binding.content.setOnClickListener {
-                val dialogPasochnicaMkDir = DialogPasochnicaMkDir.getInstance(dir)
+                val dialogPasochnicaMkDir = DialogPasochnicaMkDir.getInstance(dir, oldName, binding.edittext.text.toString())
                 dialogPasochnicaMkDir.show(childFragmentManager, "dialogPasochnicaMkDir")
             }
             oldName = arguments?.getString("oldName", "") ?: ""
@@ -85,7 +122,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             } else {
                 fileName = oldName
             }
-            fileName = fileName.trim().lowercase().replace(" ", "_")
+            binding.edittext.addTextChangedListener(textWatcher)
             binding.edittext.setText(fileName)
             binding.filetitle.text = filenameTitle
             if (filenameTitle == "")
@@ -112,12 +149,13 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 }
             }
             builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.save_sabytie)) { dialog: DialogInterface, _: Int ->
-                mListener?.onDialogSaveAsFile(dir, arguments?.getString("oldName", "") ?: "", binding.edittext.text.toString())
-                dialog.cancel()
-            }
-            builder.setNeutralButton(getString(by.carkva_gazeta.malitounik.R.string.add_pesny)) { _: DialogInterface, _: Int ->
-                val dialogAddPesny = DialogAddPesny.getInstance(arguments?.getString("oldName", "") ?: "")
-                dialogAddPesny.show(fragmentActivity.supportFragmentManager, "dialogAddPesny")
+                if (dir == "/admin/pesny") {
+                    val dialogAddPesny = DialogAddPesny.getInstance(oldName)
+                    dialogAddPesny.show(fragmentActivity.supportFragmentManager, "dialogAddPesny")
+                } else {
+                    mListener?.onDialogSaveAsFile(dir, oldName, binding.edittext.text.toString())
+                    dialog.cancel()
+                }
             }
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
@@ -125,63 +163,35 @@ class DialogSaveAsFileExplorer : DialogFragment() {
         return alert
     }
 
-    fun mkDir(oldDir: String) {
-        getDirListRequest(oldDir)
-        this.dir = oldDir
-    }
-
     private fun getDirListRequest(dir: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    runCatching {
-                        try {
-                            var reqParam = URLEncoder.encode("list", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode(dir, "UTF-8")
-                            val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
-                            with(mURL.openConnection() as HttpURLConnection) {
-                                requestMethod = "POST"
-                                val wr = OutputStreamWriter(outputStream)
-                                wr.write(reqParam)
-                                wr.flush()
-                                val sb = StringBuilder()
-                                BufferedReader(InputStreamReader(inputStream)).use {
-                                    var inputLine = it.readLine()
-                                    while (inputLine != null) {
-                                        sb.append(inputLine)
-                                        inputLine = it.readLine()
-                                    }
-                                }
-                                val result = sb.toString()
-                                fileList.clear()
-                                val temp = ArrayList<MyNetFile>()
-                                if (result != "null") {
-                                    val gson = Gson()
-                                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                                    val arrayList = ArrayList<ArrayList<String>>()
-                                    arrayList.addAll(gson.fromJson(result, type))
-                                    arrayList.forEach {
-                                        if (it[0].contains("dir")) {
-                                            if (it[1] == "..") temp.add(MyNetFile(R.drawable.directory_up, it[1].replace("..", "Верх")))
-                                            else temp.add(MyNetFile(R.drawable.directory_icon, it[1]))
-                                        } else {
-                                            if (it[1].contains(".htm")) {
-                                                temp.add(MyNetFile(R.drawable.file_html_icon, it[1]))
-                                            } else {
-                                                temp.add(MyNetFile(R.drawable.file_txt_icon, it[1]))
-                                            }
-                                        }
-                                    }
-                                    fileList.addAll(temp)
-                                }
-                            }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                activity?.let {
-                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                                }
-                            }
+                try {
+                    fileList.clear()
+                    val temp = ArrayList<MyNetFile>()
+                    val list = referens.child("/$dir").list(1000).await()
+                    if (dir != "") {
+                        val t1 = dir.lastIndexOf("/")
+                        temp.add(MyNetFile(R.drawable.directory_up, dir.substring(t1 + 1)))
+                    }
+                    list.prefixes.forEach {
+                        temp.add(MyNetFile(R.drawable.directory_icon, it.name))
+                    }
+                    list.items.forEach {
+                        if (it.name.contains(".htm")) {
+                            temp.add(MyNetFile(R.drawable.file_html_icon, it.name))
+                        } else if (it.name.contains(".json")) {
+                            temp.add(MyNetFile(R.drawable.file_json_icon, it.name))
+                        } else if (it.name.contains(".php")) {
+                            temp.add(MyNetFile(R.drawable.file_php_icon, it.name))
+                        } else {
+                            temp.add(MyNetFile(R.drawable.file_txt_icon, it.name))
                         }
+                    }
+                    fileList.addAll(temp)
+                } catch (e: Throwable) {
+                    activity?.let {
+                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                 }
                 adapter.notifyDataSetChanged()

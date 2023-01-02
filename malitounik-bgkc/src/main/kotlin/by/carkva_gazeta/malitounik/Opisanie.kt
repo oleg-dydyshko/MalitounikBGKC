@@ -12,19 +12,21 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import by.carkva_gazeta.malitounik.databinding.OpisanieBinding
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ListResult
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
-import java.io.BufferedInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.net.HttpURLConnection
-import java.net.URL
+import kotlinx.coroutines.tasks.await
+import java.io.*
+import java.lang.reflect.Type
 import java.util.*
 
 
@@ -39,37 +41,18 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private var resetTollbarJob: Job? = null
     private var loadIconsJob: Job? = null
     private var loadPiarlinyJob: Job? = null
-    private var timerCount = 0
-    private var timer = Timer()
-    private var timerTask: TimerTask? = null
-
-    private fun startTimer() {
-        timer = Timer()
-        timerCount = 0
-        timerTask = object : TimerTask() {
-            override fun run() {
-                if (loadIconsJob?.isActive == true && timerCount == 6) {
-                    loadIconsJob?.cancel()
-                    stopTimer()
-                    CoroutineScope(Dispatchers.Main).launch {
-                        binding.progressBar2.visibility = View.INVISIBLE
-                        MainActivity.toastView(this@Opisanie, getString(R.string.bad_internet), Toast.LENGTH_LONG)
-                    }
-                }
-                timerCount++
-            }
-        }
-        timer.schedule(timerTask, 0, 5000)
-    }
+    private val storage: FirebaseStorage
+        get() = Firebase.storage
+    private val referens: StorageReference
+        get() = storage.reference
+    private val dirList = ArrayList<DirList>()
 
     private fun viewSviaryiaIIcon() {
         val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
-        var builder = ""
         if (svity) {
             loadOpisanieSviat()
         } else {
-            if (fileOpisanie.exists()) builder = fileOpisanie.readText()
-            loadOpisanieSviatyia(builder)
+            if (fileOpisanie.exists()) loadOpisanieSviatyia(fileOpisanie.readText())
         }
         for (i in 0..3) {
             var schet = ""
@@ -99,14 +82,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
     }
 
-    private fun stopTimer() {
-        timer.cancel()
-        timerTask = null
-    }
-
     override fun onPause() {
         super.onPause()
-        stopTimer()
         resetTollbarJob?.cancel()
         loadIconsJob?.cancel()
         loadPiarlinyJob?.cancel()
@@ -137,9 +114,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         if (builder.isNotEmpty()) {
             arrayList.addAll(gson.fromJson(builder, type))
             res = arrayList[day - 1]
-        } else {
-            val dialoNoIntent = DialogNoInternet()
-            dialoNoIntent.show(supportFragmentManager, "dialoNoIntent")
         }
         if (dzenNoch) res = res.replace("#d00505", "#f44336")
         if (res.contains("<!--image-->")) {
@@ -202,6 +176,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = OpisanieBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -230,6 +205,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary_black)
+            binding.imageViewFull.background = ContextCompat.getDrawable(this, R.color.colorbackground_material_dark)
         } else {
             binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         }
@@ -238,211 +214,168 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         setTollbarTheme()
     }
 
-    override fun onDialogPositiveOpisanieWIFI() {
-        startLoadIconsJob(true)
+    override fun onDialogPositiveOpisanieWIFI(isFull: Boolean) {
+        startLoadIconsJob(true, isFull)
+    }
+
+    override fun onDialogNegativeOpisanieWIFI() {
+        binding.progressBar2.visibility = View.INVISIBLE
     }
 
     private fun startLoadIconsJob(loadIcons: Boolean, isFull: Boolean = false) {
         loadIconsJob = CoroutineScope(Dispatchers.Main).launch {
+            binding.progressBar2.isIndeterminate = true
             binding.progressBar2.visibility = View.VISIBLE
-            startTimer()
-            var builder = ""
-            val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
             if (!MainActivity.isNetworkAvailable()) {
+                val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
                 if (!svity && fileOpisanie.exists()) {
-                    builder = fileOpisanie.readText()
+                    loadOpisanieSviatyia(fileOpisanie.readText())
+                } else {
+                    val dialoNoIntent = DialogNoInternet()
+                    dialoNoIntent.show(supportFragmentManager, "dialoNoIntent")
                 }
             } else {
-                withContext(Dispatchers.IO) {
-                    runCatching {
-                        try {
-                            val mURL = URL("https://android.carkva-gazeta.by/admin/getFiles.php?update=1")
-                            val conections = mURL.openConnection() as HttpURLConnection
-                            if (conections.responseCode == 200) {
-                                val dir = File("$filesDir/sviatyja/")
-                                if (!dir.exists()) dir.mkdir()
-                                val builderUrl = mURL.readText()
-                                val gson = Gson()
-                                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-                                val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(builderUrl, type)
-                                for (i in 0 until arrayList.size) {
-                                    val urlName = arrayList[i][0]
-                                    val urlTime = arrayList[i][1].toInt()
-                                    val t1 = urlName.lastIndexOf("/")
-                                    val file = if (urlName.contains("sviatyja")) {
-                                        File("$filesDir/sviatyja/" + urlName.substring(t1 + 1))
-                                    } else {
-                                        File("$filesDir/" + urlName.substring(t1 + 1))
-                                    }
-                                    val time = file.lastModified() / 1000
-                                    if (!file.exists() || time < urlTime) {
-                                        try {
-                                            val mURL2 = URL(urlName)
-                                            val conections2 = mURL2.openConnection() as HttpURLConnection
-                                            if (conections2.responseCode == 200) {
-                                                try {
-                                                    file.writer().use {
-                                                        it.write(mURL2.readText())
-                                                    }
-                                                } catch (_: Throwable) {
-                                                }
-                                            }
-                                        } catch (_: Throwable) {
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (_: Throwable) {
-                        }
-                        try {
-                            val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
-                            val mURL = URL("https://android.carkva-gazeta.by/opisanie_sviat.json")
-                            val conections = mURL.openConnection() as HttpURLConnection
-                            if (conections.responseCode == 200) {
-                                fileOpisanieSviat.writer().use {
-                                    it.write(mURL.readText())
-                                }
-                            }
-                        } catch (_: Throwable) {
-                        }
-                        if (!svity && fileOpisanie.exists()) {
-                            builder = fileOpisanie.readText()
-                        }
+                try {
+                    if (svity) {
+                        getOpisanieSviat()
+                    } else {
+                        getSviatyia()
                     }
+                    getIcons(loadIcons, isFull)
+                } catch (_: Throwable) {
                 }
             }
-            if (svity) loadOpisanieSviat()
-            else loadOpisanieSviatyia(builder)
-            if (dzenNoch) binding.imageViewFull.background = ContextCompat.getDrawable(this@Opisanie, R.color.colorbackground_material_dark)
-            val dir = File("$filesDir/icons/")
-            if (!dir.exists()) dir.mkdir()
-            if (MainActivity.isNetworkAvailable()) {
-                withContext(Dispatchers.IO) {
-                    runCatching {
-                        try {
-                            val arrayListResult = ArrayList<ArrayList<String>>()
-                            val mURL = URL("https://android.carkva-gazeta.by/admin/getFiles.php?image=1")
-                            val conections = mURL.openConnection() as HttpURLConnection
-
-                            if (conections.responseCode == 200) {
-                                val builderUrl = mURL.readText()
-                                val gson = Gson()
-                                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-                                val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(builderUrl, type)
-                                val fileString = StringBuilder()
-                                for (i in 0 until arrayList.size) {
-                                    val urlName = arrayList[i][0]
-                                    val urlTime = arrayList[i][1].toInt()
-                                    val t1 = urlName.lastIndexOf("/")
-                                    val filePatch = "$filesDir/icons/" + urlName.substring(t1 + 1)
-                                    fileString.append(urlName.substring(t1 + 1))
-                                    val file = File(filePatch)
-                                    val time = file.lastModified() / 1000
-                                    if (!file.exists() || time < urlTime) {
-                                        if (isFull) {
-                                            arrayListResult.add(arrayList[i])
-                                        } else {
-                                            if (urlName.contains("_${day}_${mun}")) {
-                                                arrayListResult.add(arrayList[i])
-                                            }
-                                        }
-                                    }
-                                }
-                                dir.walk().forEach {
-                                    if (it.isFile && !fileString.toString().contains(it.name)) {
-                                        it.delete()
-                                    }
-                                }
-                            }
-                            var size = 0f
-                            for (i in 0 until arrayListResult.size) {
-                                size += arrayListResult[i][2].toFloat()
-                            }
-                            withContext(Dispatchers.Main) {
-                                val max = size.toInt()
-                                binding.progressBar2.isIndeterminate = false
-                                binding.progressBar2.progress = 0
-                                binding.progressBar2.max = max
-                            }
-                            if (!loadIcons && MainActivity.isNetworkAvailable(true) && arrayListResult.isNotEmpty()) {
-                                withContext(Dispatchers.Main) {
-                                    val dialog = DialogOpisanieWIFI.getInstance(size)
-                                    dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
-                                }
-                            } else {
-                                var progress = 0
-                                for (i in 0 until arrayListResult.size) {
-                                    val urlName = arrayListResult[i][0]
-                                    val mURL2 = URL(urlName)
-                                    val conections2 = mURL2.openConnection() as HttpURLConnection
-                                    if (conections2.responseCode == 200) {
-                                        val t1 = urlName.lastIndexOf("/")
-                                        val file = File("$filesDir/icons/" + urlName.substring(t1 + 1))
-                                        val bufferedInputStream = BufferedInputStream(conections2.inputStream)
-                                        val byteArrayOut = ByteArrayOutputStream()
-                                        var c2: Int
-                                        while (bufferedInputStream.read().also { c2 = it } != -1) {
-                                            byteArrayOut.write(c2)
-                                        }
-                                        val byteArray = byteArrayOut.toByteArray()
-                                        val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-                                        val out = FileOutputStream(file)
-                                        bmp.compress(Bitmap.CompressFormat.JPEG, 90, out)
-                                        out.flush()
-                                        out.close()
-                                        withContext(Dispatchers.Main) {
-                                            progress += arrayListResult[i][2].toInt()
-                                            binding.progressBar2.progress = progress
-                                        }
-                                    }
-                                }
-                                withContext(Dispatchers.Main) {
-                                    var endImage = 3
-                                    if (svity) endImage = 0
-                                    for (e in 0..endImage) {
-                                        var schet = ""
-                                        if (e > 0) schet = "_${e + 1}"
-                                        val file2 = if (svity) File("$filesDir/icons/v_${day}_${mun}.jpg")
-                                        else File("$filesDir/icons/s_${day}_${mun}$schet.jpg")
-                                        val imageView = when (e) {
-                                            1 -> binding.image2
-                                            2 -> binding.image3
-                                            3 -> binding.image4
-                                            else -> binding.image1
-                                        }
-                                        if (file2.exists()) {
-                                            imageView.post {
-                                                imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file2.absolutePath)))
-                                                imageView.visibility = View.VISIBLE
-                                                imageView.setOnClickListener {
-                                                    if (file2.exists()) {
-                                                        val bitmap = BitmapFactory.decodeFile(file2.absolutePath)
-                                                        binding.imageViewFull.setImageBitmap(bitmap)
-                                                        binding.imageViewFull.visibility = View.VISIBLE
-                                                        binding.progressBar2.visibility = View.INVISIBLE
-                                                        binding.swipeRefreshLayout.visibility = View.GONE
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            imageView.post {
-                                                imageView.setImageBitmap(null)
-                                                imageView.visibility = View.GONE
-                                                imageView.setOnClickListener(null)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (_: Throwable) {
-                        }
-                    }
-                }
-            }
-            binding.progressBar2.visibility = View.INVISIBLE
-            binding.progressBar2.isIndeterminate = true
-            stopTimer()
         }
+    }
+
+    private suspend fun getOpisanieSviat() {
+        val pathReference = referens.child("/opisanie_sviat.json")
+        val file = File("$filesDir/" + pathReference.name)
+        var update = 0L
+        pathReference.metadata.addOnSuccessListener { storageMetadata ->
+            update = storageMetadata.updatedTimeMillis
+        }.await()
+        val time = file.lastModified()
+        if (!file.exists() || time < update) {
+            pathReference.getFile(file).await()
+        }
+        loadOpisanieSviat()
+    }
+
+    private suspend fun getSviatyia() {
+        val dir = File("$filesDir/sviatyja/")
+        if (!dir.exists()) dir.mkdir()
+        var list: ListResult? = null
+        referens.child("/chytanne/sviatyja").list(12).addOnSuccessListener { listResult ->
+            list = listResult
+        }.await()
+        list?.items?.forEach { storageReference ->
+            if (mun == Calendar.getInstance()[Calendar.MONTH] + 1) {
+                var update = 0L
+                storageReference.metadata.addOnSuccessListener { storageMetadata ->
+                    update = storageMetadata.updatedTimeMillis
+                }.await()
+                val fileOpisanie = File("$filesDir/sviatyja/" + storageReference.name)
+                val time = fileOpisanie.lastModified()
+                if (!fileOpisanie.exists() || time < update) {
+                    storageReference.getFile(fileOpisanie).await()
+                }
+            }
+        }
+        val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
+        if (fileOpisanie.exists()) loadOpisanieSviatyia(fileOpisanie.readText())
+    }
+
+    private suspend fun getIcons(loadIcons: Boolean, isFull: Boolean) {
+        val dir = File("$filesDir/icons/")
+        if (!dir.exists()) dir.mkdir()
+        val arrayList = ArrayList<ArrayList<String>>()
+        val localFile = withContext(Dispatchers.IO) {
+            File.createTempFile("icons", "json")
+        }
+        referens.child("/icons.json").getFile(localFile).addOnSuccessListener {
+            val gson = Gson()
+            val json = localFile.readText()
+            val type: Type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+            arrayList.addAll(gson.fromJson(json, type))
+        }.await()
+        dirList.clear()
+        var size = 0L
+        arrayList.forEach {
+            val pref = if (svity) "v"
+            else "s"
+            val setIsFull = if (isFull) true
+            else it[0].contains("${pref}_${day}_${mun}.")
+            if (setIsFull) {
+                val fileIcon = File("$filesDir/icons/" + it[0])
+                val time = fileIcon.lastModified()
+                val update = it[2].toLong()
+                if (!fileIcon.exists() || time < update) {
+                    dirList.add(DirList(it[0], it[1].toLong()))
+                    size += it[1].toLong()
+                }
+            }
+        }
+        if (!loadIcons && MainActivity.isNetworkAvailable(true)) {
+            if (dirList.isNotEmpty()) {
+                val dialog = DialogOpisanieWIFI.getInstance(size.toFloat(), isFull)
+                dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
+            } else {
+                binding.progressBar2.visibility = View.INVISIBLE
+            }
+        } else {
+            binding.progressBar2.isIndeterminate = false
+            binding.progressBar2.progress = 0
+            binding.progressBar2.max = size.toInt()
+            var progress = 0
+            for (i in 0 until dirList.size) {
+                val fileIcon = File("$filesDir/icons/" + dirList[i].name)
+                val pathReference = referens.child("/chytanne/icons/" + dirList[i].name)
+                pathReference.getFile(fileIcon).await()
+                progress += dirList[i].sizeBytes.toInt()
+                binding.progressBar2.progress = progress
+            }
+            loadIconsOnImageView()
+        }
+    }
+
+    private fun loadIconsOnImageView() {
+        var endImage = 3
+        if (svity) endImage = 0
+        for (e in 0..endImage) {
+            var schet = ""
+            if (e > 0) schet = "_${e + 1}"
+            val file2 = if (svity) File("$filesDir/icons/v_${day}_${mun}.jpg")
+            else File("$filesDir/icons/s_${day}_${mun}$schet.jpg")
+            val imageView = when (e) {
+                1 -> binding.image2
+                2 -> binding.image3
+                3 -> binding.image4
+                else -> binding.image1
+            }
+            if (file2.exists()) {
+                imageView.post {
+                    imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file2.absolutePath)))
+                    imageView.visibility = View.VISIBLE
+                    imageView.setOnClickListener {
+                        if (file2.exists()) {
+                            val bitmap = BitmapFactory.decodeFile(file2.absolutePath)
+                            binding.imageViewFull.setImageBitmap(bitmap)
+                            binding.imageViewFull.visibility = View.VISIBLE
+                            binding.progressBar2.visibility = View.INVISIBLE
+                            binding.swipeRefreshLayout.visibility = View.GONE
+                        }
+                    }
+                }
+            } else {
+                imageView.post {
+                    imageView.setImageBitmap(null)
+                    imageView.visibility = View.GONE
+                    imageView.setOnClickListener(null)
+                }
+            }
+        }
+        binding.progressBar2.visibility = View.INVISIBLE
     }
 
     private fun checkParliny(): Boolean {
@@ -551,7 +484,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             return true
         }
         if (id == R.id.action_download_all) {
-            startLoadIconsJob(true, isFull = true)
+            startLoadIconsJob(!MainActivity.isNetworkAvailable(true), isFull = true)
             return true
         }
         if (id == R.id.action_download_del) {
@@ -629,4 +562,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         binding.image4.setImageBitmap(null)
         MainActivity.toastView(this, getString(R.string.remove_padzea))
     }
+
+    private data class DirList(val name: String?, val sizeBytes: Long)
 }

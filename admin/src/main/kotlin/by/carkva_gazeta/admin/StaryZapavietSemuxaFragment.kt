@@ -1,5 +1,6 @@
 package by.carkva_gazeta.admin
 
+import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
@@ -9,11 +10,15 @@ import android.view.ViewGroup
 import by.carkva_gazeta.admin.databinding.AdminBiblePageFragmentBinding
 import by.carkva_gazeta.malitounik.BaseFragment
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.*
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
+import kotlinx.coroutines.tasks.await
+import java.io.File
 
 class StaryZapavietSemuxaFragment : BaseFragment() {
     private var kniga = 0
@@ -23,6 +28,10 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
     private val binding get() = _binding!!
     private var urlJob: Job? = null
     private var mLastClickTime: Long = 0
+    private val storage: FirebaseStorage
+        get() = Firebase.storage
+    private val referens: StorageReference
+        get() = storage.reference
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -32,6 +41,7 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(Malitounik.applicationContext())
         kniga = arguments?.getInt("kniga") ?: 0
         page = arguments?.getInt("page") ?: 0
         pazicia = arguments?.getInt("pazicia") ?: 0
@@ -59,100 +69,107 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
-                var responseCodeS = 500
-                withContext(Dispatchers.IO) {
-                    runCatching {
-                        try {
-                            var zag = "Разьдзел"
-                            if (id == 19) zag = "Псальма"
-                            var reqParam = URLEncoder.encode("z", "UTF-8") + "=" + URLEncoder.encode("s", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode(id.toString(), "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("save", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(spaw, "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("zag", "UTF-8") + "=" + URLEncoder.encode(zag, "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("sv", "UTF-8") + "=" + URLEncoder.encode(sv.toString(), "UTF-8")
-                            val mURL = URL("https://android.carkva-gazeta.by/biblija/index.php")
-                            with(mURL.openConnection() as HttpURLConnection) {
-                                requestMethod = "POST"
-                                val wr = OutputStreamWriter(outputStream)
-                                wr.write(reqParam)
-                                wr.flush()
-                                responseCodeS = responseCode
+                val localFile = withContext(Dispatchers.IO) {
+                    File.createTempFile("Semucha", "txt")
+                }
+                var zag = "Разьдзел"
+                if (id == 19) zag = "Псальма"
+                referens.child("/chytanne/Semucha/biblias$id.txt").getFile(localFile).addOnSuccessListener {
+                    val file = localFile.readText()
+                    val file2 = file.split("===")
+                    val fileNew = StringBuilder()
+                    for ((count, element) in file2.withIndex()) {
+                        val fil = element.trim()
+                        var srtn = "\n"
+                        var stringraz = ""
+                        if (fil != "") {
+                            if (count != 0) {
+                                srtn = "\n\n"
+                                stringraz = "===\n"
                             }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                activity?.let {
-                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                                }
+                            if (file2.size == count + 1) {
+                                srtn = "\n"
+                            }
+                            if (count == sv) {
+                                fileNew.append(stringraz + "//" + zag + " " + sv + "\n" + spaw.trim() + srtn)
+                            } else {
+                                fileNew.append(stringraz + fil + srtn)
                             }
                         }
                     }
-                }
-                activity?.let {
-                    if (responseCodeS == 200) {
-                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
-                    } else {
-                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    localFile.writer().use {
+                        it.write(fileNew.toString())
                     }
-                    binding.progressBar2.visibility = View.GONE
-                }
+                }.await()
+                referens.child("/chytanne/Semucha/biblias$id.txt").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
+                    activity?.let {
+                        if (task.isSuccessful) {
+                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
+                        } else {
+                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        }
+                    }
+                }.await()
+                binding.progressBar2.visibility = View.GONE
             }
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if (MainActivity.isNetworkAvailable()) {
             binding.progressBar2.visibility = View.VISIBLE
-            var url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias1.txt"
+            var url = "/chytanne/Semucha/biblias1.txt"
             when (kniga) {
-                0 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias1.txt"
-                1 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias2.txt"
-                2 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias3.txt"
-                3 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias4.txt"
-                4 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias5.txt"
-                5 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias6.txt"
-                6 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias7.txt"
-                7 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias8.txt"
-                8 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias9.txt"
-                9 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias10.txt"
-                10 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias11.txt"
-                11 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias12.txt"
-                12 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias13.txt"
-                13 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias14.txt"
-                14 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias15.txt"
-                15 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias16.txt"
-                16 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias17.txt"
-                17 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias18.txt"
-                18 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias19.txt"
-                19 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias20.txt"
-                20 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias21.txt"
-                21 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias22.txt"
-                22 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias23.txt"
-                23 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias24.txt"
-                24 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias25.txt"
-                25 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias26.txt"
-                26 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias27.txt"
-                27 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias28.txt"
-                28 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias29.txt"
-                29 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias30.txt"
-                30 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias31.txt"
-                31 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias32.txt"
-                32 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias33.txt"
-                33 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias34.txt"
-                34 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias35.txt"
-                35 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias36.txt"
-                36 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias37.txt"
-                37 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias38.txt"
-                38 -> url = "https://www.android.carkva-gazeta.by/chytanne/Semucha/biblias39.txt"
+                0 -> url = "/chytanne/Semucha/biblias1.txt"
+                1 -> url = "/chytanne/Semucha/biblias2.txt"
+                2 -> url = "/chytanne/Semucha/biblias3.txt"
+                3 -> url = "/chytanne/Semucha/biblias4.txt"
+                4 -> url = "/chytanne/Semucha/biblias5.txt"
+                5 -> url = "/chytanne/Semucha/biblias6.txt"
+                6 -> url = "/chytanne/Semucha/biblias7.txt"
+                7 -> url = "/chytanne/Semucha/biblias8.txt"
+                8 -> url = "/chytanne/Semucha/biblias9.txt"
+                9 -> url = "/chytanne/Semucha/biblias10.txt"
+                10 -> url = "/chytanne/Semucha/biblias11.txt"
+                11 -> url = "/chytanne/Semucha/biblias12.txt"
+                12 -> url = "/chytanne/Semucha/biblias13.txt"
+                13 -> url = "/chytanne/Semucha/biblias14.txt"
+                14 -> url = "/chytanne/Semucha/biblias15.txt"
+                15 -> url = "/chytanne/Semucha/biblias16.txt"
+                16 -> url = "/chytanne/Semucha/biblias17.txt"
+                17 -> url = "/chytanne/Semucha/biblias18.txt"
+                18 -> url = "/chytanne/Semucha/biblias19.txt"
+                19 -> url = "/chytanne/Semucha/biblias20.txt"
+                20 -> url = "/chytanne/Semucha/biblias21.txt"
+                21 -> url = "/chytanne/Semucha/biblias22.txt"
+                22 -> url = "/chytanne/Semucha/biblias23.txt"
+                23 -> url = "/chytanne/Semucha/biblias24.txt"
+                24 -> url = "/chytanne/Semucha/biblias25.txt"
+                25 -> url = "/chytanne/Semucha/biblias26.txt"
+                26 -> url = "/chytanne/Semucha/biblias27.txt"
+                27 -> url = "/chytanne/Semucha/biblias28.txt"
+                28 -> url = "/chytanne/Semucha/biblias29.txt"
+                29 -> url = "/chytanne/Semucha/biblias30.txt"
+                30 -> url = "/chytanne/Semucha/biblias31.txt"
+                31 -> url = "/chytanne/Semucha/biblias32.txt"
+                32 -> url = "/chytanne/Semucha/biblias33.txt"
+                33 -> url = "/chytanne/Semucha/biblias34.txt"
+                34 -> url = "/chytanne/Semucha/biblias35.txt"
+                35 -> url = "/chytanne/Semucha/biblias36.txt"
+                36 -> url = "/chytanne/Semucha/biblias37.txt"
+                37 -> url = "/chytanne/Semucha/biblias38.txt"
+                38 -> url = "/chytanne/Semucha/biblias39.txt"
             }
             urlJob = CoroutineScope(Dispatchers.Main).launch {
                 val sb = StringBuilder()
-                withContext(Dispatchers.IO) {
-                    runCatching {
-                        try {
-                            val inputStream = URL(url)
-                            val text = inputStream.readText()
+                try {
+                    val localFile = withContext(Dispatchers.IO) {
+                        File.createTempFile("SemuchaRead", "txt")
+                    }
+                    referens.child(url).getFile(localFile).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            val text = localFile.readText()
                             val split = text.split("===")
                             val knig = split[page + 1]
                             val split2 = knig.split("\n")
@@ -164,13 +181,15 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
                                     sb.append(it).append("\n")
                                 }
                             }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                activity?.let {
-                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                                }
+                        } else {
+                            activity?.let {
+                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                             }
                         }
+                    }.await()
+                } catch (e: Throwable) {
+                    activity?.let {
+                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                 }
                 binding.textView.setText(sb.toString().trim())

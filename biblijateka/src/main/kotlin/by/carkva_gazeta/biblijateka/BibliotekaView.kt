@@ -48,16 +48,20 @@ import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
 import com.github.barteksc.pdfviewer.util.FitPolicy
 import com.google.android.play.core.splitcompat.SplitCompat
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kursx.parser.fb2.*
 import com.shockwave.pdfium.PdfDocument
 import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import org.xml.sax.SAXException
 import java.io.*
 import java.lang.reflect.Type
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
@@ -102,6 +106,10 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     private var site = false
     private var mActionDown = false
     private var resetTollbarJob: Job? = null
+    private val storage: FirebaseStorage
+        get() = Firebase.storage
+    private val referens: StorageReference
+        get() = storage.reference
     private val animationListenerOutRight: AnimationListener = object : AnimationListener {
         override fun onAnimationStart(animation: Animation) {}
         override fun onAnimationEnd(animation: Animation) {
@@ -212,16 +220,18 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
                         val gson = Gson()
-                        val json: String = k.getString("Biblioteka", "") ?: ""
-                        arrayList.clear()
-                        val type: Type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-                        arrayList.addAll(gson.fromJson(json, type))
-                        val temp: ArrayList<ArrayList<String>> = ArrayList()
-                        for (i in 0 until arrayList.size) {
-                            val rtemp2: Int = arrayList[i][4].toInt()
-                            if (rtemp2 != rub) temp.add(arrayList[i])
+                        val json = k.getString("Biblioteka", "") ?: ""
+                        if (json != "") {
+                            arrayList.clear()
+                            val type: Type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                            arrayList.addAll(gson.fromJson(json, type))
+                            val temp: ArrayList<ArrayList<String>> = ArrayList()
+                            for (i in 0 until arrayList.size) {
+                                val rtemp2: Int = arrayList[i][4].toInt()
+                                if (rtemp2 != rub) temp.add(arrayList[i])
+                            }
+                            arrayList.removeAll(temp.toSet())
                         }
-                        arrayList.removeAll(temp.toSet())
                         adapter.notifyDataSetChanged()
                         bindingcontent.progressBar2.visibility = View.GONE
                         MainActivity.toastView(this@BibliotekaView, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
@@ -310,12 +320,12 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         }
     }
 
-    override fun onDialogPositiveClick(listPosition: String?) {
+    override fun onDialogPositiveClick(listPosition: String) {
         if (!MainActivity.isNetworkAvailable()) {
             val dialogNoInternet = DialogNoInternet()
             dialogNoInternet.show(supportFragmentManager, "no_internet")
         } else {
-            writeFile("https://android.carkva-gazeta.by/data/bibliateka/$listPosition")
+            writeFile(listPosition)
         }
     }
 
@@ -331,10 +341,10 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             invalidateOptionsMenu()
         } else {
             if (MainActivity.isNetworkAvailable(true)) {
-                val bibliotekaWiFi: DialogBibliotekaWIFI = DialogBibliotekaWIFI.getInstance(listPosition)
+                val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition)
                 bibliotekaWiFi.show(supportFragmentManager, "biblioteka_WI_FI")
             } else {
-                writeFile("https://android.carkva-gazeta.by/data/bibliateka/$listPosition")
+                writeFile(listPosition)
             }
         }
     }
@@ -343,31 +353,14 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         bindingcontent.progressBar2.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.Main).launch {
             var error = false
-            withContext(Dispatchers.IO) {
-                runCatching {
-                    try {
-                        val dir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                        if (dir?.exists() != true) {
-                            dir?.mkdir()
-                        }
-                        val myUrl = URL(url)
-                        val last = url.lastIndexOf("/")
-                        val uplFilename = url.substring(last + 1)
-                        val inpstr: InputStream = myUrl.openStream()
-                        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), uplFilename)
-                        val outputStream = FileOutputStream(file)
-                        val buffer = ByteArray(1024)
-                        var bytesRead: Int
-                        while (inpstr.read(buffer).also { bytesRead = it } != -1) {
-                            outputStream.write(buffer, 0, bytesRead)
-                        }
-                        outputStream.close()
-                        filePath = file.path
-                        fileName = uplFilename
-                    } catch (t: Throwable) {
-                        error = true
-                    }
+            try {
+                val dir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                if (dir?.exists() != true) {
+                    dir?.mkdir()
                 }
+                downloadPdfFile(url)
+            } catch (t: Throwable) {
+                error = true
             }
             if (!error) {
                 adapter.notifyDataSetChanged()
@@ -381,6 +374,17 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 DialogNoInternet().show(supportFragmentManager, "no_internet")
             }
         }
+    }
+
+    private suspend fun downloadPdfFile(url: String) {
+        FirebaseApp.initializeApp(this)
+        val storage = Firebase.storage
+        val referens = storage.reference
+        val pathReference = referens.child("/data/bibliateka/$url")
+        val localFile = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
+        pathReference.getFile(localFile).await()
+        filePath = localFile.path
+        fileName = url
     }
 
     override fun onError(t: Throwable?) {
@@ -510,6 +514,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         SplitCompat.install(this)
+        FirebaseApp.initializeApp(this)
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
@@ -1686,77 +1691,87 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         arrayList.clear()
         adapter.notifyDataSetChanged()
         bindingcontent.progressBar2.visibility = View.VISIBLE
-        val showUrl = "https://android.carkva-gazeta.by/bibliotekaNew.php"
-        sqlJob = CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                runCatching {
-                    val temp: ArrayList<ArrayList<String>> = ArrayList()
-                    val sb = URL(showUrl).readText()
-                    val gson = Gson()
-                    val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
-                    val biblioteka: ArrayList<ArrayMap<String, String>> = gson.fromJson(sb, type)
-                    for (i in 0 until biblioteka.size) {
-                        val mySqlList: ArrayList<String> = ArrayList()
-                        val kniga = biblioteka[i]
-                        val id = kniga["bib"] ?: ""
-                        val rubrika = kniga["rubryka"] ?: ""
-                        val link = kniga["link"] ?: ""
-                        var str = kniga["str"] ?: ""
-                        val pdf = kniga["pdf"] ?: ""
-                        var image = kniga["image"] ?: ""
-                        mySqlList.add(link)
-                        val pos = str.indexOf("</span><br>")
-                        str = str.substring(pos + 11)
-                        mySqlList.add(str)
-                        mySqlList.add(pdf)
-                        val url = URL("https://android.carkva-gazeta.by/data/bibliateka/$pdf")
-                        var filesize: String
-                        val conn = url.openConnection()
-                        if (conn is HttpURLConnection) {
-                            (conn as HttpURLConnection?)?.requestMethod = "HEAD"
+        try {
+            sqlJob = CoroutineScope(Dispatchers.Main).launch {
+                val temp: ArrayList<ArrayList<String>> = ArrayList()
+                val sb = getBibliatekaJson()
+                val gson = Gson()
+                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
+                val biblioteka: ArrayList<ArrayMap<String, String>> = gson.fromJson(sb, type)
+                for (i in 0 until biblioteka.size) {
+                    val mySqlList: ArrayList<String> = ArrayList()
+                    val kniga = biblioteka[i]
+                    val id = kniga["bib"] ?: ""
+                    val rubrika = kniga["rubryka"] ?: ""
+                    val link = kniga["link"] ?: ""
+                    var str = kniga["str"] ?: ""
+                    val pdf = kniga["pdf"] ?: ""
+                    var image = kniga["image"] ?: ""
+                    mySqlList.add(link)
+                    val pos = str.indexOf("</span><br>")
+                    str = str.substring(pos + 11)
+                    mySqlList.add(str)
+                    mySqlList.add(pdf)
+                    mySqlList.add(getPdfFile(pdf))
+                    mySqlList.add(rubrika)
+                    val im1 = image.indexOf("src=\"")
+                    val im2 = image.indexOf("\"", im1 + 5)
+                    image = image.substring(im1 + 5, im2)
+                    val t1 = pdf.lastIndexOf(".")
+                    val imageLocal = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png"
+                    mySqlList.add(imageLocal)
+                    mySqlList.add(id)
+                    if (MainActivity.isNetworkAvailable()) {
+                        val dir = File("$filesDir/image_temp")
+                        if (!dir.exists()) dir.mkdir()
+                        val file = File(imageLocal)
+                        if (!file.exists()) {
+                            saveImagePdf(pdf, image)
                         }
-                        filesize = java.lang.String.valueOf(conn.contentLength)
-                        if (conn is HttpURLConnection) {
-                            (conn as HttpURLConnection?)?.disconnect()
-                        }
-                        mySqlList.add(filesize)
-                        mySqlList.add(rubrika)
-                        val im1 = image.indexOf("src=\"")
-                        val im2 = image.indexOf("\"", im1 + 5)
-                        image = "https://android.carkva-gazeta.by" + image.substring(im1 + 5, im2)
-                        val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
-                        val imageLocal: String = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png" //image.substring(t1 + 1)
-                        mySqlList.add(imageLocal)
-                        mySqlList.add(id)
-                        if (MainActivity.isNetworkAvailable()) {
-                            val dir = File("$filesDir/image_temp")
-                            if (!dir.exists()) dir.mkdir()
-                            var mIcon11: Bitmap
-                            val file = File(imageLocal)
-                            if (!file.exists()) {
-                                FileOutputStream("$filesDir/image_temp/" + pdf.substring(0, t1) + ".png").use { out ->
-                                    val inputStream: InputStream = URL(image).openStream()
-                                    mIcon11 = BitmapFactory.decodeStream(inputStream)
-                                    mIcon11.compress(Bitmap.CompressFormat.PNG, 90, out)
-                                }
-                            }
-                        }
-                        if (rubrika.toInt() == rub) {
-                            arrayList.add(mySqlList)
-                        }
-                        temp.add(mySqlList)
                     }
-                    val json: String = gson.toJson(temp)
-                    val prefEditors: SharedPreferences.Editor = k.edit()
-                    prefEditors.putString("Biblioteka", json)
-                    prefEditors.apply()
-                    runSql = false
+                    if (rubrika.toInt() == rub) {
+                        arrayList.add(mySqlList)
+                    }
+                    temp.add(mySqlList)
                 }
+                val json: String = gson.toJson(temp)
+                val prefEditors = k.edit()
+                prefEditors.putString("Biblioteka", json)
+                prefEditors.apply()
+                runSql = false
+                stopTimer()
+                adapter.notifyDataSetChanged()
+                bindingcontent.progressBar2.visibility = View.GONE
             }
-            stopTimer()
-            adapter.notifyDataSetChanged()
-            bindingcontent.progressBar2.visibility = View.GONE
+        } catch (e: Throwable) {
+            e.printStackTrace()
         }
+    }
+
+    private suspend fun getBibliatekaJson(): String {
+        var text = ""
+        val pathReference = referens.child("/bibliateka.json")
+        val localFile = withContext(Dispatchers.IO) {
+            File.createTempFile("bibliateka", "json")
+        }
+        pathReference.getFile(localFile).addOnCompleteListener {
+            text = localFile.readText()
+        }.await()
+        return text
+    }
+
+    private suspend fun getPdfFile(pdf: String): String {
+        var filesize = "0"
+        referens.child("/data/bibliateka/$pdf").metadata.addOnCompleteListener {
+            filesize = it.result.sizeBytes.toString()
+        }.await()
+        return filesize
+    }
+
+    private suspend fun saveImagePdf(pdf: String, image: String) {
+        val t1 = pdf.lastIndexOf(".")
+        val imageTempFile = File("$filesDir/image_temp/" + pdf.substring(0, t1) + ".png")
+        referens.child(image).getFile(imageTempFile).await()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Typeface
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -40,14 +39,16 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.splitinstall.*
 import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.*
 import kotlin.math.roundToLong
 
@@ -160,7 +161,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             lp.screenBrightness = brightness.toFloat() / 100
             window.attributes = lp
         }
-        val density = resources.displayMetrics.density
+        /*val density = resources.displayMetrics.density
 
         binding.logosite.post {
             val bd = ContextCompat.getDrawable(this, R.drawable.logotip) as BitmapDrawable
@@ -172,7 +173,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             val layoutParams = binding.logosite.layoutParams
             layoutParams.height = (hidch * density).toInt()
             binding.logosite.layoutParams = layoutParams
-        }
+        }*/
     }
 
     private fun ajustCompoundDrawableSizeWithText(textView: TextView, leftDrawable: Drawable?) {
@@ -265,7 +266,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.label104.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             bindingappbar.toolbar.popupTheme = R.style.AppCompatDark
             setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest_black))
-            binding.logosite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.logotip_whate))
+            //binding.logosite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.logotip_whate))
             binding.label9a.setBackgroundResource(R.drawable.selector_dark)
             binding.label10a.setBackgroundResource(R.drawable.selector_dark)
         } else {
@@ -509,9 +510,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         CoroutineScope(Dispatchers.IO).launch {
             if (padzeia.size == 0) setListPadzeia()
             if (k.getBoolean("setAlarm", true)) {
-                withContext(Dispatchers.Main) {
-                    getVersionCode()
-                }
+                getVersionCode()
                 val notify = k.getInt("notification", 2)
                 SettingsActivity.setNotifications(notify)
                 val edit = k.edit()
@@ -803,6 +802,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (!(id == R.id.label9a || id == R.id.label10a)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             if (dzenNoch) {
+                binding.citata.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+                binding.title.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+                binding.description.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                 binding.label1.setBackgroundResource(R.drawable.selector_dark)
                 binding.label2.setBackgroundResource(R.drawable.selector_dark)
                 binding.label3.setBackgroundResource(R.drawable.selector_dark)
@@ -1368,21 +1370,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private fun getVersionCode() {
         if (isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                runCatching {
-                    val updeteArrayText = withContext(Dispatchers.IO) {
-                        var updeteArrayText = mapOf<String, String>()
-                        try {
-                            val mURL = URL("https://android.carkva-gazeta.by/updateMalitounikBGKC.json")
-                            val conections = mURL.openConnection() as HttpURLConnection
-                            if (conections.responseCode == 200) {
-                                val gson = Gson()
-                                val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
-                                updeteArrayText = gson.fromJson(mURL.readText(), type)
-                            }
-                        } catch (_: Throwable) {
-                        }
-                        return@withContext updeteArrayText
-                    }
+                val gson = Gson()
+                val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
+                val text = getUpdateMalitounikBGKC()
+                if (text != "") {
+                    val updeteArrayText = gson.fromJson<Map<String, String>>(text, type)
                     val currentVersionName = BuildConfig.VERSION_NAME
                     val currentVersionCode = BuildConfig.VERSION_CODE
                     val versionSize = currentVersionName.split(".")
@@ -1401,6 +1393,21 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
             }
         }
+    }
+
+    private suspend fun getUpdateMalitounikBGKC(): String {
+        FirebaseApp.initializeApp(this@MainActivity)
+        val storage = Firebase.storage
+        val referens = storage.reference
+        val pathReference = referens.child("/updateMalitounikBGKC.json")
+        var text = ""
+        val localFile = withContext(Dispatchers.IO) {
+            File.createTempFile("updateMalitounikBGKC", "json")
+        }
+        pathReference.getFile(localFile).addOnSuccessListener {
+            text = localFile.readText()
+        }.await()
+        return text
     }
 
     companion object {

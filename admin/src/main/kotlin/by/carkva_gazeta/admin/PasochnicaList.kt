@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.hardware.SensorEvent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -26,26 +27,29 @@ import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ListResult
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.*
-import java.io.BufferedReader
+import kotlinx.coroutines.tasks.await
 import java.io.File
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
 import java.util.*
 
 
-class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener {
+class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener, DialogDeliteAllPasochnica.DialogDeliteAllPasochnicaListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaListBinding
     private var resetTollbarJob: Job? = null
     private var fileList = ArrayList<String>()
     private lateinit var adapter: PasochnicaListAdaprer
+    private val storage: FirebaseStorage
+        get() = Firebase.storage
+    private val referens: StorageReference
+        get() = storage.reference
     private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (it) {
             val fileExplorer = DialogFileExplorer()
@@ -90,12 +94,32 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
         if (dir?.exists() == true) {
             dir.deleteRecursively()
             getDirPostRequest()
+            invalidateOptionsMenu()
         }
-        invalidateOptionsMenu()
+    }
+
+    override fun deliteAllPasochnica() {
+        if (MainActivity.isNetworkAvailable()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.progressBar2.visibility = View.VISIBLE
+                try {
+                    val list = referens.child("/admin/piasochnica").list(1000).await()
+                    list.items.forEach {
+                        it.delete().await()
+                    }
+                } catch (e: Throwable) {
+                    MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                }
+                binding.progressBar2.visibility = View.GONE
+                getDirPostRequest()
+                invalidateOptionsMenu()
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
         getFindFileListAsSave()
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = AdminPasochnicaListBinding.inflate(layoutInflater)
@@ -224,33 +248,28 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
     private fun getFileCopyPostRequest(dirToFile: String, fileName: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                runCatching {
-                    binding.progressBar2.visibility = View.VISIBLE
-                    withContext(Dispatchers.IO) {
-                        try {
-                            var reqParam = URLEncoder.encode("copy", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("dirToFile", "UTF-8") + "=" + URLEncoder.encode(dirToFile, "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
-                            val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
-                            with(mURL.openConnection() as HttpURLConnection) {
-                                requestMethod = "POST"
-                                val wr = OutputStreamWriter(outputStream)
-                                wr.write(reqParam)
-                                wr.flush()
-                                inputStream
-                            }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                            }
-                        }
+                binding.progressBar2.visibility = View.VISIBLE
+                var resourse = ""
+                try {
+                    val localFile = withContext(Dispatchers.IO) {
+                        File.createTempFile("piasochnica", "html")
                     }
-                    binding.progressBar2.visibility = View.GONE
-                    val intent = Intent(this@PasochnicaList, Pasochnica::class.java)
-                    intent.putExtra("isSite", true)
-                    intent.putExtra("fileName", fileName)
-                    startActivity(intent)
+                    referens.child("/$dirToFile").getFile(localFile).await()
+                    val t1 = fileName.indexOf(".")
+                    var newFileName = fileName.replace("\n", " ")
+                    if (t1 != -1) {
+                        resourse = "(" + fileName.substring(0, t1) + ") "
+                        newFileName = fileName.substring(0, t1)
+                    }
+                    referens.child("/admin/piasochnica/$resourse$newFileName").putFile(Uri.fromFile(localFile)).await()
+                } catch (e: Throwable) {
+                    MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
+                binding.progressBar2.visibility = View.GONE
+                val intent = Intent(this@PasochnicaList, Pasochnica::class.java)
+                intent.putExtra("isSite", true)
+                intent.putExtra("fileName", "$resourse$fileName")
+                startActivity(intent)
             }
         }
     }
@@ -258,34 +277,20 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
     private fun getFileUnlinkPostRequest(fileName: String, isSite: Boolean) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                runCatching {
-                    binding.progressBar2.visibility = View.VISIBLE
-                    withContext(Dispatchers.IO) {
-                        try {
-                            var reqParam = URLEncoder.encode("unlink", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            if (isSite) {
-                                reqParam += "&" + URLEncoder.encode("isSite", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            }
-                            reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
-                            val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
-                            with(mURL.openConnection() as HttpURLConnection) {
-                                requestMethod = "POST"
-                                val wr = OutputStreamWriter(outputStream)
-                                wr.write(reqParam)
-                                wr.flush()
-                                inputStream
-                            }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                            }
-                        }
+                binding.progressBar2.visibility = View.VISIBLE
+                try {
+                    if (isSite) {
+                        referens.child("/$fileName").delete().addOnCompleteListener { }.await()
+                    } else {
+                        referens.child("/admin/piasochnica/$fileName").delete().await()
                     }
-                    binding.progressBar2.visibility = View.GONE
-                    val dialogNetFileExplorer = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
-                    dialogNetFileExplorer?.getDirListRequest()
-                    getDirPostRequest()
+                } catch (e: Throwable) {
+                    MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
+                binding.progressBar2.visibility = View.GONE
+                val fragment = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
+                fragment?.update()
+                getDirPostRequest()
             }
         }
     }
@@ -293,35 +298,27 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
     private fun getFileRenamePostRequest(oldFileName: String, fileName: String, isSite: Boolean) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                runCatching {
-                    binding.progressBar2.visibility = View.VISIBLE
-                    withContext(Dispatchers.IO) {
-                        try {
-                            var reqParam = URLEncoder.encode("rename", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            if (isSite) {
-                                reqParam += "&" + URLEncoder.encode("isSite", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            }
-                            reqParam += "&" + URLEncoder.encode("oldFileName", "UTF-8") + "=" + URLEncoder.encode(oldFileName.replace("\n", " "), "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
-                            val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
-                            with(mURL.openConnection() as HttpURLConnection) {
-                                requestMethod = "POST"
-                                val wr = OutputStreamWriter(outputStream)
-                                wr.write(reqParam)
-                                wr.flush()
-                                inputStream
-                            }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                            }
-                        }
+                binding.progressBar2.visibility = View.VISIBLE
+                try {
+                    val localFile = withContext(Dispatchers.IO) {
+                        File.createTempFile("piasochnica", "html")
                     }
-                    binding.progressBar2.visibility = View.GONE
-                    val dialogNetFileExplorer = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
-                    dialogNetFileExplorer?.getDirListRequest()
-                    getDirPostRequest()
+                    if (isSite) {
+                        referens.child("/$oldFileName").getFile(localFile).await()
+                        referens.child("/$oldFileName").delete().await()
+                        referens.child("/$fileName").putFile(Uri.fromFile(localFile)).await()
+                    } else {
+                        referens.child("/admin/piasochnica/$oldFileName").getFile(localFile).await()
+                        referens.child("/admin/piasochnica/$oldFileName").delete().await()
+                        referens.child("/admin/piasochnica/$fileName").putFile(Uri.fromFile(localFile)).await()
+                    }
+                } catch (e: Throwable) {
+                    MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
+                binding.progressBar2.visibility = View.GONE
+                val fragment = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
+                fragment?.update()
+                getDirPostRequest()
             }
         }
     }
@@ -352,72 +349,48 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
         }
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                runCatching {
-                    binding.progressBar2.visibility = View.VISIBLE
-                    withContext(Dispatchers.IO) {
-                        try {
-                            val reqParam = URLEncoder.encode("file", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
-                            with(mURL.openConnection() as HttpURLConnection) {
-                                requestMethod = "POST"
-                                val wr = OutputStreamWriter(outputStream)
-                                wr.write(reqParam)
-                                wr.flush()
-                                val sb = StringBuilder()
-                                BufferedReader(InputStreamReader(inputStream)).use {
-                                    var inputLine = it.readLine()
-                                    while (inputLine != null) {
-                                        sb.append(inputLine)
-                                        inputLine = it.readLine()
-                                    }
-                                }
-                                val result = sb.toString()
-                                fileList.clear()
-                                if (result != "null") {
-                                    val gson = Gson()
-                                    val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
-                                    fileList.addAll(gson.fromJson(result, type))
-                                    fileList.sort()
-                                }
-                                fileList.addAll(backCopy)
-                            }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                            }
-                        }
+                binding.progressBar2.visibility = View.VISIBLE
+                try {
+                    fileList.clear()
+                    val list = referens.child("/admin/piasochnica").list(500).await()
+                    list.items.forEach {
+                        fileList.add(it.name)
                     }
-                    if (intent.extras != null) {
-                        val res = intent.extras?.getString("resours", "") ?: ""
-                        var exits = false
-                        for (i in 0 until fileList.size) {
-                            var resurs = fileList[i]
-                            val t1 = fileList[i].indexOf("(")
-                            if (t1 != -1) {
-                                val t2 = fileList[i].indexOf(")")
-                                resurs = fileList[i].substring(t1 + 1, t2)
-                            } else {
-                                val t3 = fileList[i].lastIndexOf(".")
-                                if (t3 != -1) {
-                                    resurs = fileList[i].substring(0, t3)
-                                }
-                            }
-                            if (res == resurs) {
-                                exits = true
-                                break
-                            }
-                        }
-                        val intent = Intent(this@PasochnicaList, Pasochnica::class.java)
-                        intent.putExtra("text", this@PasochnicaList.intent.extras?.getString("text", "") ?: "")
-                        intent.putExtra("resours", this@PasochnicaList.intent.extras?.getString("resours", "") ?: "")
-                        intent.putExtra("exits", exits)
-                        intent.putExtra("title", this@PasochnicaList.intent.extras?.getString("title", "") ?: "")
-                        startActivity(intent)
-                    }
-                    adapter.notifyDataSetChanged()
-                    binding.listView.invalidate()
-                    binding.progressBar2.visibility = View.GONE
+                    fileList.sort()
+                    fileList.addAll(backCopy)
+                } catch (e: Throwable) {
+                    MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
+                if (intent.extras != null) {
+                    val res = intent.extras?.getString("resours", "") ?: ""
+                    var exits = false
+                    for (i in 0 until fileList.size) {
+                        var resurs = fileList[i]
+                        val t1 = fileList[i].indexOf("(")
+                        if (t1 != -1) {
+                            val t2 = fileList[i].indexOf(")")
+                            resurs = fileList[i].substring(t1 + 1, t2)
+                        } else {
+                            val t3 = fileList[i].lastIndexOf(".")
+                            if (t3 != -1) {
+                                resurs = fileList[i].substring(0, t3)
+                            }
+                        }
+                        if (res == resurs) {
+                            exits = true
+                            break
+                        }
+                    }
+                    val intent = Intent(this@PasochnicaList, Pasochnica::class.java)
+                    intent.putExtra("text", this@PasochnicaList.intent.extras?.getString("text", "") ?: "")
+                    intent.putExtra("resours", this@PasochnicaList.intent.extras?.getString("resours", "") ?: "")
+                    intent.putExtra("exits", exits)
+                    intent.putExtra("title", this@PasochnicaList.intent.extras?.getString("title", "") ?: "")
+                    startActivity(intent)
+                }
+                binding.listView.invalidate()
+                adapter.notifyDataSetChanged()
+                binding.progressBar2.visibility = View.GONE
             }
         } else {
             fileList.addAll(backCopy)
@@ -440,7 +413,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
         if (id == R.id.action_plus) {
             val intent = Intent(this, Pasochnica::class.java)
             intent.putExtra("newFile", true)
-            intent.putExtra("fileName", "newFile.html")
+            intent.putExtra("fileName", "new_file.html")
             startActivity(intent)
             return true
         }
@@ -462,6 +435,11 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
         if (id == R.id.action_delite_all) {
             val dialogDeliteAllBackCopy = DialogDeliteAllBackCopy()
             dialogDeliteAllBackCopy.show(supportFragmentManager, "dialogDeliteAllBackCopy")
+            return true
+        }
+        if (id == R.id.action_delite_all_pasochnica) {
+            val dialogDeliteAllPasochnica = DialogDeliteAllPasochnica()
+            dialogDeliteAllPasochnica.show(supportFragmentManager, "dialogDeliteAllPasochnica")
             return true
         }
         return false
@@ -507,38 +485,32 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
 
     companion object {
         val findDirAsSave = ArrayList<String>()
+
+        private suspend fun findFile(list: ListResult? = null) {
+            CoroutineScope(Dispatchers.Main).launch {
+                FirebaseApp.initializeApp(Malitounik.applicationContext())
+                val storage = Firebase.storage
+                val referens = storage.reference
+                val nawList = list ?: referens.child("/admin").list(1000).await()
+                nawList.items.forEach {
+                    findDirAsSave.add(it.path)
+                }
+                nawList.prefixes.forEach {
+                    if (it.name != "piasochnica") {
+                        val rList = referens.child(it.path).list(1000).await()
+                        findFile(rList)
+                    }
+                }
+            }
+        }
+
         fun getFindFileListAsSave() {
             if (MainActivity.isNetworkAvailable()) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    withContext(Dispatchers.IO) {
-                        runCatching {
-                            try {
-                                val reqParam = URLEncoder.encode("findDir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                                val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
-                                with(mURL.openConnection() as HttpURLConnection) {
-                                    requestMethod = "POST"
-                                    val wr = OutputStreamWriter(outputStream)
-                                    wr.write(reqParam)
-                                    wr.flush()
-                                    val sb = StringBuilder()
-                                    BufferedReader(InputStreamReader(inputStream)).use {
-                                        var inputLine = it.readLine()
-                                        while (inputLine != null) {
-                                            sb.append(inputLine)
-                                            inputLine = it.readLine()
-                                        }
-                                    }
-                                    if (responseCode == 200) {
-                                        findDirAsSave.clear()
-                                        val gson = Gson()
-                                        val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
-                                        findDirAsSave.addAll(gson.fromJson<ArrayList<String>>(sb.toString(), type))
-                                    }
-                                }
-                            } catch (e: Throwable) {
-                                MainActivity.toastView(Malitounik.applicationContext(), Malitounik.applicationContext().getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                            }
-                        }
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        findFile()
+                    } catch (e: Throwable) {
+                        MainActivity.toastView(Malitounik.applicationContext(), Malitounik.applicationContext().getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                 }
             }

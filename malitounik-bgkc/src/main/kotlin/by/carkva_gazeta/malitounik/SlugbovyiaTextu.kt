@@ -1,13 +1,18 @@
 package by.carkva_gazeta.malitounik
 
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.*
 
 class SlugbovyiaTextu {
@@ -378,25 +383,13 @@ class SlugbovyiaTextu {
             if (!filePiarliny.exists()) {
                 if (MainActivity.isNetworkAvailable()) {
                     loadPiarlinyJob = CoroutineScope(Dispatchers.Main).launch {
-                        withContext(Dispatchers.IO) {
-                            runCatching {
-                                try {
-                                    val mURL = URL("https://android.carkva-gazeta.by/chytanne/piarliny.json")
-                                    val conections = mURL.openConnection() as HttpURLConnection
-                                    if (conections.responseCode == 200) {
-                                        filePiarliny.writer().use {
-                                            it.write(mURL.readText())
-                                        }
-                                    }
-                                } catch (_: Throwable) {
-                                }
-                            }
-                        }
                         try {
-                            val builder = filePiarliny.readText()
-                            val gson = Gson()
-                            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-                            piarliny.addAll(gson.fromJson(builder, type))
+                            val builder = getPiarliny()
+                            if (builder != "") {
+                                val gson = Gson()
+                                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                                piarliny.addAll(gson.fromJson(builder, type))
+                            }
                         } catch (t: Throwable) {
                             filePiarliny.delete()
                         }
@@ -413,6 +406,19 @@ class SlugbovyiaTextu {
                 }
             }
         }
+    }
+
+    private suspend fun getPiarliny(): String {
+        FirebaseApp.initializeApp(Malitounik.applicationContext())
+        val storage = Firebase.storage
+        val referens = storage.reference
+        val pathReference = referens.child("/chytanne/piarliny.json")
+        var text = ""
+        val localFile = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
+        pathReference.getFile(localFile).addOnSuccessListener {
+            text = localFile.readText()
+        }.await()
+        return text
     }
 
     fun checkParliny(day: Int, mun: Int): Boolean {

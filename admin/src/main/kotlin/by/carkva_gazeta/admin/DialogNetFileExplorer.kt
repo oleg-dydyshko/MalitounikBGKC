@@ -16,20 +16,18 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminSimpleListItemBinding
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogListviewDisplayBinding
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
+import kotlinx.coroutines.tasks.await
 
 class DialogNetFileExplorer : DialogFragment() {
 
@@ -40,6 +38,15 @@ class DialogNetFileExplorer : DialogFragment() {
     private var dir = ""
     private var _binding: DialogListviewDisplayBinding? = null
     private val binding get() = _binding!!
+    private val storage: FirebaseStorage
+        get() = Firebase.storage
+    private val referens: StorageReference
+        get() = storage.reference
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(Malitounik.applicationContext())
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -101,65 +108,43 @@ class DialogNetFileExplorer : DialogFragment() {
         return alert
     }
 
-    fun getDirListRequest() {
+    fun update() {
         getDirListRequest(dir)
     }
 
     private fun getDirListRequest(dir: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    runCatching {
-                        try {
-                            var reqParam = URLEncoder.encode("list", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode(dir, "UTF-8")
-                            val mURL = URL("https://android.carkva-gazeta.by/admin/piasochnica.php")
-                            with(mURL.openConnection() as HttpURLConnection) {
-                                requestMethod = "POST"
-                                val wr = OutputStreamWriter(outputStream)
-                                wr.write(reqParam)
-                                wr.flush()
-                                val sb = StringBuilder()
-                                BufferedReader(InputStreamReader(inputStream)).use {
-                                    var inputLine = it.readLine()
-                                    while (inputLine != null) {
-                                        sb.append(inputLine)
-                                        inputLine = it.readLine()
-                                    }
-                                }
-                                val result = sb.toString()
-                                fileList.clear()
-                                val temp = ArrayList<MyNetFile>()
-                                if (result != "null") {
-                                    val gson = Gson()
-                                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                                    val arrayList = ArrayList<ArrayList<String>>()
-                                    arrayList.addAll(gson.fromJson(result, type))
-                                    arrayList.forEach {
-                                        if (it[0].contains("dir")) {
-                                            if (it[1] == "..") temp.add(MyNetFile(R.drawable.directory_up, it[1].replace("..", "Верх")))
-                                            else temp.add(MyNetFile(R.drawable.directory_icon, it[1]))
-                                        } else {
-                                            if (it[1].contains(".htm")) {
-                                                temp.add(MyNetFile(R.drawable.file_html_icon, it[1]))
-                                            } else {
-                                                temp.add(MyNetFile(R.drawable.file_txt_icon, it[1]))
-                                            }
-                                        }
-                                    }
-                                    fileList.addAll(temp)
-                                }
-                            }
-                        } catch (e: Throwable) {
-                            withContext(Dispatchers.Main) {
-                                activity?.let {
-                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                                }
-                            }
+                try {
+                    fileList.clear()
+                    val temp = ArrayList<MyNetFile>()
+                    val list = referens.child("/$dir").list(1000).await()
+                    if (dir != "") {
+                        val t1 = dir.lastIndexOf("/")
+                        temp.add(MyNetFile(R.drawable.directory_up, dir.substring(t1 + 1)))
+                    }
+                    list.prefixes.forEach {
+                        temp.add(MyNetFile(R.drawable.directory_icon, it.name))
+                    }
+                    list.items.forEach {
+                        if (it.name.contains(".htm")) {
+                            temp.add(MyNetFile(R.drawable.file_html_icon, it.name))
+                        } else if (it.name.contains(".json")) {
+                            temp.add(MyNetFile(R.drawable.file_json_icon, it.name))
+                        } else if (it.name.contains(".php")) {
+                            temp.add(MyNetFile(R.drawable.file_php_icon, it.name))
+                        } else {
+                            temp.add(MyNetFile(R.drawable.file_txt_icon, it.name))
                         }
                     }
+                    fileList.addAll(temp)
+                    adapter.notifyDataSetChanged()
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                    activity?.let {
+                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                    }
                 }
-                adapter.notifyDataSetChanged()
             }
         }
     }

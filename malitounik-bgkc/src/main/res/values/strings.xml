@@ -173,7 +173,7 @@
     <string name="chtinia_zag">%1$s[&#8230;]</string>
     <string name="error_ch">Памылка, даруйце\n</string>
     <string name="error_ch2">Памылка, даруйце</string>
-    <string name="error_ch_email">carkva@carkva-gazeta.by\nНапішыце пра памылку ў праграме\n\nЗагадзя шчыра дзякуем!</string>
+    <string name="error_ch_email">carkvagazeta@gmail.com\nНапішыце пра памылку ў праграме\n\nЗагадзя шчыра дзякуем!</string>
     <string name="Sabytie">%1$s%2$d.%3$s%4$d.%5$d</string>
     <string name="seash">(%1$d)</string>
     <string name="sabytie_name">Назва падзеі</string>
@@ -261,7 +261,6 @@
     <string name="natatka_bersha_biblii">НАТАТКА ДЛЯ ВЕРША</string>
     <string name="zakladki_bible">Закладкі</string>
     <string name="natatki_biblii">Нататкі</string>
-<!--    <string name="http_carkva_gazeta_by">https://carkva-gazeta.by/</string>-->
     <string name="helpbible">Каб дадаць нататку або закладку, скапіяваць, выдзяліць або падкрэсьліць тэкст, націсьніце на патрэбны верш і ўтрымлівайце, тады зьнізу зьявіцца панэль дзеяньняў.</string>
     <string name="delite_natatki_i_zakladki">Вы сапраўды жадаеце выдаліць %1$s\n\"%2$s\"?</string>
     <string name="delite_all_natatki_i_zakladki">Вы сапраўды жадаеце выдаліць усе %1$s?</string>
@@ -293,7 +292,7 @@
     <string name="sort_time">Сартаваць паводле часу</string>
     <string name="title_biblijateka">Бібліятэка Царквы</string>
     <string name="title_download_module">СПАМПОЎВАЕМ \"БІБЛІЯТЭКУ ЦАРКВЫ\"</string>
-    <string name="title_download_module2">СПАМПОЎВАЕМ \"КІРАВАНЬНЕ САЙТАМ\"</string>
+    <string name="title_download_module2">СПАМПОЎВАЕМ \"КІРАВАНЬНЕ РЭСУРСАМІ ПРАГРАМЫ\"</string>
     <string name="title_resources">Рэсурсы Дадатка</string>
     <string name="settings_notifi_sviata">Налады апавяшчэньня сьвятаў</string>
     <string name="filter">Фільтар</string>
@@ -596,7 +595,7 @@
         <item>лістапада</item>
         <item>сьнежня</item>
     </string-array>
-    <string name="site_admin">Кіраваньне сайтам</string>
+    <string name="site_admin">Кіраваньне рэсурсамі праграмы</string>
     <string name="admin_panel">ПАНЭЛЬ КІРАВАНЬНЯ</string>
     <string name="login">Логін</string>
     <string name="password">Пароль</string>
@@ -616,8 +615,6 @@
     <string name="file_exists_opis">Перазапісаць існуючы файл \"%1$s\"?</string>
     <string name="mk_dir">СТВАРЫЦЬ КАТАЛОГ</string>
     <string name="set_file_dir">ВЫБЯРЫЦЕ ІМЯ КАТАЛОГА</string>
-    <string name="set_file_txt">Як тэкст</string>
-    <string name="set_file_html">Як HTML</string>
     <string name="image_upload">Загрузіць ікону</string>
     <string name="image_help_title">ДАВЕДКА ПА IMG</string>
     <string name="image_help_text">Кнопка выкарыстоўваецца для абазначэньня палажэньня другой, трэцяй і г.д. іконы Сьвятога. Абраз павінен існаваць.
@@ -678,7 +675,6 @@
     <string name="sabytie_data_name">%1$s %2$s</string>
     <string name="trash_sabytie">ВЫДАЛІЦЬ УСЁ ПАДЗЕІ?</string>
     <string name="del_all_sabytie">Вы сапраўды жадаеце выдаліць усё Падзеі?</string>
-    <string name="save_as_help">Для таго каб файл трапіў у Праграму, яго трэба скапіяваць у адпаведную тэчку на сайце Царквы (у тэчцы admin).</string>
     <string name="help_alarm_title">БУДЗІЛЬНІКІ</string>
     <string name="help_alarm_content">Праграме патрэбны будзільнікі для паказу апавяшчэньняў пра Падзеі.</string>
     <string name="update_title">Даступна абнаўленьне праграмы</string>
@@ -699,6 +695,9 @@
     <string name="viaczernia_bierascie_2">Вершы з Пс 140–141</string>
     <string name="viaczernia_bierascie_3">На нядзельнай вячэрні вершапесьні сьпяваюцца з наступнымі вершамі:</string>
     <string name="del_all_back_copy">Вы сапраўды жадаеце выдаліць усё рэзервовыя копіі?</string>
+    <string name="del_all_pasochnica">Вы сапраўды жадаеце выдаліць усю пясочніцу?</string>
+    <string name="del_pasochnica">Выдаліць усю пясочніцу</string>
+    <string name="del_all_copy">Выдаліць усе рэзервовыя копіі</string>
     <string name="tryjodz">Трыёдзь</string>
     <string name="admin_day_in_year">Дзень ад пачатку года (да і пасля Пасxi)</string>
     <string name="admin_show_day_in_year">Год (Пасха): %1$s(%2$s)</string>
@@ -720,5 +719,9 @@
     <string name="dialog_error_data">ПАМЫЛКА КАЛЕНДАРА</string>
     <string name="dialog_error_data_opisanie">Праверце сістэмную дату або абярыце дату %1$d %2$s %3$d года у меню.</string>
     <string name="dialog_error_data_ok">Абраць</string>
+    <string name="admin_file_upload_server">Загрузіць файл</string>
+    <string name="citata">\"Каб усе былі адно\" (Ян 17, 21)</string>
+    <string name="malitounik_name">Малітоўнік.\nКаляндар БГКЦ</string>
+    <string name="bgkc_resource">БЕЛАРУСКІ ГРЭКА-КАТАЛІЦКІ РЭСУРС</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

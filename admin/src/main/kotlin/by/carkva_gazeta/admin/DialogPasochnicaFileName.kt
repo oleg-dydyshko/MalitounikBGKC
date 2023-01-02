@@ -5,6 +5,8 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
@@ -23,6 +25,34 @@ class DialogPasochnicaFileName : DialogFragment() {
     private lateinit var builder: AlertDialog.Builder
     private var _binding: DialogEditviewDisplayBinding? = null
     private val binding get() = _binding!!
+    private val textWatcher = object : TextWatcher {
+        private var editPosition = 0
+        private var check = 0
+        private var editch = true
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            editch = count != after
+            check = after
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            editPosition = start + count
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            if (editch) {
+                var edit = s.toString()
+                edit = edit.replace("-", "_")
+                edit = edit.replace(" ", "_").lowercase()
+                if (check != 0) {
+                    binding.content.removeTextChangedListener(this)
+                    binding.content.setText(edit)
+                    binding.content.setSelection(editPosition)
+                    binding.content.addTextChangedListener(this)
+                }
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -51,7 +81,7 @@ class DialogPasochnicaFileName : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        oldFileName = arguments?.getString("oldFileName") ?: "newFile.html"
+        oldFileName = arguments?.getString("oldFileName") ?: "new_file.html"
         isSite = arguments?.getBoolean("isSite") ?: false
     }
 
@@ -63,7 +93,7 @@ class DialogPasochnicaFileName : DialogFragment() {
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val text = if (savedInstanceState != null) {
                 binding.content.setText(savedInstanceState.getString("fileName"))
-                savedInstanceState.getString("fileName") ?: "newFile.html"
+                savedInstanceState.getString("fileName") ?: "new_file.html"
             } else {
                 binding.content.setText(oldFileName)
                 oldFileName
@@ -75,6 +105,7 @@ class DialogPasochnicaFileName : DialogFragment() {
             binding.content.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             binding.content.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorWhite)
             binding.content.requestFocus()
+            binding.content.addTextChangedListener(textWatcher)
             binding.content.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     setFileName()
@@ -87,34 +118,6 @@ class DialogPasochnicaFileName : DialogFragment() {
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)
                 dialog.cancel()
-            }
-            val textNetral = if (oldFileName.contains(".htm")) {
-                resources.getString(by.carkva_gazeta.malitounik.R.string.set_file_txt)
-            } else {
-                resources.getString(by.carkva_gazeta.malitounik.R.string.set_file_html)
-            }
-            builder.setNeutralButton(textNetral) { _: DialogInterface?, _: Int ->
-                var fileName = binding.content.text.toString()
-                val t1 = fileName.lastIndexOf(".")
-                if (fileName == "") {
-                    val gc = Calendar.getInstance()
-                    val mun = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
-                    fileName = gc[Calendar.DATE].toString() + "_" + mun[gc[Calendar.MONTH]] + "_" + gc[Calendar.YEAR] + "_" + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
-                }
-                fileName = if (oldFileName.contains(".htm")) {
-                    if (t1 != -1) {
-                        fileName.substring(0, t1) + ".txt"
-                    } else {
-                        "$fileName.txt"
-                    }
-                } else {
-                    if (t1 != -1) {
-                        fileName.substring(0, t1) + ".html"
-                    } else {
-                        "$fileName.html"
-                    }
-                }
-                mListener?.setFileName(oldFileName, fileName, isSite)
             }
             builder.setPositiveButton(resources.getString(by.carkva_gazeta.malitounik.R.string.ok)) { _: DialogInterface?, _: Int ->
                 setFileName()

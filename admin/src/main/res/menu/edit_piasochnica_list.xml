@@ -22,6 +22,11 @@
     <item
         android:id="@+id/action_delite_all"
         android:orderInCategory="100"
-        android:title="@string/delite"
+        android:title="@string/del_all_copy"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_delite_all_pasochnica"
+        android:orderInCategory="100"
+        android:title="@string/del_pasochnica"
         app:showAsAction="never" />
 </menu>

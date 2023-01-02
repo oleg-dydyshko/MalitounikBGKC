@@ -122,7 +122,7 @@ pesny_prasl_72<>Крыжовы шлях
 pesny_prasl_73<>Аднаві маю надзею
 pesny_prasl_74<>Праслаўляйце Пана Бога
 pesny_prasl_75<>Радуйся і слаў Яго
-piesni_prasl_aliluja<>Алілуя
+pesny_prasl_aliluja<>Алілуя
 pesny_taize_0<>Magnifikat
 pesny_taize_1<>Ostende nobis
 pesny_taize_2<>Ubi caritas

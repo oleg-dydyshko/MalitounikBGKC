@@ -19,7 +19,7 @@ import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.android.play.core.splitcompat.SplitCompat
 import kotlinx.coroutines.*
 
-class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
+class AdminMain : BaseActivity() {
     private lateinit var binding: AdminMainBinding
     private var resetTollbarJob: Job? = null
 
@@ -109,14 +109,6 @@ class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
-    }
-
-    override fun onUpdate(error: Boolean) {
-        if (error) {
-            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
-        } else {
-            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.save))
-        }
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {

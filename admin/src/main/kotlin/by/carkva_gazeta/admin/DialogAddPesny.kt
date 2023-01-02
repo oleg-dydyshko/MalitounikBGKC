@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.DialogAddpesnyBinding
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 
 class DialogAddPesny : DialogFragment() {
@@ -60,7 +58,6 @@ class DialogAddPesny : DialogFragment() {
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.add_pesny_title)
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             binding.content.requestFocus()
             binding.content.setOnEditorActionListener { editText, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {
@@ -87,7 +84,7 @@ class DialogAddPesny : DialogFragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
             if (savedInstanceState != null) {
-                binding.content.setText(savedInstanceState.getString("fileName"))
+                binding.content.setText(savedInstanceState.getString("fileName") ?: "")
                 pesny = savedInstanceState.getString("pesny", getString(by.carkva_gazeta.malitounik.R.string.pesny1))
                 var position = 0
                 when (pesny) {
@@ -113,7 +110,7 @@ class DialogAddPesny : DialogFragment() {
     }
 
     private fun addPesny() {
-        dialogAddPesnyListiner?.addPesny(binding.content.text.toString().trim(), pesny, arguments?.getString("fileName", "")?: "")
+        dialogAddPesnyListiner?.addPesny(binding.content.text.toString().trim(), pesny, arguments?.getString("fileName") ?: "new_filename")
     }
 
     private inner class PesnyAdapter(context: Context) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, array) {

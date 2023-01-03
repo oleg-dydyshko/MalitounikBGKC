@@ -517,6 +517,17 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 edit.putBoolean("setAlarm", false)
                 edit.apply()
             }
+            if (k.getBoolean("admin", false)) {
+                val localFile = withContext(Dispatchers.IO) {
+                    File.createTempFile("log", "txt")
+                }
+                FirebaseApp.initializeApp(Malitounik.applicationContext())
+                val storage = Firebase.storage
+                val referens = storage.reference
+                referens.child("/admin/log.txt").getFile(localFile).await()
+                val log = localFile.readText()
+                if (log != "") toastView(this@MainActivity, getString(R.string.check_update_resourse))
+            }
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
     }

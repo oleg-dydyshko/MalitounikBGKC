@@ -509,11 +509,12 @@ class SvityiaFragment : BaseFragment(), View.OnClickListener {
                     val localFile2 = withContext(Dispatchers.IO) {
                         File.createTempFile("calendarsviatyiaEdit", "json")
                     }
+                    var builder2 = ""
                     referens.child("/calendarsviatyia.txt").getFile(localFile2).addOnSuccessListener {
-                        builder = localFile2.readText()
+                        builder2 = localFile2.readText()
                     }.await()
-                    if (builder != "") {
-                        val line = builder.split("\n")
+                    if (builder2 != "") {
+                        val line = builder2.split("\n")
                         for (element in line) {
                             val reg = element.split("<>")
                             val list = ArrayList<String>()

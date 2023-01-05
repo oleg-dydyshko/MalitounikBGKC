@@ -26,13 +26,6 @@
         android:title="@string/Bright"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_trash"
-        android:icon="@drawable/trash"
-        android:orderInCategory="100"
-        android:title="@string/Trash"
-        android:visible="false"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_set_page"
         android:orderInCategory="100"
         android:title="@string/set_page_bibliateka"
@@ -43,10 +36,47 @@
         android:orderInCategory="100"
         android:title="@string/inversion"
         app:showAsAction="never" />
-    <!--<item
-        android:id="@+id/action_pdf"
-        android:icon="@drawable/pdf"
+    <item
+        android:id="@+id/action_trash"
+        android:icon="@drawable/trash"
         android:orderInCategory="100"
-        android:title="@string/open_as"
-        app:showAsAction="always" />-->
+        android:title="@string/Trash"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_rub_0"
+        android:orderInCategory="100"
+        android:title="@string/bibliateka_niadaunia"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_rub_1"
+        android:orderInCategory="100"
+        android:title="@string/bibliateka_gistoryia_carkvy"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_rub_2"
+        android:orderInCategory="100"
+        android:title="@string/bibliateka_malitouniki"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_rub_3"
+        android:orderInCategory="100"
+        android:title="@string/bibliateka_speuniki"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_rub_4"
+        android:orderInCategory="100"
+        android:title="@string/bibliateka_rel_litaratura"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_rub_5"
+        android:orderInCategory="100"
+        android:title="@string/bibliateka_file"
+        android:visible="false"
+        app:showAsAction="never" />
 </menu>

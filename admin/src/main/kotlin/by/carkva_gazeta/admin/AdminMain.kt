@@ -29,13 +29,17 @@ class AdminMain : BaseActivity() {
     override fun setMyTheme() {
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        SplitCompat.install(this)
+    override fun onResume() {
+        super.onResume()
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        SplitCompat.install(this)
         super.onCreate(savedInstanceState)
         binding = AdminMainBinding.inflate(layoutInflater)
         try {
@@ -97,7 +101,6 @@ class AdminMain : BaseActivity() {
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.site_admin)
     }
 
@@ -113,10 +116,6 @@ class AdminMain : BaseActivity() {
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == android.R.id.home) {
-            onBack()
-            return true
-        }
         if (id == R.id.action_beta) {
             val dialogUpdateHelp = DialogUpdateHelp.newInstance(false)
             dialogUpdateHelp.show(supportFragmentManager, "dialogUpdateHelp")

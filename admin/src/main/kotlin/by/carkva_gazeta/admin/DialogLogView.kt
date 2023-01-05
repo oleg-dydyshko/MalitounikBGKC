@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -62,7 +61,7 @@ class DialogLogView : DialogFragment() {
             binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             ad.setView(binding.root)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
-            ad.setNeutralButton(getString(R.string.clear_log)) { dialog: DialogInterface, _: Int ->
+            ad.setNeutralButton(getString(R.string.clear_log)) { _: DialogInterface, _: Int ->
                 clearLog()
             }
             alert = ad.create()

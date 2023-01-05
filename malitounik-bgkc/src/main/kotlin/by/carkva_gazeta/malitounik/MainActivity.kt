@@ -806,7 +806,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
     }
 
-    private fun selectFragment(view: View?, start: Boolean = false, biblijatekaRubrika: Int = 0, shortcuts: Boolean = false) {
+    private fun selectFragment(view: View?, start: Boolean = false, shortcuts: Boolean = false) {
         val id = view?.id ?: R.id.label1
         val idOld = if (id == R.id.label2) idSelect
         else id
@@ -1045,7 +1045,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         intentBib.setClassName(this, BIBLIOTEKAVIEW)
                         if (shortcuts || intent.extras?.containsKey("site") == true) {
                             intentBib.data = intent.data
-                            intentBib.putExtra("rubrika", biblijatekaRubrika)
                             if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
                             if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
                         }

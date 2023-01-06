@@ -526,7 +526,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 val referens = storage.reference
                 referens.child("/admin/log.txt").getFile(localFile).await()
                 val log = localFile.readText()
-                if (log != "") toastView(this@MainActivity, getString(R.string.check_update_resourse))
+                if (log != "") {
+                    withContext(Dispatchers.Main) {
+                        toastView(this@MainActivity, getString(R.string.check_update_resourse))
+                    }
+                }
             }
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }

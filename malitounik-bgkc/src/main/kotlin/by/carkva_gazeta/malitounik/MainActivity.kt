@@ -13,6 +13,7 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.SystemClock
 import android.provider.Settings
 import android.text.Spannable
@@ -27,6 +28,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.view.GravityCompat
@@ -46,14 +48,14 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileReader
+import java.io.*
 import java.util.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 import kotlin.math.roundToLong
 
 
-class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
+class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogLogView.DialogLogViewListener {
 
     private val c = Calendar.getInstance()
     private lateinit var k: SharedPreferences
@@ -91,6 +93,48 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private val bibliatekaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+    }
+
+    override fun createAndSentFile(log: ArrayList<String>, isClear: Boolean) {
+        if (log.isNotEmpty()) {
+            FirebaseApp.initializeApp(Malitounik.applicationContext())
+            val storage = Firebase.storage
+            val referens = storage.reference
+            CoroutineScope(Dispatchers.Main).launch {
+                val fileZip = withContext(Dispatchers.IO) {
+                    val localFile = withContext(Dispatchers.IO) {
+                        File.createTempFile("resource", "txt")
+                    }
+                    val zip = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "MalitounikResource.zip")
+                    val out = ZipOutputStream(BufferedOutputStream(FileOutputStream(zip)))
+                    for (file in log) {
+                        referens.child(file).getFile(localFile).await()
+                        val fi = FileInputStream(localFile)
+                        val origin = BufferedInputStream(fi)
+                        val entry = ZipEntry(file.substring(file.lastIndexOf("/")))
+                        out.putNextEntry(entry)
+                        origin.copyTo(out, 1024)
+                        origin.close()
+                    }
+                    out.close()
+                    return@withContext zip
+                }
+                val sendIntent = Intent(Intent.ACTION_SEND)
+                sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@MainActivity,"by.carkva_gazeta.malitounik.fileprovider", fileZip))
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Адправіць файл")
+                sendIntent.type = "application/zip"
+                startActivity(Intent.createChooser(sendIntent, "Адправіць файл"))
+                if (isClear) {
+                    val localFile = withContext(Dispatchers.IO) {
+                        File.createTempFile("log", "txt")
+                    }
+                    localFile.writer().use {
+                        it.write("")
+                    }
+                    referens.child("/admin/log.txt").putFile(Uri.fromFile(localFile)).await()
+                }
+            }
         }
     }
 
@@ -704,6 +748,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
             return true
         }
+        if (id == R.id.action_log) {
+            val dialog = DialogLogView()
+            dialog.show(supportFragmentManager, "DialogLogView")
+        }
         return false
     }
 
@@ -744,7 +792,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             menu.findItem(R.id.tipicon).isVisible = true
             menu.findItem(R.id.sabytie).isVisible = true
             menu.findItem(R.id.search_sviatyia).isVisible = true
-            menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
+            val admin = k.getBoolean("admin", false)
+            menu.findItem(R.id.action_carkva).isVisible = admin
+            menu.findItem(R.id.action_log).isVisible = admin
             if (dzenNoch) {
                 menu.findItem(R.id.action_mun).setIcon(R.drawable.calendar_black_full)
                 menu.findItem(R.id.action_glava).setIcon(R.drawable.calendar_black)

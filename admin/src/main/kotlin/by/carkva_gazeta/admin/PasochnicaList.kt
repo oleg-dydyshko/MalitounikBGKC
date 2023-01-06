@@ -410,11 +410,6 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == R.id.action_log) {
-            val dialog = DialogLogView()
-            dialog.show(supportFragmentManager, "DialogLogView")
-            return true
-        }
         if (id == R.id.action_plus) {
             val intent = Intent(this, Pasochnica::class.java)
             intent.putExtra("newFile", true)

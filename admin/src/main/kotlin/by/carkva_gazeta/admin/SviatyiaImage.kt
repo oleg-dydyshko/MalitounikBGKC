@@ -222,7 +222,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.sviatyia)
+        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.admin_img_sviat)
     }
 
     private fun fullTextTollbar() {
@@ -420,8 +420,10 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                     continue
                 } else {
                     val t1 = text.indexOf("</strong>")
-                    sb = text.substring(0, t1)
-                    titleArray.add(0, sb)
+                    if (t1 != -1) {
+                        sb = text.substring(0, t1)
+                        titleArray.add(0, sb)
+                    }
                 }
             }
         }

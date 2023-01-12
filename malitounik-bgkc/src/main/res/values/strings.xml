@@ -727,5 +727,6 @@
     <string name="check_update_resourse">Ёсць абнаўленьне рэсурсаў</string>
     <string name="set_log_file">Адправіць файл</string>
     <string name="admin_date">%1$d %2$s</string>
+    <string name="admin_img_sviat">Іконкі сьвятых</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

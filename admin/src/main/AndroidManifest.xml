@@ -109,7 +109,7 @@
         <activity
             android:name="by.carkva_gazeta.admin.SviatyiaImage"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
-            android:label="@string/sviatyia"
+            android:label="@string/admin_img_sviat"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

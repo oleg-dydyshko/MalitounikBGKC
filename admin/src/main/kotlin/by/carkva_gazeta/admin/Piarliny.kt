@@ -81,9 +81,9 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
         edit = position
         binding.addPiarliny.setText(piarliny[edit].data)
         binding.addPiarliny.setSelection(piarliny[edit].data.length)
-        val calendar = GregorianCalendar()
-        calendar.timeInMillis = piarliny[edit].time * 1000
-        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, calendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)])
+        timeListCalendar.timeInMillis = piarliny[edit].time * 1000
+        timeListCalendar.set(Calendar.MILLISECOND, 0)
+        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, timeListCalendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[timeListCalendar.get(Calendar.MONTH)])
         binding.listView.visibility = View.GONE
         binding.addPiarliny.visibility = View.VISIBLE
         binding.linearLayout2.visibility = View.VISIBLE
@@ -280,8 +280,8 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
             binding.addPiarliny.visibility = View.VISIBLE
             binding.linearLayout2.visibility = View.VISIBLE
             binding.addPiarliny.setText("")
-            val calendar = Calendar.getInstance()
-            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, calendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)])
+            timeListCalendar.timeInMillis = Calendar.getInstance().timeInMillis
+            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, timeListCalendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[timeListCalendar.get(Calendar.MONTH)])
             invalidateOptionsMenu()
             return true
         }
@@ -417,7 +417,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
             val calendar = GregorianCalendar()
             calendar.timeInMillis = piarliny[position].time * 1000
             val munName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)]
-            viewHolder.text.text = MainActivity.fromHtml(calendar.get(Calendar.DATE).toString() + " " + munName + " " + calendar[Calendar.YEAR])
+            viewHolder.text.text = MainActivity.fromHtml(calendar.get(Calendar.DATE).toString() + " " + munName)
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             return rootView
         }

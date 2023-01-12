@@ -73,20 +73,15 @@ class SubMenuBogashlugbovyaViachernia : BaseActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (data[position].resurs == "1") {
-                val intent = Intent(this, Aktoix::class.java)
+            if (MainActivity.checkmoduleResources()) {
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
+                intent.putExtra("title", data[position].title)
+                intent.putExtra("resurs", data[position].resurs)
                 startActivity(intent)
             } else {
-                if (MainActivity.checkmoduleResources()) {
-                    val intent = Intent()
-                    intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
-                    intent.putExtra("title", data[position].title)
-                    intent.putExtra("resurs", data[position].resurs)
-                    startActivity(intent)
-                } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(supportFragmentManager, "dadatak")
-                }
+                val dadatak = DialogInstallDadatak()
+                dadatak.show(supportFragmentManager, "dadatak")
             }
         }
     }

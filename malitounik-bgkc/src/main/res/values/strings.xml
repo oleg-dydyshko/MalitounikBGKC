@@ -410,7 +410,6 @@
         <item>Вячэрня ў звычайныя дні</item>
         <item>Вячэрня ў вялікім посьце</item>
         <item>Вячэрняя служба штодзённая (без сьвятара)</item>
-        <item>Aktoix</item>
     </string-array>
     <string-array name="sub_bogaslugbovuia_vialiki_post">
         <item>Службы 1-га тыдня Вялікага посту</item>
@@ -729,5 +728,7 @@
     <string name="clear_log">Ачысьціць файл лога</string>
     <string name="set_log">Даслаць файлы</string>
     <string name="check_update_resourse">Ёсць абнаўленьне рэсурсаў</string>
+    <string name="set_log_file">Адправіць файл</string>
+    <string name="admin_date">%1$d %2$s</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

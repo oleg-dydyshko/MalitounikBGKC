@@ -62,8 +62,6 @@ class DialogImageFileLoad : DialogFragment() {
             val arrayAdapter = ListAdapter(it)
             binding.content.adapter = arrayAdapter
             val path = arguments?.getString("path") ?: ""
-            val isSviaty = arguments?.getBoolean("isSviaty") ?: false
-            if (isSviaty) binding.content.visibility = View.GONE
             val file = File(path)
             Picasso.with(it).load(file).resize(600, 1000).onlyScaleDown().centerInside().into(binding.icon)
             builder.setNegativeButton(getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int ->
@@ -106,11 +104,10 @@ class DialogImageFileLoad : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(path: String, isSviaty: Boolean): DialogImageFileLoad {
+        fun getInstance(path: String): DialogImageFileLoad {
             val dialogImageFileLoad = DialogImageFileLoad()
             val bundle = Bundle()
             bundle.putString("path", path)
-            bundle.putBoolean("isSviaty", isSviaty)
             dialogImageFileLoad.arguments = bundle
             return dialogImageFileLoad
         }

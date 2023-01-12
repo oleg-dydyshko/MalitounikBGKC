@@ -318,7 +318,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
         }
 
         private inner class ViewHolder(itemView: ListItemBinding) : DragItemAdapter.ViewHolder(itemView.root, mGrabHandleId, mDragOnLongPress) {
-            var mText = itemView.text
+            val mText = itemView.text
             override fun onItemClicked(view: View) {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return

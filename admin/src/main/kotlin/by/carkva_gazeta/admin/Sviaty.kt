@@ -39,7 +39,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.lang.reflect.Type
 
-class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogFileExplorerListener {
+class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogFileExplorerListener, DialogImageFileExplorer.DialogImageFileExplorerListener {
     private lateinit var binding: AdminSviatyBinding
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
@@ -51,7 +51,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
         get() = storage.reference
     private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (it) {
-            val fileExplorer = DialogImageFileExplorer.getInstance(true)
+            val fileExplorer = DialogImageFileExplorer()
             fileExplorer.show(supportFragmentManager, "file_explorer")
         }
     }
@@ -60,6 +60,12 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
     }
 
     override fun setMyTheme() {
+    }
+
+    override fun setImageFile(bitmap: Bitmap?, position: Int) {
+    }
+
+    override fun setImageFileCancel() {
     }
 
     override fun onPause() {
@@ -341,7 +347,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
             if (PackageManager.PERMISSION_DENIED == permissionCheck) {
                 mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             } else {
-                val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(true)
+                val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(0, true)
                 dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
             }
             return true

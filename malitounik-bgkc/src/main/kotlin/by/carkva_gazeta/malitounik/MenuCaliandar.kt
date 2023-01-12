@@ -187,8 +187,8 @@ class MenuCaliandar : BaseFragment() {
                     intent.setClassName(it, MainActivity.ADMINSVIATYIA)
                     val caliandarFull = childFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as CaliandarFull
                     val year = caliandarFull.getYear()
-                    val cal = GregorianCalendar(year, 0, 1)
-                    var dayofyear = caliandarFull.getDayOfYear() - 1
+                    val cal = GregorianCalendar(2020, 0, 1)
+                    var dayofyear = caliandarFull.getDayOfYear()
                     if (!cal.isLeapYear(year) && dayofyear >= 59) {
                         dayofyear++
                     }

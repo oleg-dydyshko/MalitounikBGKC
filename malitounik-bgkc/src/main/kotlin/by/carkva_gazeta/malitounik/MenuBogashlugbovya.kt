@@ -63,13 +63,12 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.add(MenuListData(r1[2] + opisanie, "viachernia_na_kozny_dzen"))
             dataSearch.add(MenuListData(r1[3] + opisanie, "viachernia_u_vialikim_poscie"))
             dataSearch.add(MenuListData(r1[4] + opisanie, "viaczernia_bierascie"))
-            if (!isSearch) dataSearch.add(MenuListData(r1[5] + opisanie, "1"))
             return dataSearch
         }
 
         fun getTextAktoixList(isSearch: Boolean = false): ArrayList<MenuListData> {
             var opisanie = ""
-            if (isSearch) opisanie = "\nВячэрня -> Aktoix"
+            if (isSearch) opisanie = "\nАктоіх"
             val dataSearch = ArrayList<MenuListData>()
             val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.aktoix_list)
             dataSearch.add(MenuListData(r1[0] + opisanie, "viachernia_ton1"))
@@ -132,6 +131,19 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         }
     }
 
+    private fun getTextBogaslugbovyiaFolderList(): ArrayList<MenuListData> {
+        val dataSearch = ArrayList<MenuListData>()
+        dataSearch.add(MenuListData("МАЛІТВЫ ПАСЬЛЯ СЬВЯТОГА ПРЫЧАСЬЦЯ", "1"))
+        dataSearch.add(MenuListData("ВЯЧЭРНЯ", "2"))
+        dataSearch.add(MenuListData("ТРАПАРЫ І КАНДАКІ НЯДЗЕЛЬНЫЯ ВАСЬМІ ТОНАЎ", "3"))
+        dataSearch.add(MenuListData("МІНЭЯ МЕСЯЧНАЯ", "4"))
+        dataSearch.add(MenuListData("ТРЫЁДЗЬ", "5"))
+        dataSearch.add(MenuListData("МІНЭЯ АГУЛЬНАЯ", "6"))
+        dataSearch.add(MenuListData("АКТОІХ", "7"))
+        dataSearch.sort()
+        return dataSearch
+    }
+
     private fun getTextBogaslugbovyiaList(isSearch: Boolean = false): ArrayList<MenuListData> {
         var opisanie = ""
         if (isSearch) opisanie = "\nБогаслужбовыя тэксты"
@@ -150,14 +162,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         dataSearch.add(MenuListData("Служба за памерлых на кожны дзень тыдня$opisanie", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
         dataSearch.add(MenuListData("Служба Найсьвяцейшай Багародзіцы$opisanie", "sluzba_najsviaciejszaj_baharodzicy"))
         dataSearch.add(MenuListData("Служба аб вызваленьні бязьвінна зьняволеных$opisanie", "sluzba_vyzvalen_biazvinna_zniavolenych"))
-        if (!isSearch) {
-            dataSearch.add(MenuListData("Малітвы пасьля сьвятога прычасьця", "1"))
-            dataSearch.add(MenuListData("Вячэрня", "2"))
-            dataSearch.add(MenuListData("Трапары і кандакі нядзельныя васьмі тонаў", "3"))
-            dataSearch.add(MenuListData("Мінэя месячная", "4"))
-            dataSearch.add(MenuListData("Трыёдзь", "5"))
-            dataSearch.add(MenuListData("Мінэя агульная", "6"))
-        }
+        dataSearch.sort()
         return dataSearch
     }
 
@@ -174,8 +179,8 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
+            data.addAll(getTextBogaslugbovyiaFolderList())
             data.addAll(getTextBogaslugbovyiaList())
-            data.sort()
             dataOriginal.addAll(data)
             adapter = MenuListAdaprer(it as BaseActivity)
             binding.ListView.adapter = adapter
@@ -389,6 +394,10 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                 }
                 "6" -> {
                     val intent = Intent(it, MineiaAgulnaia::class.java)
+                    startActivity(intent)
+                }
+                "7" -> {
+                    val intent = Intent(it, Aktoix::class.java)
                     startActivity(intent)
                 }
                 else -> {

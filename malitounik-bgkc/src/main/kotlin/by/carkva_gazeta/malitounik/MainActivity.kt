@@ -122,9 +122,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
                 val sendIntent = Intent(Intent.ACTION_SEND)
                 sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@MainActivity,"by.carkva_gazeta.malitounik.fileprovider", fileZip))
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Адправіць файл")
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
                 sendIntent.type = "application/zip"
-                startActivity(Intent.createChooser(sendIntent, "Адправіць файл"))
+                startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
                 if (isClear) {
                     val localFile = withContext(Dispatchers.IO) {
                         File.createTempFile("log", "txt")
@@ -784,6 +784,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         menu.findItem(R.id.action_dzen_noch).isVisible = false
         menu.findItem(R.id.action_help).isVisible = false
         menu.findItem(R.id.action_carkva).isVisible = false
+        menu.findItem(R.id.action_log).isVisible = k.getBoolean("admin", false)
         if (idSelect == R.id.label1) {
             val arrayList = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])
             val dataCalendar = arrayList[0][25].toInt()
@@ -792,9 +793,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             menu.findItem(R.id.tipicon).isVisible = true
             menu.findItem(R.id.sabytie).isVisible = true
             menu.findItem(R.id.search_sviatyia).isVisible = true
-            val admin = k.getBoolean("admin", false)
-            menu.findItem(R.id.action_carkva).isVisible = admin
-            menu.findItem(R.id.action_log).isVisible = admin
+            menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
             if (dzenNoch) {
                 menu.findItem(R.id.action_mun).setIcon(R.drawable.calendar_black_full)
                 menu.findItem(R.id.action_glava).setIcon(R.drawable.calendar_black)

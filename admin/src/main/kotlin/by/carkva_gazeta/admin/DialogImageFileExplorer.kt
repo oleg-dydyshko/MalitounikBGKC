@@ -2,7 +2,10 @@ package by.carkva_gazeta.admin
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
@@ -35,9 +38,27 @@ class DialogImageFileExplorer : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var _binding: DialogListviewDisplayBinding? = null
     private val binding get() = _binding!!
+    private var listener: DialogImageFileExplorerListener? = null
+
+    interface DialogImageFileExplorerListener {
+        fun setImageFile(bitmap: Bitmap?, position: Int)
+        fun setImageFileCancel()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is Activity) {
+            listener = try {
+                context as DialogImageFileExplorerListener
+            } catch (e: ClassCastException) {
+                throw ClassCastException("$context must implement DialogImageFileExplorerListener")
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        listener?.setImageFileCancel()
         _binding = null
     }
 
@@ -97,7 +118,7 @@ class DialogImageFileExplorer : DialogFragment() {
             binding.content.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
             binding.content.adapter = TitleListAdaprer(it)
             builder.setView(binding.root)
-            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.cansel)) { _: DialogInterface, _: Int -> listener?.setImageFileCancel() }
             alert = builder.create()
             binding.content.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
                 if (sdCard) {
@@ -136,8 +157,14 @@ class DialogImageFileExplorer : DialogFragment() {
                         (binding.content.adapter as TitleListAdaprer).notifyDataSetChanged()
                     } else {
                         val isSviaty = arguments?.getBoolean("isSviaty") ?: false
-                        val dialogImageFileLoad = DialogImageFileLoad.getInstance(sel.absolutePath, isSviaty)
-                        dialogImageFileLoad.show(childFragmentManager, "dialogImageFileLoad")
+                        if (isSviaty) {
+                            val dialogImageFileLoad = DialogImageFileLoad.getInstance(sel.absolutePath)
+                            dialogImageFileLoad.show(childFragmentManager, "dialogImageFileLoad")
+                        } else {
+                            val bitmap = BitmapFactory.decodeFile(sel.absolutePath)
+                            listener?.setImageFile(bitmap,arguments?.getInt("position") ?: 0)
+                            dialog?.cancel()
+                        }
                     }
                 }
             }
@@ -167,9 +194,10 @@ class DialogImageFileExplorer : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(isSviaty: Boolean): DialogImageFileExplorer {
+        fun getInstance(position: Int, isSviaty: Boolean): DialogImageFileExplorer {
             val dialogImageFileLoad = DialogImageFileExplorer()
             val bundle = Bundle()
+            bundle.putInt("position", position)
             bundle.putBoolean("isSviaty", isSviaty)
             dialogImageFileLoad.arguments = bundle
             return dialogImageFileLoad

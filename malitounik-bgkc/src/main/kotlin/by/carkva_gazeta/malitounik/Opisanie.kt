@@ -301,19 +301,36 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }.await()
         dirList.clear()
         var size = 0L
+        val images = ArrayList<String>()
+        images.add("s_${day}_${mun}.jpg")
+        images.add("s_${day}_${mun}_2.jpg")
+        images.add("s_${day}_${mun}_3.jpg")
+        images.add("s_${day}_${mun}_4.jpg")
         arrayList.forEach {
             val pref = if (svity) "v"
             else "s"
             val setIsFull = if (isFull) true
-            else it[0].contains("${pref}_${day}_${mun}.")
+            else it[0].contains("${pref}_${day}_${mun}.") || it[0].contains("${pref}_${day}_${mun}_")
             if (setIsFull) {
                 val fileIcon = File("$filesDir/icons/" + it[0])
+                for (i in 0 until images.size) {
+                    if (fileIcon.name == images[i]) {
+                        images.removeAt(i)
+                        break
+                    }
+                }
                 val time = fileIcon.lastModified()
                 val update = it[2].toLong()
                 if (!fileIcon.exists() || time < update) {
                     dirList.add(DirList(it[0], it[1].toLong()))
                     size += it[1].toLong()
                 }
+            }
+        }
+        if (images.isNotEmpty()) {
+            for (i in 0 until images.size) {
+                val file = File("$filesDir/icons/" + images[i])
+                if (file.exists()) file.delete()
             }
         }
         if (!loadIcons && MainActivity.isNetworkAvailable(true)) {
@@ -512,7 +529,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     cal.set(Calendar.YEAR, year)
                     cal.set(Calendar.MONTH, mun - 1)
                     cal.set(Calendar.DAY_OF_MONTH, day)
-                    var dayofyear = cal[Calendar.DAY_OF_YEAR] - 1
+                    var dayofyear = cal[Calendar.DAY_OF_YEAR]
                     if (!cal.isLeapYear(cal[Calendar.YEAR]) && dayofyear >= 59) {
                         dayofyear++
                     }

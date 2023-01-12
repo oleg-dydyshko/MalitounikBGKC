@@ -81,7 +81,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     override fun setUrl(url: String, titleUrl: String) {
         val startSelect = binding.apisanne.selectionStart
         val endSelect = binding.apisanne.selectionEnd
-        if (fileName.contains(".htm")) {
+        if (isHTML) {
             val text = SpannableStringBuilder(binding.apisanne.text)
             val subtext = text.getSpans(startSelect, endSelect, URLSpan::class.java)
             subtext.forEach {
@@ -111,15 +111,17 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     }
 
     private fun addHistory(s: Editable?, editPosition: Int) {
-        s?.let {
-            if (it.toString() != "") {
-                if (history.size == 51) history.removeAt(0)
-                history.add(History(it.toSpannable(), editPosition))
-            }
-            if (history.size > 1) {
-                binding.actionBack.visibility = View.VISIBLE
-            } else {
-                binding.actionBack.visibility = View.GONE
+        if (isHTML) {
+            s?.let {
+                if (it.toString() != "") {
+                    if (history.size == 51) history.removeAt(0)
+                    history.add(History(it.toSpannable(), editPosition))
+                }
+                if (history.size > 1) {
+                    binding.actionBack.visibility = View.VISIBLE
+                } else {
+                    binding.actionBack.visibility = View.GONE
+                }
             }
         }
     }
@@ -786,17 +788,21 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_preview) {
+            binding.apisanne.removeTextChangedListener(textWatcher)
             isHTML = !isHTML
             convertView()
+            binding.apisanne.addTextChangedListener(textWatcher)
             return true
         }
         if (id == R.id.action_save) {
+            binding.apisanne.removeTextChangedListener(textWatcher)
             if (fileName == "new_file.html") {
                 val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance("new_file.html", false)
                 dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
             } else {
                 saveResult()
             }
+            binding.apisanne.addTextChangedListener(textWatcher)
             return true
         }
         return false
@@ -808,6 +814,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
             binding.apisanne.setText(MainActivity.fromHtml(text.toString(), HtmlCompat.FROM_HTML_MODE_COMPACT))
             binding.actionP.visibility = View.GONE
             binding.actionBr.visibility = View.GONE
+            if (history.size > 1) {
+                binding.actionBack.visibility = View.VISIBLE
+            }
         } else {
             text?.let {
                 var result = MainActivity.toHtml(it)
@@ -823,6 +832,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 binding.actionP.visibility = View.VISIBLE
                 binding.actionBr.visibility = View.VISIBLE
                 binding.apisanne.setText(result)
+                binding.actionBack.visibility = View.GONE
             }
         }
     }
@@ -868,7 +878,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         if (id == R.id.action_bold) {
             val startSelect = binding.apisanne.selectionStart
             val endSelect = binding.apisanne.selectionEnd
-            if (fileName.contains(".htm")) {
+            if (isHTML) {
                 val text = binding.apisanne.text
                 text?.let { editable ->
                     val subtext = editable.getSpans(startSelect, endSelect, StyleSpan(Typeface.BOLD)::class.java)
@@ -899,7 +909,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         if (id == R.id.action_em) {
             val startSelect = binding.apisanne.selectionStart
             val endSelect = binding.apisanne.selectionEnd
-            if (fileName.contains(".htm")) {
+            if (isHTML) {
                 val text = binding.apisanne.text
                 text?.let { editable ->
                     val subtext = editable.getSpans(startSelect, endSelect, StyleSpan(Typeface.ITALIC)::class.java)
@@ -930,7 +940,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         if (id == R.id.action_red) {
             val startSelect = binding.apisanne.selectionStart
             val endSelect = binding.apisanne.selectionEnd
-            if (fileName.contains(".htm")) {
+            if (isHTML) {
                 val text = binding.apisanne.text
                 text?.let { editable ->
                     val subtext = editable.getSpans(startSelect, endSelect, ForegroundColorSpan::class.java)

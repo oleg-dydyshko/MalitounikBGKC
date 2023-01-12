@@ -116,37 +116,46 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             res = arrayList[day - 1]
         }
         if (dzenNoch) res = res.replace("#d00505", "#f44336")
-        if (res.contains("<!--image-->")) {
-            res.split("<!--image-->").forEachIndexed { index, text ->
-                val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-                val spanned = MainActivity.fromHtml(text)
-                when (index) {
-                    0 -> {
-                        binding.TextView1.textSize = fontBiblia
-                        binding.TextView1.text = spanned.trim()
-                    }
-                    1 -> {
-                        binding.TextView2.textSize = fontBiblia
-                        binding.TextView2.text = spanned.trim()
-                        binding.TextView2.visibility = View.VISIBLE
-                    }
-                    2 -> {
-                        binding.TextView3.textSize = fontBiblia
-                        binding.TextView3.text = spanned.trim()
-                        binding.TextView3.visibility = View.VISIBLE
-                    }
-                    3 -> {
-                        binding.TextView4.textSize = fontBiblia
-                        binding.TextView4.text = spanned.trim()
-                        binding.TextView4.visibility = View.VISIBLE
-                    }
+        val title = ArrayList<String>()
+        val listRes = res.split("<strong>")
+        var sb = ""
+        for (i in listRes.size - 1 downTo 0) {
+            val text = listRes[i].replace("<!--image-->", "")
+            if (text.trim() != "") {
+                if (text.contains("Трапар", ignoreCase = true) || text.contains("Кандак", ignoreCase = true)) {
+                    sb = "<strong>$text$sb"
+                    continue
+                } else {
+                    sb = "<strong>$text$sb"
+                    title.add(0, sb)
+                    sb = ""
                 }
             }
-        } else {
+        }
+        title.forEachIndexed { index, text ->
             val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-            val spanned = MainActivity.fromHtml(res)
-            binding.TextView1.textSize = fontBiblia
-            binding.TextView1.text = spanned.trim()
+            val spanned = MainActivity.fromHtml(text)
+            when (index) {
+                0 -> {
+                    binding.TextView1.textSize = fontBiblia
+                    binding.TextView1.text = spanned.trim()
+                }
+                1 -> {
+                    binding.TextView2.textSize = fontBiblia
+                    binding.TextView2.text = spanned.trim()
+                    binding.TextView2.visibility = View.VISIBLE
+                }
+                2 -> {
+                    binding.TextView3.textSize = fontBiblia
+                    binding.TextView3.text = spanned.trim()
+                    binding.TextView3.visibility = View.VISIBLE
+                }
+                3 -> {
+                    binding.TextView4.textSize = fontBiblia
+                    binding.TextView4.text = spanned.trim()
+                    binding.TextView4.visibility = View.VISIBLE
+                }
+            }
         }
     }
 

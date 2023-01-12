@@ -36,7 +36,7 @@ import kotlinx.coroutines.tasks.await
 import java.io.File
 import java.util.*
 
-class Sviatyia : BaseActivity(), DialogSviatyiaImageHelp.DialodSviatyiaImageHelpListener, View.OnClickListener {
+class Sviatyia : BaseActivity(), View.OnClickListener {
     private lateinit var k: SharedPreferences
     private var setedit = false
     private lateinit var binding: AdminSviatyiaBinding
@@ -48,12 +48,6 @@ class Sviatyia : BaseActivity(), DialogSviatyiaImageHelp.DialodSviatyiaImageHelp
     private val array: Array<String>
         get() = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.admin_svity)
     private val arrayList = ArrayList<Tipicon>()
-    /*private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-        if (it) {
-            val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(false)
-            dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
-        }
-    }*/
     private var mLastClickTime: Long = 0
     private val storage: FirebaseStorage
         get() = Firebase.storage
@@ -141,7 +135,6 @@ class Sviatyia : BaseActivity(), DialogSviatyiaImageHelp.DialodSviatyiaImageHelp
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)
         binding.actionP.setOnClickListener(this)
-        binding.actionImg.setOnClickListener(this)
         binding.actionKeyword.setOnClickListener(this)
         binding.imageViewLeft.setOnClickListener(this)
         binding.imageViewRight.setOnClickListener(this)
@@ -257,19 +250,6 @@ class Sviatyia : BaseActivity(), DialogSviatyiaImageHelp.DialodSviatyiaImageHelp
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun insertIMG() {
-        val endSelect = binding.apisanne.selectionEnd
-        val text = binding.apisanne.text.toString()
-        val build = with(StringBuilder()) {
-            append(text.substring(0, endSelect))
-            append("<!--image-->")
-            append(text.substring(endSelect))
-            toString()
-        }
-        binding.apisanne.setText(build)
-        binding.apisanne.setSelection(endSelect + 12)
-    }
-
     override fun onBack() {
         if (binding.scrollpreView.visibility == View.VISIBLE) {
             binding.scrollpreView.visibility = View.GONE
@@ -313,13 +293,6 @@ class Sviatyia : BaseActivity(), DialogSviatyiaImageHelp.DialodSviatyiaImageHelp
             return true
         }
         if (id == R.id.action_upload_image) {
-            /*val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-            if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            } else {
-                val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(false)
-                dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
-            }*/
             val cal = Calendar.getInstance()
             cal.set(Calendar.YEAR, VYSOCOSNYI_GOD)
             cal.set(Calendar.DAY_OF_YEAR, dayOfYear)
@@ -432,10 +405,6 @@ class Sviatyia : BaseActivity(), DialogSviatyiaImageHelp.DialodSviatyiaImageHelp
             }
             binding.apisanne.setText(build)
             binding.apisanne.setSelection(endSelect + 3)
-        }
-        if (id == R.id.action_img) {
-            val dialogSviatyiaImageHelp = DialogSviatyiaImageHelp()
-            dialogSviatyiaImageHelp.show(supportFragmentManager, "dialogSviatyiaImageHelp")
         }
         if (id == R.id.action_keyword) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

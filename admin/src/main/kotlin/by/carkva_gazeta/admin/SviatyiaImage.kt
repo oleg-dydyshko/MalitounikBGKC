@@ -200,7 +200,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                             val file = File("$filesDir/icons/s_${day}_${mun}${posItems}.jpg")
                             arraytemp.add(DataImages(getSviatyia(toPosition), file.length(), file, images[i].position))
                         } else {
-                            arraytemp.add(DataImages("", 0, File(""), images[i].position))
+                            arraytemp.add(DataImages(getSviatyia(toPosition), 0, File(""), images[i].position))
                             referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").delete().await()
                         }
                     }
@@ -357,7 +357,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                         images.add(tempArray[e])
                         e++
                     } else {
-                        images.add(DataImages("", 0, File(""), position))
+                        images.add(DataImages(getSviatyia(position.toInt()), 0, File(""), position))
                         position++
                     }
                 } else {
@@ -369,11 +369,11 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                             images.add(tempArray[e])
                             e++
                         } else {
-                            images.add(DataImages("", 0, File(""), position))
+                            images.add(DataImages(getSviatyia(position.toInt()), 0, File(""), position))
                             position++
                         }
                     } else {
-                        images.add(DataImages("", 0, File(""), position))
+                        images.add(DataImages(getSviatyia(position.toInt()), 0, File(""), position))
                         position++
                     }
                 }
@@ -410,19 +410,26 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
             arrayList.addAll(gson.fromJson(fileOpisanie.readText(), type))
             res = arrayList[day - 1]
         }
-        if (res.contains("<!--image-->")) {
-            res.split("<!--image-->").forEachIndexed { index, text ->
-                if (position == index) {
-                    val t1 = text.indexOf("<strong>")
-                    val t2 = text.indexOf("</strong>", t1 + 8)
-                    title = text.substring(t1 + 8, t2)
-                    return@forEachIndexed
+        val titleArray = ArrayList<String>()
+        val listRes = res.split("<strong>")
+        var sb: String
+        for (i in listRes.size - 1 downTo 0) {
+            val text = listRes[i].replace("<!--image-->", "")
+            if (text.trim() != "") {
+                if (text.contains("Трапар", ignoreCase = true) || text.contains("Кандак", ignoreCase = true)) {
+                    continue
+                } else {
+                    val t1 = text.indexOf("</strong>")
+                    sb = text.substring(0, t1)
+                    titleArray.add(0, sb)
                 }
             }
-        } else {
-            val t1 = res.indexOf("<strong>")
-            val t2 = res.indexOf("</strong>", t1 + 8)
-            title = res.substring(t1 + 8, t2)
+        }
+        titleArray.forEachIndexed { index, text ->
+            if (position == index) {
+                title = text
+                return@forEachIndexed
+            }
         }
         return title
     }

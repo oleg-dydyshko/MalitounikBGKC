@@ -8,6 +8,7 @@ import android.content.SharedPreferences.Editor
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
@@ -18,6 +19,7 @@ import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -31,6 +33,9 @@ import by.carkva_gazeta.resources.databinding.AkafistActivityPasliaPrichBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
+import java.io.BufferedReader
+import java.io.File
+import java.io.InputStreamReader
 
 
 class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeListener {
@@ -278,6 +283,35 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
                 startActivity(intent)
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+            }
+            return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
+            val pesny = Bogashlugbovya.resursMap[malitvy[pasliaPrychascia].resurs] ?: R.raw.bogashlugbovya_error
+            val builder = StringBuilder()
+            if (pesny != -1) {
+                val inputStream = resources.openRawResource(pesny)
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                var line: String
+                reader.use { bufferedReader ->
+                    bufferedReader.forEachLine {
+                        line = it
+                        if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                        builder.append(line)
+                    }
+                }
+                val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "${malitvy[pasliaPrychascia].resurs}.html")
+                file.writer().use {
+                    it.write(builder.toString())
+                }
+                val sendIntent = Intent(Intent.ACTION_SEND)
+                sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this,"by.carkva_gazeta.malitounik.fileprovider", file))
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(by.carkva_gazeta.malitounik.R.string.set_log_file))
+                sendIntent.type = "text/html"
+                startActivity(Intent.createChooser(sendIntent, getString(by.carkva_gazeta.malitounik.R.string.set_log_file)))
+            } else {
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error_ch))
             }
             return true
         }

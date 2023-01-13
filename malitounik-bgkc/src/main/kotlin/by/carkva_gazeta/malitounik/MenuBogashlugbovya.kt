@@ -148,9 +148,9 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         var opisanie = ""
         if (isSearch) opisanie = "\nБогаслужбовыя тэксты"
         val dataSearch = ArrayList<MenuListData>()
-        dataSearch.add(MenuListData("Боская Літургія між сьвятымі айца нашага Яна Залатавуснага$opisanie", "lit_jan_zalat"))
+        dataSearch.add(MenuListData("Боская Літургія сьв. Яна Залатавуснага$opisanie", "lit_jan_zalat"))
         dataSearch.add(MenuListData("Боская Літургія ў Велікодны перыяд$opisanie", "lit_jan_zalat_vielikodn"))
-        dataSearch.add(MenuListData("Боская Літургія між сьвятымі айца нашага Базыля Вялікага$opisanie", "lit_vasila_vialikaha"))
+        dataSearch.add(MenuListData("Боская Літургія сьв. Васіля Вялікага$opisanie", "lit_vasila_vialikaha"))
         dataSearch.add(MenuListData("Літургія раней асьвячаных дароў$opisanie", "lit_ran_asv_dar"))
         dataSearch.add(MenuListData("Набажэнства ў гонар Маці Божай Нястомнай Дапамогі$opisanie", "nabazenstva_maci_bozaj_niast_dap"))
         dataSearch.add(MenuListData("Ютрань нядзельная (у скароце)$opisanie", "jutran_niadzelnaja"))
@@ -158,7 +158,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         dataSearch.add(MenuListData("Служба за памерлых — Малая паніхіда$opisanie", "panichida_mal"))
         dataSearch.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы$opisanie", "kanon_malebny_baharodzicy"))
         dataSearch.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага$opisanie", "kanon_a_kryckaha"))
-        dataSearch.add(MenuListData("Малебен сьвятым айцам нашым, роўным апосталам Кірылу і Мятоду, настаўнікам славянскім$opisanie", "malebien_kiryla_miatod"))
+        dataSearch.add(MenuListData("Малебен сьв. Кірылу і Мятоду, настаўнікам славянскім$opisanie", "malebien_kiryla_miatod"))
         dataSearch.add(MenuListData("Служба за памерлых на кожны дзень тыдня$opisanie", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
         dataSearch.add(MenuListData("Служба Найсьвяцейшай Багародзіцы$opisanie", "sluzba_najsviaciejszaj_baharodzicy"))
         dataSearch.add(MenuListData("Служба аб вызваленьні бязьвінна зьняволеных$opisanie", "sluzba_vyzvalen_biazvinna_zniavolenych"))
@@ -244,7 +244,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getMineiaSviatochnaia()
-        opisanie = "\nТрыёдзь -> Трыёдзь Сьвяточная"
+        opisanie = "\nТрыёдзь -> Трыёдзь сьвяточная"
         for (i in mesiach.indices) {
             dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
         }

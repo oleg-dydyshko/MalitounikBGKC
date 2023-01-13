@@ -11,6 +11,7 @@ import android.content.SharedPreferences.Editor
 import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
 import android.text.Editable
 import android.text.Spannable
@@ -25,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.text.toSpannable
 import androidx.core.view.WindowCompat
@@ -1707,7 +1709,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     override fun onPrepareMenu(menu: Menu) {
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         val itemVybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
-        //menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
         if (mAutoScroll) {
             autoscroll = k.getBoolean("autoscroll", false)
             when {
@@ -1862,15 +1863,35 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             hide()
             return true
         }
-        /*if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
-            val sendIntent = Intent()
-            sendIntent.action = Intent.ACTION_SEND
-            val shareTitle = URLEncoder.encode(title, StandardCharsets.UTF_8.toString())
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=2&title=$shareTitle&file=$resurs")
-            sendIntent.type = "text/plain"
-            startActivity(Intent.createChooser(sendIntent, null))
+        if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
+            val pesny = resursMap[resurs] ?: R.raw.bogashlugbovya_error
+            val builder = StringBuilder()
+            if (pesny != -1) {
+                val inputStream = resources.openRawResource(pesny)
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                var line: String
+                reader.use { bufferedReader ->
+                    bufferedReader.forEachLine {
+                        line = it
+                        if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                        builder.append(line)
+                    }
+                }
+                val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "$resurs.html")
+                file.writer().use {
+                    it.write(builder.toString())
+                }
+                val sendIntent = Intent(Intent.ACTION_SEND)
+                sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this,"by.carkva_gazeta.malitounik.fileprovider", file))
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(by.carkva_gazeta.malitounik.R.string.set_log_file))
+                sendIntent.type = "text/html"
+                startActivity(Intent.createChooser(sendIntent, getString(by.carkva_gazeta.malitounik.R.string.set_log_file)))
+            } else {
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error_ch))
+            }
             return true
-        }*/
+        }
         prefEditor.apply()
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
             if (MainActivity.checkmodulesAdmin()) {

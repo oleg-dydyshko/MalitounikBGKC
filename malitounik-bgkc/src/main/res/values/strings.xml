@@ -21,7 +21,6 @@
     <string name="data_search">ВЫБЯРЫЦЕ РАЗЬДЗЕЛ.\nУСЯГО: %1$d</string>
     <string name="razdzel">Разьдзел</string>
     <string name="psalom">Псальма</string>
-    <!--<string name="sajt">ГАЛОЎНАЯ - сайт</string>-->
     <string name="liturgikon">БОГАСЛУЖБОВЫЯ ТЭКСТЫ</string>
     <string name="liturgikon2">Богаслужбовыя тэксты</string>
     <string name="malitvy">МАЛІТВЫ</string>
@@ -423,18 +422,8 @@
         <item>Трыёдзь посная</item>
         <item>Службы Вялікага тыдня</item>
         <item>Службы Сьветлага тыдня</item>
-        <item>Трыёдзь Сьвяточная</item>
+        <item>Трыёдзь сьвяточная</item>
     </string-array>
-    <!--<string-array name="galounae">
-        <item>Апошнія навіны</item>
-        <item>Навіны хрысьціянскага сьвету</item>
-        <item>Гісторыя Царквы</item>
-        <item>Сьвятло Ўсходу</item>
-        <item>Царква і грамадзтва</item>
-        <item>Катэдральны пляц</item>
-        <item>Відэа</item>
-        <item>Бібліятэка</item>
-    </string-array>-->
     <string-array name="malitvy">
         <item>Ранішняя малітвы</item>
         <item>Вячэрнія малітвы</item>
@@ -623,7 +612,7 @@
     <string name="zmena_chastki">Зьменныя часткі</string>
     <string name="add_piarliny">Дадаць пярліну</string>
     <string name="mineia_agulnaia">Мінэя агульная</string>
-    <string name="aktoix">Aktoix</string>
+    <string name="aktoix">Актоіх</string>
     <string-array name="aktoix_list">
         <item>Вячэрня Тон 1</item>
         <item>Вячэрня Тон 2</item>
@@ -682,7 +671,7 @@
     <string name="admin_update_all">Абнаўленьне павінна існаваць у Google Play.\nНапішыце нумар %1$s версіі:</string>
     <string name="admin_update_ok">Апублікаваць</string>
     <string name="mineia_shtodzennaia">Мінэя месячная</string>
-    <string name="mineia_sviatochnaia">Трыёдзь Сьвяточная</string>
+    <string name="mineia_sviatochnaia">Трыёдзь сьвяточная</string>
     <string-array name="admin_svity">
         <item>Чырвоны</item>
         <item>Чырвоны тоўсты</item>

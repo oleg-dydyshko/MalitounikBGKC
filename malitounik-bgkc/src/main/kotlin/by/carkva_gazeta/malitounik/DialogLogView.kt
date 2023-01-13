@@ -88,7 +88,7 @@ class DialogLogView : DialogFragment() {
             binding.checkbox.typeface = MainActivity.createFont(Typeface.NORMAL)
             binding.checkbox.text = getString(R.string.clear_log)
             ad.setView(binding.root)
-            ad.setPositiveButton(resources.getString(R.string.set_log)) { dialog: DialogInterface, _: Int ->
+            ad.setPositiveButton(resources.getString(R.string.set_log)) { _: DialogInterface, _: Int ->
                 mListener?.createAndSentFile(log, binding.checkbox.isChecked)
             }
             ad.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }

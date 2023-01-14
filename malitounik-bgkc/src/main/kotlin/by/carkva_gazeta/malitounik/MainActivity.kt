@@ -1,6 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -95,6 +96,18 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.drawerLayout.openDrawer(GravityCompat.START)
         }
     }
+    private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+        val cw = Calendar.getInstance()
+        val intent = Intent(this, ReceiverBroad::class.java)
+        intent.putExtra("file", "MalitounikResource.zip")
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_IMMUTABLE or 0
+        } else {
+            0
+        }
+        val pIntent = PendingIntent.getBroadcast(this, 30, intent, flags)
+        SettingsActivity.setAlarm(cw.timeInMillis + 10 * 60 * 1000, pIntent)
+    }
 
     override fun createAndSentFile(log: ArrayList<String>, isClear: Boolean) {
         if (log.isNotEmpty()) {
@@ -121,10 +134,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     return@withContext zip
                 }
                 val sendIntent = Intent(Intent.ACTION_SEND)
-                sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@MainActivity,"by.carkva_gazeta.malitounik.fileprovider", fileZip))
+                sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@MainActivity, "by.carkva_gazeta.malitounik.fileprovider", fileZip))
                 sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
                 sendIntent.type = "application/zip"
-                startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
+                shareLauncher.launch(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
                 if (isClear) {
                     val localFile = withContext(Dispatchers.IO) {
                         File.createTempFile("log", "txt")

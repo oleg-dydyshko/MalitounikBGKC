@@ -34,6 +34,7 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import by.carkva_gazeta.biblijateka.databinding.BibliotekaViewBinding
 import by.carkva_gazeta.biblijateka.databinding.SimpleListItemBibliotekaBinding
 import by.carkva_gazeta.malitounik.*
@@ -1796,6 +1797,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         if (file.exists()) {
             popup.menu.getItem(1).isVisible = false
         } else {
+            popup.menu.getItem(3).isVisible = false
             popup.menu.getItem(2).isVisible = false
             if (!MainActivity.isNetworkAvailable()) popup.menu.getItem(1).isVisible = false
         }
@@ -1824,14 +1826,14 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     dd.show(supportFragmentManager, "dialog_delite")
                     return@setOnMenuItemClickListener true
                 }
-                /*R.id.menu_share -> {
-                    val sendIntent = Intent()
-                    sendIntent.action = Intent.ACTION_SEND
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/index.php?bib=${arrayList[position][6]}")
-                    sendIntent.type = "text/plain"
-                    startActivity(Intent.createChooser(sendIntent, null))
+                R.id.menu_share -> {
+                    val sendIntent = Intent(Intent.ACTION_SEND)
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, "by.carkva_gazeta.malitounik.fileprovider", file))
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(by.carkva_gazeta.malitounik.R.string.set_log_file))
+                    sendIntent.type = "text/html"
+                    startActivity(Intent.createChooser(sendIntent, getString(by.carkva_gazeta.malitounik.R.string.set_log_file)))
                     return@setOnMenuItemClickListener true
-                }*/
+                }
             }
             false
         }

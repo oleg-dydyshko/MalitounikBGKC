@@ -4,12 +4,14 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.content.res.Configuration
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
@@ -95,6 +97,18 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 setDatacalendar(null)
             }
         }
+    }
+    private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+        val cw = Calendar.getInstance()
+        val intent = Intent(this, ReceiverBroad::class.java)
+        intent.putExtra("file", "$resurs.html")
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_IMMUTABLE or 0
+        } else {
+            0
+        }
+        val pIntent = PendingIntent.getBroadcast(this, 30, intent, flags)
+        SettingsActivity.setAlarm(cw.timeInMillis + 10 * 60 * 1000, pIntent)
     }
 
     companion object {
@@ -1883,10 +1897,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     it.write(builder.toString())
                 }
                 val sendIntent = Intent(Intent.ACTION_SEND)
-                sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this,"by.carkva_gazeta.malitounik.fileprovider", file))
+                sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, "by.carkva_gazeta.malitounik.fileprovider", file))
                 sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(by.carkva_gazeta.malitounik.R.string.set_log_file))
                 sendIntent.type = "text/html"
-                startActivity(Intent.createChooser(sendIntent, getString(by.carkva_gazeta.malitounik.R.string.set_log_file)))
+                shareLauncher.launch(Intent.createChooser(sendIntent, getString(by.carkva_gazeta.malitounik.R.string.set_log_file)))
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error_ch))
             }

@@ -128,7 +128,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             return intent
         }
 
-        private fun setAlarm(timeAlarm: Long, pendingIntent: PendingIntent?, padzeia: Boolean = false) {
+        fun setAlarm(timeAlarm: Long, pendingIntent: PendingIntent?, padzeia: Boolean = false) {
             val context = Malitounik.applicationContext()
             val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (padzeia && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !am.canScheduleExactAlarms()) return

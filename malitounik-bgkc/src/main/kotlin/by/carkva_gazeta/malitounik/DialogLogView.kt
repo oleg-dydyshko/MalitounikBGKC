@@ -74,7 +74,9 @@ class DialogLogView : DialogFragment() {
                 val localFile = withContext(Dispatchers.IO) {
                     File.createTempFile("log", "txt")
                 }
-                referens.child("/admin/log.txt").getFile(localFile).await()
+                referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
+                    MainActivity.toastView(fragmentActivity, getString(R.string.error))
+                }.await()
                 localFile.readLines().forEach {
                     if (it.isNotEmpty()) {
                         log.add(it)

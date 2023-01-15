@@ -57,8 +57,9 @@ class Chytanny : BaseActivity() {
                 File.createTempFile("cytanne", "php")
             }
             var text = ""
-            referens.child("/calendar-cytanne_$year.php").getFile(localFile).addOnSuccessListener {
-                text = localFile.readText()
+            referens.child("/calendar-cytanne_$year.php").getFile(localFile).addOnCompleteListener {
+                if (it.isSuccessful) text = localFile.readText()
+                else MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
             }.await()
             val a = year % 19
             val b = year % 4
@@ -264,7 +265,9 @@ class Chytanny : BaseActivity() {
                     }
                     val sb = StringBuilder()
                     val url = "/calendar-cytanne_$year.php"
-                    referens.child("/admin/log.txt").getFile(logFile).await()
+                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                        MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }.await()
                     var ref = true
                     logFile.readLines().forEach {
                         sb.append("$it\n")

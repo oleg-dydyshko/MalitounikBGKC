@@ -112,11 +112,15 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                 val localFile = withContext(Dispatchers.IO) {
                     File.createTempFile("opisanieSviat", "json")
                 }
-                referens.child("/opisanie_sviat.json").getFile(localFile).addOnSuccessListener {
-                    val builder = localFile.readText()
-                    val gson = Gson()
-                    val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-                    arrayList.addAll(gson.fromJson(builder, type))
+                referens.child("/opisanie_sviat.json").getFile(localFile).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        val builder = localFile.readText()
+                        val gson = Gson()
+                        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                        arrayList.addAll(gson.fromJson(builder, type))
+                    } else {
+                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }
                 }.await()
             } catch (e: Throwable) {
                 MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
@@ -211,11 +215,15 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                 }
                 referens.child("/chytanne/icons/" + fileName.name).putFile(Uri.fromFile(localFile)).await()
                 val arrayListIcon = java.util.ArrayList<java.util.ArrayList<String>>()
-                referens.child("/icons.json").getFile(localFile2).addOnSuccessListener {
-                    val gson = Gson()
-                    val json = localFile.readText()
-                    val type: Type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                    arrayListIcon.addAll(gson.fromJson(json, type))
+                referens.child("/icons.json").getFile(localFile2).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        val gson = Gson()
+                        val json = localFile.readText()
+                        val type: Type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                        arrayListIcon.addAll(gson.fromJson(json, type))
+                    } else {
+                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }
                 }.await()
                 var chek = false
                 arrayListIcon.forEach { result ->
@@ -466,34 +474,38 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     val gson = Gson()
                     val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                     var array = ArrayList<ArrayList<String>>()
-                    referens.child("/opisanie_sviat.json").getFile(localFile).addOnSuccessListener {
-                        val builder = localFile.readText()
-                        array = gson.fromJson(builder, type)
-                        for (i in 0 until array.size) {
-                            if (day == array[i][0].toInt() && mun == array[i][1].toInt()) {
-                                opisanie = array[i][2]
-                                utran = array[i][3]
-                                linur = array[i][4]
-                                viach = array[i][5]
-                                index = i
-                                break
+                    referens.child("/opisanie_sviat.json").getFile(localFile).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            val builder = localFile.readText()
+                            array = gson.fromJson(builder, type)
+                            for (i in 0 until array.size) {
+                                if (day == array[i][0].toInt() && mun == array[i][1].toInt()) {
+                                    opisanie = array[i][2]
+                                    utran = array[i][3]
+                                    linur = array[i][4]
+                                    viach = array[i][5]
+                                    index = i
+                                    break
+                                }
                             }
-                        }
-                        opisanie = apisanne
-                        if (index == -5) {
-                            val temp = ArrayList<String>()
-                            temp.add(day.toString())
-                            temp.add(mun.toString())
-                            temp.add(opisanie)
-                            temp.add(utran)
-                            temp.add(linur)
-                            temp.add(viach)
-                            array.add(temp)
+                            opisanie = apisanne
+                            if (index == -5) {
+                                val temp = ArrayList<String>()
+                                temp.add(day.toString())
+                                temp.add(mun.toString())
+                                temp.add(opisanie)
+                                temp.add(utran)
+                                temp.add(linur)
+                                temp.add(viach)
+                                array.add(temp)
+                            } else {
+                                array[index][2] = opisanie
+                                array[index][3] = utran
+                                array[index][4] = linur
+                                array[index][5] = viach
+                            }
                         } else {
-                            array[index][2] = opisanie
-                            array[index][3] = utran
-                            array[index][4] = linur
-                            array[index][5] = viach
+                            MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
                     }.await()
                     localFile.writer().use {
@@ -504,7 +516,9 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     }
                     val sb = StringBuilder()
                     val url = "/opisanie_sviat.json"
-                    referens.child("/admin/log.txt").getFile(logFile).await()
+                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }.await()
                     var ref = true
                     logFile.readLines().forEach {
                         sb.append("$it\n")

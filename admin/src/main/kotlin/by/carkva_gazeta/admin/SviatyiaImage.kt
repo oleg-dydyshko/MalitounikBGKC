@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaImageBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuListData
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ListItemImageBinding
 import com.google.firebase.FirebaseApp
@@ -140,11 +141,15 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
             val localFile2 = withContext(Dispatchers.IO) {
                 File.createTempFile("icons", "json")
             }
-            referens.child("/icons.json").getFile(localFile2).addOnSuccessListener {
-                val gson = Gson()
-                val json = localFile2.readText()
-                val type: Type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                arrayListIcon.addAll(gson.fromJson(json, type))
+            referens.child("/icons.json").getFile(localFile2).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val gson = Gson()
+                    val json = localFile2.readText()
+                    val type: Type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                    arrayListIcon.addAll(gson.fromJson(json, type))
+                } else {
+                    MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.error))
+                }
             }.await()
             getIcons()
         }
@@ -201,7 +206,9 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                             arraytemp.add(DataImages(getSviatyia(toPosition), file.length(), file, images[i].position))
                         } else {
                             arraytemp.add(DataImages(getSviatyia(toPosition), 0, File(""), images[i].position))
-                            referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").delete().await()
+                            if (images[i].size != 0L) {
+                                referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").delete().await()
+                            }
                         }
                     }
                     images.clear()
@@ -308,18 +315,29 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
 
     private suspend fun saveIconJson() {
         withContext(Dispatchers.IO) {
-            arrayListIcon.clear()
+            val tempList = ArrayList<ArrayList<String>>()
+            arrayListIcon.forEach {
+                if (it[0].contains("s_${day}_${mun}.") || it[0].contains("s_${day}_${mun}_")) {
+                    tempList.add(it)
+                }
+            }
+            arrayListIcon.removeAll(tempList)
             val list = referens.child("/chytanne/icons").list(1000).await()
             list.items.forEach { result ->
-                val array = ArrayList<String>()
-                val meta = result.metadata.await()
-                array.add(result.name)
-                array.add(meta.sizeBytes.toString())
-                array.add(meta.updatedTimeMillis.toString())
-                arrayListIcon.add(array)
+                if (result.name.contains("s_${day}_${mun}.") || result.name.contains("s_${day}_${mun}_")) {
+                    val array = ArrayList<String>()
+                    val meta = result.metadata.await()
+                    array.add(result.name)
+                    array.add(meta.sizeBytes.toString())
+                    array.add(meta.updatedTimeMillis.toString())
+                    arrayListIcon.add(array)
+                }
             }
             val localFile2 = withContext(Dispatchers.IO) {
                 File.createTempFile("icons", "json")
+            }
+            arrayListIcon.sortBy {
+                it[0]
             }
             localFile2.writer().use {
                 val gson = Gson()
@@ -344,7 +362,9 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                 if (it[0].contains("s_${day}_${mun}.") || it[0].contains("s_${day}_${mun}_")) {
                     val fileIcon = File("$filesDir/icons/" + it[0])
                     val pathReference = referens.child("/chytanne/icons/" + it[0])
-                    pathReference.getFile(fileIcon).await()
+                    pathReference.getFile(fileIcon).addOnFailureListener {
+                        MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }.await()
                     tempArray.add(DataImages(getSviatyia(position.toInt()), fileIcon.length(), fileIcon, position))
                     position++
                 }
@@ -397,7 +417,9 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                 val fileOpisanie = File("$filesDir/sviatyja/" + storageReference.name)
                 val time = fileOpisanie.lastModified()
                 if (!fileOpisanie.exists() || time < update) {
-                    storageReference.getFile(fileOpisanie).await()
+                    storageReference.getFile(fileOpisanie).addOnFailureListener {
+                        MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }.await()
                 }
             }
         }

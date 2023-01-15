@@ -138,7 +138,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                         piarliny.sort()
                         binding.listView.adapter = PiarlinyListAdaprer(this@Piarliny)
                     } else {
-                        MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
                     binding.progressBar2.visibility = View.GONE
                 }.await()
@@ -365,7 +365,9 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                     }
                     val sb = StringBuilder()
                     val url = "/chytanne/piarliny.json"
-                    referens.child("/admin/log.txt").getFile(logFile).await()
+                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                        MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }.await()
                     var ref = true
                     logFile.readLines().forEach {
                         sb.append("$it\n")

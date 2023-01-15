@@ -74,31 +74,37 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
                 }
                 var zag = "Разьдзел"
                 if (id == 19) zag = "Псальма"
-                referens.child("/chytanne/Semucha/biblias$id.txt").getFile(localFile).addOnSuccessListener {
-                    val file = localFile.readText()
-                    val file2 = file.split("===")
-                    val fileNew = StringBuilder()
-                    for ((count, element) in file2.withIndex()) {
-                        val fil = element.trim()
-                        var srtn = "\n"
-                        var stringraz = ""
-                        if (fil != "") {
-                            if (count != 0) {
-                                srtn = "\n\n"
-                                stringraz = "===\n"
-                            }
-                            if (file2.size == count + 1) {
-                                srtn = "\n"
-                            }
-                            if (count == sv) {
-                                fileNew.append(stringraz + "//" + zag + " " + sv + "\n" + spaw.trim() + srtn)
-                            } else {
-                                fileNew.append(stringraz + fil + srtn)
+                referens.child("/chytanne/Semucha/biblias$id.txt").getFile(localFile).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val file = localFile.readText()
+                        val file2 = file.split("===")
+                        val fileNew = StringBuilder()
+                        for ((count, element) in file2.withIndex()) {
+                            val fil = element.trim()
+                            var srtn = "\n"
+                            var stringraz = ""
+                            if (fil != "") {
+                                if (count != 0) {
+                                    srtn = "\n\n"
+                                    stringraz = "===\n"
+                                }
+                                if (file2.size == count + 1) {
+                                    srtn = "\n"
+                                }
+                                if (count == sv) {
+                                    fileNew.append(stringraz + "//" + zag + " " + sv + "\n" + spaw.trim() + srtn)
+                                } else {
+                                    fileNew.append(stringraz + fil + srtn)
+                                }
                             }
                         }
-                    }
-                    localFile.writer().use {
-                        it.write(fileNew.toString())
+                        localFile.writer().use {
+                            it.write(fileNew.toString())
+                        }
+                    } else {
+                        activity?.let {
+                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        }
                     }
                 }.await()
                 val logFile = withContext(Dispatchers.IO) {
@@ -106,7 +112,11 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
                 }
                 val sb = StringBuilder()
                 val url = "/chytanne/Semucha/biblias$id.txt"
-                referens.child("/admin/log.txt").getFile(logFile).await()
+                referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                    activity?.let {
+                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }
+                }.await()
                 var ref = true
                 logFile.readLines().forEach {
                     sb.append("$it\n")
@@ -188,8 +198,8 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
                     val localFile = withContext(Dispatchers.IO) {
                         File.createTempFile("SemuchaRead", "txt")
                     }
-                    referens.child(url).getFile(localFile).addOnCompleteListener {
-                        if (it.isSuccessful) {
+                    referens.child(url).getFile(localFile).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
                             val text = localFile.readText()
                             val split = text.split("===")
                             val knig = split[page + 1]
@@ -204,7 +214,7 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
                             }
                         } else {
                             activity?.let {
-                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
                             }
                         }
                     }.await()

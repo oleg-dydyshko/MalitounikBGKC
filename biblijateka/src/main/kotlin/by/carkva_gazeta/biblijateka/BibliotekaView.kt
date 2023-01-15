@@ -363,7 +363,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     private suspend fun downloadPdfFile(url: String) {
         val pathReference = referens.child("/data/bibliateka/$url")
         val localFile = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
-        pathReference.getFile(localFile).await()
+        pathReference.getFile(localFile).addOnFailureListener {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+        }.await()
         filePath = localFile.path
         fileName = url
     }
@@ -1669,7 +1671,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             File.createTempFile("bibliateka", "json")
         }
         pathReference.getFile(localFile).addOnCompleteListener {
-            text = localFile.readText()
+            if (it.isSuccessful) text = localFile.readText()
+            else MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
         }.await()
         return text
     }
@@ -1685,7 +1688,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     private suspend fun saveImagePdf(pdf: String, image: String) {
         val t1 = pdf.lastIndexOf(".")
         val imageTempFile = File("$filesDir/image_temp/" + pdf.substring(0, t1) + ".png")
-        referens.child(image).getFile(imageTempFile).await()
+        referens.child(image).getFile(imageTempFile).addOnFailureListener {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+        }.await()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

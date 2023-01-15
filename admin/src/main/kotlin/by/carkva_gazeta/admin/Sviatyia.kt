@@ -157,8 +157,9 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                         File.createTempFile("opisanieEdit", "json")
                     }
                     var builder = ""
-                    referens.child("/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json").getFile(localFile).addOnSuccessListener {
-                        builder = localFile.readText()
+                    referens.child("/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json").getFile(localFile).addOnCompleteListener {
+                        if (it.isSuccessful) builder = localFile.readText()
+                        else MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
                     val gson = Gson()
                     if (builder != "") {
@@ -170,8 +171,9 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                         File.createTempFile("calendarsviatyiaEdit", "json")
                     }
                     var builder2 = ""
-                    referens.child("/calendarsviatyia.txt").getFile(localFile2).addOnSuccessListener {
-                        builder2 = localFile2.readText()
+                    referens.child("/calendarsviatyia.txt").getFile(localFile2).addOnCompleteListener {
+                        if (it.isSuccessful) builder2 = localFile2.readText()
+                        else MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
                     if (builder2 != "") {
                         val line = builder2.split("\n")
@@ -433,20 +435,24 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                     File.createTempFile("calendarsviatyiaEdit", "json")
                 }
                 val sviatyiaNewList = ArrayList<ArrayList<String>>()
-                referens.child("/calendarsviatyia.txt").getFile(localFile2).addOnSuccessListener {
-                    val sviatyiaNew = localFile2.readLines()
-                    for (element in sviatyiaNew) {
-                        val re1 = element.split("<>")
-                        val list = ArrayList<String>()
-                        for (element2 in re1) {
-                            list.add(element2)
+                referens.child("/calendarsviatyia.txt").getFile(localFile2).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        val sviatyiaNew = localFile2.readLines()
+                        for (element in sviatyiaNew) {
+                            val re1 = element.split("<>")
+                            val list = ArrayList<String>()
+                            for (element2 in re1) {
+                                list.add(element2)
+                            }
+                            sviatyiaNewList.add(list)
                         }
-                        sviatyiaNewList.add(list)
+                        sviatyiaNewList[dayOfYear][0] = name
+                        sviatyiaNewList[dayOfYear][1] = chtenie
+                        sviatyiaNewList[dayOfYear][2] = style.toString()
+                        sviatyiaNewList[dayOfYear][3] = tipicon
+                    } else {
+                        MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
-                    sviatyiaNewList[dayOfYear][0] = name
-                    sviatyiaNewList[dayOfYear][1] = chtenie
-                    sviatyiaNewList[dayOfYear][2] = style.toString()
-                    sviatyiaNewList[dayOfYear][3] = tipicon
                 }.await()
                 var sw3 = ""
                 val sb = StringBuilder()
@@ -467,8 +473,12 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                     File.createTempFile("opisanieSave", "json")
                 }
                 var builder = ""
-                referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").getFile(localFile).addOnSuccessListener {
-                    builder = localFile.readText()
+                referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").getFile(localFile).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        builder = localFile.readText()
+                    } else {
+                        MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }
                 }.await()
                 val gson = Gson()
                 if (builder != "") {
@@ -484,7 +494,9 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 }
                 val stringBuilder = StringBuilder()
                 var url = "/calendarsviatyia.txt"
-                referens.child("/admin/log.txt").getFile(logFile).await()
+                referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                    MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
+                }.await()
                 var ref = true
                 logFile.readLines().forEach {
                     stringBuilder.append("$it\n")
@@ -501,7 +513,9 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
                 sb.clear()
                 url = "/chytanne/sviatyja/opisanie" + (mun + 1) + ".json"
-                referens.child("/admin/log.txt").getFile(logFile).await()
+                referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                    MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
+                }.await()
                 ref = true
                 logFile.readLines().forEach {
                     sb.append("$it\n")

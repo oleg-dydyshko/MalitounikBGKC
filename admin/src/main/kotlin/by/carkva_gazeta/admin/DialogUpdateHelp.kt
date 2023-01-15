@@ -44,9 +44,9 @@ class DialogUpdateHelp : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        activity?.let {
-            _binding = AdminDialogEditviewDisplayBinding.inflate(LayoutInflater.from(it))
-            val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
+        activity?.let { fragmentActivity ->
+            _binding = AdminDialogEditviewDisplayBinding.inflate(LayoutInflater.from(fragmentActivity))
+            val builder = AlertDialog.Builder(fragmentActivity, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.admin_update)
             val release = arguments?.getBoolean("release", false) ?: false
             val version = if (release) "release"
@@ -68,16 +68,20 @@ class DialogUpdateHelp : DialogFragment() {
                         val localFile = withContext(Dispatchers.IO) {
                             File.createTempFile("updateMalitounik", "json")
                         }
-                        referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnSuccessListener {
-                            val jsonFile = localFile.readText()
-                            val gson = Gson()
-                            val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
-                            val updeteArrayText = gson.fromJson<Map<String, String>>(jsonFile, type)
-                            if (release) binding.edittext.setText(updeteArrayText["release"])
-                            else binding.edittext.setText(updeteArrayText["devel"])
+                        referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                val jsonFile = localFile.readText()
+                                val gson = Gson()
+                                val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
+                                val updeteArrayText = gson.fromJson<Map<String, String>>(jsonFile, type)
+                                if (release) binding.edittext.setText(updeteArrayText["release"])
+                                else binding.edittext.setText(updeteArrayText["devel"])
+                            } else {
+                                MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error))
+                            }
                         }.await()
                     } catch (_: Throwable) {
-                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                 }
             }
@@ -92,18 +96,24 @@ class DialogUpdateHelp : DialogFragment() {
                     val localFile = withContext(Dispatchers.IO) {
                         File.createTempFile("updateMalitounik", "json")
                     }
-                    referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnSuccessListener {
-                        val jsonFile = localFile.readText()
-                        val gson = Gson()
-                        val type = TypeToken.getParameterized(MutableMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
-                        val updeteArrayText = gson.fromJson<MutableMap<String, String>>(jsonFile, type)
-                        if (release) {
-                            updeteArrayText["release"] = releaseCode
+                    referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val jsonFile = localFile.readText()
+                            val gson = Gson()
+                            val type = TypeToken.getParameterized(MutableMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
+                            val updeteArrayText = gson.fromJson<MutableMap<String, String>>(jsonFile, type)
+                            if (release) {
+                                updeteArrayText["release"] = releaseCode
+                            } else {
+                                updeteArrayText["devel"] = releaseCode
+                            }
+                            localFile.writer().use {
+                                it.write(gson.toJson(updeteArrayText))
+                            }
                         } else {
-                            updeteArrayText["devel"] = releaseCode
-                        }
-                        localFile.writer().use {
-                            it.write(gson.toJson(updeteArrayText))
+                            activity?.let {
+                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                            }
                         }
                     }.await()
                     referens.child("/updateMalitounikBGKC.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->

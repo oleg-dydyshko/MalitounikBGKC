@@ -254,7 +254,9 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                     val localFile = withContext(Dispatchers.IO) {
                         File.createTempFile("piasochnica", "html")
                     }
-                    referens.child("/$dirToFile").getFile(localFile).await()
+                    referens.child("/$dirToFile").getFile(localFile).addOnFailureListener {
+                        MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }.await()
                     val t1 = fileName.indexOf(".")
                     var newFileName = fileName.replace("\n", " ")
                     if (t1 != -1) {
@@ -304,11 +306,15 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                         File.createTempFile("piasochnica", "html")
                     }
                     if (isSite) {
-                        referens.child("/$oldFileName").getFile(localFile).await()
+                        referens.child("/$oldFileName").getFile(localFile).addOnFailureListener {
+                            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        }.await()
                         referens.child("/$oldFileName").delete().await()
                         referens.child("/$fileName").putFile(Uri.fromFile(localFile)).await()
                     } else {
-                        referens.child("/admin/piasochnica/$oldFileName").getFile(localFile).await()
+                        referens.child("/admin/piasochnica/$oldFileName").getFile(localFile).addOnFailureListener {
+                            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        }.await()
                         referens.child("/admin/piasochnica/$oldFileName").delete().await()
                         referens.child("/admin/piasochnica/$fileName").putFile(Uri.fromFile(localFile)).await()
                     }

@@ -96,7 +96,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.drawerLayout.openDrawer(GravityCompat.START)
         }
     }
-    private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+    private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         val cw = Calendar.getInstance()
         val intent = Intent(this, ReceiverBroad::class.java)
         intent.putExtra("file", "MalitounikResource.zip")
@@ -122,7 +122,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     val zip = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "MalitounikResource.zip")
                     val out = ZipOutputStream(BufferedOutputStream(FileOutputStream(zip)))
                     for (file in log) {
-                        referens.child(file).getFile(localFile).await()
+                        referens.child(file).getFile(localFile).addOnFailureListener {
+                            toastView(this@MainActivity, getString(R.string.error))
+                        }.await()
                         val fi = FileInputStream(localFile)
                         val origin = BufferedInputStream(fi)
                         val entry = ZipEntry(file.substring(file.lastIndexOf("/")))
@@ -581,7 +583,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 FirebaseApp.initializeApp(Malitounik.applicationContext())
                 val storage = Firebase.storage
                 val referens = storage.reference
-                referens.child("/admin/log.txt").getFile(localFile).await()
+                referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
+                    toastView(this@MainActivity, getString(R.string.error))
+                }.await()
                 val log = localFile.readText()
                 if (log != "") {
                     withContext(Dispatchers.Main) {

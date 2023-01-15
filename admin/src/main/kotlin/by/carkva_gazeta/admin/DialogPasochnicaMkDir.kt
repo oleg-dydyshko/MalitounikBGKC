@@ -101,17 +101,19 @@ class DialogPasochnicaMkDir : DialogFragment() {
     private fun sendMkDirPostRequest() {
         val dirName = binding.content.text.toString()
         if (dirName != "") {
-            activity?.let {
+            activity?.let { fragmentActivity ->
                 if (MainActivity.isNetworkAvailable()) {
                     CoroutineScope(Dispatchers.Main).launch {
                         try {
-                            FirebaseApp.initializeApp(it)
+                            FirebaseApp.initializeApp(fragmentActivity)
                             val storage = Firebase.storage
                             val referens = storage.reference
                             val localFile = withContext(Dispatchers.IO) {
                                 File.createTempFile("mkdir", "html")
                             }
-                            referens.child("/admin/piasochnica/$oldName").getFile(localFile).await()
+                            referens.child("/admin/piasochnica/$oldName").getFile(localFile).addOnFailureListener {
+                                MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error))
+                            }.await()
                             referens.child("/$dir/$dirName/$newName").putFile(Uri.fromFile(localFile)).await()
                         } catch (e: Throwable) {
                             activity?.let {

@@ -346,22 +346,28 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     val t1 = fileName.indexOf(".")
                     val nawFileName = if (t1 != -1) fileName.substring(0, t1)
                     else fileName
-                    referens.child("/admin/pesny/pesny_menu.txt").getFile(localFile).addOnSuccessListener {
-                        var onRun = false
-                        localFile.readLines().forEach {
-                            if (it.indexOf(pesny, ignoreCase = true) != -1) {
-                                onRun = true
-                                string.append("$it\n")
-                            } else {
-                                if (onRun) {
-                                    string.append("$pesny$nawFileName<>$title\n")
-                                    onRun = false
+                    referens.child("/admin/pesny/pesny_menu.txt").getFile(localFile).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            var onRun = false
+                            localFile.readLines().forEach {
+                                if (it.indexOf(pesny, ignoreCase = true) != -1) {
+                                    onRun = true
+                                    string.append("$it\n")
+                                } else {
+                                    if (onRun) {
+                                        string.append("$pesny$nawFileName<>$title\n")
+                                        onRun = false
+                                    }
+                                    string.append("$it\n")
                                 }
-                                string.append("$it\n")
                             }
+                        } else {
+                            MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
                     }.await()
-                    referens.child("/admin/piasochnica/$fileName").getFile(localFile2).await()
+                    referens.child("/admin/piasochnica/$fileName").getFile(localFile2).addOnFailureListener {
+                        MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }.await()
                     referens.child("/admin/pesny/$pesny$fileName").putFile(Uri.fromFile(localFile2)).await()
                     referens.child("/admin/piasochnica/($pesny$nawFileName) $title").putFile(Uri.fromFile(localFile2)).await()
                     referens.child("/admin/piasochnica/$fileName").delete().await()
@@ -428,7 +434,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     }
                     val sb = StringBuilder()
                     val url = "/$dirToFile"
-                    referens.child("/admin/log.txt").getFile(logFile).await()
+                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                        MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }.await()
                     var ref = true
                     logFile.readLines().forEach {
                         sb.append("$it\n")
@@ -444,7 +452,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     }
                     referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
 
-                    referens.child("/admin/piasochnica/" + fileName.replace("\n", " ")).getFile(localFile).await()
+                    referens.child("/admin/piasochnica/" + fileName.replace("\n", " ")).getFile(localFile).addOnFailureListener {
+                        MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }.await()
                     referens.child("/$dirToFile").putFile(Uri.fromFile(localFile)).await()
                     var oldFile = ""
                     if (fileName.indexOf("(") == -1) {
@@ -502,7 +512,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                         val localFile = withContext(Dispatchers.IO) {
                             File.createTempFile("piasochnica", "json")
                         }
-                        referens.child("/admin/piasochnica/$fileName").getFile(localFile).await()
+                        referens.child("/admin/piasochnica/$fileName").getFile(localFile).addOnFailureListener {
+                            MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        }.await()
                         result = localFile.readText()
                     } catch (e: Throwable) {
                         MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
@@ -581,8 +593,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 for (i in 0 until result.size) {
                     val t1 = result[i].lastIndexOf("/")
                     if (result[i].substring(t1 + 1) == newFileName) {
-                        referens.child("/" + result[i]).getFile(localFile).addOnSuccessListener {
-                            text = localFile.readText()
+                        referens.child("/" + result[i]).getFile(localFile).addOnCompleteListener {
+                            if (it.isSuccessful) text = localFile.readText()
+                            else MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }.await()
                         break
                     }

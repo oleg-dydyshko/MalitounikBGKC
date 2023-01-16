@@ -56,7 +56,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
     private lateinit var bindingprogress: ProgressBinding
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
-    private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+    private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         val cw = Calendar.getInstance()
         val intent = Intent(this, ReceiverBroad::class.java)
         intent.putExtra("file", "${malitvy[pasliaPrychascia].resurs}.html")
@@ -235,7 +235,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.akafist, menu)
+        menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.bogashlugbovya, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())

@@ -48,7 +48,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
     private lateinit var bindingprogress: ProgressPesnyAllBinding
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
-    private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+    private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         val cw = Calendar.getInstance()
         val intent = Intent(this, ReceiverBroad::class.java)
         intent.putExtra("file", "$resurs.html")
@@ -497,7 +497,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.akafist, menu)
+        menuInflater.inflate(R.menu.bogashlugbovya, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())

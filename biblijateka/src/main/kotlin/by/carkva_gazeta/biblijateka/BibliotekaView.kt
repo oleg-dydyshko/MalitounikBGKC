@@ -12,6 +12,7 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.SystemClock
@@ -491,10 +492,16 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         super.onCreate(savedInstanceState)
         SplitCompat.install(this)
         FirebaseApp.initializeApp(this)
-        val display = windowManager.defaultDisplay
-        val size = Point()
-        display.getSize(size)
-        width = size.x
+        width = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val display = windowManager.currentWindowMetrics
+            val bounds = display.bounds
+            bounds.width()
+        } else {
+            val display = windowManager.defaultDisplay
+            val size = Point()
+            display.getSize(size)
+            size.x
+        }
         // Копирование и удаление старых файлов из Библиотеки
         getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.let {
             val file = File("$filesDir/Biblijateka")
@@ -874,7 +881,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 if (!(jsonB == "" || timeUpdate - timeUpdateSave == 0L)) {
                     if (timeUpdate - timeUpdateSave > (24 * 60 * 60 * 1000L)) {
                         if (MainActivity.isNetworkAvailable()) {
-                            val prefEditors: SharedPreferences.Editor = k.edit()
+                            val prefEditors = k.edit()
                             prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
                             prefEditors.apply()
                             getSql(rub)
@@ -1659,8 +1666,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 adapter.notifyDataSetChanged()
                 binding.progressBar2.visibility = View.GONE
             }
-        } catch (e: Throwable) {
-            e.printStackTrace()
+        } catch (_: Throwable) {
         }
     }
 

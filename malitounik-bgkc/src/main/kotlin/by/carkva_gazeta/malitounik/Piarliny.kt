@@ -89,7 +89,16 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     i++
                 }
             }
-            binding.textView.text = MainActivity.fromHtml(sb.toString())
+            if (sb.toString() == "") {
+                if (MainActivity.isNetworkAvailable(true)) {
+                    val dialog = DialogOpisanieWIFI()
+                    dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
+                } else {
+                    loadPiarliny(true)
+                }
+            } else {
+                binding.textView.text = MainActivity.fromHtml(sb.toString())
+            }
         }
     }
 

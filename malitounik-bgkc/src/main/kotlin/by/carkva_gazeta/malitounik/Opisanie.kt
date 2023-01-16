@@ -40,7 +40,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private lateinit var chin: SharedPreferences
     private var resetTollbarJob: Job? = null
     private var loadIconsJob: Job? = null
-    private var loadPiarlinyJob: Job? = null
     private val storage: FirebaseStorage
         get() = Firebase.storage
     private val referens: StorageReference
@@ -86,7 +85,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         super.onPause()
         resetTollbarJob?.cancel()
         loadIconsJob?.cancel()
-        loadPiarlinyJob?.cancel()
     }
 
     private fun resizeImage(bitmap: Bitmap?): Bitmap? {
@@ -251,6 +249,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                         getSviatyia()
                     }
                     getIcons(loadIcons, isFull)
+                    getPiarliny()
                 } catch (_: Throwable) {
                 }
             }
@@ -402,6 +401,13 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             }
         }
         binding.progressBar2.visibility = View.INVISIBLE
+    }
+
+    private suspend fun getPiarliny() {
+        val pathReference = referens.child("/chytanne/piarliny.json")
+        val localFile = File("$filesDir/piarliny.json")
+        pathReference.getFile(localFile).await()
+        invalidateOptionsMenu()
     }
 
     private fun checkParliny(): Boolean {

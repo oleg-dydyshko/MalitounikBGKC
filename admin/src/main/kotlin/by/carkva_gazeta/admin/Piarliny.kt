@@ -246,6 +246,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                 } else {
                     piarliny.add(PiarlinyData(timeListCalendar.timeInMillis / 1000, text))
                 }
+                piarliny.sort()
                 val gson = Gson()
                 val resultArray = ArrayList<ArrayList<String>>()
                 for (i in 0 until piarliny.size) {
@@ -256,7 +257,6 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                 }
                 sendPostRequest(gson.toJson(resultArray))
             }
-            piarliny.sort()
             binding.listView.visibility = View.VISIBLE
             binding.addPiarliny.visibility = View.GONE
             binding.linearLayout2.visibility = View.GONE

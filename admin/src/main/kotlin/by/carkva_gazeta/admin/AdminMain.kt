@@ -81,6 +81,10 @@ class AdminMain : BaseActivity() {
             val intent = Intent(this, Piarliny::class.java)
             startActivity(intent)
         }
+        binding.bibliateka.setOnClickListener {
+            val intent = Intent(this, BibliatekaList::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setTollbarTheme() {

@@ -145,7 +145,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                 if (it.isSuccessful) {
                     val gson = Gson()
                     val json = localFile2.readText()
-                    val type: Type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                     arrayListIcon.addAll(gson.fromJson(json, type))
                 } else {
                     MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.error))
@@ -358,6 +358,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
             var position = 0L
             val tempArray = ArrayList<DataImages>()
             images.clear()
+            if (arrayListIcon.size == 0) MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.error))
             arrayListIcon.forEach {
                 if (it[0].contains("s_${day}_${mun}.") || it[0].contains("s_${day}_${mun}_")) {
                     val fileIcon = File("$filesDir/icons/" + it[0])

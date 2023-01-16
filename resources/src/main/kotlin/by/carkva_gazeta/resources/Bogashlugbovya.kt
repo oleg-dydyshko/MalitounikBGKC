@@ -98,7 +98,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
         }
     }
-    private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+    private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         val cw = Calendar.getInstance()
         val intent = Intent(this, ReceiverBroad::class.java)
         intent.putExtra("file", "$resurs.html")
@@ -1754,7 +1754,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         itemVybranoe.title = spanString
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_zmena).isVisible = chechZmena
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_mun).isVisible = true
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_mun).isVisible = k.getBoolean("admin", false)
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
@@ -1771,7 +1771,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.akafist, menu)
+        menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.bogashlugbovya, menu)
         for (i in 0 until menu.size()) {
             val item: MenuItem = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())

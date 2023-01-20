@@ -11,11 +11,6 @@ import by.carkva_gazeta.admin.databinding.AdminBiblePageFragmentBinding
 import by.carkva_gazeta.malitounik.BaseFragment
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.io.File
@@ -28,10 +23,6 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
     private val binding get() = _binding!!
     private var urlJob: Job? = null
     private var mLastClickTime: Long = 0
-    private val storage: FirebaseStorage
-        get() = Firebase.storage
-    private val referens: StorageReference
-        get() = storage.reference
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -41,7 +32,6 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(Malitounik.applicationContext())
         kniga = arguments?.getInt("kniga") ?: 0
         page = arguments?.getInt("page") ?: 0
         pazicia = arguments?.getInt("pazicia") ?: 0
@@ -73,7 +63,7 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                     File.createTempFile("Semucha", "txt")
                 }
                 val zag = "Разьдзел"
-                referens.child("/chytanne/Semucha/biblian$id.txt").getFile(localFile).addOnCompleteListener { task ->
+                Malitounik.referens.child("/chytanne/Semucha/biblian$id.txt").getFile(localFile).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val file = localFile.readText()
                         val file2 = file.split("===")
@@ -111,7 +101,7 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                 }
                 val sb = StringBuilder()
                 val url = "/chytanne/Semucha/biblian$id.txt"
-                referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
                     activity?.let {
                         MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
@@ -129,9 +119,9 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                 logFile.writer().use {
                     it.write(sb.toString())
                 }
-                referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+                Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
 
-                referens.child("/chytanne/Semucha/biblian$id.txt").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
+                Malitounik.referens.child("/chytanne/Semucha/biblian$id.txt").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
                     activity?.let {
                         if (task.isSuccessful) {
                             MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
@@ -185,7 +175,7 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                     val localFile = withContext(Dispatchers.IO) {
                         File.createTempFile("SemuchaRead", "txt")
                     }
-                    referens.child(url).getFile(localFile).addOnCompleteListener { it ->
+                    Malitounik.referens.child(url).getFile(localFile).addOnCompleteListener { it ->
                         if (it.isSuccessful) {
                             val text = localFile.readText()
                             val split = text.split("===")

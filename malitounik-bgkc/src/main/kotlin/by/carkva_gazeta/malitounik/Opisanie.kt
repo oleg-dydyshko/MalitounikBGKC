@@ -15,12 +15,7 @@ import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import by.carkva_gazeta.malitounik.databinding.OpisanieBinding
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ListResult
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -40,10 +35,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private lateinit var chin: SharedPreferences
     private var resetTollbarJob: Job? = null
     private var loadIconsJob: Job? = null
-    private val storage: FirebaseStorage
-        get() = Firebase.storage
-    private val referens: StorageReference
-        get() = storage.reference
     private val dirList = ArrayList<DirList>()
 
     private fun viewSviaryiaIIcon() {
@@ -183,7 +174,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = OpisanieBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -257,7 +247,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     private suspend fun getOpisanieSviat() {
-        val pathReference = referens.child("/opisanie_sviat.json")
+        val pathReference = Malitounik.referens.child("/opisanie_sviat.json")
         val file = File("$filesDir/" + pathReference.name)
         var update = 0L
         pathReference.metadata.addOnSuccessListener { storageMetadata ->
@@ -274,7 +264,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         val dir = File("$filesDir/sviatyja/")
         if (!dir.exists()) dir.mkdir()
         var list: ListResult? = null
-        referens.child("/chytanne/sviatyja").list(12).addOnSuccessListener { listResult ->
+        Malitounik.referens.child("/chytanne/sviatyja").list(12).addOnSuccessListener { listResult ->
             list = listResult
         }.await()
         list?.items?.forEach { storageReference ->
@@ -301,7 +291,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         val localFile = withContext(Dispatchers.IO) {
             File.createTempFile("icons", "json")
         }
-        referens.child("/icons.json").getFile(localFile).addOnSuccessListener {
+        Malitounik.referens.child("/icons.json").getFile(localFile).addOnSuccessListener {
             val gson = Gson()
             val json = localFile.readText()
             val type: Type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
@@ -355,7 +345,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             var progress = 0
             for (i in 0 until dirList.size) {
                 val fileIcon = File("$filesDir/icons/" + dirList[i].name)
-                val pathReference = referens.child("/chytanne/icons/" + dirList[i].name)
+                val pathReference = Malitounik.referens.child("/chytanne/icons/" + dirList[i].name)
                 pathReference.getFile(fileIcon).await()
                 progress += dirList[i].sizeBytes.toInt()
                 binding.progressBar2.progress = progress
@@ -404,7 +394,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     private suspend fun getPiarliny() {
-        val pathReference = referens.child("/chytanne/piarliny.json")
+        val pathReference = Malitounik.referens.child("/chytanne/piarliny.json")
         val localFile = File("$filesDir/piarliny.json")
         pathReference.getFile(localFile).await()
         invalidateOptionsMenu()

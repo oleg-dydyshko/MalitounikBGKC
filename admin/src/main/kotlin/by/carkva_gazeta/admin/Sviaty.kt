@@ -24,13 +24,9 @@ import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminSviatyBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -45,10 +41,6 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
     private var resetTollbarJob: Job? = null
     private val sviaty = ArrayList<SviatyData>()
     private var edittext: AppCompatEditText? = null
-    private val storage: FirebaseStorage
-        get() = Firebase.storage
-    private val referens: StorageReference
-        get() = storage.reference
     private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (it) {
             val fileExplorer = DialogImageFileExplorer()
@@ -62,7 +54,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
     override fun setMyTheme() {
     }
 
-    override fun setImageFile(bitmap: Bitmap?, position: Int) {
+    override fun setImageFile(file: File, position: Int) {
     }
 
     override fun setImageFileCancel() {
@@ -76,7 +68,6 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this)
         binding = AdminSviatyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         sviaty.add(SviatyData(-1, 0, "Уваход у Ерусалім"))
@@ -112,7 +103,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                 val localFile = withContext(Dispatchers.IO) {
                     File.createTempFile("opisanieSviat", "json")
                 }
-                referens.child("/opisanie_sviat.json").getFile(localFile).addOnCompleteListener {
+                Malitounik.referens.child("/opisanie_sviat.json").getFile(localFile).addOnCompleteListener {
                     if (it.isSuccessful) {
                         val builder = localFile.readText()
                         val gson = Gson()
@@ -213,9 +204,9 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                 val localFile2 = withContext(Dispatchers.IO) {
                     File.createTempFile("icons", "json")
                 }
-                referens.child("/chytanne/icons/" + fileName.name).putFile(Uri.fromFile(localFile)).await()
+                Malitounik.referens.child("/chytanne/icons/" + fileName.name).putFile(Uri.fromFile(localFile)).await()
                 val arrayListIcon = java.util.ArrayList<java.util.ArrayList<String>>()
-                referens.child("/icons.json").getFile(localFile2).addOnCompleteListener {
+                Malitounik.referens.child("/icons.json").getFile(localFile2).addOnCompleteListener {
                     if (it.isSuccessful) {
                         val gson = Gson()
                         val json = localFile.readText()
@@ -228,7 +219,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                 var chek = false
                 arrayListIcon.forEach { result ->
                     if (fileName.name == result[0]) {
-                        referens.child("/chytanne/icons/" + fileName.name).metadata.addOnSuccessListener {
+                        Malitounik.referens.child("/chytanne/icons/" + fileName.name).metadata.addOnSuccessListener {
                             result[1] = it.sizeBytes.toString()
                             result[2] = it.updatedTimeMillis.toString()
                             chek = true
@@ -236,7 +227,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     }
                 }
                 if (!chek) {
-                    referens.child("/chytanne/icons/" + fileName.name).metadata.addOnSuccessListener {
+                    Malitounik.referens.child("/chytanne/icons/" + fileName.name).metadata.addOnSuccessListener {
                         val result = java.util.ArrayList<String>()
                         result.add(it.name ?: "")
                         result.add(it.sizeBytes.toString())
@@ -248,7 +239,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     val gson = Gson()
                     it.write(gson.toJson(arrayListIcon))
                 }
-                referens.child("/icons.json").putFile(Uri.fromFile(localFile2)).addOnCompleteListener { task ->
+                Malitounik.referens.child("/icons.json").putFile(Uri.fromFile(localFile2)).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.save))
                     } else {
@@ -474,7 +465,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     val gson = Gson()
                     val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                     var array = ArrayList<ArrayList<String>>()
-                    referens.child("/opisanie_sviat.json").getFile(localFile).addOnCompleteListener {
+                    Malitounik.referens.child("/opisanie_sviat.json").getFile(localFile).addOnCompleteListener {
                         if (it.isSuccessful) {
                             val builder = localFile.readText()
                             array = gson.fromJson(builder, type)
@@ -516,7 +507,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     }
                     val sb = StringBuilder()
                     val url = "/opisanie_sviat.json"
-                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                    Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
                         MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
                     var ref = true
@@ -532,9 +523,9 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     logFile.writer().use {
                         it.write(sb.toString())
                     }
-                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+                    Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
 
-                    referens.child("/opisanie_sviat.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
+                    Malitounik.referens.child("/opisanie_sviat.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                         if (it.isSuccessful) {
                             MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.save))
                         } else {

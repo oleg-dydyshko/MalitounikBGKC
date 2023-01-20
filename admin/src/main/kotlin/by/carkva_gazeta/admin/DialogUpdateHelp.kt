@@ -10,11 +10,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminDialogEditviewDisplayBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -28,15 +23,6 @@ class DialogUpdateHelp : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var _binding: AdminDialogEditviewDisplayBinding? = null
     private val binding get() = _binding!!
-    private val storage: FirebaseStorage
-        get() = Firebase.storage
-    private val referens: StorageReference
-        get() = storage.reference
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(Malitounik.applicationContext())
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -68,7 +54,7 @@ class DialogUpdateHelp : DialogFragment() {
                         val localFile = withContext(Dispatchers.IO) {
                             File.createTempFile("updateMalitounik", "json")
                         }
-                        referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener {
+                        Malitounik.referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener {
                             if (it.isSuccessful) {
                                 val jsonFile = localFile.readText()
                                 val gson = Gson()
@@ -96,7 +82,7 @@ class DialogUpdateHelp : DialogFragment() {
                     val localFile = withContext(Dispatchers.IO) {
                         File.createTempFile("updateMalitounik", "json")
                     }
-                    referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener { task ->
+                    Malitounik.referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             val jsonFile = localFile.readText()
                             val gson = Gson()
@@ -116,7 +102,7 @@ class DialogUpdateHelp : DialogFragment() {
                             }
                         }
                     }.await()
-                    referens.child("/updateMalitounikBGKC.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
+                    Malitounik.referens.child("/updateMalitounikBGKC.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
                         activity?.let {
                             if (task.isSuccessful) {
                                 MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))

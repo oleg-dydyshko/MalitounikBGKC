@@ -52,6 +52,8 @@ class DialogPiarlinyContextMenu : DialogFragment() {
             binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.redagaktirovat)
             binding.content2.text = getString(by.carkva_gazeta.malitounik.R.string.delite)
             builder.setView(binding.root)
+            binding.content.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            binding.content2.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             dialog = builder.create()
             binding.content.setOnClickListener {
                 dialog.cancel()

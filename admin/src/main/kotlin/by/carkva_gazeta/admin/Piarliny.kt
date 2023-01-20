@@ -16,11 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import by.carkva_gazeta.admin.databinding.AdminPiarlinyBinding
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -36,10 +31,6 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
     private val piarliny = ArrayList<PiarlinyData>()
     private var edit = -1
     private var timeListCalendar = Calendar.getInstance()
-    private val storage: FirebaseStorage
-        get() = Firebase.storage
-    private val referens: StorageReference
-        get() = storage.reference
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
@@ -111,7 +102,6 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this)
         binding = AdminPiarlinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.actionBold.setOnClickListener(this)
@@ -125,7 +115,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                 val localFile = withContext(Dispatchers.IO) {
                     File.createTempFile("piarliny", "json")
                 }
-                referens.child("/chytanne/piarliny.json").getFile(localFile).addOnCompleteListener { task ->
+                Malitounik.referens.child("/chytanne/piarliny.json").getFile(localFile).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val jsonFile = localFile.readText()
                         val gson = Gson()
@@ -365,7 +355,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                     }
                     val sb = StringBuilder()
                     val url = "/chytanne/piarliny.json"
-                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                    Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
                         MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
                     var ref = true
@@ -381,9 +371,9 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                     logFile.writer().use {
                         it.write(sb.toString())
                     }
-                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+                    Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
 
-                    referens.child("/chytanne/piarliny.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
+                    Malitounik.referens.child("/chytanne/piarliny.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                         if (it.isSuccessful) {
                             MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.save))
                             binding.addPiarliny.setText("")

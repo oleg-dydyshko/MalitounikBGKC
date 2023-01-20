@@ -20,10 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaImageBinding
-import by.carkva_gazeta.malitounik.BaseActivity
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.MenuListData
-import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.ListItemImageBinding
 import com.google.firebase.FirebaseApp
 import com.google.firebase.ktx.Firebase
@@ -52,10 +49,6 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
     private var mLastClickTime: Long = 0
     private var mun = 1
     private var day = 1
-    private val storage: FirebaseStorage
-        get() = Firebase.storage
-    private val referens: StorageReference
-        get() = storage.reference
     private val images = ArrayList<DataImages>()
     private val arrayListIcon = ArrayList<ArrayList<String>>()
     private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -65,7 +58,8 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
         }
     }
 
-    override fun setImageFile(bitmap: Bitmap?, position: Int) {
+    override fun setImageFile(file: File, position: Int) {
+        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
         fileUpload(bitmap, position)
     }
 
@@ -102,7 +96,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
         CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             val file = images[position].file
-            referens.child("/chytanne/icons/" + file.name).delete().await()
+            Malitounik.referens.child("/chytanne/icons/" + file.name).delete().await()
             val imageFile = File("$filesDir/icons/" + file.name)
             if (imageFile.exists()) {
                 imageFile.delete()
@@ -131,7 +125,6 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this)
         binding = AdminSviatyiaImageBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val c = Calendar.getInstance()
@@ -141,7 +134,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
             val localFile2 = withContext(Dispatchers.IO) {
                 File.createTempFile("icons", "json")
             }
-            referens.child("/icons.json").getFile(localFile2).addOnCompleteListener {
+            Malitounik.referens.child("/icons.json").getFile(localFile2).addOnCompleteListener {
                 if (it.isSuccessful) {
                     val gson = Gson()
                     val json = localFile2.readText()
@@ -201,13 +194,13 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                             else -> ""
                         }
                         if (images[i].size != 0L) {
-                            referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").putFile(Uri.fromFile(images[i].file)).await()
+                            Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").putFile(Uri.fromFile(images[i].file)).await()
                             val file = File("$filesDir/icons/s_${day}_${mun}${posItems}.jpg")
                             arraytemp.add(DataImages(getSviatyia(toPosition), file.length(), file, images[i].position))
                         } else {
                             arraytemp.add(DataImages(getSviatyia(toPosition), 0, File(""), images[i].position))
                             if (images[i].size != 0L) {
-                                referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").delete().await()
+                                Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").delete().await()
                             }
                         }
                     }
@@ -275,7 +268,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                 }
                 bitmap?.let {
                     if (position == 0) {
-                        referens.child("/chytanne/icons/s_${day}_${mun}.jpg").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
+                        Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}.jpg").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
                             val file = File("$filesDir/icons/s_${day}_${mun}.jpg")
                             localFile.copyTo(file, true)
                             images[position].file = file
@@ -283,14 +276,14 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                         }.await()
                         arrayListIcon.forEach { result ->
                             if (images[position].file.name == result[0]) {
-                                referens.child("/chytanne/icons/" + images[position].file.name).metadata.addOnSuccessListener {
+                                Malitounik.referens.child("/chytanne/icons/" + images[position].file.name).metadata.addOnSuccessListener {
                                     result[1] = it.sizeBytes.toString()
                                     result[2] = it.updatedTimeMillis.toString()
                                 }.await()
                             }
                         }
                     } else {
-                        referens.child("/chytanne/icons/s_${day}_${mun}_${position + 1}.jpg").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
+                        Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}_${position + 1}.jpg").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
                             val file = File("$filesDir/icons/s_${day}_${mun}_${position + 1}.jpg")
                             localFile.copyTo(file, true)
                             images[position].file = file
@@ -298,7 +291,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                         }.await()
                         arrayListIcon.forEach { result ->
                             if (images[position].file.name == result[0]) {
-                                referens.child("/chytanne/icons/" + images[position].file.name).metadata.addOnSuccessListener {
+                                Malitounik.referens.child("/chytanne/icons/" + images[position].file.name).metadata.addOnSuccessListener {
                                     result[1] = it.sizeBytes.toString()
                                     result[2] = it.updatedTimeMillis.toString()
                                 }.await()
@@ -322,7 +315,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                 }
             }
             arrayListIcon.removeAll(tempList)
-            val list = referens.child("/chytanne/icons").list(1000).await()
+            val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
             list.items.forEach { result ->
                 if (result.name.contains("s_${day}_${mun}.") || result.name.contains("s_${day}_${mun}_")) {
                     val array = ArrayList<String>()
@@ -343,7 +336,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                 val gson = Gson()
                 it.write(gson.toJson(arrayListIcon))
             }
-            referens.child("/icons.json").putFile(Uri.fromFile(localFile2)).addOnCompleteListener {
+            Malitounik.referens.child("/icons.json").putFile(Uri.fromFile(localFile2)).addOnCompleteListener {
                 if (it.isSuccessful) MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.save))
                 else MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.error))
             }.await()
@@ -362,7 +355,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
             arrayListIcon.forEach {
                 if (it[0].contains("s_${day}_${mun}.") || it[0].contains("s_${day}_${mun}_")) {
                     val fileIcon = File("$filesDir/icons/" + it[0])
-                    val pathReference = referens.child("/chytanne/icons/" + it[0])
+                    val pathReference = Malitounik.referens.child("/chytanne/icons/" + it[0])
                     pathReference.getFile(fileIcon).addOnFailureListener {
                         MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
@@ -408,7 +401,7 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
         var title = ""
         val dir = File("$filesDir/sviatyja/")
         if (!dir.exists()) dir.mkdir()
-        val list = referens.child("/chytanne/sviatyja").list(12).await()
+        val list = Malitounik.referens.child("/chytanne/sviatyja").list(12).await()
         list.items.forEach { storageReference ->
             if (mun == Calendar.getInstance()[Calendar.MONTH] + 1) {
                 var update = 0L

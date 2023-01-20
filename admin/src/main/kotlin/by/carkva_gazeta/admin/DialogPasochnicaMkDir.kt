@@ -16,7 +16,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
-import com.google.firebase.FirebaseApp
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
@@ -105,7 +104,6 @@ class DialogPasochnicaMkDir : DialogFragment() {
                 if (MainActivity.isNetworkAvailable()) {
                     CoroutineScope(Dispatchers.Main).launch {
                         try {
-                            FirebaseApp.initializeApp(fragmentActivity)
                             val storage = Firebase.storage
                             val referens = storage.reference
                             val localFile = withContext(Dispatchers.IO) {

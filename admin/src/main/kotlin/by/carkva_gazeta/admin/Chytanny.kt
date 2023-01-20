@@ -17,11 +17,6 @@ import androidx.core.view.forEachIndexed
 import by.carkva_gazeta.admin.databinding.AdminChytannyBinding
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.io.File
@@ -32,10 +27,6 @@ class Chytanny : BaseActivity() {
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
     private val data = ArrayList<String>()
-    private val storage: FirebaseStorage
-        get() = Firebase.storage
-    private val referens: StorageReference
-        get() = storage.reference
 
     override fun onSensorChanged(event: SensorEvent?) {
     }
@@ -57,7 +48,7 @@ class Chytanny : BaseActivity() {
                 File.createTempFile("cytanne", "php")
             }
             var text = ""
-            referens.child("/calendar-cytanne_$year.php").getFile(localFile).addOnCompleteListener {
+            Malitounik.referens.child("/calendar-cytanne_$year.php").getFile(localFile).addOnCompleteListener {
                 if (it.isSuccessful) text = localFile.readText()
                 else MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
             }.await()
@@ -135,7 +126,6 @@ class Chytanny : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this)
         binding = AdminChytannyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) data.add(i.toString())
@@ -265,7 +255,7 @@ class Chytanny : BaseActivity() {
                     }
                     val sb = StringBuilder()
                     val url = "/calendar-cytanne_$year.php"
-                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                    Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
                         MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
                     var ref = true
@@ -281,9 +271,9 @@ class Chytanny : BaseActivity() {
                     logFile.writer().use {
                         it.write(sb.toString())
                     }
-                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+                    Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
 
-                    referens.child("/calendar-cytanne_$year.php").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
+                    Malitounik.referens.child("/calendar-cytanne_$year.php").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                         if (it.isSuccessful) {
                             MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.save))
                         } else {

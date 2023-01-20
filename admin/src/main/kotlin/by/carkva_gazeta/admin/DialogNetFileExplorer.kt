@@ -19,11 +19,6 @@ import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogListviewDisplayBinding
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,15 +33,6 @@ class DialogNetFileExplorer : DialogFragment() {
     private var dir = ""
     private var _binding: DialogListviewDisplayBinding? = null
     private val binding get() = _binding!!
-    private val storage: FirebaseStorage
-        get() = Firebase.storage
-    private val referens: StorageReference
-        get() = storage.reference
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(Malitounik.applicationContext())
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -118,7 +104,7 @@ class DialogNetFileExplorer : DialogFragment() {
                 try {
                     fileList.clear()
                     val temp = ArrayList<MyNetFile>()
-                    val list = referens.child("/$dir").list(1000).await()
+                    val list = Malitounik.referens.child("/$dir").list(1000).await()
                     if (dir != "") {
                         val t1 = dir.lastIndexOf("/")
                         temp.add(MyNetFile(R.drawable.directory_up, dir.substring(t1 + 1)))

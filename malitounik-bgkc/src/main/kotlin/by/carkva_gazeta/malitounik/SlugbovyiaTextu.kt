@@ -1,8 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -409,10 +406,7 @@ class SlugbovyiaTextu {
     }
 
     private suspend fun getPiarliny(): String {
-        FirebaseApp.initializeApp(Malitounik.applicationContext())
-        val storage = Firebase.storage
-        val referens = storage.reference
-        val pathReference = referens.child("/chytanne/piarliny.json")
+        val pathReference = Malitounik.referens.child("/chytanne/piarliny.json")
         var text = ""
         val localFile = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
         pathReference.getFile(localFile).addOnSuccessListener {

@@ -22,11 +22,6 @@ import by.carkva_gazeta.admin.databinding.AdminSimpleListItemBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,10 +39,6 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     private var filenameTitle = ""
     private var _binding: AdminDialigSaveAsBinding? = null
     private val binding get() = _binding!!
-    private val storage: FirebaseStorage
-        get() = Firebase.storage
-    private val referens: StorageReference
-        get() = storage.reference
     private val textWatcher = object : TextWatcher {
         private var editPosition = 0
         private var check = 0
@@ -75,11 +66,6 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 }
             }
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(Malitounik.applicationContext())
     }
 
     internal interface DialogSaveAsFileExplorerListener {
@@ -169,7 +155,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 try {
                     fileList.clear()
                     val temp = ArrayList<MyNetFile>()
-                    val list = referens.child("/$dir").list(1000).await()
+                    val list = Malitounik.referens.child("/$dir").list(1000).await()
                     if (dir != "") {
                         val t1 = dir.lastIndexOf("/")
                         temp.add(MyNetFile(R.drawable.directory_up, dir.substring(t1 + 1)))

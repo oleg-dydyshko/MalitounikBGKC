@@ -6,35 +6,34 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.hardware.SensorEvent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.ArrayMap
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.drawable.toBitmap
 import by.carkva_gazeta.admin.databinding.AdminBibliatekaListBinding
 import by.carkva_gazeta.admin.databinding.AdminSimpleListItemBibliotekaBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 
-class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener {
+class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener, DialogImageFileExplorer.DialogImageFileExplorerListener, DialogFileExplorer.DialogFileExplorerListener {
 
     companion object {
         private const val GISTORYIACARKVY = 1
@@ -49,18 +48,10 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
     private var width = 0
     private val arrayList = ArrayList<ArrayList<String>>()
     private lateinit var adapter: BibliotekaAdapter
-    private var timeListCalendar = Calendar.getInstance()
-    private val storage: FirebaseStorage
-        get() = Firebase.storage
-    private val referens: StorageReference
-        get() = storage.reference
-    private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val intent = result.data
-            if (intent != null) {
-            }
-        }
-    }
+    private lateinit var rubrikaAdapter: RubrikaAdapter
+    private var position = -1
+    private var pdfFilePath = ""
+    private var imageFilePath = ""
 
     override fun onSensorChanged(event: SensorEvent?) {
     }
@@ -74,7 +65,167 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
         sqlJob?.cancel()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("editVisibility", binding.edit.visibility == View.VISIBLE)
+        outState.putString("pdfTextView", binding.pdfTextView.text.toString())
+        outState.putParcelable("BitmapImage", binding.imagePdf.drawable.toBitmap())
+        outState.putInt("position", position)
+        outState.putString("pdfFilePath", pdfFilePath)
+        outState.putString("imageFilePath", imageFilePath)
+    }
+
+    override fun onBack() {
+        if (binding.edit.visibility == View.VISIBLE) {
+            binding.edit.visibility = View.GONE
+            binding.listView.visibility = View.VISIBLE
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+            invalidateOptionsMenu()
+        } else {
+            super.onBack()
+        }
+    }
+
+    private fun setImageSize(imageView: View) {
+        imageView.setBackgroundResource(R.drawable.frame_image_biblioteka)
+        imageView.layoutParams?.width = width / 2
+        imageView.layoutParams?.height = (width / 2 * 1.4F).toInt()
+        imageView.requestLayout()
+    }
+
     override fun onDialogEditClick(position: Int) {
+        binding.edit.visibility = View.VISIBLE
+        binding.listView.visibility = View.GONE
+        invalidateOptionsMenu()
+        this.position = position
+        if (position != -1) {
+            binding.textViewTitle.setText(arrayList[position][0])
+            binding.rubrika.setSelection(arrayList[position][4].toInt() - 1)
+            if (arrayList[position].size == 3) {
+                if (arrayList[position][2] != "") {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val bitmap = withContext(Dispatchers.IO) {
+                            val options = BitmapFactory.Options()
+                            options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                            return@withContext BitmapFactory.decodeFile(arrayList[position][2], options)
+                        }
+                        binding.imagePdf.setImageBitmap(bitmap)
+                    }
+                }
+            } else {
+                val t1 = arrayList[position][5].lastIndexOf("/")
+                val file = File("$filesDir/image_temp/" + arrayList[position][5].substring(t1 + 1))
+                if (file.exists()) {
+                    imageFilePath = file.absolutePath
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val bitmap = withContext(Dispatchers.IO) {
+                            val options = BitmapFactory.Options()
+                            options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                            return@withContext BitmapFactory.decodeFile("$filesDir/image_temp/" + arrayList[position][5].substring(t1 + 1), options)
+                        }
+                        binding.imagePdf.setImageBitmap(bitmap)
+                    }
+                }
+            }
+            binding.pdfTextView.text = arrayList[position][2]
+            binding.opisanie.setText(arrayList[position][1])
+        } else {
+            binding.imagePdf.setImageDrawable(null)
+            binding.textViewTitle.setText("")
+            binding.rubrika.setSelection(1)
+            binding.pdfTextView.text = ""
+            binding.opisanie.setText("")
+        }
+        setImageSize(binding.imagePdf)
+        binding.imagePdf.setOnClickListener {
+            val dialog = DialogImageFileExplorer.getInstance(0, false)
+            dialog.show(supportFragmentManager, "DialogImageFileExplorer")
+        }
+        binding.admin.setOnClickListener {
+            val dialog = DialogFileExplorer()
+            dialog.show(supportFragmentManager, "DialogFileExplorer")
+        }
+    }
+
+    private fun saveBibliateka() {
+        if (MainActivity.isNetworkAvailable()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.progressBar2.visibility = View.VISIBLE
+                withContext(Dispatchers.IO) {
+                    val rubrika = (binding.rubrika.selectedItemPosition + 1).toString()
+                    val link = binding.textViewTitle.text.toString()
+                    val str = binding.opisanie.text.toString()
+                    val pdf = binding.pdfTextView.text.toString()
+                    val t1 = pdf.lastIndexOf(".")
+                    if (t1 == -1 || link == "" || imageFilePath == "") {
+                        withContext(Dispatchers.Main) {
+                            MainActivity.toastView(this@BibliatekaList, getString(by.carkva_gazeta.malitounik.R.string.error))
+                            binding.progressBar2.visibility = View.GONE
+                        }
+                        return@withContext
+                    }
+                    val imageLocal = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png"
+                    if (position == -1) {
+                        val mySqlList = ArrayList<String>()
+                        mySqlList.add(link)
+                        mySqlList.add(str)
+                        mySqlList.add(pdf)
+                        mySqlList.add(File(pdfFilePath).length().toString())
+                        mySqlList.add(rubrika)
+                        mySqlList.add(imageLocal)
+                        arrayList.add(0, mySqlList)
+                    } else {
+                        arrayList[position][0] = link
+                        arrayList[position][1] = str
+                        arrayList[position][2] = pdf
+                        if (pdfFilePath != "") arrayList[position][3] = File(pdfFilePath).length().toString()
+                        arrayList[position][4] = rubrika
+                        arrayList[position][5] = imageLocal
+                    }
+                    val dir = File("$filesDir/image_temp")
+                    if (!dir.exists()) dir.mkdir()
+                    val file = File(imageLocal)
+                    val bitmap = BitmapFactory.decodeFile(imageFilePath)
+                    bitmap?.let {
+                        val out = FileOutputStream(file)
+                        it.compress(Bitmap.CompressFormat.PNG, 90, out)
+                        out.flush()
+                        out.close()
+                    }
+                    saveBibliatekaJson()
+                    if (pdfFilePath != "") Malitounik.referens.child("/data/bibliateka/$pdf").putFile(Uri.fromFile(File(pdfFilePath))).await()
+                    Malitounik.referens.child("/images/bibliateka/" + file.name).putFile(Uri.fromFile(file)).await()
+                }
+                adapter.notifyDataSetChanged()
+                MainActivity.toastView(this@BibliatekaList, getString(by.carkva_gazeta.malitounik.R.string.save))
+                binding.progressBar2.visibility = View.GONE
+            }
+        }
+    }
+
+    private suspend fun saveBibliatekaJson() {
+        val localFile = withContext(Dispatchers.IO) {
+            File.createTempFile("bibliateka", "json")
+        }
+        val gson = Gson()
+        localFile.writer().use {
+            it.write(gson.toJson(arrayList))
+        }
+        Malitounik.referens.child("/bibliateka.json").putFile(Uri.fromFile(localFile)).await()
+    }
+
+    override fun onDialogFile(file: File) {
+        binding.pdfTextView.text = file.name
+        pdfFilePath = file.absolutePath
+    }
+
+    override fun setImageFile(file: File, position: Int) {
+        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+        binding.imagePdf.setImageBitmap(bitmap)
+        imageFilePath = file.absolutePath
+    }
+
+    override fun setImageFileCancel() {
     }
 
     override fun onDialogDeliteClick(position: Int, name: String) {
@@ -83,81 +234,79 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
     }
 
     override fun fileDelite(position: Int, title: String, isSite: Boolean) {
-    }
-
-    private fun getSql() {
-        binding.progressBar2.visibility = View.VISIBLE
-        try {
-            sqlJob = CoroutineScope(Dispatchers.Main).launch {
-                val temp = ArrayList<ArrayList<String>>()
-                val sb = getBibliatekaJson()
-                val gson = Gson()
-                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
-                val biblioteka: ArrayList<ArrayMap<String, String>> = gson.fromJson(sb, type)
-                for (i in 0 until biblioteka.size) {
-                    val mySqlList = ArrayList<String>()
-                    val kniga = biblioteka[i]
-                    val id = kniga["bib"] ?: ""
-                    val rubrika = kniga["rubryka"] ?: ""
-                    val link = kniga["link"] ?: ""
-                    var str = kniga["str"] ?: ""
-                    val pdf = kniga["pdf"] ?: ""
-                    var image = kniga["image"] ?: ""
-                    mySqlList.add(link)
-                    val pos = str.indexOf("</span><br>")
-                    str = str.substring(pos + 11)
-                    mySqlList.add(str)
-                    mySqlList.add(pdf)
-                    mySqlList.add(getPdfFile(pdf))
-                    mySqlList.add(rubrika)
-                    val im1 = image.indexOf("src=\"")
-                    val im2 = image.indexOf("\"", im1 + 5)
-                    image = image.substring(im1 + 5, im2)
-                    val t1 = pdf.lastIndexOf(".")
-                    val imageLocal = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png"
-                    mySqlList.add(imageLocal)
-                    mySqlList.add(id)
-                    if (MainActivity.isNetworkAvailable()) {
-                        val dir = File("$filesDir/image_temp")
-                        if (!dir.exists()) dir.mkdir()
-                        val file = File(imageLocal)
-                        if (!file.exists()) {
-                            saveImagePdf(pdf, image)
-                        }
-                    }
-                    arrayList.add(mySqlList)
-                }
-                val json = gson.toJson(arrayList)
-                val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-                val prefEditors = k.edit()
-                prefEditors.putString("Biblioteka", json)
-                prefEditors.apply()
-                adapter.notifyDataSetChanged()
-                binding.progressBar2.visibility = View.GONE
+        CoroutineScope(Dispatchers.Main).launch {
+            Malitounik.referens.child("/data/bibliateka/" + arrayList[position][2]).delete().await()
+            val file = File(arrayList[position][5])
+            if (file.exists()) {
+                file.delete()
             }
-        } catch (_: Throwable) {
+            Malitounik.referens.child("/images/bibliateka/" + file.name).delete().await()
+            arrayList.removeAt(position)
+            adapter.notifyDataSetChanged()
+            saveBibliatekaJson()
         }
     }
 
-    private suspend fun getPdfFile(pdf: String): String {
-        var filesize = "0"
-        referens.child("/data/bibliateka/$pdf").metadata.addOnCompleteListener {
-            filesize = it.result.sizeBytes.toString()
-        }.await()
-        return filesize
+    private fun getSql() {
+        if (MainActivity.isNetworkAvailable()) {
+            try {
+                sqlJob = CoroutineScope(Dispatchers.Main).launch {
+                    val sb = getBibliatekaJson()
+                    if (sb != "") {
+                        binding.progressBar2.visibility = View.VISIBLE
+                        val gson = Gson()
+                        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(String::class.java).type).type).type
+                        val biblioteka = gson.fromJson<ArrayList<ArrayList<String>>>(sb, type)
+                        for (i in 0 until biblioteka.size) {
+                            val mySqlList = ArrayList<String>()
+                            val kniga = biblioteka[i]
+                            val rubrika = kniga[4]
+                            val link = kniga[0]
+                            val str = kniga[1]
+                            val pdf = kniga[2]
+                            val pdfFileSize = kniga[3]
+                            val image = kniga[5]
+                            mySqlList.add(link)
+                            mySqlList.add(str)
+                            mySqlList.add(pdf)
+                            mySqlList.add(pdfFileSize)
+                            mySqlList.add(rubrika)
+                            mySqlList.add(image)
+                            val dir = File("$filesDir/image_temp")
+                            if (!dir.exists()) dir.mkdir()
+                            val file = File(image)
+                            if (!file.exists()) {
+                                saveImagePdf(pdf, image)
+                            }
+                            arrayList.add(mySqlList)
+                        }
+                        val json = gson.toJson(arrayList)
+                        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+                        val prefEditors = k.edit()
+                        prefEditors.putString("Biblioteka", json)
+                        prefEditors.apply()
+                        adapter.notifyDataSetChanged()
+                    } else {
+                        MainActivity.toastView(this@BibliatekaList, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }
+                    binding.progressBar2.visibility = View.GONE
+                }
+            } catch (_: Throwable) {
+            }
+        }
     }
 
     private suspend fun saveImagePdf(pdf: String, image: String) {
         val t1 = pdf.lastIndexOf(".")
         val imageTempFile = File("$filesDir/image_temp/" + pdf.substring(0, t1) + ".png")
-        referens.child(image).getFile(imageTempFile).addOnFailureListener {
+        Malitounik.referens.child(image).getFile(imageTempFile).addOnFailureListener {
             MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
         }.await()
     }
 
     private suspend fun getBibliatekaJson(): String {
         var text = ""
-        val pathReference = referens.child("/bibliateka.json")
+        val pathReference = Malitounik.referens.child("/bibliateka.json")
         val localFile = withContext(Dispatchers.IO) {
             File.createTempFile("bibliateka", "json")
         }
@@ -171,7 +320,6 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this)
         width = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val display = windowManager.currentWindowMetrics
             val bounds = display.bounds
@@ -189,10 +337,23 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
             dialog.show(supportFragmentManager, "DialogPiarlinyContextMenu")
             return@setOnItemLongClickListener true
         }
-        binding.listView.setOnItemClickListener { _, _, position, _ ->
-        }
+        val array = arrayOf(getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy), getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki), getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki), getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura))
+        rubrikaAdapter = RubrikaAdapter(this, array)
+        binding.rubrika.adapter = rubrikaAdapter
         adapter = BibliotekaAdapter(this)
         binding.listView.adapter = adapter
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getBoolean("editVisibility")) {
+                binding.edit.visibility = View.VISIBLE
+                binding.listView.visibility = View.GONE
+            }
+            position = savedInstanceState.getInt("position")
+            binding.pdfTextView.text = savedInstanceState.getString("pdfTextView")
+            binding.imagePdf.setImageBitmap(savedInstanceState.getParcelable("BitmapImage"))
+            pdfFilePath = savedInstanceState.getString("pdfFilePath") ?: ""
+            imageFilePath = savedInstanceState.getString("imageFilePath") ?: ""
+            setImageSize(binding.imagePdf)
+        }
         getSql()
         setTollbarTheme()
     }
@@ -233,6 +394,40 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
         binding.titleToolbar.isSingleLine = true
     }
 
+    override fun onPrepareMenu(menu: Menu) {
+        if (binding.edit.visibility == View.VISIBLE) {
+            menu.findItem(R.id.action_plus).isVisible = false
+            menu.findItem(R.id.action_save).isVisible = true
+        } else {
+            menu.findItem(R.id.action_plus).isVisible = true
+            menu.findItem(R.id.action_save).isVisible = false
+        }
+    }
+
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.action_save) {
+            saveBibliateka()
+            return true
+        }
+        if (id == R.id.action_plus) {
+            onDialogEditClick(-1)
+            return true
+        }
+        return false
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.edit_bibliateka_list, menu)
+        for (i in 0 until menu.size()) {
+            val item = menu.getItem(i)
+            val spanString = SpannableString(menu.getItem(i).title.toString())
+            val end = spanString.length
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            item.title = spanString
+        }
+    }
+
     internal inner class BibliotekaAdapter(private val context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.admin_simple_list_item_biblioteka, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -246,10 +441,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.imageView.setBackgroundResource(R.drawable.frame_image_biblioteka)
-            viewHolder.imageView.layoutParams?.width = width / 2
-            viewHolder.imageView.layoutParams?.height = (width / 2 * 1.4F).toInt()
-            viewHolder.imageView.requestLayout()
+            setImageSize(viewHolder.imageView)
             if (arrayList[position].size == 3) {
                 if (arrayList[position][2] != "") {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -293,4 +485,40 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
     }
 
     private class ViewHolder(var text: TextView, var imageView: ImageView, var rubrika: TextView)
+
+    private class RubrikaAdapter(activity: Activity, private val dataRubrika: Array<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, dataRubrika) {
+
+        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val v = super.getDropDownView(position, convertView, parent)
+            val textView = v as TextView
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView.text = dataRubrika[position]
+            textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            return v
+        }
+
+        override fun getCount(): Int {
+            return dataRubrika.size
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolderRubrika
+            if (convertView == null) {
+                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolderRubrika(binding.text1)
+                rootView.tag = viewHolder
+            } else {
+                rootView = convertView
+                viewHolder = rootView.tag as ViewHolderRubrika
+            }
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            viewHolder.text.text = dataRubrika[position]
+            viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            return rootView
+        }
+    }
+
+    private class ViewHolderRubrika(var text: TextView)
 }

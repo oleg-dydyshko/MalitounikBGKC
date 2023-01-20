@@ -13,9 +13,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import by.carkva_gazeta.malitounik.databinding.PiarlinyBinding
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -103,10 +100,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     private suspend fun getPiarliny(): String {
-        FirebaseApp.initializeApp(this)
-        val storage = Firebase.storage
-        val referens = storage.reference
-        val pathReference = referens.child("/chytanne/piarliny.json")
+        val pathReference = Malitounik.referens.child("/chytanne/piarliny.json")
         var text = ""
         val localFile = File("$filesDir/piarliny.json")
         pathReference.getFile(localFile).addOnSuccessListener {

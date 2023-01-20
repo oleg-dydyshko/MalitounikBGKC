@@ -64,7 +64,7 @@ class DialogFileExplorer : DialogFragment() {
             }
             val filterFile = FilenameFilter { dir: File, filename: String ->
                 val sel = File(dir, filename)
-                sel.isFile && !sel.isHidden && (sel.name.contains(".txt", true) || sel.name.contains(".htm", true))
+                sel.isFile && !sel.isHidden && (sel.name.contains(".txt", true) || sel.name.contains(".htm", true) || sel.name.contains(".pdf", true))
             }
             if (!firstLvl) {
                 fileList.add(MyFile("Верх", R.drawable.directory_up))
@@ -82,6 +82,9 @@ class DialogFileExplorer : DialogFragment() {
             dList.sort()
             for (aFList in fList) {
                 when {
+                    aFList.contains(".pdf", true) -> {
+                        fileList.add(MyFile(aFList, R.drawable.file_icon))
+                    }
                     aFList.contains(".htm", true) -> {
                         fileList.add(MyFile(aFList, R.drawable.file_html_icon))
                     }

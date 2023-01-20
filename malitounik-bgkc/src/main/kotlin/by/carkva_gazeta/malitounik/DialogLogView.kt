@@ -12,11 +12,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewCheckboxDisplayBinding
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,10 +23,6 @@ class DialogLogView : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var _binding: DialogTextviewCheckboxDisplayBinding? = null
     private val binding get() = _binding!!
-    private val storage: FirebaseStorage
-        get() = Firebase.storage
-    private val referens: StorageReference
-        get() = storage.reference
     private var log = ArrayList<String>()
     private var mListener: DialogLogViewListener? = null
 
@@ -55,11 +46,6 @@ class DialogLogView : DialogFragment() {
         _binding = null
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(Malitounik.applicationContext())
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { fragmentActivity ->
             _binding = DialogTextviewCheckboxDisplayBinding.inflate(LayoutInflater.from(fragmentActivity))
@@ -74,7 +60,7 @@ class DialogLogView : DialogFragment() {
                 val localFile = withContext(Dispatchers.IO) {
                     File.createTempFile("log", "txt")
                 }
-                referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
+                Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
                     MainActivity.toastView(fragmentActivity, getString(R.string.error))
                 }.await()
                 localFile.readLines().forEach {

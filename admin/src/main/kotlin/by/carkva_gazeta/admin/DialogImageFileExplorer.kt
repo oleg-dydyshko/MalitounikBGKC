@@ -4,8 +4,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
@@ -41,7 +39,7 @@ class DialogImageFileExplorer : DialogFragment() {
     private var listener: DialogImageFileExplorerListener? = null
 
     interface DialogImageFileExplorerListener {
-        fun setImageFile(bitmap: Bitmap?, position: Int)
+        fun setImageFile(file: File, position: Int)
         fun setImageFileCancel()
     }
 
@@ -161,8 +159,7 @@ class DialogImageFileExplorer : DialogFragment() {
                             val dialogImageFileLoad = DialogImageFileLoad.getInstance(sel.absolutePath)
                             dialogImageFileLoad.show(childFragmentManager, "dialogImageFileLoad")
                         } else {
-                            val bitmap = BitmapFactory.decodeFile(sel.absolutePath)
-                            listener?.setImageFile(bitmap,arguments?.getInt("position") ?: 0)
+                            listener?.setImageFile(sel,arguments?.getInt("position") ?: 0)
                             dialog?.cancel()
                         }
                     }

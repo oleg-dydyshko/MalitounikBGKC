@@ -20,7 +20,6 @@ import android.provider.MediaStore
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
-import android.util.ArrayMap
 import android.util.Base64.DEFAULT
 import android.util.Base64.decode
 import android.util.TypedValue
@@ -45,11 +44,6 @@ import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
 import com.github.barteksc.pdfviewer.util.FitPolicy
 import com.google.android.play.core.splitcompat.SplitCompat
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kursx.parser.fb2.*
@@ -112,10 +106,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     private var site = false
     private var mActionDown = false
     private var resetTollbarJob: Job? = null
-    private val storage: FirebaseStorage
-        get() = Firebase.storage
-    private val referens: StorageReference
-        get() = storage.reference
     private val animationListenerOutRight: AnimationListener = object : AnimationListener {
         override fun onAnimationStart(animation: Animation) {}
         override fun onAnimationEnd(animation: Animation) {
@@ -362,7 +352,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     }
 
     private suspend fun downloadPdfFile(url: String) {
-        val pathReference = referens.child("/data/bibliateka/$url")
+        val pathReference = Malitounik.referens.child("/data/bibliateka/$url")
         val localFile = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
         pathReference.getFile(localFile).addOnFailureListener {
             MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
@@ -445,6 +435,16 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         bookTitle.clear()
         printBookmarksTree(pdfView.tableOfContents)
         var title = pdfView.documentMeta.title
+        var position = -1
+        if (title == "") {
+            arrayList.forEachIndexed { index, kniga ->
+                if (kniga[2] == fileName) {
+                    position = index
+                    title = kniga[0]
+                    return@forEachIndexed
+                }
+            }
+        }
         if (title == "" && filePath != "") {
             val t1 = filePath.lastIndexOf("/")
             title = filePath.substring(t1 + 1)
@@ -461,11 +461,16 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             val temp = ArrayList<String>()
             temp.add(title)
             temp.add(filePath)
-            val t2 = filePath.lastIndexOf("/")
-            val image = filePath.substring(t2 + 1)
-            val t1 = image.lastIndexOf(".")
-            val imageTemp = File("$filesDir/image_temp/" + image.substring(0, t1) + ".png")
-            if (imageTemp.exists()) temp.add("$filesDir/image_temp/" + image.substring(0, t1) + ".png")
+            val image = if (position != -1) {
+                File(arrayList[position][5]).name
+            } else {
+                val t2 = filePath.lastIndexOf("/")
+                val img = filePath.substring(t2 + 1)
+                val t1 = img.lastIndexOf(".")
+                img.substring(0, t1) + ".png"
+            }
+            val imageTemp = File("$filesDir/image_temp/$image")
+            if (imageTemp.exists()) temp.add("$filesDir/image_temp/$image")
             else temp.add("")
             naidaunia.add(temp)
             val prefEditor = k.edit()
@@ -491,7 +496,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         SplitCompat.install(this)
-        FirebaseApp.initializeApp(this)
         width = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val display = windowManager.currentWindowMetrics
             val bounds = display.bounds
@@ -1616,55 +1620,51 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         adapter.notifyDataSetChanged()
         binding.progressBar2.visibility = View.VISIBLE
         try {
-            sqlJob = CoroutineScope(Dispatchers.Main).launch {
-                val temp = ArrayList<ArrayList<String>>()
-                val sb = getBibliatekaJson()
-                val gson = Gson()
-                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
-                val biblioteka: ArrayList<ArrayMap<String, String>> = gson.fromJson(sb, type)
-                for (i in 0 until biblioteka.size) {
-                    val mySqlList = ArrayList<String>()
-                    val kniga = biblioteka[i]
-                    val id = kniga["bib"] ?: ""
-                    val rubrika = kniga["rubryka"] ?: ""
-                    val link = kniga["link"] ?: ""
-                    var str = kniga["str"] ?: ""
-                    val pdf = kniga["pdf"] ?: ""
-                    var image = kniga["image"] ?: ""
-                    mySqlList.add(link)
-                    val pos = str.indexOf("</span><br>")
-                    str = str.substring(pos + 11)
-                    mySqlList.add(str)
-                    mySqlList.add(pdf)
-                    mySqlList.add(getPdfFile(pdf))
-                    mySqlList.add(rubrika)
-                    val im1 = image.indexOf("src=\"")
-                    val im2 = image.indexOf("\"", im1 + 5)
-                    image = image.substring(im1 + 5, im2)
-                    val t1 = pdf.lastIndexOf(".")
-                    val imageLocal = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png"
-                    mySqlList.add(imageLocal)
-                    mySqlList.add(id)
-                    if (MainActivity.isNetworkAvailable()) {
-                        val dir = File("$filesDir/image_temp")
-                        if (!dir.exists()) dir.mkdir()
-                        val file = File(imageLocal)
-                        if (!file.exists()) {
-                            saveImagePdf(pdf, image)
+            if (MainActivity.isNetworkAvailable()) {
+                sqlJob = CoroutineScope(Dispatchers.Main).launch {
+                    val temp = ArrayList<ArrayList<String>>()
+                    val sb = getBibliatekaJson()
+                    if (sb != "") {
+                        val gson = Gson()
+                        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(String::class.java).type).type).type
+                        val biblioteka: ArrayList<ArrayList<String>> = gson.fromJson(sb, type)
+                        for (i in 0 until biblioteka.size) {
+                            val mySqlList = ArrayList<String>()
+                            val kniga = biblioteka[i]
+                            val rubrika = kniga[4]
+                            val link = kniga[0]
+                            val str = kniga[1]
+                            val pdf = kniga[2]
+                            val pdfFileSize = kniga[3]
+                            val image = kniga[5]
+                            mySqlList.add(link)
+                            mySqlList.add(str)
+                            mySqlList.add(pdf)
+                            mySqlList.add(pdfFileSize)
+                            mySqlList.add(rubrika)
+                            mySqlList.add(image)
+                            val dir = File("$filesDir/image_temp")
+                            if (!dir.exists()) dir.mkdir()
+                            val file = File(image)
+                            if (!file.exists()) {
+                                saveImagePdf(pdf, image)
+                            }
+                            if (rubrika.toInt() == rub) {
+                                arrayList.add(mySqlList)
+                            }
+                            temp.add(mySqlList)
                         }
+                        val json = gson.toJson(temp)
+                        val prefEditors = k.edit()
+                        prefEditors.putString("Biblioteka", json)
+                        prefEditors.apply()
+                        adapter.notifyDataSetChanged()
+                    } else {
+                        MainActivity.toastView(this@BibliotekaView, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
-                    if (rubrika.toInt() == rub) {
-                        arrayList.add(mySqlList)
-                    }
-                    temp.add(mySqlList)
+                    runSql = false
+                    binding.progressBar2.visibility = View.GONE
                 }
-                val json = gson.toJson(temp)
-                val prefEditors = k.edit()
-                prefEditors.putString("Biblioteka", json)
-                prefEditors.apply()
-                runSql = false
-                adapter.notifyDataSetChanged()
-                binding.progressBar2.visibility = View.GONE
             }
         } catch (_: Throwable) {
         }
@@ -1672,7 +1672,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
 
     private suspend fun getBibliatekaJson(): String {
         var text = ""
-        val pathReference = referens.child("/bibliateka.json")
+        val pathReference = Malitounik.referens.child("/bibliateka.json")
         val localFile = withContext(Dispatchers.IO) {
             File.createTempFile("bibliateka", "json")
         }
@@ -1683,18 +1683,10 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         return text
     }
 
-    private suspend fun getPdfFile(pdf: String): String {
-        var filesize = "0"
-        referens.child("/data/bibliateka/$pdf").metadata.addOnCompleteListener {
-            filesize = it.result.sizeBytes.toString()
-        }.await()
-        return filesize
-    }
-
     private suspend fun saveImagePdf(pdf: String, image: String) {
         val t1 = pdf.lastIndexOf(".")
         val imageTempFile = File("$filesDir/image_temp/" + pdf.substring(0, t1) + ".png")
-        referens.child(image).getFile(imageTempFile).addOnFailureListener {
+        Malitounik.referens.child(image).getFile(imageTempFile).addOnFailureListener {
             MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
         }.await()
     }

@@ -42,9 +42,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.splitinstall.*
 import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -111,9 +108,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     override fun createAndSentFile(log: ArrayList<String>, isClear: Boolean) {
         if (log.isNotEmpty()) {
-            FirebaseApp.initializeApp(Malitounik.applicationContext())
-            val storage = Firebase.storage
-            val referens = storage.reference
             CoroutineScope(Dispatchers.Main).launch {
                 val fileZip = withContext(Dispatchers.IO) {
                     val localFile = withContext(Dispatchers.IO) {
@@ -122,7 +116,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     val zip = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "MalitounikResource.zip")
                     val out = ZipOutputStream(BufferedOutputStream(FileOutputStream(zip)))
                     for (file in log) {
-                        referens.child(file).getFile(localFile).addOnFailureListener {
+                        Malitounik.referens.child(file).getFile(localFile).addOnFailureListener {
                             toastView(this@MainActivity, getString(R.string.error))
                         }.await()
                         val fi = FileInputStream(localFile)
@@ -147,7 +141,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     localFile.writer().use {
                         it.write("")
                     }
-                    referens.child("/admin/log.txt").putFile(Uri.fromFile(localFile)).await()
+                    Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(localFile)).await()
                 }
             }
         }
@@ -580,10 +574,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 val localFile = withContext(Dispatchers.IO) {
                     File.createTempFile("log", "txt")
                 }
-                FirebaseApp.initializeApp(Malitounik.applicationContext())
-                val storage = Firebase.storage
-                val referens = storage.reference
-                referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
+                Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
                     toastView(this@MainActivity, getString(R.string.error))
                 }.await()
                 val log = localFile.readText()
@@ -1476,10 +1467,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     private suspend fun getUpdateMalitounikBGKC(): String {
-        FirebaseApp.initializeApp(this@MainActivity)
-        val storage = Firebase.storage
-        val referens = storage.reference
-        val pathReference = referens.child("/updateMalitounikBGKC.json")
+        val pathReference = Malitounik.referens.child("/updateMalitounikBGKC.json")
         var text = ""
         val localFile = withContext(Dispatchers.IO) {
             File.createTempFile("updateMalitounikBGKC", "json")

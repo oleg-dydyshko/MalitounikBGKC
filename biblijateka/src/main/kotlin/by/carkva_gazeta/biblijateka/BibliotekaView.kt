@@ -544,14 +544,12 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 val dialogNoInternet = DialogNoInternet()
                 dialogNoInternet.show(supportFragmentManager, "no_internet")
             } else {
-                var rub = 1
                 when (idSelect) {
-                    GISTORYIACARKVY -> rub = 1
-                    MALITOUNIKI -> rub = 2
-                    SPEUNIKI -> rub = 3
-                    RELLITARATURA -> rub = 4
+                    GISTORYIACARKVY -> getSql(GISTORYIACARKVY)
+                    MALITOUNIKI -> getSql(MALITOUNIKI)
+                    SPEUNIKI -> getSql(SPEUNIKI)
+                    RELLITARATURA -> getSql(RELLITARATURA)
                 }
-                getSql(rub)
             }
             binding.swipeRefreshLayout.isRefreshing = false
         }
@@ -615,7 +613,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     arrayList.removeAt(position)
                     naidaunia.clear()
                     naidaunia.addAll(arrayList)
-
                     adapter.notifyDataSetChanged()
                     val gson = Gson()
                     val prefEditor = k.edit()
@@ -821,11 +818,11 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             idSelect = MALITOUNIKI
         }
         when (idSelect) {
-            0 -> setRubrika(NIADAUNIA)
-            1 -> setRubrika(GISTORYIACARKVY)
-            2 -> setRubrika(MALITOUNIKI)
-            3 -> setRubrika(SPEUNIKI)
-            4 -> setRubrika(RELLITARATURA)
+            NIADAUNIA -> setRubrika(NIADAUNIA)
+            GISTORYIACARKVY -> setRubrika(GISTORYIACARKVY)
+            MALITOUNIKI -> setRubrika(MALITOUNIKI)
+            SPEUNIKI -> setRubrika(SPEUNIKI)
+            RELLITARATURA -> setRubrika(RELLITARATURA)
             else -> setRubrika(NIADAUNIA)
         }
         if (filePath != "" && savedInstance != 0) {

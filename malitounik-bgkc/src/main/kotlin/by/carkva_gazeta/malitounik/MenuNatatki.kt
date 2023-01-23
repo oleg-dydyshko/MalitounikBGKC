@@ -143,7 +143,6 @@ class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
                 myNatatki.show(childFragmentManager, "myNatatki")
             } else {
                 MainActivity.toastView(it, getString(R.string.no_file))
-                fileDelite(position)
             }
         }
     }
@@ -299,7 +298,6 @@ class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
                     myNatatki.show(childFragmentManager, "myNatatki")
                 } else {
                     MainActivity.toastView(activity, getString(R.string.no_file))
-                    fileDelite(adapterPosition)
                 }
             }
 

@@ -322,10 +322,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             //binding.logosite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.logotip_whate))
             binding.label9a.setBackgroundResource(R.drawable.selector_dark)
             binding.label10a.setBackgroundResource(R.drawable.selector_dark)
+            binding.label14a.setBackgroundResource(R.drawable.selector_dark)
         } else {
             setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest))
             binding.label9a.setBackgroundResource(R.drawable.selector_default)
             binding.label10a.setBackgroundResource(R.drawable.selector_default)
+            binding.label14a.setBackgroundResource(R.drawable.selector_default)
         }
         if (k.getInt("sinoidal", 0) == 1) {
             binding.label11.visibility = View.VISIBLE
@@ -333,7 +335,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.title9.setOnClickListener(this)
         binding.title10.setOnClickListener(this)
         binding.label1.setOnClickListener(this)
-        binding.label2.setOnClickListener(this)
         binding.label3.setOnClickListener(this)
         binding.label4.setOnClickListener(this)
         binding.label5.setOnClickListener(this)
@@ -355,6 +356,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.label13.setOnClickListener(this)
         binding.label9a.setOnClickListener(this)
         binding.label10a.setOnClickListener(this)
+        binding.label14a.setOnClickListener(this)
+        binding.label140.setOnClickListener(this)
+        binding.label141.setOnClickListener(this)
+        binding.label142.setOnClickListener(this)
+        binding.label143.setOnClickListener(this)
+        binding.label144.setOnClickListener(this)
+        binding.label145.setOnClickListener(this)
 
         val data = intent.data
         if (data != null) {
@@ -373,7 +381,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
                 data.toString().contains("shortcuts=2") -> {
                     //idSelect = R.id.label2
-                    selectFragment(binding.label2, true, shortcuts = true)
+                    selectFragment(binding.label142, true, shortcuts = true)
                 }
                 /*data.toString().contains("caliandar") -> {
                     idSelect = R.id.label1
@@ -631,7 +639,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     private fun setMenuIcon(drawable: Drawable?) {
         ajustCompoundDrawableSizeWithText(binding.label1, drawable)
-        ajustCompoundDrawableSizeWithText(binding.label2, drawable)
         ajustCompoundDrawableSizeWithText(binding.label3, drawable)
         ajustCompoundDrawableSizeWithText(binding.label4, drawable)
         ajustCompoundDrawableSizeWithText(binding.label5, drawable)
@@ -643,6 +650,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         ajustCompoundDrawableSizeWithText(binding.label11, drawable)
         ajustCompoundDrawableSizeWithText(binding.label12, drawable)
         ajustCompoundDrawableSizeWithText(binding.label13, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label14, drawable)
     }
 
     override fun onBack() {
@@ -871,14 +879,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         val id = view?.id ?: R.id.label1
         val idOld = if (id == R.id.label2) idSelect
         else id
-        if (!(id == R.id.label9a || id == R.id.label10a)) {
+        if (!(id == R.id.label9a || id == R.id.label10a || id == R.id.label14a)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             if (dzenNoch) {
                 binding.citata.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                 binding.title.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
                 binding.description.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                 binding.label1.setBackgroundResource(R.drawable.selector_dark)
-                binding.label2.setBackgroundResource(R.drawable.selector_dark)
                 binding.label3.setBackgroundResource(R.drawable.selector_dark)
                 binding.label4.setBackgroundResource(R.drawable.selector_dark)
                 binding.label5.setBackgroundResource(R.drawable.selector_dark)
@@ -898,9 +905,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.label11.setBackgroundResource(R.drawable.selector_dark)
                 binding.label12.setBackgroundResource(R.drawable.selector_dark)
                 binding.label13.setBackgroundResource(R.drawable.selector_dark)
+                binding.label140.setBackgroundResource(R.drawable.selector_dark)
+                binding.label141.setBackgroundResource(R.drawable.selector_dark)
+                binding.label142.setBackgroundResource(R.drawable.selector_dark)
+                binding.label143.setBackgroundResource(R.drawable.selector_dark)
+                binding.label144.setBackgroundResource(R.drawable.selector_dark)
+                binding.label145.setBackgroundResource(R.drawable.selector_dark)
             } else {
                 binding.label1.setBackgroundResource(R.drawable.selector_default)
-                binding.label2.setBackgroundResource(R.drawable.selector_default)
                 binding.label3.setBackgroundResource(R.drawable.selector_default)
                 binding.label4.setBackgroundResource(R.drawable.selector_default)
                 binding.label5.setBackgroundResource(R.drawable.selector_default)
@@ -920,6 +932,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.label11.setBackgroundResource(R.drawable.selector_default)
                 binding.label12.setBackgroundResource(R.drawable.selector_default)
                 binding.label13.setBackgroundResource(R.drawable.selector_default)
+                binding.label140.setBackgroundResource(R.drawable.selector_default)
+                binding.label141.setBackgroundResource(R.drawable.selector_default)
+                binding.label142.setBackgroundResource(R.drawable.selector_default)
+                binding.label143.setBackgroundResource(R.drawable.selector_default)
+                binding.label144.setBackgroundResource(R.drawable.selector_default)
+                binding.label145.setBackgroundResource(R.drawable.selector_default)
             }
         }
         prefEditors = k.edit()
@@ -932,6 +950,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.title10.visibility = View.VISIBLE
             if (dzenNoch) binding.image3.setImageResource(R.drawable.arrow_up_float_black)
             else binding.image3.setImageResource(R.drawable.arrow_up_float)
+        }
+        if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145) {
+            binding.title14.visibility = View.VISIBLE
+            if (dzenNoch) binding.image4.setImageResource(R.drawable.arrow_up_float_black)
+            else binding.image4.setImageResource(R.drawable.arrow_up_float)
         }
 
         if (id == R.id.label9a) {
@@ -957,6 +980,19 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 else binding.image3.setImageResource(R.drawable.arrow_up_float)
                 binding.scrollView.post {
                     binding.scrollView.smoothScrollBy(0, binding.title10.height)
+                }
+            }
+        }
+        if (id == R.id.label14a) {
+            if (binding.title14.visibility == View.VISIBLE) {
+                binding.title14.visibility = View.GONE
+                binding.image4.setImageResource(R.drawable.arrow_down_float)
+            } else {
+                binding.title14.visibility = View.VISIBLE
+                if (dzenNoch) binding.image4.setImageResource(R.drawable.arrow_up_float_black)
+                else binding.image4.setImageResource(R.drawable.arrow_up_float)
+                binding.scrollView.post {
+                    binding.scrollView.smoothScrollBy(0, binding.title14.height)
                 }
             }
         }
@@ -1097,31 +1133,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     }
                     idSelect = id
                 }
-            }
-            R.id.label2 -> {
-                //val fragment = supportFragmentManager.findFragmentByTag("menuGlavnoe")
-                if (checkmoduleResources()) {
-                    if (checkmodulesBiblijateka()) {
-                        val intentBib = Intent()
-                        intentBib.setClassName(this, BIBLIOTEKAVIEW)
-                        if (shortcuts || intent.extras?.containsKey("site") == true) {
-                            intentBib.data = intent.data
-                            if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
-                            if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
-                        }
-                        bibliatekaLauncher.launch(intentBib)
-                    } else {
-                        downloadDynamicModule(this)
-                    }
-                } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(supportFragmentManager, "dadatak")
-                }
-                /*if (fragment == null) {
-                    val menuGlavnoe = MenuGlavnoe()
-                    ftrans.replace(R.id.conteiner, menuGlavnoe, "menuGlavnoe")
-                    prefEditors.putInt("id", idSelect)
-                }*/
             }
             R.id.label3 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("bogaslus")
@@ -1365,6 +1376,24 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+            R.id.label140 -> {
+                startBiblioteka(0, shortcuts)
+            }
+            R.id.label141 -> {
+                startBiblioteka(1, shortcuts)
+            }
+            R.id.label142 -> {
+                startBiblioteka(2, shortcuts)
+            }
+            R.id.label143 -> {
+                startBiblioteka(3, shortcuts)
+            }
+            R.id.label144 -> {
+                startBiblioteka(4, shortcuts)
+            }
+            R.id.label145 -> {
+                startBiblioteka(5, shortcuts)
+            }
         }
         if (start) {
             ftrans.commit()
@@ -1388,6 +1417,28 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     override fun onClick(view: View?) {
         selectFragment(view)
+    }
+
+    private fun startBiblioteka(rub: Int, shortcuts: Boolean) {
+        if (checkmoduleResources()) {
+            if (checkmodulesBiblijateka()) {
+                val intentBib = Intent()
+                intentBib.setClassName(this, BIBLIOTEKAVIEW)
+                intentBib.putExtra("rub", rub)
+                if (shortcuts || intent.extras?.containsKey("site") == true) {
+                    intentBib.data = intent.data
+                    if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
+                    if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
+
+                }
+                bibliatekaLauncher.launch(intentBib)
+            } else {
+                downloadDynamicModule(this)
+            }
+        } else {
+            val dadatak = DialogInstallDadatak()
+            dadatak.show(supportFragmentManager, "dadatak")
+        }
     }
 
     private fun popupSnackbarForCompleteUpdate(code: Int) {
@@ -1479,6 +1530,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     companion object {
+        const val BIBLIATEKALIST = "by.carkva_gazeta.admin.BibliatekaList"
         const val ADMINMAIN = "by.carkva_gazeta.admin.AdminMain"
         const val ADMINNOVYZAPAVIETSEMUXA = "by.carkva_gazeta.admin.NovyZapavietSemuxa"
         const val ADMINSTARYZAPAVIETSEMUXA = "by.carkva_gazeta.admin.StaryZapavietSemuxa"

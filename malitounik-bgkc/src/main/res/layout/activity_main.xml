@@ -184,15 +184,135 @@
                     android:textSize="14sp"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/label2"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/label14a"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:gravity="center_vertical"
-                    android:padding="10dp"
-                    android:text="@string/bibliateka_carkvy"
-                    android:textSize="14sp" />
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/label14"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:padding="10dp"
+                        android:text="@string/bibliateka_carkvy"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/image2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/image4"
+                        android:layout_width="15dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@string/empty"
+                        android:src="@drawable/arrow_down_float"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/title14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/label140"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/bibliateka_niadaunia"
+                        android:textSize="14sp"
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
+
+                    <TextView
+                        android:id="@+id/label141"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/bibliateka_gistoryia_carkvy"
+                        android:textSize="14sp"
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
+
+                    <TextView
+                        android:id="@+id/label142"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/bibliateka_malitouniki"
+                        android:textSize="14sp"
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
+
+                    <TextView
+                        android:id="@+id/label143"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/bibliateka_speuniki"
+                        android:textSize="14sp"
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
+
+                    <TextView
+                        android:id="@+id/label144"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/bibliateka_rel_litaratura"
+                        android:textSize="14sp"
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
+
+                    <TextView
+                        android:id="@+id/label145"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/bibliateka_file"
+                        android:textSize="14sp"
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
+                </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/label9a"

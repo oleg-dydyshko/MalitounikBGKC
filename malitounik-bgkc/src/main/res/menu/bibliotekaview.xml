@@ -79,4 +79,10 @@
         android:title="@string/bibliateka_file"
         android:visible="false"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_carkva"
+        android:orderInCategory="100"
+        android:title="@string/redagaktirovat"
+        android:visible="false"
+        app:showAsAction="never" />
 </menu>

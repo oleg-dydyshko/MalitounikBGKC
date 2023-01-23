@@ -535,7 +535,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             binding.listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
             binding.swipeRefreshLayout.setColorSchemeResources(by.carkva_gazeta.malitounik.R.color.colorPrimary_black)
         } else {
-            binding.listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            binding.listView.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.color.colorDivider)
+            binding.listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default_bibliateka)
             binding.swipeRefreshLayout.setColorSchemeResources(by.carkva_gazeta.malitounik.R.color.colorPrimary)
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
@@ -814,16 +815,24 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             }
             site = intent.getBooleanExtra("site", false)
         }
-        if (naidaunia.isEmpty() && idSelect == NIADAUNIA) {
-            idSelect = MALITOUNIKI
-        }
+        idSelect = intent.getIntExtra("rub", MALITOUNIKI)
         when (idSelect) {
             NIADAUNIA -> setRubrika(NIADAUNIA)
             GISTORYIACARKVY -> setRubrika(GISTORYIACARKVY)
             MALITOUNIKI -> setRubrika(MALITOUNIKI)
             SPEUNIKI -> setRubrika(SPEUNIKI)
             RELLITARATURA -> setRubrika(RELLITARATURA)
-            else -> setRubrika(NIADAUNIA)
+            SETFILE -> {
+                val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                if (PackageManager.PERMISSION_DENIED == permissionCheck) {
+                    mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                } else {
+                    binding.progressBar2.visibility = View.GONE
+                    val fileExplorer = DialogFileExplorer()
+                    fileExplorer.show(supportFragmentManager, "file_explorer")
+                }
+                setRubrika(NIADAUNIA)
+            }
         }
         if (filePath != "" && savedInstance != 0) {
             if (filePath.contains("raw:")) {
@@ -1362,6 +1371,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_rub_4).isVisible = isTrash
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_rub_5).isVisible = isTrash
         itemAuto.isVisible = false
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         if (binding.swipeRefreshLayout.visibility == View.GONE) {
             binding.subtitleToolbar.visibility = View.GONE
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_set_page).isVisible = true
@@ -1441,6 +1451,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)
         binding.subtitleToolbar.text = nameRubrika
         setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
@@ -1459,6 +1470,10 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val prefEditor = k.edit()
         val id = item.itemId
+        if (id == android.R.id.home) {
+            onBack()
+            return true
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
             val dialogFontSize = DialogFontSize()
             dialogFontSize.show(supportFragmentManager, "font")
@@ -1541,6 +1556,11 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             prefEditor.apply()
             invalidateOptionsMenu()
             return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
+            val intent = Intent()
+            intent.setClassName(this, MainActivity.BIBLIATEKALIST)
+            startActivity(intent)
         }
         return false
     }
@@ -1869,7 +1889,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.imageView.setBackgroundResource(R.drawable.frame_image_biblioteka)
             viewHolder.imageView.layoutParams?.width = width / 2
             viewHolder.imageView.layoutParams?.height = (width / 2 * 1.4F).toInt()
             viewHolder.imageView.requestLayout()

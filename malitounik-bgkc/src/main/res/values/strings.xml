@@ -11,9 +11,9 @@
     <string name="error">Памылка</string>
     <string name="error_up">ПАМЫЛКА</string>
     <string name="ok">Добра</string>
-    <string name="cansel">Адмена</string>
+    <string name="cansel">Скасаваць</string>
     <string name="ok_u">ДОБРА</string>
-    <string name="cansel_u">АДМЕНА</string>
+    <string name="cansel_u">СКАСАВАЦЬ</string>
     <string name="title_biblia">БІБЛІЯ (пераклад В. Сёмухі)</string>
     <string name="tools_item">Налады</string>
     <string name="tools_admin_item">Налады%1$s</string>
@@ -685,7 +685,7 @@
     <string name="del_pasochnica">Выдаліць усю пясочніцу</string>
     <string name="del_all_copy">Выдаліць усе рэзервовыя копіі</string>
     <string name="tryjodz">Трыёдзь</string>
-    <string name="admin_day_in_year">Дзень ад пачатку года (да і пасля Пасxi)</string>
+    <string name="admin_day_in_year">Дзень ад пачатку года (да і пасьля Пасxi)</string>
     <string name="admin_show_day_in_year">Год (Пасха): %1$s(%2$s)</string>
     <string name="admin_set_name_link">СПАСЫЛКА</string>
     <string name="admin_link">Спасылка:</string>
@@ -713,7 +713,7 @@
     <string name="log_m">Лог праграмы</string>
     <string name="clear_log">Ачысьціць файл лога</string>
     <string name="set_log">Даслаць файлы</string>
-    <string name="check_update_resourse">Ёсць абнаўленьне рэсурсаў</string>
+    <string name="check_update_resourse">Ёсьць абнаўленьне рэсурсаў</string>
     <string name="set_log_file">Адправіць файл</string>
     <string name="admin_date">%1$d %2$s</string>
     <string name="admin_img_sviat">Іконкі сьвятых</string>

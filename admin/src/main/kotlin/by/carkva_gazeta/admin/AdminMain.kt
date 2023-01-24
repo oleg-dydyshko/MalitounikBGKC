@@ -105,6 +105,7 @@ class AdminMain : BaseActivity() {
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.site_admin)
     }
 
@@ -120,6 +121,10 @@ class AdminMain : BaseActivity() {
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (android.R.id.home == id) {
+            onBack()
+            return true
+        }
         if (id == R.id.action_beta) {
             val dialogUpdateHelp = DialogUpdateHelp.newInstance(false)
             dialogUpdateHelp.show(supportFragmentManager, "dialogUpdateHelp")

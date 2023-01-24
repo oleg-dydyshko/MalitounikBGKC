@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
@@ -39,8 +40,15 @@ class MyNatatki : DialogFragment() {
         fun myNatatkiEdit(position: Int)
     }
 
-    fun setMyNatatkiListener(listener: MyNatatkiListener) {
-        mListener = listener
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is Activity) {
+            mListener = try {
+                context as MyNatatkiListener
+            } catch (e: ClassCastException) {
+                throw ClassCastException("$activity must implement MyNatatkiListener")
+            }
+        }
     }
 
     override fun onPause() {

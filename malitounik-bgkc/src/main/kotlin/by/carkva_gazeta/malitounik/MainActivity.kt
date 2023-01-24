@@ -53,7 +53,7 @@ import java.util.zip.ZipOutputStream
 import kotlin.math.roundToLong
 
 
-class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogLogView.DialogLogViewListener {
+class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogLogView.DialogLogViewListener, MyNatatki.MyNatatkiListener {
 
     private val c = Calendar.getInstance()
     private lateinit var k: SharedPreferences
@@ -175,6 +175,16 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         vybranoe?.fileDeliteCancel()
         val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
         menuNatatki?.fileDeliteCancel()
+    }
+
+    override fun myNatatkiAdd() {
+        val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
+        menuNatatki?.myNatatkiAdd()
+    }
+
+    override fun myNatatkiEdit(position: Int) {
+        val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
+        menuNatatki?.myNatatkiEdit(position)
     }
 
     override fun fileDelite(position: Int, file: String) {
@@ -317,6 +327,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.label103.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label105.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label104.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label140.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label141.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label142.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label143.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label144.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label145.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             bindingappbar.toolbar.popupTheme = R.style.AppCompatDark
             setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest_black))
             //binding.logosite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.logotip_whate))
@@ -877,7 +893,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     private fun selectFragment(view: View?, start: Boolean = false, shortcuts: Boolean = false) {
         val id = view?.id ?: R.id.label1
-        val idOld = if (id == R.id.label2) idSelect
+        val idOld = if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145) idSelect
         else id
         if (!(id == R.id.label9a || id == R.id.label10a || id == R.id.label14a)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -1107,7 +1123,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         val ftrans = supportFragmentManager.beginTransaction()
         ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
 
-        if (id != R.id.label2 && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
+        if (!(id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145) && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
         if (tolbarTitle == "") {
             val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
             if (fragment == null) {

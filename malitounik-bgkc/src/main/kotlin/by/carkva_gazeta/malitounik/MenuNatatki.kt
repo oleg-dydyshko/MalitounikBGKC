@@ -22,7 +22,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 
-class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
+class MenuNatatki : BaseFragment() {
     private lateinit var adapter: ItemAdapter
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
@@ -133,13 +133,12 @@ class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
         binding.dragListView.resetSwipedViews(null)
     }
 
-    override fun myNatatkiEdit(position: Int) {
+    fun myNatatkiEdit(position: Int) {
         binding.dragListView.resetSwipedViews(null)
         val f = adapter.itemList[position]
         activity?.let {
             if (File("${it.filesDir}/Malitva/Mae_malitvy_${f.id}").exists()) {
                 val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 2, position)
-                myNatatki.setMyNatatkiListener(this)
                 myNatatki.show(childFragmentManager, "myNatatki")
             } else {
                 MainActivity.toastView(it, getString(R.string.no_file))
@@ -147,7 +146,7 @@ class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
         }
     }
 
-    override fun myNatatkiAdd() {
+    fun myNatatkiAdd() {
         val myNatatkiFilesSort = k.getInt("natatki_sort", 0)
         if (myNatatkiFilesSort == 0) {
             activity?.let {
@@ -191,7 +190,6 @@ class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
         if (id == R.id.action_add) {
             binding.dragListView.resetSwipedViews(null)
             val myNatatki = MyNatatki.getInstance("", 1, 0)
-            myNatatki.setMyNatatkiListener(this)
             myNatatki.show(childFragmentManager, "myNatatki")
             return true
         }
@@ -294,7 +292,6 @@ class MenuNatatki : BaseFragment(), MyNatatki.MyNatatkiListener {
                 val f = itemList[adapterPosition]
                 if (File("${activity.filesDir}/Malitva/Mae_malitvy_${f.id}").exists()) {
                     val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 3, adapterPosition)
-                    myNatatki.setMyNatatkiListener(this@MenuNatatki)
                     myNatatki.show(childFragmentManager, "myNatatki")
                 } else {
                     MainActivity.toastView(activity, getString(R.string.no_file))

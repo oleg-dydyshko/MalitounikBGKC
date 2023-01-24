@@ -1,27 +1,17 @@
 package by.carkva_gazeta.malitounik
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.os.SystemClock
-import android.text.Spannable
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.util.TypedValue
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.toSpannable
-import by.carkva_gazeta.malitounik.databinding.HelpBinding
+import by.carkva_gazeta.malitounik.databinding.PasxaBinding
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class Onas : BaseActivity() {
-    private lateinit var binding: HelpBinding
+    private lateinit var binding: PasxaBinding
     private var resetTollbarJob: Job? = null
-    private var mLastClickTime: Long = 0
 
     override fun onPause() {
         super.onPause()
@@ -31,9 +21,9 @@ class Onas : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val dzenNoch = getBaseDzenNoch()
-        binding = HelpBinding.inflate(layoutInflater)
+        binding = PasxaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.textView.movementMethod = LinkMovementMethod.getInstance()
+        //binding.textView.movementMethod = LinkMovementMethod.getInstance()
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setOnClickListener {
@@ -59,19 +49,20 @@ class Onas : BaseActivity() {
         val reader = BufferedReader(isr)
         var line: String
         val builder = StringBuilder()
+        if (dzenNoch) builder.append("<html><head><style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #303030;}</style></head><body>\n")
+        else builder.append("<html><head><style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}</style></head><body>\n")
         reader.use { bufferedReader ->
             bufferedReader.forEachLine {
                 line = it
-                if (dzenNoch) line = line.replace("#d00505", "#f44336")
                 if (line.contains("<!--<VERSION></VERSION>-->")) {
                     line = line.replace("<!--<VERSION></VERSION>-->", "<em>Версія праграмы: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})</em><br><br>")
                 }
                 builder.append(line)
             }
         }
-        val text = MainActivity.fromHtml(builder.toString())
+        /*val text = MainActivity.fromHtml(builder.toString())
         val spannable = text.toSpannable()
-        /*val str = "https://carkva-gazeta.by"
+        val str = "https://carkva-gazeta.by"
         val t1 = text.indexOf(str)
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View) {
@@ -88,7 +79,7 @@ class Onas : BaseActivity() {
                 startActivity(intent)
             }
         }, t1, t1 + str.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)*/
-        val str2 = "Палітыка прыватнасьці"
+        /*val str2 = "Палітыка прыватнасьці"
         val t2 = text.indexOf(str2)
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View) {
@@ -111,8 +102,12 @@ class Onas : BaseActivity() {
                     }
                 }
             }
-        }, t2, t2 + str2.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        binding.textView.text = spannable
+        }, t2, t2 + str2.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)*/
+        val webSettings = binding.pasxa.settings
+        webSettings.standardFontFamily = "sans-serif-condensed"
+        webSettings.defaultFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT.toInt()
+        webSettings.domStorageEnabled = true
+        binding.pasxa.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

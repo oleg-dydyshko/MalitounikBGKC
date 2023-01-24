@@ -105,13 +105,13 @@ internal class ZmenyiaChastki {
             }
             var polstixaA = false
             var polstixaB = false
-            if (knigaK.contains("а")) {
+            if (knigaK.contains("а", true)) {
                 polstixaA = true
-                knigaK = knigaK.replace("а", "")
+                knigaK = knigaK.replace("а", "", true)
             }
-            if (knigaN.contains("б")) {
+            if (knigaN.contains("б", true)) {
                 polstixaB = true
-                knigaN = knigaN.replace("б", "")
+                knigaN = knigaN.replace("б", "", true)
             }
             var kniga = 0 //if (zagl.equals("Ціт")) kniga = 0;
             if (zagl == "Езк") kniga = 1
@@ -198,7 +198,8 @@ internal class ZmenyiaChastki {
                 }
             }
             val desK = spl.indexOf("\n", desK1)
-            if (desK == -1) res.append(spl.substring(desN)) else res.append(spl.substring(desN, desK))
+            if (desK == -1) res.append(spl.substring(desN))
+            else res.append(spl.substring(desN, desK))
             result = res.toString()
             if (polstixaA) {
                 val t2 = result.indexOf("$knigaK.")
@@ -206,7 +207,7 @@ internal class ZmenyiaChastki {
                 var t1 = result.indexOf(":", t2)
                 if (t1 == -1) t1 = result.indexOf(";", t3 + 1)
                 if (t1 == -1) t1 = result.indexOf(".", t3 + 1)
-                if (t1 != -1) result = result.substring(0, t1 + 1) + "<strong>" + result.substring(t1 + 1, result.length) + "</strong>"
+                if (t1 != -1) result = result.substring(0, t1 + 1) + "<s>" + result.substring(t1 + 1, result.length) + "</s>"
             }
             if (polstixaB) {
                 val t2 = result.indexOf("\n")
@@ -216,7 +217,7 @@ internal class ZmenyiaChastki {
                 var t1 = textPol.indexOf(":")
                 if (t1 == -1) t1 = textPol.indexOf(";", t3 + 1)
                 if (t1 == -1) t1 = textPol.indexOf(".", t3 + 1)
-                if (t1 != -1) result = result.substring(0, t3 + 1) + "<strong>" + result.substring(t3 + 1, t1 + 1) + "</strong>" + result.substring(t1 + 1, result.length)
+                if (t1 != -1) result = result.substring(0, t3 + 1) + "<s>" + result.substring(t3 + 1, t1 + 1) + "</s>" + result.substring(t1 + 1, result.length)
             }
         }
         return "$result<br>"

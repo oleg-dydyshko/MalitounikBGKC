@@ -68,8 +68,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private var mLastClickTime: Long = 0
     private var resetTollbarJob: Job? = null
     private var snackbar: Snackbar? = null
-    //private lateinit var callbackManager: CallbackManager
-    //private lateinit var shareDialog: ShareDialog
     private val mainActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 300) {
             recreate()
@@ -107,32 +105,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         val pIntent = PendingIntent.getBroadcast(this, 30, intent, flags)
         SettingsActivity.setAlarm(cw.timeInMillis + 10 * 60 * 1000, pIntent)
     }
-    /*private val shareCallback = object : FacebookCallback<Sharer.Result> {
-
-        override fun onCancel() {
-            Log.d("Oleg", "Canceled")
-        }
-
-        override fun onError(error: FacebookException) {
-            Log.d("Oleg", String.format("Error: %s", error.toString()))
-            val title = getString(R.string.error)
-            val alertMessage: String = error.message ?: getString(R.string.error)
-            showResult(title, alertMessage)
-        }
-
-        override fun onSuccess(result: Sharer.Result) {
-            Log.d("Oleg", "Success!")
-            val postid = result.postId
-            if (postid != null) {
-                val title = getString(R.string.ok)
-                showResult(title, postid)
-            }
-        }
-
-        private fun showResult(title: String, alertMessage: String) {
-            Log.d("Oleg", "$title: $alertMessage")
-        }
-    }*/
 
     override fun createAndSentFile(log: ArrayList<String>, isClear: Boolean) {
         if (log.isNotEmpty()) {
@@ -281,28 +253,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        /*callbackManager = CallbackManager.Factory.create()
-
-        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-            override fun onSuccess(result: LoginResult) {
-                Log.d("Oleg", "onSuccess")
-            }
-
-            override fun onCancel() {
-                Log.d("Oleg", "onCancel()")
-            }
-
-            override fun onError(error: FacebookException) {
-                Log.d("Oleg", "onError")
-            }
-        })
-
-        shareDialog = ShareDialog(this)
-        shareDialog.registerCallback(callbackManager, shareCallback)
-        val linkContent = ShareLinkContent.Builder().setContentUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/malitounik.appspot.com/o/admin%2Fbogashlugbovya%2Fabiednica.html?alt=media&token=9aed9aff-c9ce-44ee-9a98-ad05a6ffd012")).build()
-        shareDialog.show(linkContent)*/
-
         k = getSharedPreferences("biblia", MODE_PRIVATE)
         mkDir()
         binding = ActivityMainBinding.inflate(layoutInflater)

@@ -12,8 +12,8 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 441976
-        versionName "4.2.0.19"
+        versionCode 441977
+        versionName "4.2.0.20"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -69,8 +69,6 @@ dependencies {
     api platform('com.google.firebase:firebase-bom:31.2.0')
     //api 'com.google.firebase:firebase-core:21.1.1'
     api 'com.google.firebase:firebase-storage-ktx'
-    api 'com.facebook.android:facebook-share:15.2.0'
-    api 'com.facebook.android:facebook-applinks:15.2.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

@@ -68,6 +68,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private var mLastClickTime: Long = 0
     private var resetTollbarJob: Job? = null
     private var snackbar: Snackbar? = null
+    //private lateinit var callbackManager: CallbackManager
+    //private lateinit var shareDialog: ShareDialog
     private val mainActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 300) {
             recreate()
@@ -105,6 +107,32 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         val pIntent = PendingIntent.getBroadcast(this, 30, intent, flags)
         SettingsActivity.setAlarm(cw.timeInMillis + 10 * 60 * 1000, pIntent)
     }
+    /*private val shareCallback = object : FacebookCallback<Sharer.Result> {
+
+        override fun onCancel() {
+            Log.d("Oleg", "Canceled")
+        }
+
+        override fun onError(error: FacebookException) {
+            Log.d("Oleg", String.format("Error: %s", error.toString()))
+            val title = getString(R.string.error)
+            val alertMessage: String = error.message ?: getString(R.string.error)
+            showResult(title, alertMessage)
+        }
+
+        override fun onSuccess(result: Sharer.Result) {
+            Log.d("Oleg", "Success!")
+            val postid = result.postId
+            if (postid != null) {
+                val title = getString(R.string.ok)
+                showResult(title, postid)
+            }
+        }
+
+        private fun showResult(title: String, alertMessage: String) {
+            Log.d("Oleg", "$title: $alertMessage")
+        }
+    }*/
 
     override fun createAndSentFile(log: ArrayList<String>, isClear: Boolean) {
         if (log.isNotEmpty()) {
@@ -253,6 +281,28 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        /*callbackManager = CallbackManager.Factory.create()
+
+        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(result: LoginResult) {
+                Log.d("Oleg", "onSuccess")
+            }
+
+            override fun onCancel() {
+                Log.d("Oleg", "onCancel()")
+            }
+
+            override fun onError(error: FacebookException) {
+                Log.d("Oleg", "onError")
+            }
+        })
+
+        shareDialog = ShareDialog(this)
+        shareDialog.registerCallback(callbackManager, shareCallback)
+        val linkContent = ShareLinkContent.Builder().setContentUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/malitounik.appspot.com/o/admin%2Fbogashlugbovya%2Fabiednica.html?alt=media&token=9aed9aff-c9ce-44ee-9a98-ad05a6ffd012")).build()
+        shareDialog.show(linkContent)*/
+
         k = getSharedPreferences("biblia", MODE_PRIVATE)
         mkDir()
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -333,6 +383,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.label143.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label144.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label145.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label147.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label148.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             bindingappbar.toolbar.popupTheme = R.style.AppCompatDark
             setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest_black))
             //binding.logosite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.logotip_whate))
@@ -379,6 +431,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.label143.setOnClickListener(this)
         binding.label144.setOnClickListener(this)
         binding.label145.setOnClickListener(this)
+        binding.label147.setOnClickListener(this)
+        binding.label148.setOnClickListener(this)
 
         val data = intent.data
         if (data != null) {
@@ -893,7 +947,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     private fun selectFragment(view: View?, start: Boolean = false, shortcuts: Boolean = false) {
         val id = view?.id ?: R.id.label1
-        val idOld = if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145) idSelect
+        val idOld = if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145 || id == R.id.label148) idSelect
         else id
         if (!(id == R.id.label9a || id == R.id.label10a || id == R.id.label14a)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -927,6 +981,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.label143.setBackgroundResource(R.drawable.selector_dark)
                 binding.label144.setBackgroundResource(R.drawable.selector_dark)
                 binding.label145.setBackgroundResource(R.drawable.selector_dark)
+                binding.label147.setBackgroundResource(R.drawable.selector_dark)
+                binding.label148.setBackgroundResource(R.drawable.selector_dark)
             } else {
                 binding.label1.setBackgroundResource(R.drawable.selector_default)
                 binding.label3.setBackgroundResource(R.drawable.selector_default)
@@ -954,6 +1010,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.label143.setBackgroundResource(R.drawable.selector_default)
                 binding.label144.setBackgroundResource(R.drawable.selector_default)
                 binding.label145.setBackgroundResource(R.drawable.selector_default)
+                binding.label147.setBackgroundResource(R.drawable.selector_default)
+                binding.label148.setBackgroundResource(R.drawable.selector_default)
             }
         }
         prefEditors = k.edit()
@@ -967,7 +1025,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             if (dzenNoch) binding.image3.setImageResource(R.drawable.arrow_up_float_black)
             else binding.image3.setImageResource(R.drawable.arrow_up_float)
         }
-        if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145) {
+        if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145 || id == R.id.label147 || id == R.id.label148) {
             binding.title14.visibility = View.VISIBLE
             if (dzenNoch) binding.image4.setImageResource(R.drawable.arrow_up_float_black)
             else binding.image4.setImageResource(R.drawable.arrow_up_float)
@@ -1118,12 +1176,17 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (dzenNoch) binding.label12.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label12.setBackgroundResource(R.drawable.selector_gray)
             }
+            R.id.label147 -> {
+                tolbarTitle = getString(R.string.bibliateka_gistoryia_carkvy)
+                if (dzenNoch) binding.label147.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label147.setBackgroundResource(R.drawable.selector_gray)
+            }
         }
 
         val ftrans = supportFragmentManager.beginTransaction()
         ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
 
-        if (!(id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145) && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
+        if (!(id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145 || id == R.id.label147 || id == R.id.label148) && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
         if (tolbarTitle == "") {
             val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
             if (fragment == null) {
@@ -1409,6 +1472,18 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
             R.id.label145 -> {
                 startBiblioteka(5, shortcuts)
+            }
+            R.id.label148 -> {
+                startBiblioteka(6, shortcuts)
+            }
+            R.id.label147 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("menuArtykuly")
+                if (fragment == null) {
+                    val menuArtykuly = MenuBibliatekaArtykuly()
+                    ftrans.replace(R.id.conteiner, menuArtykuly, "menuArtykuly")
+                    prefEditors.putInt("id", id)
+                    idSelect = id
+                }
             }
         }
         if (start) {

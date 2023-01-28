@@ -1,16 +1,13 @@
 package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.graphics.Color
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
@@ -20,9 +17,7 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -37,7 +32,6 @@ import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
 import java.io.BufferedReader
-import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 
@@ -56,18 +50,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
     private lateinit var bindingprogress: ProgressBinding
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
-    private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        val cw = Calendar.getInstance()
-        val intent = Intent(this, ReceiverBroad::class.java)
-        intent.putExtra("file", "${malitvy[pasliaPrychascia].resurs}.html")
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_IMMUTABLE or 0
-        } else {
-            0
-        }
-        val pIntent = PendingIntent.getBroadcast(this, 30, intent, flags)
-        SettingsActivity.setAlarm(cw.timeInMillis + 10 * 60 * 1000, pIntent)
-    }
 
     override fun onPause() {
         super.onPause()
@@ -304,28 +286,19 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             val pesny = Bogashlugbovya.resursMap[malitvy[pasliaPrychascia].resurs] ?: R.raw.bogashlugbovya_error
-            val builder = StringBuilder()
-            if (pesny != -1) {
+            if (pesny != R.raw.bogashlugbovya_error) {
                 val inputStream = resources.openRawResource(pesny)
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
-                var line: String
+                var text: String
                 reader.use { bufferedReader ->
-                    bufferedReader.forEachLine {
-                        line = it
-                        if (dzenNoch) line = line.replace("#d00505", "#f44336")
-                        builder.append(line)
-                    }
-                }
-                val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "${malitvy[pasliaPrychascia].resurs}.html")
-                file.writer().use {
-                    it.write(builder.toString())
+                    text = bufferedReader.readText()
                 }
                 val sendIntent = Intent(Intent.ACTION_SEND)
-                sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this,"by.carkva_gazeta.malitounik.fileprovider", file))
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(by.carkva_gazeta.malitounik.R.string.set_log_file))
-                sendIntent.type = "text/html"
-                shareLauncher.launch(Intent.createChooser(sendIntent, getString(by.carkva_gazeta.malitounik.R.string.set_log_file)))
+                sendIntent.putExtra(Intent.EXTRA_TEXT, MainActivity.fromHtml(text).toString())
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, title)
+                sendIntent.type = "text/plain"
+                startActivity(Intent.createChooser(sendIntent, title))
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error_ch))
             }

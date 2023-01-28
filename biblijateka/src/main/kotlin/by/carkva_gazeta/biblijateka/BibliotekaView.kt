@@ -68,6 +68,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         private const val SPEUNIKI = 3
         private const val RELLITARATURA = 4
         private const val SETFILE = 5
+        private const val PDF = 6
     }
 
     private lateinit var gestureDetector: GestureDetector
@@ -352,7 +353,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     }
 
     private suspend fun downloadPdfFile(url: String) {
-        val pathReference = Malitounik.referens.child("/data/bibliateka/$url")
+        val downloadFilePath = if (idSelect == PDF) "/PDF/$url"
+        else "/data/bibliateka/$url"
+        val pathReference = Malitounik.referens.child(downloadFilePath)
         val localFile = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
         pathReference.getFile(localFile).addOnFailureListener {
             MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
@@ -555,6 +558,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                         MALITOUNIKI -> getSql(MALITOUNIKI)
                         SPEUNIKI -> getSql(SPEUNIKI)
                         RELLITARATURA -> getSql(RELLITARATURA)
+                        PDF -> getSql(PDF)
                     }
                 }
             }
@@ -818,12 +822,14 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             site = intent.getBooleanExtra("site", false)
         }
         idSelect = intent.getIntExtra("rub", MALITOUNIKI)
+        setTitleBibliateka(idSelect)
         when (idSelect) {
             NIADAUNIA -> setRubrika(NIADAUNIA)
             GISTORYIACARKVY -> setRubrika(GISTORYIACARKVY)
             MALITOUNIKI -> setRubrika(MALITOUNIKI)
             SPEUNIKI -> setRubrika(SPEUNIKI)
             RELLITARATURA -> setRubrika(RELLITARATURA)
+            PDF -> setRubrika(PDF)
             SETFILE -> {
                 val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 if (PackageManager.PERMISSION_DENIED == permissionCheck) {
@@ -872,6 +878,58 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     }
                     binding.swipeRefreshLayout.visibility = View.GONE
                 }
+            }
+        }
+    }
+
+    private fun setTitleBibliateka(rub: Int) {
+        when (rub) {
+            GISTORYIACARKVY -> {
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
+                binding.pageToolbar.text = ""
+                binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy)
+                idSelect = GISTORYIACARKVY
+                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy)
+            }
+            MALITOUNIKI -> {
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
+                binding.pageToolbar.text = ""
+                binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki)
+                idSelect = MALITOUNIKI
+                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki)
+            }
+            SPEUNIKI -> {
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
+                binding.pageToolbar.text = ""
+                binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki)
+                idSelect = SPEUNIKI
+                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki)
+            }
+            RELLITARATURA -> {
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
+                binding.pageToolbar.text = ""
+                binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura)
+                idSelect = RELLITARATURA
+                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura)
+            }
+            PDF -> {
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
+                binding.pageToolbar.text = ""
+                binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.arx_num_gaz)
+                idSelect = PDF
+                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.arx_num_gaz)
+            }
+            else -> {
+                // NIADAUNIA
+                arrayList.clear()
+                arrayList.addAll(naidaunia)
+                arrayList.reverse()
+                adapter.notifyDataSetChanged()
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
+                binding.pageToolbar.text = ""
+                binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)
+                idSelect = NIADAUNIA
+                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)
             }
         }
     }
@@ -928,48 +986,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                         noInternet.show(supportFragmentManager, "no_internet")
                     }
                 }
-                when (rub) {
-                    NIADAUNIA -> {
-                        arrayList.clear()
-                        arrayList.addAll(naidaunia)
-                        arrayList.reverse()
-                        adapter.notifyDataSetChanged()
-                        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
-                        binding.pageToolbar.text = ""
-                        binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)
-                        idSelect = NIADAUNIA
-                        nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)
-                    }
-                    GISTORYIACARKVY -> {
-                        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
-                        binding.pageToolbar.text = ""
-                        binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy)
-                        idSelect = GISTORYIACARKVY
-                        nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy)
-                    }
-                    MALITOUNIKI -> {
-                        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
-                        binding.pageToolbar.text = ""
-                        binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki)
-                        idSelect = MALITOUNIKI
-                        nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki)
-                    }
-                    SPEUNIKI -> {
-                        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
-                        binding.pageToolbar.text = ""
-                        binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki)
-                        idSelect = SPEUNIKI
-                        nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki)
-                    }
-                    RELLITARATURA -> {
-                        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
-                        binding.pageToolbar.text = ""
-                        binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura)
-                        idSelect = RELLITARATURA
-                        nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura)
-                    }
-                }
             }
+            setTitleBibliateka(rub)
             saveindep = true
             invalidateOptionsMenu()
             binding.progressBar2.visibility = View.GONE
@@ -1372,6 +1390,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_rub_3).isVisible = isTrash
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_rub_4).isVisible = isTrash
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_rub_5).isVisible = isTrash
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_rub_6).isVisible = isTrash
         itemAuto.isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         if (binding.swipeRefreshLayout.visibility == View.GONE) {
@@ -1499,6 +1518,10 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_rub_4) {
             setRubrika(RELLITARATURA)
+            return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_rub_6) {
+            setRubrika(PDF)
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_rub_5) {
@@ -1664,7 +1687,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                                 mySqlList.add(pdf)
                                 mySqlList.add(pdfFileSize)
                                 mySqlList.add(rubrika)
-                                mySqlList.add(image)
+                                val t1 = pdf.lastIndexOf(".")
+                                mySqlList.add(pdf.substring(0, t1) + ".png")
                                 val dir = File("$filesDir/image_temp")
                                 if (!dir.exists()) dir.mkdir()
                                 val file = File(image)

@@ -44,12 +44,6 @@
         android:visible="false"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_rub_0"
-        android:orderInCategory="100"
-        android:title="@string/bibliateka_niadaunia"
-        android:visible="false"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_rub_1"
         android:orderInCategory="100"
         android:title="@string/bibliateka_gistoryia_carkvy"
@@ -71,6 +65,18 @@
         android:id="@+id/action_rub_4"
         android:orderInCategory="100"
         android:title="@string/bibliateka_rel_litaratura"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_rub_6"
+        android:orderInCategory="100"
+        android:title="@string/arx_num_gaz"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_rub_0"
+        android:orderInCategory="100"
+        android:title="@string/bibliateka_niadaunia"
         android:visible="false"
         app:showAsAction="never" />
     <item

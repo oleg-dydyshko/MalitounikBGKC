@@ -10,40 +10,27 @@ import android.graphics.BitmapFactory
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import java.io.File
 import java.util.*
 
 class ReceiverBroad : BroadcastReceiver() {
     private var sabytieSet = false
     override fun onReceive(ctx: Context, intent: Intent) {
-        if (intent.extras?.containsKey("file") == true) {
-            intent.extras?.let { bundle ->
-                bundle.getString("file")?.let {
-                    val file = File(ctx.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), it)
-                    if (file.exists()) {
-                        file.delete()
-                    }
-                }
-            }
-        } else {
-            val g = Calendar.getInstance()
-            val dayofyear = g[Calendar.DAY_OF_YEAR]
-            val year = g[Calendar.YEAR]
-            val sabytie = intent.getBooleanExtra("sabytieSet", false)
-            if (sabytie) {
-                val idString = intent.extras?.getString("dataString", dayofyear.toString() + g[Calendar.MONTH].toString() + g[Calendar.HOUR_OF_DAY] + g[Calendar.MINUTE]) ?: "205"
-                val newId = idString.toInt()
-                id = if (newId <= id) id + 1
-                else newId
-                sabytieSet = true
-            }
-            sendNotif(ctx, intent.action, intent.getStringExtra("extra") ?: "", intent.getIntExtra("dayofyear", dayofyear), intent.getIntExtra("year", year))
+        val g = Calendar.getInstance()
+        val dayofyear = g[Calendar.DAY_OF_YEAR]
+        val year = g[Calendar.YEAR]
+        val sabytie = intent.getBooleanExtra("sabytieSet", false)
+        if (sabytie) {
+            val idString = intent.extras?.getString("dataString", dayofyear.toString() + g[Calendar.MONTH].toString() + g[Calendar.HOUR_OF_DAY] + g[Calendar.MINUTE]) ?: "205"
+            val newId = idString.toInt()
+            id = if (newId <= id) id + 1
+            else newId
+            sabytieSet = true
         }
+        sendNotif(ctx, intent.action, intent.getStringExtra("extra") ?: "", intent.getIntExtra("dayofyear", dayofyear), intent.getIntExtra("year", year))
     }
 
     private fun sendNotif(context: Context, Sviata: String?, Name: String, dayofyear: Int, year: Int) {

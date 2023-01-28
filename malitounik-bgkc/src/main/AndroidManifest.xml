@@ -13,12 +13,17 @@
     <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+
+    <queries>
+        <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
+    </queries>
 
     <application
         android:name=".Malitounik"
         android:allowBackup="true"
-        android:fullBackupContent="@xml/backup_descriptor"
         android:dataExtractionRules="@xml/backup_descriptor"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:installLocation="internalOnly"
@@ -27,13 +32,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:targetApi="m"
-        tools:ignore="UnusedAttribute">
+        tools:ignore="UnusedAttribute"
+        tools:targetApi="m">
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
         <activity
             android:name=".SplashActivity"
+            android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/SplashTheme"
-            android:exported="true">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -234,9 +241,9 @@
         <activity
             android:name=".WidgetConfig"
             android:excludeFromRecents="true"
+            android:exported="false"
             android:taskAffinity=""
-            android:theme="@style/Theme.Transparent"
-            android:exported="false" >
+            android:theme="@style/Theme.Transparent">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -367,6 +374,15 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
 
+        <activity
+            android:name=".BibliatekaArtykuly"
+            android:label="Артыкулы"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+
         <meta-data
             android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAInlVmnTmpjY-SZQXQdB2RUIqzm6pXcrryjHH1FQ" />
@@ -382,6 +398,10 @@
                 android:resource="@xml/file_path"
                 tools:replace="android:resource" />
         </provider>
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1329199627878541"
+            android:exported="false" />
 
         <receiver android:name=".ReceiverBroad" />
         <receiver
@@ -393,8 +413,9 @@
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".Widget"
-            android:exported="false" >
+        <receiver
+            android:name=".Widget"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -403,8 +424,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_metadata" />
         </receiver>
-        <receiver android:name=".WidgetMun"
-            android:exported="false" >
+        <receiver
+            android:name=".WidgetMun"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

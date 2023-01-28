@@ -563,15 +563,23 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             dialogFontSize.show(supportFragmentManager, "font")
             return true
         }
-        /*if (id == R.id.action_share) {
+        if (id == R.id.action_share) {
+            val sb = StringBuilder()
+            val text1 = binding.TextView1.text.toString()
+            if (text1 != "") sb.append(text1).append("\n\n")
+            val text2 = binding.TextView2.text.toString()
+            if (text2 != "") sb.append(text2).append("\n\n")
+            val text3 = binding.TextView3.text.toString()
+            if (text3 != "") sb.append(text3).append("\n\n")
+            val text4 = binding.TextView4.text.toString()
+            if (text4 != "") sb.append(text4)
             val sendIntent = Intent(Intent.ACTION_SEND)
-            var sviatylink = ""
-            if (svity) sviatylink = "&sviata=1"
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=3$sviatylink&date=$day&month=$mun")
+            sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString())
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getText(R.string.zmiest))
             sendIntent.type = "text/plain"
-            startActivity(Intent.createChooser(sendIntent, null))
+            startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.zmiest)))
             return true
-        }*/
+        }
         return false
     }
 

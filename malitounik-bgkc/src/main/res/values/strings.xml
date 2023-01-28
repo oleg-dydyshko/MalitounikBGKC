@@ -214,7 +214,7 @@
     <string name="vygliad">ВЫГЛЯД:</string>
     <string name="delite_full">Вы сапраўды жадаеце выдаліць %1$s \"%2$s\"?</string>
     <string name="delite_niadaunia">Вы сапраўды жадаеце выдаліць з нядаўніх кніг \"%1$s\"?</string>
-    <string name="delite_all_niadaunia">Вы сапраўды жадаеце выдаліць усе нядаўнія кнігі?</string>
+    <string name="delite_all_niadaunia">Вы сапраўды жадаеце выдаліць усе нядаўна прагледжанае?</string>
     <string name="autotext">Шрыфт па змаўчаньні</string>
     <string name="ton_n">Трапары і кандакі нядзельныя васьмі тонаў</string>
     <string name="ton_sh">Трапары і кандакі штодзённыя - на кожны дзень тыдня</string>
@@ -314,7 +314,7 @@
     <string name="security_error">Файл ня бясьпечны</string>
     <string name="pamerlyia">Памінаньне памерлых</string>
     <string name="bibliateka_carkvy">БІБЛІЯТЭКА ЦАРКВЫ</string>
-    <string name="bibliateka_niadaunia">Нядаўнія кнігі</string>
+    <string name="bibliateka_niadaunia">Нядаўна прагледжанае</string>
     <string name="bibliateka_gistoryia_carkvy">Гісторыя Царквы</string>
     <string name="bibliateka_malitouniki">Малітоўнікі</string>
     <string name="bibliateka_speuniki">Сьпеўнікі</string>
@@ -718,5 +718,10 @@
     <string name="admin_date">%1$d %2$s</string>
     <string name="admin_img_sviat">Іконкі сьвятых</string>
     <string name="admin_title">Назва кнігі</string>
+    <string name="facebook_app_id">1329199627878541</string>
+    <string name="facebook_client_token">d7417928c77b6d00a4dab10c48502125</string>
+    <string name="arx_num_gaz">Архіў нумароў газеты</string>
+    <string name="knigi">Кнігі:</string>
+    <string name="artykuly">Артыкулы:</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

@@ -35,13 +35,6 @@ import java.util.*
 
 class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener, DialogImageFileExplorer.DialogImageFileExplorerListener, DialogFileExplorer.DialogFileExplorerListener {
 
-    companion object {
-        private const val GISTORYIACARKVY = 1
-        private const val MALITOUNIKI = 2
-        private const val SPEUNIKI = 3
-        private const val RELLITARATURA = 4
-    }
-
     private lateinit var binding: AdminBibliatekaListBinding
     private var sqlJob: Job? = null
     private var resetTollbarJob: Job? = null
@@ -271,7 +264,8 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
                             mySqlList.add(pdf)
                             mySqlList.add(pdfFileSize)
                             mySqlList.add(rubrika)
-                            mySqlList.add(image)
+                            val t1 = pdf.lastIndexOf(".")
+                            mySqlList.add(pdf.substring(0, t1) + ".png")
                             val dir = File("$filesDir/image_temp")
                             if (!dir.exists()) dir.mkdir()
                             val file = File(image)
@@ -337,7 +331,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
             dialog.show(supportFragmentManager, "DialogPiarlinyContextMenu")
             return@setOnItemLongClickListener true
         }
-        val array = arrayOf(getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy), getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki), getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki), getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura))
+        val array = arrayOf(getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy), getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki), getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki), getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura), getString(by.carkva_gazeta.malitounik.R.string.arx_num_gaz))
         rubrikaAdapter = RubrikaAdapter(this, array)
         binding.rubrika.adapter = rubrikaAdapter
         adapter = BibliotekaAdapter(this)
@@ -473,10 +467,11 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
             }
             viewHolder.text.text = arrayList[position][0]
             val rubrika = when (arrayList[position][4].toInt()) {
-                GISTORYIACARKVY -> getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy)
-                MALITOUNIKI -> getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki)
-                SPEUNIKI -> getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki)
-                RELLITARATURA -> getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura)
+                MainActivity.GISTORYIACARKVY -> getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy)
+                MainActivity.MALITOUNIKI -> getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki)
+                MainActivity.SPEUNIKI -> getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki)
+                MainActivity.RELLITARATURA -> getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura)
+                MainActivity.PDF -> getString(by.carkva_gazeta.malitounik.R.string.arx_num_gaz)
                 else -> ""
             }
             viewHolder.rubrika.text = rubrika

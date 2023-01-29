@@ -1025,6 +1025,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putBoolean("pegistrbukv", true)
             prefEditor.putInt("slovocalkam", 0)
             prefEditor.putBoolean("AdminDialogSaveAsHelp", true)
+            prefEditor.putBoolean("dialogHelpShare", true)
             binding.maranataBel.isClickable = false
             binding.maranataRus.isClickable = false
             binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))

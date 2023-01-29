@@ -4,9 +4,7 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.content.SharedPreferences.Editor
 import android.content.res.Configuration
 import android.graphics.Typeface
@@ -21,6 +19,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
@@ -41,7 +40,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 
-class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener {
+class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -1875,11 +1874,21 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 reader.use { bufferedReader ->
                     text = bufferedReader.readText()
                 }
-                val sendIntent = Intent(Intent.ACTION_SEND)
-                sendIntent.putExtra(Intent.EXTRA_TEXT, MainActivity.fromHtml(text).toString())
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, title)
-                sendIntent.type = "text/plain"
-                startActivity(Intent.createChooser(sendIntent, title))
+                val sent = MainActivity.fromHtml(text).toString()
+                val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText(getString(by.carkva_gazeta.malitounik.R.string.copy_text), sent)
+                clipboard.setPrimaryClip(clip)
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.copy_text), Toast.LENGTH_LONG)
+                if (k.getBoolean("dialogHelpShare", true)) {
+                    val dialog = DialogHelpShare.getInstance(sent)
+                    dialog.show(supportFragmentManager, "DialogHelpShare")
+                } else {
+                    val sendIntent = Intent(Intent.ACTION_SEND)
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, sent)
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, title)
+                    sendIntent.type = "text/plain"
+                    startActivity(Intent.createChooser(sendIntent, title))
+                }
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error_ch))
             }
@@ -1905,6 +1914,14 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             return true
         }
         return false
+    }
+
+    override fun sentShareText(shareText: String) {
+        val sendIntent = Intent(Intent.ACTION_SEND)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, shareText)
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, title)
+        sendIntent.type = "text/plain"
+        startActivity(Intent.createChooser(sendIntent, title))
     }
 
     override fun onBack() {

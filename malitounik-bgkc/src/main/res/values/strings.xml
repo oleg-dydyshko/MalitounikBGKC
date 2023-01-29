@@ -721,5 +721,7 @@
     <string name="arx_num_gaz">Архіў нумароў газеты</string>
     <string name="knigi">Кнігі:</string>
     <string name="artykuly">Артыкулы:</string>
+    <string name="dialog_help_share">Калі тэкст у сацыяльных сетках не з\'явіцца, яго трэба ўставіць уручную.</string>
+    <string name="copy_text">Тэкст скапіяваны</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

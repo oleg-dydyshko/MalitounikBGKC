@@ -1406,25 +1406,25 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
             }
             R.id.label140 -> {
-                startBiblioteka(0, shortcuts)
+                startBiblioteka(NIADAUNIA, shortcuts)
             }
             R.id.label141 -> {
-                startBiblioteka(1, shortcuts)
+                startBiblioteka(GISTORYIACARKVY, shortcuts)
             }
             R.id.label142 -> {
-                startBiblioteka(2, shortcuts)
+                startBiblioteka(MALITOUNIKI, shortcuts)
             }
             R.id.label143 -> {
-                startBiblioteka(3, shortcuts)
+                startBiblioteka(SPEUNIKI, shortcuts)
             }
             R.id.label144 -> {
-                startBiblioteka(4, shortcuts)
+                startBiblioteka(RELLITARATURA, shortcuts)
             }
             R.id.label145 -> {
-                startBiblioteka(5, shortcuts)
+                startBiblioteka(SETFILE, shortcuts)
             }
             R.id.label148 -> {
-                startBiblioteka(6, shortcuts)
+                startBiblioteka(PDF, shortcuts)
             }
             R.id.label147 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuArtykuly")
@@ -1598,6 +1598,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val NOVYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.NovyZapavietSinaidal"
         const val STARYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.StaryZapavietSinaidal"
         const val BIBLIAVYBRANOE = "by.carkva_gazeta.resources.BibliaVybranoe"
+        const val NIADAUNIA = 0
+        const val GISTORYIACARKVY = 1
+        const val MALITOUNIKI = 2
+        const val SPEUNIKI = 3
+        const val RELLITARATURA = 4
+        const val PDF = 5
+        const val SETFILE = 6
         var padzeia = ArrayList<Padzeia>()
         private var setDataCalendar = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])[0][25].toInt()
         var checkBrightness = true

@@ -1,9 +1,7 @@
 package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.content.SharedPreferences.Editor
 import android.graphics.Color
 import android.graphics.Typeface
@@ -17,6 +15,7 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -36,7 +35,7 @@ import java.io.InputStreamReader
 import java.util.*
 
 
-class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeListener {
+class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -294,17 +293,35 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
                 reader.use { bufferedReader ->
                     text = bufferedReader.readText()
                 }
-                val sendIntent = Intent(Intent.ACTION_SEND)
-                sendIntent.putExtra(Intent.EXTRA_TEXT, MainActivity.fromHtml(text).toString())
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, title)
-                sendIntent.type = "text/plain"
-                startActivity(Intent.createChooser(sendIntent, title))
+                val sent = MainActivity.fromHtml(text).toString()
+                val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText(getString(by.carkva_gazeta.malitounik.R.string.copy_text), sent)
+                clipboard.setPrimaryClip(clip)
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.copy_text), Toast.LENGTH_LONG)
+                if (k.getBoolean("dialogHelpShare", true)) {
+                    val dialog = DialogHelpShare.getInstance(sent)
+                    dialog.show(supportFragmentManager, "DialogHelpShare")
+                } else {
+                    val sendIntent = Intent(Intent.ACTION_SEND)
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, sent)
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(by.carkva_gazeta.malitounik.R.string.pasliaPrychscia))
+                    sendIntent.type = "text/plain"
+                    startActivity(Intent.createChooser(sendIntent, resources.getString(by.carkva_gazeta.malitounik.R.string.pasliaPrychscia)))
+                }
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error_ch))
             }
             return true
         }
         return false
+    }
+
+    override fun sentShareText(shareText: String) {
+        val sendIntent = Intent(Intent.ACTION_SEND)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, shareText)
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(by.carkva_gazeta.malitounik.R.string.pasliaPrychscia))
+        sendIntent.type = "text/plain"
+        startActivity(Intent.createChooser(sendIntent, resources.getString(by.carkva_gazeta.malitounik.R.string.pasliaPrychscia)))
     }
 
     override fun onPrepareMenu(menu: Menu) {

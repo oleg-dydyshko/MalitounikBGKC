@@ -61,15 +61,6 @@ import kotlin.math.abs
 
 class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener {
 
-    companion object {
-        private const val NIADAUNIA = 0
-        private const val GISTORYIACARKVY = 1
-        private const val MALITOUNIKI = 2
-        private const val SPEUNIKI = 3
-        private const val RELLITARATURA = 4
-        private const val SETFILE = 5
-        private const val PDF = 6
-    }
 
     private lateinit var gestureDetector: GestureDetector
     private lateinit var pdfView: PDFView
@@ -85,7 +76,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     private lateinit var adapter: BibliotekaAdapter
     private var nameRubrika = ""
     private var defaultPage = 0
-    private var idSelect = NIADAUNIA
+    private var idSelect = MainActivity.NIADAUNIA
     private val naidaunia = ArrayList<ArrayList<String>>()
     private var saveindep = true
     private var runSql = false
@@ -166,7 +157,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     private var sqlJob: Job? = null
     private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (it) {
-            if (idSelect == SETFILE) {
+            if (idSelect == MainActivity.SETFILE) {
                 binding.progressBar2.visibility = View.GONE
                 val fileExplorer = DialogFileExplorer()
                 fileExplorer.show(supportFragmentManager, "file_explorer")
@@ -282,7 +273,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             }
         }
         if (position1 != -1) {
-            if (idSelect == NIADAUNIA) {
+            if (idSelect == MainActivity.NIADAUNIA) {
                 arrayList.removeAt(position)
                 adapter.notifyDataSetChanged()
             }
@@ -353,9 +344,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     }
 
     private suspend fun downloadPdfFile(url: String) {
-        val downloadFilePath = if (idSelect == PDF) "/PDF/$url"
-        else "/data/bibliateka/$url"
-        val pathReference = Malitounik.referens.child(downloadFilePath)
+        val pathReference = Malitounik.referens.child("/data/bibliateka/$url")
         val localFile = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
         pathReference.getFile(localFile).addOnFailureListener {
             MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
@@ -372,9 +361,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     override fun onDialogFile(file: File) {
         binding.swipeRefreshLayout.visibility = View.GONE
         saveindep = false
-        idSelect = NIADAUNIA
+        idSelect = MainActivity.NIADAUNIA
         nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)
-        setRubrika(NIADAUNIA)
+        setRubrika(MainActivity.NIADAUNIA)
         filePath = file.absolutePath
         fileName = file.name
         when {
@@ -554,11 +543,11 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             } else {
                 CoroutineScope(Dispatchers.IO).launch {
                     when (idSelect) {
-                        GISTORYIACARKVY -> getSql(GISTORYIACARKVY)
-                        MALITOUNIKI -> getSql(MALITOUNIKI)
-                        SPEUNIKI -> getSql(SPEUNIKI)
-                        RELLITARATURA -> getSql(RELLITARATURA)
-                        PDF -> getSql(PDF)
+                        MainActivity.GISTORYIACARKVY -> getSql(MainActivity.GISTORYIACARKVY)
+                        MainActivity.MALITOUNIKI -> getSql(MainActivity.MALITOUNIKI)
+                        MainActivity.SPEUNIKI -> getSql(MainActivity.SPEUNIKI)
+                        MainActivity.RELLITARATURA -> getSql(MainActivity.RELLITARATURA)
+                        MainActivity.PDF -> getSql(MainActivity.PDF)
                     }
                 }
             }
@@ -821,16 +810,15 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             }
             site = intent.getBooleanExtra("site", false)
         }
-        idSelect = intent.getIntExtra("rub", MALITOUNIKI)
-        setTitleBibliateka(idSelect)
+        idSelect = intent.getIntExtra("rub", MainActivity.MALITOUNIKI)
         when (idSelect) {
-            NIADAUNIA -> setRubrika(NIADAUNIA)
-            GISTORYIACARKVY -> setRubrika(GISTORYIACARKVY)
-            MALITOUNIKI -> setRubrika(MALITOUNIKI)
-            SPEUNIKI -> setRubrika(SPEUNIKI)
-            RELLITARATURA -> setRubrika(RELLITARATURA)
-            PDF -> setRubrika(PDF)
-            SETFILE -> {
+            MainActivity.NIADAUNIA -> setRubrika(MainActivity.NIADAUNIA)
+            MainActivity.GISTORYIACARKVY -> setRubrika(MainActivity.GISTORYIACARKVY)
+            MainActivity.MALITOUNIKI -> setRubrika(MainActivity.MALITOUNIKI)
+            MainActivity.SPEUNIKI -> setRubrika(MainActivity.SPEUNIKI)
+            MainActivity.RELLITARATURA -> setRubrika(MainActivity.RELLITARATURA)
+            MainActivity.PDF -> setRubrika(MainActivity.PDF)
+            MainActivity.SETFILE -> {
                 val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 if (PackageManager.PERMISSION_DENIED == permissionCheck) {
                     mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -839,9 +827,10 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     val fileExplorer = DialogFileExplorer()
                     fileExplorer.show(supportFragmentManager, "file_explorer")
                 }
-                setRubrika(NIADAUNIA)
+                setRubrika(MainActivity.NIADAUNIA)
             }
         }
+        setTitleBibliateka(idSelect)
         if (filePath != "" && savedInstance != 0) {
             if (filePath.contains("raw:")) {
                 val t1 = filePath.indexOf("raw:")
@@ -884,43 +873,43 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
 
     private fun setTitleBibliateka(rub: Int) {
         when (rub) {
-            GISTORYIACARKVY -> {
+            MainActivity.GISTORYIACARKVY -> {
                 binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
                 binding.pageToolbar.text = ""
                 binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy)
-                idSelect = GISTORYIACARKVY
+                idSelect = MainActivity.GISTORYIACARKVY
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy)
             }
-            MALITOUNIKI -> {
+            MainActivity.MALITOUNIKI -> {
                 binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
                 binding.pageToolbar.text = ""
                 binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki)
-                idSelect = MALITOUNIKI
+                idSelect = MainActivity.MALITOUNIKI
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki)
             }
-            SPEUNIKI -> {
+            MainActivity.SPEUNIKI -> {
                 binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
                 binding.pageToolbar.text = ""
                 binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki)
-                idSelect = SPEUNIKI
+                idSelect = MainActivity.SPEUNIKI
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki)
             }
-            RELLITARATURA -> {
+            MainActivity.RELLITARATURA -> {
                 binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
                 binding.pageToolbar.text = ""
                 binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura)
-                idSelect = RELLITARATURA
+                idSelect = MainActivity.RELLITARATURA
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura)
             }
-            PDF -> {
+            MainActivity.PDF -> {
                 binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
                 binding.pageToolbar.text = ""
                 binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.arx_num_gaz)
-                idSelect = PDF
+                idSelect = MainActivity.PDF
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.arx_num_gaz)
             }
             else -> {
-                // NIADAUNIA
+                // MainActivity.NIADAUNIA
                 arrayList.clear()
                 arrayList.addAll(naidaunia)
                 arrayList.reverse()
@@ -928,7 +917,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
                 binding.pageToolbar.text = ""
                 binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)
-                idSelect = NIADAUNIA
+                idSelect = MainActivity.NIADAUNIA
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)
             }
         }
@@ -965,7 +954,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                         arrayList.clear()
                         val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                         arrayList.addAll(gson.fromJson(jsonB, type))
-                        val temp: ArrayList<ArrayList<String>> = ArrayList()
+                        val temp = ArrayList<ArrayList<String>>()
                         for (i in 0 until arrayList.size) {
                             val rtemp2 = arrayList[i][4].toInt()
                             if (rtemp2 != rub) temp.add(arrayList[i])
@@ -1383,7 +1372,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         val isTrash = binding.swipeRefreshLayout.visibility == View.VISIBLE
         binding.swipeRefreshLayout.isEnabled = binding.swipeRefreshLayout.visibility == View.VISIBLE
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_trash).isVisible = binding.swipeRefreshLayout.visibility == View.VISIBLE && idSelect == NIADAUNIA && naidaunia.size > 0
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_trash).isVisible = binding.swipeRefreshLayout.visibility == View.VISIBLE && idSelect == MainActivity.NIADAUNIA && naidaunia.size > 0
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_rub_0).isVisible = isTrash
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_rub_1).isVisible = isTrash
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_rub_2).isVisible = isTrash
@@ -1501,27 +1490,27 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_rub_0) {
-            setRubrika(NIADAUNIA)
+            setRubrika(MainActivity.NIADAUNIA)
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_rub_1) {
-            setRubrika(GISTORYIACARKVY)
+            setRubrika(MainActivity.GISTORYIACARKVY)
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_rub_2) {
-            setRubrika(MALITOUNIKI)
+            setRubrika(MainActivity.MALITOUNIKI)
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_rub_3) {
-            setRubrika(SPEUNIKI)
+            setRubrika(MainActivity.SPEUNIKI)
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_rub_4) {
-            setRubrika(RELLITARATURA)
+            setRubrika(MainActivity.RELLITARATURA)
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_rub_6) {
-            setRubrika(PDF)
+            setRubrika(MainActivity.PDF)
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_rub_5) {
@@ -1533,7 +1522,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 val fileExplorer = DialogFileExplorer()
                 fileExplorer.show(supportFragmentManager, "file_explorer")
             }
-            idSelect = SETFILE
+            idSelect = MainActivity.SETFILE
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_trash) {
@@ -1619,7 +1608,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         if (binding.swipeRefreshLayout.visibility == View.GONE) {
             invalidateOptionsMenu()
             if (arrayList.size == 0) {
-                if (idSelect != SETFILE) {
+                if (idSelect != MainActivity.SETFILE) {
                     setRubrika(idSelect)
                 } else {
                     if (site) {
@@ -1630,7 +1619,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     super.onBack()
                 }
             } else {
-                if (idSelect == NIADAUNIA || idSelect == SETFILE) {
+                if (idSelect == MainActivity.NIADAUNIA || idSelect == MainActivity.SETFILE) {
                     arrayList.clear()
                     arrayList.addAll(naidaunia)
                     arrayList.reverse()

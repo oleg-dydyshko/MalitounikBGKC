@@ -1,9 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Spannable
@@ -13,6 +11,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -28,7 +27,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 
-class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener {
+class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -539,11 +538,21 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                 reader.use { bufferedReader ->
                     text = bufferedReader.readText()
                 }
-                val sendIntent = Intent(Intent.ACTION_SEND)
-                sendIntent.putExtra(Intent.EXTRA_TEXT, MainActivity.fromHtml(text).toString())
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, title)
-                sendIntent.type = "text/plain"
-                startActivity(Intent.createChooser(sendIntent, title))
+                val sent = MainActivity.fromHtml(text).toString()
+                val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText(getString(R.string.copy_text), sent)
+                clipboard.setPrimaryClip(clip)
+                MainActivity.toastView(this, getString(R.string.copy_text), Toast.LENGTH_LONG)
+                if (k.getBoolean("dialogHelpShare", true)) {
+                    val dialog = DialogHelpShare.getInstance(sent)
+                    dialog.show(supportFragmentManager, "DialogHelpShare")
+                } else {
+                    val sendIntent = Intent(Intent.ACTION_SEND)
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, sent)
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, title)
+                    sendIntent.type = "text/plain"
+                    startActivity(Intent.createChooser(sendIntent, title))
+                }
             } else {
                 MainActivity.toastView(this, getString(R.string.error_ch))
             }
@@ -568,6 +577,14 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             return true
         }
         return false
+    }
+
+    override fun sentShareText(shareText: String) {
+        val sendIntent = Intent(Intent.ACTION_SEND)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, shareText)
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, title)
+        sendIntent.type = "text/plain"
+        startActivity(Intent.createChooser(sendIntent, title))
     }
 
     override fun onBack() {

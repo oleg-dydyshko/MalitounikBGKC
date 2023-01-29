@@ -1,8 +1,6 @@
 package by.carkva_gazeta.malitounik
 
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -12,6 +10,7 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import by.carkva_gazeta.malitounik.databinding.OpisanieBinding
@@ -25,7 +24,7 @@ import java.lang.reflect.Type
 import java.util.*
 
 
-class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener, DialogDeliteAllImagesOpisanie.DialogDeliteAllImagesOpisanieListener {
+class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener, DialogDeliteAllImagesOpisanie.DialogDeliteAllImagesOpisanieListener, DialogHelpShare.DialogHelpShareListener {
     private val dzenNoch get() = getBaseDzenNoch()
     private var mun = 1
     private var day = 1
@@ -573,14 +572,31 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             if (text3 != "") sb.append(text3).append("\n\n")
             val text4 = binding.TextView4.text.toString()
             if (text4 != "") sb.append(text4)
-            val sendIntent = Intent(Intent.ACTION_SEND)
-            sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString())
-            sendIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getText(R.string.zmiest))
-            sendIntent.type = "text/plain"
-            startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.zmiest)))
+            val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText(getString(R.string.copy_text), sb.toString())
+                clipboard.setPrimaryClip(clip)
+                MainActivity.toastView(this, getString(R.string.copy_text), Toast.LENGTH_LONG)
+                if (chin.getBoolean("dialogHelpShare", true)) {
+                    val dialog = DialogHelpShare.getInstance(sb.toString())
+                    dialog.show(supportFragmentManager, "DialogHelpShare")
+                } else {
+                    val sendIntent = Intent(Intent.ACTION_SEND)
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString())
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getText(R.string.zmiest))
+                    sendIntent.type = "text/plain"
+                    startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.zmiest)))
+                }
             return true
         }
         return false
+    }
+
+    override fun sentShareText(shareText: String) {
+        val sendIntent = Intent(Intent.ACTION_SEND)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, shareText)
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getText(R.string.zmiest))
+        sendIntent.type = "text/plain"
+        startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.zmiest)))
     }
 
     override fun deliteAllImagesOpisanie() {

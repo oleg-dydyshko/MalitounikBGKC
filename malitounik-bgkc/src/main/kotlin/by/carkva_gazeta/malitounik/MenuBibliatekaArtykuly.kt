@@ -25,15 +25,25 @@ import java.io.File
 class MenuBibliatekaArtykuly : BaseListFragment() {
     private var mLastClickTime: Long = 0
     private val data = ArrayList<LinkedTreeMap<String, String>>()
+    private var rubrika = MainActivity.ARTGISTORYIACARKVY
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
-            val localFile = File("${activity.filesDir}/history.json")
+            rubrika = arguments?.getInt("rubrika") ?: MainActivity.ARTGISTORYIACARKVY
+            val path = when (rubrika) {
+                MainActivity.ARTGISTORYIACARKVY -> "history.json"
+                MainActivity.ARTSVIATLOUSXODU -> "svietlo_uschodu.json"
+                MainActivity.ARTCARKVAGRAMADSTVA -> "gramadstva.json"
+                MainActivity.ARTARXIYNAVIN -> "naviny.json"
+                MainActivity.ARTARXABVESTAK -> "abvestki.json"
+                else -> "history.json"
+            }
+            val localFile = File("${activity.filesDir}/$path")
             if (MainActivity.isNetworkAvailable(true)) {
                 if (!localFile.exists()) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        Malitounik.referens.child("/history.json").getFile(localFile).addOnFailureListener {
+                        Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
                             toastView(activity, getString(R.string.error))
                         }.await()
                         load(localFile)
@@ -43,7 +53,7 @@ class MenuBibliatekaArtykuly : BaseListFragment() {
                 }
             } else if (MainActivity.isNetworkAvailable()) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    Malitounik.referens.child("/history.json").getFile(localFile).addOnFailureListener {
+                    Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
                         toastView(activity, getString(R.string.error))
                     }.await()
                     load(localFile)
@@ -79,6 +89,7 @@ class MenuBibliatekaArtykuly : BaseListFragment() {
         mLastClickTime = SystemClock.elapsedRealtime()
         activity?.let {
             val intent = Intent(it, BibliatekaArtykuly::class.java)
+            intent.putExtra("rubrika", rubrika)
             intent.putExtra("position", position)
             startActivity(intent)
         }
@@ -99,11 +110,21 @@ class MenuBibliatekaArtykuly : BaseListFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            viewHolder.text.text = data[position]["link"]
+            viewHolder.text.text = MainActivity.fromHtml(data[position]["link"] ?: "")
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
     }
 
     private class ViewHolder(var text: TextView)
+
+    companion object {
+        fun getInstance(rubrika: Int): MenuBibliatekaArtykuly {
+            val bundle = Bundle()
+            bundle.putInt("rubrika", rubrika)
+            val menuBibliatekaArtykuly = MenuBibliatekaArtykuly()
+            menuBibliatekaArtykuly.arguments = bundle
+            return menuBibliatekaArtykuly
+        }
+    }
 }

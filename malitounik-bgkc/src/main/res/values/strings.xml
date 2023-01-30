@@ -723,5 +723,9 @@
     <string name="artykuly">Артыкулы:</string>
     <string name="dialog_help_share">Калі тэкст у сацыяльных сетках не з\'явіцца, яго трэба ўставіць уручную.</string>
     <string name="copy_text">Тэкст скапіяваны</string>
+    <string name="arx_navin">Архіў навін</string>
+    <string name="svitlo_usxodu">Сьвятло Ўсходу</string>
+    <string name="carkva_gramadstva">Царква і грамадзтва</string>
+    <string name="arx_abvestak">Архіў абвестак</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

@@ -65,8 +65,33 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
                 }
             }
         }
+        val rubrika = intent.extras?.getInt("rubrika") ?: MainActivity.ARTGISTORYIACARKVY
+        var title = resources.getText(R.string.bibliateka_gistoryia_carkvy)
+        val path = when (rubrika) {
+            MainActivity.ARTGISTORYIACARKVY -> {
+                title = resources.getText(R.string.bibliateka_gistoryia_carkvy)
+                "history.json"
+            }
+            MainActivity.ARTSVIATLOUSXODU -> {
+                title = resources.getText(R.string.svitlo_usxodu)
+                "svietlo_uschodu.json"
+            }
+            MainActivity.ARTCARKVAGRAMADSTVA -> {
+                title = resources.getText(R.string.carkva_gramadstva)
+                "gramadstva.json"
+            }
+            MainActivity.ARTARXIYNAVIN -> {
+                title = resources.getText(R.string.arx_navin)
+                "naviny.json"
+            }
+            MainActivity.ARTARXABVESTAK -> {
+                title = resources.getText(R.string.arx_abvestak)
+                "abvestki.json"
+            }
+            else -> "history.json"
+        }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        binding.titleToolbar.text = resources.getText(R.string.bibliateka_gistoryia_carkvy)
+        binding.titleToolbar.text = title
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
@@ -80,7 +105,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
         val builder = StringBuilder()
         if (dzenNoch) builder.append("<html><head><style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #303030;}$style</style></head><body>\n")
         else builder.append("<html><head><style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}$style</style></head><body>\n")
-        val localFile = File("$filesDir/history.json")
+        val localFile = File("$filesDir/$path")
         val gson = Gson()
         val text = localFile.readText()
         val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type

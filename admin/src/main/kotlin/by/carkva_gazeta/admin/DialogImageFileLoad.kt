@@ -63,7 +63,7 @@ class DialogImageFileLoad : DialogFragment() {
             binding.content.adapter = arrayAdapter
             val path = arguments?.getString("path") ?: ""
             val file = File(path)
-            Picasso.with(it).load(file).resize(600, 1000).onlyScaleDown().centerInside().into(binding.icon)
+            Picasso.get().load(file).resize(600, 1000).onlyScaleDown().centerInside().into(binding.icon)
             builder.setNegativeButton(getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int ->
                 dialog.cancel()
             }

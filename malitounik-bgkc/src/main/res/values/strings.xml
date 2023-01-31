@@ -719,13 +719,37 @@
     <string name="admin_img_sviat">Іконкі сьвятых</string>
     <string name="admin_title">Назва кнігі</string>
     <string name="arx_num_gaz">Архіў нумароў газеты</string>
-    <string name="knigi">Кнігі:</string>
-    <string name="artykuly">Артыкулы:</string>
     <string name="dialog_help_share">Калі тэкст у сацыяльных сетках не з\'явіцца, яго трэба ўставіць уручную.</string>
     <string name="copy_text">Тэкст скапіяваны</string>
     <string name="arx_navin">Архіў навін</string>
     <string name="svitlo_usxodu">Сьвятло Ўсходу</string>
     <string name="carkva_gramadstva">Царква і грамадзтва</string>
     <string name="arx_abvestak">Архіў абвестак</string>
+    <string name="arx_videa">Відэа</string>
+    <string name="arx_adkaz">Катэдральны пляц</string>
+    <string name="artykuly">Артыкулы</string>
+    <string-array name="artykuly">
+        <item>Сьвятло Ўсходу</item>
+        <item>Гісторыя Царквы</item>
+        <item>Царква і грамадзтва</item>
+        <item>Відэа</item>
+        <item>Катэдральны пляц</item>
+        <item>Архіў навін за 2022 год</item>
+        <item>Архіў навін за 2021 год</item>
+        <item>Архіў навін за 2020 год</item>
+        <item>Архіў навін за 2019 год</item>
+        <item>Архіў навін за 2018 год</item>
+        <item>Архіў навін за 2017 год</item>
+        <item>Архіў навін за 2016 год</item>
+        <item>Архіў навін за 2015 год</item>
+        <item>Архіў навін за 2014 год</item>
+        <item>Архіў навін за 2013 год</item>
+        <item>Архіў навін за 2012 год</item>
+        <item>Архіў навін за 2011 год</item>
+        <item>Архіў навін за 2010 год</item>
+        <item>Архіў навін за 2009 год</item>
+        <item>Архіў навін за 2008 год</item>
+        <item>Архіў абвестак</item>
+    </string-array>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

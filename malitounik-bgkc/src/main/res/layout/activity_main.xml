@@ -224,19 +224,6 @@
                     android:visibility="gone">
 
                     <TextView
-                        android:id="@+id/label139"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/knigi"
-                        android:textSize="14sp" />
-
-                    <TextView
                         android:id="@+id/label141"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -312,6 +299,21 @@
                         app:drawableStartCompat="@drawable/stiker" />
 
                     <TextView
+                        android:id="@+id/label146"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/artykuly"
+                        android:textSize="14sp"
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
+
+                    <TextView
                         android:id="@+id/label140"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -337,94 +339,6 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/bibliateka_file"
-                        android:textSize="14sp"
-                        app:drawableLeftCompat="@drawable/stiker"
-                        app:drawableStartCompat="@drawable/stiker" />
-
-                    <TextView
-                        android:id="@+id/label146"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/artykuly"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/label149"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/arx_navin"
-                        android:textSize="14sp"
-                        app:drawableLeftCompat="@drawable/stiker"
-                        app:drawableStartCompat="@drawable/stiker" />
-
-                    <TextView
-                        android:id="@+id/label150"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/svitlo_usxodu"
-                        android:textSize="14sp"
-                        app:drawableLeftCompat="@drawable/stiker"
-                        app:drawableStartCompat="@drawable/stiker" />
-
-                    <TextView
-                        android:id="@+id/label147"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/bibliateka_gistoryia_carkvy"
-                        android:textSize="14sp"
-                        app:drawableLeftCompat="@drawable/stiker"
-                        app:drawableStartCompat="@drawable/stiker" />
-
-                    <TextView
-                        android:id="@+id/label151"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/carkva_gramadstva"
-                        android:textSize="14sp"
-                        app:drawableLeftCompat="@drawable/stiker"
-                        app:drawableStartCompat="@drawable/stiker" />
-
-                    <TextView
-                        android:id="@+id/label152"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/arx_abvestak"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />

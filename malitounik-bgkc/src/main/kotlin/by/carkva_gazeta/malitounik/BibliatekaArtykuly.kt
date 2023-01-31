@@ -27,7 +27,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
     private val data = ArrayList<LinkedTreeMap<String, String>>()
-    private val style = "img {max-width: 100%; height: auto; border:0; padding:0} @media (max-width: 990px) {img {height: auto !important}} @media (max-width: 660px) {img {margin: 10px 0 !important}}"
+    private val style = "img {max-width: 100%; height: auto; border:0; padding:0} @media (max-width: 990px) {img {height: auto !important}} @media (max-width: 660px) {img {margin: 10px 0 !important}} .article_naviny_data {text-align: left; color: #999; font-size: 12px} .alt2 { text-align:right; font-weight:700; font-style:italic; margin-top:5px}"
 
     override fun onPause() {
         super.onPause()
@@ -65,26 +65,90 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
                 }
             }
         }
-        val rubrika = intent.extras?.getInt("rubrika") ?: MainActivity.ARTGISTORYIACARKVY
+        val rubrika = intent.extras?.getInt("rubrika") ?: 1
         var title = resources.getText(R.string.bibliateka_gistoryia_carkvy)
         val path = when (rubrika) {
-            MainActivity.ARTGISTORYIACARKVY -> {
-                title = resources.getText(R.string.bibliateka_gistoryia_carkvy)
-                "history.json"
-            }
-            MainActivity.ARTSVIATLOUSXODU -> {
+            0 -> {
                 title = resources.getText(R.string.svitlo_usxodu)
                 "svietlo_uschodu.json"
             }
-            MainActivity.ARTCARKVAGRAMADSTVA -> {
+            1 -> {
+                title = resources.getText(R.string.bibliateka_gistoryia_carkvy)
+                "history.json"
+            }
+            2 -> {
                 title = resources.getText(R.string.carkva_gramadstva)
                 "gramadstva.json"
             }
-            MainActivity.ARTARXIYNAVIN -> {
-                title = resources.getText(R.string.arx_navin)
-                "naviny.json"
+            3 -> {
+                title = resources.getText(R.string.arx_videa)
+                "videa.json"
             }
-            MainActivity.ARTARXABVESTAK -> {
+            4 -> {
+                title = resources.getText(R.string.arx_adkaz)
+                "adkaz.json"
+            }
+            5 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2022.json"
+            }
+            6 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2021.json"
+            }
+            7 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2020.json"
+            }
+            8 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2019.json"
+            }
+            9 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2018.json"
+            }
+            10 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2017.json"
+            }
+            11 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2016.json"
+            }
+            12 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2015.json"
+            }
+            13 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2014.json"
+            }
+            14 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2013.json"
+            }
+            15 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2012.json"
+            }
+            16 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2011.json"
+            }
+            17 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2010.json"
+            }
+            18 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2009.json"
+            }
+            19 -> {
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
+                "naviny2008.json"
+            }
+            20 -> {
                 title = resources.getText(R.string.arx_abvestak)
                 "abvestki.json"
             }
@@ -114,6 +178,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
         var textData = data[position]["str"] ?: ""
         if (dzenNoch) {
             textData = textData.replace("color: rgb(102, 0, 0)", "color: rgb(244, 67, 54)")
+            textData = textData.replace("color:rgb(102, 0, 0)", "color: rgb(244, 67, 54)")
         }
         builder.append(textData)
         builder.append("</body></html>")

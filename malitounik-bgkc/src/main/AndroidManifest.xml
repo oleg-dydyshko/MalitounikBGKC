@@ -366,14 +366,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
-
         <activity
-            android:name=".BibliatekaArtykuly"
-            android:label="Артыкулы"
+            android:name=".BibliatekaArtykulyList"
+            android:label="@string/artykuly"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
+            android:name=".BibliatekaArtykuly"
+            android:label="@string/artykuly"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.BibliatekaArtykulyList" />
         </activity>
 
         <meta-data

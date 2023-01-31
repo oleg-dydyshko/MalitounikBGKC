@@ -169,7 +169,7 @@ class DialogImageFileExplorer : DialogFragment() {
         return alert
     }
 
-    private inner class TitleListAdaprer(private val mContext: Activity) : ArrayAdapter<MyImageFile>(mContext, R.layout.admin_image_list_item, fileList) {
+    private inner class TitleListAdaprer(mContext: Activity) : ArrayAdapter<MyImageFile>(mContext, R.layout.admin_image_list_item, fileList) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -184,7 +184,7 @@ class DialogImageFileExplorer : DialogFragment() {
             }
             viewHolder.text.text = fileList[position].name
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            Picasso.with(mContext).load(fileList[position].file).resize(600, 1000).onlyScaleDown().centerInside().into(viewHolder.image)
+            Picasso.get().load(fileList[position].file).resize(600, 1000).onlyScaleDown().centerInside().into(viewHolder.image)
             return rootView
         }
 

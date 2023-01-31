@@ -728,6 +728,7 @@
     <string name="arx_videa">Відэа</string>
     <string name="arx_adkaz">Катэдральны пляц</string>
     <string name="artykuly">Артыкулы</string>
+    <string name="admin_resourse_error">Шмат рэсурсаў у %1$d дзень!</string>
     <string-array name="artykuly">
         <item>Сьвятло Ўсходу</item>
         <item>Гісторыя Царквы</item>

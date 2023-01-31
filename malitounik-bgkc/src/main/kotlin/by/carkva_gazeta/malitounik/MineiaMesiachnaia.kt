@@ -40,7 +40,7 @@ class MineiaMesiachnaia : BaseActivity() {
             }
         }
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (k.getBoolean("admin", false) && errorCount > 1) MainActivity.toastView(this, "Шмат рэсурсаў у $day дзень!!!", Toast.LENGTH_LONG)
+        if (k.getBoolean("admin", false) && errorCount > 1) MainActivity.toastView(this,  getString(R.string.admin_resourse_error, day), Toast.LENGTH_LONG)
         return count
     }
 

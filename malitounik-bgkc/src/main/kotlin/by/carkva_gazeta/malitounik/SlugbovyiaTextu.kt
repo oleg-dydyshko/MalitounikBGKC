@@ -193,7 +193,6 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(63, "Нядзеля ўсіх сьвятых беларускага народу", "ndz_usich_sv_biel_narodu_liturhija", LITURHIJA, pasxa = true))
         datMinSH.add(SlugbovyiaTextuData(274, "Покрыва Найсьвяцейшай Багародзіцы", "mm_01_10_pokryva_baharodzicy_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(325, "Уваход у храм Найсьвяцейшай Багародзіцы", "mm_21_11_liturhija", LITURHIJA))
-        datMinSH.add(SlugbovyiaTextuData(33, "Сустрэча Госпада нашага Ісуса Хрыста (ГРАМНІЦЫ)", "mm_02_02_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "mm_06_01_bohazjaulennie_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "mm_05_01_sv_vieczar_bohazjaulennia_vial_hadziny", VIALHADZINY))
         datMinSH.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "mm_05_01_sv_vieczar_bohazjaulennia_abiednica", ABIEDNICA))
@@ -213,6 +212,7 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(360, "Сабор Найсьвяцейшай Багародзіцы", "mm_26_12_sabor_baharodzicy_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(362, "20 тысячаў мучанікаў Нікамедыйскіх", "mm_28_12_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(-70, "Нядзеля мытніка і фарысэя", "ndz_mytnika_i_faryseja", LITURHIJA, pasxa = true))
+        datMinSH.add(SlugbovyiaTextuData(33, "Сустрэча Госпада нашага Ісуса Хрыста (ГРАМНІЦЫ)", "mm_02_02_sustrecza_hospada_liturhija", LITURHIJA))
 
         datMinSV.add(SlugbovyiaTextuData(6, "Нядзеля Тамаша (Антыпасха) вячэрня ў суботу", "ndz_tamasza_viaczernia_subota", VIACZERNIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха)", "ndz_tamasza_jutran", JUTRAN, pasxa = true))

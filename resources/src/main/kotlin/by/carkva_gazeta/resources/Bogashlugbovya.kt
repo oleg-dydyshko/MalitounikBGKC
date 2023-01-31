@@ -295,7 +295,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["uzniasienne_liturhija"] = R.raw.uzniasienne_liturhija
             resursMap["uzniasienne_viaczernia"] = R.raw.uzniasienne_viaczernia
             resursMap["mm_21_11_liturhija"] = R.raw.mm_21_11_liturhija
-            resursMap["mm_02_02_liturhija"] = R.raw.mm_02_02_liturhija
             resursMap["l_ajcy_6_saborau"] = R.raw.l_ajcy_6_saborau
             resursMap["mm_13_11_liturhija"] = R.raw.mm_13_11_liturhija
             resursMap["mm_13_11_viaczernia"] = R.raw.mm_13_11_viaczernia
@@ -456,6 +455,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mltv_razam_z_padlaszskimi_muczanikami_ab_ednasci"] = R.raw.mltv_razam_z_padlaszskimi_muczanikami_ab_ednasci
             resursMap["mltv_ab_jednadci_carkvy_leanida_fiodarava"] = R.raw.mltv_ab_jednadci_carkvy_leanida_fiodarava
             resursMap["ndz_mytnika_i_faryseja"] = R.raw.ndz_mytnika_i_faryseja
+            resursMap["mm_02_02_sustrecza_hospada_liturhija"] = R.raw.mm_02_02_sustrecza_hospada_liturhija
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {

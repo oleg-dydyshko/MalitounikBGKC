@@ -538,7 +538,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                     } else {
                         MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
-                }
+                }.await()
                 binding.progressBar2.visibility = View.GONE
             }
         }

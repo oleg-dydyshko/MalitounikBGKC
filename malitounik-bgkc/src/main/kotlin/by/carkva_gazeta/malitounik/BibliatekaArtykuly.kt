@@ -1,17 +1,19 @@
 package by.carkva_gazeta.malitounik
 
-import android.content.Context
-import android.content.SharedPreferences
+import android.content.*
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.ViewGroup
+import android.view.*
+import android.view.animation.AnimationUtils
 import android.webkit.WebSettings
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.PasxaBinding
@@ -22,11 +24,14 @@ import kotlinx.coroutines.*
 import java.io.File
 
 
-class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener {
+class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener {
+    private var fullscreenPage = false
     private lateinit var binding: PasxaBinding
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
     private val data = ArrayList<LinkedTreeMap<String, String>>()
+    private var position = 0
+    private var rubrika = 1
     private val style = "img {max-width: 100%; height: auto; border:0; padding:0} @media (max-width: 990px) {img {height: auto !important}} @media (max-width: 660px) {img {margin: 10px 0 !important}} .article_naviny_data {text-align: left; color: #999; font-size: 12px} .alt2 { text-align:right; font-weight:700; font-style:italic; margin-top:5px}"
 
     override fun onPause() {
@@ -50,6 +55,12 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
         val dzenNoch = getBaseDzenNoch()
         binding = PasxaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        if (savedInstanceState != null) {
+            MainActivity.dialogVisable = false
+            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
+        } else {
+            fullscreenPage = chin.getBoolean("fullscreenPage", false)
+        }
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
@@ -65,7 +76,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
                 }
             }
         }
-        val rubrika = intent.extras?.getInt("rubrika") ?: 1
+        rubrika = intent.extras?.getInt("rubrika") ?: 1
         var title = resources.getText(R.string.bibliateka_gistoryia_carkvy)
         val path = when (rubrika) {
             0 -> {
@@ -174,7 +185,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
         val text = localFile.readText()
         val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
         data.addAll(gson.fromJson(text, type))
-        val position = intent.extras?.getInt("position") ?: 0
+        position = intent.extras?.getInt("position") ?: 0
         var textData = data[position]["str"] ?: ""
         if (dzenNoch) {
             textData = textData.replace("color: rgb(102, 0, 0)", "color: rgb(244, 67, 54)")
@@ -187,6 +198,12 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
         webSettings.defaultFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT.toInt()
         webSettings.domStorageEnabled = true
         binding.pasxa.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
+        binding.actionBack.setOnClickListener {
+            onBack()
+        }
+        binding.actionFullscreen.setOnClickListener {
+            show()
+        }
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
@@ -199,8 +216,21 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
         binding.titleToolbar.isSingleLine = true
     }
 
+    override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR) {
+            MainActivity.dialogVisable = true
+        }
+        return super.onMenuOpened(featureId, menu)
+    }
+
+    override fun onPanelClosed(featureId: Int, menu: Menu) {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR) {
+            MainActivity.dialogVisable = false
+        }
+    }
+
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.pasxa, menu)
+        menuInflater.inflate(R.menu.artykuly, menu)
         for (i in 0 until menu.size()) {
             val item: MenuItem = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -213,6 +243,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
     override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_dzen_noch).isChecked = getBaseDzenNoch()
         if (chin.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
+        menu.findItem(R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
@@ -238,13 +269,81 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
             recreate()
             return true
         }
-        /*if (id == R.id.action_share) {
-            val sendIntent = Intent(Intent.ACTION_SEND)
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=5")
-            sendIntent.type = "text/plain"
-            startActivity(Intent.createChooser(sendIntent, null))
+        if (id == R.id.action_fullscreen) {
+            hide()
             return true
-        }*/
+        }
+        if (id == R.id.action_bright) {
+            val dialogBrightness = DialogBrightness()
+            dialogBrightness.show(supportFragmentManager, "brightness")
+            return true
+        }
+        if (id == R.id.action_share) {
+            val textData = data[position]["str"] ?: ""
+            val sent = MainActivity.fromHtml(textData).toString()
+            val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText(getString(R.string.copy_text), sent)
+            clipboard.setPrimaryClip(clip)
+            MainActivity.toastView(this, getString(R.string.copy_text), Toast.LENGTH_LONG)
+            if (chin.getBoolean("dialogHelpShare", true)) {
+                val dialog = DialogHelpShare.getInstance(sent)
+                dialog.show(supportFragmentManager, "DialogHelpShare")
+            } else {
+                val sendIntent = Intent(Intent.ACTION_SEND)
+                sendIntent.putExtra(Intent.EXTRA_TEXT, sent)
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, title)
+                sendIntent.type = "text/plain"
+                startActivity(Intent.createChooser(sendIntent, title))
+            }
+            return true
+        }
+        if (id == R.id.action_carkva) {
+            val intent = Intent()
+            intent.setClassName(this, MainActivity.ARTYKLY)
+            intent.putExtra("rybrika", rubrika)
+            intent.putExtra("position", position)
+            startActivity(intent)
+        }
         return false
+    }
+
+    override fun sentShareText(shareText: String) {
+        val sendIntent = Intent(Intent.ACTION_SEND)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, shareText)
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, title)
+        sendIntent.type = "text/plain"
+        startActivity(Intent.createChooser(sendIntent, title))
+    }
+
+    private fun hide() {
+        fullscreenPage = true
+        supportActionBar?.hide()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = WindowCompat.getInsetsController(window, binding.constraint)
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+        val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
+        binding.actionFullscreen.visibility = View.VISIBLE
+        binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.VISIBLE
+        binding.actionBack.animation = animation
+    }
+
+    private fun show() {
+        fullscreenPage = false
+        supportActionBar?.show()
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        val controller = WindowCompat.getInsetsController(window, binding.constraint)
+        controller.show(WindowInsetsCompat.Type.systemBars())
+        val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+        binding.actionFullscreen.visibility = View.GONE
+        binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.GONE
+        binding.actionBack.animation = animation
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("fullscreen", fullscreenPage)
     }
 }

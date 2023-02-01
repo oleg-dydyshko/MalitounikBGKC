@@ -4,20 +4,27 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity.Companion.toastView
 import by.carkva_gazeta.malitounik.databinding.ContentPsalterBinding
-import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItemArtykulyBinding
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.io.File
@@ -154,20 +161,31 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemArtykulyBinding.inflate(LayoutInflater.from(context), parent, false)
                 rootView = binding.root
-                viewHolder = ViewHolder(binding.label)
+                viewHolder = ViewHolder(binding.label, binding.image)
                 rootView.tag = viewHolder
             } else {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            viewHolder.text.text = MainActivity.fromHtml(data[position]["link"] ?: "")
-            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            val ssb = SpannableStringBuilder()
+            val dataArt = SpannableString(data[position]["data"] ?: "")
+            dataArt.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorSecondary_text)), 0, dataArt.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            dataArt.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt() - 2, true), 0, dataArt.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            ssb.append(dataArt)
+            val link = MainActivity.fromHtml(data[position]["link"] ?: "")
+            ssb.append("\n")
+            ssb.append(link)
+            viewHolder.text.text = ssb
+            if (data[position]["img_cache"]?.isEmpty() == true) {
+                viewHolder.image.visibility = View.GONE
+            } else {
+                Picasso.get().load(data[position]["img_cache"]).into(viewHolder.image)
+            }
             return rootView
         }
     }
 
-    private class ViewHolder(var text: TextView)
+    private class ViewHolder(var text: TextView, var image: ImageView)
 }

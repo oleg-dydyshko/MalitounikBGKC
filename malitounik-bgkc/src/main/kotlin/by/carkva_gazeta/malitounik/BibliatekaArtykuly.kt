@@ -40,7 +40,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
     private val adminUpdateLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                val localFile = File("$filesDir/$path")
+                val localFile = File("$filesDir/Artykuly/$path")
                 Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
                     MainActivity.toastView(this@BibliatekaArtykuly, getString(R.string.error))
                 }.await()
@@ -209,7 +209,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
             if (dzenNoch) builder.append("<html><head><style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #303030;}$style</style></head><body>\n")
             else builder.append("<html><head><style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}$style</style></head><body>\n")
             val gson = Gson()
-            val localFile = File("$filesDir/$path")
+            val localFile = File("$filesDir/Artykuly/$path")
             val text = localFile.readText()
             val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
             data.clear()

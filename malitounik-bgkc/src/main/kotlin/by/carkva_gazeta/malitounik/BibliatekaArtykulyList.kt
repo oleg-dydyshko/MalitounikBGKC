@@ -71,7 +71,11 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener {
             20 -> "abvestki.json"
             else -> "history.json"
         }
-        val localFile = File("$filesDir/$path")
+        val oldLocalFile = File("$filesDir/$path")
+        if (oldLocalFile.exists()) oldLocalFile.delete()
+        val dir = File ("$filesDir/Artykuly")
+        if (!dir.exists()) dir.mkdir()
+        val localFile = File("$filesDir/Artykuly/$path")
         if (MainActivity.isNetworkAvailable(true)) {
             if (!localFile.exists()) {
                 CoroutineScope(Dispatchers.Main).launch {

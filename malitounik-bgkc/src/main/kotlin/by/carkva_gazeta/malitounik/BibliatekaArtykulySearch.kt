@@ -27,6 +27,7 @@ import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import java.io.File
 
 class BibliatekaArtykulySearch : BaseActivity(), View.OnClickListener {
@@ -54,7 +55,8 @@ class BibliatekaArtykulySearch : BaseActivity(), View.OnClickListener {
         searchJob?.cancel()
     }
 
-    private fun load() {
+    private suspend fun load() {
+        binding.progressBar.visibility = View.VISIBLE
         try {
             var title = ""
             val gson = Gson()
@@ -147,24 +149,36 @@ class BibliatekaArtykulySearch : BaseActivity(), View.OnClickListener {
                     }
                     else -> "history.json"
                 }
-                val localFile = File("$filesDir/$path")
-                val text = localFile.readText()
-                val arrayData = ArrayList<LinkedTreeMap<String, String>>()
-                arrayData.addAll(gson.fromJson(text, type))
-                for (i in 0 until arrayData.size) {
-                    artykulyList.add(ArtykulyData(title, rubrika, i, arrayData[i]["str"] ?: "", arrayData[i]["link"] ?: ""))
+                val localFile = File("$filesDir/Artykuly/$path")
+                if (!localFile.exists()) {
+                    if (MainActivity.isNetworkAvailable() && !MainActivity.isNetworkAvailable(true)) {
+                        Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
+                            MainActivity.toastView(this@BibliatekaArtykulySearch, getString(R.string.error))
+                        }.await()
+                    }
+                }
+                if (localFile.exists()) {
+                    val text = localFile.readText()
+                    val arrayData = ArrayList<LinkedTreeMap<String, String>>()
+                    arrayData.addAll(gson.fromJson(text, type))
+                    for (i in 0 until arrayData.size) {
+                        artykulyList.add(ArtykulyData(title, rubrika, i, arrayData[i]["str"] ?: "", arrayData[i]["link"] ?: ""))
+                    }
                 }
             }
         } catch (_: Throwable) {
             MainActivity.toastView(this, getString(R.string.error_ch2))
         }
+        binding.progressBar.visibility = View.GONE
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = BibliatekaArtykulySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        load()
+        CoroutineScope(Dispatchers.Main).launch {
+            load()
+        }
         binding.filterGrup.visibility = View.VISIBLE
         binding.buttonx2.setOnClickListener(this)
         DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, R.color.colorPrimary))

@@ -10,15 +10,12 @@ import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.MainActivity.Companion.toastView
 import by.carkva_gazeta.malitounik.databinding.ContentPsalterBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemArtykulyBinding
 import com.google.gson.Gson
@@ -79,7 +76,7 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener {
             if (!localFile.exists()) {
                 CoroutineScope(Dispatchers.Main).launch {
                     Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
-                        toastView(this@BibliatekaArtykulyList, getString(R.string.error))
+                        MainActivity.toastView(this@BibliatekaArtykulyList, getString(R.string.error))
                     }.await()
                     load(localFile)
                 }
@@ -89,7 +86,7 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener {
         } else if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
-                    toastView(this@BibliatekaArtykulyList, getString(R.string.error))
+                    MainActivity.toastView(this@BibliatekaArtykulyList, getString(R.string.error))
                 }.await()
                 load(localFile)
             }
@@ -136,12 +133,16 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener {
     }
 
     private fun load(localFile: File) {
-        val gson = Gson()
-        val text = localFile.readText()
-        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
-        data.addAll(gson.fromJson(text, type))
-        listAdapter = MenuListAdaprer(this)
-        binding.listView.adapter = listAdapter
+        try {
+            val gson = Gson()
+            val text = localFile.readText()
+            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
+            data.addAll(gson.fromJson(text, type))
+            listAdapter = MenuListAdaprer(this)
+            binding.listView.adapter = listAdapter
+        } catch (_: Throwable) {
+            MainActivity.toastView(this, getString(R.string.error_ch2))
+        }
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -153,6 +154,26 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener {
         intent.putExtra("rubrika", this.position)
         intent.putExtra("position", position)
         startActivity(intent)
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.artykuly_list, menu)
+        for (i in 0 until menu.size()) {
+            val item: MenuItem = menu.getItem(i)
+            val spanString = SpannableString(menu.getItem(i).title.toString())
+            val end = spanString.length
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            item.title = spanString
+        }
+    }
+
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.action_search) {
+            startActivity(Intent(this, BibliatekaArtykulySearch::class.java))
+            return true
+        }
+        return false
     }
 
     private inner class MenuListAdaprer(private val context: Activity) : ArrayAdapter<LinkedTreeMap<String, String>>(context, R.layout.simple_list_item_2, R.id.label, data) {

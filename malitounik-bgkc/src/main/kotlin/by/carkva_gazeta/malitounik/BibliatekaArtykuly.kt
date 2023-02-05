@@ -10,29 +10,44 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.webkit.WebSettings
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
-import by.carkva_gazeta.malitounik.databinding.PasxaBinding
+import by.carkva_gazeta.malitounik.databinding.BibliatekaArtykulyBinding
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import java.io.File
 
 
 class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener {
     private var fullscreenPage = false
-    private lateinit var binding: PasxaBinding
+    private lateinit var binding: BibliatekaArtykulyBinding
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
     private val data = ArrayList<LinkedTreeMap<String, String>>()
+    private val dzenNoch get() = getBaseDzenNoch()
     private var position = 0
     private var rubrika = 1
+    private var path = "history.json"
     private val style = "img {max-width: 100%; height: auto; border:0; padding:0} @media (max-width: 990px) {img {height: auto !important}} @media (max-width: 660px) {img {margin: 10px 0 !important}} .article_naviny_data {text-align: left; color: #999; font-size: 12px} .alt2 { text-align:right; font-weight:700; font-style:italic; margin-top:5px}"
+    private val adminUpdateLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+        if (MainActivity.isNetworkAvailable()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                val localFile = File("$filesDir/$path")
+                Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
+                    MainActivity.toastView(this@BibliatekaArtykuly, getString(R.string.error))
+                }.await()
+                load()
+            }
+        }
+    }
 
     override fun onPause() {
         super.onPause()
@@ -40,7 +55,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
     }
 
     override fun onDialogFontSize(fontSize: Float) {
-        val webSettings = binding.pasxa.settings
+        val webSettings = binding.webView.settings
         webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
         webSettings.blockNetworkImage = true
         webSettings.loadsImagesAutomatically = true
@@ -52,8 +67,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val dzenNoch = getBaseDzenNoch()
-        binding = PasxaBinding.inflate(layoutInflater)
+        binding = BibliatekaArtykulyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
@@ -77,26 +91,26 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
             }
         }
         rubrika = intent.extras?.getInt("rubrika") ?: 1
-        var title = resources.getText(R.string.bibliateka_gistoryia_carkvy)
-        val path = when (rubrika) {
+        var title = resources.getStringArray(R.array.artykuly)[rubrika]
+        path = when (rubrika) {
             0 -> {
-                title = resources.getText(R.string.svitlo_usxodu)
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
                 "svietlo_uschodu.json"
             }
             1 -> {
-                title = resources.getText(R.string.bibliateka_gistoryia_carkvy)
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
                 "history.json"
             }
             2 -> {
-                title = resources.getText(R.string.carkva_gramadstva)
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
                 "gramadstva.json"
             }
             3 -> {
-                title = resources.getText(R.string.arx_videa)
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
                 "videa.json"
             }
             4 -> {
-                title = resources.getText(R.string.arx_adkaz)
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
                 "adkaz.json"
             }
             5 -> {
@@ -160,7 +174,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
                 "naviny2008.json"
             }
             20 -> {
-                title = resources.getText(R.string.arx_abvestak)
+                title = resources.getStringArray(R.array.artykuly)[rubrika]
                 "abvestki.json"
             }
             else -> "history.json"
@@ -172,37 +186,45 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                @Suppress("DEPRECATION") WebSettingsCompat.setForceDark(binding.pasxa.settings, WebSettingsCompat.FORCE_DARK_ON)
+                @Suppress("DEPRECATION") WebSettingsCompat.setForceDark(binding.webView.settings, WebSettingsCompat.FORCE_DARK_ON)
             }
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
-
-        val builder = StringBuilder()
-        if (dzenNoch) builder.append("<html><head><style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #303030;}$style</style></head><body>\n")
-        else builder.append("<html><head><style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}$style</style></head><body>\n")
-        val localFile = File("$filesDir/$path")
-        val gson = Gson()
-        val text = localFile.readText()
-        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
-        data.addAll(gson.fromJson(text, type))
-        position = intent.extras?.getInt("position") ?: 0
-        var textData = data[position]["str"] ?: ""
-        if (dzenNoch) {
-            textData = textData.replace("color: rgb(102, 0, 0)", "color: rgb(244, 67, 54)")
-            textData = textData.replace("color:rgb(102, 0, 0)", "color: rgb(244, 67, 54)")
-        }
-        builder.append(textData)
-        builder.append("</body></html>")
-        val webSettings = binding.pasxa.settings
+        load()
+        val webSettings = binding.webView.settings
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT.toInt()
         webSettings.domStorageEnabled = true
-        binding.pasxa.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
         binding.actionBack.setOnClickListener {
             onBack()
         }
         binding.actionFullscreen.setOnClickListener {
             show()
+        }
+    }
+
+    private fun load() {
+        try {
+            val builder = StringBuilder()
+            if (dzenNoch) builder.append("<html><head><style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #303030;}$style</style></head><body>\n")
+            else builder.append("<html><head><style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}$style</style></head><body>\n")
+            val gson = Gson()
+            val localFile = File("$filesDir/$path")
+            val text = localFile.readText()
+            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
+            data.clear()
+            data.addAll(gson.fromJson(text, type))
+            position = intent.extras?.getInt("position") ?: 0
+            var textData = data[position]["str"] ?: ""
+            if (dzenNoch) {
+                textData = textData.replace("color: rgb(102, 0, 0)", "color: rgb(244, 67, 54)")
+                textData = textData.replace("color:rgb(102, 0, 0)", "color: rgb(244, 67, 54)")
+            }
+            builder.append(textData)
+            builder.append("</body></html>")
+            binding.webView.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
+        } catch (_: Throwable) {
+            MainActivity.toastView(this, getString(R.string.error_ch2))
         }
     }
 
@@ -302,7 +324,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
             intent.setClassName(this, MainActivity.ARTYKLY)
             intent.putExtra("rybrika", rubrika)
             intent.putExtra("position", position)
-            startActivity(intent)
+            adminUpdateLauncher.launch(intent)
         }
         return false
     }

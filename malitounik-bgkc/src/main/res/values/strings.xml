@@ -752,5 +752,6 @@
         <item>Архіў навін за 2008 год</item>
         <item>Архіў абвестак</item>
     </string-array>
+    <string name="artykuly_opisanie">Для пошуку па ўсіх матэрыялах трэба спампаваць %1$s.\nІнакш пошук будзе весьціся толькі па раней агледжаных рубрыках.</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

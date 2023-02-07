@@ -369,7 +369,8 @@
         <activity
             android:name=".BibliatekaArtykulyList"
             android:label="@string/artykuly"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateVisible|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -381,15 +382,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.BibliatekaArtykulyList" />
-        </activity>
-        <activity
-            android:name=".BibliatekaArtykulySearch"
-            android:label="@string/poshuk"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateVisible|adjustResize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.BibliatekaArtykuly" />
         </activity>
 
         <meta-data

@@ -37,7 +37,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
     private var rubrika = 1
     private var path = "history.json"
     private val style = "img {max-width: 100%; height: auto; border:0; padding:0} @media (max-width: 990px) {img {height: auto !important}} @media (max-width: 660px) {img {margin: 10px 0 !important}} .article_naviny_data {text-align: left; color: #999; font-size: 12px} .alt2 { text-align:right; font-weight:700; font-style:italic; margin-top:5px}"
-    private val adminUpdateLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+    private val adminUpdateLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 val localFile = File("$filesDir/Artykuly/$path")

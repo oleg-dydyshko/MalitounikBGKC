@@ -71,6 +71,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         const val GET_CALIANDAR_YEAR_MAX = 2024
         const val NOTIFICATION_CHANNEL_ID_SABYTIE = "3003"
         const val NOTIFICATION_CHANNEL_ID_SVIATY = "2003"
+        const val NOTIFICATION_CHANNEL_ID_RADIO_MARYIA = "4007"
         val vibrate = longArrayOf(0, 1000, 700, 1000)
 
         private fun mkTime(year: Int, month: Int, day: Int, hour: Int): Long {

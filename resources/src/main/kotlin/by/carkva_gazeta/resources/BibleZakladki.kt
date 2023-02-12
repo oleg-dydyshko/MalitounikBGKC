@@ -309,7 +309,7 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                val knigaName = mItemList[adapterPosition].data
+                val knigaName = mItemList[bindingAdapterPosition].data
                 var kniga = -1
                 var knigaS = -1
                 var t1: Int
@@ -497,9 +497,9 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
             }
 
             override fun onItemLongClicked(view: View): Boolean {
-                val t1 = itemList[adapterPosition].data.indexOf("\n\n")
-                val t2 = if (semuxa == 1) itemList[adapterPosition].data.indexOf(". ", t1) else itemList[adapterPosition].data.indexOf(" ", t1)
-                val delite = DialogZakladkaDelite.getInstance(adapterPosition, itemList[adapterPosition].data.substring(0, t1) + getString(R.string.stix_by) + " " + itemList[adapterPosition].data.substring(t1 + 2, t2), semuxa, true)
+                val t1 = itemList[bindingAdapterPosition].data.indexOf("\n\n")
+                val t2 = if (semuxa == 1) itemList[bindingAdapterPosition].data.indexOf(". ", t1) else itemList[bindingAdapterPosition].data.indexOf(" ", t1)
+                val delite = DialogZakladkaDelite.getInstance(bindingAdapterPosition, itemList[bindingAdapterPosition].data.substring(0, t1) + getString(R.string.stix_by) + " " + itemList[bindingAdapterPosition].data.substring(t1 + 2, t2), semuxa, true)
                 delite.show(supportFragmentManager, "zakladka_delite")
                 return true
             }

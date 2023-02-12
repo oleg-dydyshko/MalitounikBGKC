@@ -281,7 +281,7 @@ class DialogCalindarGrid : DialogFragment() {
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (itemList[adapterPosition].toInt() == 7) {
+                if (itemList[bindingAdapterPosition].toInt() == 7) {
                     if (!issetSvityia) {
                         val i = Intent(activity, Opisanie::class.java)
                         i.putExtra("mun", munreal)
@@ -291,7 +291,7 @@ class DialogCalindarGrid : DialogFragment() {
                     }
                     return
                 }
-                if (itemList[adapterPosition].toInt() == 8) {
+                if (itemList[bindingAdapterPosition].toInt() == 8) {
                     if (slugba.checkParliny(data, mun)) {
                         val i = Intent(activity, Piarliny::class.java)
                         i.putExtra("mun", munreal)
@@ -305,7 +305,7 @@ class DialogCalindarGrid : DialogFragment() {
                     dadatak.show(childFragmentManager, "dadatak")
                     return
                 }
-                when (itemList[adapterPosition].toInt()) {
+                when (itemList[bindingAdapterPosition].toInt()) {
                     1 -> {
                         when {
                             slugba.checkViachernia(raznicia, dayOfYear.toInt()) -> {

@@ -104,7 +104,7 @@
     <string name="search">Пошук песень</string>
     <string name="rsinaidal">Глава</string>
     <string name="psinaidal">Псалтирь</string>
-    <string name="bsinaidal">Біблія ў расейскім Сінадальным перакладзе</string>
+    <string name="bsinaidal">БІБЛІЯ (Расейскі Сінадальны пераклад)</string>
     <string name="stsinaidal">Ветхий завет</string>
     <string name="novsinaidal">Новый завет</string>
     <string name="maranata">Штодзённае чытаньне Бібліі за год:</string>
@@ -753,5 +753,7 @@
         <item>Архіў абвестак</item>
     </string-array>
     <string name="artykuly_opisanie">Для пошуку па ўсіх матэрыялах трэба спампаваць %1$s.\nІнакш пошук будзе весьціся толькі па раней агледжаных рубрыках.</string>
+    <string name="padie_maryia">РАДЫЁ МАРЫЯ</string>
+    <string name="padie_maryia_s">Радыё Марыя</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

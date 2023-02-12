@@ -262,7 +262,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.BIBLIAVYBRANOE)
                         intent.putExtra("biblia", biblia)
-                        intent.putExtra("title", mItemList[adapterPosition].title)
+                        intent.putExtra("title", mItemList[bindingAdapterPosition].title)
                         startActivity(intent)
                     }
                 } else {
@@ -272,7 +272,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             }
 
             override fun onItemLongClicked(view: View): Boolean {
-                val dialog = DialogDeliteBibliaVybranoe.getInstance(adapterPosition, arrayListVybranoe[adapterPosition].title)
+                val dialog = DialogDeliteBibliaVybranoe.getInstance(bindingAdapterPosition, arrayListVybranoe[bindingAdapterPosition].title)
                 dialog.setDialogDeliteBibliVybranoeListener(this@DialogVybranoeBibleList)
                 dialog.show(childFragmentManager, "DialogDeliteBibliaVybranoe")
                 return true

@@ -2364,7 +2364,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                     return true
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                val contextMenuSabytie = DialogContextMenuSabytie.getInstance(adapterPosition, MainActivity.padzeia[adapterPosition].padz)
+                val contextMenuSabytie = DialogContextMenuSabytie.getInstance(bindingAdapterPosition, MainActivity.padzeia[bindingAdapterPosition].padz)
                 contextMenuSabytie.show(supportFragmentManager, "context_menu_sabytie")
                 return true
             }
@@ -2374,7 +2374,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                val p = MainActivity.padzeia[adapterPosition]
+                val p = MainActivity.padzeia[bindingAdapterPosition]
                 val title = p.padz
                 val data = p.dat
                 val time = p.tim

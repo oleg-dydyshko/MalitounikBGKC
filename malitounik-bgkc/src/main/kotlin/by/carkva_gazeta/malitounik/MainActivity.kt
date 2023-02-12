@@ -1,12 +1,11 @@
 package by.carkva_gazeta.malitounik
 
-import android.app.Activity
-import android.app.PendingIntent
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.Manifest
+import android.app.*
+import android.content.*
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -17,6 +16,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.SystemClock
 import android.provider.Settings
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.MediaSessionCompat
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
@@ -27,7 +28,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
@@ -350,6 +355,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (k.getInt("sinoidal", 0) == 1) {
             binding.label11.visibility = View.VISIBLE
         }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            binding.label15a.visibility = View.GONE
+        }
         binding.title9.setOnClickListener(this)
         binding.title10.setOnClickListener(this)
         binding.label1.setOnClickListener(this)
@@ -383,6 +391,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.label145.setOnClickListener(this)
         binding.label146.setOnClickListener(this)
         binding.label148.setOnClickListener(this)
+        binding.image5.setOnClickListener(this)
+        binding.image6.setOnClickListener(this)
+
 
         val data = intent.data
         if (data != null) {
@@ -672,6 +683,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         ajustCompoundDrawableSizeWithText(binding.label12, drawable)
         ajustCompoundDrawableSizeWithText(binding.label13, drawable)
         ajustCompoundDrawableSizeWithText(binding.label14, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label15, drawable)
     }
 
     override fun onBack() {
@@ -898,9 +910,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     private fun selectFragment(view: View?, start: Boolean = false, shortcuts: Boolean = false) {
         val id = view?.id ?: R.id.label1
-        val idOld = if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145 || id == R.id.label148) idSelect
+        val idOld = if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145 || id == R.id.label148 || id == R.id.image5) idSelect
         else id
-        if (!(id == R.id.label9a || id == R.id.label10a || id == R.id.label14a)) {
+        if (!(id == R.id.label9a || id == R.id.label10a || id == R.id.label14a || id == R.id.image5 || id == R.id.image6)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             if (dzenNoch) {
                 binding.citata.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
@@ -1436,6 +1448,22 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+            R.id.image5 -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val intent = Intent(this, ServiceRadioMaryia::class.java)
+                    intent.putExtra("action", ServiceRadioMaryia.PLAY_PAUSE)
+                    startService(intent)
+                    setRadioNotification()
+                }
+            }
+            R.id.image6 -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isServiceRadioMaryiaRun) {
+                    val intent = Intent(this, ServiceRadioMaryia::class.java)
+                    intent.putExtra("action", ServiceRadioMaryia.STOP)
+                    startService(intent)
+                    setRadioNotification()
+                }
+            }
         }
         if (start) {
             ftrans.commit()
@@ -1455,6 +1483,64 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 prefEditors.apply()
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun setRadioNotification() {
+        val mediaSession = MediaSessionCompat(this, "Radio Maria session")
+        val name = getString(R.string.padie_maryia_s)
+        mediaSession.setMetadata(MediaMetadataCompat.Builder().putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, BitmapFactory.decodeResource(resources, R.drawable.maria)).putString(MediaMetadataCompat.METADATA_KEY_TITLE, name).build())
+        mediaSession.isActive = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(SettingsActivity.NOTIFICATION_CHANNEL_ID_RADIO_MARYIA, name, NotificationManager.IMPORTANCE_LOW)
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            channel.description = name
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+        val notifi = NotificationCompat.Builder(this, SettingsActivity.NOTIFICATION_CHANNEL_ID_RADIO_MARYIA)
+        notifi.setShowWhen(false)
+        notifi.setStyle(androidx.media.app.NotificationCompat.MediaStyle()
+            .setMediaSession(mediaSession.sessionToken)
+            .setShowActionsInCompactView(0, 1))
+        notifi.setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.maria))
+        notifi.setSmallIcon(R.drawable.krest)
+        notifi.setContentTitle(getString(R.string.padie_maryia_s))
+        notifi.setOngoing(true)
+        notifi.addAction(R.drawable.play3, "play", retreivePlaybackAction(ServiceRadioMaryia.PLAY_PAUSE))
+        notifi.addAction(R.drawable.stop3, "stop", retreivePlaybackAction(ServiceRadioMaryia.STOP))
+        val notification = notifi.build()
+        val notificationManager = NotificationManagerCompat.from(this)
+        notificationManager.deleteNotificationChannel("4006")
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            notificationManager.notify(100, notification)
+        }
+    }
+
+    private fun retreivePlaybackAction(which: Int): PendingIntent? {
+        val action = Intent()
+        val pendingIntent: PendingIntent
+        val serviceName = ComponentName(this, ServiceRadioMaryia::class.java)
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+        when (which) {
+            ServiceRadioMaryia.PLAY_PAUSE -> {
+                action.putExtra("action", ServiceRadioMaryia.PLAY_PAUSE)
+                action.component = serviceName
+                pendingIntent = PendingIntent.getService(this, ServiceRadioMaryia.PLAY_PAUSE, action, flags)
+                return pendingIntent
+            }
+            ServiceRadioMaryia.STOP -> {
+                action.putExtra("action", ServiceRadioMaryia.STOP)
+                action.component = serviceName
+                pendingIntent = PendingIntent.getService(this, ServiceRadioMaryia.STOP, action, flags)
+                return pendingIntent
+            }
+        }
+        return null
     }
 
     override fun onClick(view: View?) {
@@ -1607,13 +1693,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val RELLITARATURA = 4
         const val PDF = 5
         const val SETFILE = 6
+        var isServiceRadioMaryiaRun = false
         var padzeia = ArrayList<Padzeia>()
         private var setDataCalendar = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])[0][25].toInt()
         var checkBrightness = true
         private var sessionId = 0
         var brightness = 15
         var dialogVisable = false
-
         fun setListPadzeia() {
             padzeia.clear()
             val gson = Gson()

@@ -289,9 +289,9 @@ class MenuNatatki : BaseFragment() {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 binding.dragListView.resetSwipedViews(null)
-                val f = itemList[adapterPosition]
+                val f = itemList[bindingAdapterPosition]
                 if (File("${activity.filesDir}/Malitva/Mae_malitvy_${f.id}").exists()) {
-                    val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 3, adapterPosition)
+                    val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 3, bindingAdapterPosition)
                     myNatatki.show(childFragmentManager, "myNatatki")
                 } else {
                     MainActivity.toastView(activity, getString(R.string.no_file))
@@ -299,7 +299,7 @@ class MenuNatatki : BaseFragment() {
             }
 
             override fun onItemLongClicked(view: View): Boolean {
-                val contextMenu = DialogContextMenu.getInstance(adapterPosition, itemList[adapterPosition].title)
+                val contextMenu = DialogContextMenu.getInstance(bindingAdapterPosition, itemList[bindingAdapterPosition].title)
                 contextMenu.show(childFragmentManager, "context_menu")
                 return true
             }

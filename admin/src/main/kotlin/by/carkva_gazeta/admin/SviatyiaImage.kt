@@ -508,28 +508,28 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
             val mTextView = itemView.text
 
             override fun onItemClicked(view: View?) {
-                if (images[adapterPosition].size == 0L) {
+                if (images[bindingAdapterPosition].size == 0L) {
                     val permissionCheck = ContextCompat.checkSelfPermission(this@SviatyiaImage, READ_EXTERNAL_STORAGE)
                     if (PackageManager.PERMISSION_DENIED == permissionCheck) {
                         mPermissionResult.launch(READ_EXTERNAL_STORAGE)
                     } else {
-                        val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(adapterPosition, false)
+                        val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(bindingAdapterPosition, false)
                         dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
                     }
                 }
             }
 
             override fun onItemLongClicked(view: View): Boolean {
-                if (images[adapterPosition].size == 0L) {
+                if (images[bindingAdapterPosition].size == 0L) {
                     val permissionCheck = ContextCompat.checkSelfPermission(this@SviatyiaImage, READ_EXTERNAL_STORAGE)
                     if (PackageManager.PERMISSION_DENIED == permissionCheck) {
                         mPermissionResult.launch(READ_EXTERNAL_STORAGE)
                     } else {
-                        val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(adapterPosition, false)
+                        val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(bindingAdapterPosition, false)
                         dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
                     }
                 } else {
-                    val contextMenu = DialogPiarlinyContextMenu.getInstance(adapterPosition, getString(by.carkva_gazeta.malitounik.R.string.sviatyia))
+                    val contextMenu = DialogPiarlinyContextMenu.getInstance(bindingAdapterPosition, getString(by.carkva_gazeta.malitounik.R.string.sviatyia))
                     contextMenu.show(supportFragmentManager, "context_menu")
                 }
                 return true

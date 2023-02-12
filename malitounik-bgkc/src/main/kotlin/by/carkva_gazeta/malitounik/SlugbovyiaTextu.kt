@@ -213,6 +213,7 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(362, "20 тысячаў мучанікаў Нікамедыйскіх", "mm_28_12_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(-70, "Нядзеля мытніка і фарысэя", "ndz_mytnika_i_faryseja", LITURHIJA, pasxa = true))
         datMinSH.add(SlugbovyiaTextuData(33, "Сустрэча Госпада нашага Ісуса Хрыста (ГРАМНІЦЫ)", "mm_02_02_sustrecza_hospada_liturhija", LITURHIJA))
+        datMinSH.add(SlugbovyiaTextuData(-56, "Нядзеля мясапусная, пра Страшны суд", "ndz_miasapusnaja_liturgija", LITURHIJA, pasxa = true))
 
         datMinSV.add(SlugbovyiaTextuData(6, "Нядзеля Тамаша (Антыпасха) вячэрня ў суботу", "ndz_tamasza_viaczernia_subota", VIACZERNIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха)", "ndz_tamasza_jutran", JUTRAN, pasxa = true))

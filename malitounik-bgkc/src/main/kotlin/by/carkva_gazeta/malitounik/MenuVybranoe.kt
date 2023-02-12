@@ -324,15 +324,15 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (itemList[adapterPosition].resurs.contains("pesny")) {
+                if (itemList[bindingAdapterPosition].resurs.contains("pesny")) {
                     val intent = Intent(activity, PesnyAll::class.java)
-                    intent.putExtra("type", itemList[adapterPosition].resurs)
-                    intent.putExtra("pesny", itemList[adapterPosition].data)
+                    intent.putExtra("type", itemList[bindingAdapterPosition].resurs)
+                    intent.putExtra("pesny", itemList[bindingAdapterPosition].data)
                     intent.putExtra("chekVybranoe", true)
                     menuVybranoeLauncher.launch(intent)
                 } else {
                     if (MainActivity.checkmoduleResources()) {
-                        when (itemList[adapterPosition].resurs) {
+                        when (itemList[bindingAdapterPosition].resurs) {
                             "1" -> {
                                 DialogVybranoeBibleList.biblia = "1"
                                 val dialogVybranoeList = DialogVybranoeBibleList()
@@ -354,8 +354,8 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                             else -> {
                                 val intent = Intent()
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("resurs", itemList[adapterPosition].resurs)
-                                intent.putExtra("title", itemList[adapterPosition].data)
+                                intent.putExtra("resurs", itemList[bindingAdapterPosition].resurs)
+                                intent.putExtra("title", itemList[bindingAdapterPosition].data)
                                 intent.putExtra("chekVybranoe", true)
                                 menuVybranoeLauncher.launch(intent)
                             }
@@ -368,7 +368,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
             }
 
             override fun onItemLongClicked(view: View): Boolean {
-                val dd = DialogDelite.getInstance(adapterPosition, "", "з выбранага", itemList[adapterPosition].data)
+                val dd = DialogDelite.getInstance(bindingAdapterPosition, "", "з выбранага", itemList[bindingAdapterPosition].data)
                 dd.show(childFragmentManager, "dialog_dilite")
                 return true
             }

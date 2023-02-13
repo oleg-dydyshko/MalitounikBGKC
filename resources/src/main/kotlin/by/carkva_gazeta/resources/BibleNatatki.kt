@@ -319,7 +319,7 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 mLastClickTime = SystemClock.elapsedRealtime()
                 var kniga = -1
                 var knigaS = -1
-                if (data[adapterPosition].list[0].contains("1")) kniga = data[adapterPosition].list[1].toInt() else knigaS = data[adapterPosition].list[1].toInt()
+                if (data[bindingAdapterPosition].list[0].contains("1")) kniga = data[bindingAdapterPosition].list[1].toInt() else knigaS = data[bindingAdapterPosition].list[1].toInt()
                 var intent = Intent()
                 if (kniga != -1) {
                     if (semuxa == 1) {
@@ -364,13 +364,13 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                     }
                     intent.putExtra("kniga", knigaS)
                 }
-                intent.putExtra("glava", Integer.valueOf(data[adapterPosition].list[2]))
-                intent.putExtra("stix", Integer.valueOf(data[adapterPosition].list[3]))
+                intent.putExtra("glava", Integer.valueOf(data[bindingAdapterPosition].list[2]))
+                intent.putExtra("stix", Integer.valueOf(data[bindingAdapterPosition].list[3]))
                 staryZapavietSemuxaLauncher.launch(intent)
             }
 
             override fun onItemLongClicked(view: View): Boolean {
-                val contextMenu = DialogContextMenu.getInstance(adapterPosition, data[adapterPosition].list[5])
+                val contextMenu = DialogContextMenu.getInstance(bindingAdapterPosition, data[bindingAdapterPosition].list[5])
                 contextMenu.show(supportFragmentManager, "context_menu")
                 return true
             }

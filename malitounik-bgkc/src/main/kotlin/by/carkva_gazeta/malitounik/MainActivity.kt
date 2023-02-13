@@ -52,6 +52,8 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.io.*
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
@@ -73,6 +75,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private var mLastClickTime: Long = 0
     private var resetTollbarJob: Job? = null
     private var snackbar: Snackbar? = null
+    private var timer = Timer()
+    private var timerTask: TimerTask? = null
     private val mainActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 300) {
             recreate()
@@ -109,6 +113,35 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
         val pIntent = PendingIntent.getBroadcast(this, 30, intent, flags)
         SettingsActivity.setAlarm(cw.timeInMillis + 10 * 60 * 1000, pIntent)
+    }
+
+    private fun startTimer() {
+        stopTimer()
+        timerTask = object : TimerTask() {
+            override fun run() {
+                if (!ServiceRadioMaryia.isServiceRadioMaryiaRun) {
+                    stopTimer()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        binding.label15b.visibility = View.GONE
+                    }
+                } else {
+                    sendTitlePadioMaryia()
+                }
+            }
+        }
+        timer = Timer()
+        timer.schedule(timerTask, 0, 20000)
+    }
+
+    private fun stopTimer() {
+        timer.cancel()
+        timerTask = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopTimer()
+        binding.label15b.visibility = View.GONE
     }
 
     override fun createAndSentFile(log: ArrayList<String>, isClear: Boolean) {
@@ -340,9 +373,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.label145.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label146.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label148.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label15b.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             bindingappbar.toolbar.popupTheme = R.style.AppCompatDark
             setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest_black))
-            //binding.logosite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.logotip_whate))
             binding.label9a.setBackgroundResource(R.drawable.selector_dark)
             binding.label10a.setBackgroundResource(R.drawable.selector_dark)
             binding.label14a.setBackgroundResource(R.drawable.selector_dark)
@@ -394,6 +427,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.image5.setOnClickListener(this)
         binding.image6.setOnClickListener(this)
 
+        if (ServiceRadioMaryia.isServiceRadioMaryiaRun) {
+            sendTitlePadioMaryia()
+        }
 
         val data = intent.data
         if (data != null) {
@@ -1449,19 +1485,27 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
             }
             R.id.image5 -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    val intent = Intent(this, ServiceRadioMaryia::class.java)
-                    intent.putExtra("action", ServiceRadioMaryia.PLAY_PAUSE)
-                    startService(intent)
-                    setRadioNotification()
+                if (isNetworkAvailable()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        val intent = Intent(this, ServiceRadioMaryia::class.java)
+                        intent.putExtra("action", ServiceRadioMaryia.PLAY_PAUSE)
+                        startService(intent)
+                        setRadioNotification()
+                        sendTitlePadioMaryia()
+                        startTimer()
+                    }
+                } else {
+                    val dialoNoIntent = DialogNoInternet()
+                    dialoNoIntent.show(supportFragmentManager, "dialoNoIntent")
                 }
             }
             R.id.image6 -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isServiceRadioMaryiaRun) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && ServiceRadioMaryia.isServiceRadioMaryiaRun) {
                     val intent = Intent(this, ServiceRadioMaryia::class.java)
                     intent.putExtra("action", ServiceRadioMaryia.STOP)
                     startService(intent)
-                    setRadioNotification()
+                    stopTimer()
+                    binding.label15b.visibility = View.GONE
                 }
             }
         }
@@ -1487,32 +1531,30 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setRadioNotification() {
-        val mediaSession = MediaSessionCompat(this, "Radio Maria session")
-        val name = getString(R.string.padie_maryia_s)
-        mediaSession.setMetadata(MediaMetadataCompat.Builder().putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, BitmapFactory.decodeResource(resources, R.drawable.maria)).putString(MediaMetadataCompat.METADATA_KEY_TITLE, name).build())
-        mediaSession.isActive = true
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(SettingsActivity.NOTIFICATION_CHANNEL_ID_RADIO_MARYIA, name, NotificationManager.IMPORTANCE_LOW)
-            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            channel.description = name
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
-        }
-        val notifi = NotificationCompat.Builder(this, SettingsActivity.NOTIFICATION_CHANNEL_ID_RADIO_MARYIA)
-        notifi.setShowWhen(false)
-        notifi.setStyle(androidx.media.app.NotificationCompat.MediaStyle()
-            .setMediaSession(mediaSession.sessionToken)
-            .setShowActionsInCompactView(0, 1))
-        notifi.setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.maria))
-        notifi.setSmallIcon(R.drawable.krest)
-        notifi.setContentTitle(getString(R.string.padie_maryia_s))
-        notifi.setOngoing(true)
-        notifi.addAction(R.drawable.play3, "play", retreivePlaybackAction(ServiceRadioMaryia.PLAY_PAUSE))
-        notifi.addAction(R.drawable.stop3, "stop", retreivePlaybackAction(ServiceRadioMaryia.STOP))
-        val notification = notifi.build()
-        val notificationManager = NotificationManagerCompat.from(this)
-        notificationManager.deleteNotificationChannel("4006")
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            val mediaSession = MediaSessionCompat(this, "Radio Maria session")
+            val name = getString(R.string.padie_maryia_s)
+            mediaSession.setMetadata(MediaMetadataCompat.Builder().putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, BitmapFactory.decodeResource(resources, R.drawable.maria)).putString(MediaMetadataCompat.METADATA_KEY_TITLE, name).putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, binding.label15b.text.toString()).build())
+            mediaSession.isActive = true
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(SettingsActivity.NOTIFICATION_CHANNEL_ID_RADIO_MARYIA, name, NotificationManager.IMPORTANCE_LOW)
+                channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                channel.description = name
+                val notificationManager = getSystemService(NotificationManager::class.java)
+                notificationManager.createNotificationChannel(channel)
+            }
+            val notifi = NotificationCompat.Builder(this, SettingsActivity.NOTIFICATION_CHANNEL_ID_RADIO_MARYIA)
+            notifi.setShowWhen(false)
+            notifi.setStyle(androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession.sessionToken).setShowActionsInCompactView(0, 1))
+            notifi.setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.maria))
+            notifi.setSmallIcon(R.drawable.krest)
+            notifi.setContentTitle(getString(R.string.padie_maryia_s))
+            notifi.setContentText(binding.label15b.text)
+            notifi.setOngoing(true)
+            notifi.addAction(R.drawable.play3, "play", retreivePlaybackAction(ServiceRadioMaryia.PLAY_PAUSE))
+            notifi.addAction(R.drawable.stop3, "stop", retreivePlaybackAction(ServiceRadioMaryia.STOP))
+            val notification = notifi.build()
+            val notificationManager = NotificationManagerCompat.from(this)
             notificationManager.notify(100, notification)
         }
     }
@@ -1541,6 +1583,47 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
         return null
+    }
+
+    private fun sendTitlePadioMaryia() {
+        if (isNetworkAvailable()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                runCatching {
+                    withContext(Dispatchers.IO) {
+                        try {
+                            val mURL = URL("https://radiomaria.by/player/hintbackend.php")
+                            with(mURL.openConnection() as HttpURLConnection) {
+                                val sb = StringBuilder()
+                                BufferedReader(InputStreamReader(inputStream)).use {
+                                    var inputLine = it.readLine()
+                                    while (inputLine != null) {
+                                        sb.append(inputLine)
+                                        inputLine = it.readLine()
+                                    }
+                                }
+                                withContext(Dispatchers.Main) {
+                                    var text = fromHtml(sb.toString()).toString().trim()
+                                    val t1 = text.indexOf(":", ignoreCase = true)
+                                    if (t1 != -1) {
+                                        text = text.substring(t1 + 1)
+                                    }
+                                    val t2 = text.indexOf(">", ignoreCase = true)
+                                    if (t2 != -1) {
+                                        text = text.substring(t2 + 1)
+                                    }
+                                    binding.label15b.text = text.trim()
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        setRadioNotification()
+                                    }
+                                    binding.label15b.visibility = View.VISIBLE
+                                }
+                            }
+                        } catch (_: Throwable) {
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onClick(view: View?) {
@@ -1693,7 +1776,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val RELLITARATURA = 4
         const val PDF = 5
         const val SETFILE = 6
-        var isServiceRadioMaryiaRun = false
         var padzeia = ArrayList<Padzeia>()
         private var setDataCalendar = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])[0][25].toInt()
         var checkBrightness = true

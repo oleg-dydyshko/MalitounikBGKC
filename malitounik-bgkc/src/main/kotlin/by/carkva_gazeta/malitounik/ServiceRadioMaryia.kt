@@ -15,6 +15,7 @@ class ServiceRadioMaryia : Service() {
     companion object {
         const val PLAY_PAUSE = 1
         const val STOP = 2
+        var isServiceRadioMaryiaRun = false
     }
 
     private var player: ExoPlayer? = null
@@ -29,7 +30,7 @@ class ServiceRadioMaryia : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        MainActivity.isServiceRadioMaryiaRun = true
+        isServiceRadioMaryiaRun = true
         initRadioMaria()
     }
 
@@ -56,7 +57,7 @@ class ServiceRadioMaryia : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        MainActivity.isServiceRadioMaryiaRun = false
+        isServiceRadioMaryiaRun = false
         stopPlay()
     }
 

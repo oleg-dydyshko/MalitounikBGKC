@@ -198,7 +198,6 @@
                         android:padding="10dp"
                         android:text="@string/padie_maryia"
                         android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/image2"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -210,7 +209,7 @@
                         android:contentDescription="@string/empty"
                         android:padding="10dp"
                         android:src="@drawable/play2"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/label15b"
                         app:layout_constraintEnd_toStartOf="@+id/image6"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -221,9 +220,25 @@
                         android:contentDescription="@string/empty"
                         android:padding="10dp"
                         android:src="@drawable/stop2"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/label15b"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/label15b"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        app:drawableStartCompat="@drawable/stiker"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/label15" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout

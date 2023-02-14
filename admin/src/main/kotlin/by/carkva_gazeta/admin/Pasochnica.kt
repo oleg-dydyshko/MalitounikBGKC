@@ -193,6 +193,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         } else {
             "($resours) $title"
         }
+        isHTML = text.contains("<!DOCTYPE HTML>", ignoreCase = true)
         if (savedInstanceState != null) {
             isHTML = savedInstanceState.getBoolean("isHTML", true)
             fileName = savedInstanceState.getString("fileName", "")
@@ -212,16 +213,15 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 }
             }
         } else {
-            val newFile = intent.extras?.getBoolean("new_file", false) ?: false
+            val newFile = intent.extras?.getBoolean("newFile", false) ?: false
             when {
                 intent.extras?.getBoolean("backcopy", false) == true -> {
-                    if (text.contains("<!DOCTYPE HTML>", ignoreCase = true)) {
+                    if (isHTML) {
                         binding.apisanne.setText(MainActivity.fromHtml(text, HtmlCompat.FROM_HTML_MODE_COMPACT))
                         binding.actionP.visibility = View.GONE
                         binding.actionBr.visibility = View.GONE
                     } else {
                         binding.apisanne.setText(text)
-                        isHTML = false
                     }
                 }
                 !newFile -> {
@@ -442,17 +442,34 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     Malitounik.referens.child("/admin/piasochnica/" + fileName.replace("\n", " ")).getFile(localFile).addOnFailureListener {
                         MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
-                    Malitounik.referens.child("/$dirToFile").putFile(Uri.fromFile(localFile)).await()
+                    val t3 = dirToFile.lastIndexOf("/")
+                    var newFile = dirToFile.substring(t3 + 1)
+                    val newDir = dirToFile.substring(0, t3 + 1)
+                    newFile = newFile.replace("-", "_")
+                    newFile = newFile.replace(" ", "_").lowercase()
+                    Malitounik.referens.child("/$newDir$newFile").putFile(Uri.fromFile(localFile)).await()
+                    Malitounik.referens.child("/admin/piasochnica/" + fileName.replace("\n", " ")).delete().await()
                     var oldFile = ""
+                    var title = ""
                     if (fileName.indexOf("(") == -1) {
                         val t1 = dirToFile.lastIndexOf("/")
                         oldFile = "(" + dirToFile.substring(t1 + 1) + ") "
                         val t2 = oldFile.lastIndexOf(".")
                         if (t2 != -1) {
-                            oldFile = " (" + oldFile.substring(0, t2) + ")"
+                            oldFile = oldFile.substring(0, t2) + ") "
+                        }
+                        if (fileName.contains(".html")) {
+                            val rt = localFile.readText()
+                            val t4 = rt.indexOf("<strong>")
+                            if (t4 != -1) {
+                                val t5 = rt.indexOf("</strong>")
+                                title = rt.substring(t4 + 8, t5).trim()
+                            }
                         }
                     }
-                    Malitounik.referens.child("/admin/piasochnica/$oldFile" + fileName.replace("\n", " ")).putFile(Uri.fromFile(localFile)).addOnCompleteListener {
+                    val tv = if (title != "") MainActivity.fromHtml(title).toString()
+                    else fileName.replace("\n", " ")
+                    Malitounik.referens.child("/admin/piasochnica/$oldFile$tv").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                         if (it.isSuccessful) {
                             Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
                                 setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))

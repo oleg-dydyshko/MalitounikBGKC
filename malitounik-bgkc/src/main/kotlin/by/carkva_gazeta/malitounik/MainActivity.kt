@@ -154,9 +154,16 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     val zip = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "MalitounikResource.zip")
                     val out = ZipOutputStream(BufferedOutputStream(FileOutputStream(zip)))
                     for (file in log) {
-                        Malitounik.referens.child(file).getFile(localFile).addOnFailureListener {
-                            toastView(this@MainActivity, getString(R.string.error))
-                        }.await()
+                        var error = false
+                        try {
+                            Malitounik.referens.child(file).getFile(localFile).addOnFailureListener {
+                                toastView(this@MainActivity, getString(R.string.error))
+                                error = true
+                            }.await()
+                        } catch (_: Throwable) {
+                            error = true
+                        }
+                        if (error) continue
                         val fi = FileInputStream(localFile)
                         val origin = BufferedInputStream(fi)
                         val entry = ZipEntry(file.substring(file.lastIndexOf("/")))
@@ -379,11 +386,15 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.label9a.setBackgroundResource(R.drawable.selector_dark)
             binding.label10a.setBackgroundResource(R.drawable.selector_dark)
             binding.label14a.setBackgroundResource(R.drawable.selector_dark)
+            binding.image5.setBackgroundResource(R.drawable.selector_dark)
+            binding.image6.setBackgroundResource(R.drawable.selector_dark)
         } else {
             setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest))
             binding.label9a.setBackgroundResource(R.drawable.selector_default)
             binding.label10a.setBackgroundResource(R.drawable.selector_default)
             binding.label14a.setBackgroundResource(R.drawable.selector_default)
+            binding.image5.setBackgroundResource(R.drawable.selector_default)
+            binding.image6.setBackgroundResource(R.drawable.selector_default)
         }
         if (k.getInt("sinoidal", 0) == 1) {
             binding.label11.visibility = View.VISIBLE

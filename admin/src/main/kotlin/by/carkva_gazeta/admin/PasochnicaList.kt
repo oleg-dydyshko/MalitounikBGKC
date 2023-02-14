@@ -240,27 +240,42 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 var resourse = ""
+                var res = fileName
+                val localFile = withContext(Dispatchers.IO) {
+                    File.createTempFile("piasochnica", "html")
+                }
                 try {
-                    val localFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("piasochnica", "html")
-                    }
                     Malitounik.referens.child("/$dirToFile").getFile(localFile).addOnFailureListener {
                         MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
                     val t1 = fileName.indexOf(".")
                     var newFileName = fileName.replace("\n", " ")
+                    var title = ""
                     if (t1 != -1) {
-                        resourse = "(" + fileName.substring(0, t1) + ") "
-                        newFileName = fileName.substring(0, t1)
+                        resourse = "(" + newFileName.substring(0, t1) + ") "
+                        newFileName = newFileName.substring(0, t1)
+                        if (fileName.contains(".html")) {
+                            val rt = localFile.readText()
+                            val t2 = rt.indexOf("<strong>")
+                            if (t2 != -1) {
+                                val t3 = rt.indexOf("</strong>")
+                                title = rt.substring(t2 + 8, t3).trim()
+                            }
+                        }
                     }
-                    Malitounik.referens.child("/admin/piasochnica/$resourse$newFileName").putFile(Uri.fromFile(localFile)).await()
+                    res = if (title != "") {
+                        val preparetext = MainActivity.fromHtml(title).toString()
+                        preparetext.substring(0, 1).uppercase() + preparetext.substring(1).lowercase()
+                    } else newFileName
+                    Malitounik.referens.child("/admin/piasochnica/$resourse$res").putFile(Uri.fromFile(localFile)).await()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
                 binding.progressBar2.visibility = View.GONE
                 val intent = Intent(this@PasochnicaList, Pasochnica::class.java)
+                intent.putExtra("text", localFile.readText())
                 intent.putExtra("isSite", true)
-                intent.putExtra("fileName", "$resourse$fileName")
+                intent.putExtra("fileName", "$resourse$res")
                 startActivity(intent)
             }
         }

@@ -5,8 +5,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
@@ -25,7 +23,7 @@ class DialogPasochnicaFileName : DialogFragment() {
     private lateinit var builder: AlertDialog.Builder
     private var _binding: DialogEditviewDisplayBinding? = null
     private val binding get() = _binding!!
-    private val textWatcher = object : TextWatcher {
+    /*private val textWatcher = object : TextWatcher {
         private var editPosition = 0
         private var check = 0
         private var editch = true
@@ -52,7 +50,7 @@ class DialogPasochnicaFileName : DialogFragment() {
                 }
             }
         }
-    }
+    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -105,7 +103,7 @@ class DialogPasochnicaFileName : DialogFragment() {
             binding.content.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             binding.content.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorWhite)
             binding.content.requestFocus()
-            binding.content.addTextChangedListener(textWatcher)
+            //binding.content.addTextChangedListener(textWatcher)
             binding.content.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     setFileName()

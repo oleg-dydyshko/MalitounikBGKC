@@ -389,7 +389,7 @@
             android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAInlVmnTmpjY-SZQXQdB2RUIqzm6pXcrryjHH1FQ" />
 
-        <service android:name=".ServiceRadioMaryia" />
+        <service android:name=".ServiceRadyjoMaryia" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

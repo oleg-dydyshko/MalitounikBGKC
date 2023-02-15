@@ -755,5 +755,6 @@
     <string name="artykuly_opisanie">Для пошуку па ўсіх матэрыялах трэба спампаваць %1$s.\nІнакш пошук будзе весьціся толькі па раней агледжаных рубрыках.</string>
     <string name="padie_maryia">РАДЫЁ МАРЫЯ</string>
     <string name="padie_maryia_s">Радыё Марыя</string>
+    <string name="program_radio_maryia">ПРАГРАМА ПЕРАДАЧ РАДЫЁ МАРЫЯ</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

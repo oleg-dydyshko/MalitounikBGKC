@@ -119,7 +119,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         stopTimer()
         timerTask = object : TimerTask() {
             override fun run() {
-                if (!ServiceRadioMaryia.isServiceRadioMaryiaRun) {
+                if (!ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
                         binding.label15b.visibility = View.GONE
@@ -388,6 +388,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.label14a.setBackgroundResource(R.drawable.selector_dark)
             binding.image5.setBackgroundResource(R.drawable.selector_dark)
             binding.image6.setBackgroundResource(R.drawable.selector_dark)
+            binding.image7.setBackgroundResource(R.drawable.selector_dark)
         } else {
             setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest))
             binding.label9a.setBackgroundResource(R.drawable.selector_default)
@@ -395,6 +396,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.label14a.setBackgroundResource(R.drawable.selector_default)
             binding.image5.setBackgroundResource(R.drawable.selector_default)
             binding.image6.setBackgroundResource(R.drawable.selector_default)
+            binding.image7.setBackgroundResource(R.drawable.selector_default)
         }
         if (k.getInt("sinoidal", 0) == 1) {
             binding.label11.visibility = View.VISIBLE
@@ -437,8 +439,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.label148.setOnClickListener(this)
         binding.image5.setOnClickListener(this)
         binding.image6.setOnClickListener(this)
+        binding.image7.setOnClickListener(this)
 
-        if (ServiceRadioMaryia.isServiceRadioMaryiaRun) {
+        if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
             sendTitlePadioMaryia()
         }
 
@@ -957,9 +960,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     private fun selectFragment(view: View?, start: Boolean = false, shortcuts: Boolean = false) {
         val id = view?.id ?: R.id.label1
-        val idOld = if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145 || id == R.id.label148 || id == R.id.image5) idSelect
+        val idOld = if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145 || id == R.id.label148 || id == R.id.image5 || id == R.id.image6 || id == R.id.image7) idSelect
         else id
-        if (!(id == R.id.label9a || id == R.id.label10a || id == R.id.label14a || id == R.id.image5 || id == R.id.image6)) {
+        if (!(id == R.id.label9a || id == R.id.label10a || id == R.id.label14a || id == R.id.image5 || id == R.id.image6 || id == R.id.image7)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             if (dzenNoch) {
                 binding.citata.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
@@ -1498,8 +1501,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             R.id.image5 -> {
                 if (isNetworkAvailable()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        val intent = Intent(this, ServiceRadioMaryia::class.java)
-                        intent.putExtra("action", ServiceRadioMaryia.PLAY_PAUSE)
+                        val intent = Intent(this, ServiceRadyjoMaryia::class.java)
+                        intent.putExtra("action", ServiceRadyjoMaryia.PLAY_PAUSE)
                         startService(intent)
                         setRadioNotification()
                         sendTitlePadioMaryia()
@@ -1511,13 +1514,17 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
             }
             R.id.image6 -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && ServiceRadioMaryia.isServiceRadioMaryiaRun) {
-                    val intent = Intent(this, ServiceRadioMaryia::class.java)
-                    intent.putExtra("action", ServiceRadioMaryia.STOP)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
+                    val intent = Intent(this, ServiceRadyjoMaryia::class.java)
+                    intent.putExtra("action", ServiceRadyjoMaryia.STOP)
                     startService(intent)
                     stopTimer()
                     binding.label15b.visibility = View.GONE
                 }
+            }
+            R.id.image7 -> {
+                val dialog = DialogProgramPadoiMaryia()
+                dialog.show(supportFragmentManager, "DialogProgramPadoiMaryia")
             }
         }
         if (start) {
@@ -1562,8 +1569,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             notifi.setContentTitle(getString(R.string.padie_maryia_s))
             notifi.setContentText(binding.label15b.text)
             notifi.setOngoing(true)
-            notifi.addAction(R.drawable.play3, "play", retreivePlaybackAction(ServiceRadioMaryia.PLAY_PAUSE))
-            notifi.addAction(R.drawable.stop3, "stop", retreivePlaybackAction(ServiceRadioMaryia.STOP))
+            notifi.addAction(R.drawable.play3, "play", retreivePlaybackAction(ServiceRadyjoMaryia.PLAY_PAUSE))
+            notifi.addAction(R.drawable.stop3, "stop", retreivePlaybackAction(ServiceRadyjoMaryia.STOP))
             val notification = notifi.build()
             val notificationManager = NotificationManagerCompat.from(this)
             notificationManager.notify(100, notification)
@@ -1573,23 +1580,23 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private fun retreivePlaybackAction(which: Int): PendingIntent? {
         val action = Intent()
         val pendingIntent: PendingIntent
-        val serviceName = ComponentName(this, ServiceRadioMaryia::class.java)
+        val serviceName = ComponentName(this, ServiceRadyjoMaryia::class.java)
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         } else {
             PendingIntent.FLAG_UPDATE_CURRENT
         }
         when (which) {
-            ServiceRadioMaryia.PLAY_PAUSE -> {
-                action.putExtra("action", ServiceRadioMaryia.PLAY_PAUSE)
+            ServiceRadyjoMaryia.PLAY_PAUSE -> {
+                action.putExtra("action", ServiceRadyjoMaryia.PLAY_PAUSE)
                 action.component = serviceName
-                pendingIntent = PendingIntent.getService(this, ServiceRadioMaryia.PLAY_PAUSE, action, flags)
+                pendingIntent = PendingIntent.getService(this, ServiceRadyjoMaryia.PLAY_PAUSE, action, flags)
                 return pendingIntent
             }
-            ServiceRadioMaryia.STOP -> {
-                action.putExtra("action", ServiceRadioMaryia.STOP)
+            ServiceRadyjoMaryia.STOP -> {
+                action.putExtra("action", ServiceRadyjoMaryia.STOP)
                 action.component = serviceName
-                pendingIntent = PendingIntent.getService(this, ServiceRadioMaryia.STOP, action, flags)
+                pendingIntent = PendingIntent.getService(this, ServiceRadyjoMaryia.STOP, action, flags)
                 return pendingIntent
             }
         }

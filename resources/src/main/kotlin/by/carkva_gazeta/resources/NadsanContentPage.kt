@@ -140,8 +140,16 @@ class NadsanContentPage : BaseFragment(), OnItemLongClickListener, AdapterView.O
         inputStream.close()
         val bibleline = split[page + 1].split("\n")
         bibleline.forEach {
-            if (it.trim() != "")
-                bible.add(it)
+            if (it.trim() != "") {
+                var line = it
+                if (line.contains("//")) {
+                    val t1 = line.indexOf("//")
+                    line = line.substring(0, t1).trim()
+                    if (line != "") bible.add("$line\n")
+                } else {
+                    bible.add("$line\n")
+                }
+            }
         }
         activity?.let { activity ->
             adapter = ListAdaprer(activity, bible)

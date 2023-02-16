@@ -8,6 +8,8 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.DialogWebviewDisplayBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +24,13 @@ class DialogProgramPadoiMaryia : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var _binding: DialogWebviewDisplayBinding? = null
     private val binding get() = _binding!!
+    private val dzenNoch: Boolean
+        get() {
+            activity?.let {
+                return (it as BaseActivity).getBaseDzenNoch()
+            }
+            return false
+        }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -31,15 +40,18 @@ class DialogProgramPadoiMaryia : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogWebviewDisplayBinding.inflate(LayoutInflater.from(it))
-            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
+            val webSettings = binding.content.settings
+            if (dzenNoch) {
+                binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                    @Suppress("DEPRECATION") WebSettingsCompat.setForceDark(webSettings, WebSettingsCompat.FORCE_DARK_ON)
+                }
+            } else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = getString(R.string.program_radio_maryia)
             sendTitlePadioMaryia()
-            val webSettings = binding.content.settings
             webSettings.standardFontFamily = "sans-serif-condensed"
             webSettings.defaultFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT.toInt()
             webSettings.domStorageEnabled = true
@@ -114,7 +126,9 @@ class DialogProgramPadoiMaryia : DialogFragment() {
                                             text = text.substring(t1, t2)
                                         }
                                     }
-                                    text = "<html><head>$builder</head><body>$efir$text</body></html>"
+                                    val style = if (dzenNoch) "<style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #424242;}</style>\n"
+                                    else "<style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}</style>\n"
+                                    text = "<html><head>$style$builder</head><body>$efir$text</body></html>"
                                     binding.content.loadDataWithBaseURL(null, text.trim(), "text/html", "utf-8", null)
                                 }
                             }

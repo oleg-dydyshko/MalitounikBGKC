@@ -44,7 +44,6 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
     private var searchJob: Job? = null
     private var fierstPosition = 0
     private var artykulyList = ArrayList<LinkedTreeMap<String, String>>()
-    private val positionList = ArrayList<Int>()
     private var path = "history.json"
 
     companion object {
@@ -330,9 +329,25 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
             else -> 1
         }
         intent.putExtra("rubrika", rub)
-        if (searchView?.isIconified == false) intent.putExtra("position", positionList[position])
+        if (searchView?.isIconified == false) intent.putExtra("position", fingListPosition(listAdapter.getItem(position)?.get("link")))
         else intent.putExtra("position", position)
         startActivity(intent)
+    }
+
+    private fun fingListPosition(link: String?): Int {
+        var position = 0
+        var rub = "history.json"
+        for (i in 0 until artykulyList.size) {
+            if (rub != artykulyList[i]["rub"]) {
+                rub = artykulyList[i]["rub"] ?: "history.json"
+                position = 0
+            }
+            if (artykulyList[i]["link"] == link) {
+                return position
+            }
+            position++
+        }
+        return 0
     }
 
     private fun changeSearchViewElements(view: View?) {
@@ -469,15 +484,8 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
                 }
             }
         }
-        var position = 0
-        var rub = "history.json"
-        positionList.clear()
         for (i in 0 until artykulyList.size) {
             if (searchJob?.isActive == false) break
-            if (rub != artykulyList[i]["rub"]) {
-                rub = artykulyList[i]["rub"] ?: "history.json"
-                position = 0
-            }
             var prepinanie = artykulyList[i]["str"] ?: ""
             prepinanie = prepinanie.replace(",", "")
             prepinanie = prepinanie.replace(".", "")
@@ -497,7 +505,6 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
             if (slovocalkam == 0) {
                 if (prepinanie.contains(poshuk1, pegistrbukv)) {
                     seashpost.add(artykulyList[i])
-                    positionList.add(position)
                 }
             } else {
                 if (prepinanie.contains(poshuk1, pegistrbukv)) {
@@ -520,11 +527,9 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
                     }
                     if (slovocalkam) {
                         seashpost.add(artykulyList[i])
-                        positionList.add(position)
                     }
                 }
             }
-            position++
         }
         return seashpost
     }

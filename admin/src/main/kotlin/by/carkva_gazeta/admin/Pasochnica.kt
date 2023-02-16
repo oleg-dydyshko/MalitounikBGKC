@@ -565,6 +565,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                         MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                 }
+                isHTML = result.contains("<!DOCTYPE HTML>", ignoreCase = true)
                 if (isHTML) {
                     binding.apisanne.setText(MainActivity.fromHtml(result, HtmlCompat.FROM_HTML_MODE_COMPACT))
                     binding.actionP.visibility = View.GONE
@@ -575,6 +576,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 binding.progressBar2.visibility = View.GONE
             }
         } else {
+            isHTML = content.contains("<!DOCTYPE HTML>", ignoreCase = true)
             if (isHTML) {
                 binding.apisanne.setText(MainActivity.fromHtml(content, HtmlCompat.FROM_HTML_MODE_COMPACT))
                 binding.actionP.visibility = View.GONE

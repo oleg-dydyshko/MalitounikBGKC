@@ -1629,11 +1629,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                                     if (t2 != -1) {
                                         text = text.substring(t2 + 1)
                                     }
-                                    binding.label15b.text = text.trim()
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                        setRadioNotification()
+                                        if (binding.label15b.text != text.trim()) {
+                                            binding.label15b.text = text.trim()
+                                            setRadioNotification()
+                                        }
+                                        binding.label15b.visibility = View.VISIBLE
                                     }
-                                    binding.label15b.visibility = View.VISIBLE
                                 }
                             }
                         } catch (_: Throwable) {

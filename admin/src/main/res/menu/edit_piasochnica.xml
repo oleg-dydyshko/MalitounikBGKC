@@ -2,6 +2,12 @@
 <menu  xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/action_find"
+        android:icon="@drawable/search"
+        android:orderInCategory="100"
+        android:title="@string/searche_text"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_preview"
         android:icon="@drawable/natatka"
         android:orderInCategory="100"

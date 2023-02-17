@@ -205,24 +205,29 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
 
     private fun load() {
         try {
-            val builder = StringBuilder()
-            if (dzenNoch) builder.append("<html><head><style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #303030;}$style</style></head><body>\n")
-            else builder.append("<html><head><style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}$style</style></head><body>\n")
-            val gson = Gson()
-            val localFile = File("$filesDir/Artykuly/$path")
-            val text = localFile.readText()
-            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
-            data.clear()
-            data.addAll(gson.fromJson(text, type))
-            position = intent.extras?.getInt("position") ?: 0
-            var textData = data[position]["str"] ?: ""
-            if (dzenNoch) {
-                textData = textData.replace("color: rgb(102, 0, 0)", "color: rgb(244, 67, 54)")
-                textData = textData.replace("color:rgb(102, 0, 0)", "color: rgb(244, 67, 54)")
+            if (MainActivity.isNetworkAvailable()) {
+                val builder = StringBuilder()
+                if (dzenNoch) builder.append("<html><head><style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #303030;}$style</style></head><body>\n")
+                else builder.append("<html><head><style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}$style</style></head><body>\n")
+                val gson = Gson()
+                val localFile = File("$filesDir/Artykuly/$path")
+                val text = localFile.readText()
+                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
+                data.clear()
+                data.addAll(gson.fromJson(text, type))
+                position = intent.extras?.getInt("position") ?: 0
+                var textData = data[position]["str"] ?: ""
+                if (dzenNoch) {
+                    textData = textData.replace("color: rgb(102, 0, 0)", "color: rgb(244, 67, 54)")
+                    textData = textData.replace("color:rgb(102, 0, 0)", "color: rgb(244, 67, 54)")
+                }
+                builder.append(textData)
+                builder.append("</body></html>")
+                binding.webView.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
+            } else {
+                val dialog = DialogNoInternet()
+                dialog.show(supportFragmentManager, "DialogNoInternet")
             }
-            builder.append(textData)
-            builder.append("</body></html>")
-            binding.webView.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
         } catch (_: Throwable) {
             MainActivity.toastView(this, getString(R.string.error_ch2))
         }

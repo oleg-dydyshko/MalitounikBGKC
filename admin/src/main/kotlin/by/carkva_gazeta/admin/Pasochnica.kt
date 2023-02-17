@@ -1,5 +1,7 @@
 package by.carkva_gazeta.admin
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
@@ -9,10 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.*
-import android.text.style.AbsoluteSizeSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
-import android.text.style.URLSpan
+import android.text.style.*
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -40,6 +39,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     private var positionY = 0
     private var firstTextPosition = ""
     private var isHTML = true
+    private var findPosition = 0
+    private val findListSpans = ArrayList<SpanStr>()
+    private var animatopRun = false
     private val textWatcher = object : TextWatcher {
         private var editPosition = 0
 
@@ -64,6 +66,145 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     }
 
     override fun setMyTheme() {
+    }
+
+    private fun findAllAsanc(noNext: Boolean = true) {
+        CoroutineScope(Dispatchers.Main).launch {
+            findRemoveSpan()
+            findAll()
+            findCheckPosition()
+            if (noNext) findNext(false)
+        }
+    }
+
+    private fun findAll() {
+        var position = 0
+        val search = binding.textSearch.text.toString()
+        if (search.length >= 3) {
+            val text = binding.apisanne.text as SpannableStringBuilder
+            val searchLig = search.length
+            var run = true
+            while (run) {
+                val strPosition = text.indexOf(search, position, true)
+                if (strPosition != -1) {
+                    findListSpans.add(SpanStr(getColorSpans(text.getSpans(strPosition, strPosition + searchLig, ForegroundColorSpan::class.java)), strPosition, strPosition + searchLig))
+                    text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    position = strPosition + 1
+                } else {
+                    run = false
+                }
+            }
+        }
+    }
+
+    private fun findCheckPosition() {
+        if (findListSpans.isNotEmpty()) {
+            binding.apisanne.layout?.let { layout ->
+                val lineForVertical = layout.getLineForVertical(positionY)
+                for (i in 0 until findListSpans.size) {
+                    if (lineForVertical <= layout.getLineForOffset(findListSpans[i].start)) {
+                        findPosition = i
+                        break
+                    }
+                }
+            }
+        } else {
+            findPosition = 0
+            binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.niama)
+        }
+    }
+
+    private fun findRemoveSpan() {
+        val text = binding.apisanne.text as SpannableStringBuilder
+        if (findListSpans.isNotEmpty()) {
+            findListSpans.forEach {
+                text.setSpan(ForegroundColorSpan(it.color), it.start, it.size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            if (findListSpans.size >= findPosition) findPosition = 0
+            findListSpans.clear()
+        }
+        val spans = text.getSpans(0, text.length, BackgroundColorSpan::class.java)
+        spans.forEach {
+            text.removeSpan(it)
+        }
+    }
+
+    private fun findNext(next: Boolean = true, previous: Boolean = false) {
+        val findPositionOld = findPosition
+        if (next) {
+            if (previous) findPosition--
+            else findPosition++
+        }
+        if (findListSpans.isNotEmpty()) {
+            if (findPosition == -1) {
+                findPosition = findListSpans.size - 1
+            }
+            if (findPosition == findListSpans.size) {
+                findPosition = 0
+            }
+            val text = binding.apisanne.text as SpannableStringBuilder
+            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld].start, findListSpans[findPositionOld].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, findPosition + 1, findListSpans.size)
+            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta2)), findListSpans[findPosition].start, findListSpans[findPosition].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            binding.apisanne.layout?.let { layout ->
+                val line = layout.getLineForOffset(findListSpans[findPosition].start)
+                val y = layout.getLineTop(line)
+                val anim = ObjectAnimator.ofInt(binding.scrollView, "scrollY", binding.scrollView.scrollY, y)
+                anim.addListener(object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {
+                        animatopRun = true
+                    }
+
+                    override fun onAnimationEnd(animation: Animator) {
+                        animatopRun = false
+                    }
+
+                    override fun onAnimationCancel(animation: Animator) {
+                    }
+
+                    override fun onAnimationRepeat(animation: Animator) {
+                    }
+                })
+                anim.setDuration(1000).start()
+            }
+        }
+    }
+
+    private fun getColorSpans(colorSpan: Array<out ForegroundColorSpan>): Int {
+        var color = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
+        if (colorSpan.isNotEmpty()) {
+            color = colorSpan[colorSpan.size - 1].foregroundColor
+        }
+        return color
+    }
+
+    override fun onScroll(t: Int, oldt: Int) {
+        positionY = t
+        binding.apisanne.layout?.let { layout ->
+            val textForVertical = binding.apisanne.text.toString().substring(layout.getLineStart(layout.getLineForVertical(positionY)), layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
+            if (textForVertical != "") firstTextPosition = textForVertical
+            if (binding.find.visibility == View.VISIBLE && !animatopRun) {
+                if (findListSpans.isNotEmpty()) {
+                    val text = binding.apisanne.text as SpannableStringBuilder
+                    for (i in 0 until findListSpans.size) {
+                        if (layout.getLineForOffset(findListSpans[i].start) == layout.getLineForVertical(positionY)) {
+                            var ii = i + 1
+                            if (i == 0) ii = 1
+                            findPosition = i
+                            var findPositionOld = if (t >= oldt) i - 1
+                            else i + 1
+                            if (findPositionOld == -1) findPositionOld = findListSpans.size - 1
+                            if (findPositionOld == findListSpans.size) findPositionOld = 0
+                            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld].start, findListSpans[findPositionOld].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (findPosition != ii) binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, ii, findListSpans.size)
+                            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta2)), findListSpans[i].start, findListSpans[i].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            break
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun setUrl(url: String, titleUrl: String) {
@@ -111,14 +252,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     binding.actionBack.visibility = View.GONE
                 }
             }
-        }
-    }
-
-    override fun onScroll(t: Int, oldt: Int) {
-        positionY = t
-        binding.apisanne.layout?.let { layout ->
-            val textForVertical = binding.apisanne.text.toString().substring(layout.getLineStart(layout.getLineForVertical(positionY)), layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
-            if (textForVertical != "") firstTextPosition = textForVertical
         }
     }
 
@@ -198,6 +331,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
             isHTML = savedInstanceState.getBoolean("isHTML", true)
             fileName = savedInstanceState.getString("fileName", "")
             resours = savedInstanceState.getString("resours", "")
+            if (savedInstanceState.getBoolean("seach")) {
+                binding.find.visibility = View.VISIBLE
+            }
             history.clear()
             binding.apisanne.post {
                 val textline = savedInstanceState.getString("textLine", "")
@@ -233,6 +369,43 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
             }
         }
         positionY = k.getInt("admin" + fileName + "position", 0)
+        binding.textSearch.addTextChangedListener(object : TextWatcher {
+            var editPosition = 0
+            var check = 0
+            var editch = true
+
+            override fun afterTextChanged(s: Editable?) {
+                var edit = s.toString()
+                edit = edit.replace("и", "і")
+                edit = edit.replace("щ", "ў")
+                edit = edit.replace("ъ", "'")
+                edit = edit.replace("И", "І")
+                if (editch) {
+                    if (check != 0) {
+                        binding.textSearch.removeTextChangedListener(this)
+                        binding.textSearch.setText(edit)
+                        binding.textSearch.setSelection(editPosition)
+                        binding.textSearch.addTextChangedListener(this)
+                    }
+                }
+                if (edit.length >= 3) {
+                    findAllAsanc()
+                } else {
+                    findRemoveSpan()
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                editch = count != after
+                check = after
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                editPosition = start + count
+            }
+        })
+        binding.imageView6.setOnClickListener { findNext(previous = true) }
+        binding.imageView5.setOnClickListener { findNext() }
         setTollbarTheme()
     }
 
@@ -242,6 +415,8 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         outState.putString("fileName", fileName)
         outState.putString("textLine", firstTextPosition)
         outState.putString("resours", resours)
+        if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
+        else outState.putBoolean("seach", false)
     }
 
     private fun setTollbarTheme() {
@@ -287,7 +462,15 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     }
 
     override fun onBack() {
-        onSupportNavigateUp()
+        if (binding.find.visibility == View.VISIBLE) {
+            binding.find.visibility = View.GONE
+            binding.textSearch.setText("")
+            findRemoveSpan()
+            val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
+        } else {
+            onSupportNavigateUp()
+        }
     }
 
     override fun onDialogSaveAsFile(dir: String, oldFileName: String, fileName: String) {
@@ -806,6 +989,12 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == R.id.action_find) {
+            binding.find.visibility = View.VISIBLE
+            binding.textSearch.requestFocus()
+            EditTextCustom.focusAndShowKeyboard(binding.textSearch)
+            return true
+        }
         if (id == R.id.action_preview) {
             binding.apisanne.removeTextChangedListener(textWatcher)
             isHTML = !isHTML
@@ -1054,4 +1243,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     }
 
     private data class History(val spannable: Spannable, val editPosition: Int)
+
+    private data class SpanStr(val color: Int, val start: Int, val size: Int)
 }

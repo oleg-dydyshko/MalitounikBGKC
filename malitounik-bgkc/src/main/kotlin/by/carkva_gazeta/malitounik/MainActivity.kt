@@ -61,6 +61,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private var mLastClickTime: Long = 0
     private var resetTollbarJob: Job? = null
     private var snackbar: Snackbar? = null
+    private var isConnectServise = false
     private var mRadyjoMaryiaService: ServiceRadyjoMaryia? = null
     private val mainActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 300) {
@@ -110,18 +111,23 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     binding.label15b.visibility = View.VISIBLE
                 }
             }
+            isConnectServise = true
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
+            isConnectServise = false
             mRadyjoMaryiaService = null
         }
     }
 
     override fun onPause() {
         super.onPause()
-        unbindService(mConnection)
+        if (isConnectServise) {
+            unbindService(mConnection)
+        }
         mRadyjoMaryiaService = null
         binding.label15b.visibility = View.GONE
+        isConnectServise = false
     }
 
     override fun createAndSentFile(log: ArrayList<String>, isClear: Boolean) {
@@ -253,6 +259,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             val intent = Intent(this, ServiceRadyjoMaryia::class.java)
             startService(intent)
             bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+            isConnectServise = true
         }
 
         /*val density = resources.displayMetrics.density
@@ -1487,6 +1494,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                             val intent = Intent(this, ServiceRadyjoMaryia::class.java)
                             startService(intent)
                             bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+                            isConnectServise = true
                         } else {
                             mRadyjoMaryiaService?.playOrPause()
                         }
@@ -1498,7 +1506,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
             R.id.image6 -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
-                    unbindService(mConnection)
+                    if (isConnectServise) {
+                        unbindService(mConnection)
+                    }
+                    isConnectServise = false
                     mRadyjoMaryiaService?.stopServiceRadioMaria()
                     binding.label15b.visibility = View.GONE
                 }
@@ -1534,10 +1545,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     override fun unBinding() {
-        if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
+        if (isConnectServise) {
             unbindService(mConnection)
-            binding.label15b.visibility = View.GONE
         }
+        binding.label15b.visibility = View.GONE
+        isConnectServise = false
     }
 
     override fun onClick(view: View?) {

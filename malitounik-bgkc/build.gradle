@@ -12,8 +12,8 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 441991
-        versionName "4.2.0.34"
+        versionCode 441992
+        versionName "4.2.0.35"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -70,8 +70,8 @@ dependencies {
     //api 'com.google.firebase:firebase-core:21.1.1'
     api 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.google.android.exoplayer:exoplayer:2.18.2'
-    implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.2'
+    implementation 'com.google.android.exoplayer:exoplayer:2.18.3'
+    implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.3'
     implementation 'androidx.core:core-ktx:1.9.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

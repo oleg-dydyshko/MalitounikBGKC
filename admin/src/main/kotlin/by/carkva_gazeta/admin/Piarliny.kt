@@ -131,6 +131,24 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                         MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
                     binding.progressBar2.visibility = View.GONE
+                    if (intent.extras != null) {
+                        val time = intent.extras?.getLong("time") ?: Calendar.getInstance().timeInMillis
+                        val cal = GregorianCalendar()
+                        cal.timeInMillis = time
+                        val day = cal[Calendar.DATE]
+                        val mun = cal[Calendar.MONTH]
+                        val cal2 = GregorianCalendar()
+                        for (i in 0 until piarliny.size) {
+                            val t = piarliny[i].time * 1000
+                            cal2.timeInMillis = t
+                            val day2 = cal2[Calendar.DATE]
+                            val mun2 = cal2[Calendar.MONTH]
+                            if (day == day2 && mun == mun2) {
+                                onDialogEditClick(i)
+                                break
+                            }
+                        }
+                    }
                 }.await()
             } catch (e: Throwable) {
                 MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
@@ -147,14 +165,13 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
             return@setOnItemLongClickListener true
         }
         binding.listView.setOnItemClickListener { _, _, position, _ ->
-            val calendar = GregorianCalendar()
-            calendar.timeInMillis = piarliny[position].time * 1000
-            val day = calendar[Calendar.DATE]
-            val mun = calendar[Calendar.MONTH] + 1
-            val i = Intent(this, by.carkva_gazeta.malitounik.Piarliny::class.java)
-            i.putExtra("mun", mun)
-            i.putExtra("day", day)
-            startActivity(i)
+            var text = piarliny[position].data
+            if (text.length > 30) {
+                text = text.substring(0, 30)
+                text = "$text..."
+            }
+            val dialog = DialogPiarlinyContextMenu.getInstance(position, text)
+            dialog.show(supportFragmentManager, "DialogPiarlinyContextMenu")
         }
         setTollbarTheme()
     }

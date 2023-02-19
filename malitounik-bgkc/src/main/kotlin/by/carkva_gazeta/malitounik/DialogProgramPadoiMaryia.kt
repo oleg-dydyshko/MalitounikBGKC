@@ -71,29 +71,33 @@ class DialogProgramPadoiMaryia : DialogFragment() {
                 runCatching {
                     withContext(Dispatchers.IO) {
                         try {
-                            var efir: String
-                            val mURL1 = URL("https://radiomaria.by/player/hintbackend.php")
-                            with(mURL1.openConnection() as HttpURLConnection) {
-                                val sb = StringBuilder()
-                                BufferedReader(InputStreamReader(inputStream)).use {
-                                    var inputLine = it.readLine()
-                                    while (inputLine != null) {
-                                        sb.append(inputLine)
-                                        inputLine = it.readLine()
+                            var efir = arguments?.getString("titleRadyjoMaryia") ?: ""
+                            if (efir == "") {
+                                val mURL1 = URL("https://radiomaria.by/player/hintbackend.php")
+                                with(mURL1.openConnection() as HttpURLConnection) {
+                                    val sb = StringBuilder()
+                                    BufferedReader(InputStreamReader(inputStream)).use {
+                                        var inputLine = it.readLine()
+                                        while (inputLine != null) {
+                                            sb.append(inputLine)
+                                            inputLine = it.readLine()
+                                        }
+                                    }
+                                    withContext(Dispatchers.Main) {
+                                        var text = MainActivity.fromHtml(sb.toString()).toString().trim()
+                                        val t1 = text.indexOf(":", ignoreCase = true)
+                                        if (t1 != -1) {
+                                            text = text.substring(t1 + 1)
+                                        }
+                                        val t2 = text.indexOf(">", ignoreCase = true)
+                                        if (t2 != -1) {
+                                            text = text.substring(t2 + 1)
+                                        }
+                                        efir = "<strong>Цяпер у эфіры:</strong><br><em>" + text.trim() + "</em>"
                                     }
                                 }
-                                withContext(Dispatchers.Main) {
-                                    var text = MainActivity.fromHtml(sb.toString()).toString().trim()
-                                    val t1 = text.indexOf(":", ignoreCase = true)
-                                    if (t1 != -1) {
-                                        text = text.substring(t1 + 1)
-                                    }
-                                    val t2 = text.indexOf(">", ignoreCase = true)
-                                    if (t2 != -1) {
-                                        text = text.substring(t2 + 1)
-                                    }
-                                    efir = "<strong>Цяпер у эфіры:</strong><br><em>" + text.trim() + "</em>"
-                                }
+                            } else {
+                                efir = "<strong>Цяпер у эфіры:</strong><br><em>$efir</em>"
                             }
                             val mURL = URL("https://radiomaria.by/program")
                             with(mURL.openConnection() as HttpURLConnection) {
@@ -138,6 +142,16 @@ class DialogProgramPadoiMaryia : DialogFragment() {
                 }
                 binding.progressBar.visibility = View.GONE
             }
+        }
+    }
+
+    companion object {
+        fun getInstance(titleRadyjoMaryia: String): DialogProgramPadoiMaryia {
+            val bundle = Bundle()
+            bundle.putString("titleRadyjoMaryia", titleRadyjoMaryia)
+            val dialog = DialogProgramPadoiMaryia()
+            dialog.arguments = bundle
+            return dialog
         }
     }
 }

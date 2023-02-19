@@ -120,14 +120,22 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         if (isConnectServise) {
             unbindService(mConnection)
         }
         mRadyjoMaryiaService = null
         binding.label15b.visibility = View.GONE
         isConnectServise = false
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
+            val intent = Intent(this, ServiceRadyjoMaryia::class.java)
+            bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+        }
     }
 
     override fun createAndSentFile(log: ArrayList<String>, isClear: Boolean) {
@@ -254,12 +262,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             val lp = window.attributes
             lp.screenBrightness = brightness.toFloat() / 100
             window.attributes = lp
-        }
-        if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
-            val intent = Intent(this, ServiceRadyjoMaryia::class.java)
-            startService(intent)
-            bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
-            isConnectServise = true
         }
 
         /*val density = resources.displayMetrics.density
@@ -1494,7 +1496,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                             val intent = Intent(this, ServiceRadyjoMaryia::class.java)
                             startService(intent)
                             bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
-                            isConnectServise = true
                         } else {
                             mRadyjoMaryiaService?.playOrPause()
                         }
@@ -1515,7 +1516,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
             }
             R.id.image7 -> {
-                val dialog = DialogProgramPadoiMaryia()
+                val dialog = DialogProgramPadoiMaryia.getInstance(mRadyjoMaryiaService?.getTitleProgramRadioMaria() ?: "")
                 dialog.show(supportFragmentManager, "DialogProgramPadoiMaryia")
             }
         }

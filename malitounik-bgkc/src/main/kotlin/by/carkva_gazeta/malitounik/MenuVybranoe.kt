@@ -195,8 +195,8 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                 try {
                     val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
                     vybranoe.addAll(gson.fromJson(file.readText(), type))
-                } catch (e: Throwable) {
-                    file.delete()
+                } catch (_: Throwable) {
+                    MainActivity.toastView(fragmentActivity, getString(R.string.error_ch2))
                 }
             }
             checkBibleVybranoe()

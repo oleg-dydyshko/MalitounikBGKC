@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import by.carkva_gazeta.malitounik.databinding.PiarlinyBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -29,6 +30,11 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private lateinit var chin: SharedPreferences
     private var resetTollbarJob: Job? = null
     private var loadPiarlinyJob: Job? = null
+    private val piarlinyActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (MainActivity.isNetworkAvailable()) {
+            loadPiarliny(true)
+        }
+    }
 
     override fun onPause() {
         super.onPause()
@@ -209,7 +215,9 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.ADMINPIARLINY)
-                startActivity(intent)
+                val calendar = GregorianCalendar(2020, mun - 1, day)
+                intent.putExtra("time", calendar.timeInMillis)
+                piarlinyActivityLauncher.launch(intent)
             } else {
                 MainActivity.toastView(this, getString(R.string.error))
             }

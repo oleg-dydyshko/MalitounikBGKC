@@ -135,6 +135,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
             val intent = Intent(this, ServiceRadyjoMaryia::class.java)
             bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+            binding.image5.setImageResource(R.drawable.pause2)
         }
     }
 
@@ -1496,8 +1497,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                             val intent = Intent(this, ServiceRadyjoMaryia::class.java)
                             startService(intent)
                             bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+                            binding.image5.setImageResource(R.drawable.pause2)
                         } else {
-                            mRadyjoMaryiaService?.playOrPause()
+                            mRadyjoMaryiaService?.apply {
+                                playOrPause()
+                                if (isPlayingRadioMaria()) binding.image5.setImageResource(R.drawable.pause2)
+                                else binding.image5.setImageResource(R.drawable.play2)
+                            }
                         }
                     }
                 } else {
@@ -1513,6 +1519,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     isConnectServise = false
                     mRadyjoMaryiaService?.stopServiceRadioMaria()
                     binding.label15b.visibility = View.GONE
+                    binding.image5.setImageResource(R.drawable.play2)
                 }
             }
             R.id.image7 -> {
@@ -1551,6 +1558,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
         binding.label15b.visibility = View.GONE
         isConnectServise = false
+    }
+
+    override fun playingRadioMaria(isPlayingRadioMaria: Boolean) {
+        if (isPlayingRadioMaria) binding.image5.setImageResource(R.drawable.pause2)
+        else binding.image5.setImageResource(R.drawable.play2)
     }
 
     override fun onClick(view: View?) {

@@ -18,6 +18,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,6 +52,7 @@ class ServiceRadyjoMaryia : Service() {
     interface ServiceRadyjoMaryiaListener {
         fun setTitleRadioMaryia(title: String)
         fun unBinding()
+        fun playingRadioMaria(isPlayingRadioMaria: Boolean)
     }
 
     fun setServiceRadyjoMaryiaListener(serviceRadyjoMaryiaListener: ServiceRadyjoMaryiaListener) {
@@ -61,6 +63,15 @@ class ServiceRadyjoMaryia : Service() {
         player = ExoPlayer.Builder(this).build().apply {
             setMediaItem(MediaItem.fromUri(Uri.parse("https://server.radiorm.by:8443/live")))
             prepare()
+            addListener(object : Player.Listener {
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    if (playbackState == Player.STATE_READY) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            setRadioNotification()
+                        }
+                    }
+                }
+            })
         }
     }
 
@@ -82,9 +93,14 @@ class ServiceRadyjoMaryia : Service() {
         } else {
             player?.play()
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setRadioNotification()
+        }
     }
 
     fun getTitleProgramRadioMaria() = radyjoMaryiaTitle
+
+    fun isPlayingRadioMaria() = isPlaying
 
     private fun stopPlay() {
         player?.stop()
@@ -119,6 +135,7 @@ class ServiceRadyjoMaryia : Service() {
         val action = intent?.extras?.getInt("action") ?: PLAY_PAUSE
         if (action == PLAY_PAUSE) {
             playOrPause()
+            listener?.playingRadioMaria(isPlaying)
         } else {
             stopServiceRadioMaria()
             listener?.unBinding()
@@ -191,7 +208,8 @@ class ServiceRadyjoMaryia : Service() {
             notifi.setContentTitle(getString(R.string.padie_maryia_s))
             notifi.setContentText(radyjoMaryiaTitle)
             notifi.setOngoing(true)
-            notifi.addAction(R.drawable.play3, "play", retreivePlaybackAction(PLAY_PAUSE))
+            if (isPlaying) notifi.addAction(R.drawable.pause3, "pause", retreivePlaybackAction(PLAY_PAUSE))
+            else notifi.addAction(R.drawable.play3, "play", retreivePlaybackAction(PLAY_PAUSE))
             notifi.addAction(R.drawable.stop3, "stop", retreivePlaybackAction(STOP))
             val notification = notifi.build()
             val notificationManager = NotificationManagerCompat.from(this)

@@ -53,6 +53,7 @@ class ServiceRadyjoMaryia : Service() {
         fun setTitleRadioMaryia(title: String)
         fun unBinding()
         fun playingRadioMaria(isPlayingRadioMaria: Boolean)
+        fun playingRadioMariaStateReady()
     }
 
     fun setServiceRadyjoMaryiaListener(serviceRadyjoMaryiaListener: ServiceRadyjoMaryiaListener) {
@@ -68,6 +69,7 @@ class ServiceRadyjoMaryia : Service() {
                     if (playbackState == Player.STATE_READY) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             setRadioNotification()
+                            listener?.playingRadioMariaStateReady()
                         }
                     }
                 }

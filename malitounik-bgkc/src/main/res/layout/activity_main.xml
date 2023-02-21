@@ -226,6 +226,19 @@
                         app:layout_constraintEnd_toStartOf="@+id/image6"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <ProgressBar
+                        android:id="@+id/progressbar"
+                        style="?attr/progressBarStyle"
+                        android:layout_width="35dp"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toTopOf="@+id/label15b"
+                        app:layout_constraintEnd_toStartOf="@+id/image6"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <ImageView
                         android:id="@+id/image6"
                         android:layout_width="35dp"

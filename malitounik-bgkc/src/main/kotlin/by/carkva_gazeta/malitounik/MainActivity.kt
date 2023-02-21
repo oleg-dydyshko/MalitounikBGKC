@@ -105,12 +105,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             val binder = service as ServiceRadyjoMaryia.ServiceRadyjoMaryiaBinder
             mRadyjoMaryiaService = binder.getService()
             mRadyjoMaryiaService?.setServiceRadyjoMaryiaListener(this@MainActivity)
-            if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
-                mRadyjoMaryiaService?.let {
-                    binding.label15b.text = it.getTitleProgramRadioMaria()
-                    binding.label15b.visibility = View.VISIBLE
-                }
-            }
             isConnectServise = true
         }
 
@@ -1494,6 +1488,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (isNetworkAvailable()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         if (!ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
+                            binding.image5.visibility = View.INVISIBLE
+                            binding.progressbar.visibility = View.VISIBLE
                             val intent = Intent(this, ServiceRadyjoMaryia::class.java)
                             startService(intent)
                             bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
@@ -1548,8 +1544,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     override fun setTitleRadioMaryia(title: String) {
-        binding.label15b.text = title
-        binding.label15b.visibility = View.VISIBLE
+        if (title != "") {
+            binding.label15b.text = title
+            binding.label15b.visibility = View.VISIBLE
+        }
     }
 
     override fun unBinding() {
@@ -1564,6 +1562,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     override fun playingRadioMaria(isPlayingRadioMaria: Boolean) {
         if (isPlayingRadioMaria) binding.image5.setImageResource(R.drawable.pause2)
         else binding.image5.setImageResource(R.drawable.play2)
+    }
+
+    override fun playingRadioMariaStateReady() {
+        binding.image5.visibility = View.VISIBLE
+        binding.progressbar.visibility = View.GONE
     }
 
     override fun onClick(view: View?) {

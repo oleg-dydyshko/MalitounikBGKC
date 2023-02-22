@@ -113,7 +113,6 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
                 dialog.show(supportFragmentManager, "DialogBibliatekaArtykuly")
             }
         } catch (e: Throwable) {
-            e.printStackTrace()
             MainActivity.toastView(this, getString(R.string.error_ch2))
         }
         binding.progressBar.visibility = View.GONE
@@ -293,7 +292,6 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
             listAdapter.addAll(gson.fromJson<ArrayList<LinkedTreeMap<String, String>>>(text, type))
             listAdapter.notifyDataSetChanged()
         } catch (e: Throwable) {
-            e.printStackTrace()
             MainActivity.toastView(this, getString(R.string.error_ch2))
         }
     }

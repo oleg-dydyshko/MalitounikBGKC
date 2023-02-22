@@ -30,9 +30,14 @@ class MenuBibliatekaArtykuly : BaseListFragment() {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         activity?.let {
-            val intent = Intent(it, BibliatekaArtykulyList::class.java)
-            intent.putExtra("position", position)
-            startActivity(intent)
+            if (position == 21) {
+                val intent = Intent(it, BibliatekaPoll::class.java)
+                startActivity(intent)
+            } else {
+                val intent = Intent(it, BibliatekaArtykulyList::class.java)
+                intent.putExtra("position", position)
+                startActivity(intent)
+            }
         }
     }
 }

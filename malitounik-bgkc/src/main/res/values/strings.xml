@@ -706,7 +706,6 @@
     <string name="dialog_error_data_opisanie">Праверце сістэмную дату або абярыце дату %1$d %2$s %3$d года у меню.</string>
     <string name="dialog_error_data_ok">Абраць</string>
     <string name="admin_file_upload_server">Загрузіць файл</string>
-    <string name="citata">\"Каб усе былі адно\" (Ян 17, 21)</string>
     <string name="malitounik_name">Малітоўнік.\nКаляндар БГКЦ</string>
     <string name="bgkc_resource">БЕЛАРУСКІ ГРЭКА-КАТАЛІЦКІ РЭСУРС</string>
     <string name="log">ЛОГ</string>

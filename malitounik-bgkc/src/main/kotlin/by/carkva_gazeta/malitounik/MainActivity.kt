@@ -12,7 +12,11 @@ import android.os.*
 import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.*
 import android.widget.LinearLayout
@@ -25,6 +29,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
+import androidx.core.text.toSpannable
 import androidx.core.view.GravityCompat
 import by.carkva_gazeta.malitounik.databinding.ActivityMainBinding
 import by.carkva_gazeta.malitounik.databinding.AppBarMainBinding
@@ -550,6 +555,26 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 val arrayList = MenuCaliandar.getDataCalaindar(mun = calendar[Calendar.MONTH], year = calendar[Calendar.YEAR])
                 setDataCalendar = arrayList[calendar[Calendar.DATE] - 1][25].toInt()
             }
+        }
+        val inputStream = resources.openRawResource(R.raw.citata)
+        val isr = InputStreamReader(inputStream)
+        val reader = BufferedReader(isr)
+        val citataList = ArrayList<Spannable>()
+        reader.forEachLine {
+            val line = SpannableStringBuilder()
+            val t1 = it.indexOf("(")
+            line.append(it.substring(0, t1))
+            line.append("\n")
+            line.append(it.substring(t1))
+            citataList.add(line.toSpannable())
+        }
+        binding.citata.text = citataList[Random().nextInt(citataList.size)].apply {
+            setSpan(CustomTypefaceSpan("", ResourcesCompat.getFont(this@MainActivity, R.font.andantinoscript)), 0, 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+            setSpan(StyleSpan(Typeface.BOLD_ITALIC), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            if (dzenNoch) setSpan(ForegroundColorSpan(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary_black)), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            else setSpan(ForegroundColorSpan(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary)), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(AbsoluteSizeSpan(30, true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(CustomTypefaceSpan("", ResourcesCompat.getFont(this@MainActivity, R.font.comici)), 1, length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
         }
         var scroll = false
         when (idSelect) {

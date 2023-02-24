@@ -563,7 +563,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         reader.forEachLine {
             val line = SpannableStringBuilder()
             val t1 = it.indexOf("(")
-            line.append(it.substring(0, t1))
+            line.append(it.substring(0, t1).trim())
             line.append("\n")
             line.append(it.substring(t1))
             citataList.add(line.toSpannable())

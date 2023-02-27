@@ -42,10 +42,17 @@ class DialogTraparyAndKandaki : DialogFragment() {
             chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             _binding = TraparyAndKandakiBinding.inflate(LayoutInflater.from(it))
-            val builder = AlertDialog.Builder(it)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            val builder = AlertDialog.Builder(it, style)
             builder.setView(binding.root)
-            if (dzenNoch) binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
-            else binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
+            if (dzenNoch) {
+                binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
+            } else {
+                binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
+                binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
+            }
             val lityrgia = arguments?.getInt("lityrgia", 4) ?: 4
             val title = arguments?.getString("title", "") ?: ""
             val ton = arguments?.getInt("ton", 1) ?: 1

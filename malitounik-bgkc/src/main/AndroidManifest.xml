@@ -392,6 +392,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.BibliatekaArtykulyList" />
         </activity>
+        <activity
+            android:name=".WidgetRadyjoMaryiaProgram"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Transparent" />
 
         <meta-data
             android:name="com.google.android.backup.api_key"
@@ -423,7 +429,8 @@
         </receiver>
         <receiver
             android:name=".Widget"
-            android:exported="false">
+            android:exported="false"
+            android:label="@string/widget_title">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -434,7 +441,8 @@
         </receiver>
         <receiver
             android:name=".WidgetMun"
-            android:exported="false">
+            android:exported="false"
+            android:label="@string/widget_mun_title">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -442,6 +450,18 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_mun_metadata" />
+        </receiver>
+        <receiver
+            android:name=".WidgetRadyjoMaryia"
+            android:exported="false"
+            android:label="@string/padie_maryia_s">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_radyjo_maryia_metadata" />
         </receiver>
     </application>
 </manifest>

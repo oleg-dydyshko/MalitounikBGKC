@@ -5,11 +5,13 @@ import android.app.*
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Binder
 import android.os.Build
+import android.os.IBinder
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.annotation.RequiresApi
@@ -40,14 +42,31 @@ class ServiceRadyjoMaryia : Service() {
         const val PLAY_PAUSE = 1
         const val STOP = 2
         var isServiceRadioMaryiaRun = false
+        var isPlayingRadyjoMaryia = false
+        var titleRadyjoMaryia = ""
     }
 
     private var player: ExoPlayer? = null
-    private val isPlaying get() = player?.isPlaying ?: false
+    private val isPlaying: Boolean
+        get() {
+            val play = player?.isPlaying ?: false
+            isPlayingRadyjoMaryia = play
+            return play
+        }
     private var timer = Timer()
     private var timerTask: TimerTask? = null
     private var radyjoMaryiaTitle = ""
     private var listener: ServiceRadyjoMaryiaListener? = null
+    private var isConnectServise = false
+    private val mConnection = object : ServiceConnection {
+            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                isConnectServise = true
+            }
+
+            override fun onServiceDisconnected(name: ComponentName?) {
+                isConnectServise = false
+            }
+        }
 
     interface ServiceRadyjoMaryiaListener {
         fun setTitleRadioMaryia(title: String)
@@ -60,6 +79,30 @@ class ServiceRadyjoMaryia : Service() {
         listener = serviceRadyjoMaryiaListener
     }
 
+    private fun setBinding() {
+        if (isServiceRadioMaryiaRun) {
+            val intent = Intent(this, ServiceRadyjoMaryia::class.java)
+            bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    private fun unsetBinding() {
+        if (isConnectServise) {
+            unbindService(mConnection)
+            isConnectServise = false
+        }
+    }
+
+    private fun callWidgetRadyjoMaryia() {
+        val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
+            setBinding()
+            val intent = Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java)
+            intent.putExtra("action", 10)
+            sendBroadcast(intent)
+        }
+    }
+
     private fun initRadioMaria() {
         player = ExoPlayer.Builder(this).build().apply {
             setMediaItem(MediaItem.fromUri(Uri.parse("https://server.radiorm.by:8443/live")))
@@ -70,6 +113,7 @@ class ServiceRadyjoMaryia : Service() {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             setRadioNotification()
                             listener?.playingRadioMariaStateReady()
+                            callWidgetRadyjoMaryia()
                         }
                     }
                 }
@@ -87,6 +131,10 @@ class ServiceRadyjoMaryia : Service() {
     fun stopServiceRadioMaria() {
         stopPlay()
         stopSelf()
+        isServiceRadioMaryiaRun = false
+        listener?.setTitleRadioMaryia("")
+        listener?.unBinding()
+        unsetBinding()
     }
 
     fun playOrPause() {
@@ -140,7 +188,6 @@ class ServiceRadyjoMaryia : Service() {
             listener?.playingRadioMaria(isPlaying)
         } else {
             stopServiceRadioMaria()
-            listener?.unBinding()
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -177,6 +224,7 @@ class ServiceRadyjoMaryia : Service() {
                                             setRadioNotification()
                                         }
                                         listener?.setTitleRadioMaryia(radyjoMaryiaTitle)
+                                        titleRadyjoMaryia = radyjoMaryiaTitle
                                     }
                                 }
                             }

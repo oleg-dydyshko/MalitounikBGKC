@@ -22,7 +22,7 @@ class Malitounik : SplitCompatApplication() {
 
     companion object {
         private var instance: Malitounik? = null
-        val storage: FirebaseStorage
+        private val storage: FirebaseStorage
             get() = Firebase.storage
         val referens: StorageReference
             get() = storage.reference

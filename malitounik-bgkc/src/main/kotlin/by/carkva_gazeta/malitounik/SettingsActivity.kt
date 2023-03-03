@@ -216,6 +216,17 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 pIntent = PendingIntent.getBroadcast(context, 50, intent, flags)
                 setAlarm(mkTime(cw[Calendar.YEAR], cw[Calendar.MONTH], cw[Calendar.DAY_OF_MONTH]), pIntent)
             }
+            if (chin.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
+                val cw = Calendar.getInstance()
+                intent = Intent(context, WidgetRadyjoMaryia::class.java)
+                val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PendingIntent.FLAG_IMMUTABLE or 0
+                } else {
+                    0
+                }
+                pIntent = PendingIntent.getBroadcast(context, 52, intent, flags)
+                setAlarm(mkTime(cw[Calendar.YEAR], cw[Calendar.MONTH], cw[Calendar.DAY_OF_MONTH]), pIntent)
+            }
             val c = Calendar.getInstance()
             val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 PendingIntent.FLAG_IMMUTABLE or 0

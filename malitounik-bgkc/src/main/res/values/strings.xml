@@ -757,5 +757,7 @@
     <string name="padie_maryia_s">Радыё Марыя</string>
     <string name="program_radio_maryia">ПРАГРАМА ПЕРАДАЧ РАДЫЁ МАРЫЯ</string>
     <string name="artykuly_apytanki_count">Усяго: %1$d</string>
+    <string name="widget_title">Каляндар на дзень</string>
+    <string name="widget_mun_title">Каляндар на месяц</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

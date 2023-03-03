@@ -11,10 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.DialogWebviewDisplayBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -24,6 +21,7 @@ class DialogProgramPadoiMaryia : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var _binding: DialogWebviewDisplayBinding? = null
     private val binding get() = _binding!!
+    private var sendTitlePadioMaryiaJob: Job? = null
     private val dzenNoch: Boolean
         get() {
             activity?.let {
@@ -34,6 +32,7 @@ class DialogProgramPadoiMaryia : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        sendTitlePadioMaryiaJob?.cancel()
         _binding = null
     }
 
@@ -66,7 +65,7 @@ class DialogProgramPadoiMaryia : DialogFragment() {
 
     private fun sendTitlePadioMaryia() {
         if (MainActivity.isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.Main).launch {
+            sendTitlePadioMaryiaJob = CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar.visibility = View.VISIBLE
                 runCatching {
                     withContext(Dispatchers.IO) {

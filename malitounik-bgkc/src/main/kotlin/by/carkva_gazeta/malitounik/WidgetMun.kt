@@ -101,18 +101,17 @@ class WidgetMun : AppWidgetProvider() {
         val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, flags)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pIntent = PendingIntent.getBroadcast(context, 50, intent, flags)
-        val c = Calendar.getInstance()
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms() -> {
-                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(), pIntent)
                 alarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
             }
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(), pIntent)
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
             }
             else -> {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, mkTime(), pIntent)
                 alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
             }
         }
@@ -159,16 +158,19 @@ class WidgetMun : AppWidgetProvider() {
         editor.apply()
     }
 
-    private fun mkTime(year: Int, month: Int, day: Int): Long {
+    private fun mkTime(addDate: Int = 0): Long {
         val calendar = Calendar.getInstance()
-        calendar.set(year, month, day, 0, 0, 0)
+        calendar.add(Calendar.DATE, addDate)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
         return calendar.timeInMillis
     }
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        var c = Calendar.getInstance()
+        val c = Calendar.getInstance()
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (intent.action.equals(SettingsActivity.UPDATE_ALL_WIDGETS, ignoreCase = true)) {
             val thisAppWidget = ComponentName(context.packageName, javaClass.name)
@@ -181,7 +183,6 @@ class WidgetMun : AppWidgetProvider() {
             onUpdate(context, appWidgetManager, ids)
             val intentUpdate = Intent(context, WidgetMun::class.java)
             intentUpdate.action = SettingsActivity.UPDATE_ALL_WIDGETS
-            c.add(Calendar.DATE, 1)
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 PendingIntent.FLAG_IMMUTABLE or 0
@@ -191,17 +192,16 @@ class WidgetMun : AppWidgetProvider() {
             val pIntent = PendingIntent.getBroadcast(context, 51, intentUpdate, flags)
             when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms() -> {
-                    alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
+                    alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(1), pIntent)
                 }
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(1), pIntent)
                 }
                 else -> {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, mkTime(1), pIntent)
                 }
             }
         }
-        c = Calendar.getInstance()
         val resetMain = SettingsActivity.RESET_MAIN
         if (intent.action.equals(resetMain, ignoreCase = true)) {
             val thisAppWidget = ComponentName(context.packageName, javaClass.name)

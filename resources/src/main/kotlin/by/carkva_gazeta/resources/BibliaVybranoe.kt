@@ -524,8 +524,10 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
 
     private fun autoScroll() {
         if (autoScrollJob?.isActive != true) {
-            autoscroll = true
+            binding.textView.clearFocus()
+            binding.textView.setTextIsSelectable(false)
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            autoscroll = true
             val prefEditor = k.edit()
             prefEditor.putBoolean("autoscroll", true)
             prefEditor.apply()
@@ -543,8 +545,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
 
     private fun autoStartScroll() {
         if (autoScrollJob?.isActive != true) {
-            binding.textView.clearFocus()
-            binding.textView.setTextIsSelectable(false)
             if (spid < 166) {
                 val autoTime = (230 - spid) / 10
                 if (autoStartScrollJob?.isActive != true) {

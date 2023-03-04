@@ -13,6 +13,8 @@ import android.widget.RemoteViews
 class WidgetRadyjoMaryia : AppWidgetProvider(), ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener {
 
     private var mRadyjoMaryiaService: ServiceRadyjoMaryia? = null
+    private var isFirstRun = false
+    private var isProgram = false
 
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
@@ -34,6 +36,23 @@ class WidgetRadyjoMaryia : AppWidgetProvider(), ServiceRadyjoMaryia.ServiceRadyj
             intent2.putExtra("action", ServiceRadyjoMaryia.STOP)
             context.startService(intent2)
         }
+        if (extra == ServiceRadyjoMaryia.PLAY_PAUSE) {
+            if (!ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
+                isFirstRun = true
+            }
+            val intent2 = Intent(context, ServiceRadyjoMaryia::class.java)
+            intent2.putExtra("action", ServiceRadyjoMaryia.PLAY_PAUSE)
+            context.startService(intent2)
+        }
+        if (extra == 20) {
+            isProgram = true
+            val intent2 = Intent(context, WidgetRadyjoMaryiaProgram::class.java)
+            intent2.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            context.startActivity(intent2)
+        }
+        if (extra == 30) {
+            isProgram = false
+        }
         update()
     }
 
@@ -46,21 +65,22 @@ class WidgetRadyjoMaryia : AppWidgetProvider(), ServiceRadyjoMaryia.ServiceRadyj
 
     private fun radyjoMaryia(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
         val updateViews = RemoteViews(context.packageName, R.layout.widget_radyjo_maryia)
-        val intent = Intent(context, ServiceRadyjoMaryia::class.java)
+        val intent = Intent(context, WidgetRadyjoMaryia::class.java)
         intent.putExtra("action", ServiceRadyjoMaryia.PLAY_PAUSE)
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         } else {
             PendingIntent.FLAG_UPDATE_CURRENT
         }
-        val pIntent = PendingIntent.getService(context, ServiceRadyjoMaryia.PLAY_PAUSE, intent, flags)
+        val pIntent = PendingIntent.getBroadcast(context, ServiceRadyjoMaryia.PLAY_PAUSE, intent, flags)
         updateViews.setOnClickPendingIntent(R.id.play, pIntent)
         val intent2 = Intent(context, WidgetRadyjoMaryia::class.java)
         intent2.putExtra("action", ServiceRadyjoMaryia.STOP)
         val pIntent2 = PendingIntent.getBroadcast(context, ServiceRadyjoMaryia.STOP, intent2, flags)
         updateViews.setOnClickPendingIntent(R.id.stop, pIntent2)
-        val intent3 = Intent(context, WidgetRadyjoMaryiaProgram::class.java)
-        val pIntent3 = PendingIntent.getActivity(context, 20, intent3, flags)
+        val intent3 = Intent(context, WidgetRadyjoMaryia::class.java)
+        intent3.putExtra("action", 20)
+        val pIntent3 = PendingIntent.getBroadcast(context, 20, intent3, flags)
         updateViews.setOnClickPendingIntent(R.id.program, pIntent3)
         if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
             val service = peekService(context, Intent(context, ServiceRadyjoMaryia::class.java))
@@ -77,13 +97,26 @@ class WidgetRadyjoMaryia : AppWidgetProvider(), ServiceRadyjoMaryia.ServiceRadyj
             updateViews.setTextViewText(R.id.textView, context.getString(R.string.padie_maryia_s))
             updateViews.setImageViewResource(R.id.play, R.drawable.play3)
         }
-        updateViews.setViewVisibility(R.id.play, View.VISIBLE)
+        if (isFirstRun) {
+            updateViews.setViewVisibility(R.id.play, View.GONE)
+            updateViews.setViewVisibility(R.id.progressbar, View.VISIBLE)
+        } else {
+            updateViews.setViewVisibility(R.id.play, View.VISIBLE)
+            updateViews.setViewVisibility(R.id.progressbar, View.GONE)
+        }
         updateViews.setViewVisibility(R.id.stop, View.VISIBLE)
-        updateViews.setViewVisibility(R.id.program, View.VISIBLE)
+        if (isProgram) {
+            updateViews.setViewVisibility(R.id.program, View.GONE)
+            updateViews.setViewVisibility(R.id.progressbar2, View.VISIBLE)
+        } else {
+            updateViews.setViewVisibility(R.id.program, View.VISIBLE)
+            updateViews.setViewVisibility(R.id.progressbar2, View.GONE)
+        }
         appWidgetManager.updateAppWidget(appWidgetId, updateViews)
     }
 
     override fun setTitleRadioMaryia(title: String) {
+        isFirstRun = false
         update()
     }
 

@@ -10,6 +10,7 @@ import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
 
+
 class WidgetRadyjoMaryia : AppWidgetProvider(), ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener {
 
     private var mRadyjoMaryiaService: ServiceRadyjoMaryia? = null
@@ -98,20 +99,16 @@ class WidgetRadyjoMaryia : AppWidgetProvider(), ServiceRadyjoMaryia.ServiceRadyj
             updateViews.setImageViewResource(R.id.play, R.drawable.play3)
         }
         if (isFirstRun) {
-            updateViews.setViewVisibility(R.id.play, View.GONE)
-            updateViews.setViewVisibility(R.id.progressbar, View.VISIBLE)
+            updateViews.setImageViewResource(R.id.play, R.drawable.load)
+        }
+        if (isProgram) {
+            updateViews.setImageViewResource(R.id.program, R.drawable.load)
         } else {
-            updateViews.setViewVisibility(R.id.play, View.VISIBLE)
-            updateViews.setViewVisibility(R.id.progressbar, View.GONE)
+            updateViews.setImageViewResource(R.id.program, R.drawable.programm_rado_maria2)
         }
         updateViews.setViewVisibility(R.id.stop, View.VISIBLE)
-        if (isProgram) {
-            updateViews.setViewVisibility(R.id.program, View.GONE)
-            updateViews.setViewVisibility(R.id.progressbar2, View.VISIBLE)
-        } else {
-            updateViews.setViewVisibility(R.id.program, View.VISIBLE)
-            updateViews.setViewVisibility(R.id.progressbar2, View.GONE)
-        }
+        updateViews.setViewVisibility(R.id.play, View.VISIBLE)
+        updateViews.setViewVisibility(R.id.program, View.VISIBLE)
         appWidgetManager.updateAppWidget(appWidgetId, updateViews)
     }
 

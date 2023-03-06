@@ -33,7 +33,7 @@ class WidgetMun : AppWidgetProvider() {
         if (updateViews == null) updateViews = RemoteViews(context.packageName, R.layout.widget_mun)
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val c = Calendar.getInstance()
-        val monthName = arrayOf("СТУДЗЕНЬ", "ЛЮТЫ", "САКАВІК", "КРАСАВІК", "ТРАВЕНЬ", "ЧЭРВЕНЬ", "ЛІПЕНЬ", "ЖНІВЕНЬ", "ВЕРАСЕНЬ", "КАСТРЫЧНІК", "ЛІСТАПАД", "СЬНЕЖАНЬ")
+        val monthName = context.resources.getStringArray(R.array.meciac2)
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         } else {
@@ -63,7 +63,7 @@ class WidgetMun : AppWidgetProvider() {
         val cYear = SettingsActivity.GET_CALIANDAR_YEAR_MAX //c.get(Calendar.YEAR);
         val tecmun = chin.getInt("WIDGET$widgetID", c[Calendar.MONTH])
         val tecyear = chin.getInt("WIDGETYEAR$widgetID", SettingsActivity.GET_CALIANDAR_YEAR_MAX)
-        val monthName = arrayOf("СТУДЗЕНЬ", "ЛЮТЫ", "САКАВІК", "КРАСАВІК", "ТРАВЕНЬ", "ЧЭРВЕНЬ", "ЛІПЕНЬ", "ЖНІВЕНЬ", "ВЕРАСЕНЬ", "КАСТРЫЧНІК", "ЛІСТАПАД", "СЬНЕЖАНЬ")
+        val monthName = context.resources.getStringArray(R.array.meciac2)
         if (updateViews == null) updateViews = RemoteViews(context.packageName, R.layout.widget_mun)
         if (tecyear == c[Calendar.YEAR]) updateViews?.setTextViewText(R.id.Mun_widget, monthName[tecmun]) else updateViews?.setTextViewText(R.id.Mun_widget, monthName[tecmun] + ", " + tecyear)
         if (cYear == tecyear && tecmun == 11) updateViews?.setViewVisibility(R.id.imageButton2, View.INVISIBLE) else updateViews?.setViewVisibility(R.id.imageButton2, View.VISIBLE)

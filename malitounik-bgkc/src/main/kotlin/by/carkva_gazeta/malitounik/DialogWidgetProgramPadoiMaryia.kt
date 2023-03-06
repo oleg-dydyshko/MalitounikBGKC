@@ -2,6 +2,7 @@ package by.carkva_gazeta.malitounik
 
 import android.app.Dialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -48,6 +49,9 @@ class DialogWidgetProgramPadoiMaryia : DialogFragment() {
                 dialog.cancel()
             }
             alert = builder.create()
+            val intent = Intent(it, WidgetRadyjoMaryia::class.java)
+            intent.putExtra("action", 30)
+            it.sendBroadcast(intent)
         }
         return alert
     }

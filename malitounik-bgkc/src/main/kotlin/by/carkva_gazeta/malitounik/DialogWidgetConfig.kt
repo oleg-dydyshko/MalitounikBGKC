@@ -1,9 +1,10 @@
 package by.carkva_gazeta.malitounik
 
-import android.app.Activity
 import android.app.Dialog
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,31 +15,9 @@ import by.carkva_gazeta.malitounik.databinding.DialogWidgetConfigBinding
 
 class DialogWidgetConfig : DialogFragment() {
     private var configDzenNoch = false
-    private var widgetID = 0
-    private var mListener: DialogWidgetConfigListener? = null
     private lateinit var alert: AlertDialog
     private var _binding: DialogWidgetConfigBinding? = null
     private val binding get() = _binding!!
-
-    internal interface DialogWidgetConfigListener {
-        fun onDialogWidgetConfigPositiveClick()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        widgetID = arguments?.getInt("widgetID") ?: 0
-    }
-
-    override fun onAttach(activity: Context) {
-        super.onAttach(activity)
-        if (activity is Activity) {
-            mListener = try {
-                activity as DialogWidgetConfigListener
-            } catch (e: ClassCastException) {
-                throw ClassCastException("$activity must implement DialogWidgetConfigListener")
-            }
-        }
-    }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
@@ -52,32 +31,32 @@ class DialogWidgetConfig : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            val widgetID = arguments?.getInt("widgetID") ?: AppWidgetManager.INVALID_APPWIDGET_ID
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val builder = AlertDialog.Builder(it, R.style.AlertDialogTheme)
-            builder.setPositiveButton(resources.getText(R.string.ok)) { dialog: DialogInterface, _: Int ->
-                save()
-                mListener?.onDialogWidgetConfigPositiveClick()
-                dialog.cancel()
-            }
             _binding = DialogWidgetConfigBinding.inflate(LayoutInflater.from(it))
             binding.checkBox20.typeface = MainActivity.createFont(Typeface.NORMAL)
             binding.checkBox20.isChecked = chin.getBoolean("dzen_noch_widget_day$widgetID", false)
             binding.checkBox20.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
                 configDzenNoch = isChecked
             }
+            val builder = AlertDialog.Builder(it, R.style.AlertDialogTheme)
+            builder.setPositiveButton(resources.getText(R.string.ok)) { dialog: DialogInterface, _: Int ->
+                val prefEditor = chin.edit()
+                prefEditor.putBoolean("dzen_noch_widget_day$widgetID", configDzenNoch)
+                prefEditor.apply()
+                val intent = Intent(it, Widget::class.java)
+                intent.putExtra("widgetID", widgetID)
+                it.sendBroadcast(intent)
+                dialog.cancel()
+            }
             builder.setView(binding.root)
             alert = builder.create()
+            val intent = Intent(it, Widget::class.java)
+            intent.putExtra("widgetID", widgetID)
+            intent.putExtra("actionEndLoad", true)
+            it.sendBroadcast(intent)
         }
         return alert
-    }
-
-    private fun save() {
-        activity?.let {
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val prefEditor = k.edit()
-            prefEditor.putBoolean("dzen_noch_widget_day$widgetID", configDzenNoch)
-            prefEditor.apply()
-        }
     }
 
     companion object {

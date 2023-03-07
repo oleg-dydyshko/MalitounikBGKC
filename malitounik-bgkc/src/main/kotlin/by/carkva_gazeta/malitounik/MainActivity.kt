@@ -1546,7 +1546,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
             }
             R.id.image7 -> {
-                val dialog = DialogProgramPadoiMaryia.getInstance(mRadyjoMaryiaService?.getTitleProgramRadioMaria() ?: "")
+                val dialog = DialogProgramPadoiMaryia()
                 dialog.show(supportFragmentManager, "DialogProgramPadoiMaryia")
             }
         }

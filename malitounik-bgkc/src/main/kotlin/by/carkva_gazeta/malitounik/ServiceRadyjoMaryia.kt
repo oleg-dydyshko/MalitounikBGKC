@@ -59,14 +59,14 @@ class ServiceRadyjoMaryia : Service() {
     private var listener: ServiceRadyjoMaryiaListener? = null
     private var isConnectServise = false
     private val mConnection = object : ServiceConnection {
-            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                isConnectServise = true
-            }
-
-            override fun onServiceDisconnected(name: ComponentName?) {
-                isConnectServise = false
-            }
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            isConnectServise = true
         }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            isConnectServise = false
+        }
+    }
 
     interface ServiceRadyjoMaryiaListener {
         fun setTitleRadioMaryia(title: String)
@@ -208,24 +208,22 @@ class ServiceRadyjoMaryia : Service() {
                                         inputLine = it.readLine()
                                     }
                                 }
-                                withContext(Dispatchers.Main) {
-                                    var text = MainActivity.fromHtml(sb.toString()).toString().trim()
-                                    val t1 = text.indexOf(":", ignoreCase = true)
-                                    if (t1 != -1) {
-                                        text = text.substring(t1 + 1)
+                                var text = MainActivity.fromHtml(sb.toString()).toString().trim()
+                                val t1 = text.indexOf(":", ignoreCase = true)
+                                if (t1 != -1) {
+                                    text = text.substring(t1 + 1)
+                                }
+                                val t2 = text.indexOf(">", ignoreCase = true)
+                                if (t2 != -1) {
+                                    text = text.substring(t2 + 1)
+                                }
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    if (radyjoMaryiaTitle != text.trim()) {
+                                        radyjoMaryiaTitle = text.trim()
+                                        setRadioNotification()
                                     }
-                                    val t2 = text.indexOf(">", ignoreCase = true)
-                                    if (t2 != -1) {
-                                        text = text.substring(t2 + 1)
-                                    }
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                        if (radyjoMaryiaTitle != text.trim()) {
-                                            radyjoMaryiaTitle = text.trim()
-                                            setRadioNotification()
-                                        }
-                                        listener?.setTitleRadioMaryia(radyjoMaryiaTitle)
-                                        titleRadyjoMaryia = radyjoMaryiaTitle
-                                    }
+                                    listener?.setTitleRadioMaryia(radyjoMaryiaTitle)
+                                    titleRadyjoMaryia = radyjoMaryiaTitle
                                 }
                             }
                         } catch (_: Throwable) {

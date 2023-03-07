@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 class WidgetRadyjoMaryiaProgram : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val dialog = DialogWidgetProgramPadoiMaryia()
+        val dialog = DialogProgramPadoiMaryia()
         dialog.show(supportFragmentManager, "DialogWidgetProgramPadoiMaryia")
     }
 }

@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#606060"
+        android:background="@color/color_widget_mun"
         android:weightSum="1">
 
         <ImageView
@@ -22,6 +22,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_gravity="left"
+            android:background="@drawable/selector_widget_mun"
             android:contentDescription="@string/empty"
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
@@ -50,6 +51,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="end"
+            android:background="@drawable/selector_widget_mun"
             android:contentDescription="@string/empty"
             android:paddingStart="33dp"
             android:paddingLeft="33dp"

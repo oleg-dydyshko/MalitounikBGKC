@@ -145,7 +145,7 @@ class ServiceRadyjoMaryia : Service() {
             }
         }
         timer = Timer()
-        timer.schedule(timerTask, 0, 20000)
+        timer.schedule(timerTask, 0, 5000)
     }
 
     private fun stopTimer() {
@@ -198,10 +198,12 @@ class ServiceRadyjoMaryia : Service() {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     if (titleRadyjoMaryia != text.trim()) {
                                         titleRadyjoMaryia = text.trim()
-                                        setRadioNotification()
-                                        val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-                                        if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
-                                            sendBroadcast(Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java))
+                                        withContext(Dispatchers.Main) {
+                                            setRadioNotification()
+                                            val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+                                            if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
+                                                sendBroadcast(Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java))
+                                            }
                                         }
                                         listener?.setTitleRadioMaryia(titleRadyjoMaryia)
                                     }

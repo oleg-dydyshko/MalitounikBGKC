@@ -56,7 +56,7 @@ class WidgetRadyjoMaryia : AppWidgetProvider() {
         if (extra == ServiceRadyjoMaryia.PLAYING_RADIO_MARIA_STATE_READY) {
             isFirstRun = false
         }
-        update()
+        update(context)
     }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
@@ -112,10 +112,10 @@ class WidgetRadyjoMaryia : AppWidgetProvider() {
         appWidgetManager.updateAppWidget(appWidgetId, updateViews)
     }
 
-    private fun update() {
-        val thisAppWidget = ComponentName(Malitounik.applicationContext().packageName, javaClass.name)
-        val appWidgetManager = AppWidgetManager.getInstance(Malitounik.applicationContext())
+    private fun update(context: Context) {
+        val thisAppWidget = ComponentName(context.packageName, javaClass.name)
+        val appWidgetManager = AppWidgetManager.getInstance(context)
         val ids = appWidgetManager.getAppWidgetIds(thisAppWidget)
-        onUpdate(Malitounik.applicationContext(), appWidgetManager, ids)
+        onUpdate(context, appWidgetManager, ids)
     }
 }

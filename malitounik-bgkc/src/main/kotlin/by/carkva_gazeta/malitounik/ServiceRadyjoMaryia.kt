@@ -145,7 +145,7 @@ class ServiceRadyjoMaryia : Service() {
             }
         }
         timer = Timer()
-        timer.schedule(timerTask, 0, 5000)
+        timer.schedule(timerTask, 0, 20000)
     }
 
     private fun stopTimer() {

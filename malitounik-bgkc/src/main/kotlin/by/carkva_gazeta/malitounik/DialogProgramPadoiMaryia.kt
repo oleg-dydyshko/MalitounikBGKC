@@ -71,7 +71,7 @@ class DialogProgramPadoiMaryia : DialogFragment() {
                 alert = builder.create()
                 if (activity !is BaseActivity) {
                     val intent = Intent(activity, WidgetRadyjoMaryia::class.java)
-                    intent.putExtra("action", 30)
+                    intent.putExtra("action", ServiceRadyjoMaryia.WIDGET_RADYJO_MARYIA_PROGRAM_EXIT)
                     activity.sendBroadcast(intent)
                 }
             }

@@ -5,13 +5,11 @@ import android.app.*
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Binder
 import android.os.Build
-import android.os.IBinder
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.annotation.RequiresApi
@@ -41,6 +39,9 @@ class ServiceRadyjoMaryia : Service() {
     companion object {
         const val PLAY_PAUSE = 1
         const val STOP = 2
+        const val PLAYING_RADIO_MARIA_STATE_READY = 10
+        const val WIDGET_RADYJO_MARYIA_PROGRAM = 20
+        const val WIDGET_RADYJO_MARYIA_PROGRAM_EXIT = 30
         var isServiceRadioMaryiaRun = false
         var isPlayingRadyjoMaryia = false
         var titleRadyjoMaryia = ""
@@ -55,18 +56,7 @@ class ServiceRadyjoMaryia : Service() {
         }
     private var timer = Timer()
     private var timerTask: TimerTask? = null
-    private var radyjoMaryiaTitle = ""
     private var listener: ServiceRadyjoMaryiaListener? = null
-    private var isConnectServise = false
-    private val mConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            isConnectServise = true
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            isConnectServise = false
-        }
-    }
 
     interface ServiceRadyjoMaryiaListener {
         fun setTitleRadioMaryia(title: String)
@@ -79,30 +69,6 @@ class ServiceRadyjoMaryia : Service() {
         listener = serviceRadyjoMaryiaListener
     }
 
-    private fun setBinding() {
-        if (isServiceRadioMaryiaRun) {
-            val intent = Intent(this, ServiceRadyjoMaryia::class.java)
-            bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
-        }
-    }
-
-    private fun unsetBinding() {
-        if (isConnectServise) {
-            unbindService(mConnection)
-            isConnectServise = false
-        }
-    }
-
-    private fun callWidgetRadyjoMaryia() {
-        val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
-            setBinding()
-            val intent = Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java)
-            intent.putExtra("action", 10)
-            sendBroadcast(intent)
-        }
-    }
-
     private fun initRadioMaria() {
         player = ExoPlayer.Builder(this).build().apply {
             setMediaItem(MediaItem.fromUri(Uri.parse("https://server.radiorm.by:8443/live")))
@@ -113,7 +79,12 @@ class ServiceRadyjoMaryia : Service() {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             setRadioNotification()
                             listener?.playingRadioMariaStateReady()
-                            callWidgetRadyjoMaryia()
+                            val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+                            if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
+                                val intent = Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java)
+                                intent.putExtra("action", PLAYING_RADIO_MARIA_STATE_READY)
+                                sendBroadcast(intent)
+                            }
                         }
                     }
                 }
@@ -132,9 +103,12 @@ class ServiceRadyjoMaryia : Service() {
         stopPlay()
         stopSelf()
         isServiceRadioMaryiaRun = false
+        val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
+            sendBroadcast(Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java))
+        }
         listener?.setTitleRadioMaryia("")
         listener?.unBinding()
-        unsetBinding()
     }
 
     fun playOrPause() {
@@ -147,8 +121,6 @@ class ServiceRadyjoMaryia : Service() {
             setRadioNotification()
         }
     }
-
-    fun getTitleProgramRadioMaria() = radyjoMaryiaTitle
 
     fun isPlayingRadioMaria() = isPlaying
 
@@ -185,7 +157,13 @@ class ServiceRadyjoMaryia : Service() {
         val action = intent?.extras?.getInt("action") ?: PLAY_PAUSE
         if (action == PLAY_PAUSE) {
             playOrPause()
-            listener?.playingRadioMaria(isPlaying)
+            listener?.let {
+                val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+                if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
+                    sendBroadcast(Intent(this, WidgetRadyjoMaryia::class.java))
+                }
+                it.playingRadioMaria(isPlaying)
+            }
         } else {
             stopServiceRadioMaria()
         }
@@ -218,12 +196,15 @@ class ServiceRadyjoMaryia : Service() {
                                     text = text.substring(t2 + 1)
                                 }
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    if (radyjoMaryiaTitle != text.trim()) {
-                                        radyjoMaryiaTitle = text.trim()
+                                    if (titleRadyjoMaryia != text.trim()) {
+                                        titleRadyjoMaryia = text.trim()
                                         setRadioNotification()
+                                        val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+                                        if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
+                                            sendBroadcast(Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java))
+                                        }
+                                        listener?.setTitleRadioMaryia(titleRadyjoMaryia)
                                     }
-                                    listener?.setTitleRadioMaryia(radyjoMaryiaTitle)
-                                    titleRadyjoMaryia = radyjoMaryiaTitle
                                 }
                             }
                         } catch (_: Throwable) {
@@ -239,7 +220,7 @@ class ServiceRadyjoMaryia : Service() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             val mediaSession = MediaSessionCompat(this, "Radyjo Maryia session")
             val name = getString(R.string.padie_maryia_s)
-            mediaSession.setMetadata(MediaMetadataCompat.Builder().putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, BitmapFactory.decodeResource(resources, R.drawable.maria)).putString(MediaMetadataCompat.METADATA_KEY_TITLE, name).putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, radyjoMaryiaTitle).build())
+            mediaSession.setMetadata(MediaMetadataCompat.Builder().putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, BitmapFactory.decodeResource(resources, R.drawable.maria)).putString(MediaMetadataCompat.METADATA_KEY_TITLE, name).putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, titleRadyjoMaryia).build())
             mediaSession.isActive = true
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(SettingsActivity.NOTIFICATION_CHANNEL_ID_RADIO_MARYIA, name, NotificationManager.IMPORTANCE_LOW)
@@ -254,7 +235,7 @@ class ServiceRadyjoMaryia : Service() {
             notifi.setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.maria))
             notifi.setSmallIcon(R.drawable.krest)
             notifi.setContentTitle(getString(R.string.padie_maryia_s))
-            notifi.setContentText(radyjoMaryiaTitle)
+            notifi.setContentText(titleRadyjoMaryia)
             notifi.setOngoing(true)
             if (isPlaying) notifi.addAction(R.drawable.pause3, "pause", retreivePlaybackAction(PLAY_PAUSE))
             else notifi.addAction(R.drawable.play3, "play", retreivePlaybackAction(PLAY_PAUSE))

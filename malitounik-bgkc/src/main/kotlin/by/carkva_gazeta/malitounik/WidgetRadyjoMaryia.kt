@@ -11,9 +11,8 @@ import android.view.View
 import android.widget.RemoteViews
 
 
-class WidgetRadyjoMaryia : AppWidgetProvider(), ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener {
+class WidgetRadyjoMaryia : AppWidgetProvider() {
 
-    private var mRadyjoMaryiaService: ServiceRadyjoMaryia? = null
     private var isFirstRun = false
     private var isProgram = false
 
@@ -45,14 +44,17 @@ class WidgetRadyjoMaryia : AppWidgetProvider(), ServiceRadyjoMaryia.ServiceRadyj
             intent2.putExtra("action", ServiceRadyjoMaryia.PLAY_PAUSE)
             context.startService(intent2)
         }
-        if (extra == 20) {
+        if (extra == ServiceRadyjoMaryia.WIDGET_RADYJO_MARYIA_PROGRAM) {
             isProgram = true
             val intent2 = Intent(context, WidgetRadyjoMaryiaProgram::class.java)
             intent2.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(intent2)
         }
-        if (extra == 30) {
+        if (extra == ServiceRadyjoMaryia.WIDGET_RADYJO_MARYIA_PROGRAM_EXIT) {
             isProgram = false
+        }
+        if (extra == ServiceRadyjoMaryia.PLAYING_RADIO_MARIA_STATE_READY) {
+            isFirstRun = false
         }
         update()
     }
@@ -80,20 +82,18 @@ class WidgetRadyjoMaryia : AppWidgetProvider(), ServiceRadyjoMaryia.ServiceRadyj
         val pIntent2 = PendingIntent.getBroadcast(context, ServiceRadyjoMaryia.STOP, intent2, flags)
         updateViews.setOnClickPendingIntent(R.id.stop, pIntent2)
         val intent3 = Intent(context, WidgetRadyjoMaryia::class.java)
-        intent3.putExtra("action", 20)
-        val pIntent3 = PendingIntent.getBroadcast(context, 20, intent3, flags)
+        intent3.putExtra("action", ServiceRadyjoMaryia.WIDGET_RADYJO_MARYIA_PROGRAM)
+        val pIntent3 = PendingIntent.getBroadcast(context, ServiceRadyjoMaryia.WIDGET_RADYJO_MARYIA_PROGRAM, intent3, flags)
         updateViews.setOnClickPendingIntent(R.id.program, pIntent3)
         if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
-            val service = peekService(context, Intent(context, ServiceRadyjoMaryia::class.java))
-            val binder = service as? ServiceRadyjoMaryia.ServiceRadyjoMaryiaBinder
-            mRadyjoMaryiaService = binder?.getService()
-            mRadyjoMaryiaService?.setServiceRadyjoMaryiaListener(this@WidgetRadyjoMaryia)
-            if (mRadyjoMaryiaService?.isPlayingRadioMaria() == true) {
+            if (ServiceRadyjoMaryia.isPlayingRadyjoMaryia) {
                 updateViews.setImageViewResource(R.id.play, R.drawable.pause3)
             } else {
                 updateViews.setImageViewResource(R.id.play, R.drawable.play3)
             }
-            updateViews.setTextViewText(R.id.textView, mRadyjoMaryiaService?.getTitleProgramRadioMaria() ?: context.getString(R.string.padie_maryia_s))
+            val title = if (ServiceRadyjoMaryia.titleRadyjoMaryia != "") ServiceRadyjoMaryia.titleRadyjoMaryia
+            else context.getString(R.string.padie_maryia_s)
+            updateViews.setTextViewText(R.id.textView, title)
         } else {
             updateViews.setTextViewText(R.id.textView, context.getString(R.string.padie_maryia_s))
             updateViews.setImageViewResource(R.id.play, R.drawable.play3)
@@ -110,21 +110,6 @@ class WidgetRadyjoMaryia : AppWidgetProvider(), ServiceRadyjoMaryia.ServiceRadyj
         updateViews.setViewVisibility(R.id.play, View.VISIBLE)
         updateViews.setViewVisibility(R.id.program, View.VISIBLE)
         appWidgetManager.updateAppWidget(appWidgetId, updateViews)
-    }
-
-    override fun setTitleRadioMaryia(title: String) {
-        isFirstRun = false
-        update()
-    }
-
-    override fun unBinding() {
-    }
-
-    override fun playingRadioMaria(isPlayingRadioMaria: Boolean) {
-        update()
-    }
-
-    override fun playingRadioMariaStateReady() {
     }
 
     private fun update() {

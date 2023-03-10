@@ -1594,6 +1594,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     override fun playingRadioMariaStateReady() {
         binding.image5.visibility = View.VISIBLE
         binding.progressbar.visibility = View.GONE
+        setTitleRadioMaryia(ServiceRadyjoMaryia.titleRadyjoMaryia)
     }
 
     override fun onClick(view: View?) {

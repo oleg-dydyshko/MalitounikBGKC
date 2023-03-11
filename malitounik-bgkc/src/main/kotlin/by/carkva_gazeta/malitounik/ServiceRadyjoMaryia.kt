@@ -172,7 +172,7 @@ class ServiceRadyjoMaryia : Service() {
 
     private fun sendTitlePadioMaryia() {
         if (MainActivity.isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 runCatching {
                     withContext(Dispatchers.IO) {
                         try {
@@ -204,8 +204,8 @@ class ServiceRadyjoMaryia : Service() {
                                             if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
                                                 sendBroadcast(Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java))
                                             }
+                                            listener?.setTitleRadioMaryia(titleRadyjoMaryia)
                                         }
-                                        listener?.setTitleRadioMaryia(titleRadyjoMaryia)
                                     }
                                 }
                             }

@@ -12,8 +12,10 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 442006
-        versionName "4.3.0.8"
+        versionCode 442007
+        versionName "4.3.0.9"
+
+        //multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -73,6 +75,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.18.4'
     implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.4'
     implementation 'androidx.core:core-ktx:1.9.0'
+    //implementation 'androidx.multidex:multidex:2.0.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

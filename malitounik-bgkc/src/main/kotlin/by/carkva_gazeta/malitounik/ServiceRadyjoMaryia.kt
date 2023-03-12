@@ -57,6 +57,7 @@ class ServiceRadyjoMaryia : Service() {
     private var timer = Timer()
     private var timerTask: TimerTask? = null
     private var listener: ServiceRadyjoMaryiaListener? = null
+    private var isPlaybackStateReady = false
 
     interface ServiceRadyjoMaryiaListener {
         fun setTitleRadioMaryia(title: String)
@@ -85,6 +86,7 @@ class ServiceRadyjoMaryia : Service() {
                                 intent.putExtra("action", PLAYING_RADIO_MARIA_STATE_READY)
                                 sendBroadcast(intent)
                             }
+                            isPlaybackStateReady = true
                         }
                     }
                 }
@@ -109,6 +111,7 @@ class ServiceRadyjoMaryia : Service() {
         }
         listener?.setTitleRadioMaryia("")
         listener?.unBinding()
+        isPlaybackStateReady = false
     }
 
     fun playOrPause() {
@@ -157,13 +160,13 @@ class ServiceRadyjoMaryia : Service() {
         val action = intent?.extras?.getInt("action") ?: PLAY_PAUSE
         if (action == PLAY_PAUSE) {
             playOrPause()
-            listener?.let {
+            if (isPlaybackStateReady) {
                 val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
                 if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
                     sendBroadcast(Intent(this, WidgetRadyjoMaryia::class.java))
                 }
-                it.playingRadioMaria(isPlaying)
             }
+            listener?.playingRadioMaria(isPlaying)
         } else {
             stopServiceRadioMaria()
         }

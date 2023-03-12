@@ -131,8 +131,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
             val intent = Intent(this, ServiceRadyjoMaryia::class.java)
             bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
-            if (ServiceRadyjoMaryia.isPlayingRadyjoMaryia)
-                binding.image5.setImageResource(R.drawable.pause2)
+            if (ServiceRadyjoMaryia.isPlayingRadyjoMaryia) binding.image5.setImageResource(R.drawable.pause2)
             binding.label15b.visibility = View.VISIBLE
             binding.label15b.text = ServiceRadyjoMaryia.titleRadyjoMaryia
         }
@@ -1523,6 +1522,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                             binding.image5.setImageResource(R.drawable.pause2)
                         } else {
                             mRadyjoMaryiaService?.apply {
+                                if (k.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
+                                    sendBroadcast(Intent(this, WidgetRadyjoMaryia::class.java))
+                                }
                                 playOrPause()
                                 if (isPlayingRadioMaria()) binding.image5.setImageResource(R.drawable.pause2)
                                 else binding.image5.setImageResource(R.drawable.play2)

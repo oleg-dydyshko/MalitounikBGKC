@@ -454,7 +454,8 @@
         <receiver
             android:name=".WidgetRadyjoMaryia"
             android:exported="false"
-            android:label="@string/padie_maryia_s">
+            android:label="@string/padie_maryia_s"
+            android:enabled="@bool/widgetRadyjoMaryia">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

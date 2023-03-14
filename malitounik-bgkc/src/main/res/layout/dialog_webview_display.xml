@@ -22,6 +22,7 @@
         android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:scrollbars="none"
         android:padding="10dp"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"

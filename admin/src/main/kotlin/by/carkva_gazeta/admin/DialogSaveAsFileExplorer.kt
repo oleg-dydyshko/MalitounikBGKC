@@ -103,7 +103,8 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             if (t1 != -1 && t1 == 0) {
                 val t2 = oldName.indexOf(")")
                 val t3 = oldName.lastIndexOf(".")
-                filenameTitle = oldName.substring(t2 + 2, t3)
+                filenameTitle = if (t3 != -1) oldName.substring(t2 + 2, t3)
+                else oldName.substring(t2 + 2)
                 fileName = oldName.substring(1, t2) + oldName.substring(t3)
             } else {
                 fileName = oldName

@@ -18,7 +18,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import by.carkva_gazeta.malitounik.databinding.PesnyBinding
-import by.carkva_gazeta.malitounik.databinding.ProgressPesnyAllBinding
+import by.carkva_gazeta.malitounik.databinding.ProgressMainBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -39,7 +39,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
     private var men = false
     private var resurs = ""
     private lateinit var binding: PesnyBinding
-    private lateinit var bindingprogress: ProgressPesnyAllBinding
+    private lateinit var bindingprogress: ProgressMainBinding
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
 

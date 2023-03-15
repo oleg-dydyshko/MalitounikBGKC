@@ -359,7 +359,8 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
         BibleGlobalList.mListGlava = 0
         binding.pager.adapter = MyPagerAdapter(this)
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
-            tab.text = if (kniga == 21) resources.getString(by.carkva_gazeta.malitounik.R.string.psinaidal) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (position + 1)
+            tab.text = if (kniga == 21) getString(by.carkva_gazeta.malitounik.R.string.psinaidal) + " " + (position + 1)
+            else getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (position + 1)
         }.attach()
         binding.pager.offscreenPageLimit = 1
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -562,8 +563,6 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
             }
         }
         setTollbarTheme()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

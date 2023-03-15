@@ -398,6 +398,14 @@
             android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".Cytaty"
+            android:label="@string/cytaty_z_biblii"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
 
         <meta-data
             android:name="com.google.android.backup.api_key"

@@ -267,7 +267,7 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
         val adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
-            tab.text = resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
+            tab.text = getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
         }.attach()
         binding.pager.offscreenPageLimit = 1
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -475,8 +475,6 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
             }
         }
         setTollbarTheme()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

@@ -36,19 +36,34 @@ class WidgetRadyjoMaryia : AppWidgetProvider() {
             intent2.putExtra("action", ServiceRadyjoMaryia.STOP)
             context.startService(intent2)
         }
+        val isInternet = MainActivity.isNetworkAvailable()
         if (extra == ServiceRadyjoMaryia.PLAY_PAUSE) {
-            if (!ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
-                isFirstRun = true
+            if (isInternet) {
+                if (!ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
+                    isFirstRun = true
+                }
+                val intent2 = Intent(context, ServiceRadyjoMaryia::class.java)
+                intent2.putExtra("action", ServiceRadyjoMaryia.PLAY_PAUSE)
+                context.startService(intent2)
+            } else {
+                val intent3 = Intent(context, WidgetRadyjoMaryiaProgram::class.java)
+                intent3.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                intent3.putExtra("checkInternet", true)
+                context.startActivity(intent3)
             }
-            val intent2 = Intent(context, ServiceRadyjoMaryia::class.java)
-            intent2.putExtra("action", ServiceRadyjoMaryia.PLAY_PAUSE)
-            context.startService(intent2)
         }
         if (extra == ServiceRadyjoMaryia.WIDGET_RADYJO_MARYIA_PROGRAM) {
-            isProgram = true
-            val intent2 = Intent(context, WidgetRadyjoMaryiaProgram::class.java)
-            intent2.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            context.startActivity(intent2)
+            if (isInternet) {
+                isProgram = true
+                val intent2 = Intent(context, WidgetRadyjoMaryiaProgram::class.java)
+                intent2.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                context.startActivity(intent2)
+            } else {
+                val intent3 = Intent(context, WidgetRadyjoMaryiaProgram::class.java)
+                intent3.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                intent3.putExtra("checkInternet", true)
+                context.startActivity(intent3)
+            }
         }
         if (extra == ServiceRadyjoMaryia.WIDGET_RADYJO_MARYIA_PROGRAM_EXIT) {
             isProgram = false

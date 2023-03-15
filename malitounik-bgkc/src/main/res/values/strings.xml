@@ -759,5 +759,7 @@
     <string name="artykuly_apytanki_count">Усяго: %1$d</string>
     <string name="widget_title">Каляндар на дзень</string>
     <string name="widget_mun_title">Каляндар на месяц</string>
+    <string name="cytaty_staronka">Старонка %1$d</string>
+    <string name="cytaty_z_biblii">Цытаты з Бібліі</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

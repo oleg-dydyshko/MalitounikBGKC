@@ -43,7 +43,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
     private val malitvy = ArrayList<MenuListData>()
     private val dzenNoch get() = getBaseDzenNoch()
     private var pasliaPrychascia = 0
-    private var n = 0
     private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private lateinit var binding: AkafistActivityPasliaPrichBinding
     private lateinit var bindingprogress: ProgressBinding
@@ -356,7 +355,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             }
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
-                    n = event?.y?.toInt() ?: 0
                     if (x < otstup) {
                         bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)

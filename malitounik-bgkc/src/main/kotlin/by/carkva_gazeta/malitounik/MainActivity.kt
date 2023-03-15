@@ -434,6 +434,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.image5.setOnClickListener(this)
         binding.image6.setOnClickListener(this)
         binding.image7.setOnClickListener(this)
+        binding.citata.setOnClickListener(this)
 
         val data = intent.data
         if (data != null) {
@@ -1008,6 +1009,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.label145.setBackgroundResource(R.drawable.selector_dark)
                 binding.label146.setBackgroundResource(R.drawable.selector_dark)
                 binding.label148.setBackgroundResource(R.drawable.selector_dark)
+                binding.citata.setBackgroundResource(R.drawable.selector_dark)
             } else {
                 binding.label1.setBackgroundResource(R.drawable.selector_default)
                 binding.label3.setBackgroundResource(R.drawable.selector_default)
@@ -1037,6 +1039,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.label145.setBackgroundResource(R.drawable.selector_default)
                 binding.label146.setBackgroundResource(R.drawable.selector_default)
                 binding.label148.setBackgroundResource(R.drawable.selector_default)
+                binding.citata.setBackgroundResource(R.drawable.selector_default)
             }
         }
         prefEditors = k.edit()
@@ -1550,6 +1553,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             R.id.image7 -> {
                 val dialog = DialogProgramPadoiMaryia()
                 dialog.show(supportFragmentManager, "DialogProgramPadoiMaryia")
+            }
+            R.id.citata -> {
+                startActivity(Intent(this, Cytaty::class.java))
             }
         }
         if (start) {

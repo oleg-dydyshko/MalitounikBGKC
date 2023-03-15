@@ -20,10 +20,19 @@ class DialogNoInternet : DialogFragment() {
         _binding = null
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        activity?.let {
+            if (it !is BaseActivity) it.finish()
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
-            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
+            val dzenNoch = if (it is BaseActivity) {
+                it.getBaseDzenNoch()
+            } else false
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val ad = AlertDialog.Builder(it, style)

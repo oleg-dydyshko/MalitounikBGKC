@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.hardware.SensorEvent
@@ -263,10 +264,17 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         prefEditor.apply()
     }
 
+    private fun setResoursName() {
+        val t1 = fileName.indexOf("(")
+        if (t1 != -1) {
+            val t2 = fileName.indexOf(")")
+            resours = fileName.substring(1, t2)
+        }
+    }
+
     private fun findResoursNameAndTitle(): String {
-        var title: String
         val t3 = fileName.lastIndexOf(".")
-        title = if (t3 != -1) {
+        var title = if (t3 != -1) {
             var findResours = false
             for (i in 0 until PasochnicaList.findDirAsSave.size) {
                 if (fileName.substring(0, t3) == PasochnicaList.findDirAsSave[i]) {
@@ -317,14 +325,19 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         fileName = intent.extras?.getString("fileName", "") ?: "new_file.html"
         resours = intent.extras?.getString("resours", "") ?: ""
         var title = intent.extras?.getString("title", "") ?: ""
-        if (resours == "" && title == "") {
-            title = findResoursNameAndTitle()
-        }
+        val isPasochnica = intent.extras?.getBoolean("isPasochnica", false) ?: false
         val text = intent.extras?.getString("text", "") ?: ""
-        fileName = if (resours == "") {
-            title
+        if (!isPasochnica) {
+            if (resours == "" && title == "") {
+                title = findResoursNameAndTitle()
+            }
+            fileName = if (resours == "") {
+                title
+            } else {
+                "($resours) $title"
+            }
         } else {
-            "($resours) $title"
+            setResoursName()
         }
         isHTML = text.contains("<!DOCTYPE HTML>", ignoreCase = true)
         if (savedInstanceState != null) {
@@ -364,6 +377,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     getOrSendFilePostRequest(text, false)
                 }
                 else -> {
+                    isHTML = true
                     intent.removeExtra("newFile")
                 }
             }
@@ -754,9 +768,12 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     binding.actionP.visibility = View.GONE
                     binding.actionBr.visibility = View.GONE
                 } else {
+                    binding.actionP.visibility = View.VISIBLE
+                    binding.actionBr.visibility = View.VISIBLE
                     binding.apisanne.setText(result)
                 }
                 binding.progressBar2.visibility = View.GONE
+                invalidateOptionsMenu()
             }
         } else {
             isHTML = content.contains("<!DOCTYPE HTML>", ignoreCase = true)
@@ -987,8 +1004,18 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         return result
     }
 
+    override fun onPrepareMenu(menu: Menu) {
+        if (!isHTML) {
+            menu.findItem(R.id.action_preview).isVisible = false
+        }
+    }
+
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == android.R.id.home) {
+            startActivity(Intent(this, PasochnicaList::class.java))
+            return true
+        }
         if (id == R.id.action_find) {
             binding.find.visibility = View.VISIBLE
             binding.textSearch.requestFocus()
@@ -1037,9 +1064,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 result = clearColor(result)
                 result = clearBold(result)
                 result = clearEm(result)
+                binding.apisanne.setText(result)
                 binding.actionP.visibility = View.VISIBLE
                 binding.actionBr.visibility = View.VISIBLE
-                binding.apisanne.setText(result)
                 binding.actionBack.visibility = View.GONE
             }
         }

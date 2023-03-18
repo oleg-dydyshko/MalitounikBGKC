@@ -459,6 +459,15 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["ndz_miasapusnaja_liturhija"] = R.raw.ndz_miasapusnaja_liturhija
             resursMap["ndz_syrnaja_liturhija"] = R.raw.ndz_syrnaja_liturhija
             resursMap["ndz_bludnaha_syna_liturhija"] = R.raw.ndz_bludnaha_syna_liturhija
+            resursMap["mm_06_04_miatoda_marauskaha_viaczernia"] = R.raw.mm_06_04_miatoda_marauskaha_viaczernia
+            resursMap["mm_14_03_viaczernia"] = R.raw.mm_14_03_viaczernia
+            resursMap["mm_17_03_viaczernia"] = R.raw.mm_17_03_viaczernia
+            resursMap["mm_18_03_viaczernia"] = R.raw.mm_18_03_viaczernia
+            resursMap["mm_23_04_juryja_pieramozcy_liturhija"] = R.raw.mm_23_04_juryja_pieramozcy_liturhija
+            resursMap["mm_23_04_juryja_pieramozcy_viaczernia"] = R.raw.mm_23_04_juryja_pieramozcy_viaczernia
+            resursMap["mm_24_03_pieradsv_dabravieszczannia_liturhija"] = R.raw.mm_24_03_pieradsv_dabravieszczannia_liturhija
+            resursMap["mm_24_03_pieradsv_dabravieszczannia_viaczernia"] = R.raw.mm_24_03_pieradsv_dabravieszczannia_viaczernia
+            resursMap["mm_25_03_dabravieszczannie_viaczernia"] = R.raw.mm_25_03_dabravieszczannie_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {

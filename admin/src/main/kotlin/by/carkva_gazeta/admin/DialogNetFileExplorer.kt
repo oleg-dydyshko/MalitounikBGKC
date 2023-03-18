@@ -126,7 +126,6 @@ class DialogNetFileExplorer : DialogFragment() {
                     fileList.addAll(temp)
                     adapter.notifyDataSetChanged()
                 } catch (e: Throwable) {
-                    e.printStackTrace()
                     activity?.let {
                         MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }

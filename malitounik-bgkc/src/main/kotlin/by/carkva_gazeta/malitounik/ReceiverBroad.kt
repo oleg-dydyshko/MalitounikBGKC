@@ -30,10 +30,11 @@ class ReceiverBroad : BroadcastReceiver() {
             else newId
             sabytieSet = true
         }
-        sendNotif(ctx, intent.action, intent.getStringExtra("extra") ?: "", intent.getIntExtra("dayofyear", dayofyear), intent.getIntExtra("year", year))
+        sendNotif(ctx, intent.action, intent.getStringExtra("extra"), intent.getIntExtra("dayofyear", dayofyear), intent.getIntExtra("year", year))
     }
 
-    private fun sendNotif(context: Context, Sviata: String?, Name: String, dayofyear: Int, year: Int) {
+    private fun sendNotif(context: Context, sviata: String?, name: String?, dayofyear: Int, year: Int) {
+        if (sviata == null || name == null) return
         val notificationIntent = Intent(context, MainActivity::class.java)
         notificationIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         notificationIntent.putExtra("data", dayofyear)
@@ -41,7 +42,7 @@ class ReceiverBroad : BroadcastReceiver() {
         notificationIntent.putExtra("sabytie", true)
         if (sabytieSet) {
             notificationIntent.putExtra("sabytieView", true)
-            notificationIntent.putExtra("sabytieTitle", Sviata)
+            notificationIntent.putExtra("sabytieTitle", sviata)
         }
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -76,8 +77,8 @@ class ReceiverBroad : BroadcastReceiver() {
         } else {
             NotificationCompat.Builder(context, SettingsActivity.NOTIFICATION_CHANNEL_ID_SVIATY)
         }
-        builder.setContentIntent(contentIntent).setWhen(System.currentTimeMillis()).setShowWhen(true).setSmallIcon(R.drawable.krest).setLargeIcon(BitmapFactory.decodeResource(context.resources, bigIcon)).setAutoCancel(true).setPriority(NotificationManagerCompat.IMPORTANCE_HIGH).setLights(ContextCompat.getColor(context, R.color.colorPrimary), 1000, 1000).setContentTitle(Name).setContentText(Sviata)
-        if (sabytieSet) builder.setStyle(NotificationCompat.BigTextStyle().bigText(Sviata))
+        builder.setContentIntent(contentIntent).setWhen(System.currentTimeMillis()).setShowWhen(true).setSmallIcon(R.drawable.krest).setLargeIcon(BitmapFactory.decodeResource(context.resources, bigIcon)).setAutoCancel(true).setPriority(NotificationManagerCompat.IMPORTANCE_HIGH).setLights(ContextCompat.getColor(context, R.color.colorPrimary), 1000, 1000).setContentTitle(name).setContentText(sviata)
+        if (sabytieSet) builder.setStyle(NotificationCompat.BigTextStyle().bigText(sviata))
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || chin.getInt("guk", 1) == 1) builder.setSound(uri)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || chin.getInt("vibra", 1) == 1) builder.setVibrate(SettingsActivity.vibrate)
         val notification = builder.build()

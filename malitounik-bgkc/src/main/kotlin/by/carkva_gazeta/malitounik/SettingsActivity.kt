@@ -73,6 +73,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         const val NOTIFICATION_CHANNEL_ID_SVIATY = "2003"
         const val NOTIFICATION_CHANNEL_ID_RADIO_MARYIA = "4007"
         val vibrate = longArrayOf(0, 1000, 700, 1000)
+        var isPadzeiaSetAlarm = false
 
         private fun mkTime(year: Int, month: Int, day: Int, hour: Int): Long {
             val calendar = Calendar.getInstance()
@@ -233,6 +234,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             } else {
                 0
             }
+            isPadzeiaSetAlarm = true
             MainActivity.padzeia.forEach {
                 if (it.sec != "-1") {
                     val timerepit = it.paznic
@@ -243,6 +245,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                     }
                 }
             }
+            isPadzeiaSetAlarm = false
             var year = c[Calendar.YEAR]
             var dataP: Int
             var monthP: Int

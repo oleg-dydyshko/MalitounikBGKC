@@ -731,6 +731,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
     }
 
     override fun fileDelite(position: Int, file: String) {
+        if (SettingsActivity.isPadzeiaSetAlarm) return
         redak = true
         val sab = MainActivity.padzeia[position]
         val filen = sab.padz
@@ -740,6 +741,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 del.add(p)
             }
         }
+
         MainActivity.padzeia.removeAll(del.toSet())
         val outputStream = FileWriter("$filesDir/Sabytie.json")
         val gson = Gson()
@@ -940,6 +942,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
+        if (SettingsActivity.isPadzeiaSetAlarm) return false
         if (!home) {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return false
@@ -2153,6 +2156,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
     }
 
     override fun sabytieDelAll() {
+        if (SettingsActivity.isPadzeiaSetAlarm) return
         redak = true
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
@@ -2179,6 +2183,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
     }
 
     override fun sabytieDelOld() {
+        if (SettingsActivity.isPadzeiaSetAlarm) return
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PendingIntent.FLAG_IMMUTABLE or 0
         } else {

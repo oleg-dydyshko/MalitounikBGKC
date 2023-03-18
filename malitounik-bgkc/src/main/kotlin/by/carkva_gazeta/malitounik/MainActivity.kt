@@ -164,7 +164,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         origin.copyTo(out, 1024)
                         origin.close()
                     }
-                    out.close()
+                    out.closeEntry()
                     return@withContext zip
                 }
                 val sendIntent = Intent(Intent.ACTION_SEND)

@@ -142,6 +142,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                     intent.putExtra("backcopy", true)
                 }
             } else {
+                intent.putExtra("isPasochnica", true)
                 intent.putExtra("isSite", true)
                 intent.putExtra("fileName", fileName)
             }
@@ -240,7 +241,6 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 var resourse = ""
-                var res = fileName
                 val localFile = withContext(Dispatchers.IO) {
                     File.createTempFile("piasochnica", "html")
                 }
@@ -248,25 +248,34 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                     Malitounik.referens.child("/$dirToFile").getFile(localFile).addOnFailureListener {
                         MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
-                    val t1 = fileName.indexOf(".")
-                    var newFileName = fileName.replace("\n", " ")
-                    var title = ""
-                    if (t1 != -1) {
-                        resourse = "(" + newFileName.substring(0, t1) + ") "
-                        newFileName = newFileName.substring(0, t1)
-                        if (fileName.contains(".html")) {
-                            val rt = localFile.readText()
-                            val t2 = rt.indexOf("<strong>")
-                            if (t2 != -1) {
-                                val t3 = rt.indexOf("</strong>")
-                                title = rt.substring(t2 + 8, t3).trim()
+                } catch (e: Throwable) {
+                    MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                }
+                val t1 = fileName.indexOf(".")
+                var newFileName = fileName.replace("\n", " ")
+                var title = ""
+                if (t1 != -1) {
+                    resourse = "(" + newFileName.substring(0, t1) + ") "
+                    newFileName = newFileName.substring(0, t1)
+                    if (fileName.contains(".html")) {
+                        val rt = localFile.readText()
+                        val t2 = rt.indexOf("<strong>")
+                        if (t2 != -1) {
+                            val t3 = rt.indexOf("</strong>")
+                            val t4 = rt.indexOf("<br>")
+                            title = if (t4 > t2 + 8 && t4 < t3) {
+                                rt.substring(t2 + 8, t4).trim()
+                            } else {
+                                rt.substring(t2 + 8, t3).trim()
                             }
                         }
                     }
-                    res = if (title != "") {
-                        val preparetext = MainActivity.fromHtml(title).toString()
-                        preparetext.substring(0, 1).uppercase() + preparetext.substring(1).lowercase()
-                    } else newFileName
+                }
+                val res = if (title != "") {
+                    val preparetext = MainActivity.fromHtml(title).toString()
+                    preparetext.substring(0, 1).uppercase() + preparetext.substring(1).lowercase()
+                } else newFileName
+                try {
                     Malitounik.referens.child("/admin/piasochnica/$resourse$res").putFile(Uri.fromFile(localFile)).await()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))

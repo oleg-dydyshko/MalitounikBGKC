@@ -47,62 +47,19 @@ class Onas : BaseActivity() {
         val inputStream = resources.openRawResource(R.raw.onas)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
-        var line: String
         val builder = StringBuilder()
         if (dzenNoch) builder.append("<html><head><style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #303030;}</style></head><body>\n")
         else builder.append("<html><head><style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}</style></head><body>\n")
         reader.use { bufferedReader ->
             bufferedReader.forEachLine {
-                line = it
+                var line = it
+                if (dzenNoch) line = line.replace("#d00505", "#f44336")
                 if (line.contains("<!--<VERSION></VERSION>-->")) {
                     line = line.replace("<!--<VERSION></VERSION>-->", "<em>Версія праграмы: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})</em><br><br>")
                 }
                 builder.append(line)
             }
         }
-        /*val text = MainActivity.fromHtml(builder.toString())
-        val spannable = text.toSpannable()
-        val str = "https://carkva-gazeta.by"
-        val t1 = text.indexOf(str)
-        spannable.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                    return
-                }
-                mLastClickTime = SystemClock.elapsedRealtime()
-                val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-                val prefEditors = k.edit()
-                prefEditors.putInt("id", R.id.label2)
-                prefEditors.apply()
-                val intent = Intent(this@Onas, Naviny::class.java)
-                intent.putExtra("naviny", 0)
-                startActivity(intent)
-            }
-        }, t1, t1 + str.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)*/
-        /*val str2 = "Палітыка прыватнасьці"
-        val t2 = text.indexOf(str2)
-        spannable.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                    return
-                }
-                mLastClickTime = SystemClock.elapsedRealtime()
-                val url = "https://carkva.web.app/"
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.setPackage("com.android.chrome")
-                try {
-                    startActivity(intent)
-                } catch (ex: ActivityNotFoundException) {
-                    try {
-                        intent.setPackage(null)
-                        startActivity(intent)
-                    } catch (ex: ActivityNotFoundException) {
-                        MainActivity.toastView(this@Onas, getString(R.string.error_ch2))
-                    }
-                }
-            }
-        }, t2, t2 + str2.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)*/
         val webSettings = binding.pasxa.settings
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT.toInt()

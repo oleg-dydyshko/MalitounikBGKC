@@ -70,7 +70,7 @@ class DialogHelpShare : DialogFragment() {
                 edit.apply()
             }
             ad.setView(binding.root)
-            ad.setPositiveButton(resources.getString(R.string.ok)) { _: DialogInterface, _: Int -> mListener?.sentShareText(arguments?.getString("shareText") ?: "") }
+            ad.setPositiveButton(resources.getString(R.string.close)) { _: DialogInterface, _: Int -> mListener?.sentShareText(arguments?.getString("shareText") ?: "") }
             alert = ad.create()
         }
         return alert

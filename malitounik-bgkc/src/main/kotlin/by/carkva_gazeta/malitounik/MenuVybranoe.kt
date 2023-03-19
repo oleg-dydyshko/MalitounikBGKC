@@ -270,8 +270,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                             val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
                             vybranoe.addAll(gson.fromJson(file.readText(), type))
                             vybranoeSort = 0
-                        } catch (t: Throwable) {
-                            file.delete()
+                        } catch (_: Throwable) {
                         }
                     }
                 } else {

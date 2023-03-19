@@ -172,15 +172,21 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
                 sendIntent.type = "application/zip"
                 shareLauncher.launch(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
-                if (isClear) {
-                    val localFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("log", "txt")
-                    }
-                    localFile.writer().use {
-                        it.write("")
-                    }
-                    Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(localFile)).await()
+                clearLogFile(isClear)
+            }
+        }
+    }
+
+    override fun clearLogFile(isClear: Boolean) {
+        if (isClear) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val localFile = withContext(Dispatchers.IO) {
+                    File.createTempFile("log", "txt")
                 }
+                localFile.writer().use {
+                    it.write("")
+                }
+                Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(localFile)).await()
             }
         }
     }

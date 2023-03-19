@@ -138,7 +138,7 @@ class DialogLiturgia : DialogFragment() {
             else binding.content.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             binding.content.text = MainActivity.fromHtml(builder.toString())
             ab.setView(binding.root)
-            ab.setPositiveButton(activity.resources.getString(by.carkva_gazeta.malitounik.R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            ab.setPositiveButton(activity.resources.getString(by.carkva_gazeta.malitounik.R.string.close)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
         }
         return ab.create()
     }

@@ -28,6 +28,7 @@ class DialogLogView : DialogFragment() {
 
     interface DialogLogViewListener {
         fun createAndSentFile(log: ArrayList<String>, isClear: Boolean)
+        fun clearLogFile(isClear: Boolean)
     }
 
     override fun onAttach(context: Context) {
@@ -79,7 +80,9 @@ class DialogLogView : DialogFragment() {
             ad.setPositiveButton(resources.getString(R.string.set_log)) { _: DialogInterface, _: Int ->
                 mListener?.createAndSentFile(log, binding.checkbox.isChecked)
             }
-            ad.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            ad.setNegativeButton(getString(R.string.cansel)) { _: DialogInterface, _: Int ->
+                mListener?.clearLogFile(binding.checkbox.isChecked)
+            }
             alert = ad.create()
         }
         return alert

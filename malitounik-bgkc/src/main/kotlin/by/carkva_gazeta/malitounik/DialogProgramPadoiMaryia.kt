@@ -65,7 +65,7 @@ class DialogProgramPadoiMaryia : DialogFragment() {
                 webSettings.defaultFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT.toInt()
                 webSettings.domStorageEnabled = true
                 builder.setView(it.root)
-                builder.setPositiveButton(resources.getText(R.string.ok)) { dialog: DialogInterface, _: Int ->
+                builder.setPositiveButton(resources.getText(R.string.close)) { dialog: DialogInterface, _: Int ->
                     dialog.cancel()
                 }
                 alert = builder.create()

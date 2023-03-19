@@ -126,7 +126,7 @@ class DialogBibleSearshSettings : DialogFragment() {
                 }
             }
             builder.setView(binding.root)
-            builder.setPositiveButton(getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setPositiveButton(getString(R.string.close)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
         }
         return builder.create()
     }

@@ -26,95 +26,13 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/textView1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/tipicon_fon"
-                android:textColor="@color/colorPrimary" />
-
-            <View
-                android:id="@+id/line1"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/colorPrimary" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/colorPrimary"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@string/niadzeli_i_sviaty"
-                android:textColor="@color/colorWhite" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/colorPost"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@string/Post" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/colorStrogiPost"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@string/Strogi_post"
-                android:textColor="@color/colorWhite" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/colorBezPosta"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@string/No_post" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/colorDivider"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@string/zvychaynye_dny" />
-
-            <TextView
                 android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:paddingTop="10dp"
                 android:text="@string/Znaki_cviat"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp" />
 
             <View
                 android:id="@+id/line2"
@@ -148,7 +66,8 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -176,7 +95,8 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="@string/Z_Lic_na_ve" />
+                    android:text="@string/Z_Lic_na_ve"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -204,7 +124,8 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="@string/Z_v_v_v_u_n_u" />
+                    android:text="@string/Z_v_v_v_u_n_u"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -232,7 +153,8 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="@string/Z_sh_v_v_u_u" />
+                    android:text="@string/Z_sh_v_v_u_u"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -260,8 +182,98 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="@string/Z_sh_v_m_u_u" />
+                    android:text="@string/Z_sh_v_m_u_u"
+                    android:textSize="14sp" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:paddingTop="10dp"
+                android:text="@string/tipicon_fon"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp" />
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorPrimary"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/niadzeli_i_sviaty"
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorDivider"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/zvychaynye_dny"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorBezPosta"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/No_post_n"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorPost"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/Post"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorStrogiPost"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/Strogi_post_n"
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

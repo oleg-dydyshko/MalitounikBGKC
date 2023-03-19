@@ -56,7 +56,7 @@ class DialogSemuxaNoKnigi : DialogFragment() {
                 edit.apply()
             }
             ad.setView(binding.root)
-            ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            ad.setPositiveButton(resources.getString(R.string.close)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = ad.create()
         }
         return alert

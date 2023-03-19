@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.hardware.SensorEvent
@@ -787,29 +786,28 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         }
     }
 
-    private fun getTextOnSite(fileName: String): String {
+    private suspend fun getTextOnSite(fileName: String): String {
         var text = ""
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val localFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("piasochnica", "json")
-                }
-                val result = PasochnicaList.findDirAsSave
-                val newFileName = "$fileName.html"
-                for (i in 0 until result.size) {
-                    val t1 = result[i].lastIndexOf("/")
-                    if (result[i].substring(t1 + 1) == newFileName) {
-                        Malitounik.referens.child("/" + result[i]).getFile(localFile).addOnCompleteListener {
-                            if (it.isSuccessful) text = localFile.readText()
-                            else MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
-                        }.await()
-                        break
-                    }
-                }
-            } catch (e: Throwable) {
-                text = ""
-                MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+        try {
+            val localFile = withContext(Dispatchers.IO) {
+                File.createTempFile("piasochnica", "json")
             }
+            val result = PasochnicaList.findDirAsSave
+            for (i in 0 until result.size) {
+                val t1 = result[i].lastIndexOf("/")
+                var t2 = result[i].lastIndexOf(".")
+                if (t2 == -1) t2 = result[i].length
+                if (result[i].substring(t1 + 1, t2) == fileName) {
+                    Malitounik.referens.child("/" + result[i]).getFile(localFile).addOnCompleteListener {
+                        if (it.isSuccessful) text = localFile.readText()
+                        else MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }.await()
+                    break
+                }
+            }
+        } catch (e: Throwable) {
+            text = ""
+            MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
         }
         return text
     }
@@ -1012,10 +1010,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == android.R.id.home) {
-            startActivity(Intent(this, PasochnicaList::class.java))
-            return true
-        }
         if (id == R.id.action_find) {
             binding.find.visibility = View.VISIBLE
             binding.textSearch.requestFocus()

@@ -14,7 +14,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogWidgetConfigBinding
 
 class DialogWidgetConfig : DialogFragment() {
-    private var configDzenNoch = false
     private lateinit var alert: AlertDialog
     private var _binding: DialogWidgetConfigBinding? = null
     private val binding get() = _binding!!

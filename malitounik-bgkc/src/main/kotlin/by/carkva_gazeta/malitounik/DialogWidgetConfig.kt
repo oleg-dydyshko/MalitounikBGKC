@@ -37,16 +37,15 @@ class DialogWidgetConfig : DialogFragment() {
             binding.checkBox20.typeface = MainActivity.createFont(Typeface.NORMAL)
             binding.checkBox20.isChecked = chin.getBoolean("dzen_noch_widget_day$widgetID", false)
             binding.checkBox20.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-                configDzenNoch = isChecked
-            }
-            val builder = AlertDialog.Builder(it, R.style.AlertDialogTheme)
-            builder.setPositiveButton(resources.getText(R.string.ok)) { dialog: DialogInterface, _: Int ->
                 val prefEditor = chin.edit()
-                prefEditor.putBoolean("dzen_noch_widget_day$widgetID", configDzenNoch)
+                prefEditor.putBoolean("dzen_noch_widget_day$widgetID", isChecked)
                 prefEditor.apply()
                 val intent = Intent(it, Widget::class.java)
                 intent.putExtra("widgetID", widgetID)
                 it.sendBroadcast(intent)
+            }
+            val builder = AlertDialog.Builder(it, R.style.AlertDialogTheme)
+            builder.setPositiveButton(resources.getText(R.string.close)) { dialog: DialogInterface, _: Int ->
                 dialog.cancel()
             }
             builder.setView(binding.root)

@@ -383,6 +383,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["dzie_varshava"] = R.raw.dzie_varshava
             resursMap["dzie_vilnia"] = R.raw.dzie_vilnia
             resursMap["dzie_viena"] = R.raw.dzie_viena
+            resursMap["dzie_krakau"] = R.raw.dzie_krakau
             resursMap["dzie_kalininhrad"] = R.raw.dzie_kalininhrad
             resursMap["dzie_praha"] = R.raw.dzie_praha
             resursMap["dzie_rym"] = R.raw.dzie_rym

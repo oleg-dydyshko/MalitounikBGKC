@@ -103,6 +103,7 @@ class MenuParafiiBgkc : BaseFragment() {
             children4.add(MenuListData("Рым (Італія)", "dzie_rym"))
             children4.add(MenuListData("Санкт-Пецярбург (Расея)", "dzie_sanktpieciarburg"))
             children4.add(MenuListData("Беласток (Польшча)", "dzie_bielastok"))
+            children4.add(MenuListData("Кракаў (Польшча)", "dzie_krakau"))
             children4.sort()
             groups.add(children4)
             val adapter = ExpListAdapterPrafiiBgkc(activity, groups)

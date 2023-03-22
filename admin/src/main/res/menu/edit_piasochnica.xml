@@ -19,4 +19,9 @@
         android:orderInCategory="100"
         android:title="@string/save_sabytie"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_convert"
+        android:orderInCategory="100"
+        android:title="@string/convert_to_html"
+        app:showAsAction="never" />
 </menu>

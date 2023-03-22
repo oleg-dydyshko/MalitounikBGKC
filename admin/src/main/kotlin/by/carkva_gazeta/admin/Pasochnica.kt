@@ -376,7 +376,8 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     getOrSendFilePostRequest(text, false)
                 }
                 else -> {
-                    isHTML = true
+                    binding.actionP.visibility = View.VISIBLE
+                    binding.actionBr.visibility = View.VISIBLE
                     intent.removeExtra("newFile")
                 }
             }
@@ -1003,7 +1004,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        if (!isHTML) {
+        if (isHTML) {
+            menu.findItem(R.id.action_convert).isVisible = false
+        } else {
             menu.findItem(R.id.action_preview).isVisible = false
         }
     }
@@ -1019,7 +1022,13 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         if (id == R.id.action_preview) {
             binding.apisanne.removeTextChangedListener(textWatcher)
             isHTML = !isHTML
-            convertView()
+            convertView(binding.apisanne.text)
+            binding.apisanne.addTextChangedListener(textWatcher)
+            return true
+        }
+        if (id == R.id.action_convert) {
+            binding.apisanne.removeTextChangedListener(textWatcher)
+            convertToHtml()
             binding.apisanne.addTextChangedListener(textWatcher)
             return true
         }
@@ -1037,8 +1046,16 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         return false
     }
 
-    private fun convertView() {
-        val text = binding.apisanne.text
+    private fun convertToHtml() {
+        var text = binding.apisanne.text.toString()
+        text = text.replace("\n", "<br>\n")
+        text = "<!DOCTYPE HTML>$text"
+        isHTML = true
+        convertView(SpannableStringBuilder(text))
+        invalidateOptionsMenu()
+    }
+
+    private fun convertView(text: Editable?) {
         if (isHTML) {
             binding.apisanne.setText(MainActivity.fromHtml(text.toString(), HtmlCompat.FROM_HTML_MODE_COMPACT))
             binding.actionP.visibility = View.GONE

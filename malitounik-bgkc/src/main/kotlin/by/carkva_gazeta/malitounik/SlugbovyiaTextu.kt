@@ -225,6 +225,8 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(83, "Перадсьвяцьце Дабравешчаньня", "mm_24_03_pieradsv_dabravieszczannia_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(83, "Перадсьвяцьце Дабравешчаньня", "mm_24_03_pieradsv_dabravieszczannia_viaczernia", VIACZERNIA))
         datMinSH.add(SlugbovyiaTextuData(84, "Дабравешчаньне Найсьвяцейшай Багародзіцы", "mm_25_03_dabravieszczannie_viaczernia", VIACZERNIA))
+        datMinSH.add(SlugbovyiaTextuData(104, "Між сьвятымі айца нашага Марціна Вызнаўцы, папы Рымскага", "mm_14_04_marcina_papy_rymskaha_viaczernia", VIACZERNIA))
+        datMinSH.add(SlugbovyiaTextuData(113, "Сьвятога вялікамучаніка Юрыя", "mm_23_04_juryja_pieramozcy_jutran", JUTRAN))
 
         datMinSV.add(SlugbovyiaTextuData(6, "Нядзеля Тамаша (Антыпасха) вячэрня ў суботу", "ndz_tamasza_viaczernia_subota", VIACZERNIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха)", "ndz_tamasza_jutran", JUTRAN, pasxa = true))

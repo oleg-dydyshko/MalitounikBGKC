@@ -67,9 +67,7 @@ class DialogTraparyAndKandaki : DialogFragment() {
                 startActivity(intent)
             }
             title.forEachIndexed { index, tit ->
-                if (tit != "") {
-                    data.add(Bogaslujbovyia(tit, resurs[index]))
-                }
+                data.add(Bogaslujbovyia(tit, resurs[index]))
             }
             data.add(Bogaslujbovyia("Тон $ton", "ton$ton"))
             val adapter = TraparyAndKandakiAdaprer(activity, data)

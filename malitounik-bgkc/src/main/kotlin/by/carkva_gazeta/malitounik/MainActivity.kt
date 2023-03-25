@@ -299,6 +299,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", MODE_PRIVATE)
+        // Удаление "фантомных" виджетов
+        /*val appWidgetManager = AppWidgetManager.getInstance(this)
+        val thisAppWidget = ComponentName(packageName, Widget::class.java.name)
+        val host = AppWidgetHost(this, 0)
+        appWidgetManager.getAppWidgetIds(thisAppWidget).forEach {
+            //host.deleteAppWidgetId(it)
+            Log.d("Oleg", it.toString())
+        }*/
         mkDir()
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain

@@ -1047,11 +1047,23 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     }
 
     private fun convertToHtml() {
-        var text = binding.apisanne.text.toString()
-        text = text.replace("\n", "<br>\n")
-        text = "<!DOCTYPE HTML>$text"
+        val text = binding.apisanne.text.toString()
+        val listText = text.split("\n")
+        val result = SpannableStringBuilder()
+        result.append("<!DOCTYPE HTML>")
+        listText.forEach {
+            val string = it.trim()
+            val res = if (it.length >= 4) string.substring(it.length - 4)
+            else string
+            val isBR = res.contains("<br>")
+            if (isBR) {
+                result.append("$it\n")
+            } else {
+                result.append("$it<br>\n")
+            }
+        }
         isHTML = true
-        convertView(SpannableStringBuilder(text))
+        convertView(result)
         invalidateOptionsMenu()
     }
 

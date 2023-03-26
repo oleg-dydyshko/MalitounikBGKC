@@ -41,7 +41,7 @@ class MenuBibleSemuxa : BaseFragment() {
                 val bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
                 if (bibleVybranoe != "") {
                     val gson = Gson()
-                    val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                     arrayListVybranoe.addAll(gson.fromJson(bibleVybranoe, type))
                 }
                 if (bibleVybranoe == "" || arrayListVybranoe.isEmpty()) {

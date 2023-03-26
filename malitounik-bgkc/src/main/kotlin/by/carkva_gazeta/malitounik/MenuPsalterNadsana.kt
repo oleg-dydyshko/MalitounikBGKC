@@ -96,7 +96,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
             val bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
             if (bibleVybranoe != "") {
                 val gson = Gson()
-                val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeBibliaData::class.java).type
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
                 arrayListVybranoe.addAll(gson.fromJson(bibleVybranoe, type))
             }
             if (bibleVybranoe == "" || arrayListVybranoe.isEmpty()) {

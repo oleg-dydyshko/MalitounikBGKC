@@ -119,7 +119,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                     if (task.isSuccessful) {
                         val jsonFile = localFile.readText()
                         val gson = Gson()
-                        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                         val piarlin = ArrayList<ArrayList<String>>()
                         piarlin.addAll(gson.fromJson(jsonFile, type))
                         piarlin.forEach {

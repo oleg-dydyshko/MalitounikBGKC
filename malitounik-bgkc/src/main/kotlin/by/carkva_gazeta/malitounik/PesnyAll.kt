@@ -197,11 +197,11 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             try {
                 val gson = Gson()
                 if (file.exists() && MenuVybranoe.vybranoe.isEmpty()) {
-                    val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
-                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
+                    if (MenuVybranoe.vybranoe[i].resurs?.intern() == resurs) {
                         MenuVybranoe.vybranoe.removeAt(i)
                         check = false
                         break
@@ -220,7 +220,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             return check
         }
 
-        private fun vybranoeIndex(): Long {
+        fun vybranoeIndex(): Long {
             var result: Long = 1
             val vybranoe = MenuVybranoe.vybranoe
             if (vybranoe.size != 0) {
@@ -238,11 +238,11 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             try {
                 val gson = Gson()
                 if (MenuVybranoe.vybranoe.isEmpty()) {
-                    val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
-                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) return true
+                    if (MenuVybranoe.vybranoe[i].resurs?.intern() == resurs) return true
                 }
             } catch (t: Throwable) {
                 file.delete()

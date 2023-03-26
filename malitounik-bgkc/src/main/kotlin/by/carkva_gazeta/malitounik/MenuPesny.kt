@@ -101,7 +101,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
             if (chin.getString("history_pesny", "") != "") {
                 val gson = Gson()
                 val json = chin.getString("history_pesny", "")
-                val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
                 history.addAll(gson.fromJson(json, type))
             }
             if (savedInstanceState != null) {

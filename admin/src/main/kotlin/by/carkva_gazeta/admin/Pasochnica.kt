@@ -28,7 +28,7 @@ import org.apache.commons.text.StringEscapeUtils
 import java.io.File
 
 
-class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener {
+class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener, DialogIsHtml.DialogIsHtmlListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
@@ -1033,17 +1033,30 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
             return true
         }
         if (id == R.id.action_save) {
-            binding.apisanne.removeTextChangedListener(textWatcher)
-            if (fileName == "new_file.html") {
-                val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance("new_file.html", false)
-                dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
+            val text = binding.apisanne.text.toString()
+            if (text.contains("<em>") || text.contains("<strong>") || text.contains("<br>") || text.contains("<font")) {
+                val dialog = DialogIsHtml()
+                dialog.show(supportFragmentManager, "DialogIsHtml")
             } else {
-                saveResult()
+                pasochnica(false)
             }
-            binding.apisanne.addTextChangedListener(textWatcher)
             return true
         }
         return false
+    }
+
+    override fun pasochnica(isHtml: Boolean) {
+        if (isHtml) {
+            convertToHtml()
+        }
+        binding.apisanne.removeTextChangedListener(textWatcher)
+        if (fileName == "new_file.html") {
+            val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance("new_file.html", false)
+            dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
+        } else {
+            saveResult()
+        }
+        binding.apisanne.addTextChangedListener(textWatcher)
     }
 
     private fun convertToHtml() {

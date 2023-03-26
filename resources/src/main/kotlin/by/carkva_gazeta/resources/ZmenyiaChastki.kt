@@ -37,7 +37,14 @@ internal class ZmenyiaChastki {
 
     fun raznica() = arrayData[0][22].toInt()
 
-    fun dayOfYear() = arrayData[0][24]
+    fun dayOfYear(): String {
+        val c = GregorianCalendar()
+        var day = arrayData[0][24].toInt()
+        if (c.isLeapYear(arrayData[0][3].toInt()) && arrayData[0][24].toInt() > 59) {
+            day--
+        }
+        return day.toString()
+    }
 
     private fun chtenia(w: String, apostal: Int): String {
         var w1 = w

@@ -763,5 +763,7 @@
     <string name="cytaty_staronka">Старонка %1$d</string>
     <string name="cytaty_z_biblii">Цытаты з Бібліі</string>
     <string name="convert_to_html">Канвертаваньне ў html</string>
+    <string name="is_html_title">ФАРМАТ HTML</string>
+    <string name="is_html">Тэкст у фармаце HTML?</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

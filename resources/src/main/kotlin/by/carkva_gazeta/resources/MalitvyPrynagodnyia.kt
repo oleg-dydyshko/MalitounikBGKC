@@ -217,7 +217,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         if (chin.getString("history_prynagodnyia", "") != "") {
             val gson = Gson()
             val json = chin.getString("history_prynagodnyia", "")
-            val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
             history.addAll(gson.fromJson(json, type))
         }
         historyAdapter = HistoryAdapter(this, history)

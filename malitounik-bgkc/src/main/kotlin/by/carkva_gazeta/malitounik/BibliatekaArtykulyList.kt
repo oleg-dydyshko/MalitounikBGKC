@@ -63,7 +63,7 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
         try {
             artykulyList.clear()
             val gson = Gson()
-            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
             var dirSize = 0L
             for (rubrika in 0 until resources.getStringArray(R.array.artykuly).size) {
                 val path = when (rubrika) {
@@ -288,7 +288,7 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
             listAdapter.clear()
             val gson = Gson()
             val text = localFile.readText()
-            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
             listAdapter.addAll(gson.fromJson<ArrayList<LinkedTreeMap<String, String>>>(text, type))
             listAdapter.notifyDataSetChanged()
         } catch (e: Throwable) {

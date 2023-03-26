@@ -472,6 +472,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_14_04_marcina_papy_rymskaha_viaczernia"] = R.raw.mm_14_04_marcina_papy_rymskaha_viaczernia
             resursMap["mm_23_04_juryja_pieramozcy_jutran"] = R.raw.mm_23_04_juryja_pieramozcy_jutran
             resursMap["mm_25_03_dabravieszczannie_liturhija_subota_niadziela"] = R.raw.mm_25_03_dabravieszczannie_liturhija_subota_niadziela
+            resursMap["mm_25_03_dabravieszczannie_viaczernia_z_liturhijaj"] = R.raw.mm_25_03_dabravieszczannie_viaczernia_z_liturhijaj
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -480,11 +481,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             try {
                 val gson = Gson()
                 if (file.exists() && MenuVybranoe.vybranoe.isEmpty()) {
-                    val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
-                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
+                    if (MenuVybranoe.vybranoe[i].resurs?.intern() == resurs) {
                         MenuVybranoe.vybranoe.removeAt(i)
                         check = false
                         break
@@ -521,11 +522,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             try {
                 if (MenuVybranoe.vybranoe.isEmpty()) {
                     val gson = Gson()
-                    val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
-                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) return true
+                    if (MenuVybranoe.vybranoe[i].resurs?.intern() == resurs) return true
                 }
             } catch (t: Throwable) {
                 file.delete()

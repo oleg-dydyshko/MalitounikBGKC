@@ -237,8 +237,9 @@ class MenuCaliandar : BaseFragment() {
                 it.readText()
             }
             val gson = Gson()
-            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
             data.addAll(gson.fromJson(builder, type))
+            val text = 0
         }
 
         fun getPositionCaliandar(position: Int) = data[position]

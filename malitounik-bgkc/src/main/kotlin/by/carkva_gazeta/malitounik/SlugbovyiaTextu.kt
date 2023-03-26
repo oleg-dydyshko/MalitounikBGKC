@@ -27,6 +27,7 @@ class SlugbovyiaTextu {
         const val ABIEDNICA = 5
         const val VIALHADZINY = 6
         const val PAUNOCHNICA = 7
+        const val VIACZERNIA_Z_LITURHIJA = 8
         const val AICOU_VII_SUSVETNAGA_SABORY = 1000
         const val NIADZELIA_PRA_AICOU = 1001
         const val NIADZELIA_AICOU_VI_SABORY = 1002
@@ -226,6 +227,7 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(83, "Перадсьвяцьце Дабравешчаньня", "mm_24_03_pieradsv_dabravieszczannia_viaczernia", VIACZERNIA))
         datMinSH.add(SlugbovyiaTextuData(84, "Дабравешчаньне Найсьвяцейшай Багародзіцы", "mm_25_03_dabravieszczannie_viaczernia", VIACZERNIA))
         datMinSH.add(SlugbovyiaTextuData(84, "Дабравешчаньне Найсьвяцейшай Багародзіцы", "mm_25_03_dabravieszczannie_liturhija_subota_niadziela", LITURHIJA))
+        datMinSH.add(SlugbovyiaTextuData(84, "Дабравешчаньне Найсьвяцейшай Багародзіцы", "mm_25_03_dabravieszczannie_viaczernia_z_liturhijaj", VIACZERNIA_Z_LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(104, "Між сьвятымі айца нашага Марціна Вызнаўцы, папы Рымскага", "mm_14_04_marcina_papy_rymskaha_viaczernia", VIACZERNIA))
         datMinSH.add(SlugbovyiaTextuData(113, "Сьвятога вялікамучаніка Юрыя", "mm_23_04_juryja_pieramozcy_jutran", JUTRAN))
 
@@ -400,7 +402,7 @@ class SlugbovyiaTextu {
                             val builder = getPiarliny()
                             if (builder != "") {
                                 val gson = Gson()
-                                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                                 piarliny.addAll(gson.fromJson(builder, type))
                             }
                         } catch (t: Throwable) {
@@ -412,7 +414,7 @@ class SlugbovyiaTextu {
                 try {
                     val builder = filePiarliny.readText()
                     val gson = Gson()
-                    val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                     piarliny.addAll(gson.fromJson(builder, type))
                 } catch (t: Throwable) {
                     filePiarliny.delete()

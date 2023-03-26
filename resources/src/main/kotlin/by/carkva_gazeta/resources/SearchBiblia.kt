@@ -248,7 +248,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         if (chin.getString("history_bible_$biblia", "") != "") {
             val gson = Gson()
             val json = chin.getString("history_bible_$biblia", "")
-            val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
             history.addAll(gson.fromJson(json, type))
         }
         adapter = SearchBibliaListAdaprer(this, ArrayList())
@@ -271,7 +271,7 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             if (chin.getString("search_array", "") != "") {
                 val gson = Gson()
                 val json = chin.getString("search_array", "")
-                val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
                 val arrayList = ArrayList<String>()
                 val arraySpan = ArrayList<Spannable>()
                 arrayList.addAll(gson.fromJson(json, type))

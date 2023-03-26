@@ -152,11 +152,17 @@ class DialogCalindarGrid : DialogFragment() {
             raznicia = arguments?.getInt("raznicia", 400) ?: 400
             sviatyaName = arguments?.getString("svityiaName", "no_sviatyia") ?: "no_sviatyia"
             issetSvityia = sviatyaName.contains("no_sviatyia")
+            val c = GregorianCalendar()
+            if (c.isLeapYear(year) && dayOfYear.toInt() > 59) {
+                var day = dayOfYear.toInt()
+                day--
+                dayOfYear = day.toString()
+            }
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (k.getString("caliandarGrid", "") != "") {
                 try {
                     val gson = Gson()
-                    val type = TypeToken.getParameterized(ArrayList::class.java, Integer::class.java).type
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type
                     mItemArray = gson.fromJson(k.getString("caliandarGrid", ""), type)
                 } catch (e: Throwable) {
                     val edit = k.edit()
@@ -363,7 +369,23 @@ class DialogCalindarGrid : DialogFragment() {
                         }
                     }
                     6 -> {
+                        val c = GregorianCalendar()
+                        val dabraveshchanne = if (c.isLeapYear(year)) 85
+                        else 84
                         when {
+                            dayOfYear.toInt() == dabraveshchanne -> {
+                                val resours = if (denNedzeli == Calendar.SUNDAY || denNedzeli == Calendar.SATURDAY) {
+                                    slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
+                                } else {
+                                    slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)
+                                }
+                                val intent = Intent()
+                                intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("resurs", resours)
+                                intent.putExtra("zmena_chastki", true)
+                                intent.putExtra("title", slugba.getTitle(resours))
+                                startActivity(intent)
+                            }
                             slugba.checkLiturgia(raznicia, dayOfYear.toInt()) -> {
                                 if (denNedzeli == Calendar.SUNDAY && ton != 0) {
                                     val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.LITURHIJA)

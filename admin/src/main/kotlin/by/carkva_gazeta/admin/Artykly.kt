@@ -99,7 +99,7 @@ class Artykly : BaseActivity(), View.OnClickListener {
     private fun load(localFile: File) {
         val gson = Gson()
         val text = localFile.readText()
-        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
         artykli.addAll(gson.fromJson(text, type))
         position = intent.extras?.getInt("position") ?: 0
         binding.sviaty.setText(artykli[position]["str"] ?: "")
@@ -229,7 +229,7 @@ class Artykly : BaseActivity(), View.OnClickListener {
             artykli[position]["str"] = binding.sviaty.text.toString()
             val gson = Gson()
             val localFile = File("$filesDir/$path")
-            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
             localFile.writer().use {
                 it.write(gson.toJson(artykli, type))
             }

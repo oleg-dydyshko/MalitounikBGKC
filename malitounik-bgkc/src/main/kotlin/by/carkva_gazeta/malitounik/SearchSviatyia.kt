@@ -184,7 +184,7 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         if (chin.getString("history_sviatyia", "") != "") {
             val gson = Gson()
             val json = chin.getString("history_sviatyia", "")
-            val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
             history.addAll(gson.fromJson(json, type))
         }
         adapter = SearchListAdapter(this, ArrayList())

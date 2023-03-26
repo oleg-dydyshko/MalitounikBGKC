@@ -212,7 +212,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
                 val gson = Gson()
                 val localFile = File("$filesDir/Artykuly/$path")
                 val text = localFile.readText()
-                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(LinkedTreeMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type).type
                 data.clear()
                 data.addAll(gson.fromJson(text, type))
                 position = intent.extras?.getInt("position") ?: 0

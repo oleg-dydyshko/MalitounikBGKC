@@ -389,7 +389,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         else File("$filesDir/MaranAta/$cytanne.json")
         if (file.exists()) {
             val gson = Gson()
-            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, Integer::class.java).type).type
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
             vydelenie = gson.fromJson(file.readText(), type)
         }
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {

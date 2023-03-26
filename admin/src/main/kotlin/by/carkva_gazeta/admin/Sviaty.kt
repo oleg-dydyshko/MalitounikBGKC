@@ -107,7 +107,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     if (it.isSuccessful) {
                         val builder = localFile.readText()
                         val gson = Gson()
-                        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                         arrayList.addAll(gson.fromJson(builder, type))
                     } else {
                         MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))

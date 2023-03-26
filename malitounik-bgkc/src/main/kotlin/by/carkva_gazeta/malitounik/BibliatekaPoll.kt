@@ -27,7 +27,7 @@ class BibliatekaPoll : BaseActivity() {
         binding.progressBar.visibility = View.VISIBLE
         try {
             val gson = Gson()
-            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(Any::class.java).type).type
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(Any::class.java).type).type
             for (rubrika in 0..5) {
                 val path = when (rubrika) {
                     0 -> "carkvapoll6.json"

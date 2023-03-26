@@ -68,8 +68,13 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
     }
 
     private fun checkBibleVybranoe() {
+        val arrayPositions = ArrayList<VybranoeData>()
+        vybranoe.forEach {
+            if (it.data == null) arrayPositions.add(it)
+        }
+        vybranoe.removeAll(arrayPositions.toSet())
         val gson = Gson()
-        val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
         var bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
         var indexVybranoe = 0
         var remove = false
@@ -83,6 +88,14 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                             remove = true
                             return@forEachIndexed
                         }
+                    }
+                } else {
+                    var isResurs = false
+                    vybranoe.forEach {
+                        if (it.resurs == "1") isResurs = true
+                    }
+                    if (!isResurs) {
+                        vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), "1", getString(R.string.title_biblia)))
                     }
                 }
             } catch (e: Throwable) {
@@ -115,6 +128,14 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                             return@forEachIndexed
                         }
                     }
+                } else {
+                    var isResurs = false
+                    vybranoe.forEach {
+                        if (it.resurs == "2") isResurs = true
+                    }
+                    if (!isResurs) {
+                        vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), "2", getString(R.string.bsinaidal)))
+                    }
                 }
             } catch (e: Throwable) {
                 val edit = k.edit()
@@ -145,6 +166,14 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                             remove = true
                             return@forEachIndexed
                         }
+                    }
+                } else {
+                    var isResurs = false
+                    vybranoe.forEach {
+                        if (it.resurs == "3") isResurs = true
+                    }
+                    if (!isResurs) {
+                        vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), "3", getString(R.string.title_psalter)))
                     }
                 }
             } catch (e: Throwable) {
@@ -193,7 +222,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
             val file = File(fragmentActivity.filesDir.toString() + "/Vybranoe.json")
             if (file.exists() && vybranoe.isEmpty()) {
                 try {
-                    val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                     vybranoe.addAll(gson.fromJson(file.readText(), type))
                 } catch (_: Throwable) {
                     MainActivity.toastView(fragmentActivity, getString(R.string.error_ch2))
@@ -216,7 +245,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                     if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
                         val adapterItem = item.tag as VybranoeData
                         val pos = binding.dragListView.adapter.getPositionForItem(adapterItem)
-                        val dd = DialogDelite.getInstance(pos, "", "з выбранага", adapter.itemList[pos].data)
+                        val dd = DialogDelite.getInstance(pos, "", "з выбранага", adapter.itemList[pos].data ?: "")
                         dd.show(childFragmentManager, "dialog_dilite")
                     }
                 }
@@ -267,7 +296,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                     if (file.exists()) {
                         try {
                             vybranoe.clear()
-                            val type = TypeToken.getParameterized(ArrayList::class.java, VybranoeData::class.java).type
+                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                             vybranoe.addAll(gson.fromJson(file.readText(), type))
                             vybranoeSort = 0
                         } catch (_: Throwable) {
@@ -323,7 +352,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (itemList[bindingAdapterPosition].resurs.contains("pesny")) {
+                if (itemList[bindingAdapterPosition].resurs?.contains("pesny") == true) {
                     val intent = Intent(activity, PesnyAll::class.java)
                     intent.putExtra("type", itemList[bindingAdapterPosition].resurs)
                     intent.putExtra("pesny", itemList[bindingAdapterPosition].data)
@@ -367,7 +396,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
             }
 
             override fun onItemLongClicked(view: View): Boolean {
-                val dd = DialogDelite.getInstance(bindingAdapterPosition, "", "з выбранага", itemList[bindingAdapterPosition].data)
+                val dd = DialogDelite.getInstance(bindingAdapterPosition, "", "з выбранага", itemList[bindingAdapterPosition].data ?: "")
                 dd.show(childFragmentManager, "dialog_dilite")
                 return true
             }

@@ -51,35 +51,43 @@ class MenuNatatki : BaseFragment() {
             val file = File(activity.filesDir.toString() + "/Natatki.json")
             val gson = Gson()
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, MyNatatkiFiles::class.java).type
+            var isNatatkiError = false
             if (file.exists()) {
                 try {
                     myNatatkiFiles = gson.fromJson(file.readText(), type)
+                    myNatatkiFiles.forEach {
+                        if (it.title == null) isNatatkiError = true
+                    }
                     activity.invalidateOptionsMenu()
-                } catch (t: Throwable) {
-                    File(activity.filesDir.toString().plus("/Malitva")).walk().forEach {
-                        if (it.isFile) {
-                            val name = it.name
-                            val t1 = name.lastIndexOf("_")
-                            val index = name.substring(t1 + 1).toLong()
-                            val inputStream = FileReader(it)
-                            val reader = BufferedReader(inputStream)
-                            val res = reader.readText().split("<MEMA></MEMA>")
-                            inputStream.close()
-                            var lRTE: Long = 1
-                            if (res[1].contains("<RTE></RTE>")) {
-                                val start = res[1].indexOf("<RTE></RTE>")
-                                val end = res[1].length
-                                lRTE = res[1].substring(start + 11, end).toLong()
-                            }
-                            if (lRTE <= 1) {
-                                lRTE = it.lastModified()
-                            }
-                            myNatatkiFiles.add(MyNatatkiFiles(index, lRTE, res[0]))
+                } catch (_: Throwable) {
+                    isNatatkiError = true
+                }
+            }
+            if (isNatatkiError) {
+                myNatatkiFiles.clear()
+                File(activity.filesDir.toString().plus("/Malitva")).walk().forEach {
+                    if (it.isFile) {
+                        val name = it.name
+                        val t1 = name.lastIndexOf("_")
+                        val index = name.substring(t1 + 1).toLong()
+                        val inputStream = FileReader(it)
+                        val reader = BufferedReader(inputStream)
+                        val res = reader.readText().split("<MEMA></MEMA>")
+                        inputStream.close()
+                        var lRTE: Long = 1
+                        if (res[1].contains("<RTE></RTE>")) {
+                            val start = res[1].indexOf("<RTE></RTE>")
+                            val end = res[1].length
+                            lRTE = res[1].substring(start + 11, end).toLong()
                         }
+                        if (lRTE <= 1) {
+                            lRTE = it.lastModified()
+                        }
+                        myNatatkiFiles.add(MyNatatkiFiles(index, lRTE, res[0]))
                     }
-                    file.writer().use {
-                        it.write(gson.toJson(myNatatkiFiles))
-                    }
+                }
+                file.writer().use {
+                    it.write(gson.toJson(myNatatkiFiles))
                 }
             }
             myNatatkiFiles.sort()
@@ -98,7 +106,7 @@ class MenuNatatki : BaseFragment() {
                     val adapterItem = item.tag as MyNatatkiFiles
                     val pos = binding.dragListView.adapter.getPositionForItem(adapterItem)
                     if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
-                        onDialogDeliteClick(pos, adapter.itemList[pos].title)
+                        onDialogDeliteClick(pos, adapter.itemList[pos].title ?: "")
                     }
                     if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
                         myNatatkiEdit(pos)
@@ -299,7 +307,7 @@ class MenuNatatki : BaseFragment() {
             }
 
             override fun onItemLongClicked(view: View): Boolean {
-                val contextMenu = DialogContextMenu.getInstance(bindingAdapterPosition, itemList[bindingAdapterPosition].title)
+                val contextMenu = DialogContextMenu.getInstance(bindingAdapterPosition, itemList[bindingAdapterPosition].title ?: "")
                 contextMenu.show(childFragmentManager, "context_menu")
                 return true
             }

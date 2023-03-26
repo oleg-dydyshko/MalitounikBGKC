@@ -298,7 +298,7 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
             val inputStream = FileReader(file)
             val reader = BufferedReader(inputStream)
             val gson = Gson()
-            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, Integer::class.java).type).type
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
             BibleGlobalList.vydelenie.addAll(gson.fromJson(reader.readText(), type))
             inputStream.close()
         }

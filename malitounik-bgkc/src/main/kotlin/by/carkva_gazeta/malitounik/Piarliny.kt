@@ -52,7 +52,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                         val builder = getPiarliny()
                         if (builder != "") {
                             val gson = Gson()
-                            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                             piarliny.addAll(gson.fromJson(builder, type))
                         }
                     } catch (t: Throwable) {
@@ -76,7 +76,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             try {
                 val builder = filePiarliny.readText()
                 val gson = Gson()
-                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                 piarliny.addAll(gson.fromJson(builder, type))
             } catch (t: Throwable) {
                 filePiarliny.delete()

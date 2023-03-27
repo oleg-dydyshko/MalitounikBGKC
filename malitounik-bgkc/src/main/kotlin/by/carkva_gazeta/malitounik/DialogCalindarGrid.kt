@@ -152,12 +152,6 @@ class DialogCalindarGrid : DialogFragment() {
             raznicia = arguments?.getInt("raznicia", 400) ?: 400
             sviatyaName = arguments?.getString("svityiaName", "no_sviatyia") ?: "no_sviatyia"
             issetSvityia = sviatyaName.contains("no_sviatyia")
-            val c = GregorianCalendar()
-            if (c.isLeapYear(year) && dayOfYear.toInt() > 59) {
-                var day = dayOfYear.toInt()
-                day--
-                dayOfYear = day.toString()
-            }
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (k.getString("caliandarGrid", "") != "") {
                 try {

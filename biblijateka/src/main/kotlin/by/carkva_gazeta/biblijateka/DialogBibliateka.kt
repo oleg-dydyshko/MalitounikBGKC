@@ -95,7 +95,7 @@ class DialogBibliateka : DialogFragment() {
                     }
                 }
             }
-            binding.content.text = listStr
+            binding.content.text = MainActivity.fromHtml(listStr)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             val dirCount = size.toInt()

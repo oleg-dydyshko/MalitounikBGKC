@@ -632,7 +632,10 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     pdfView.visibility = View.VISIBLE
                     invalidateOptionsMenu()
                 } else {
-                    val dialogBibliateka = DialogBibliateka.getInstance(arrayList[position][2], arrayList[position][1], arrayList[position][0], arrayList[position][3])
+                    var opisanie = arrayList[position][1]
+                    val t1 = opisanie.indexOf("</span><br>")
+                    if (t1 != -1) opisanie = opisanie.substring(t1 + 11)
+                    val dialogBibliateka = DialogBibliateka.getInstance(arrayList[position][2], opisanie, arrayList[position][0], arrayList[position][3])
                     dialogBibliateka.show(supportFragmentManager, "dialog_bibliateka")
                 }
             }

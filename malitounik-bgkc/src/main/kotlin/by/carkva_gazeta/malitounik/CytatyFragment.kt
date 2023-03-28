@@ -50,30 +50,30 @@ class CytatyFragment : BaseFragment() {
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-            val range = when (position) {
-                0 -> 0..9
-                1 -> 10..19
-                2 -> 20..29
-                3 -> 30..39
-                4 -> 40..49
-                5 -> 50..59
-                6 -> 60..69
-                7 -> 70..79
-                8 -> 80..89
-                9 -> 90..99
-                10 -> 100..109
-                11 -> 110..111
-                else -> 0..9
-            }
             val inputStream = resources.openRawResource(R.raw.citata)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
-            val text = SpannableStringBuilder()
+            val arrrayText = ArrayList<String>()
+            val textRider = StringBuilder()
             var index = 0
             reader.forEachLine {
-                if (index in range) {
-                    val line = SpannableStringBuilder()
-                    val t1 = it.indexOf("(")
+                if (index < 10) {
+                    textRider.append(it).append("\n")
+                }
+                index++
+                if (index == 10) {
+                    arrrayText.add(textRider.toString())
+                    textRider.clear()
+                    index = 0
+                }
+            }
+            if (textRider.isNotBlank()) arrrayText.add(textRider.toString())
+            val text = SpannableStringBuilder()
+            val textArray = arrrayText[position].split("\n")
+            textArray.forEach {
+                val line = SpannableStringBuilder()
+                val t1 = it.indexOf("(")
+                if (t1 != -1) {
                     line.append(it.substring(0, t1).trim())
                     line.append("\n")
                     line.append(it.substring(t1))
@@ -85,13 +85,11 @@ class CytatyFragment : BaseFragment() {
                     } else line.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary)), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     line.setSpan(AbsoluteSizeSpan(30, true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     line.setSpan(CustomTypefaceSpan("", ResourcesCompat.getFont(activity, R.font.comici)), 1, line.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
-                    if (index != range.last) line.append("\n\n")
+                    line.append("\n\n")
                     text.append(line)
                 }
-                index++
             }
-
-            binding.TextView.text = text
+            binding.TextView.text = text.trim()
             if (dzenNoch) {
                 binding.TextView.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
             }

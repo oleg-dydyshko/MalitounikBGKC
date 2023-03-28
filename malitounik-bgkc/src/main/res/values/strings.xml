@@ -765,5 +765,6 @@
     <string name="convert_to_html">Канвертаваньне ў html</string>
     <string name="is_html_title">ФАРМАТ HTML</string>
     <string name="is_html">Тэкст у фармаце HTML?</string>
+    <string name="citata_error">Памылка: у файле \"citata\" няма \"(\" у страке %1$d</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

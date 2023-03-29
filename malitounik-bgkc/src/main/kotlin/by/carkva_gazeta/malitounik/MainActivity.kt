@@ -469,6 +469,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     //idSelect = R.id.label2
                     selectFragment(binding.label142, true, shortcuts = true)
                 }
+                data.scheme == "content" -> {
+                    startBiblioteka(NIADAUNIA, shortcuts = true)
+                }
                 /*data.toString().contains("caliandar") -> {
                     idSelect = R.id.label1
                     selectFragment(binding.label1, true)

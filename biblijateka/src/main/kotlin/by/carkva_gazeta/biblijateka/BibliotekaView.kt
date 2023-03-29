@@ -868,6 +868,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                             loadFileEPUB()
                         }
                     }
+                    saveindep = false
                     binding.swipeRefreshLayout.visibility = View.GONE
                 }
             }

@@ -185,14 +185,7 @@ class MenuCaliandar : BaseFragment() {
                 if (MainActivity.checkmodulesAdmin()) {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.ADMINSVIATYIA)
-                    val caliandarFull = childFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as CaliandarFull
-                    val year = caliandarFull.getYear()
-                    val cal = GregorianCalendar(2020, 0, 1)
-                    var dayofyear = caliandarFull.getDayOfYear()
-                    if (!cal.isLeapYear(year) && dayofyear >= 59) {
-                        dayofyear++
-                    }
-                    intent.putExtra("dayOfYear", dayofyear)
+                    intent.putExtra("dayOfYear", getPositionCaliandar(binding.pager.currentItem)[24].toInt())
                     startActivity(intent)
                 } else {
                     MainActivity.toastView(it, getString(R.string.error))
@@ -239,7 +232,6 @@ class MenuCaliandar : BaseFragment() {
             val gson = Gson()
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
             data.addAll(gson.fromJson(builder, type))
-            val text = 0
         }
 
         fun getPositionCaliandar(position: Int) = data[position]

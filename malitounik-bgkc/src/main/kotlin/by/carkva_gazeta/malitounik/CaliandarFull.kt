@@ -52,9 +52,9 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
         _binding = null
     }
 
-    fun getDayOfYear() = MenuCaliandar.getPositionCaliandar(position)[24].toInt()
+    private fun getDayOfYear() = MenuCaliandar.getPositionCaliandar(position)[24].toInt()
 
-    fun getYear() = MenuCaliandar.getPositionCaliandar(position)[3].toInt()
+    private fun getYear() = MenuCaliandar.getPositionCaliandar(position)[3].toInt()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -556,7 +556,11 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                 }
                 gc[r1[2].toInt(), r1[1].toInt() - 1] = r1[0].toInt()
                 for (i in 0 until rezkK) {
-                    if (gc[Calendar.DAY_OF_YEAR] == getDayOfYear() && gc[Calendar.YEAR] == getYear()) {
+                    var dayofyear = gc[Calendar.DAY_OF_YEAR]
+                    if (!gc.isLeapYear(yaerw) && dayofyear > 59) {
+                        dayofyear++
+                    }
+                    if (dayofyear == getDayOfYear() && gc[Calendar.YEAR] == getYear()) {
                         val title = p.padz
                         val data = p.dat
                         val time = p.tim

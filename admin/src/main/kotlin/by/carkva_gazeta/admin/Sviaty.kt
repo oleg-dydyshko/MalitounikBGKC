@@ -21,6 +21,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminSviatyBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
@@ -173,8 +174,10 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
             resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(5000)
                 resetTollbar(layoutParams)
+                TransitionManager.beginDelayedTransition(binding.toolbar)
             }
         }
+        TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

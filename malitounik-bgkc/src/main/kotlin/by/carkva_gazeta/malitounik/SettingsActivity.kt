@@ -26,6 +26,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.SettingsActivityBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import kotlinx.coroutines.*
@@ -1400,8 +1401,10 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)

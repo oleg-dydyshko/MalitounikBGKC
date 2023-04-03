@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminMainBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
@@ -100,8 +101,10 @@ class AdminMain : BaseActivity() {
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         setSupportActionBar(binding.toolbar)

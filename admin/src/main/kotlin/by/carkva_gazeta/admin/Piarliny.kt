@@ -13,6 +13,7 @@ import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminPiarlinyBinding
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
@@ -198,8 +199,10 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
             resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(5000)
                 resetTollbar(layoutParams)
+                TransitionManager.beginDelayedTransition(binding.toolbar)
             }
         }
+        TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

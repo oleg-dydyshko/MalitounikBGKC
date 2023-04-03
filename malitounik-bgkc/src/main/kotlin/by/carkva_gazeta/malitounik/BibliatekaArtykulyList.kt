@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.ContentPsalterBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemArtykulyBinding
 import com.google.gson.Gson
@@ -260,8 +261,10 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
     }
 

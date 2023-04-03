@@ -13,6 +13,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
+import androidx.transition.TransitionManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.admin.databinding.AdminBibleBinding
@@ -219,8 +220,10 @@ class NovyZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelLi
             resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(5000)
                 resetTollbar(layoutParams)
+                TransitionManager.beginDelayedTransition(binding.toolbar)
             }
         }
+        TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

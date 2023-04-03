@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.content.ContextCompat
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
 import kotlinx.coroutines.*
 
@@ -54,8 +55,10 @@ class BogashlugbovyaTryjodz : BaseActivity() {
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         binding.titleToolbar.text = resources.getText(R.string.tryjodz)

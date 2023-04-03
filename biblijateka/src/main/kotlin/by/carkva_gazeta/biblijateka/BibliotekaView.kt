@@ -35,6 +35,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.biblijateka.databinding.BibliotekaViewBinding
 import by.carkva_gazeta.biblijateka.databinding.SimpleListItemBibliotekaBinding
 import by.carkva_gazeta.malitounik.*
@@ -1458,8 +1459,10 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)

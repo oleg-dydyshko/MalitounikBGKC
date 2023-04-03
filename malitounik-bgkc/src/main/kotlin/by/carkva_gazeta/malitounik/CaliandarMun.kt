@@ -9,6 +9,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.CalendarBinding
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.*
@@ -63,8 +64,10 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
             resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(5000)
                 resetTollbar(layoutParams)
+                TransitionManager.beginDelayedTransition(binding.toolbar)
             }
         }
+        TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

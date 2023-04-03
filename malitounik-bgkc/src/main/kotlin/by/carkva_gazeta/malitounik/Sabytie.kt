@@ -32,6 +32,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.DialogContextMenuSabytie.DialogContextMenuSabytieListener
 import by.carkva_gazeta.malitounik.DialogDelite.DialogDeliteListener
 import by.carkva_gazeta.malitounik.DialogSabytieSave.DialogSabytieSaveListener
@@ -537,8 +538,10 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         binding.pavedamic3.setOnClickListener {
             try {

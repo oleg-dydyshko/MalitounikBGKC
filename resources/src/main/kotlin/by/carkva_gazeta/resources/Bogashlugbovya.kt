@@ -29,6 +29,7 @@ import androidx.core.text.toSpannable
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.databinding.BogasluzbovyaBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
@@ -885,8 +886,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         setSupportActionBar(binding.toolbar)

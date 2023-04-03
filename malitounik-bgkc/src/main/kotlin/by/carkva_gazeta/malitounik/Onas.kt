@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.MenuItem
 import android.view.ViewGroup
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.PasxaBinding
 import kotlinx.coroutines.*
 import java.io.BufferedReader
@@ -38,8 +39,10 @@ class Onas : BaseActivity() {
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         if (dzenNoch) binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())

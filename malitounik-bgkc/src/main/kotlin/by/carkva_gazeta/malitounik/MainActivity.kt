@@ -28,6 +28,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.text.toSpannable
 import androidx.core.view.GravityCompat
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.ActivityMainBinding
 import by.carkva_gazeta.malitounik.databinding.AppBarMainBinding
 import by.carkva_gazeta.malitounik.databinding.ContentMainBinding
@@ -356,8 +357,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(bindingappbar.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(bindingappbar.toolbar)
         }
         setSupportActionBar(bindingappbar.toolbar)
 

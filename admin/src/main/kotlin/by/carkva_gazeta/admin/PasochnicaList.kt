@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaListBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
@@ -217,8 +218,10 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(5000)
                 resetTollbar(layoutParams)
+                TransitionManager.beginDelayedTransition(binding.toolbar)
             }
         }
+        TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

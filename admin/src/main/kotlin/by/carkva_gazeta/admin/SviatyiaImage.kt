@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaImageBinding
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.ListItemImageBinding
@@ -237,8 +238,10 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
             resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(5000)
                 resetTollbar(layoutParams)
+                TransitionManager.beginDelayedTransition(binding.toolbar)
             }
         }
+        TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

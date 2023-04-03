@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
@@ -153,8 +154,10 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)

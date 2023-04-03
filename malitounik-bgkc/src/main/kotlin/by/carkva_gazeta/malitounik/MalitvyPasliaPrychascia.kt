@@ -4,12 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import androidx.core.content.ContextCompat
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
 import kotlinx.coroutines.*
 
@@ -43,8 +43,10 @@ class MalitvyPasliaPrychascia : BaseActivity() {
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         binding.titleToolbar.text = resources.getText(R.string.pasliaPrychscia)

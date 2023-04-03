@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.transition.TransitionManager
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.BibliatekaArtykulyBinding
@@ -87,8 +88,10 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         rubrika = intent.extras?.getInt("rubrika") ?: 1
         var title = resources.getStringArray(R.array.artykuly)[rubrika]

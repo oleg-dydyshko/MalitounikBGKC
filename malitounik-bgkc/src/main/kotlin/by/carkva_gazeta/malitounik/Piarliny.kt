@@ -13,6 +13,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.PiarlinyBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -166,8 +167,10 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)

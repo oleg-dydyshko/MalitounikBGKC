@@ -21,6 +21,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaBinding
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
@@ -238,8 +239,10 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
             resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(5000)
                 resetTollbar(layoutParams)
+                TransitionManager.beginDelayedTransition(binding.toolbar)
             }
         }
+        TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

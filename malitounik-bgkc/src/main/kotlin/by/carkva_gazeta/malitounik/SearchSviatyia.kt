@@ -20,6 +20,7 @@ import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.SearchSviatyiaBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
@@ -237,8 +238,10 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)

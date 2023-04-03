@@ -12,6 +12,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.webkit.WebSettings
+import androidx.transition.TransitionManager
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.PasxaBinding
@@ -58,8 +59,10 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         binding.titleToolbar.text = resources.getText(R.string.pascha_kaliandar_bel)

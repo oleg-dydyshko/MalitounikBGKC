@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toBitmap
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminBibliatekaListBinding
 import by.carkva_gazeta.admin.databinding.AdminSimpleListItemBibliotekaBinding
 import by.carkva_gazeta.malitounik.BaseActivity
@@ -374,8 +375,10 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
             resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(5000)
                 resetTollbar(layoutParams)
+                TransitionManager.beginDelayedTransition(binding.toolbar)
             }
         }
+        TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

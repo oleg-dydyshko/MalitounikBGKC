@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ExpandableListView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
 import kotlinx.coroutines.*
 import java.util.*
@@ -239,8 +240,10 @@ class MineiaMesiachnaia : BaseActivity() {
             resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(5000)
                 resetTollbar(layoutParams)
+                TransitionManager.beginDelayedTransition(binding.toolbar)
             }
         }
+        TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

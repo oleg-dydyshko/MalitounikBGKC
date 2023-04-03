@@ -14,6 +14,7 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.*
 import androidx.core.view.forEachIndexed
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminChytannyBinding
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
@@ -199,8 +200,10 @@ class Chytanny : BaseActivity() {
             resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(5000)
                 resetTollbar(layoutParams)
+                TransitionManager.beginDelayedTransition(binding.toolbar)
             }
         }
+        TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

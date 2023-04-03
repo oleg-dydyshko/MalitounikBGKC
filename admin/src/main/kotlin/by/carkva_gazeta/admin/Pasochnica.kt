@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.text.toSpannable
+import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaBinding
 import by.carkva_gazeta.malitounik.*
 import com.google.android.material.snackbar.Snackbar
@@ -455,8 +456,10 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
             resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(5000)
                 resetTollbar(layoutParams)
+                TransitionManager.beginDelayedTransition(binding.toolbar)
             }
         }
+        TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

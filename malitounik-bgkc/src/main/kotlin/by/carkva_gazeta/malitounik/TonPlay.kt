@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.transition.TransitionManager
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.TonPlayBinding
@@ -56,8 +57,10 @@ class TonPlay : BaseActivity() {
                 resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(5000)
                     resetTollbar(layoutParams)
+                    TransitionManager.beginDelayedTransition(binding.toolbar)
                 }
             }
+            TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         val ton = intent?.extras?.getInt("ton", 1) ?: 1
         if (dzenNoch) {

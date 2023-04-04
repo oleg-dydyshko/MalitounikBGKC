@@ -44,32 +44,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         } else {
             if (fileOpisanie.exists()) loadOpisanieSviatyia(fileOpisanie.readText())
         }
-        for (i in 0..3) {
-            var schet = ""
-            if (i > 0) schet = "_${i + 1}"
-            val file = File("$filesDir/icons/s_${day}_${mun}$schet.jpg")
-            if (file.exists()) {
-                val imageView = when (i) {
-                    1 -> binding.image2
-                    2 -> binding.image3
-                    3 -> binding.image4
-                    else -> binding.image1
-                }
-                imageView.post {
-                    imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file.absolutePath)))
-                    imageView.visibility = View.VISIBLE
-                    imageView.setOnClickListener {
-                        if (file.exists()) {
-                            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                            binding.imageViewFull.setImageBitmap(bitmap)
-                            binding.imageViewFull.visibility = View.VISIBLE
-                            binding.progressBar2.visibility = View.INVISIBLE
-                            binding.swipeRefreshLayout.visibility = View.GONE
-                        }
-                    }
-                }
-            }
-        }
+        loadIconsOnImageView()
     }
 
     override fun onPause() {
@@ -576,19 +551,19 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             val text4 = binding.TextView4.text.toString()
             if (text4 != "") sb.append(text4)
             val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText(getString(R.string.copy_text), sb.toString())
-                clipboard.setPrimaryClip(clip)
-                MainActivity.toastView(this, getString(R.string.copy_text), Toast.LENGTH_LONG)
-                if (chin.getBoolean("dialogHelpShare", true)) {
-                    val dialog = DialogHelpShare.getInstance(sb.toString())
-                    dialog.show(supportFragmentManager, "DialogHelpShare")
-                } else {
-                    val sendIntent = Intent(Intent.ACTION_SEND)
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString())
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getText(R.string.zmiest))
-                    sendIntent.type = "text/plain"
-                    startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.zmiest)))
-                }
+            val clip = ClipData.newPlainText(getString(R.string.copy_text), sb.toString())
+            clipboard.setPrimaryClip(clip)
+            MainActivity.toastView(this, getString(R.string.copy_text), Toast.LENGTH_LONG)
+            if (chin.getBoolean("dialogHelpShare", true)) {
+                val dialog = DialogHelpShare.getInstance(sb.toString())
+                dialog.show(supportFragmentManager, "DialogHelpShare")
+            } else {
+                val sendIntent = Intent(Intent.ACTION_SEND)
+                sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString())
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getText(R.string.zmiest))
+                sendIntent.type = "text/plain"
+                startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.zmiest)))
+            }
             return true
         }
         return false

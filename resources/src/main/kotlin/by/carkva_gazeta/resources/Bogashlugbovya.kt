@@ -930,7 +930,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             raznica = zmenyiaChastki.raznica()
             dayOfYear = zmenyiaChastki.dayOfYear()
             var zmennyiaCastkiTitle = ""
-            checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
+            val cal = Calendar.getInstance()
+            cal[Calendar.YEAR] = 2020
+            checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
             if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR]))) {
                 chechZmena = true
                 val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
@@ -1455,7 +1457,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     stopAutoStartScroll()
                     mAutoScroll = false
                     invalidateOptionsMenu()
-                } else if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
+                } else if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll && binding.find.visibility == View.GONE) {
                     autoStartScroll()
                 }
             } else {

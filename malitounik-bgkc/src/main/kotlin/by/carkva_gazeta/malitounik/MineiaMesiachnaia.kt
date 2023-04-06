@@ -54,6 +54,7 @@ class MineiaMesiachnaia : BaseActivity() {
         val slugba = SlugbovyiaTextu()
         val mineiaList = slugba.getMineiaMesiachnaia()
         val c = GregorianCalendar()
+        c[Calendar.YEAR] = 2020
         val child0 = ArrayList<MineiaDay>()
         val child1 = ArrayList<MineiaDay>()
         val child2 = ArrayList<MineiaDay>()
@@ -72,10 +73,10 @@ class MineiaMesiachnaia : BaseActivity() {
             var opisanie = ""
             if (count == 1) {
                 when (mineiaList[i].sluzba) {
-                    SlugbovyiaTextu.JUTRAN -> opisanie = " - Ютрань"
-                    SlugbovyiaTextu.LITURHIJA -> opisanie = " - Літургія"
-                    SlugbovyiaTextu.VIACZERNIA -> opisanie = " - Вячэрня"
-                    SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA -> opisanie = " - Вячэрня з Літургіяй"
+                    SlugbovyiaTextu.JUTRAN -> opisanie = ". Ютрань"
+                    SlugbovyiaTextu.LITURHIJA -> opisanie = ". Літургія"
+                    SlugbovyiaTextu.VIACZERNIA -> opisanie = ". Вячэрня"
+                    SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA -> opisanie = ". Вячэрня з Літургіяй"
                 }
             }
             if (day == mineiaList[i].day) {
@@ -98,7 +99,7 @@ class MineiaMesiachnaia : BaseActivity() {
                     c.set(Calendar.DAY_OF_YEAR, SlugbovyiaTextu().getRealDay(SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY))
                 }
                 mineiaList[i].pasxa -> {
-                    MenuCaliandar.getDataCalaindar(year = c[Calendar.YEAR]).forEach {
+                    MenuCaliandar.getDataCalaindar(year = Calendar.getInstance()[Calendar.YEAR]).forEach {
                         if (it[22].toInt() == day) {
                             c.set(Calendar.DAY_OF_YEAR, it[24].toInt())
                             return@forEach

@@ -55,12 +55,12 @@ class DialogMineiaList : DialogFragment() {
             resourceAbednica = arguments?.getString("resourceAbednica", "0") ?: "0"
             resourceVialikiaGadziny = arguments?.getString("resourceVialikiaGadziny", "0") ?: "0"
             resourceViacherniaZLiturgia = arguments?.getString("resourceViacherniaZLiturgia", "0") ?: "0"
+            if (resourceViacherniaZLiturgia != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Вячэрня з Літургіяй", resourceViacherniaZLiturgia))
+            if (resourceViachernia != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Вячэрня", resourceViachernia))
             if (resourceUtran != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Ютрань", resourceUtran))
             if (resourceLiturgia != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Літургія", resourceLiturgia))
-            if (resourceViachernia != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Вячэрня", resourceViachernia))
-            if (resourceAbednica != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Абедніца", resourceAbednica))
             if (resourceVialikiaGadziny != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Вялікія гадзіны", resourceVialikiaGadziny))
-            if (resourceViacherniaZLiturgia != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Вячэрня з Літургіяй", resourceViacherniaZLiturgia))
+            if (resourceAbednica != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Абедніца", resourceAbednica))
             binding.content.setOnItemClickListener { _, _, position, _ ->
                 if (MainActivity.checkmoduleResources()) {
                     val intent = Intent()

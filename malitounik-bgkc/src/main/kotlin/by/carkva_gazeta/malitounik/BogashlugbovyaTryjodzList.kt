@@ -131,10 +131,10 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
             }
             val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             val opisanie = when (data[position].sluzba) {
-                SlugbovyiaTextu.JUTRAN -> " - Ютрань"
-                SlugbovyiaTextu.LITURHIJA -> " - Літургія"
-                SlugbovyiaTextu.VIACZERNIA -> " - Вячэрня"
-                SlugbovyiaTextu.VIALHADZINY -> " - Вялікія гадзіны"
+                SlugbovyiaTextu.JUTRAN -> ". Ютрань"
+                SlugbovyiaTextu.LITURHIJA -> ". Літургія"
+                SlugbovyiaTextu.VIACZERNIA -> ". Вячэрня"
+                SlugbovyiaTextu.VIALHADZINY -> ". Вялікія гадзіны"
                 else -> ""
             }
             viewHolder.text.text = context.resources.getString(R.string.tryjodz_opisanie, data[position].title, opisanie)

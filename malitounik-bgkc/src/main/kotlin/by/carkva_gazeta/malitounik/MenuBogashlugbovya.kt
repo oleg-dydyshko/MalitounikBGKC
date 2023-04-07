@@ -216,6 +216,19 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         editText?.addTextChangedListener(textWatcher)
     }
 
+    private fun getSluzba(sluzba: Int): String {
+        val opisanie = when (sluzba) {
+            SlugbovyiaTextu.JUTRAN -> ". Ютрань"
+            SlugbovyiaTextu.LITURHIJA -> ". Літургія"
+            SlugbovyiaTextu.VIACZERNIA -> ". Вячэрня"
+            SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA -> ". Вячэрня з Літургіяй"
+            SlugbovyiaTextu.VIALHADZINY -> ". Вялікія гадзіны"
+            SlugbovyiaTextu.ABIEDNICA -> ". Абедніца"
+            else -> ""
+        }
+        return opisanie
+    }
+
     private fun searchText() {
         dataSearch.addAll(getTextBogaslugbovyiaList(true))
         dataSearch.addAll(getTextPasliaPrychascia(true))
@@ -231,22 +244,22 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         var mesiach = sluzba.getMineiaMesiachnaia()
         opisanie = "\nМінэя месячная"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + getSluzba(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getVilikiTydzen()
         opisanie = "\nТрыёдзь -> Службы Вялікага тыдня"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + getSluzba(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getSvetlyTydzen()
         opisanie = "\nТрыёдзь -> Службы Сьветлага тыдня"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + getSluzba(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getMineiaSviatochnaia()
         opisanie = "\nТрыёдзь -> Трыёдзь сьвяточная"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + getSluzba(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getTydzen1()
         opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 1-га тыдня Вялікага посту"

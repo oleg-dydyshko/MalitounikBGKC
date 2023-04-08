@@ -13,8 +13,10 @@ import android.widget.RemoteViews
 
 class WidgetRadyjoMaryia : AppWidgetProvider() {
 
-    private var isFirstRun = false
-    private var isProgram = false
+    companion object {
+        private var isFirstRun = false
+        private var isProgram = false
+    }
 
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
@@ -30,7 +32,7 @@ class WidgetRadyjoMaryia : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        val extra = intent.extras?.getInt("action")
+        val extra = intent.extras?.getInt("action") ?: 0
         if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun && extra == ServiceRadyjoMaryia.STOP) {
             val intent2 = Intent(context, ServiceRadyjoMaryia::class.java)
             intent2.putExtra("action", ServiceRadyjoMaryia.STOP)
@@ -100,7 +102,9 @@ class WidgetRadyjoMaryia : AppWidgetProvider() {
         intent3.putExtra("action", ServiceRadyjoMaryia.WIDGET_RADYJO_MARYIA_PROGRAM)
         val pIntent3 = PendingIntent.getBroadcast(context, ServiceRadyjoMaryia.WIDGET_RADYJO_MARYIA_PROGRAM, intent3, flags)
         updateViews.setOnClickPendingIntent(R.id.program, pIntent3)
-        if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
+        if (isFirstRun) {
+            updateViews.setImageViewResource(R.id.play, R.drawable.load)
+        } else if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
             if (ServiceRadyjoMaryia.isPlayingRadyjoMaryia) {
                 updateViews.setImageViewResource(R.id.play, R.drawable.pause3)
             } else {
@@ -112,9 +116,6 @@ class WidgetRadyjoMaryia : AppWidgetProvider() {
         } else {
             updateViews.setTextViewText(R.id.textView, context.getString(R.string.padie_maryia_s))
             updateViews.setImageViewResource(R.id.play, R.drawable.play3)
-        }
-        if (isFirstRun) {
-            updateViews.setImageViewResource(R.id.play, R.drawable.load)
         }
         if (isProgram) {
             updateViews.setImageViewResource(R.id.program, R.drawable.load)

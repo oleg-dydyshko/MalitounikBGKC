@@ -12,13 +12,12 @@ import android.os.Binder
 import android.os.Build
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -75,6 +74,11 @@ class ServiceRadyjoMaryia : Service() {
             setMediaItem(MediaItem.fromUri(Uri.parse("https://server.radiorm.by:8443/live")))
             prepare()
             addListener(object : Player.Listener {
+
+                override fun onPlayerError(error: PlaybackException) {
+                    stopServiceRadioMaria(true)
+                }
+
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     if (playbackState == Player.STATE_READY) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -101,7 +105,7 @@ class ServiceRadyjoMaryia : Service() {
         initRadioMaria()
     }
 
-    fun stopServiceRadioMaria() {
+    fun stopServiceRadioMaria(isError: Boolean = false) {
         stopPlay()
         stopSelf()
         isServiceRadioMaryiaRun = false
@@ -112,6 +116,7 @@ class ServiceRadyjoMaryia : Service() {
         listener?.setTitleRadioMaryia("")
         listener?.unBinding()
         isPlaybackStateReady = false
+        if (isError) MainActivity.toastView(this, getString(R.string.error_ch2), Toast.LENGTH_LONG)
     }
 
     fun playOrPause() {

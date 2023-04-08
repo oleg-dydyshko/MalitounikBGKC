@@ -1619,6 +1619,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             unbindService(mConnection)
         }
         binding.label15b.visibility = View.GONE
+        binding.image5.visibility = View.VISIBLE
+        binding.progressbar.visibility = View.GONE
         binding.image5.setImageResource(R.drawable.play2)
         isConnectServise = false
     }

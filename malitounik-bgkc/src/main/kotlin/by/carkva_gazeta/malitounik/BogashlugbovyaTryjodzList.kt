@@ -11,19 +11,19 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.widget.BaseExpandableListAdapter
+import android.widget.ExpandableListView
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
-import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
-import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
+import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
+import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
+import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
 import kotlinx.coroutines.*
 
 class BogashlugbovyaTryjodzList : BaseActivity() {
-    private var data = ArrayList<SlugbovyiaTextuData>()
+    private var data = ArrayList<ArrayList<SlugbovyiaTextuData>>()
     private var mLastClickTime: Long = 0
-    private lateinit var binding: AkafistListBinding
+    private lateinit var binding: ContentBibleBinding
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
 
@@ -44,7 +44,7 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
         super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = getBaseDzenNoch()
-        binding = AkafistListBinding.inflate(layoutInflater)
+        binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -69,39 +69,76 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = R.style.AppCompatDark
-            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+            binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         } else {
-            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+            binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         }
         binding.titleToolbar.text = intent?.extras?.getString("title", getString(R.string.tryjodz)) ?: getString(R.string.tryjodz)
         val sluzba = SlugbovyiaTextu()
-        data = when (intent?.extras?.getInt("tryjodz", 0) ?: 0) {
+        var array = ArrayList<SlugbovyiaTextuData>()
+        var day = 0
+        when (intent?.extras?.getInt("tryjodz", 0) ?: 0) {
             1 -> {
-                sluzba.getVilikiTydzen()
+                sluzba.getVilikiTydzen().forEachIndexed { index, it ->
+                    if (index == 0) day = it.day
+                    if (day != it.day) {
+                        data.add(array)
+                        array = ArrayList()
+                    }
+                    array.add(it)
+                    day = it.day
+                }
             }
             2 -> {
-                sluzba.getSvetlyTydzen()
+                sluzba.getSvetlyTydzen().forEachIndexed { index, it ->
+                    if (index == 0) day = it.day
+                    if (day != it.day) {
+                        if (data.size > 1) {
+                            sluzba.getSvetlyTydzen().forEachIndexed { i, svetlyTydzenList ->
+                                if (svetlyTydzenList.sluzba == SlugbovyiaTextu.VIALHADZINY) {
+                                    array.add(sluzba.getSvetlyTydzen()[i])
+                                }
+                            }
+                        }
+                        data.add(array)
+                        array = ArrayList()
+                    }
+                    array.add(it)
+                    day = it.day
+                }
             }
             else -> {
-                sluzba.getMineiaSviatochnaia()
+                sluzba.getMineiaSviatochnaia().forEachIndexed { index, it ->
+                    if (index == 0) day = it.day
+                    if (day != it.day) {
+                        data.add(array)
+                        array = ArrayList()
+                    }
+                    array.add(it)
+                    day = it.day
+                }
             }
         }
-        binding.ListView.adapter = ListAdaprer(this, data)
-        binding.ListView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
+        binding.elvMain.setAdapter(ExpListAdapter(this, data))
+        binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@OnItemClickListener
+                return@setOnChildClickListener true
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             if (MainActivity.checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
-                intent.putExtra("title", data[position].title)
-                intent.putExtra("resurs", data[position].resource)
+                intent.putExtra("title", data[groupPosition][childPosition].title)
+                intent.putExtra("resurs", data[groupPosition][childPosition].resource)
                 startActivity(intent)
             } else {
                 val dadatak = DialogInstallDadatak()
                 dadatak.show(supportFragmentManager, "dadatak")
             }
+            false
+        }
+        data.forEachIndexed { index, _ ->
+            binding.elvMain.expandGroup(index)
         }
     }
 
@@ -115,33 +152,63 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
         binding.titleToolbar.isSingleLine = true
     }
 
-    private class ListAdaprer(private val context: Activity, private val data: ArrayList<SlugbovyiaTextuData>) : ArrayAdapter<SlugbovyiaTextuData>(context, R.layout.simple_list_item_2, R.id.label, data) {
+    private class ExpListAdapter(private val mContext: Activity, private val groups: ArrayList<ArrayList<SlugbovyiaTextuData>>) : BaseExpandableListAdapter() {
+        override fun getGroupCount(): Int {
+            return groups.size
+        }
 
-        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolder
-            if (mView == null) {
-                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
-                rootView = binding.root
-                viewHolder = ViewHolder(binding.label)
-                rootView.tag = viewHolder
-            } else {
-                rootView = mView
-                viewHolder = rootView.tag as ViewHolder
-            }
-            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            val opisanie = when (data[position].sluzba) {
-                SlugbovyiaTextu.JUTRAN -> ". Ютрань"
-                SlugbovyiaTextu.LITURHIJA -> ". Літургія"
-                SlugbovyiaTextu.VIACZERNIA -> ". Вячэрня"
-                SlugbovyiaTextu.VIALHADZINY -> ". Вялікія гадзіны"
+        override fun getChildrenCount(groupPosition: Int): Int {
+            return groups[groupPosition].size
+        }
+
+        override fun getGroup(groupPosition: Int): Any {
+            return groups[groupPosition]
+        }
+
+        override fun getChild(groupPosition: Int, childPosition: Int): Any {
+            return groups[groupPosition][childPosition]
+        }
+
+        override fun getGroupId(groupPosition: Int): Long {
+            return groupPosition.toLong()
+        }
+
+        override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+            return childPosition.toLong()
+        }
+
+        override fun hasStableIds(): Boolean {
+            return true
+        }
+
+        override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
+            val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            rootView.textGroup.text = groups[groupPosition][0].title
+            return rootView.root
+        }
+
+        override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
+            val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
+            if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            var opisanie = when (groups[groupPosition][childPosition].sluzba) {
+                SlugbovyiaTextu.JUTRAN -> "Ютрань"
+                SlugbovyiaTextu.LITURHIJA -> "Літургія"
+                SlugbovyiaTextu.VIACZERNIA -> "Вячэрня"
+                SlugbovyiaTextu.VIALHADZINY -> "Вялікія гадзіны"
+                SlugbovyiaTextu.PAVIACHERNICA -> "Малая павячэрніца"
+                SlugbovyiaTextu.PAUNOCHNICA -> "Паўночніца"
                 else -> ""
             }
-            viewHolder.text.text = context.resources.getString(R.string.tryjodz_opisanie, data[position].title, opisanie)
-            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            return rootView
+            if (groups[groupPosition][childPosition].day == -2 && groups[groupPosition][childPosition].sluzba == SlugbovyiaTextu.JUTRAN) {
+                opisanie = "Ютрань (12 Евангельляў Мукаў Хрыстовых)"
+            }
+            rootView.textChild.text = opisanie
+            return rootView.root
+        }
+
+        override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+            return true
         }
     }
-
-    private class ViewHolder(var text: TextView)
 }

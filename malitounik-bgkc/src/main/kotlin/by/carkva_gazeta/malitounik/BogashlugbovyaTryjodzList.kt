@@ -183,7 +183,7 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
-            rootView.textGroup.text = groups[groupPosition][0].title
+            rootView.textGroup.text = groups[groupPosition][0].title.uppercase()
             return rootView.root
         }
 

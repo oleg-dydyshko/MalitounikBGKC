@@ -12,7 +12,7 @@ import android.os.SystemClock
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
-import java.util.*
+import java.util.Calendar
 
 class Widget : AppWidgetProvider() {
     private val updateAllWidgets = "update_all_widgets"
@@ -246,13 +246,17 @@ class Widget : AppWidgetProvider() {
             }
             if (!data[0][6].contains("no_sviaty")) {
                 val svita = data[0][6].replace("\n", "<br>")
-                if (data[0][5].contains("1")) updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml("<strong>$svita</strong>")) else updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml(svita))
+                if (data[0][5].contains("1")) updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml("<strong>$svita</strong>"))
+                else updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml(svita))
                 updateViews.setViewVisibility(R.id.textCviatyGlavnyia, View.VISIBLE)
             }
-            if (data[0][6].contains("Пачатак") || data[0][6].contains("Вялікі") || data[0][6].contains("Вялікая") || data[0][6].contains("убот") || data[0][6].contains("ВЕЧАР") || data[0][6].contains("Палова")) {
+            if (data[0][6].contains("Пачатак") || data[0][6].contains("Вялікі") || data[0][6].contains("Вялікая") || data[0][6].contains("ВЕЧАР") || data[0][6].contains("Палова")) {
                 updateViews.setTextColor(R.id.textCviatyGlavnyia, ContextCompat.getColor(context, rColorColorPrimaryText))
                 updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml(data[0][6]))
                 updateViews.setViewVisibility(R.id.textCviatyGlavnyia, View.VISIBLE)
+            }
+            if (data[0][6].contains("Сьветл")) {
+                updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml("<strong>${data[0][6]}</strong>"))
             }
             var dataSviatyia = ""
             if (!data[0][4].contains("no_sviatyia")) {

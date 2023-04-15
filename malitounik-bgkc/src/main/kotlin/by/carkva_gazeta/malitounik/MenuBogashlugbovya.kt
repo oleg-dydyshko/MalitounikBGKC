@@ -12,10 +12,21 @@ import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.AbsListView
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Filter
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.MenuPesnyBinding
@@ -224,6 +235,8 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA -> ". Вячэрня з Літургіяй"
             SlugbovyiaTextu.VIALHADZINY -> ". Вялікія гадзіны"
             SlugbovyiaTextu.ABIEDNICA -> ". Абедніца"
+            SlugbovyiaTextu.PAVIACHERNICA -> ". Малая павячэрніца"
+            SlugbovyiaTextu.PAUNOCHNICA -> ". Паўночніца"
             else -> ""
         }
         return opisanie
@@ -264,32 +277,32 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         mesiach = sluzba.getTydzen1()
         opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 1-га тыдня Вялікага посту"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + getSluzba(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getTydzen2()
         opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 2-га тыдня Вялікага посту"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + getSluzba(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getTydzen3()
         opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 3-га тыдня Вялікага посту"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + getSluzba(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getTydzen4()
         opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 4-га тыдня Вялікага посту"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + getSluzba(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getTydzen5()
         opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 5-га тыдня Вялікага посту"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + getSluzba(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
         }
         mesiach = sluzba.getTydzen6()
         opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 6-га тыдня Вялікага посту"
         for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + opisanie, mesiach[i].resource))
+            dataSearch.add(MenuListData(mesiach[i].title + getSluzba(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
         }
         dataSearch.sort()
     }

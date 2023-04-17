@@ -205,6 +205,13 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                 searchViewQwery = savedInstanceState.getString("SearchViewQwery", "")
                 actionExpandOn = savedInstanceState.getBoolean("actionExpandOn")
             }
+            if (actionExpandOn) {
+                dataSearch.clear()
+                searchText()
+                data.clear()
+                data.addAll(dataSearch)
+                adapter.notifyDataSetChanged()
+            }
             binding.ListView.isVerticalScrollBarEnabled = false
             binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
                 override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {

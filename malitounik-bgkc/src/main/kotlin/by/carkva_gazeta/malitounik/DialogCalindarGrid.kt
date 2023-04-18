@@ -19,7 +19,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class DialogCalindarGrid : DialogFragment() {
 
@@ -211,11 +212,13 @@ class DialogCalindarGrid : DialogFragment() {
                     view.itemLayout.setBackgroundResource(R.drawable.selector_grid_strogi_post)
                     view.text.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
                 }
+
                 4 -> {
                     if (dzenNoch) view.itemLayout.setBackgroundResource(R.drawable.selector_grid_red_dark)
                     else view.itemLayout.setBackgroundResource(R.drawable.selector_grid_red)
                     view.text.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
                 }
+
                 else -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_gray)
             }
             return ViewHolder(view)
@@ -231,34 +234,42 @@ class DialogCalindarGrid : DialogFragment() {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
+
                 mItemList[position] == 7 && issetSvityia -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
+
                 mItemList[position] == 8 && !slugba.checkParliny(data, mun) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
+
                 mItemList[position] == 2 && !(slugba.checkPavichrrnica(raznicia, dayOfYear.toInt())) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
+
                 mItemList[position] == 5 && !slugba.checkVialikiaGadziny(raznicia, dayOfYear.toInt()) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
+
                 mItemList[position] == 3 && !(slugba.checkPaunochnica(raznicia, dayOfYear.toInt())) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
+
                 mItemList[position] == 9 -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
+
                 mItemList[position] == 6 && !(slugba.checkLiturgia(raznicia, dayOfYear.toInt()) || (ton == 0 && denNedzeli != Calendar.SUNDAY) || ton != 0) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
+
                 else -> {
                     if (post == 3 || post == 4) {
                         holder.mImage.setImageResource(getImage(mItemList[position], imageWhite = true))
@@ -309,20 +320,35 @@ class DialogCalindarGrid : DialogFragment() {
                     1 -> {
                         when {
                             slugba.checkViachernia(raznicia, dayOfYear.toInt()) -> {
-                                val intent = Intent()
-                                val resours = slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.VIACZERNIA)
-                                intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("resurs", resours)
-                                intent.putExtra("zmena_chastki", true)
-                                intent.putExtra("title", slugba.getTitle(resours))
-                                startActivity(intent)
+                                val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.VIACZERNIA)
+                                val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.VIACZERNIA)
+                                val listResource = ArrayList<String>()
+                                if (resours != "0") listResource.add(resours)
+                                if (resours2 != "0") listResource.add(resours2)
+                                val listTitle = ArrayList<String>()
+                                if (resours != "0") listTitle.add(slugba.getTitle(resours))
+                                if (resours2 != "0") listTitle.add(slugba.getTitle(resours2))
+                                if (listResource.size > 1) {
+                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, 0, listResource)
+                                    traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
+                                } else {
+                                    val intent = Intent()
+                                    intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
+                                    if (resours != "0") intent.putExtra("resurs", resours)
+                                    if (resours2 != "0") intent.putExtra("resurs", resours2)
+                                    intent.putExtra("zmena_chastki", true)
+                                    intent.putExtra("title", slugba.getTitle(resours))
+                                    startActivity(intent)
+                                }
                             }
+
                             else -> {
                                 val intent = Intent(activity, SubMenuBogashlugbovyaViachernia::class.java)
                                 startActivity(intent)
                             }
                         }
                     }
+
                     2 -> {
                         when {
                             slugba.checkPavichrrnica(raznicia, dayOfYear.toInt()) -> {
@@ -336,6 +362,7 @@ class DialogCalindarGrid : DialogFragment() {
                             }
                         }
                     }
+
                     3 -> {
                         when {
                             slugba.checkPaunochnica(raznicia, dayOfYear.toInt()) -> {
@@ -349,6 +376,7 @@ class DialogCalindarGrid : DialogFragment() {
                             }
                         }
                     }
+
                     5 -> {
                         when {
                             slugba.checkVialikiaGadziny(raznicia, dayOfYear.toInt()) -> {
@@ -362,6 +390,7 @@ class DialogCalindarGrid : DialogFragment() {
                             }
                         }
                     }
+
                     6 -> {
                         val c = GregorianCalendar()
                         val dabraveshchanne = if (c.isLeapYear(year)) 85
@@ -380,28 +409,30 @@ class DialogCalindarGrid : DialogFragment() {
                                 intent.putExtra("title", slugba.getTitle(resours))
                                 startActivity(intent)
                             }
+
                             slugba.checkLiturgia(raznicia, dayOfYear.toInt()) -> {
-                                if (denNedzeli == Calendar.SUNDAY && ton != 0) {
-                                    val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.LITURHIJA)
-                                    val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.LITURHIJA)
-                                    val listResource = ArrayList<String>()
-                                    if (resours != "0") listResource.add(resours)
-                                    if (resours2 != "0") listResource.add(resours2)
-                                    val listTitle = ArrayList<String>()
-                                    if (resours != "0") listTitle.add(slugba.getTitle(resours))
-                                    if (resours2 != "0") listTitle.add(slugba.getTitle(resours2))
+                                val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.LITURHIJA)
+                                val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.LITURHIJA)
+                                val listResource = ArrayList<String>()
+                                if (resours != "0") listResource.add(resours)
+                                if (resours2 != "0") listResource.add(resours2)
+                                val listTitle = ArrayList<String>()
+                                if (resours != "0") listTitle.add(slugba.getTitle(resours))
+                                if (resours2 != "0") listTitle.add(slugba.getTitle(resours2))
+                                if (listResource.size > 1) {
                                     val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, ton, listResource)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 } else {
                                     val intent = Intent()
-                                    val resours = slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
                                     intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                                    intent.putExtra("resurs", resours)
+                                    if (resours != "0") intent.putExtra("resurs", resours)
+                                    if (resours2 != "0") intent.putExtra("resurs", resours2)
                                     intent.putExtra("zmena_chastki", true)
                                     intent.putExtra("title", slugba.getTitle(resours))
                                     startActivity(intent)
                                 }
                             }
+
                             else -> {
                                 if (ton != 0) {
                                     val intent = Intent()
@@ -429,17 +460,32 @@ class DialogCalindarGrid : DialogFragment() {
                             }
                         }
                     }
+
                     4 -> {
                         when {
                             slugba.checkUtran(raznicia, dayOfYear.toInt()) -> {
-                                val intent = Intent()
-                                val resours = slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.JUTRAN)
-                                intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("resurs", resours)
-                                intent.putExtra("zmena_chastki", true)
-                                intent.putExtra("title", slugba.getTitle(resours))
-                                startActivity(intent)
+                                val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.JUTRAN)
+                                val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.JUTRAN)
+                                val listResource = ArrayList<String>()
+                                if (resours != "0") listResource.add(resours)
+                                if (resours2 != "0") listResource.add(resours2)
+                                val listTitle = ArrayList<String>()
+                                if (resours != "0") listTitle.add(slugba.getTitle(resours))
+                                if (resours2 != "0") listTitle.add(slugba.getTitle(resours2))
+                                if (listResource.size > 1) {
+                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, 0, listResource)
+                                    traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
+                                } else {
+                                    val intent = Intent()
+                                    intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
+                                    if (resours != "0") intent.putExtra("resurs", resours)
+                                    if (resours2 != "0") intent.putExtra("resurs", resours2)
+                                    intent.putExtra("zmena_chastki", true)
+                                    intent.putExtra("title", slugba.getTitle(resours))
+                                    startActivity(intent)
+                                }
                             }
+
                             denNedzeli == 1 -> {
                                 val intent = Intent()
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)

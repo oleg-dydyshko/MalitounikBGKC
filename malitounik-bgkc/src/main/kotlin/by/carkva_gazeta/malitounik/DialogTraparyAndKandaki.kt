@@ -52,7 +52,7 @@ class DialogTraparyAndKandaki : DialogFragment() {
                 binding.listView.selector = ContextCompat.getDrawable(activity, R.drawable.selector_default)
             }
             val title = arguments?.getStringArrayList("title") ?: ArrayList<String>()
-            val ton = arguments?.getInt("ton", 1) ?: 1
+            val ton = arguments?.getInt("ton", 0) ?: 0
             val resurs = arguments?.getStringArrayList("resurs") ?: ArrayList<String>()
             binding.listView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -69,7 +69,7 @@ class DialogTraparyAndKandaki : DialogFragment() {
             title.forEachIndexed { index, tit ->
                 data.add(Bogaslujbovyia(tit, resurs[index]))
             }
-            data.add(Bogaslujbovyia("Тон $ton", "ton$ton"))
+            if (ton != 0) data.add(Bogaslujbovyia("Тон $ton", "ton$ton"))
             val adapter = TraparyAndKandakiAdaprer(activity, data)
             binding.listView.adapter = adapter
             alert = builder.create()

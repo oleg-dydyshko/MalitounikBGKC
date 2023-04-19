@@ -419,7 +419,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 val listTitle = ArrayList<String>()
                                 if (resours != "0") listTitle.add(slugba.getTitle(resours))
                                 if (resours2 != "0") listTitle.add(slugba.getTitle(resours2))
-                                if (listResource.size > 1) {
+                                if (listResource.size > 1 || ton != 0) {
                                     val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, ton, listResource)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 } else {
@@ -441,18 +441,12 @@ class DialogCalindarGrid : DialogFragment() {
                                     intent.putExtra("title", "Тон $ton")
                                     intent.putExtra("zmena_chastki", true)
                                     startActivity(intent)
-                                } else if (denNedzeli != 1) {
+                                } else if (denNedzeli != Calendar.SUNDAY) {
                                     val intent = Intent()
                                     intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                     intent.putExtra("resurs", "ton${denNedzeli - 1}_budni")
-                                    val title = when (denNedzeli - 1) {
-                                        1 -> "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
-                                        2 -> "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю"
-                                        3 -> "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу"
-                                        4 -> "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю"
-                                        5 -> "ПЯТНІЦА\nСлужба Крыжу Гасподняму"
-                                        else -> "Субота\nСлужба ўсім сьвятым і памёрлым"
-                                    }
+                                    val arrayTonKognyDzen = activity.resources.getStringArray(R.array.ton_kogny_dzen)
+                                    val title = arrayTonKognyDzen[denNedzeli - 2]
                                     intent.putExtra("title", title)
                                     intent.putExtra("zmena_chastki", true)
                                     startActivity(intent)
@@ -486,7 +480,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 }
                             }
 
-                            denNedzeli == 1 -> {
+                            denNedzeli == Calendar.SUNDAY -> {
                                 val intent = Intent()
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("title", "Ютрань нядзельная (у скароце)")

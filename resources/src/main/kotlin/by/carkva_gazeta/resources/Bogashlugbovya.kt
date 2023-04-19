@@ -961,6 +961,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         line = line.replace("PRICHASNIKK", "")
                         builder.append(line)
                     }
+
                     liturgia -> {
                         if (line.contains("KANDAK")) {
                             line = line.replace("KANDAK", "")
@@ -1047,6 +1048,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                                     builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br><br>\n")
                                 }
                             }
+
                             line.contains("EVCH") -> {
                                 line = line.replace("EVCH", "")
                                 if (chechZmena && !nochenia) {
@@ -1067,12 +1069,14 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                                     builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                                 }
                             }
+
                             else -> {
                                 builder.append(line)
                             }
                         }
 
                     }
+
                     else -> {
                         builder.append(line)
                     }
@@ -1457,8 +1461,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     stopAutoStartScroll()
                     mAutoScroll = false
                     invalidateOptionsMenu()
-                } else if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll && binding.find.visibility == View.GONE) {
-                    autoStartScroll()
                 }
             } else {
                 if (resurs.contains("viachernia_ton")) {
@@ -1819,6 +1821,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     intent.putExtra("mun", munsv)
                     intent.putExtra("year", Calendar.getInstance()[Calendar.YEAR])
                 }
+
                 checkDayOfYear -> {
                     val resours = slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
                     intent.putExtra("autoscrollOFF", autoscroll)
@@ -1826,6 +1829,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))
                 }
+
                 else -> {
                     val resours = if (checkLiturgia == 0) slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
                     else slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.VIACZERNIA)
@@ -1958,10 +1962,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
             }
+
             intent.extras?.getBoolean("chekVybranoe", false) == true && men != checkVybranoe -> {
                 setResult(200)
                 super.onBack()
             }
+
             else -> {
                 super.onBack()
             }

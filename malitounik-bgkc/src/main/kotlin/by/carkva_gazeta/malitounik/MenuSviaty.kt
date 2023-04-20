@@ -17,14 +17,15 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemSviatyBinding
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class MenuSviaty : BaseListFragment() {
     private var year = Calendar.getInstance()[Calendar.YEAR]
     private lateinit var mListener: CarkvaCarkvaListener
     private var mLastClickTime: Long = 0
     private lateinit var myArrayAdapter: MyArrayAdapter
-    private var list = ArrayList<Prazdniki>()
+    private val list = ArrayList<Prazdniki>()
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -35,7 +36,8 @@ class MenuSviaty : BaseListFragment() {
 
     fun setCviatyYear(year: Int) {
         this.year = year
-        list = getPrazdnik(year)
+        list.clear()
+        list.addAll(getPrazdnik(year))
         activity?.let {
             if (SettingsActivity.GET_CALIANDAR_YEAR_MAX >= year) {
                 listView.isClickable = true
@@ -60,9 +62,9 @@ class MenuSviaty : BaseListFragment() {
         activity?.let {
             if (savedInstanceState != null) {
                 year = savedInstanceState.getInt("year")
-                list = getPrazdnik(year)
+                list.addAll(getPrazdnik(year))
             } else {
-                list = getPrazdnik()
+                list.addAll(getPrazdnik())
             }
             myArrayAdapter = MyArrayAdapter(it, list)
             listAdapter = myArrayAdapter
@@ -81,7 +83,10 @@ class MenuSviaty : BaseListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (SettingsActivity.GET_CALIANDAR_YEAR_MAX >= year) mListener.setDataCalendar(list[position].dayOfYear, year)
+        val c = GregorianCalendar()
+        val dayOfYear = if (!c.isLeapYear(year) && list[position].dayOfYear > 59) list[position].dayOfYear + 1
+        else list[position].dayOfYear
+        if (SettingsActivity.GET_CALIANDAR_YEAR_MAX >= year) mListener.setDataCalendar(dayOfYear, year)
     }
 
     internal interface CarkvaCarkvaListener {

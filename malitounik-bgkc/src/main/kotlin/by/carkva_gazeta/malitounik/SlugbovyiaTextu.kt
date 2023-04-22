@@ -234,6 +234,13 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(85, "Дабравешчаньне Найсьвяцейшай Багародзіцы", "mm_25_03_dabravieszczannie_viaczernia_z_liturhijaj", VIACZERNIA_Z_LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(105, "Між сьвятымі айца нашага Марціна Вызнаўцы, папы Рымскага", "mm_14_04_marcina_papy_rymskaha_viaczernia", VIACZERNIA))
         datMinSH.add(SlugbovyiaTextuData(114, "Сьвятога вялікамучаніка Юрыя", "mm_23_04_juryja_pieramozcy_jutran", JUTRAN))
+        datMinSH.add(SlugbovyiaTextuData(116, "Сьвятога апостала і евангеліста Марка", "mm_25_04_apostala_marka_liturhija", LITURHIJA))
+        datMinSH.add(SlugbovyiaTextuData(116, "Сьвятога апостала і евангеліста Марка", "mm_25_04_apostala_marka_viaczernia", VIACZERNIA))
+        datMinSH.add(SlugbovyiaTextuData(118, "Сьвятога сьвятамучаніка Сямёна, сваяка Гасподняга", "mm_27_04_siamiona_svajaka_haspodniaha_viaczernia", VIACZERNIA))
+        datMinSH.add(SlugbovyiaTextuData(119, "Між сьвятымі айца нашага Кірылы, біскупа Тураўскага", "mm_28_04_kiryly_turauskaha_liturhija", LITURHIJA))
+        datMinSH.add(SlugbovyiaTextuData(119, "Між сьвятымі айца нашага Кірылы, біскупа Тураўскага", "mm_28_04_kiryly_turauskaha_viaczernia", VIACZERNIA))
+        datMinSH.add(SlugbovyiaTextuData(121, "Сьвятога апостала Якуба, брата Яна Багаслова", "mm_30_04_apostala_jakuba_liturhija", LITURHIJA))
+        datMinSH.add(SlugbovyiaTextuData(121, "Сьвятога апостала Якуба, брата Яна Багаслова", "mm_30_04_apostala_jakuba_viaczernia", VIACZERNIA))
 
         datMinSV.add(SlugbovyiaTextuData(6, "Нядзеля Тамаша (Антыпасха) вячэрня ў суботу", "ndz_tamasza_viaczernia_subota", VIACZERNIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха)", "ndz_tamasza_jutran", JUTRAN, pasxa = true))

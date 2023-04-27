@@ -35,6 +35,23 @@ class SlugbovyiaTextu {
     }
 
     init {
+        datMinSV.add(SlugbovyiaTextuData(6, "Нядзеля Тамаша (Антыпасха) вячэрня ў суботу", "ndz_tamasza_viaczernia_subota", VIACZERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха)", "ndz_tamasza_jutran", JUTRAN, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха)", "ndz_tamasza_liturhija", LITURHIJA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша ўвечары", "ndz_tamasza_uvieczary", VIACZERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(8, "Панядзелак пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_paniadzielak", VIACZERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(9, "Аўторак пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_autorak", VIACZERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(10, "Серада пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_sierada", VIACZERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(11, "Чацьвер пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_czacvier", VIACZERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(12, "Пятніца пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_piatnica", VIACZERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў", "ndz_miranosic_liturhija", LITURHIJA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(21, "Нядзеля расслабленага", "ndz_rasslablenaha_liturhija", LITURHIJA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(28, "Нядзеля самаранкі", "ndz_samaranki_liturhija", LITURHIJA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(35, "Нядзеля сьлепанароджанага", "ndz_slepanarodz_liturhija", LITURHIJA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(49, "Тройца (Сёмуха)", "paniadzielak_sv_ducha_ndz_viaczaram", VIACZERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(49, "Тройца (Сёмуха)", "zychod_sv_ducha_jutran", JUTRAN, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(49, "Тройца (Сёмуха)", "zychod_sv_ducha_liturhija", LITURHIJA, pasxa = true))
+
         datMinVP.add(SlugbovyiaTextuData(-49, "Вячэрня ў нядзелю сырную вeчарам", "bogashlugbovya12_1", VIACZERNIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-48, "Панядзeлак 1-га тыдня посту ўвeчары", "bogashlugbovya12_2", VIACZERNIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-47, "Аўтoрак 1-га тыдня посту ўвeчары", "bogashlugbovya12_3", VIACZERNIA, pasxa = true))
@@ -241,24 +258,11 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(119, "Між сьвятымі айца нашага Кірылы, біскупа Тураўскага", "mm_28_04_kiryly_turauskaha_viaczernia", VIACZERNIA))
         datMinSH.add(SlugbovyiaTextuData(121, "Сьвятога апостала Якуба, брата Яна Багаслова", "mm_30_04_apostala_jakuba_liturhija", LITURHIJA))
         datMinSH.add(SlugbovyiaTextuData(121, "Сьвятога апостала Якуба, брата Яна Багаслова", "mm_30_04_apostala_jakuba_viaczernia", VIACZERNIA))
-
-        datMinSV.add(SlugbovyiaTextuData(6, "Нядзеля Тамаша (Антыпасха) вячэрня ў суботу", "ndz_tamasza_viaczernia_subota", VIACZERNIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха)", "ndz_tamasza_jutran", JUTRAN, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха)", "ndz_tamasza_liturhija", LITURHIJA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша ўвечары", "ndz_tamasza_uvieczary", VIACZERNIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(8, "Панядзелак пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_paniadzielak", VIACZERNIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(9, "Аўторак пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_autorak", VIACZERNIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(10, "Серада пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_sierada", VIACZERNIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(11, "Чацьвер пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_czacvier", VIACZERNIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(12, "Пятніца пасьля нядзелі Тамаша ўвечары", "ndz_tamasza_piatnica", VIACZERNIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў", "ndz_miranosic_liturhija", LITURHIJA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(21, "Нядзеля расслабленага", "ndz_rasslablenaha_liturhija", LITURHIJA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(28, "Нядзеля самаранкі", "ndz_samaranki_liturhija", LITURHIJA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(35, "Нядзеля сьлепанароджанага", "ndz_slepanarodz_liturhija", LITURHIJA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(49, "Тройца (Сёмуха)", "paniadzielak_sv_ducha_ndz_viaczaram", VIACZERNIA, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(49, "Тройца (Сёмуха)", "zychod_sv_ducha_jutran", JUTRAN, pasxa = true))
-        datMinSV.add(SlugbovyiaTextuData(49, "Тройца (Сёмуха)", "zychod_sv_ducha_liturhija", LITURHIJA, pasxa = true))
-
+        datMinSH.add(SlugbovyiaTextuData(123, "Між сьвятымі айца нашага Апанаса, архібіскупа Александрыйскага", "mm_02_05_apanasa_aleksandryjskaha_liturhija", LITURHIJA))
+        datMinSH.add(SlugbovyiaTextuData(123, "Між сьвятымі айца нашага Апанаса, архібіскупа Александрыйскага", "mm_02_05_apanasa_aleksandryjskaha_viaczernia", VIACZERNIA))
+        datMinSH.add(SlugbovyiaTextuData(132, "Сьвятых і роўных апосталам настаўнікаў славянскіх Кірылы і Мятода", "mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_jutran", JUTRAN))
+        datMinSH.add(SlugbovyiaTextuData(132, "Сьвятых і роўных апосталам настаўнікаў славянскіх Кірылы і Мятода", "mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_liturhija", LITURHIJA))
+        datMinSH.add(SlugbovyiaTextuData(132, "Сьвятых і роўных апосталам настаўнікаў славянскіх Кірылы і Мятода", "mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_viaczernia", VIACZERNIA))
     }
 
     fun getTydzen1(): ArrayList<SlugbovyiaTextuData> {

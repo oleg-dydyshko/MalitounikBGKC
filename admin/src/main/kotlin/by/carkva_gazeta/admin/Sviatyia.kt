@@ -13,7 +13,12 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
@@ -23,7 +28,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaBinding
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.CaliandarMun
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuCaliandar
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemTipiconBinding
 import com.google.firebase.ktx.Firebase
@@ -32,10 +41,16 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.File
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class Sviatyia : BaseActivity(), View.OnClickListener {
     private lateinit var k: SharedPreferences
@@ -466,8 +481,10 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 val localFile3 = withContext(Dispatchers.IO) {
                     File.createTempFile("calendarsviatyiaSave", "txt")
                 }
-                localFile3.writer().use {
-                    it.write(sb.toString())
+                if (sviatyiaNewList.isNotEmpty()) {
+                    localFile3.writer().use {
+                        it.write(sb.toString())
+                    }
                 }
                 val localFile = withContext(Dispatchers.IO) {
                     File.createTempFile("opisanieEdit", "json")
@@ -510,10 +527,12 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 if (ref) {
                     stringBuilder.append("$url\n")
                 }
-                logFile.writer().use {
-                    it.write(stringBuilder.toString())
+                if (sviatyiaNewList.isNotEmpty()) {
+                    logFile.writer().use {
+                        it.write(stringBuilder.toString())
+                    }
+                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
                 }
-                referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
                 sb.clear()
                 url = "/chytanne/sviatyja/opisanie" + (mun + 1) + ".json"
                 referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
@@ -529,19 +548,25 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 if (ref) {
                     sb.append("$url\n")
                 }
-                logFile.writer().use {
-                    it.write(sb.toString())
-                }
-                referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
-
-                referens.child("/calendarsviatyia.txt").putFile(Uri.fromFile(localFile3)).await()
-                referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").putFile(Uri.fromFile(localFile4)).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.save))
-                    } else {
-                        MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
+                if (builder != "") {
+                    logFile.writer().use {
+                        it.write(sb.toString())
                     }
-                }.await()
+                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+                }
+
+                if (sviatyiaNewList.isNotEmpty()) {
+                    referens.child("/calendarsviatyia.txt").putFile(Uri.fromFile(localFile3)).await()
+                }
+                if (builder != "") {
+                    referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").putFile(Uri.fromFile(localFile4)).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.save))
+                        } else {
+                            MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        }
+                    }.await()
+                }
                 binding.progressBar2.visibility = View.GONE
             }
         }

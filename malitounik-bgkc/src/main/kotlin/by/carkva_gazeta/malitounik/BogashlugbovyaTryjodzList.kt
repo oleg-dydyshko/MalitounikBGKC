@@ -18,7 +18,11 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
 import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class BogashlugbovyaTryjodzList : BaseActivity() {
     private var data = ArrayList<ArrayList<SlugbovyiaTextuData>>()
@@ -87,8 +91,12 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
                     }
                     array.add(it)
                     day = it.day
+                    if (sluzba.getVilikiTydzen().count() == index + 1) {
+                        data.add(array)
+                    }
                 }
             }
+
             2 -> {
                 sluzba.getSvetlyTydzen().forEachIndexed { index, it ->
                     if (index == 0) day = it.day
@@ -105,8 +113,12 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
                     }
                     array.add(it)
                     day = it.day
+                    if (sluzba.getSvetlyTydzen().count() == index + 1) {
+                        data.add(array)
+                    }
                 }
             }
+
             else -> {
                 sluzba.getMineiaSviatochnaia().forEachIndexed { index, it ->
                     if (index == 0) day = it.day
@@ -116,6 +128,9 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
                     }
                     array.add(it)
                     day = it.day
+                    if (sluzba.getMineiaSviatochnaia().count() == index + 1) {
+                        data.add(array)
+                    }
                 }
             }
         }

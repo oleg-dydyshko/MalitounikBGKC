@@ -389,7 +389,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["dzie_rym"] = R.raw.dzie_rym
             resursMap["dzie_sanktpieciarburg"] = R.raw.dzie_sanktpieciarburg
             resursMap["dzie_bielastok"] = R.raw.dzie_bielastok
-            resursMap["mm_11_05_liturhija"] = R.raw.mm_11_05_liturhija
             resursMap["mltv_za_carkvu"] = R.raw.mltv_za_carkvu
             resursMap["malebien_kiryla_miatod"] = R.raw.malebien_kiryla_miatod
             resursMap["mm_21_05_liturhija"] = R.raw.mm_21_05_liturhija

@@ -88,6 +88,15 @@ class DialogSaveAsFileExplorer : DialogFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val dialog = dialog as? AlertDialog
+        val positiveButton = dialog?.getButton(Dialog.BUTTON_POSITIVE)
+        positiveButton?.setOnClickListener {
+            setFileName()
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { fragmentActivity ->
             _binding = AdminDialigSaveAsBinding.inflate(LayoutInflater.from(fragmentActivity))
@@ -112,8 +121,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             binding.edittext.addTextChangedListener(textWatcher)
             binding.edittext.setText(fileName)
             binding.filetitle.text = filenameTitle
-            if (filenameTitle == "")
-                binding.filetitle.visibility = View.GONE
+            if (filenameTitle == "") binding.filetitle.visibility = View.GONE
             binding.listView.selector = ContextCompat.getDrawable(fragmentActivity, by.carkva_gazeta.malitounik.R.drawable.selector_default)
             adapter = TitleListAdaprer(fragmentActivity)
             binding.listView.adapter = adapter
@@ -126,28 +134,43 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                         dir = dir.substring(0, t4)
                         getDirListRequest(dir)
                     }
+
                     R.drawable.directory_icon -> {
                         dir = dir + "/" + fileList[position].title
                         getDirListRequest(dir)
                     }
+
                     else -> {
                         binding.edittext.setText(fileList[position].title)
                     }
                 }
             }
-            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.save_sabytie)) { dialog: DialogInterface, _: Int ->
-                if (dir == "/admin/pesny") {
-                    val dialogAddPesny = DialogAddPesny.getInstance(oldName)
-                    dialogAddPesny.show(fragmentActivity.supportFragmentManager, "dialogAddPesny")
-                } else {
-                    mListener?.onDialogSaveAsFile(dir, oldName, binding.edittext.text.toString())
-                    dialog.cancel()
-                }
-            }
+            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.save_sabytie), null)
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
         }
         return alert
+    }
+
+    private fun setFileName() {
+        if (dir == "/admin/pesny") {
+            val dialogAddPesny = DialogAddPesny.getInstance(oldName)
+            dialogAddPesny.show(childFragmentManager, "dialogAddPesny")
+        } else {
+            var error = false
+            val editText = binding.edittext.text.toString()
+            if (editText[0].isDigit()) error = true
+            for (c in editText) {
+                if (c.isUpperCase()) error = true
+            }
+            if (error) {
+                val dialogFileNameError = DialogFileNameError()
+                dialogFileNameError.show(childFragmentManager, "DialogFileNameError")
+                return
+            }
+            mListener?.onDialogSaveAsFile(dir, oldName, editText)
+            dialog?.cancel()
+        }
     }
 
     private fun getDirListRequest(dir: String) {

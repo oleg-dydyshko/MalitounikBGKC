@@ -13,8 +13,13 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
-import kotlinx.coroutines.*
-import java.util.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 
 class MineiaMesiachnaia : BaseActivity() {
@@ -29,10 +34,10 @@ class MineiaMesiachnaia : BaseActivity() {
         resetTollbarJob?.cancel()
     }
 
-    private fun getMineiaDayCount(list: ArrayList<SlugbovyiaTextuData>, day: Int, slugba: Int): Int {
+    private fun getMineiaDayCount(list: List<SlugbovyiaTextuData>, day: Int, slugba: Int): Int {
         var count = 0
         var errorCount = 0
-        for (i in 0 until list.size) {
+        for (i in list.indices) {
             if (day == list[i].day && slugba == list[i].sluzba) {
                 errorCount++
             }
@@ -68,7 +73,7 @@ class MineiaMesiachnaia : BaseActivity() {
         val child10 = ArrayList<MineiaDay>()
         val child11 = ArrayList<MineiaDay>()
         var day = 0
-        for (i in 0 until mineiaList.size) {
+        for (i in mineiaList.indices) {
             val count = getMineiaDayCount(mineiaList, mineiaList[i].day, mineiaList[i].sluzba)
             var opisanie = ""
             if (count == 1) {
@@ -177,7 +182,7 @@ class MineiaMesiachnaia : BaseActivity() {
                 if (resourceViacherniaZLiturgia != "0") count++
                 if (count > 1) {
                     val resourceArrayList = ArrayList<String>()
-                    for (i in 0 until mineiaList.size) {
+                    for (i in mineiaList.indices) {
                         if (groups[groupPosition][childPosition].day.toInt() == mineiaList[i].day) {
                             when (mineiaList[i].sluzba) {
                                 SlugbovyiaTextu.JUTRAN -> resourceArrayList.add(mineiaList[i].resource)

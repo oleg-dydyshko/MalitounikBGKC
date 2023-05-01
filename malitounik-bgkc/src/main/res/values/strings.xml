@@ -766,5 +766,6 @@
     <string name="is_html_title">ФАРМАТ HTML</string>
     <string name="is_html">Тэкст у фармаце HTML?</string>
     <string name="citata_error">Памылка: у файле \"citata\" няма \"(\" у страке %1$d</string>
+    <string name="file_name_error">Імя файла павінна пачынацца з літары, далей мугуць быць лічбы, таксама імя файла можа ўтрымліваць знак падкрэслення, усе літары павінны быць у ніжнем рэгістры. Напрыклад: mm_01_01_malebien_novy_hod.html</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

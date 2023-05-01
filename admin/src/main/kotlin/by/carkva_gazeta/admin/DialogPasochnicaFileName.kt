@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
-import java.util.*
+import java.util.Calendar
 
 class DialogPasochnicaFileName : DialogFragment() {
     private var oldFileName = ""
@@ -83,6 +83,15 @@ class DialogPasochnicaFileName : DialogFragment() {
         isSite = arguments?.getBoolean("isSite") ?: false
     }
 
+    override fun onResume() {
+        super.onResume()
+        val dialog = dialog as? AlertDialog
+        val positiveButton = dialog?.getButton(Dialog.BUTTON_POSITIVE)
+        positiveButton?.setOnClickListener {
+            setFileName()
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogEditviewDisplayBinding.inflate(LayoutInflater.from(it))
@@ -107,7 +116,6 @@ class DialogPasochnicaFileName : DialogFragment() {
             binding.content.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     setFileName()
-                    dialog?.cancel()
                 }
                 false
             }
@@ -117,9 +125,7 @@ class DialogPasochnicaFileName : DialogFragment() {
                 imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)
                 dialog.cancel()
             }
-            builder.setPositiveButton(resources.getString(by.carkva_gazeta.malitounik.R.string.ok)) { _: DialogInterface?, _: Int ->
-                setFileName()
-            }
+            builder.setPositiveButton(resources.getString(by.carkva_gazeta.malitounik.R.string.ok), null)
         }
         builder.setView(binding.root)
         return builder.create()
@@ -131,8 +137,24 @@ class DialogPasochnicaFileName : DialogFragment() {
             val gc = Calendar.getInstance()
             val mun = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
             fileName = gc[Calendar.DATE].toString() + "_" + mun[gc[Calendar.MONTH]] + "_" + gc[Calendar.YEAR] + "_" + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
+        } else {
+            var error = false
+            var t1 = fileName.indexOf(")")
+            if (t1 != -1) {
+                t1 += 2
+            } else t1 = 0
+            if (fileName[t1].isDigit()) error = true
+            for (c in fileName) {
+                if (c.isUpperCase()) error = true
+            }
+            if (error) {
+                val dialog = DialogFileNameError()
+                dialog.show(childFragmentManager, "DialogFileNameError")
+                return
+            }
         }
         mListener?.setFileName(oldFileName, fileName, isSite)
+        dialog?.cancel()
     }
 
     companion object {

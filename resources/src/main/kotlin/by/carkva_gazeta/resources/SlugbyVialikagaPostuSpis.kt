@@ -21,11 +21,14 @@ import by.carkva_gazeta.malitounik.SlugbovyiaTextu
 import by.carkva_gazeta.malitounik.SlugbovyiaTextuData
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.resources.databinding.AkafistListBibleBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SlugbyVialikagaPostuSpis : BaseActivity() {
     private var mLastClickTime: Long = 0
-    private var data = ArrayList<SlugbovyiaTextuData>()
     private lateinit var binding: AkafistListBibleBinding
     private var resetTollbarJob: Job? = null
 
@@ -65,13 +68,14 @@ class SlugbyVialikagaPostuSpis : BaseActivity() {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
         val slugba = SlugbovyiaTextu()
-        when (intent.extras?.getInt("resurs") ?: 0) {
-            12 -> data = slugba.getTydzen1()
-            13 -> data = slugba.getTydzen2()
-            14 -> data = slugba.getTydzen3()
-            15 -> data = slugba.getTydzen4()
-            16 -> data = slugba.getTydzen5()
-            17 -> data = slugba.getTydzen6()
+        val data = when (intent.extras?.getInt("resurs") ?: 0) {
+            12 -> slugba.getTydzen1()
+            13 -> slugba.getTydzen2()
+            14 -> slugba.getTydzen3()
+            15 -> slugba.getTydzen4()
+            16 -> slugba.getTydzen5()
+            17 -> slugba.getTydzen6()
+            else -> listOf()
         }
         val adapter = ListAdaprer(this, data)
         binding.ListView.adapter = adapter
@@ -123,8 +127,7 @@ class SlugbyVialikagaPostuSpis : BaseActivity() {
             }
             val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             viewHolder.text.text = data[position].title
-            if (dzenNoch)
-                viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
     }

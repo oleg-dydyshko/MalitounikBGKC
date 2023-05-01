@@ -279,7 +279,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["viachernia_mineia_agulnaia22"] = R.raw.viachernia_mineia_agulnaia22
             resursMap["viachernia_mineia_agulnaia23"] = R.raw.viachernia_mineia_agulnaia23
             resursMap["viachernia_mineia_agulnaia24"] = R.raw.viachernia_mineia_agulnaia24
-            resursMap["viachernia_mineia_sviatochnaia1"] = R.raw.viachernia_mineia_sviatochnaia1
             resursMap["viachernia_mineia_sviatochnaia2"] = R.raw.viachernia_mineia_sviatochnaia2
             resursMap["viachernia_mineia_sviatochnaia3"] = R.raw.viachernia_mineia_sviatochnaia3
             resursMap["viachernia_mineia_sviatochnaia4"] = R.raw.viachernia_mineia_sviatochnaia4
@@ -396,7 +395,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_23_05_jutran"] = R.raw.mm_23_05_jutran
             resursMap["mm_23_05_liturhija"] = R.raw.mm_23_05_liturhija
             resursMap["mm_23_05_viaczernia"] = R.raw.mm_23_05_viaczernia
-            resursMap["ndz_ajcou_1susviet_saboru"] = R.raw.ndz_ajcou_1susviet_saboru
+            resursMap["ndz_ajcou_1susviet_saboru_liturhija"] = R.raw.ndz_ajcou_1susviet_saboru_liturhija
             resursMap["ndz_usich_sviatych_liturhija"] = R.raw.ndz_usich_sviatych_liturhija
             resursMap["ndz_usich_sv_biel_narodu_liturhija"] = R.raw.ndz_usich_sv_biel_narodu_liturhija
             resursMap["sluzba_za_pamierlych_na_kozny_dzien_tydnia"] = R.raw.sluzba_za_pamierlych_na_kozny_dzien_tydnia
@@ -488,6 +487,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_jutran"] = R.raw.mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_jutran
             resursMap["mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_liturhija"] = R.raw.mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_liturhija
             resursMap["mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_viaczernia"] = R.raw.mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_viaczernia
+            resursMap["mm_01_01_abrezannie_viachernia"] = R.raw.mm_01_01_abrezannie_viachernia
+            resursMap["ndz_rasslablenaha_viaczernia_u_subotu_vieczaram"] = R.raw.ndz_rasslablenaha_viaczernia_u_subotu_vieczaram
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {

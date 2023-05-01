@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.malitounik.databinding.TraparyAndKandakiBinding
 import kotlinx.coroutines.Job
+import java.util.Calendar
 
 
 class DialogTraparyAndKandaki : DialogFragment() {
@@ -53,6 +54,7 @@ class DialogTraparyAndKandaki : DialogFragment() {
             }
             val title = arguments?.getStringArrayList("title") ?: ArrayList<String>()
             val ton = arguments?.getInt("ton", 0) ?: 0
+            val denNedzeli = arguments?.getInt("denNedzeli", 0) ?: 0
             val resurs = arguments?.getStringArrayList("resurs") ?: ArrayList<String>()
             binding.listView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -70,6 +72,10 @@ class DialogTraparyAndKandaki : DialogFragment() {
                 data.add(Bogaslujbovyia(tit, resurs[index]))
             }
             if (ton != 0) data.add(Bogaslujbovyia("Тон $ton", "ton$ton"))
+            if (denNedzeli > Calendar.SUNDAY) {
+                val listTonKognyDzen = MenuBogashlugbovya.getTextTonNaKoznyDzenList()[denNedzeli - 2]
+                data.add(Bogaslujbovyia(listTonKognyDzen.title, listTonKognyDzen.resurs))
+            }
             val adapter = TraparyAndKandakiAdaprer(activity, data)
             binding.listView.adapter = adapter
             alert = builder.create()
@@ -99,11 +105,12 @@ class DialogTraparyAndKandaki : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(title: ArrayList<String>, ton: Int, resurs: ArrayList<String>): DialogTraparyAndKandaki {
+        fun getInstance(title: ArrayList<String>, ton: Int, resurs: ArrayList<String>, denNedzeli: Int): DialogTraparyAndKandaki {
             val bundle = Bundle()
             bundle.putStringArrayList("title", title)
             bundle.putInt("ton", ton)
             bundle.putStringArrayList("resurs", resurs)
+            bundle.putInt("denNedzeli", denNedzeli)
             val trapary = DialogTraparyAndKandaki()
             trapary.arguments = bundle
             return trapary

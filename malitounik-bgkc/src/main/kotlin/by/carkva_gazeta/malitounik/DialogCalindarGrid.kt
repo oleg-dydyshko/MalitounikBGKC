@@ -329,7 +329,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 if (resours != "0") listTitle.add(slugba.getTitle(resours))
                                 if (resours2 != "0") listTitle.add(slugba.getTitle(resours2))
                                 if (listResource.size > 1) {
-                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, 0, listResource)
+                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, 0, listResource, 0)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 } else {
                                     val intent = Intent()
@@ -419,8 +419,8 @@ class DialogCalindarGrid : DialogFragment() {
                                 val listTitle = ArrayList<String>()
                                 if (resours != "0") listTitle.add(slugba.getTitle(resours))
                                 if (resours2 != "0") listTitle.add(slugba.getTitle(resours2))
-                                if (listResource.size > 1 || ton != 0) {
-                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, ton, listResource)
+                                if (listResource.size > 0) {
+                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, ton, listResource, denNedzeli)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 } else {
                                     val intent = Intent()
@@ -467,7 +467,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 if (resours != "0") listTitle.add(slugba.getTitle(resours))
                                 if (resours2 != "0") listTitle.add(slugba.getTitle(resours2))
                                 if (listResource.size > 1) {
-                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, 0, listResource)
+                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, 0, listResource, 0)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 } else {
                                     val intent = Intent()

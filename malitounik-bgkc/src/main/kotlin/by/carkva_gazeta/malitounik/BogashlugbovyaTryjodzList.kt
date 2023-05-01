@@ -101,13 +101,6 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
                 sluzba.getSvetlyTydzen().forEachIndexed { index, it ->
                     if (index == 0) day = it.day
                     if (day != it.day) {
-                        if (data.size > 1) {
-                            sluzba.getSvetlyTydzen().forEachIndexed { i, svetlyTydzenList ->
-                                if (svetlyTydzenList.sluzba == SlugbovyiaTextu.VIALHADZINY) {
-                                    array.add(sluzba.getSvetlyTydzen()[i])
-                                }
-                            }
-                        }
                         data.add(array)
                         array = ArrayList()
                     }

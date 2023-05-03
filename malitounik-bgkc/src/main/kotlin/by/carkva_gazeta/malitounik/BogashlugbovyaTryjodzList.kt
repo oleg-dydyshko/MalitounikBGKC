@@ -80,17 +80,17 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
         binding.titleToolbar.text = intent?.extras?.getString("title", getString(R.string.tryjodz)) ?: getString(R.string.tryjodz)
         val sluzba = SlugbovyiaTextu()
         var array = ArrayList<SlugbovyiaTextuData>()
-        var day = 0
+        var day = ""
         when (intent?.extras?.getInt("tryjodz", 0) ?: 0) {
             1 -> {
                 sluzba.getVilikiTydzen().forEachIndexed { index, it ->
-                    if (index == 0) day = it.day
-                    if (day != it.day) {
+                    if (index == 0) day = it.title
+                    if (day != it.title) {
                         data.add(array)
                         array = ArrayList()
                     }
                     array.add(it)
-                    day = it.day
+                    day = it.title
                     if (sluzba.getVilikiTydzen().count() == index + 1) {
                         data.add(array)
                     }
@@ -99,13 +99,13 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
 
             2 -> {
                 sluzba.getSvetlyTydzen().forEachIndexed { index, it ->
-                    if (index == 0) day = it.day
-                    if (day != it.day) {
+                    if (index == 0) day = it.title
+                    if (day != it.title) {
                         data.add(array)
                         array = ArrayList()
                     }
                     array.add(it)
-                    day = it.day
+                    day = it.title
                     if (sluzba.getSvetlyTydzen().count() == index + 1) {
                         data.add(array)
                     }
@@ -114,13 +114,13 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
 
             else -> {
                 sluzba.getMineiaSviatochnaia().forEachIndexed { index, it ->
-                    if (index == 0) day = it.day
-                    if (day != it.day) {
+                    if (index == 0) day = it.title
+                    if (day != it.title) {
                         data.add(array)
                         array = ArrayList()
                     }
                     array.add(it)
-                    day = it.day
+                    day = it.title
                     if (sluzba.getMineiaSviatochnaia().count() == index + 1) {
                         data.add(array)
                     }

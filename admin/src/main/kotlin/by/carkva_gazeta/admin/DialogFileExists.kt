@@ -27,7 +27,7 @@ class DialogFileExists : DialogFragment() {
     }
 
     interface DialogFileExistsListener {
-        fun fileExists(dir: String, oldFileName: String, fileName: String)
+        fun fileExists(dir: String, oldFileName: String, fileName: String, saveAs: Boolean)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +55,8 @@ class DialogFileExists : DialogFragment() {
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.file_exists)
             binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.file_exists_opis, fileName)
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            builder.setPositiveButton(resources.getText(by.carkva_gazeta.malitounik.R.string.file_perazapisac)) { _: DialogInterface, _: Int -> mListener?.fileExists(dir, oldFileName, fileName) }
+            val saveAs = arguments?.getBoolean("saveAs") ?: true
+            builder.setPositiveButton(resources.getText(by.carkva_gazeta.malitounik.R.string.file_perazapisac)) { _: DialogInterface, _: Int -> mListener?.fileExists(dir, oldFileName, fileName, saveAs) }
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             builder.setView(binding.root)
             alert = builder.create()
@@ -64,12 +65,13 @@ class DialogFileExists : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(dir: String, oldFileName: String, fileName: String): DialogFileExists {
+        fun getInstance(dir: String, oldFileName: String, fileName: String, saveAs: Boolean): DialogFileExists {
             val dialogFileExists = DialogFileExists()
             val bundle = Bundle()
             bundle.putString("dir", dir)
             bundle.putString("oldFileName", oldFileName)
             bundle.putString("fileName", fileName)
+            bundle.putBoolean("saveAs", saveAs)
             dialogFileExists.arguments = bundle
             return dialogFileExists
         }

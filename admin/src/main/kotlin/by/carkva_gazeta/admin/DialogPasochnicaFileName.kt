@@ -58,7 +58,7 @@ class DialogPasochnicaFileName : DialogFragment() {
     }
 
     internal interface DialogPasochnicaFileNameListener {
-        fun setFileName(oldFileName: String, fileName: String, isSite: Boolean)
+        fun setFileName(oldFileName: String, fileName: String, isSite: Boolean, saveAs: Boolean)
     }
 
     override fun onAttach(context: Context) {
@@ -132,19 +132,25 @@ class DialogPasochnicaFileName : DialogFragment() {
     }
 
     private fun setFileName() {
+        val saveAs = arguments?.getBoolean("saveAs") ?: true
         var fileName = binding.content.text.toString()
         if (fileName == "") {
             val gc = Calendar.getInstance()
             val mun = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
             fileName = gc[Calendar.DATE].toString() + "_" + mun[gc[Calendar.MONTH]] + "_" + gc[Calendar.YEAR] + "_" + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
-        } else {
+        } else if (saveAs) {
             var error = false
-            var t1 = fileName.indexOf(")")
+            var checkFileName = fileName
+            val t2 = checkFileName.lastIndexOf("/")
+            if (t2 != -1) {
+                checkFileName = checkFileName.substring(t2 + 1)
+            }
+            var t1 = checkFileName.indexOf(")")
             if (t1 != -1) {
                 t1 += 2
             } else t1 = 0
-            if (fileName[t1].isDigit()) error = true
-            for (c in fileName) {
+            if (checkFileName[t1].isDigit()) error = true
+            for (c in checkFileName) {
                 if (c.isUpperCase()) error = true
             }
             if (error) {
@@ -153,16 +159,17 @@ class DialogPasochnicaFileName : DialogFragment() {
                 return
             }
         }
-        mListener?.setFileName(oldFileName, fileName, isSite)
+        mListener?.setFileName(oldFileName, fileName, isSite, saveAs)
         dialog?.cancel()
     }
 
     companion object {
-        fun getInstance(oldFileName: String, isSite: Boolean): DialogPasochnicaFileName {
+        fun getInstance(oldFileName: String, isSite: Boolean, saveAs: Boolean): DialogPasochnicaFileName {
             val instance = DialogPasochnicaFileName()
             val args = Bundle()
             args.putString("oldFileName", oldFileName)
             args.putBoolean("isSite", isSite)
+            args.putBoolean("saveAs", saveAs)
             instance.arguments = args
             return instance
         }

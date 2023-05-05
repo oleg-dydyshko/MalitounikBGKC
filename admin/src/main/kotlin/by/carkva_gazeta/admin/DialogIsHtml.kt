@@ -21,7 +21,7 @@ class DialogIsHtml : DialogFragment() {
     private var mListener: DialogIsHtmlListener? = null
 
     interface DialogIsHtmlListener {
-        fun pasochnica(isHtml: Boolean)
+        fun pasochnica(isHtml: Boolean, saveAs: Boolean)
     }
 
     override fun onAttach(context: Context) {
@@ -50,11 +50,12 @@ class DialogIsHtml : DialogFragment() {
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             builder.setView(binding.root)
+            val saveAs = arguments?.getBoolean("saveAs") ?: true
             builder.setPositiveButton(resources.getText(R.string.sabytie_yes)) { _: DialogInterface, _: Int ->
-                mListener?.pasochnica(true)
+                mListener?.pasochnica(true, saveAs)
             }
             builder.setNegativeButton(resources.getString(R.string.sabytie_no)) { _: DialogInterface, _: Int ->
-                mListener?.pasochnica(false)
+                mListener?.pasochnica(false, saveAs)
             }
             builder.setNeutralButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int ->
                 dialog.cancel()
@@ -62,5 +63,15 @@ class DialogIsHtml : DialogFragment() {
             alert = builder.create()
         }
         return alert
+    }
+
+    companion object {
+        fun getInstance(saveAs: Boolean): DialogIsHtml {
+            val bundle = Bundle()
+            bundle.putBoolean("saveAs", saveAs)
+            val dialog = DialogIsHtml()
+            dialog.arguments = bundle
+            return dialog
+        }
     }
 }

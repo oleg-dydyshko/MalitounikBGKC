@@ -16,7 +16,12 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,10 +34,16 @@ import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.firebase.storage.ListResult
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.File
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 
 class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener, DialogDeliteAllPasochnica.DialogDeliteAllPasochnicaListener {
@@ -158,7 +169,11 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
     }
 
     override fun onDialogRenameClick(position: Int, title: String, isSite: Boolean) {
-        val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance(title, isSite)
+        val t1 = title.indexOf("/")
+        val saveAs = if (t1 != -1) {
+            !title.contains("/admin/piasochnica")
+        } else false
+        val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance(title, isSite, saveAs)
         dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
     }
 
@@ -182,7 +197,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
         invalidateOptionsMenu()
     }
 
-    override fun setFileName(oldFileName: String, fileName: String, isSite: Boolean) {
+    override fun setFileName(oldFileName: String, fileName: String, isSite: Boolean, saveAs: Boolean) {
         if (oldFileName.contains("(BackCopy")) {
             val fileNameold = oldFileName.replace("(BackCopy)", "")
             val fileOld = File(getExternalFilesDir("PiasochnicaBackCopy"), fileNameold)

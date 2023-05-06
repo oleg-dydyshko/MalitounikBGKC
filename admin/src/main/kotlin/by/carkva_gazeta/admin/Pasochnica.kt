@@ -404,7 +404,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 }
 
                 !newFile -> {
-                    getOrSendFilePostRequest(text, false)
+                    getOrSendFilePostRequest(text, saveAs = false, isSaveAs = false)
                 }
 
                 else -> {

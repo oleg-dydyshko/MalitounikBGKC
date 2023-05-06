@@ -22,8 +22,7 @@ class DialogPasochnicaFileName : DialogFragment() {
     private var mListener: DialogPasochnicaFileNameListener? = null
     private lateinit var builder: AlertDialog.Builder
     private var _binding: DialogEditviewDisplayBinding? = null
-    private val binding get() = _binding!!
-    /*private val textWatcher = object : TextWatcher {
+    private val binding get() = _binding!!/*private val textWatcher = object : TextWatcher {
         private var editPosition = 0
         private var check = 0
         private var editch = true
@@ -70,6 +69,29 @@ class DialogPasochnicaFileName : DialogFragment() {
                 throw ClassCastException("$context must implement DialogPasochnicaFileNameListener")
             }
         }
+    }
+
+    fun vypraulenneFilename() {
+        var fileNameOld = binding.content.text.toString()
+        var fileName = getResourceFileName(fileNameOld)
+        fileName = fileName.replace("-", "_")
+        fileName = fileName.replace(" ", "_").lowercase()
+        val t1 = fileNameOld.indexOf(")")
+        var t2 = fileNameOld.lastIndexOf("/")
+        val prefix = if (t2 != -1) {
+            t2++
+            fileNameOld.substring(0, t2)
+        } else {
+            t2 = if (t1 != -1) 1
+            else 0
+            ""
+        }
+        val mm = if (fileNameOld[t2].isDigit()) "mm_"
+        else ""
+        if (t1 != -1) fileNameOld = "($mm" + fileName + ") " + fileNameOld.substring(t1 + 2)
+        if (prefix != "") fileNameOld = "$prefix$mm$fileName"
+        binding.content.setText(fileNameOld)
+        setFileName()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -140,15 +162,10 @@ class DialogPasochnicaFileName : DialogFragment() {
             fileName = gc[Calendar.DATE].toString() + "_" + mun[gc[Calendar.MONTH]] + "_" + gc[Calendar.YEAR] + "_" + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
         } else if (saveAs) {
             var error = false
-            var checkFileName = fileName
-            val t2 = checkFileName.lastIndexOf("/")
-            if (t2 != -1) {
-                checkFileName = checkFileName.substring(t2 + 1)
-            }
+            val checkFileName = getResourceFileName(fileName)
             var t1 = checkFileName.indexOf(")")
-            if (t1 != -1) {
-                t1 += 2
-            } else t1 = 0
+            t1 = if (t1 != -1) 1
+            else 0
             if (checkFileName[t1].isDigit()) error = true
             for (c in checkFileName) {
                 if (c.isUpperCase()) error = true
@@ -161,6 +178,19 @@ class DialogPasochnicaFileName : DialogFragment() {
         }
         mListener?.setFileName(oldFileName, fileName, isSite, saveAs)
         dialog?.cancel()
+    }
+
+    private fun getResourceFileName(fullResourceFileName: String): String {
+        var checkFileName = fullResourceFileName
+        val t2 = checkFileName.lastIndexOf("/")
+        if (t2 != -1) {
+            checkFileName = checkFileName.substring(t2 + 1)
+        }
+        val t1 = checkFileName.indexOf(")")
+        if (t1 != -1) {
+            checkFileName = checkFileName.substring(1, t1)
+        }
+        return checkFileName
     }
 
     companion object {

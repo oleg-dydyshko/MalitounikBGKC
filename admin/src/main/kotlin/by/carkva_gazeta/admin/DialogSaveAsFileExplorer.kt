@@ -58,6 +58,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 var edit = s.toString()
                 edit = edit.replace("-", "_")
                 edit = edit.replace(" ", "_").lowercase()
+                if (edit[0].isDigit()) edit = "mm_$edit"
                 if (check != 0) {
                     binding.edittext.removeTextChangedListener(this)
                     binding.edittext.setText(edit)
@@ -95,6 +96,17 @@ class DialogSaveAsFileExplorer : DialogFragment() {
         positiveButton?.setOnClickListener {
             setFileName()
         }
+    }
+
+    fun vypraulenneFilename() {
+        var fileName = binding.edittext.text.toString()
+        fileName = fileName.replace("-", "_")
+        fileName = fileName.replace(" ", "_").lowercase()
+        val mm = if (fileName[0].isDigit()) "mm_"
+        else ""
+        fileName = "$mm$fileName"
+        binding.edittext.setText(fileName)
+        setFileName()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

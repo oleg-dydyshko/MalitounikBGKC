@@ -51,7 +51,7 @@ import org.apache.commons.text.StringEscapeUtils
 import java.io.File
 
 
-class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener, DialogIsHtml.DialogIsHtmlListener {
+class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener, DialogIsHtml.DialogIsHtmlListener, DialogFileNameError.DialogFileNameErrorListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
@@ -83,6 +83,13 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 binding.actionBack.visibility = View.GONE
             }
         }
+    }
+
+    override fun renameFileName() {
+        val dialogPasochnicaFileName = supportFragmentManager.findFragmentByTag("dialogPasochnicaFileName") as? DialogPasochnicaFileName
+        dialogPasochnicaFileName?.vypraulenneFilename()
+        val dialogSaveAsFileExplorer = supportFragmentManager.findFragmentByTag("dialogSaveAsFileExplorer") as? DialogSaveAsFileExplorer
+        dialogSaveAsFileExplorer?.vypraulenneFilename()
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -671,8 +678,15 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     val newDir = dirToFile.substring(0, t3 + 1)
                     newFile = newFile.replace("-", "_")
                     newFile = newFile.replace(" ", "_").lowercase()
+                    if (newFile[0].isDigit()) newFile = "mm_$newFile"
                     Malitounik.referens.child("/$newDir$newFile").putFile(Uri.fromFile(localFile)).await()
                     Malitounik.referens.child("/admin/piasochnica/" + fileName.replace("\n", " ")).delete().await()
+                    val t6 = newFile.lastIndexOf(".")
+                    if (t6 != -1) {
+                        this@Pasochnica.fileName = "(" + newFile.substring(0, t6) + ") " + newFile
+                        resours = newFile.substring(0, t6)
+                        PasochnicaList.findDirAsSave.add("/$newDir$newFile")
+                    }
                     var oldFile = ""
                     var title = ""
                     if (fileName.indexOf("(") == -1) {
@@ -714,6 +728,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
                 binding.progressBar2.visibility = View.GONE
+                invalidateOptionsMenu()
             }
         }
     }
@@ -1038,6 +1053,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         } else {
             menu.findItem(R.id.action_preview).isVisible = false
         }
+        if (resours != "") menu.findItem(R.id.action_save).isVisible = false
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {

@@ -1,6 +1,8 @@
 package by.carkva_gazeta.admin
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.TypedValue
@@ -16,6 +18,22 @@ class DialogFileNameError : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var _binding: DialogTextviewDisplayBinding? = null
     private val binding get() = _binding!!
+    private var listener: DialogFileNameErrorListener? = null
+
+    internal interface DialogFileNameErrorListener {
+        fun renameFileName()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is Activity) {
+            listener = try {
+                context as DialogFileNameErrorListener
+            } catch (e: ClassCastException) {
+                throw ClassCastException("$context must implement DialogFileNameErrorListener")
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -32,7 +50,10 @@ class DialogFileNameError : DialogFragment() {
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             builder.setView(binding.root)
-            builder.setPositiveButton(resources.getText(R.string.ok)) { dialog: DialogInterface, _: Int ->
+            builder.setPositiveButton(resources.getText(R.string.vypravic)) { _: DialogInterface, _: Int ->
+                listener?.renameFileName()
+            }
+            builder.setNegativeButton(resources.getText(R.string.cansel)) { dialog: DialogInterface, _: Int ->
                 dialog.cancel()
             }
             alert = builder.create()

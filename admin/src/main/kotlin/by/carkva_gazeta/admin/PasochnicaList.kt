@@ -46,7 +46,7 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener, DialogDeliteAllPasochnica.DialogDeliteAllPasochnicaListener {
+class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener, DialogDeliteAllPasochnica.DialogDeliteAllPasochnicaListener, DialogFileNameError.DialogFileNameErrorListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaListBinding
@@ -58,6 +58,11 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             val fileExplorer = DialogFileExplorer()
             fileExplorer.show(supportFragmentManager, "file_explorer")
         }
+    }
+
+    override fun renameFileName() {
+        val dialogPasochnicaFileName = supportFragmentManager.findFragmentByTag("dialogPasochnicaFileName") as? DialogPasochnicaFileName
+        dialogPasochnicaFileName?.vypraulenneFilename()
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -169,10 +174,11 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
     }
 
     override fun onDialogRenameClick(position: Int, title: String, isSite: Boolean) {
-        val t1 = title.indexOf("/")
-        val saveAs = if (t1 != -1) {
-            !title.contains("/admin/piasochnica")
-        } else false
+        val t1 = title.lastIndexOf("/")
+        val t2 = title.indexOf(")")
+        val saveAs = if (t2 != -1) true
+        else if (t1 != -1) !title.contains("/admin/piasochnica")
+        else false
         val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance(title, isSite, saveAs)
         dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
     }

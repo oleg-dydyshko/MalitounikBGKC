@@ -11,8 +11,12 @@ import by.carkva_gazeta.admin.databinding.AdminBiblePageFragmentBinding
 import by.carkva_gazeta.malitounik.BaseFragment
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class StaryZapavietSemuxaFragment : BaseFragment() {
@@ -23,11 +27,17 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
     private val binding get() = _binding!!
     private var urlJob: Job? = null
     private var mLastClickTime: Long = 0
+    private var bibleJob: Job? = null
 
     override fun onDestroyView() {
         super.onDestroyView()
         urlJob?.cancel()
         _binding = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        bibleJob?.cancel()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +67,8 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
 
     private fun sendPostRequest(id: Int, spaw: String, sv: Int) {
         if (MainActivity.isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.Main).launch {
-                binding.progressBar2.visibility = View.VISIBLE
+            bibleJob = CoroutineScope(Dispatchers.Main).launch {
+                _binding?.progressBar2?.visibility = View.VISIBLE
                 val localFile = withContext(Dispatchers.IO) {
                     File.createTempFile("Semucha", "txt")
                 }
@@ -131,7 +141,7 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
                         }
                     }
                 }.await()
-                binding.progressBar2.visibility = View.GONE
+                _binding?.progressBar2?.visibility = View.GONE
             }
         }
     }

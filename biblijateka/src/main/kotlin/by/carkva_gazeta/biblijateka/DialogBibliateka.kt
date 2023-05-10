@@ -90,7 +90,7 @@ class DialogBibliateka : DialogFragment() {
                                     else -> ""
                                 }
                             }
-                            binding.title.text = getString(R.string.download_file, format)
+                            _binding?.title?.text = getString(R.string.download_file, format)
                         }
                     }
                 }

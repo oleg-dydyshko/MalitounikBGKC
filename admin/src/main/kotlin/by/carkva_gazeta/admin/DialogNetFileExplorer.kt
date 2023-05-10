@@ -21,6 +21,7 @@ import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogListviewDisplayBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -31,12 +32,17 @@ class DialogNetFileExplorer : DialogFragment() {
     private lateinit var adapter: TitleListAdaprer
     private val fileList = ArrayList<MyNetFile>()
     private var dir = ""
-    private var _binding: DialogListviewDisplayBinding? = null
-    private val binding get() = _binding!!
+    private var binding: DialogListviewDisplayBinding? = null
+    private var netFileJob: Job? = null
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        netFileJob?.cancel()
     }
 
     internal interface DialogNetFileExplorerListener {
@@ -56,39 +62,43 @@ class DialogNetFileExplorer : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogListviewDisplayBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            binding.title.text = "ВЫБЕРЫЦЕ ФАЙЛ"
-            binding.content.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
-            adapter = TitleListAdaprer(it)
-            binding.content.adapter = adapter
-            builder.setView(binding.root)
-            getDirListRequest("")
-            binding.content.setOnItemLongClickListener { _, _, position, _ ->
-                if (!(fileList[position].resources == R.drawable.directory_up || fileList[position].resources == R.drawable.directory_icon)) {
-                    val contextMenu = DialogContextMenu.getInstance(position, dir + "/" + fileList[position].title, true)
-                    contextMenu.show(childFragmentManager, "contextMenu")
+            binding = DialogListviewDisplayBinding.inflate(LayoutInflater.from(it))
+            binding?.let { binding ->
+                binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)
+                binding.content.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+                adapter = TitleListAdaprer(it)
+                binding.content.adapter = adapter
+                builder.setView(binding.root)
+                getDirListRequest("")
+                binding.content.setOnItemLongClickListener { _, _, position, _ ->
+                    if (!(fileList[position].resources == R.drawable.directory_up || fileList[position].resources == R.drawable.directory_icon)) {
+                        val contextMenu = DialogContextMenu.getInstance(position, dir + "/" + fileList[position].title, true)
+                        contextMenu.show(childFragmentManager, "contextMenu")
+                    }
+                    return@setOnItemLongClickListener true
                 }
-                return@setOnItemLongClickListener true
-            }
-            binding.content.setOnItemClickListener { _, _, position, _ ->
-                when (fileList[position].resources) {
-                    R.drawable.directory_up -> {
-                        val t1 = dir.lastIndexOf("/")
-                        dir = dir.substring(0, t1)
-                        getDirListRequest(dir)
-                    }
-                    R.drawable.directory_icon -> {
-                        dir = dir + "/" + fileList[position].title
-                        getDirListRequest(dir)
-                    }
-                    else -> {
-                        mListener?.onDialogNetFile(dir + "/" + fileList[position].title, fileList[position].title)
-                        dialog?.cancel()
+                binding.content.setOnItemClickListener { _, _, position, _ ->
+                    when (fileList[position].resources) {
+                        R.drawable.directory_up -> {
+                            val t1 = dir.lastIndexOf("/")
+                            dir = dir.substring(0, t1)
+                            getDirListRequest(dir)
+                        }
+
+                        R.drawable.directory_icon -> {
+                            dir = dir + "/" + fileList[position].title
+                            getDirListRequest(dir)
+                        }
+
+                        else -> {
+                            mListener?.onDialogNetFile(dir + "/" + fileList[position].title, fileList[position].title)
+                            dialog?.cancel()
+                        }
                     }
                 }
+                builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             }
-            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
         }
         return alert
@@ -100,7 +110,7 @@ class DialogNetFileExplorer : DialogFragment() {
 
     private fun getDirListRequest(dir: String) {
         if (MainActivity.isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.Main).launch {
+            netFileJob = CoroutineScope(Dispatchers.Main).launch {
                 try {
                     fileList.clear()
                     val temp = ArrayList<MyNetFile>()

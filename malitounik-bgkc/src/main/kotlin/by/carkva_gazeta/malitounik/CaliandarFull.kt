@@ -3,12 +3,22 @@ package by.carkva_gazeta.malitounik
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.*
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Shader
+import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.*
+import android.text.Layout
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.AlignmentSpan
 import android.text.style.ClickableSpan
@@ -32,7 +42,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 
 class CaliandarFull : BaseFragment(), View.OnClickListener {
@@ -535,7 +546,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
 
     fun sabytieView(sabytieTitle: String) {
         activity?.let { activity ->
-            binding.padzei.removeAllViewsInLayout()
+            _binding?.padzei?.removeAllViewsInLayout()
             val gc = Calendar.getInstance() as GregorianCalendar
             val sabytieList = ArrayList<TextView>()
             for (index in 0 until MainActivity.padzeia.size) {
@@ -669,7 +680,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                                 val llp2 = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
                                 llp2.setMargins(0, 0, 0, 0)
                                 textViewT.layoutParams = llp2
-                                binding.scroll.post { binding.scroll.fullScroll(ScrollView.FOCUS_DOWN) }
+                                _binding?.scroll?.post { _binding?.scroll?.fullScroll(ScrollView.FOCUS_DOWN) }
                             } else {
                                 textViewT.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0)
                                 textViewT.layoutParams = llp
@@ -682,9 +693,9 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                             val llp2 = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
                             llp2.setMargins(0, 0, 0, 0)
                             textViewT.layoutParams = llp2
-                            binding.scroll.post {
+                            _binding?.scroll?.post {
                                 activity.intent?.removeExtra("sabytieView")
-                                binding.scroll.fullScroll(ScrollView.FOCUS_DOWN)
+                                _binding?.scroll?.fullScroll(ScrollView.FOCUS_DOWN)
                                 if (!Sabytie.editCaliandar) {
                                     val shakeanimation = AnimationUtils.loadAnimation(activity, R.anim.shake)
                                     textViewT.startAnimation(shakeanimation)
@@ -698,7 +709,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                 }
             }
             for (i in sabytieList.indices) {
-                binding.padzei.addView(sabytieList[i])
+                _binding?.padzei?.addView(sabytieList[i])
             }
         }
     }

@@ -14,6 +14,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -21,53 +22,59 @@ import java.io.File
 
 class DialogUpdateHelp : DialogFragment() {
     private lateinit var alert: AlertDialog
-    private var _binding: AdminDialogEditviewDisplayBinding? = null
-    private val binding get() = _binding!!
+    private var binding: AdminDialogEditviewDisplayBinding? = null
+    private var updateHelpJob: Job? = null
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        updateHelpJob?.cancel()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { fragmentActivity ->
-            _binding = AdminDialogEditviewDisplayBinding.inflate(LayoutInflater.from(fragmentActivity))
             val builder = AlertDialog.Builder(fragmentActivity, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.admin_update)
-            val release = arguments?.getBoolean("release", false) ?: false
-            val version = if (release) "release"
-            else "beta"
-            binding.content.text = resources.getString(by.carkva_gazeta.malitounik.R.string.admin_update_all, version)
-            builder.setView(binding.root)
-            builder.setPositiveButton(resources.getString(by.carkva_gazeta.malitounik.R.string.admin_update_ok)) { _: DialogInterface, _: Int ->
-                val ver = binding.edittext.text.toString()
-                if (ver != "") {
-                    setViersionApp(ver, release)
+            binding = AdminDialogEditviewDisplayBinding.inflate(LayoutInflater.from(fragmentActivity))
+            binding?.let { displayBinding ->
+                displayBinding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.admin_update)
+                val release = arguments?.getBoolean("release", false) ?: false
+                val version = if (release) "release"
+                else "beta"
+                displayBinding.content.text = resources.getString(by.carkva_gazeta.malitounik.R.string.admin_update_all, version)
+                builder.setView(displayBinding.root)
+                builder.setPositiveButton(resources.getString(by.carkva_gazeta.malitounik.R.string.admin_update_ok)) { _: DialogInterface, _: Int ->
+                    val ver = displayBinding.edittext.text.toString()
+                    if (ver != "") {
+                        setViersionApp(ver, release)
+                    }
                 }
-            }
-            builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
-            alert = builder.create()
-            if (MainActivity.isNetworkAvailable()) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    //var updeteArrayText = mapOf<String, String>()
-                    try {
-                        val localFile = withContext(Dispatchers.IO) {
-                            File.createTempFile("updateMalitounik", "json")
-                        }
-                        Malitounik.referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                val jsonFile = localFile.readText()
-                                val gson = Gson()
-                                val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
-                                val updeteArrayText = gson.fromJson<Map<String, String>>(jsonFile, type)
-                                if (release) binding.edittext.setText(updeteArrayText["release"])
-                                else binding.edittext.setText(updeteArrayText["devel"])
-                            } else {
-                                MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error))
+                builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+                alert = builder.create()
+                if (MainActivity.isNetworkAvailable()) {
+                    updateHelpJob = CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            val localFile = withContext(Dispatchers.IO) {
+                                File.createTempFile("updateMalitounik", "json")
                             }
-                        }.await()
-                    } catch (_: Throwable) {
-                        MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            Malitounik.referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    val jsonFile = localFile.readText()
+                                    val gson = Gson()
+                                    val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
+                                    val updeteArrayText = gson.fromJson<Map<String, String>>(jsonFile, type)
+                                    if (release) displayBinding.edittext.setText(updeteArrayText["release"])
+                                    else displayBinding.edittext.setText(updeteArrayText["devel"])
+                                } else {
+                                    MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error))
+                                }
+                            }.await()
+                        } catch (_: Throwable) {
+                            MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }
                     }
                 }
             }

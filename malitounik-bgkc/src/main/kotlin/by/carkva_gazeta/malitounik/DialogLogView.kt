@@ -26,8 +26,7 @@ import java.io.File
 
 class DialogLogView : DialogFragment() {
     private lateinit var alert: AlertDialog
-    private var _binding: DialogTextviewCheckboxDisplayBinding? = null
-    private val binding get() = _binding!!
+    private var binding: DialogTextviewCheckboxDisplayBinding? = null
     private var log = ArrayList<String>()
     private var mListener: DialogLogViewListener? = null
     private var logJob: Job? = null
@@ -50,7 +49,7 @@ class DialogLogView : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 
     override fun onPause() {
@@ -60,49 +59,53 @@ class DialogLogView : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { fragmentActivity ->
-            _binding = DialogTextviewCheckboxDisplayBinding.inflate(LayoutInflater.from(fragmentActivity))
             val dzenNoch = (fragmentActivity as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val ad = AlertDialog.Builder(fragmentActivity, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary))
-            binding.title.text = getString(R.string.log)
-            logJob = CoroutineScope(Dispatchers.Main).launch {
-                val localFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("log", "txt")
-                }
-                Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
-                    MainActivity.toastView(fragmentActivity, getString(R.string.error))
-                }.await()
-                val sb = SpannableStringBuilder()
-                localFile.readLines().forEach {
-                    if (it.isNotEmpty()) {
-                        log.add(it)
-                        val t1 = it.lastIndexOf("/")
-                        if (t1 != -1) {
-                            val t2 = it.lastIndexOf("/", t1 - 1)
-                            if (t2 != -1) {
-                                val span = SpannableString(it.substring(t2))
-                                span.setSpan(StyleSpan(Typeface.BOLD), 0, t1 - t2 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                sb.append(span).append("\n")
+            binding = DialogTextviewCheckboxDisplayBinding.inflate(LayoutInflater.from(fragmentActivity))
+            binding?.let { displayBinding ->
+                if (dzenNoch) displayBinding.title.setBackgroundColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_black))
+                else displayBinding.title.setBackgroundColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary))
+                displayBinding.title.text = getString(R.string.log)
+                if (MainActivity.isNetworkAvailable()) {
+                    logJob = CoroutineScope(Dispatchers.Main).launch {
+                        val localFile = withContext(Dispatchers.IO) {
+                            File.createTempFile("log", "txt")
+                        }
+                        Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
+                            MainActivity.toastView(fragmentActivity, getString(R.string.error))
+                        }.await()
+                        val sb = SpannableStringBuilder()
+                        localFile.readLines().forEach {
+                            if (it.isNotEmpty()) {
+                                log.add(it)
+                                val t1 = it.lastIndexOf("/")
+                                if (t1 != -1) {
+                                    val t2 = it.lastIndexOf("/", t1 - 1)
+                                    if (t2 != -1) {
+                                        val span = SpannableString(it.substring(t2))
+                                        span.setSpan(StyleSpan(Typeface.BOLD), 0, t1 - t2 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        sb.append(span).append("\n")
+                                    }
+                                }
                             }
                         }
+                        displayBinding.content.text = sb
                     }
                 }
-                binding.content.text = sb
-            }
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorWhite))
-            else binding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_text))
-            binding.checkbox.typeface = MainActivity.createFont(Typeface.NORMAL)
-            binding.checkbox.text = getString(R.string.clear_log)
-            ad.setView(binding.root)
-            ad.setPositiveButton(resources.getString(R.string.set_log)) { _: DialogInterface, _: Int ->
-                mListener?.createAndSentFile(log, binding.checkbox.isChecked)
-            }
-            ad.setNegativeButton(getString(R.string.cansel)) { _: DialogInterface, _: Int ->
-                mListener?.clearLogFile(binding.checkbox.isChecked)
+                displayBinding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+                if (dzenNoch) displayBinding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorWhite))
+                else displayBinding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_text))
+                displayBinding.checkbox.typeface = MainActivity.createFont(Typeface.NORMAL)
+                displayBinding.checkbox.text = getString(R.string.clear_log)
+                ad.setView(displayBinding.root)
+                ad.setPositiveButton(resources.getString(R.string.set_log)) { _: DialogInterface, _: Int ->
+                    mListener?.createAndSentFile(log, displayBinding.checkbox.isChecked)
+                }
+                ad.setNegativeButton(getString(R.string.cansel)) { _: DialogInterface, _: Int ->
+                    mListener?.clearLogFile(displayBinding.checkbox.isChecked)
+                }
             }
             alert = ad.create()
         }

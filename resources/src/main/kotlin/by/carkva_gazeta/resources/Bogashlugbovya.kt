@@ -2032,6 +2032,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             binding.actionBack.visibility = View.VISIBLE
             binding.actionBack.animation = animation
         }
+        if (binding.find.visibility == View.VISIBLE) {
+            findRemoveSpan()
+            binding.textSearch.setText("")
+            binding.find.visibility = View.GONE
+            val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
+        }
     }
 
     private fun show() {

@@ -24,6 +24,7 @@ import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -37,8 +38,8 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     private var oldName = ""
     private var fileName = ""
     private var filenameTitle = ""
-    private var _binding: AdminDialigSaveAsBinding? = null
-    private val binding get() = _binding!!
+    private var binding: AdminDialigSaveAsBinding? = null
+    private var saveAsFileJob: Job? = null
     private val textWatcher = object : TextWatcher {
         private var editPosition = 0
         private var check = 0
@@ -60,10 +61,12 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 edit = edit.replace(" ", "_").lowercase()
                 if (edit[0].isDigit()) edit = "mm_$edit"
                 if (check != 0) {
-                    binding.edittext.removeTextChangedListener(this)
-                    binding.edittext.setText(edit)
-                    binding.edittext.setSelection(editPosition)
-                    binding.edittext.addTextChangedListener(this)
+                    binding?.let { binding ->
+                        binding.edittext.removeTextChangedListener(this)
+                        binding.edittext.setText(edit)
+                        binding.edittext.setSelection(editPosition)
+                        binding.edittext.addTextChangedListener(this)
+                    }
                 }
             }
         }
@@ -75,7 +78,12 @@ class DialogSaveAsFileExplorer : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        saveAsFileJob?.cancel()
     }
 
     override fun onAttach(context: Context) {
@@ -99,66 +107,68 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     }
 
     fun vypraulenneFilename() {
-        var fileName = binding.edittext.text.toString()
+        var fileName = binding?.edittext?.text.toString()
         fileName = fileName.replace("-", "_")
         fileName = fileName.replace(" ", "_").lowercase()
         val mm = if (fileName[0].isDigit()) "mm_"
         else ""
         fileName = "$mm$fileName"
-        binding.edittext.setText(fileName)
+        binding?.edittext?.setText(fileName)
         setFileName()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { fragmentActivity ->
-            _binding = AdminDialigSaveAsBinding.inflate(LayoutInflater.from(fragmentActivity))
             val builder = AlertDialog.Builder(fragmentActivity, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.save_as_up)
-            binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.mk_dir)
-            binding.content.setOnClickListener {
-                val dialogPasochnicaMkDir = DialogPasochnicaMkDir.getInstance(dir, oldName, binding.edittext.text.toString())
-                dialogPasochnicaMkDir.show(childFragmentManager, "dialogPasochnicaMkDir")
-            }
-            oldName = arguments?.getString("oldName", "") ?: ""
-            val t1 = oldName.indexOf("(")
-            if (t1 != -1 && t1 == 0) {
-                val t2 = oldName.indexOf(")")
-                val t3 = oldName.lastIndexOf(".")
-                filenameTitle = if (t3 != -1) oldName.substring(t2 + 2, t3)
-                else oldName.substring(t2 + 2)
-                fileName = oldName.substring(1, t2) + oldName.substring(t3)
-            } else {
-                fileName = oldName
-            }
-            binding.edittext.addTextChangedListener(textWatcher)
-            binding.edittext.setText(fileName)
-            binding.filetitle.text = filenameTitle
-            if (filenameTitle == "") binding.filetitle.visibility = View.GONE
-            binding.listView.selector = ContextCompat.getDrawable(fragmentActivity, by.carkva_gazeta.malitounik.R.drawable.selector_default)
-            adapter = TitleListAdaprer(fragmentActivity)
-            binding.listView.adapter = adapter
-            builder.setView(binding.root)
-            getDirListRequest("")
-            binding.listView.setOnItemClickListener { _, _, position, _ ->
-                when (fileList[position].resources) {
-                    R.drawable.directory_up -> {
-                        val t4 = dir.lastIndexOf("/")
-                        dir = dir.substring(0, t4)
-                        getDirListRequest(dir)
-                    }
+            binding = AdminDialigSaveAsBinding.inflate(LayoutInflater.from(fragmentActivity))
+            binding?.let { binding ->
+                binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.save_as_up)
+                binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.mk_dir)
+                binding.content.setOnClickListener {
+                    val dialogPasochnicaMkDir = DialogPasochnicaMkDir.getInstance(dir, oldName, binding.edittext.text.toString())
+                    dialogPasochnicaMkDir.show(childFragmentManager, "dialogPasochnicaMkDir")
+                }
+                oldName = arguments?.getString("oldName", "") ?: ""
+                val t1 = oldName.indexOf("(")
+                if (t1 != -1 && t1 == 0) {
+                    val t2 = oldName.indexOf(")")
+                    val t3 = oldName.lastIndexOf(".")
+                    filenameTitle = if (t3 != -1) oldName.substring(t2 + 2, t3)
+                    else oldName.substring(t2 + 2)
+                    fileName = oldName.substring(1, t2) + oldName.substring(t3)
+                } else {
+                    fileName = oldName
+                }
+                binding.edittext.addTextChangedListener(textWatcher)
+                binding.edittext.setText(fileName)
+                binding.filetitle.text = filenameTitle
+                if (filenameTitle == "") binding.filetitle.visibility = View.GONE
+                binding.listView.selector = ContextCompat.getDrawable(fragmentActivity, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+                adapter = TitleListAdaprer(fragmentActivity)
+                binding.listView.adapter = adapter
+                builder.setView(binding.root)
+                getDirListRequest("")
+                binding.listView.setOnItemClickListener { _, _, position, _ ->
+                    when (fileList[position].resources) {
+                        R.drawable.directory_up -> {
+                            val t4 = dir.lastIndexOf("/")
+                            dir = dir.substring(0, t4)
+                            getDirListRequest(dir)
+                        }
 
-                    R.drawable.directory_icon -> {
-                        dir = dir + "/" + fileList[position].title
-                        getDirListRequest(dir)
-                    }
+                        R.drawable.directory_icon -> {
+                            dir = dir + "/" + fileList[position].title
+                            getDirListRequest(dir)
+                        }
 
-                    else -> {
-                        binding.edittext.setText(fileList[position].title)
+                        else -> {
+                            binding.edittext.setText(fileList[position].title)
+                        }
                     }
                 }
+                builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.save_sabytie), null)
+                builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             }
-            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.save_sabytie), null)
-            builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
         }
         return alert
@@ -170,7 +180,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             dialogAddPesny.show(childFragmentManager, "dialogAddPesny")
         } else {
             var error = false
-            val editText = binding.edittext.text.toString()
+            val editText = binding?.edittext?.text.toString()
             if (editText[0].isDigit()) error = true
             for (c in editText) {
                 if (c.isUpperCase()) error = true
@@ -187,7 +197,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
 
     private fun getDirListRequest(dir: String) {
         if (MainActivity.isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.Main).launch {
+            saveAsFileJob = CoroutineScope(Dispatchers.Main).launch {
                 try {
                     fileList.clear()
                     val temp = ArrayList<MyNetFile>()

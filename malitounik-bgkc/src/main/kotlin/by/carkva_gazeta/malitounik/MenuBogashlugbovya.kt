@@ -316,12 +316,12 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
 
     private fun changeSearchViewElements(view: View?) {
         if (view == null) return
-        if (view.id == R.id.search_edit_frame || view.id == R.id.search_mag_icon) {
+        if (view.id == androidx.appcompat.R.id.search_edit_frame || view.id == androidx.appcompat.R.id.search_mag_icon) {
             val p = view.layoutParams as LinearLayout.LayoutParams
             p.leftMargin = 0
             p.rightMargin = 0
             view.layoutParams = p
-        } else if (view.id == R.id.search_src_text) {
+        } else if (view.id == androidx.appcompat.R.id.search_src_text) {
             editText = view as AutoCompleteTextView
             editText?.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {

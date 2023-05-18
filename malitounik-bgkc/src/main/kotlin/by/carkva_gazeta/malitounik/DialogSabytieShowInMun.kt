@@ -21,7 +21,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogSabytieShowInMunBinding
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class DialogSabytieShowInMun : DialogFragment() {
     private var dayYear = 1
@@ -115,7 +116,7 @@ class DialogSabytieShowInMun : DialogFragment() {
                         textViewT.typeface = MainActivity.createFont(Typeface.BOLD)
                         textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
                         textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(it, p.color)))
+                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(dzenNoch, p.color)))
                         sabytieList.add(textViewT)
                         val textView = TextView(it)
                         textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))

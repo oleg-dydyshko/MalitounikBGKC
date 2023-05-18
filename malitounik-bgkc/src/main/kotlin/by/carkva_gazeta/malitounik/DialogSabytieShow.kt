@@ -54,7 +54,7 @@ class DialogSabytieShow : DialogFragment() {
             _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             binding.title.text = title
-            binding.title.setBackgroundColor(Color.parseColor(Sabytie.getColors(it, color)))
+            binding.title.setBackgroundColor(Color.parseColor(Sabytie.getColors(dzenNoch, color)))
             val textR = if (konecSabytie) {
                 SpannableString(getString(R.string.sabytie_kali, data, time, res))
             } else {

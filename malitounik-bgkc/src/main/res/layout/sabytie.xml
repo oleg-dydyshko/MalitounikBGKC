@@ -52,7 +52,7 @@
                 android:layout_marginRight="10dp"
                 android:ems="10"
                 android:hint="@string/sabytie_name"
-                android:inputType="textAutoCorrect|textCapSentences" />
+                android:inputType="text|textCapSentences" />
 
             <LinearLayout
                 android:layout_width="match_parent"

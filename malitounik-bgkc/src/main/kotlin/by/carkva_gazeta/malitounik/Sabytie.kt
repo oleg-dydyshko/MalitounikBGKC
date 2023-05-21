@@ -1120,7 +1120,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                             time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                            var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
+                            var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
                                 var yeav = 365
                                 if (gc.isLeapYear(gc[Calendar.YEAR])) yeav = 366
@@ -1179,7 +1179,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                             time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                            var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
+                            var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
                                 var yeav = 365
                                 if (gc.isLeapYear(gc[Calendar.YEAR])) yeav = 366
@@ -1240,7 +1240,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                             time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                            var resd: Int = gc3[Calendar.WEEK_OF_YEAR] - dayof
+                            var resd = gc3[Calendar.WEEK_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
                                 var yeav = 365
                                 if (gc.isLeapYear(gc[Calendar.YEAR])) yeav = 366
@@ -1297,7 +1297,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                             time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                            var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
+                            var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
                                 var yeav = 365
                                 if (gc.isLeapYear(gc[Calendar.YEAR])) yeav = 366
@@ -1354,7 +1354,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                             time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                            var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
+                            var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
                                 var yeav = 365
                                 if (gc.isLeapYear(gc[Calendar.YEAR])) yeav = 366
@@ -1410,7 +1410,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                             time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                            var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
+                            var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
                                 var yeav = 365
                                 if (gc.isLeapYear(gc[Calendar.YEAR])) yeav = 366
@@ -1691,7 +1691,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                         time = binding.labelbutton12.text.toString()
                         val tim = time.split(".")
                         val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
+                        var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
                         if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
                             var yeav = 365
                             if (gc.isLeapYear(gc[Calendar.YEAR])) yeav = 366
@@ -1750,7 +1750,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                         time = binding.labelbutton12.text.toString()
                         val tim = time.split(".")
                         val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
+                        var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
                         if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
                             var yeav = 365
                             if (gc.isLeapYear(gc[Calendar.YEAR])) yeav = 366
@@ -1812,7 +1812,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                         time = binding.labelbutton12.text.toString()
                         val tim = time.split(".")
                         val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        var resd: Int = gc3[Calendar.WEEK_OF_YEAR] - dayof
+                        var resd = gc3[Calendar.WEEK_OF_YEAR] - dayof
                         if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
                             var yeav = 365
                             if (gc.isLeapYear(gc[Calendar.YEAR])) yeav = 366
@@ -1868,7 +1868,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                         time = binding.labelbutton12.text.toString()
                         val tim = time.split(".")
                         val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
+                        var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
                         if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
                             var yeav = 365
                             if (gc.isLeapYear(gc[Calendar.YEAR])) yeav = 366
@@ -1924,7 +1924,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                         time = binding.labelbutton12.text.toString()
                         val tim = time.split(".")
                         val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
+                        var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
                         if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
                             var yeav = 365
                             if (gc.isLeapYear(gc[Calendar.YEAR])) yeav = 366
@@ -1980,7 +1980,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                         time = binding.labelbutton12.text.toString()
                         val tim = time.split(".")
                         val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
+                        var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
                         if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
                             var yeav = 365
                             if (gc.isLeapYear(gc[Calendar.YEAR])) yeav = 366

@@ -7,17 +7,31 @@ import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.*
+import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.AbsListView
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
@@ -25,8 +39,13 @@ import by.carkva_gazeta.malitounik.databinding.SearchSviatyiaBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
-import java.util.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryListener {
     private lateinit var adapter: SearchListAdapter
@@ -169,7 +188,9 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
             val t3 = result.indexOf("-->")
             val g = GregorianCalendar(c[Calendar.YEAR], result.substring(t2 + 1, t3).toInt(), result.substring(t1 + 4, t2).toInt())
             val intent = Intent()
-            intent.putExtra("dayOfYear", g[Calendar.DAY_OF_YEAR])
+            var putDayOfYear = g[Calendar.DAY_OF_YEAR]
+            if (!g.isLeapYear(g[Calendar.YEAR]) && g[Calendar.DAY_OF_YEAR] > 59) putDayOfYear = g[Calendar.DAY_OF_YEAR] + 1
+            intent.putExtra("dayOfYear", putDayOfYear)
             setResult(Activity.RESULT_OK, intent)
             addHistory(result)
             saveHistopy()
@@ -210,12 +231,14 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
             mLastClickTime = SystemClock.elapsedRealtime()
             actionExpandOn = false
             val adapterRes = adapter.getItem(position) as Searche
-            val g = Calendar.getInstance()
+            val g = GregorianCalendar()
             g.set(Calendar.DAY_OF_YEAR, adapterRes.dayOfYear)
             val date = "<!--" + g[Calendar.DAY_OF_MONTH] + ":" + g[Calendar.MONTH] + "-->"
             val result = date + adapterRes.text.toString()
             val intent = Intent()
-            intent.putExtra("dayOfYear", adapterRes.dayOfYear)
+            var putDayOfYear = adapterRes.dayOfYear
+            if (!g.isLeapYear(g[Calendar.YEAR]) && adapterRes.dayOfYear > 59) putDayOfYear = adapterRes.dayOfYear + 1
+            intent.putExtra("dayOfYear", putDayOfYear)
             setResult(Activity.RESULT_OK, intent)
             addHistory(result)
             saveHistopy()

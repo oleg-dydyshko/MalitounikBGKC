@@ -166,6 +166,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         origin.close()
                     }
                     out.close()
+                    localFile.delete()
                     return@withContext zip
                 }
                 val sendIntent = Intent(Intent.ACTION_SEND)
@@ -188,6 +189,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     it.write("")
                 }
                 Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(localFile)).await()
+                localFile.delete()
             }
         }
     }
@@ -693,6 +695,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
         CoroutineScope(Dispatchers.IO).launch {
+            cacheDir?.listFiles()?.forEach {
+                it?.deleteRecursively()
+            }
             if (padzeia.size == 0) setListPadzeia()
             if (k.getBoolean("setAlarm", true)) {
                 getVersionCode()
@@ -715,6 +720,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         toastView(this@MainActivity, getString(R.string.check_update_resourse))
                     }
                 }
+                localFile.delete()
             }
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
@@ -1747,6 +1753,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         pathReference.getFile(localFile).addOnSuccessListener {
             text = localFile.readText()
         }.await()
+        localFile.delete()
         return text
     }
 

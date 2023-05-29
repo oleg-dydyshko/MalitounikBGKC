@@ -272,6 +272,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             val type: Type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
             arrayList.addAll(gson.fromJson(json, type))
         }.await()
+        localFile.delete()
         dirList.clear()
         var size = 0L
         val images = ArrayList<String>()

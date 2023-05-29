@@ -140,6 +140,8 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                         }
                     }
                 }.await()
+                localFile.delete()
+                logFile.delete()
                 _binding?.progressBar2?.visibility = View.GONE
             }
         }
@@ -205,6 +207,7 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                             }
                         }
                     }.await()
+                    localFile.delete()
                 } catch (e: Throwable) {
                     activity?.let {
                         MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))

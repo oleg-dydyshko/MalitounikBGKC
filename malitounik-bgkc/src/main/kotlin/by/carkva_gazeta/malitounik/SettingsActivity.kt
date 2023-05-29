@@ -33,6 +33,7 @@ import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
 
+
 class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
     private lateinit var k: SharedPreferences
     private lateinit var prefEditor: Editor
@@ -139,9 +140,11 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !am.canScheduleExactAlarms() -> {
                     am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeAlarm, pendingIntent)
                 }
+
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeAlarm, pendingIntent)
                 }
+
                 else -> {
                     am.setExact(AlarmManager.RTC_WAKEUP, timeAlarm, pendingIntent)
                 }
@@ -723,11 +726,9 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         prefEditor = k.edit()
         val vibr = k.getInt("vibra", 1)
         if (dzenNoch) binding.vibro.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.vibro.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (vibr == 0) binding.vibro.isChecked = false
         val guk = k.getInt("guk", 1)
         if (dzenNoch) binding.guk.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.guk.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (guk == 0) binding.guk.isChecked = false
         if (notification == 0) binding.spinnerTime.visibility = View.GONE
         if (savedInstanceState != null) {
@@ -768,7 +769,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             notificationChannel()
             notificationChannel(NOTIFICATION_CHANNEL_ID_SABYTIE)
             if (k.getInt("notification", 2) > 0) binding.notifiSvizta.visibility = View.VISIBLE
-            binding.notifiSvizta.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             binding.notifiSvizta.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
@@ -798,10 +798,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 MainActivity.toastView(this, getString(R.string.error_ch2))
             }
         }
-        binding.textView14.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        binding.textView15.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        binding.textView16.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        binding.notificationView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.textView14.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
@@ -846,7 +842,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.admin.visibility = View.VISIBLE
             binding.checkBox8.visibility = View.VISIBLE
         }
-        binding.admin.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.admin.setOnClickListener {
             if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
@@ -857,8 +852,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             }
         }
         if (dzenNoch) binding.prav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        binding.secret.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.prav.setOnCheckedChangeListener { _, isChecked: Boolean ->
             val check = k.getInt("pravas", 0)
             if (isChecked) {
@@ -870,7 +863,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             if (check != k.getInt("pravas", 0)) edit = true
         }
         if (dzenNoch) binding.pkc.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.pkc.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.pkc.setOnCheckedChangeListener { _, isChecked: Boolean ->
             val check = k.getInt("pkc", 0)
             if (isChecked) {
@@ -882,7 +874,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             if (check != k.getInt("pkc", 0)) edit = true
         }
         if (dzenNoch) binding.dzair.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.dzair.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.dzair.setOnCheckedChangeListener { _, isChecked: Boolean ->
             val check = k.getInt("gosud", 0)
             if (isChecked) {
@@ -894,7 +885,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             if (check != k.getInt("gosud", 0)) edit = true
         }
         if (dzenNoch) binding.praf.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.praf.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.praf.setOnCheckedChangeListener { _, isChecked: Boolean ->
             val check = k.getInt("pafesii", 0)
             if (isChecked) {
@@ -909,20 +899,13 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         if (k.getInt("pravas", 0) == 1) binding.prav.isChecked = true
         if (k.getInt("gosud", 0) == 1) binding.dzair.isChecked = true
         if (k.getInt("pafesii", 0) == 1) binding.praf.isChecked = true
-        binding.maranataOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        binding.notificationOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        binding.notificationFull.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        binding.notificationNon.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (Build.MANUFACTURER.contains("huawei", true)) {
             binding.helpNotifi.visibility = View.VISIBLE
-            binding.helpNotifi.textSize = GET_FONT_SIZE_MIN
             binding.helpNotifi.setOnClickListener {
                 val notifi = DialogHelpNotification()
                 notifi.show(supportFragmentManager, "help_notification")
             }
         }
-        binding.maranataBel.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        binding.maranataRus.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         val belarus = k.getBoolean("belarus", true)
         if (belarus) {
             binding.maranataBel.isChecked = true
@@ -936,11 +919,9 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         binding.notificationNon.isChecked = notification == 0
         val sinoidal = k.getInt("sinoidal", 0)
         if (dzenNoch) binding.sinoidal.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.sinoidal.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (sinoidal == 1) binding.sinoidal.isChecked = true
         val maranata = k.getInt("maranata", 0)
         if (dzenNoch) binding.maranata.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.maranata.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (maranata == 1) {
             binding.maranata.isChecked = true
         } else {
@@ -952,7 +933,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         }
         val autoDzenNochSettings = k.getBoolean("auto_dzen_noch", false)
         if (dzenNoch) binding.checkBox10.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.checkBox10.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         val mySensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
         if (lightSensor != null) {
@@ -965,34 +945,28 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.checkBox10.visibility = View.GONE
         }
         if (dzenNoch) binding.checkBox5.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.checkBox5.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (dzenNoch && binding.checkBox5.isClickable) binding.checkBox5.isChecked = true
         val autoscrollAutostart = k.getBoolean("autoscrollAutostart", false)
         if (dzenNoch) binding.checkBox6.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.checkBox6.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (autoscrollAutostart) {
             binding.checkBox6.isChecked = true
         }
         val scrinOn = k.getBoolean("scrinOn", false)
         if (dzenNoch) binding.checkBox7.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.checkBox7.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (scrinOn) {
             binding.checkBox7.isChecked = true
         }
         val fullScreen = k.getBoolean("fullscreenPage", false)
         if (dzenNoch) binding.checkBox9.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.checkBox9.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (fullScreen) {
             binding.checkBox9.isChecked = true
         }
         val adminDayInYear = k.getBoolean("adminDayInYear", false)
         if (dzenNoch) binding.checkBox8.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.checkBox8.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (adminDayInYear) {
             binding.checkBox8.isChecked = true
         }
         if (dzenNoch) binding.reset.setBackgroundResource(R.drawable.knopka_red_black)
-        binding.reset.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.reset.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
@@ -1087,9 +1061,11 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                         semuxaNoKnigi.show(supportFragmentManager, "semuxa_no_knigi")
                     }
                 }
+
                 R.id.maranataRus -> {
                     prefEditor.putBoolean("belarus", false)
                 }
+
                 else -> {
                 }
             }
@@ -1114,6 +1090,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                         setNotificationOnly()
                     }
                 }
+
                 R.id.notificationFull -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
@@ -1131,6 +1108,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                         setNotificationFull()
                     }
                 }
+
                 R.id.notificationNon -> {
                     binding.pavedamic3.visibility = View.GONE
                     setNotificationNon()

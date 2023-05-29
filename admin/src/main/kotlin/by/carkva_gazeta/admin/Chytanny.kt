@@ -11,17 +11,37 @@ import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.view.forEachIndexed
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminChytannyBinding
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.CustomTypefaceSpan
+import by.carkva_gazeta.malitounik.EditTextCustom
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.File
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class Chytanny : BaseActivity() {
     private lateinit var binding: AdminChytannyBinding
@@ -53,6 +73,7 @@ class Chytanny : BaseActivity() {
                 if (it.isSuccessful) text = localFile.readText()
                 else MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
             }.await()
+            localFile.delete()
             val a = year % 19
             val b = year % 4
             val cx = year % 7
@@ -283,6 +304,8 @@ class Chytanny : BaseActivity() {
                             MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
                     }.await()
+                    localFile.delete()
+                    localFile.delete()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }

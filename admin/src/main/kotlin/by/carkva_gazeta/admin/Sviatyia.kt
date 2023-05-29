@@ -222,6 +222,8 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                         binding.sviaty.setText(getString(by.carkva_gazeta.malitounik.R.string.error))
                         MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
+                    localFile.delete()
+                    localFile2.delete()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
@@ -567,6 +569,11 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                         }
                     }.await()
                 }
+                localFile.delete()
+                localFile2.delete()
+                localFile3.delete()
+                localFile4.delete()
+                logFile.delete()
                 binding.progressBar2.visibility = View.GONE
             }
         }

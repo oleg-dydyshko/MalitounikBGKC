@@ -92,6 +92,7 @@ class DialogLogView : DialogFragment() {
                             }
                         }
                         displayBinding.content.text = sb
+                        localFile.delete()
                     }
                 }
                 displayBinding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)

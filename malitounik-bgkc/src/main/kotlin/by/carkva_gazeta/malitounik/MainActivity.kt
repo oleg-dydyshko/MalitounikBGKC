@@ -374,6 +374,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            binding.label145.visibility = View.GONE
+        }
         if (dzenNoch) {
             binding.label91.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label92.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)

@@ -221,6 +221,8 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста", "uzniasienne_liturhija", LITURHIJA, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста", "uzniasienne_viaczernia", VIACZERNIA, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(42, "Нядзеля сьвятых айцоў I-га Усяленскага Сабору", "ndz_ajcou_1susviet_saboru_liturhija", LITURHIJA, pasxa = true))
+        datMinALL.add(SlugbovyiaTextuData(55, "Нядзеля ўсіх сьвятых", "ndz_usich_sviatych_viaczernia_u_subotu_uvieczary", VIACZERNIA, pasxa = true))
+        datMinALL.add(SlugbovyiaTextuData(56, "Нядзеля ўсіх сьвятых", "ndz_usich_sviatych_jutran", JUTRAN, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(56, "Нядзеля ўсіх сьвятых", "ndz_usich_sviatych_liturhija", LITURHIJA, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(63, "Нядзеля ўсіх сьвятых беларускага народу", "ndz_usich_sv_biel_narodu_liturhija", LITURHIJA, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(275, "Покрыва Найсьвяцейшай Багародзіцы", "mm_01_10_pokryva_baharodzicy_liturhija", LITURHIJA))

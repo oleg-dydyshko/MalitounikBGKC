@@ -11,8 +11,8 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 442056
-        versionName "4.3.2.4"
+        versionCode 442057
+        versionName "4.3.2.5"
 
         //multiDexEnabled true
 

@@ -77,33 +77,39 @@ class MenuBibleSinoidal : Fragment() {
                     val dialogBibleTimeError = DialogBibleTimeError()
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
-                    val gson = Gson()
-                    val type = TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(Integer::class.java).type).type
-                    val set = gson.fromJson<ArrayMap<String, Int>>(bibleTime, type)
-                    if (set["zavet"] == 1) {
-                        if (MainActivity.checkmoduleResources()) {
-                            val intent = Intent(activity, NovyZapavietSinaidalList::class.java)
-                            intent.putExtra("kniga", set["kniga"])
-                            intent.putExtra("glava", set["glava"])
-                            intent.putExtra("stix", set["stix"])
-                            intent.putExtra("prodolzyt", true)
-                            startActivity(intent)
+                    try {
+                        val gson = Gson()
+                        val type = TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(Integer::class.java).type).type
+                        val set = gson.fromJson<ArrayMap<String, Int>>(bibleTime, type)
+                        if (set["zavet"] == 1) {
+                            if (MainActivity.checkmoduleResources()) {
+                                val intent = Intent(activity, NovyZapavietSinaidalList::class.java)
+                                intent.putExtra("kniga", set["kniga"])
+                                intent.putExtra("glava", set["glava"])
+                                intent.putExtra("stix", set["stix"])
+                                intent.putExtra("prodolzyt", true)
+                                startActivity(intent)
+                            } else {
+                                val dadatak = DialogInstallDadatak()
+                                dadatak.show(childFragmentManager, "dadatak")
+                            }
                         } else {
-                            val dadatak = DialogInstallDadatak()
-                            dadatak.show(childFragmentManager, "dadatak")
+                            if (MainActivity.checkmoduleResources()) {
+                                val intent = Intent(activity, StaryZapavietSinaidalList::class.java)
+                                intent.putExtra("kniga", set["kniga"])
+                                intent.putExtra("glava", set["glava"])
+                                intent.putExtra("stix", set["stix"])
+                                intent.putExtra("prodolzyt", true)
+                                startActivity(intent)
+                            } else {
+                                val dadatak = DialogInstallDadatak()
+                                dadatak.show(childFragmentManager, "dadatak")
+                            }
                         }
-                    } else {
-                        if (MainActivity.checkmoduleResources()) {
-                            val intent = Intent(activity, StaryZapavietSinaidalList::class.java)
-                            intent.putExtra("kniga", set["kniga"])
-                            intent.putExtra("glava", set["glava"])
-                            intent.putExtra("stix", set["stix"])
-                            intent.putExtra("prodolzyt", true)
-                            startActivity(intent)
-                        } else {
-                            val dadatak = DialogInstallDadatak()
-                            dadatak.show(childFragmentManager, "dadatak")
-                        }
+                    } catch (_: Throwable) {
+                        k.edit().remove("bible_time_sinodal").apply()
+                        val dialogBibleTimeError = DialogBibleTimeError()
+                        dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                     }
                 }
             }

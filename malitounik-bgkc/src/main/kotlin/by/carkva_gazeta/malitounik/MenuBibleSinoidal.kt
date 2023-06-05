@@ -7,7 +7,6 @@ import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.collection.ArrayMap
 import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.MenuBibleBinding
 import com.google.gson.Gson
@@ -72,44 +71,21 @@ class MenuBibleSinoidal : Fragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                val bibleTime = k.getString("bible_time_sinodal", "") ?: ""
-                if (bibleTime == "") {
+                if (!k.contains("bible_time_sinodal_zavet")) {
                     val dialogBibleTimeError = DialogBibleTimeError()
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
-                    try {
-                        val gson = Gson()
-                        val type = TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(Integer::class.java).type).type
-                        val set = gson.fromJson<ArrayMap<String, Int>>(bibleTime, type)
-                        if (set["zavet"] == 1) {
-                            if (MainActivity.checkmoduleResources()) {
-                                val intent = Intent(activity, NovyZapavietSinaidalList::class.java)
-                                intent.putExtra("kniga", set["kniga"])
-                                intent.putExtra("glava", set["glava"])
-                                intent.putExtra("stix", set["stix"])
-                                intent.putExtra("prodolzyt", true)
-                                startActivity(intent)
-                            } else {
-                                val dadatak = DialogInstallDadatak()
-                                dadatak.show(childFragmentManager, "dadatak")
-                            }
-                        } else {
-                            if (MainActivity.checkmoduleResources()) {
-                                val intent = Intent(activity, StaryZapavietSinaidalList::class.java)
-                                intent.putExtra("kniga", set["kniga"])
-                                intent.putExtra("glava", set["glava"])
-                                intent.putExtra("stix", set["stix"])
-                                intent.putExtra("prodolzyt", true)
-                                startActivity(intent)
-                            } else {
-                                val dadatak = DialogInstallDadatak()
-                                dadatak.show(childFragmentManager, "dadatak")
-                            }
-                        }
-                    } catch (_: Throwable) {
-                        k.edit().remove("bible_time_sinodal").apply()
-                        val dialogBibleTimeError = DialogBibleTimeError()
-                        dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
+                    if (MainActivity.checkmoduleResources()) {
+                        val intent = if (k.getBoolean("bible_time_sinodal_zavet", true)) Intent(activity, NovyZapavietSinaidalList::class.java)
+                        else Intent(activity, StaryZapavietSinaidalList::class.java)
+                        intent.putExtra("kniga", k.getInt("bible_time_sinodal_kniga", 0))
+                        intent.putExtra("glava", k.getInt("bible_time_sinodal_glava", 0))
+                        intent.putExtra("stix", k.getInt("bible_time_sinodal_stix", 0))
+                        intent.putExtra("prodolzyt", true)
+                        startActivity(intent)
+                    } else {
+                        val dadatak = DialogInstallDadatak()
+                        dadatak.show(childFragmentManager, "dadatak")
                     }
                 }
             }

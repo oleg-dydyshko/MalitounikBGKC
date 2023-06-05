@@ -10,7 +10,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
-import androidx.collection.ArrayMap
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -72,15 +71,13 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
     override fun onPause() {
         super.onPause()
         val prefEditors = k.edit()
-        // Формат: Завет(1-Новый, 0-Старый) : Книга : Глава : Стих
-        val set = ArrayMap<String, Int>()
-        set["zavet"] = 0
-        set["kniga"] = kniga
-        set["glava"] = binding.pager.currentItem
-        set["stix"] = fierstPosition
-        val gson = Gson()
-        prefEditors.putString("bible_time_sinodal", gson.toJson(set))
+        prefEditors.remove("bible_time_sinodal")
+        prefEditors.putBoolean("bible_time_sinodal_zavet", false)
+        prefEditors.putInt("bible_time_sinodal_kniga", kniga)
+        prefEditors.putInt("bible_time_sinodal_glava", binding.pager.currentItem)
+        prefEditors.putInt("bible_time_sinodal_stix", fierstPosition)
         prefEditors.apply()
+        val gson = Gson()
         clearEmptyPosition()
         val file = File("$filesDir/BibliaSinodalStaryZavet/$kniga.json")
         if (BibleGlobalList.vydelenie.size == 0) {

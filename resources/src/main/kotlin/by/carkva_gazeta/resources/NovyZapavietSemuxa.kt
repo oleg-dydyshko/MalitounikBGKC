@@ -11,7 +11,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
-import androidx.collection.ArrayMap
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -71,15 +70,14 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
 
     override fun onPause() {
         super.onPause()
-        val prefEditors = k.edit() // Формат: Завет(1-Новый, 0-Старый) : Книга : Глава : Стих
-        val set = ArrayMap<String, Int>()
-        set["zavet"] = 1
-        set["kniga"] = kniga
-        set["glava"] = binding.pager.currentItem
-        set["stix"] = fierstPosition
-        val gson = Gson()
-        prefEditors.putString("bible_time_semuxa", gson.toJson(set))
+        val prefEditors = k.edit()
+        prefEditors.remove("bible_time_semuxa")
+        prefEditors.putBoolean("bible_time_semuxa_zavet", true)
+        prefEditors.putInt("bible_time_semuxa_kniga", kniga)
+        prefEditors.putInt("bible_time_semuxa_glava", binding.pager.currentItem)
+        prefEditors.putInt("bible_time_semuxa_stix", fierstPosition)
         prefEditors.apply()
+        val gson = Gson()
         clearEmptyPosition()
         val file = File("$filesDir/BibliaSemuxaNovyZavet/$kniga.json")
         if (BibleGlobalList.vydelenie.size == 0) {

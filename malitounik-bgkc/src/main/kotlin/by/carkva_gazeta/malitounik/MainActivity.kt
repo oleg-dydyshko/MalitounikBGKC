@@ -160,10 +160,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         if (error) continue
                         val fi = FileInputStream(localFile)
                         val origin = BufferedInputStream(fi)
-                        val entry = ZipEntry(file.substring(file.lastIndexOf("/")))
-                        out.putNextEntry(entry)
-                        origin.copyTo(out, 1024)
-                        origin.close()
+                        try {
+                            val entry = ZipEntry(file.substring(file.lastIndexOf("/")))
+                            out.putNextEntry(entry)
+                            origin.copyTo(out, 1024)
+                        } catch (_: Throwable) {
+                        } finally {
+                            origin.close()
+                        }
                     }
                     out.close()
                     localFile.delete()

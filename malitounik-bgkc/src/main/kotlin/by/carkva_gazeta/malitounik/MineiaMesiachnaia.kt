@@ -171,6 +171,7 @@ class MineiaMesiachnaia : BaseActivity() {
                 intent.putExtra("mun", groups[groupPosition][childPosition].month + 1)
                 intent.putExtra("day", groups[groupPosition][childPosition].day.toInt())
                 intent.putExtra("year", c[Calendar.YEAR])
+                intent.putExtra("dayPasxa", 1000)
                 startActivity(intent)
             } else {
                 var count = 0

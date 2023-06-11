@@ -486,6 +486,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                 i.putExtra("mun", munsv)
                 i.putExtra("day", daysv)
                 i.putExtra("year", MenuCaliandar.getPositionCaliandar(position)[3].toInt())
+                i.putExtra("dayPasxa", 1000)
                 startActivity(i)
             }
             R.id.sviatyia -> activity?.let {
@@ -493,6 +494,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                 i.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1)
                 i.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
                 i.putExtra("year", MenuCaliandar.getPositionCaliandar(position)[3].toInt())
+                i.putExtra("dayPasxa", MenuCaliandar.getPositionCaliandar(position)[22].toInt())
                 startActivity(i)
             }
             R.id.textChytanneSviatyia -> if (MainActivity.checkmoduleResources()) {

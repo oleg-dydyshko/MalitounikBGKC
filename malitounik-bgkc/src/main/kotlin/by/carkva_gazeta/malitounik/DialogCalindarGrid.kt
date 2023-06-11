@@ -298,6 +298,7 @@ class DialogCalindarGrid : DialogFragment() {
                         i.putExtra("mun", munreal)
                         i.putExtra("day", datareal)
                         i.putExtra("year", year)
+                        i.putExtra("dayPasxa", raznicia)
                         startActivity(i)
                     }
                     return

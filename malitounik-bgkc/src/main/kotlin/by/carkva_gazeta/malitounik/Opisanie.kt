@@ -29,6 +29,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private val dzenNoch get() = getBaseDzenNoch()
     private var mun = 1
     private var day = 1
+    private var dayPasxa = 0
     private var year = 2022
     private var svity = false
     private lateinit var binding: OpisanieBinding
@@ -96,6 +97,12 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 }
             }
         }
+        if (dayPasxa == 63) {
+            val inputStream = resources.openRawResource(R.raw.opisanie_pasxa)
+            val isr = InputStreamReader(inputStream)
+            val reader = BufferedReader(isr)
+            title.add(reader.readText())
+        }
         title.forEachIndexed { index, text ->
             val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             val spanned = MainActivity.fromHtml(text)
@@ -104,16 +111,19 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     binding.TextView1.textSize = fontBiblia
                     binding.TextView1.text = spanned.trim()
                 }
+
                 1 -> {
                     binding.TextView2.textSize = fontBiblia
                     binding.TextView2.text = spanned.trim()
                     binding.TextView2.visibility = View.VISIBLE
                 }
+
                 2 -> {
                     binding.TextView3.textSize = fontBiblia
                     binding.TextView3.text = spanned.trim()
                     binding.TextView3.visibility = View.VISIBLE
                 }
+
                 3 -> {
                     binding.TextView4.textSize = fontBiblia
                     binding.TextView4.text = spanned.trim()
@@ -156,6 +166,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: (c[Calendar.MONTH] + 1)
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         year = intent.extras?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
+        dayPasxa = intent.extras?.getInt("dayPasxa", 0) ?: 0
         svity = intent.extras?.getBoolean("glavnyia", false) ?: false
         if (savedInstanceState?.getBoolean("imageViewFullVisable") == true) {
             val bmp = if (Build.VERSION.SDK_INT >= 33) {

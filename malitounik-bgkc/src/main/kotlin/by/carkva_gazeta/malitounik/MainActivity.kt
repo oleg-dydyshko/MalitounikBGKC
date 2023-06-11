@@ -469,22 +469,25 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = R.id.label12
                     selectFragment(binding.label12, true)
                 }
+
                 data.toString().contains("shortcuts=3") -> {
                     idSelect = R.id.label7
                     selectFragment(binding.label7, true, shortcuts = true)
                 }
+
                 data.toString().contains("shortcuts=4") -> {
                     idSelect = R.id.label1
                     selectFragment(binding.label1, true, shortcuts = true)
                 }
+
                 data.toString().contains("shortcuts=2") -> {
                     //idSelect = R.id.label2
                     selectFragment(binding.label142, true, shortcuts = true)
                 }
+
                 data.scheme == "content" -> {
                     startBiblioteka(NIADAUNIA, shortcuts = true)
-                }
-                /*data.toString().contains("caliandar") -> {
+                }/*data.toString().contains("caliandar") -> {
                     idSelect = R.id.label1
                     selectFragment(binding.label1, true)
                 }
@@ -624,78 +627,97 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (!binding.label4.isShown) scroll = true
                 selectFragment(binding.label4, true)
             }
+
             R.id.label5 -> {
                 if (!binding.label5.isShown) scroll = true
                 selectFragment(binding.label5, true)
             }
+
             R.id.label6 -> {
                 if (!binding.label6.isShown) scroll = true
                 selectFragment(binding.label6, true)
             }
+
             R.id.label7 -> {
                 if (!binding.label7.isShown) scroll = true
                 selectFragment(binding.label7, true)
             }
+
             R.id.label8 -> {
                 if (!binding.label8.isShown) scroll = true
                 selectFragment(binding.label8, true)
             }
+
             R.id.label91 -> {
                 if (!binding.label91.isShown) scroll = true
                 selectFragment(binding.label91, true)
             }
+
             R.id.label92 -> {
                 if (!binding.label92.isShown) scroll = true
                 selectFragment(binding.label92, true)
             }
+
             R.id.label93 -> {
                 if (!binding.label93.isShown) scroll = true
                 selectFragment(binding.label93, true)
             }
+
             R.id.label94 -> {
                 if (!binding.label94.isShown) scroll = true
                 selectFragment(binding.label94, true)
             }
+
             R.id.label95 -> {
                 if (!binding.label95.isShown) scroll = true
                 selectFragment(binding.label95, true)
             }
+
             R.id.label101 -> {
                 if (!binding.label101.isShown) scroll = true
                 selectFragment(binding.label101, true)
             }
+
             R.id.label102 -> {
                 if (!binding.label102.isShown) scroll = true
                 selectFragment(binding.label102, true)
             }
+
             R.id.label103 -> {
                 if (!binding.label103.isShown) scroll = true
                 selectFragment(binding.label103, true)
             }
+
             R.id.label104 -> {
                 if (!binding.label104.isShown) scroll = true
                 selectFragment(binding.label104, true)
             }
+
             R.id.label105 -> {
                 if (!binding.label105.isShown) scroll = true
                 selectFragment(binding.label105, true)
             }
+
             R.id.label11 -> {
                 if (!binding.label11.isShown) scroll = true
                 selectFragment(binding.label11, true)
             }
+
             R.id.label12 -> {
                 if (!binding.label12.isShown) scroll = true
                 selectFragment(binding.label12, true)
             }
+
             R.id.label13 -> {
                 if (!binding.label13.isShown) scroll = true
                 selectFragment(binding.label13, true)
             }
+
             R.id.label146 -> {
                 if (!binding.label146.isShown) scroll = true
                 selectFragment(binding.label146, true)
             }
+
             else -> {
                 idSelect = R.id.label1
                 selectFragment(binding.label1, true)
@@ -977,10 +999,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     menu.findItem(R.id.sortdate).isChecked = true
                     menu.findItem(R.id.sorttime).isChecked = false
                 }
+
                 2 -> {
                     menu.findItem(R.id.sortdate).isChecked = false
                     menu.findItem(R.id.sorttime).isChecked = true
                 }
+
                 else -> {
                     menu.findItem(R.id.sortdate).isChecked = false
                     menu.findItem(R.id.sorttime).isChecked = false
@@ -1145,8 +1169,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 tolbarTitle = getString(R.string.kaliandar2)
                 if (dzenNoch) binding.label1.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label1.setBackgroundResource(R.drawable.selector_gray)
-            }
-            /*R.id.label2 -> {
+            }/*R.id.label2 -> {
                 tolbarTitle = getString(R.string.bibliateka_carkvy)
                 if (dzenNoch) binding.label2.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label2.setBackgroundResource(R.drawable.selector_gray)
@@ -1156,96 +1179,115 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (dzenNoch) binding.label3.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label3.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label4 -> {
                 tolbarTitle = getString(R.string.malitvy)
                 if (dzenNoch) binding.label4.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label4.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label5 -> {
                 tolbarTitle = getString(R.string.akafisty)
                 if (dzenNoch) binding.label5.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label5.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label6 -> {
                 tolbarTitle = getString(R.string.ruzanec)
                 if (dzenNoch) binding.label6.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label6.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label7 -> {
                 tolbarTitle = getString(R.string.maje_natatki)
                 if (dzenNoch) binding.label7.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label7.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label8 -> {
                 tolbarTitle = getString(R.string.title_biblia)
                 if (dzenNoch) binding.label8.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label8.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label13 -> {
                 tolbarTitle = getString(R.string.title_psalter)
                 if (dzenNoch) binding.label13.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label13.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label91 -> {
                 tolbarTitle = getString(R.string.pesny1)
                 if (dzenNoch) binding.label91.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label91.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label92 -> {
                 tolbarTitle = getString(R.string.pesny2)
                 if (dzenNoch) binding.label92.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label92.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label93 -> {
                 tolbarTitle = getString(R.string.pesny3)
                 if (dzenNoch) binding.label93.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label93.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label94 -> {
                 tolbarTitle = getString(R.string.pesny4)
                 if (dzenNoch) binding.label94.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label94.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label95 -> {
                 tolbarTitle = getString(R.string.pesny5)
                 if (dzenNoch) binding.label95.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label95.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label103 -> {
                 tolbarTitle = getString(R.string.carkva_sviaty)
                 if (dzenNoch) binding.label103.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label103.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label104 -> {
                 tolbarTitle = getString(R.string.kaliandar_bel)
                 if (dzenNoch) binding.label104.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label104.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label105 -> {
                 tolbarTitle = getString(R.string.parafii)
                 if (dzenNoch) binding.label105.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label105.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label102 -> {
                 tolbarTitle = getString(R.string.pamiatka)
                 if (dzenNoch) binding.label102.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label102.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label101 -> {
                 tolbarTitle = getString(R.string.spovedz)
                 if (dzenNoch) binding.label101.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label101.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label11 -> {
                 tolbarTitle = getString(R.string.bsinaidal)
                 if (dzenNoch) binding.label11.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label11.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label12 -> {
                 tolbarTitle = getString(R.string.MenuVybranoe)
                 if (dzenNoch) binding.label12.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label12.setBackgroundResource(R.drawable.selector_gray)
             }
+
             R.id.label146 -> {
                 tolbarTitle = getString(R.string.artykuly)
                 if (dzenNoch) binding.label146.setBackgroundResource(R.drawable.selector_dark_maranata)
@@ -1283,6 +1325,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label3 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("bogaslus")
                 if (fragment == null) {
@@ -1292,6 +1335,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label4 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuMalitvy")
                 if (fragment == null) {
@@ -1301,6 +1345,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label5 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuAkafisty")
                 if (fragment == null) {
@@ -1310,6 +1355,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label6 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("ruzanec")
                 if (fragment == null) {
@@ -1319,6 +1365,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label7 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("MenuNatatki")
                 if (fragment == null) {
@@ -1328,6 +1375,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label8 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("semuxa")
                 if (fragment == null) {
@@ -1372,6 +1420,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     prefEditors.putBoolean("novyzavet", false)
                 }
             }
+
             R.id.label13 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("nadsana")
                 if (fragment == null) {
@@ -1382,6 +1431,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     prefEditors.putBoolean("novyzavet", false)
                 }
             }
+
             R.id.label91 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuPesnyPrasl")
                 if (fragment == null) {
@@ -1391,6 +1441,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label92 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuPesnyBel")
                 if (fragment == null) {
@@ -1400,6 +1451,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label93 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuPesnyBag")
                 if (fragment == null) {
@@ -1409,6 +1461,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label94 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuPesnyKal")
                 if (fragment == null) {
@@ -1418,6 +1471,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label95 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuPesnyTaize")
                 if (fragment == null) {
@@ -1427,6 +1481,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label103 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("MenuCviaty")
                 if (fragment == null) {
@@ -1436,6 +1491,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label104 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("MenuPashalii")
                 if (fragment == null) {
@@ -1445,6 +1501,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label105 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("parafiiBgkc")
                 if (fragment == null) {
@@ -1454,6 +1511,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label102 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("MenuPamiatka")
                 if (fragment == null) {
@@ -1463,6 +1521,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label101 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("MenuPadryxtoukaDaSpovedzi")
                 if (fragment == null) {
@@ -1472,6 +1531,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label11 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("sinoidal")
                 if (fragment == null) {
@@ -1516,6 +1576,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     prefEditors.putBoolean("novyzavet", false)
                 }
             }
+
             R.id.label12 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("MenuVybranoe")
                 if (fragment == null) {
@@ -1525,27 +1586,35 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.label140 -> {
                 startBiblioteka(NIADAUNIA, shortcuts)
             }
+
             R.id.label141 -> {
                 startBiblioteka(GISTORYIACARKVY, shortcuts)
             }
+
             R.id.label142 -> {
                 startBiblioteka(MALITOUNIKI, shortcuts)
             }
+
             R.id.label143 -> {
                 startBiblioteka(SPEUNIKI, shortcuts)
             }
+
             R.id.label144 -> {
                 startBiblioteka(RELLITARATURA, shortcuts)
             }
+
             R.id.label145 -> {
                 startBiblioteka(SETFILE, shortcuts)
             }
+
             R.id.label148 -> {
                 startBiblioteka(PDF, shortcuts)
             }
+
             R.id.label146 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuArtykuly")
                 if (fragment == null) {
@@ -1555,6 +1624,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     idSelect = id
                 }
             }
+
             R.id.image5 -> {
                 if (isNetworkAvailable()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -1581,6 +1651,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     dialoNoIntent.show(supportFragmentManager, "dialoNoIntent")
                 }
             }
+
             R.id.image6 -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
                     if (isConnectServise) {
@@ -1592,10 +1663,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     binding.image5.setImageResource(R.drawable.play2)
                 }
             }
+
             R.id.image7 -> {
                 val dialog = DialogProgramPadoiMaryia()
                 dialog.show(supportFragmentManager, "DialogProgramPadoiMaryia")
             }
+
             R.id.citata -> {
                 startActivity(Intent(this, Cytaty::class.java))
             }
@@ -1757,6 +1830,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         val localFile = withContext(Dispatchers.IO) {
             File.createTempFile("updateMalitounikBGKC", "json")
         }
+        if (!localFile.exists()) return text
         pathReference.getFile(localFile).addOnSuccessListener {
             text = localFile.readText()
         }.await()
@@ -1880,16 +1954,19 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                             layoutDialod.visibility = View.VISIBLE
                             text.text = bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб")
                         }
+
                         SplitInstallSessionStatus.DOWNLOADED -> {
                             layoutDialod.visibility = View.GONE
                             context.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                         }
+
                         SplitInstallSessionStatus.DOWNLOADING -> {
                             layoutDialod.visibility = View.VISIBLE
                             progressBarModule.max = state.totalBytesToDownload().toInt()
                             progressBarModule.progress = state.bytesDownloaded().toInt()
                             text.text = bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб")
                         }
+
                         SplitInstallSessionStatus.INSTALLED -> {
                             layoutDialod.visibility = View.GONE
                             SplitInstallHelper.updateAppInfo(context)
@@ -1913,16 +1990,22 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                                 }
                             }
                         }
+
                         SplitInstallSessionStatus.CANCELED -> {
                         }
+
                         SplitInstallSessionStatus.CANCELING -> {
                         }
+
                         SplitInstallSessionStatus.FAILED -> {
                         }
+
                         SplitInstallSessionStatus.INSTALLING -> {
                         }
+
                         SplitInstallSessionStatus.REQUIRES_USER_CONFIRMATION -> {
                         }
+
                         SplitInstallSessionStatus.UNKNOWN -> {
                         }
                     }

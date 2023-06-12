@@ -185,7 +185,8 @@ class DialogCalindarGrid : DialogFragment() {
                     if (fromPosition != toPosition) {
                         val gson = Gson()
                         val edit = it.getSharedPreferences("biblia", Context.MODE_PRIVATE).edit()
-                        edit.putString("caliandarGrid", gson.toJson(mItemArray))
+                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type
+                        edit.putString("caliandarGrid", gson.toJson(mItemArray, type))
                         edit.apply()
                     }
                 }
@@ -298,7 +299,6 @@ class DialogCalindarGrid : DialogFragment() {
                         i.putExtra("mun", munreal)
                         i.putExtra("day", datareal)
                         i.putExtra("year", year)
-                        i.putExtra("dayPasxa", raznicia)
                         startActivity(i)
                     }
                     return

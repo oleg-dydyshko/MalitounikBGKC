@@ -114,7 +114,8 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
             resultArray2.add(piarliny[i].data)
             resultArray.add(resultArray2)
         }
-        sendPostRequest(gson.toJson(resultArray))
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+        sendPostRequest(gson.toJson(resultArray, type))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -282,7 +283,8 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                     resultArray2.add(piarliny[i].data)
                     resultArray.add(resultArray2)
                 }
-                sendPostRequest(gson.toJson(resultArray))
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                sendPostRequest(gson.toJson(resultArray, type))
             }
             binding.listView.visibility = View.VISIBLE
             binding.addPiarliny.visibility = View.GONE

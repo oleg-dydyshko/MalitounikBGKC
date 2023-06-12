@@ -8,25 +8,39 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.BibleGlobalList
+import by.carkva_gazeta.malitounik.BibleNatatkiData
+import by.carkva_gazeta.malitounik.DialogContextMenu
 import by.carkva_gazeta.malitounik.R
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.resources.DialogBibleNatatkaEdit.BibleNatatkaEditlistiner
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
 import by.carkva_gazeta.resources.DialogZakladkaDelite.ZakladkaDeliteListiner
 import by.carkva_gazeta.resources.databinding.BibleZakladkiBinding
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileWriter
 
@@ -136,7 +150,8 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                             }
                         } else {
                             fileZakladki.writer().use {
-                                it.write(gson.toJson(data))
+                                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                                it.write(gson.toJson(data, type))
                             }
                         }
                     }
@@ -148,7 +163,8 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                             }
                         } else {
                             fileZakladki.writer().use {
-                                it.write(gson.toJson(data))
+                                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                                it.write(gson.toJson(data, type))
                             }
                         }
                     }
@@ -257,8 +273,9 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 binding.dragListView.visibility = View.GONE
             } else {
                 val gson = Gson()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
                 val outputStream = FileWriter(fileNatatki)
-                outputStream.write(gson.toJson(data))
+                outputStream.write(gson.toJson(data, type))
                 outputStream.close()
             }
         }
@@ -274,8 +291,9 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 binding.dragListView.visibility = View.GONE
             } else {
                 val gson = Gson()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
                 val outputStream = FileWriter(fileNatatki)
-                outputStream.write(gson.toJson(data))
+                outputStream.write(gson.toJson(data, type))
                 outputStream.close()
             }
         }

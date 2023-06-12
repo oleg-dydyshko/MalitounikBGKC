@@ -211,8 +211,9 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                 if (check) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(vybranoeIndex(), resurs, title))
                 }
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                 file.writer().use {
-                    it.write(gson.toJson(MenuVybranoe.vybranoe))
+                    it.write(gson.toJson(MenuVybranoe.vybranoe, type))
                 }
             } catch (t: Throwable) {
                 file.delete()

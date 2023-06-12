@@ -28,6 +28,7 @@ import by.carkva_gazeta.resources.DialogBibleRazdel.DialogBibleRazdelListener
 import by.carkva_gazeta.resources.databinding.ActivityBibleBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.File
 
@@ -50,7 +51,8 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
         set["glava"] = binding.pager.currentItem
         set["stix"] = fierstPosition
         val gson = Gson()
-        prefEditors.putString("psalter_time_psalter_nadsan", gson.toJson(set))
+        val type = TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(Integer::class.java).type).type
+        prefEditors.putString("psalter_time_psalter_nadsan", gson.toJson(set, type))
         prefEditors.apply()
         resetTollbarJob?.cancel()
     }
@@ -262,9 +264,10 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
                 if (!DialogVybranoeBibleList.checkVybranoe("3")) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "3", getString(R.string.title_psalter)))
                     val gson = Gson()
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                     val file = File("$filesDir/Vybranoe.json")
                     file.writer().use {
-                        it.write(gson.toJson(MenuVybranoe.vybranoe))
+                        it.write(gson.toJson(MenuVybranoe.vybranoe, type))
                     }
                 }
             }

@@ -90,7 +90,8 @@ class MenuCaliandar : BaseFragment() {
             val filesDir = it.filesDir
             val outputStream = FileWriter("$filesDir/Sabytie.json")
             val gson = Gson()
-            outputStream.write(gson.toJson(MainActivity.padzeia))
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, Padzeia::class.java).type
+            outputStream.write(gson.toJson(MainActivity.padzeia, type))
             outputStream.close()
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {

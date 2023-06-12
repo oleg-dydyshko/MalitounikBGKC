@@ -242,7 +242,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         adapter.notifyDataSetChanged()
         val gson = Gson()
         val prefEditor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
         prefEditor.apply()
         binding.progressBar2.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.Main).launch {
@@ -288,7 +289,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             naidaunia.removeAt(position1)
             val gson = Gson()
             val prefEditor = k.edit()
-            prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+            prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
             prefEditor.apply()
         }
     }
@@ -476,8 +478,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             if (imageTemp.exists()) temp.add("$filesDir/image_temp/$image")
             else temp.add("")
             naidaunia.add(temp)
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
             val prefEditor = k.edit()
-            prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+            prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
             prefEditor.apply()
         }
         pdfView.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorSecondary_text)
@@ -631,8 +634,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     naidaunia.addAll(arrayList)
                     adapter.notifyDataSetChanged()
                     val gson = Gson()
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                     val prefEditor = k.edit()
-                    prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+                    prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
                     prefEditor.apply()
                     MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_file))
                 }
@@ -1061,8 +1065,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         temp.add(filePath)
         temp.add("")
         naidaunia.add(temp)
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
         val prefEditor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
         prefEditor.apply()
     }
 
@@ -1085,8 +1090,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         temp.add(filePath)
         temp.add("")
         naidaunia.add(temp)
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
         val prefEditor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
         prefEditor.apply()
     }
 
@@ -1155,8 +1161,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         temp.add(filePath)
         temp.add(biblioteka?.titleImage ?: "")
         naidaunia.add(temp)
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
         val prefEditor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
         prefEditor.apply()
     }
 
@@ -1277,8 +1284,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         temp.add(filePath)
         temp.add(file.absolutePath)
         naidaunia.add(temp)
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
         val prefEditor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
         prefEditor.apply()
     }
 
@@ -1711,7 +1719,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                         val sb = getBibliatekaJson()
                         if (sb != "") {
                             val gson = Gson()
-                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(String::class.java).type).type).type
+                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                             val biblioteka: ArrayList<ArrayList<String>> = gson.fromJson(sb, type)
                             for (i in 0 until biblioteka.size) {
                                 val mySqlList = ArrayList<String>()
@@ -1740,7 +1748,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                                 }
                                 temp.add(mySqlList)
                             }
-                            val json = gson.toJson(temp)
+                            val json = gson.toJson(temp, type)
                             val prefEditors = k.edit()
                             prefEditors.putString("Biblioteka", json)
                             prefEditors.apply()

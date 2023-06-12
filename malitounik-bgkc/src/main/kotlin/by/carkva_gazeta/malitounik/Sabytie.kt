@@ -56,6 +56,7 @@ import by.carkva_gazeta.malitounik.databinding.SabytieBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemColorBinding
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
@@ -770,7 +771,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         MainActivity.padzeia.removeAll(del.toSet())
         val outputStream = FileWriter("$filesDir/Sabytie.json")
         val gson = Gson()
-        outputStream.write(gson.toJson(MainActivity.padzeia))
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, Padzeia::class.java).type
+        outputStream.write(gson.toJson(MainActivity.padzeia, type))
         outputStream.close()
         adapter.updateList(MainActivity.padzeia)
         CoroutineScope(Dispatchers.IO).launch {
@@ -1499,7 +1501,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 }
                 val gson = Gson()
                 val outputStream = FileWriter("$filesDir/Sabytie.json")
-                outputStream.write(gson.toJson(MainActivity.padzeia))
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, Padzeia::class.java).type
+                outputStream.write(gson.toJson(MainActivity.padzeia, type))
                 outputStream.close()
                 MainActivity.padzeia.sort()
                 if (binding.editText2.text.toString() != "") {
@@ -2070,7 +2073,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             }
             val outputStream = FileWriter("$filesDir/Sabytie.json")
             val gson = Gson()
-            outputStream.write(gson.toJson(MainActivity.padzeia))
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, Padzeia::class.java).type
+            outputStream.write(gson.toJson(MainActivity.padzeia, type))
             outputStream.close()
             MainActivity.padzeia.sort()
             if (binding.editText2.text.toString() != "") {
@@ -2274,7 +2278,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             MainActivity.padzeia.removeAll(del.toSet())
             val outputStream = FileWriter("$filesDir/Sabytie.json")
             val gson = Gson()
-            outputStream.write(gson.toJson(MainActivity.padzeia))
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, Padzeia::class.java).type
+            outputStream.write(gson.toJson(MainActivity.padzeia, type))
             outputStream.close()
             adapter.updateList(MainActivity.padzeia)
             binding.dragListView.recyclerView.scrollToPosition(0)

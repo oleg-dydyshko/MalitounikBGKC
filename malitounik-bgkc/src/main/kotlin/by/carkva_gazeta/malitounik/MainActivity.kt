@@ -348,7 +348,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
             fileNatatki.writer().use {
                 val gson = Gson()
-                it.write(gson.toJson(MenuNatatki.myNatatkiFiles))
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, MyNatatkiFiles::class.java).type
+                it.write(gson.toJson(MenuNatatki.myNatatkiFiles, type))
             }
         }
         bindingappbar.titleToolbar.setOnClickListener {
@@ -1883,6 +1884,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         fun setListPadzeia() {
             padzeia.clear()
             val gson = Gson()
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, Padzeia::class.java).type
             val dir = File(Malitounik.applicationContext().filesDir.toString() + "/Sabytie")
             if (dir.exists()) {
                 dir.walk().forEach { file ->
@@ -1905,14 +1907,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
                 val file = File(Malitounik.applicationContext().filesDir.toString() + "/Sabytie.json")
                 file.writer().use {
-                    it.write(gson.toJson(padzeia))
+                    it.write(gson.toJson(padzeia, type))
                 }
                 dir.deleteRecursively()
             } else {
                 val file = File(Malitounik.applicationContext().filesDir.toString() + "/Sabytie.json")
                 if (file.exists()) {
                     try {
-                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, Padzeia::class.java).type
                         padzeia = gson.fromJson(file.readText(), type)
                     } catch (t: Throwable) {
                         file.delete()

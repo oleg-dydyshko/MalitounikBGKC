@@ -59,9 +59,10 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
         adapter.itemList.removeAt(position)
         activity?.let { activity ->
             val gson = Gson()
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
             val file = File(activity.filesDir.toString() + "/Vybranoe.json")
             file.writer().use {
-                it.write(gson.toJson(adapter.itemList))
+                it.write(gson.toJson(adapter.itemList, type))
             }
             adapter.notifyItemRemoved(position)
         }
@@ -259,8 +260,9 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
 
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
                     if (fromPosition != toPosition) {
+                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                         file.writer().use {
-                            it.write(gson.toJson(adapter.itemList))
+                            it.write(gson.toJson(adapter.itemList, type))
                         }
                         val edit = k.edit()
                         edit.putInt("vybranoe_sort", 0)

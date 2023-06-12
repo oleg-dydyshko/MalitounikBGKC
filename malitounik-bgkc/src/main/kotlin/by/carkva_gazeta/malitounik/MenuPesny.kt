@@ -177,7 +177,8 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
 
     private fun saveHistopy() {
         val gson = Gson()
-        val json = gson.toJson(history)
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
+        val json = gson.toJson(history, type)
         val prefEditors = chin.edit()
         prefEditors.putString("history_pesny", json)
         prefEditors.apply()

@@ -24,7 +24,11 @@ import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper.OnSwipeListenerAdapter
 import com.woxthebox.draglistview.swipe.ListSwipeItem
 import com.woxthebox.draglistview.swipe.ListSwipeItem.SwipeDirection
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 
 class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.DialogDeliteBibliVybranoeListener {
@@ -83,17 +87,19 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 if (posDelite != -1) {
                     MenuVybranoe.vybranoe.removeAt(posDelite)
                     val file = File("${activity.filesDir}/Vybranoe.json")
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                     file.writer().use {
-                        it.write(gson.toJson(MenuVybranoe.vybranoe))
+                        it.write(gson.toJson(MenuVybranoe.vybranoe, type))
                     }
                 }
                 listener?.onAllDeliteBible()
                 dialog?.cancel()
             } else {
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
                 when (biblia) {
-                    "1" -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe))
-                    "2" -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe))
-                    "3" -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe))
+                    "1" -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe, type))
+                    "2" -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe, type))
+                    "3" -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe, type))
                 }
             }
             prefEditors.apply()
@@ -146,10 +152,11 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
 
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
                     val prefEditors = k.edit()
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
                     when (biblia) {
-                        "1" -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe))
-                        "2" -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe))
-                        "3" -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe))
+                        "1" -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe, type))
+                        "2" -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe, type))
+                        "3" -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe, type))
                     }
                     prefEditors.apply()
                 }
@@ -334,7 +341,8 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             val gson = Gson()
             val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val prefEditors = k.edit()
-            val gsonSave = gson.toJson(arrayListVybranoe)
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
+            val gsonSave = gson.toJson(arrayListVybranoe, type)
             when (bibleName) {
                 1 -> prefEditors.putString("bibleVybranoeSemuxa", gsonSave)
                 2 -> prefEditors.putString("bibleVybranoeSinoidal", gsonSave)

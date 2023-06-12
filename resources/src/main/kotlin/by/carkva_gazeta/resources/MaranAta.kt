@@ -1084,8 +1084,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
         } else {
             val gson = Gson()
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
             val outputStream = FileWriter(file)
-            outputStream.write(gson.toJson(vydelenie))
+            outputStream.write(gson.toJson(vydelenie, type))
             outputStream.close()
         }
         mPedakVisable = false

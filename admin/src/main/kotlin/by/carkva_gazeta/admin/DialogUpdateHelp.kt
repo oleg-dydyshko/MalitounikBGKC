@@ -102,7 +102,7 @@ class DialogUpdateHelp : DialogFragment() {
                                 updeteArrayText["devel"] = releaseCode
                             }
                             localFile.writer().use {
-                                it.write(gson.toJson(updeteArrayText))
+                                it.write(gson.toJson(updeteArrayText, type))
                             }
                         } else {
                             activity?.let {

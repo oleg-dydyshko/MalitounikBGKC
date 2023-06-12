@@ -85,7 +85,8 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
             }
         } else {
             file.writer().use {
-                it.write(gson.toJson(BibleGlobalList.vydelenie))
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
+                it.write(gson.toJson(BibleGlobalList.vydelenie, type))
             }
         }
         val fileZakladki = File("$filesDir/BibliaSinodalZakladki.json")
@@ -95,7 +96,8 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
             }
         } else {
             fileZakladki.writer().use {
-                it.write(gson.toJson(BibleGlobalList.zakladkiSinodal))
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleZakladkiData::class.java).type
+                it.write(gson.toJson(BibleGlobalList.zakladkiSinodal, type))
             }
         }
         val fileNatatki = File("$filesDir/BibliaSinodalNatatki.json")
@@ -105,7 +107,8 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
             }
         } else {
             fileNatatki.writer().use {
-                it.write(gson.toJson(BibleGlobalList.natatkiSinodal))
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                it.write(gson.toJson(BibleGlobalList.natatkiSinodal, type))
             }
         }
         resetTollbarJob?.cancel()
@@ -415,9 +418,10 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
                 if (!DialogVybranoeBibleList.checkVybranoe("2")) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "2", getString(by.carkva_gazeta.malitounik.R.string.bsinaidal)))
                     val gson = Gson()
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                     val file = File("$filesDir/Vybranoe.json")
                     file.writer().use {
-                        it.write(gson.toJson(MenuVybranoe.vybranoe))
+                        it.write(gson.toJson(MenuVybranoe.vybranoe, type))
                     }
                 }
             }

@@ -202,8 +202,9 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
             File.createTempFile("bibliateka", "json")
         }
         val gson = Gson()
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
         localFile.writer().use {
-            it.write(gson.toJson(arrayList))
+            it.write(gson.toJson(arrayList, type))
         }
         Malitounik.referens.child("/bibliateka.json").putFile(Uri.fromFile(localFile)).await()
         localFile.delete()
@@ -276,7 +277,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
                             }
                             arrayList.add(mySqlList)
                         }
-                        val json = gson.toJson(arrayList)
+                        val json = gson.toJson(arrayList, type)
                         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
                         val prefEditors = k.edit()
                         prefEditors.putString("Biblioteka", json)

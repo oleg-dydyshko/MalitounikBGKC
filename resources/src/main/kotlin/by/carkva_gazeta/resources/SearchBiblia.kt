@@ -17,20 +17,44 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.AbsListView
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.CompoundButton
+import android.widget.EditText
+import android.widget.Filter
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.DialogClearHishory
+import by.carkva_gazeta.malitounik.HistoryAdapter
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -739,7 +763,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             3 -> biblia = "nadsan"
         }
         val gson = Gson()
-        val json = gson.toJson(history)
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
+        val json = gson.toJson(history, type)
         prefEditors.putString("history_bible_$biblia", json)
         prefEditors.apply()
     }
@@ -840,7 +865,8 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             arrayList.add(MainActivity.toHtml(it))
         }
         val gson = Gson()
-        val json = gson.toJson(arrayList)
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
+        val json = gson.toJson(arrayList, type)
         prefEditors.putString("search_array", json)
         prefEditors.apply()
         val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView

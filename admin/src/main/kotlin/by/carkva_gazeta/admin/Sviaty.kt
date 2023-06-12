@@ -44,7 +44,6 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.reflect.Type
 
 class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogFileExplorerListener, DialogImageFileExplorer.DialogImageFileExplorerListener {
     private lateinit var binding: AdminSviatyBinding
@@ -221,12 +220,13 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     File.createTempFile("icons", "json")
                 }
                 Malitounik.referens.child("/chytanne/icons/" + fileName.name).putFile(Uri.fromFile(localFile)).await()
-                val arrayListIcon = java.util.ArrayList<java.util.ArrayList<String>>()
+                val arrayListIcon = ArrayList<ArrayList<String>>()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                 Malitounik.referens.child("/icons.json").getFile(localFile2).addOnCompleteListener {
                     if (it.isSuccessful) {
                         val gson = Gson()
                         val json = localFile.readText()
-                        val type: Type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+
                         arrayListIcon.addAll(gson.fromJson(json, type))
                     } else {
                         MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
@@ -253,7 +253,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                 }
                 localFile2.writer().use {
                     val gson = Gson()
-                    it.write(gson.toJson(arrayListIcon))
+                    it.write(gson.toJson(arrayListIcon, type))
                 }
                 Malitounik.referens.child("/icons.json").putFile(Uri.fromFile(localFile2)).addOnCompleteListener { task ->
                     if (task.isSuccessful) {

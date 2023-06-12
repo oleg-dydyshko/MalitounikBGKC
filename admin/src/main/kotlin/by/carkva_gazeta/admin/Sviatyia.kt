@@ -508,7 +508,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                     val arrayList: ArrayList<String> = gson.fromJson(builder, type)
                     arrayList[data - 1] = spaw
                     localFile4.writer().use {
-                        it.write(gson.toJson(arrayList))
+                        it.write(gson.toJson(arrayList, type))
                     }
                 }
                 val logFile = withContext(Dispatchers.IO) {

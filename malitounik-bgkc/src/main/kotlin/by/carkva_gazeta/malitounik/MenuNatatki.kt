@@ -6,7 +6,11 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -87,7 +91,7 @@ class MenuNatatki : BaseFragment() {
                     }
                 }
                 file.writer().use {
-                    it.write(gson.toJson(myNatatkiFiles))
+                    it.write(gson.toJson(myNatatkiFiles, type))
                 }
             }
             myNatatkiFiles.sort()
@@ -125,7 +129,7 @@ class MenuNatatki : BaseFragment() {
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
                     if (fromPosition != toPosition) {
                         file.writer().use {
-                            it.write(gson.toJson(adapter.itemList))
+                            it.write(gson.toJson(adapter.itemList, type))
                         }
                     }
                     val edit = k.edit()
@@ -178,6 +182,7 @@ class MenuNatatki : BaseFragment() {
             val file = File(fragmentActivity.filesDir.toString().plus("/Natatki.json"))
             file.writer().use {
                 val gson = Gson()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, MyNatatkiFiles::class.java).type
                 it.write(gson.toJson(adapter.itemList))
             }
             adapter.notifyItemRemoved(position)

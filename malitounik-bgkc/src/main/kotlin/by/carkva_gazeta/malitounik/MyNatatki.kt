@@ -15,11 +15,15 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.MyNatatkiBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
-import java.util.*
+import java.util.Calendar
 
 class MyNatatki : DialogFragment() {
     private var filename = ""
@@ -222,7 +226,8 @@ class MyNatatki : DialogFragment() {
             }
             fileName.writer().use {
                 val gson = Gson()
-                it.write(gson.toJson(MenuNatatki.myNatatkiFiles))
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, MyNatatkiFiles::class.java).type
+                it.write(gson.toJson(MenuNatatki.myNatatkiFiles, type))
             }
             file.writer().use {
                 it.write(nazva + "<MEMA></MEMA>" + natatka + "<RTE></RTE>" + gc.timeInMillis)

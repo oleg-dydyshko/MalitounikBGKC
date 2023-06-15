@@ -282,6 +282,8 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(163, "Сьвятых апосталаў Баўтрамея і Варнавы", "mm_11_06_apostalau_bautramieja_i_varnavy_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(164, "Сьвятога Анупрэя Вялікага", "mm_12_06_anupreja_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(164, "Сьвятога Анупрэя Вялікага", "mm_12_06_anupreja_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(24, "Палова сьвята Пяцідзясятніцы", "palova_sviata_vialikadnia_liturhija", LITURHIJA, pasxa = true))
+        datMinALL.add(SlugbovyiaTextuData(23, "Палова сьвята Пяцідзясятніцы", "palova_sviata_vialikadnia_viaczernia_u_autorak", VIACZERNIA, pasxa = true))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {

@@ -15,7 +15,11 @@ import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProvider {
 
@@ -77,7 +81,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
             if (autoDzenNoch) setTheme(R.style.AppCompatDark)
         } else {
             if (dzenNoch) setTheme(R.style.AppCompatDark)
-        }
+       }
     }
 
     fun getCheckDzenNoch() = checkDzenNoch

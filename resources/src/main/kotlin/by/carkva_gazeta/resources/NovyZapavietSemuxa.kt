@@ -79,6 +79,28 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
         prefEditors.apply()
         val gson = Gson()
         clearEmptyPosition()
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
+        val listFiles = File("$filesDir/BibliaSemuxaNovyZavet").listFiles()
+        listFiles?.forEach {
+            val inputStream = FileReader(it)
+            val reader = BufferedReader(inputStream)
+            val list = gson.fromJson<ArrayList<ArrayList<Int>>>(reader.readText(), type)
+            val del = ArrayList<ArrayList<Int>>()
+            inputStream.close()
+            list.forEach { intArrayList ->
+                if (intArrayList[2] == 0 && intArrayList[3] == 0 && intArrayList[4] == 0) {
+                    del.add(intArrayList)
+                }
+            }
+            list.removeAll(del.toSet())
+            if (list.size == 0) {
+                it.delete()
+            } else {
+                it.writer().use { writer ->
+                    writer.write(gson.toJson(list, type))
+                }
+            }
+        }
         val file = File("$filesDir/BibliaSemuxaNovyZavet/$kniga.json")
         if (BibleGlobalList.vydelenie.size == 0) {
             if (file.exists()) {
@@ -86,7 +108,6 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
             }
         } else {
             file.writer().use {
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
                 it.write(gson.toJson(BibleGlobalList.vydelenie, type))
             }
         }
@@ -97,8 +118,8 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
             }
         } else {
             fileZakladki.writer().use {
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleZakladkiData::class.java).type
-                it.write(gson.toJson(BibleGlobalList.zakladkiSemuxa, type))
+                val type2 = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleZakladkiData::class.java).type
+                it.write(gson.toJson(BibleGlobalList.zakladkiSemuxa, type2))
             }
         }
         val fileNatatki = File("$filesDir/BibliaSemuxaNatatki.json")
@@ -108,8 +129,8 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
             }
         } else {
             fileNatatki.writer().use {
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
-                it.write(gson.toJson(BibleGlobalList.natatkiSemuxa, type))
+                val type3 = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                it.write(gson.toJson(BibleGlobalList.natatkiSemuxa, type3))
             }
         }
         resetTollbarJob?.cancel()

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
@@ -74,8 +75,6 @@ class MenuSviaty : BaseListFragment() {
                 listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
             }
         }
-        val pad = (10 * resources.displayMetrics.density).toInt()
-        listView.setPadding(pad, pad, pad, pad)
     }
 
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
@@ -111,7 +110,7 @@ class MenuSviaty : BaseListFragment() {
             if (convertView == null) {
                 val binding = SimpleListItemSviatyBinding.inflate(LayoutInflater.from(context), parent, false)
                 rootView = binding.root
-                ea = ViewHolder(binding.title, binding.date)
+                ea = ViewHolder(binding.group, binding.title, binding.date)
                 rootView.tag = ea
             } else {
                 rootView = convertView
@@ -121,54 +120,57 @@ class MenuSviaty : BaseListFragment() {
             if (dzenNoch) {
                 ea.title.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary_black))
             }
-            var title = SpannableString(list[position].opisanie)
+            val title = SpannableString(list[position].opisanie)
+            val data = SpannableStringBuilder()
             when (list[position].svaity) {
                 -1 -> {
                     title.setSpan(StyleSpan(Typeface.BOLD), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
                 -2 -> {
-                    title = SpannableString("ДВУНАДЗЯСЯТЫЯ СЬВЯТЫ\n\n${list[position].opisanie}")
-                    title.setSpan(StyleSpan(Typeface.BOLD), 0, 20, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ea.group.text = context.getString(R.string.dvunad_sv)
+                    ea.group.visibility = View.VISIBLE
                 }
                 -3 -> {
-                    title = SpannableString("ВЯЛІКІЯ СЬВЯТЫ\n\n${list[position].opisanie}")
-                    title.setSpan(StyleSpan(Typeface.BOLD), 0, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ea.group.text = context.getString(R.string.vial_sv)
+                    ea.group.visibility = View.VISIBLE
                 }
                 -4 -> {
-                    title = SpannableString("ДНІ ЎСПАМІНУ ПАМЁРЛЫХ\n\n${list[position].opisanie}")
-                    title.setSpan(StyleSpan(Typeface.BOLD), 0, 21, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    if (dzenNoch) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 21, list[position].opisanie.length + 23, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 21, list[position].opisanie.length + 23, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ea.group.text = context.getString(R.string.dni_yspamin_pam)
+                    ea.group.visibility = View.VISIBLE
                 }
                 -5 -> {
-                    title = SpannableString("ЦАРКОЎНЫЯ ПАМЯТНЫЯ ДАТЫ\n\n${list[position].opisanie}")
-                    title.setSpan(StyleSpan(Typeface.BOLD), 0, 23, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    if (dzenNoch) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 23, list[position].opisanie.length + 25, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 23, list[position].opisanie.length + 25, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ea.group.text = context.getString(R.string.carkva_pamiat_data)
+                    ea.group.visibility = View.VISIBLE
                 }
                 -6 -> {
-                    title = SpannableString("ПАРАФІЯЛЬНЫЯ СЬВЯТЫ\n\n${list[position].opisanie}")
-                    title.setSpan(StyleSpan(Typeface.BOLD), 0, 19, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                }
-                else -> {
-                    title = SpannableString(list[position].opisanie)
-                    if (list[position].svaity in 4..5) {
-                        if (dzenNoch) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    } else {
-                        if (dzenNoch) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }
+                    ea.group.text = context.getString(R.string.parafia_sv)
+                    ea.group.visibility = View.VISIBLE
+                } else -> {
+                    ea.group.visibility = View.GONE
                 }
             }
+            if (list[position].svaity in 4..6 || list[position].svaity in -4 downTo -6) {
+                if (dzenNoch) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                val t1 = list[position].opisanie.indexOf(":")
+                if (t1 != -1) {
+                    title.setSpan(StyleSpan(Typeface.BOLD), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+            } else if (list[position].svaity == 2 || list[position].svaity == -2) {
+                title.setSpan(StyleSpan(Typeface.BOLD), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            } else {
+                if (dzenNoch) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            data.append(list[position].opisanieData)
             ea.title.text = title
-            ea.date.text = list[position].opisanieData
+            ea.date.text = data
             return rootView
         }
 
     }
 
-    private class ViewHolder(var title: TextView, var date: TextView)
+    private class ViewHolder(var group: TextView, var title: TextView, var date: TextView)
 
     companion object {
         fun getPrazdnik(yearG: Int = Calendar.getInstance().get(Calendar.YEAR), search: Boolean = false): ArrayList<Prazdniki> {
@@ -198,45 +200,45 @@ class MenuSviaty : BaseListFragment() {
             val prazdnikiAll = ArrayList<Prazdniki>()
             val prazdnik = ArrayList<Prazdniki>()
             val c = GregorianCalendar(yearG, monthP - 1, dataP)
-            prazdnikiAll.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -1, "ПАСХА ХРЫСТОВА (ВЯЛІКДЗЕНЬ)", c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + " " + yearG + " году, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnikiAll.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -1, Malitounik.applicationContext().resources.getString(R.string.S1), c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + " " + yearG + " году, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, Calendar.JANUARY, 6)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -2, "Богазьяўленьне (Вадохрышча)", "6 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -2, Malitounik.applicationContext().resources.getString(R.string.S2), "6 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, 1, 2)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Сустрэча Госпада нашага Ісуса Хрыста (Грамніцы)", "2 лютага, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, Malitounik.applicationContext().resources.getString(R.string.S3), "2 лютага, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, Calendar.MARCH, 25)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Дабравешчаньне", "25 сакавіка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, Malitounik.applicationContext().resources.getString(R.string.S4), "25 сакавіка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(c[Calendar.YEAR], monthP - 1, dataP)
             c.add(Calendar.DATE, -7)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Уваход Гасподні ў Ерусалім (Вербніца)", c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, Malitounik.applicationContext().resources.getString(R.string.S5), c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.add(Calendar.DATE, 46)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Узьнясеньне Гасподняе (Ушэсьце)", c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, Malitounik.applicationContext().resources.getString(R.string.S6), c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.add(Calendar.DATE, 10)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Зыход Сьвятога Духа (Тройца)", c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, Malitounik.applicationContext().resources.getString(R.string.S7), c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, Calendar.AUGUST, 6)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Перамяненьне Гасподняе (Спас)", "6 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, Malitounik.applicationContext().resources.getString(R.string.S8), "6 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, Calendar.AUGUST, 15)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Усьпеньне Найсьвяцейшай Багародзіцы", "15 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, Malitounik.applicationContext().resources.getString(R.string.S9), "15 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, Calendar.SEPTEMBER, 8)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Нараджэньне Найсьвяцейшай Багародзіцы", "8 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, Malitounik.applicationContext().resources.getString(R.string.S10), "8 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, Calendar.SEPTEMBER, 14)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Крыжаўзвышэньне", "14 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, Malitounik.applicationContext().resources.getString(R.string.S11), "14 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, Calendar.NOVEMBER, 21)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Уваход у Храм Найсьвяцейшай Багародзіцы", "21 лістапада, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, Malitounik.applicationContext().resources.getString(R.string.S12), "21 лістапада, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, Calendar.DECEMBER, 25)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Нараджэньне Хрыстова (Каляды)", "25 сьнежня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, Malitounik.applicationContext().resources.getString(R.string.S13), "25 сьнежня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             prazdnik.sort()
             prazdnikiAll.addAll(prazdnik)
             prazdnik.clear()
             c.set(yearG, Calendar.JANUARY, 1)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -3, "Абрэзаньне Гасподняе", "1 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -3, Malitounik.applicationContext().resources.getString(R.string.S14), "1 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, Calendar.JUNE, 24)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 3, "Нараджэньне сьв. Яна Прадвесьніка і Хрысьціцеля", "24 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 3, Malitounik.applicationContext().resources.getString(R.string.S15), "24 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, Calendar.JUNE, 29)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 3, "Сьвятых вярхоўных апосталаў Пятра і Паўла", "29 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 3, Malitounik.applicationContext().resources.getString(R.string.S16), "29 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, Calendar.AUGUST, 29)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 3, "Адсячэньне галавы сьв. Яна Прадвесьніка і Хрысьціцеля", "29 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 3, Malitounik.applicationContext().resources.getString(R.string.S17), "29 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, Calendar.OCTOBER, 1)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 3, "Покрыва Найсьвяцейшай Багародзіцы", "1 кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 3, Malitounik.applicationContext().resources.getString(R.string.S18), "1 кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             prazdnik.sort()
             prazdnikiAll.addAll(prazdnik)
             prazdnik.clear()

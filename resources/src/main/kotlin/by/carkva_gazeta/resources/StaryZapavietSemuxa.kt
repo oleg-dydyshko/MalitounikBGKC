@@ -80,17 +80,37 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
         prefEditors.apply()
         val gson = Gson()
         clearEmptyPosition()
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
+        val listFiles = File("$filesDir/BibliaSemuxaStaryZavet").listFiles()
+        listFiles?.forEach {
+            val inputStream = FileReader(it)
+            val reader = BufferedReader(inputStream)
+            val list = gson.fromJson<ArrayList<ArrayList<Int>>>(reader.readText(), type)
+            val del = ArrayList<ArrayList<Int>>()
+            inputStream.close()
+            list.forEach { intArrayList ->
+                if (intArrayList[2] == 0 && intArrayList[3] == 0 && intArrayList[4] == 0) {
+                    del.add(intArrayList)
+                }
+            }
+            list.removeAll(del.toSet())
+            if (list.size == 0) {
+                it.delete()
+            } else {
+                it.writer().use { writer ->
+                    writer.write(gson.toJson(list, type))
+                }
+            }
+        }
         val file = File("$filesDir/BibliaSemuxaStaryZavet/$kniga.json")
         if (BibleGlobalList.vydelenie.size == 0) {
-            if (file.exists()) {
-                file.delete()
-            }
+            if (file.exists()) file.delete()
         } else {
             file.writer().use {
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
                 it.write(gson.toJson(BibleGlobalList.vydelenie, type))
             }
         }
+
         val fileZakladki = File("$filesDir/BibliaSemuxaZakladki.json")
         if (BibleGlobalList.zakladkiSemuxa.size == 0) {
             if (fileZakladki.exists()) {
@@ -98,8 +118,8 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
             }
         } else {
             fileZakladki.writer().use {
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleZakladkiData::class.java).type
-                it.write(gson.toJson(BibleGlobalList.zakladkiSemuxa, type))
+                val type2 = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleZakladkiData::class.java).type
+                it.write(gson.toJson(BibleGlobalList.zakladkiSemuxa, type2))
             }
         }
         val fileNatatki = File("$filesDir/BibliaSemuxaNatatki.json")
@@ -109,8 +129,8 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
             }
         } else {
             fileNatatki.writer().use {
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
-                it.write(gson.toJson(BibleGlobalList.natatkiSemuxa, type))
+                val type3 = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                it.write(gson.toJson(BibleGlobalList.natatkiSemuxa, type3))
             }
         }
         resetTollbarJob?.cancel()
@@ -161,154 +181,192 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
                 title = "Быцьцё"
                 fullglav = 50
             }
+
             1 -> {
                 title = "Выхад"
                 fullglav = 40
             }
+
             2 -> {
                 title = "Лявіт"
                 fullglav = 27
             }
+
             3 -> {
                 title = "Лікі"
                 fullglav = 36
             }
+
             4 -> {
                 title = "Другі Закон"
                 fullglav = 34
             }
+
             5 -> {
                 title = "Ісуса сына Нава"
                 fullglav = 24
             }
+
             6 -> {
                 title = "Судзьдзяў"
                 fullglav = 21
             }
+
             7 -> {
                 title = "Рут"
                 fullglav = 4
             }
+
             8 -> {
                 title = "1-я Царстваў"
                 fullglav = 31
             }
+
             9 -> {
                 title = "2-я Царстваў"
                 fullglav = 24
             }
+
             10 -> {
                 title = "3-я Царстваў"
                 fullglav = 22
             }
+
             11 -> {
                 title = "4-я Царстваў"
                 fullglav = 25
             }
+
             12 -> {
                 title = "1-я Летапісаў"
                 fullglav = 29
             }
+
             13 -> {
                 title = "2-я Летапісаў"
                 fullglav = 36
             }
+
             14 -> {
                 title = "Эздры"
                 fullglav = 10
             }
+
             15 -> {
                 title = "Нээміі"
                 fullglav = 13
             }
+
             16 -> {
                 title = "Эстэр"
                 fullglav = 10
             }
+
             17 -> {
                 title = "Ёва"
                 fullglav = 42
             }
+
             18 -> {
                 title = "Псалтыр"
                 fullglav = 151
             }
+
             19 -> {
                 title = "Выслоўяў Саламонавых"
                 fullglav = 31
             }
+
             20 -> {
                 title = "Эклезіяста"
                 fullglav = 12
             }
+
             21 -> {
                 title = "Найвышэйшая Песьня Саламонава"
                 fullglav = 8
             }
+
             22 -> {
                 title = "Ісаі"
                 fullglav = 66
             }
+
             23 -> {
                 title = "Ераміі"
                 fullglav = 52
             }
+
             24 -> {
                 title = "Ераміін Плач"
                 fullglav = 5
             }
+
             25 -> {
                 title = "Езэкііля"
                 fullglav = 48
             }
+
             26 -> {
                 title = "Данііла"
                 fullglav = 12
             }
+
             27 -> {
                 title = "Асіі"
                 fullglav = 14
             }
+
             28 -> {
                 title = "Ёіля"
                 fullglav = 3
             }
+
             29 -> {
                 title = "Амоса"
                 fullglav = 9
             }
+
             30 -> {
                 title = "Аўдзея"
                 fullglav = 1
             }
+
             31 -> {
                 title = "Ёны"
                 fullglav = 4
             }
+
             32 -> {
                 title = "Міхея"
                 fullglav = 7
             }
+
             33 -> {
                 title = "Навума"
                 fullglav = 3
             }
+
             34 -> {
                 title = "Абакума"
                 fullglav = 3
             }
+
             35 -> {
                 title = "Сафона"
                 fullglav = 3
             }
+
             36 -> {
                 title = "Агея"
                 fullglav = 2
             }
+
             37 -> {
                 title = "Захарыі"
                 fullglav = 14
             }
+
             38 -> {
                 title = "Малахіі"
                 fullglav = 4
@@ -433,10 +491,12 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
                 paralel = false
                 invalidateOptionsMenu()
             }
+
             BibleGlobalList.mPedakVisable -> {
                 val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as StaryZapavietSemuxaFragment
                 fragment.onBackPressedFragment()
             }
+
             else -> super.onBack()
         }
     }

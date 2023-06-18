@@ -3,6 +3,7 @@ package by.carkva_gazeta.resources
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.content.res.Configuration
@@ -12,8 +13,13 @@ import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.BackgroundColorSpan
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
@@ -29,11 +35,15 @@ import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
 import by.carkva_gazeta.resources.databinding.AkafistChytanneBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.BufferedReader
+import java.io.File
+import java.io.FileReader
 import java.io.InputStreamReader
 
-class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback {
+class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -56,6 +66,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private var positionY = 0
     private var resurs = "0"
+    private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -196,6 +207,8 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             onBack()
         }
         binding.InteractiveScroll.setOnScrollChangedCallback(this)
+        binding.textView.movementMethod = setLinkMovementMethodCheck()
+        if (dzenNoch) binding.textView.setLinkTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
     }
 
     private fun setTollbarTheme() {
@@ -307,8 +320,12 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         val ssbTitle = SpannableStringBuilder()
         DialogVybranoeBibleList.arrayListVybranoe.forEach { VybranoeBibliaData ->
             var inputStream = resources.openRawResource(R.raw.biblias1)
+            var file: File? = null
+            var intent: Intent? = null
             if (VybranoeBibliaData.bibleName == 1) {
                 if (VybranoeBibliaData.novyZavet) {
+                    file = File("$filesDir/BibliaSemuxaNovyZavet/${VybranoeBibliaData.kniga}.json")
+                    intent = Intent(this, NovyZapavietSemuxa::class.java)
                     when (VybranoeBibliaData.kniga) {
                         0 -> inputStream = resources.openRawResource(R.raw.biblian1)
                         1 -> inputStream = resources.openRawResource(R.raw.biblian2)
@@ -339,6 +356,8 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                         26 -> inputStream = resources.openRawResource(R.raw.biblian27)
                     }
                 } else {
+                    file = File("$filesDir/BibliaSemuxaStaryZavet/${VybranoeBibliaData.kniga}.json")
+                    intent = Intent(this, StaryZapavietSemuxa::class.java)
                     when (VybranoeBibliaData.kniga) {
                         0 -> inputStream = resources.openRawResource(R.raw.biblias1)
                         1 -> inputStream = resources.openRawResource(R.raw.biblias2)
@@ -383,6 +402,8 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 }
             } else if (VybranoeBibliaData.bibleName == 2) {
                 if (VybranoeBibliaData.novyZavet) {
+                    file = File("$filesDir/BibliaSinodalNovyZavet/${VybranoeBibliaData.kniga}.json")
+                    intent = Intent(this, NovyZapavietSinaidal::class.java)
                     when (VybranoeBibliaData.kniga) {
                         0 -> inputStream = resources.openRawResource(R.raw.sinaidaln1)
                         1 -> inputStream = resources.openRawResource(R.raw.sinaidaln2)
@@ -413,6 +434,8 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                         26 -> inputStream = resources.openRawResource(R.raw.sinaidaln27)
                     }
                 } else {
+                    file = File("$filesDir/BibliaSinodalStaryZavet/${VybranoeBibliaData.kniga}.json")
+                    intent = Intent(this, StaryZapavietSinaidal::class.java)
                     when (VybranoeBibliaData.kniga) {
                         0 -> inputStream = resources.openRawResource(R.raw.sinaidals1)
                         1 -> inputStream = resources.openRawResource(R.raw.sinaidals2)
@@ -479,18 +502,59 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                     if (line.contains("//")) {
                         val t1 = line.indexOf("//")
                         line = line.substring(0, t1).trim()
-                        if (line != "") builder.append(line).append("<br>")
+                        if (line != "") builder.append(line).append("<br><br>")
                     } else {
-                        if (line != "") builder.append(line).append("<br>")
+                        if (line != "") builder.append(line).append("<br><br>")
                     }
                 }
             }
             val split2 = builder.toString().split("===")
-            val titleBibliaData = VybranoeBibliaData.title
+            val titleBibliaData = SpannableString(VybranoeBibliaData.title)
+            if (intent != null) {
+                titleBibliaData.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        intent.putExtra("kniga", VybranoeBibliaData.kniga)
+                        intent.putExtra("glava", VybranoeBibliaData.glava - 1)
+                        intent.putExtra("stix", 0)
+                        startActivity(intent)
+                    }
+                }, 0, titleBibliaData.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
             ssbTitle.append(titleBibliaData)
             ssbTitle.setSpan(StyleSpan(Typeface.BOLD), ssbTitle.length - titleBibliaData.length, ssbTitle.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            ssbTitle.append("\n")
-            ssbTitle.append(MainActivity.fromHtml(split2[VybranoeBibliaData.glava])).append("\n")
+            ssbTitle.append("\n\n")
+            val sb = SpannableStringBuilder()
+            if (file?.exists() == true) {
+                BibleGlobalList.vydelenie.clear()
+                val inputStream2 = FileReader(file)
+                val reader = BufferedReader(inputStream2)
+                val gson = Gson()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
+                BibleGlobalList.vydelenie.addAll(gson.fromJson(reader.readText(), type))
+                inputStream2.close()
+                val stix = ArrayList<Spanned>()
+                val bibleline = split2[VybranoeBibliaData.glava].split("<br><br>")
+                bibleline.forEach {
+                    if (it.trim() != "") stix.add(MainActivity.fromHtml(it))
+                }
+                for (position in stix.indices) {
+                    val ssb = SpannableString(stix[position])
+                    val pos = BibleGlobalList.checkPosition(VybranoeBibliaData.glava - 1, position)
+                    if (pos != -1) {
+                        if (BibleGlobalList.vydelenie[pos][2] == 1) {
+                            ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
+                        if (BibleGlobalList.vydelenie[pos][3] == 1) ssb.setSpan(UnderlineSpan(), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (BibleGlobalList.vydelenie[pos][4] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                    sb.append(ssb).append("\n")
+                }
+            } else {
+                val bible = split2[VybranoeBibliaData.glava].replace("<br><br>", "<br>")
+                sb.append(MainActivity.fromHtml(bible))
+            }
+            ssbTitle.append(sb).append("\n")
         }
         positionY = k.getInt(resurs + "BibleVybranoeScroll", 0)
         binding.textView.text = ssbTitle.trim()
@@ -529,6 +593,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         if (autoScrollJob?.isActive != true) {
             binding.textView.clearFocus()
             binding.textView.setTextIsSelectable(false)
+            binding.textView.movementMethod = setLinkMovementMethodCheck()
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             autoscroll = true
             val prefEditor = k.edit()
@@ -603,6 +668,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             autoScrollJob?.cancel()
             stopAutoStartScroll()
             binding.textView.setTextIsSelectable(true)
+            binding.textView.movementMethod = setLinkMovementMethodCheck()
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
@@ -782,6 +848,16 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             val textForVertical = binding.textView.text.substring(it.getLineStart(it.getLineForVertical(t)), it.getLineEnd(it.getLineForVertical(t))).trim()
             if (textForVertical != "") firstTextPosition = textForVertical
         }
+    }
+
+    override fun linkMovementMethodCheckOnTouch(onTouch: Boolean) {
+        mActionDown = onTouch
+    }
+
+    private fun setLinkMovementMethodCheck(): LinkMovementMethodCheck? {
+        linkMovementMethodCheck = LinkMovementMethodCheck()
+        linkMovementMethodCheck?.setLinkMovementMethodCheckListener(this)
+        return linkMovementMethodCheck
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

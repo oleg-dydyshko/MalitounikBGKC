@@ -1831,9 +1831,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         val localFile = withContext(Dispatchers.IO) {
             File.createTempFile("updateMalitounikBGKC", "json")
         }
-        if (!localFile.exists()) return text
         pathReference.getFile(localFile).addOnSuccessListener {
-            text = localFile.readText()
+            if (localFile.exists()) text = localFile.readText()
         }.await()
         localFile.delete()
         return text

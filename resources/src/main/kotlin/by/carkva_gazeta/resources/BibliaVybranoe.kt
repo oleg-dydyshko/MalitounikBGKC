@@ -68,7 +68,10 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private var positionY = 0
     private var resurs = "0"
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
+    private var prodoljyt = false
     private val mActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        title = ""
+        prodoljyt = true
         loadBible(null)
     }
 
@@ -210,6 +213,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         binding.actionBack.setOnClickListener {
             onBack()
         }
+        prodoljyt = intent?.extras?.getBoolean("prodoljyt", false) ?: false
         binding.InteractiveScroll.setOnScrollChangedCallback(this)
         binding.textView.movementMethod = setLinkMovementMethodCheck()
         if (dzenNoch) binding.textView.setLinkTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
@@ -526,7 +530,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             }
             ssbTitle.append(titleBibliaData)
             ssbTitle.setSpan(StyleSpan(Typeface.BOLD), ssbTitle.length - titleBibliaData.length, ssbTitle.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            ssbTitle.append("\n\n")
+            ssbTitle.append("\n")
             val sb = SpannableStringBuilder()
             if (file?.exists() == true) {
                 BibleGlobalList.vydelenie.clear()
@@ -580,7 +584,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 binding.textView.layout?.let { layout ->
                     val strPosition = binding.textView.text.indexOf(title + "\n", ignoreCase = true)
                     val line = layout.getLineForOffset(strPosition)
-                    if (intent?.extras?.getBoolean("prodoljyt", false) == false) {
+                    if (!prodoljyt) {
                         y = layout.getLineTop(line)
                     }
                 }

@@ -24,6 +24,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
 import android.view.animation.AnimationUtils
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -67,6 +68,9 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private var positionY = 0
     private var resurs = "0"
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
+    private val mActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        loadBible(null)
+    }
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -516,7 +520,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                         intent.putExtra("kniga", VybranoeBibliaData.kniga)
                         intent.putExtra("glava", VybranoeBibliaData.glava - 1)
                         intent.putExtra("stix", 0)
-                        startActivity(intent)
+                        mActivityResult.launch(intent)
                     }
                 }, 0, titleBibliaData.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }

@@ -992,6 +992,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                             adapter.notifyDataSetChanged()
                             val noInternet = DialogNoInternet()
                             noInternet.show(supportFragmentManager, "no_internet")
+                            binding.progressBar2.visibility = View.GONE
                         }
                     } else {
                         arrayList.clear()
@@ -1004,6 +1005,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                         }
                         arrayList.removeAll(temp.toSet())
                         adapter.notifyDataSetChanged()
+                        binding.progressBar2.visibility = View.GONE
                     }
                 } else {
                     if (MainActivity.isNetworkAvailable()) {
@@ -1016,13 +1018,14 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                         adapter.notifyDataSetChanged()
                         val noInternet = DialogNoInternet()
                         noInternet.show(supportFragmentManager, "no_internet")
+                        binding.progressBar2.visibility = View.GONE
                     }
                 }
             }
             setTitleBibliateka(rub)
             saveindep = true
             invalidateOptionsMenu()
-            binding.progressBar2.visibility = View.GONE
+            if (sqlJob?.isActive != true) binding.progressBar2.visibility = View.GONE
         }
     }
 
@@ -1113,10 +1116,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     }
                     if (unzip) {
                         loadFileEPUB(dir)
-                        binding.progressBar2.visibility = View.GONE
-                    } else {
-                        binding.progressBar2.visibility = View.GONE
                     }
+                    binding.progressBar2.visibility = View.GONE
                 }
             } else {
                 loadFileEPUB(dir)
@@ -1778,7 +1779,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             File.createTempFile("bibliateka", "json")
         }
         pathReference.getFile(localFile).addOnCompleteListener {
-            if (it.isSuccessful) text = localFile.readText()
+            if (it.isSuccessful && localFile.exists()) text = localFile.readText()
             else MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
         }.await()
         localFile.delete()

@@ -338,7 +338,8 @@ class DialogCalindarGrid : DialogFragment() {
                                     if (resours != "0") intent.putExtra("resurs", resours)
                                     if (resours2 != "0") intent.putExtra("resurs", resours2)
                                     intent.putExtra("zmena_chastki", true)
-                                    intent.putExtra("title", slugba.getTitle(resours))
+                                    if (resours != "0") intent.putExtra("title", slugba.getTitle(resours))
+                                    else intent.putExtra("title", slugba.getTitle(resours2))
                                     startActivity(intent)
                                 }
                             }
@@ -466,7 +467,8 @@ class DialogCalindarGrid : DialogFragment() {
                                     if (resours != "0") intent.putExtra("resurs", resours)
                                     if (resours2 != "0") intent.putExtra("resurs", resours2)
                                     intent.putExtra("zmena_chastki", true)
-                                    intent.putExtra("title", slugba.getTitle(resours))
+                                    if (resours != "0") intent.putExtra("title", slugba.getTitle(resours))
+                                    else intent.putExtra("title", slugba.getTitle(resours2))
                                     startActivity(intent)
                                 }
                             }

@@ -286,6 +286,9 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(23, "Палова сьвята Пяцідзясятніцы", "palova_sviata_vialikadnia_viaczernia_u_autorak", VIACZERNIA, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(171, "Сьвятога апостала Юды, сваяка Гасподняга", "mm_19_06_apostala_judy_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(171, "Сьвятога апостала Юды, сваяка Гасподняга", "mm_19_06_apostala_judy_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(176, "Нараджэньне сьвятога прарока Прадвесьніка і Хрысьціцеля", "mm_24_06_jana_chrysciciela_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(176, "Нараджэньне сьвятога прарока Прадвесьніка і Хрысьціцеля", "mm_24_06_naradzennie_jana_chrysciciela_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(181, "Сьвятых слаўных i годных пахвалы апосталаў Пятра i Паўла", "mm_29_06_apostalau_piatra_i_paula_viaczernia", VIACZERNIA))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {

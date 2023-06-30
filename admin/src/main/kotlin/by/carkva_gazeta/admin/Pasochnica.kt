@@ -776,6 +776,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                         if (!isSaveAs) {
                             if (result == "") result = content
                         } else result = content
+                        result = result.replace(" ", " ")
                         localFile.writer().use {
                             it.write(result)
                         }

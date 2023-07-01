@@ -1,14 +1,16 @@
 package by.carkva_gazeta.admin
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.hardware.SensorEvent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
@@ -45,17 +47,25 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogFileExplorerListener, DialogImageFileExplorer.DialogImageFileExplorerListener {
+class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogFileExplorerListener {
     private lateinit var binding: AdminSviatyBinding
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
     private var fileUploadJob: Job? = null
     private val sviaty = ArrayList<SviatyData>()
     private var edittext: AppCompatEditText? = null
-    private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-        if (it) {
-            val fileExplorer = DialogImageFileExplorer()
-            fileExplorer.show(supportFragmentManager, "file_explorer")
+    private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val imageUri = it.data?.data
+            imageUri?.let { image ->
+                val bitmap = if(Build.VERSION.SDK_INT >= 28) {
+                    val source = ImageDecoder.createSource(contentResolver, image)
+                    ImageDecoder.decodeBitmap(source)
+                } else {
+                    @Suppress("DEPRECATION") MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+                }
+                fileUpload(bitmap)
+            }
         }
     }
 
@@ -63,12 +73,6 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
     }
 
     override fun setMyTheme() {
-    }
-
-    override fun setImageFile(file: File, position: Int) {
-    }
-
-    override fun setImageFileCancel() {
     }
 
     override fun onPause() {
@@ -272,8 +276,6 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
     override fun onDialogFile(absolutePath: String, image: Int) {
         val bitmap = BitmapFactory.decodeFile(absolutePath)
         fileUpload(bitmap)
-        val dialogImageFileExplorer = supportFragmentManager.findFragmentByTag("dialogImageFileExplorer") as? DialogImageFileExplorer
-        dialogImageFileExplorer?.dialog?.cancel()
     }
 
     override fun onClick(v: View?) {
@@ -360,13 +362,11 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_upload_image) {
-            val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-            if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            } else {
-                val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(0, true)
-                dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
-            }
+            val intent = Intent()
+            intent.type = "*/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
+            mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
             return true
         }
         if (id == R.id.action_save) {

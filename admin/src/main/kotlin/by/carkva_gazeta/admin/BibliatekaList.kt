@@ -2,13 +2,16 @@ package by.carkva_gazeta.admin
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.graphics.Point
 import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
@@ -17,6 +20,7 @@ import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminBibliatekaListBinding
@@ -34,7 +38,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener, DialogImageFileExplorer.DialogImageFileExplorerListener, DialogFileExplorer.DialogFileExplorerListener {
+class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener {
 
     private lateinit var binding: AdminBibliatekaListBinding
     private var sqlJob: Job? = null
@@ -44,8 +48,28 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
     private lateinit var adapter: BibliotekaAdapter
     private lateinit var rubrikaAdapter: RubrikaAdapter
     private var position = -1
-    private var pdfFilePath = ""
-    private var imageFilePath = ""
+    private val mActivityResultImageFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val imageUri = it.data?.data
+            imageUri?.let { image ->
+                val bitmap = if(Build.VERSION.SDK_INT >= 28) {
+                    val source = ImageDecoder.createSource(contentResolver, image)
+                    ImageDecoder.decodeBitmap(source)
+                } else {
+                    @Suppress("DEPRECATION") MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+                }
+                binding.imagePdf.setImageBitmap(bitmap)
+            }
+        }
+    }
+    private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val fileUri = it.data?.data
+            fileUri?.let { file ->
+                binding.pdfTextView.text = file.toString()
+            }
+        }
+    }
 
     override fun onSensorChanged(event: SensorEvent?) {
     }
@@ -63,10 +87,8 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
         super.onSaveInstanceState(outState)
         outState.putBoolean("editVisibility", binding.edit.visibility == View.VISIBLE)
         outState.putString("pdfTextView", binding.pdfTextView.text.toString())
-        outState.putParcelable("BitmapImage", binding.imagePdf.drawable.toBitmap())
+        outState.putParcelable("BitmapImage", binding.imagePdf.drawable?.toBitmap())
         outState.putInt("position", position)
-        outState.putString("pdfFilePath", pdfFilePath)
-        outState.putString("imageFilePath", imageFilePath)
     }
 
     override fun onBack() {
@@ -110,7 +132,6 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
                 val t1 = arrayList[position][5].lastIndexOf("/")
                 val file = File("$filesDir/image_temp/" + arrayList[position][5].substring(t1 + 1))
                 if (file.exists()) {
-                    imageFilePath = file.absolutePath
                     CoroutineScope(Dispatchers.Main).launch {
                         val bitmap = withContext(Dispatchers.IO) {
                             val options = BitmapFactory.Options()
@@ -132,12 +153,18 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
         }
         setImageSize(binding.imagePdf)
         binding.imagePdf.setOnClickListener {
-            val dialog = DialogImageFileExplorer.getInstance(0, false)
-            dialog.show(supportFragmentManager, "DialogImageFileExplorer")
+            val intent = Intent()
+            intent.type = "*/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
+            mActivityResultImageFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
         }
         binding.admin.setOnClickListener {
-            val dialog = DialogFileExplorer()
-            dialog.show(supportFragmentManager, "DialogFileExplorer")
+            val intent = Intent()
+            intent.type = "*/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf"))
+            mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
         }
     }
 
@@ -151,7 +178,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
                     val str = binding.opisanie.text.toString()
                     val pdf = binding.pdfTextView.text.toString()
                     val t1 = pdf.lastIndexOf(".")
-                    if (t1 == -1 || link == "" || imageFilePath == "") {
+                    if (t1 == -1 || link == "" || binding.imagePdf.drawable == null) {
                         withContext(Dispatchers.Main) {
                             MainActivity.toastView(this@BibliatekaList, getString(by.carkva_gazeta.malitounik.R.string.error))
                             binding.progressBar2.visibility = View.GONE
@@ -164,7 +191,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
                         mySqlList.add(link)
                         mySqlList.add(str)
                         mySqlList.add(pdf)
-                        mySqlList.add(File(pdfFilePath).length().toString())
+                        mySqlList.add(File(binding.pdfTextView.text.toString()).length().toString())
                         mySqlList.add(rubrika)
                         mySqlList.add(imageLocal)
                         arrayList.add(0, mySqlList)
@@ -172,14 +199,14 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
                         arrayList[position][0] = link
                         arrayList[position][1] = str
                         arrayList[position][2] = pdf
-                        if (pdfFilePath != "") arrayList[position][3] = File(pdfFilePath).length().toString()
+                        if (binding.pdfTextView.text.toString() != "") arrayList[position][3] = File(binding.pdfTextView.text.toString()).length().toString()
                         arrayList[position][4] = rubrika
                         arrayList[position][5] = imageLocal
                     }
                     val dir = File("$filesDir/image_temp")
                     if (!dir.exists()) dir.mkdir()
                     val file = File(imageLocal)
-                    val bitmap = BitmapFactory.decodeFile(imageFilePath)
+                    val bitmap = binding.imagePdf.drawable?.toBitmap()
                     bitmap?.let {
                         val out = FileOutputStream(file)
                         it.compress(Bitmap.CompressFormat.PNG, 90, out)
@@ -187,7 +214,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
                         out.close()
                     }
                     saveBibliatekaJson()
-                    if (pdfFilePath != "") Malitounik.referens.child("/data/bibliateka/$pdf").putFile(Uri.fromFile(File(pdfFilePath))).await()
+                    if (binding.pdfTextView.text.toString() != "") Malitounik.referens.child("/data/bibliateka/$pdf").putFile(Uri.fromFile(File(binding.pdfTextView.text.toString()))).await()
                     Malitounik.referens.child("/images/bibliateka/" + file.name).putFile(Uri.fromFile(file)).await()
                 }
                 adapter.notifyDataSetChanged()
@@ -208,20 +235,6 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
         }
         Malitounik.referens.child("/bibliateka.json").putFile(Uri.fromFile(localFile)).await()
         localFile.delete()
-    }
-
-    override fun onDialogFile(file: File) {
-        binding.pdfTextView.text = file.name
-        pdfFilePath = file.absolutePath
-    }
-
-    override fun setImageFile(file: File, position: Int) {
-        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-        binding.imagePdf.setImageBitmap(bitmap)
-        imageFilePath = file.absolutePath
-    }
-
-    override fun setImageFileCancel() {
     }
 
     override fun onDialogDeliteClick(position: Int, name: String) {
@@ -348,8 +361,6 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
             position = savedInstanceState.getInt("position")
             binding.pdfTextView.text = savedInstanceState.getString("pdfTextView")
             binding.imagePdf.setImageBitmap(savedInstanceState.getParcelable("BitmapImage"))
-            pdfFilePath = savedInstanceState.getString("pdfFilePath") ?: ""
-            imageFilePath = savedInstanceState.getString("imageFilePath") ?: ""
             setImageSize(binding.imagePdf)
         }
         getSql()

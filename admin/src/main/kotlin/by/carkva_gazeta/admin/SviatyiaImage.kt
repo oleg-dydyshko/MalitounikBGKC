@@ -1,48 +1,49 @@
 package by.carkva_gazeta.admin
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.content.pm.PackageManager
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.hardware.SensorEvent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.AbsoluteSizeSpan
-import android.util.Log
+import android.provider.MediaStore
 import android.util.TypedValue
-import android.view.*
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaImageBinding
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ListItemImageBinding
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.reflect.Type
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Calendar
 
-class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExplorerListener, DialogDeliteImage.DialogDeliteListener, DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener {
+class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener {
 
     private lateinit var binding: AdminSviatyiaImageBinding
     private lateinit var adapter: ItemAdapter
@@ -52,16 +53,21 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
     private var day = 1
     private val images = ArrayList<DataImages>()
     private val arrayListIcon = ArrayList<ArrayList<String>>()
-    private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-        if (it) {
-            val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(0, false)
-            dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
+    private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val imageUri = it.data?.data
+            imageUri?.let { image ->
+                val bitmap = if(Build.VERSION.SDK_INT >= 28) {
+                    val source = ImageDecoder.createSource(contentResolver, image)
+                    ImageDecoder.decodeBitmap(source)
+                } else {
+                    @Suppress("DEPRECATION") MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+                }
+                val position = it.data?.extras?.getInt("position", 0) ?: 0
+                fileUpload(bitmap, position)
+            }
         }
-    }
-
-    override fun setImageFile(file: File, position: Int) {
-        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-        fileUpload(bitmap, position)
+        binding.dragListView.resetSwipedViews(null)
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -71,22 +77,17 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
     }
 
     override fun onDialogEditClick(position: Int) {
-        val permissionCheck = ContextCompat.checkSelfPermission(this@SviatyiaImage, READ_EXTERNAL_STORAGE)
-        if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-            mPermissionResult.launch(READ_EXTERNAL_STORAGE)
-        } else {
-            val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(position, false)
-            dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
-        }
+        val intent = Intent()
+        intent.type = "*/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
+        intent.putExtra("position", position)
+        mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
     }
 
     override fun onDialogDeliteClick(position: Int, name: String) {
         val dialog = DialogDeliteImage.getInstance(position, images[position].file.absolutePath)
         dialog.show(supportFragmentManager, "DialogDeliteImage")
-    }
-
-    override fun setImageFileCancel() {
-        binding.dragListView.resetSwipedViews(null)
     }
 
     override fun imageFileDeliteCancel() {
@@ -137,15 +138,17 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
             }
             Malitounik.referens.child("/icons.json").getFile(localFile2).addOnCompleteListener {
                 if (it.isSuccessful) {
-                    val gson = Gson()
-                    val json = localFile2.readText()
-                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                    arrayListIcon.addAll(gson.fromJson(json, type))
+                    if (localFile2.exists()) {
+                        val gson = Gson()
+                        val json = localFile2.readText()
+                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                        arrayListIcon.addAll(gson.fromJson(json, type))
+                    }
                 } else {
                     MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
             }.await()
-            localFile2.delete()
+            if (localFile2.exists()) localFile2.delete()
             getIcons()
         }
         adapter = ItemAdapter(by.carkva_gazeta.malitounik.R.id.image, false)
@@ -166,13 +169,12 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
                     dialog.show(supportFragmentManager, "DialogDeliteImage")
                 }
                 if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
-                    val permissionCheck = ContextCompat.checkSelfPermission(this@SviatyiaImage, READ_EXTERNAL_STORAGE)
-                    if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                        mPermissionResult.launch(READ_EXTERNAL_STORAGE)
-                    } else {
-                        val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(pos, false)
-                        dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
-                    }
+                    val intent = Intent()
+                    intent.type = "*/*"
+                    intent.action = Intent.ACTION_GET_CONTENT
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
+                    intent.putExtra("position", pos)
+                    mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
                 }
             }
         })
@@ -516,25 +518,23 @@ class SviatyiaImage : BaseActivity(), DialogImageFileExplorer.DialogImageFileExp
 
             override fun onItemClicked(view: View?) {
                 if (images[bindingAdapterPosition].size == 0L) {
-                    val permissionCheck = ContextCompat.checkSelfPermission(this@SviatyiaImage, READ_EXTERNAL_STORAGE)
-                    if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                        mPermissionResult.launch(READ_EXTERNAL_STORAGE)
-                    } else {
-                        val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(bindingAdapterPosition, false)
-                        dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
-                    }
+                    val intent = Intent()
+                    intent.type = "*/*"
+                    intent.action = Intent.ACTION_GET_CONTENT
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
+                    intent.putExtra("position", bindingAdapterPosition)
+                    mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
                 }
             }
 
             override fun onItemLongClicked(view: View): Boolean {
                 if (images[bindingAdapterPosition].size == 0L) {
-                    val permissionCheck = ContextCompat.checkSelfPermission(this@SviatyiaImage, READ_EXTERNAL_STORAGE)
-                    if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                        mPermissionResult.launch(READ_EXTERNAL_STORAGE)
-                    } else {
-                        val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(bindingAdapterPosition, false)
-                        dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
-                    }
+                    val intent = Intent()
+                    intent.type = "*/*"
+                    intent.action = Intent.ACTION_GET_CONTENT
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
+                    intent.putExtra("position", bindingAdapterPosition)
+                    mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
                 } else {
                     val contextMenu = DialogPiarlinyContextMenu.getInstance(bindingAdapterPosition, getString(by.carkva_gazeta.malitounik.R.string.sviatyia))
                     contextMenu.show(supportFragmentManager, "context_menu")

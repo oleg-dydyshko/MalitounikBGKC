@@ -60,7 +60,7 @@ import javax.xml.parsers.ParserConfigurationException
 import kotlin.math.abs
 
 
-class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener {
+class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener {
 
 
     private lateinit var gestureDetector: GestureDetector
@@ -156,49 +156,41 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         override fun onAnimationRepeat(animation: Animation) {}
     }
     private var sqlJob: Job? = null
-    private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-        if (it) {
-            if (idSelect == MainActivity.SETFILE) {
-                binding.progressBar2.visibility = View.GONE
-                val fileExplorer = DialogFileExplorer()
-                fileExplorer.show(supportFragmentManager, "file_explorer")
-            } else {
-                when {
-                    fileName.contains(".pdf", true) -> {
-                        loadFilePDF()
-                    }
+    private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf", "text/fb2", "application/zip", "application/epub+zip", "text/plain", "text/html"))
+            val dir = File("$filesDir/BookCache")
+            if (!dir.exists()) dir.mkdir()
+            val fileUri = it.data?.data
+            val path = fileUri?.path ?: ""
+            val t1 = path.lastIndexOf("/")
+            var mime = "Bibliateka.file"
+            if (t1 != -1) {
+                mime = path.substring(t1 + 1)
+            }
+            if (!(mime.contains(".htm", ignoreCase = true) || mime.contains(".txt", ignoreCase = true) || mime.contains(".pdf", ignoreCase = true) || mime.contains(".fb2", ignoreCase = true) || mime.contains(".epub", ignoreCase = true))) return@registerForActivityResult
+            fileUri?.let { uri ->
+                copyInputStreamToFile(contentResolver.openInputStream(uri), mime)
+            }
+            onDialogFile(File("$filesDir/BookCache/$mime"))
+        }
+    }
 
-                    fileName.contains(".fb2.zip", true) -> {
-                        loadFileFB2ZIP()
-                    }
-
-                    fileName.contains(".fb2", true) -> {
-                        loadFileFB2()
-                    }
-
-                    fileName.contains(".txt", true) -> {
-                        loadFileTXT()
-                    }
-
-                    fileName.contains(".htm", true) -> {
-                        loadFileHTML()
-                    }
-
-                    else -> {
-                        loadFileEPUB()
-                    }
+    private fun copyInputStreamToFile(inputStream: InputStream?, mime: String) {
+        val outputStream = FileOutputStream(File("$filesDir/BookCache/$mime"))
+        val buffer = ByteArray(8192)
+        inputStream?.use { input ->
+            outputStream.use { fileOut ->
+                while (true) {
+                    val length = input.read(buffer)
+                    if (length <= 0) break
+                    fileOut.write(buffer, 0, length)
                 }
-                if (!fileName.contains(".pdf", true)) {
-                    autoscroll = k.getBoolean("autoscroll", false)
-                    spid = k.getInt("autoscrollSpid", 60)
-                    if (autoscroll) {
-                        startAutoScroll()
-                    }
-                }
-                binding.swipeRefreshLayout.visibility = View.GONE
-                invalidateOptionsMenu()
+                fileOut.flush()
+                fileOut.close()
             }
         }
+        inputStream?.close()
     }
 
     override fun onScroll(t: Int) {
@@ -251,6 +243,10 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 val dir = File("$filesDir/Book")
                 if (dir.exists()) {
                     dir.deleteRecursively()
+                }
+                val dir2 = File("$filesDir/BookCache")
+                if (dir2.exists()) {
+                    dir2.deleteRecursively()
                 }
             }
             binding.progressBar2.visibility = View.GONE
@@ -366,7 +362,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         pdfError.show(supportFragmentManager, "pdf_error")
     }
 
-    override fun onDialogFile(file: File) {
+    private fun onDialogFile(file: File) {
         binding.swipeRefreshLayout.visibility = View.GONE
         saveindep = false
         idSelect = MainActivity.NIADAUNIA
@@ -578,13 +574,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 if (file.exists()) {
                     filePath = file.absolutePath
                     fileName = file.name
-                    if (!File(arrayList[position][2]).exists()) {
-                        val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                        if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                            mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-                            return@setOnItemClickListener
-                        }
-                    }
                     when {
                         fileName.contains(".pdf", true) -> {
                             loadFilePDF()
@@ -846,14 +835,11 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             MainActivity.RELLITARATURA -> setRubrika(MainActivity.RELLITARATURA)
             MainActivity.PDF -> setRubrika(MainActivity.PDF)
             MainActivity.SETFILE -> {
-                val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                    mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-                } else {
-                    binding.progressBar2.visibility = View.GONE
-                    val fileExplorer = DialogFileExplorer()
-                    fileExplorer.show(supportFragmentManager, "file_explorer")
-                }
+                val intent = Intent()
+                intent.type = "*/*"
+                intent.action = Intent.ACTION_GET_CONTENT
+                mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
+                binding.progressBar2.visibility = View.GONE
                 setRubrika(MainActivity.NIADAUNIA)
             }
         }
@@ -863,14 +849,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 val t1 = filePath.indexOf("raw:")
                 filePath = filePath.substring(t1 + 4)
             }
-            val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
             when {
                 filePath.contains(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString()) -> {
                     loadFilePDF()
-                }
-
-                PackageManager.PERMISSION_DENIED == permissionCheck -> {
-                    mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 }
 
                 else -> {
@@ -1422,7 +1403,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     override fun onPrepareMenu(menu: Menu) {
         autoscroll = k.getBoolean("autoscroll", false)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
-        val isTrash =  binding.swipeRefreshLayout.visibility == View.VISIBLE
+        val isTrash = binding.swipeRefreshLayout.visibility == View.VISIBLE
         binding.swipeRefreshLayout.isEnabled = binding.swipeRefreshLayout.visibility == View.VISIBLE
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_trash).isVisible = binding.swipeRefreshLayout.visibility == View.VISIBLE && idSelect == MainActivity.NIADAUNIA && naidaunia.size > 0
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_rub_0).isVisible = isTrash
@@ -1574,14 +1555,11 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_rub_5) {
-            val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-            if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            } else {
-                binding.progressBar2.visibility = View.GONE
-                val fileExplorer = DialogFileExplorer()
-                fileExplorer.show(supportFragmentManager, "file_explorer")
-            }
+            val intent = Intent()
+            intent.type = "*/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
+            binding.progressBar2.visibility = View.GONE
             idSelect = MainActivity.SETFILE
             return true
         }
@@ -1591,12 +1569,12 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_title) {
-            val titleBiblioteka: DialogTitleBiblioteka = DialogTitleBiblioteka.getInstance(bookTitle)
+            val titleBiblioteka = DialogTitleBiblioteka.getInstance(bookTitle)
             titleBiblioteka.show(supportFragmentManager, "title_biblioteka")
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_set_page) {
-            val biblioteka: DialogSetPageBiblioteka = DialogSetPageBiblioteka.getInstance(pdfView.currentPage, pdfView.pageCount)
+            val biblioteka = DialogSetPageBiblioteka.getInstance(pdfView.currentPage, pdfView.pageCount)
             biblioteka.show(supportFragmentManager, "set_page_biblioteka")
             return true
         }

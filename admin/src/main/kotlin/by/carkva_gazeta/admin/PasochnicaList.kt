@@ -1,11 +1,9 @@
 package by.carkva_gazeta.admin
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.hardware.SensorEvent
 import android.net.Uri
@@ -42,21 +40,26 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.net.URLEncoder
 import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener, DialogDeliteAllPasochnica.DialogDeliteAllPasochnicaListener, DialogFileNameError.DialogFileNameErrorListener {
+class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener, DialogDeliteAllPasochnica.DialogDeliteAllPasochnicaListener, DialogFileNameError.DialogFileNameErrorListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaListBinding
     private var resetTollbarJob: Job? = null
     private var fileList = ArrayList<String>()
     private lateinit var adapter: PasochnicaListAdaprer
-    private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-        if (it) {
-            val fileExplorer = DialogFileExplorer()
-            fileExplorer.show(supportFragmentManager, "file_explorer")
+    private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val imageUri = it.data?.data
+                imageUri?.let { image ->
+                    onDialogFile(File(URLEncoder.encode(image.path, "UTF-8")))
+                }
+            }
         }
     }
 
@@ -76,7 +79,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
         resetTollbarJob?.cancel()
     }
 
-    override fun onDialogFile(file: File) {
+    private fun onDialogFile(file: File) {
         val title = file.name
         var exits = false
         for (i in 0 until fileList.size) {
@@ -469,13 +472,11 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             return true
         }
         if (id == R.id.action_open_file) {
-            val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-            if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            } else {
-                val fileExplorer = DialogFileExplorer()
-                fileExplorer.show(supportFragmentManager, "file_explorer")
-            }
+            val intent = Intent()
+            intent.type = "*/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("text/html", "text/plain"))
+            mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
             return true
         }
         if (id == R.id.action_delite_all) {

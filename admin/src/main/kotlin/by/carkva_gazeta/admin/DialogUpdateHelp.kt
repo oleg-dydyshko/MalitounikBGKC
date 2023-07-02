@@ -17,7 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.io.File
 
 class DialogUpdateHelp : DialogFragment() {
@@ -57,9 +56,7 @@ class DialogUpdateHelp : DialogFragment() {
                 if (MainActivity.isNetworkAvailable()) {
                     updateHelpJob = CoroutineScope(Dispatchers.Main).launch {
                         try {
-                            val localFile = withContext(Dispatchers.IO) {
-                                File.createTempFile("updateMalitounik", "json")
-                            }
+                            val localFile = File("${fragmentActivity.filesDir}/cache/cache.txt")
                             Malitounik.referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener {
                                 if (it.isSuccessful) {
                                     val jsonFile = localFile.readText()
@@ -84,44 +81,38 @@ class DialogUpdateHelp : DialogFragment() {
     }
 
     private fun setViersionApp(releaseCode: String, release: Boolean) {
-        if (MainActivity.isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.Main).launch {
-                try {
-                    val localFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("updateMalitounik", "json")
-                    }
-                    Malitounik.referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val jsonFile = localFile.readText()
-                            val gson = Gson()
-                            val type = TypeToken.getParameterized(MutableMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
-                            val updeteArrayText = gson.fromJson<MutableMap<String, String>>(jsonFile, type)
-                            if (release) {
-                                updeteArrayText["release"] = releaseCode
+        activity?.let {
+            if (MainActivity.isNetworkAvailable()) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        val localFile = File("${it.filesDir}/cache/cache.txt")
+                        Malitounik.referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val jsonFile = localFile.readText()
+                                val gson = Gson()
+                                val type = TypeToken.getParameterized(MutableMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
+                                val updeteArrayText = gson.fromJson<MutableMap<String, String>>(jsonFile, type)
+                                if (release) {
+                                    updeteArrayText["release"] = releaseCode
+                                } else {
+                                    updeteArrayText["devel"] = releaseCode
+                                }
+                                localFile.writer().use {
+                                    it.write(gson.toJson(updeteArrayText, type))
+                                }
                             } else {
-                                updeteArrayText["devel"] = releaseCode
-                            }
-                            localFile.writer().use {
-                                it.write(gson.toJson(updeteArrayText, type))
-                            }
-                        } else {
-                            activity?.let {
                                 MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
                             }
-                        }
-                    }.await()
-                    Malitounik.referens.child("/updateMalitounikBGKC.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
-                        activity?.let {
+                        }.await()
+                        Malitounik.referens.child("/updateMalitounikBGKC.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
                             } else {
                                 MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
                             }
-                        }
-                    }.await()
-                    localFile.delete()
-                } catch (e: Throwable) {
-                    activity?.let {
+                        }.await()
+                        localFile.delete()
+                    } catch (e: Throwable) {
                         MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                 }

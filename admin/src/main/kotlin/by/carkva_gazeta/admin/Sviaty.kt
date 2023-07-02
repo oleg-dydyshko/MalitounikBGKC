@@ -116,9 +116,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
             binding.progressBar2.visibility = View.VISIBLE
             val arrayList = ArrayList<ArrayList<String>>()
             try {
-                val localFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("opisanieSviat", "json")
-                }
+                val localFile = File("$filesDir/cache/cache.txt")
                 Malitounik.referens.child("/opisanie_sviat.json").getFile(localFile).addOnCompleteListener {
                     if (it.isSuccessful) {
                         val builder = localFile.readText()
@@ -210,9 +208,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
         if (MainActivity.isNetworkAvailable()) {
             fileUploadJob = CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
-                val localFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("imageSave", "jpeg")
-                }
+                val localFile = File("$filesDir/cache/cache.txt")
                 withContext(Dispatchers.IO) {
                     val out = FileOutputStream(localFile)
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
@@ -220,9 +216,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     out.close()
                 }
                 val fileName = File("/chytanne/icons/v_" + sviaty[binding.spinnerSviaty.selectedItemPosition].data.toString() + "_" + sviaty[binding.spinnerSviaty.selectedItemPosition].mun.toString() + ".jpg")
-                val localFile2 = withContext(Dispatchers.IO) {
-                    File.createTempFile("icons", "json")
-                }
+                val localFile2 = File("$filesDir/cache/cache2.txt")
                 Malitounik.referens.child("/chytanne/icons/" + fileName.name).putFile(Uri.fromFile(localFile)).await()
                 val arrayListIcon = ArrayList<ArrayList<String>>()
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
@@ -477,9 +471,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     var linur = ""
                     var viach = ""
                     var index = -5
-                    val localFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("opisanie_sviat", "json")
-                    }
+                    val localFile = File("$filesDir/cache/cache.txt")
                     val gson = Gson()
                     val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                     var array = ArrayList<ArrayList<String>>()
@@ -520,9 +512,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     localFile.writer().use {
                         it.write(gson.toJson(array))
                     }
-                    val logFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("piasochnica", "json")
-                    }
+                    val logFile = File("$filesDir/cache/log.txt")
                     val sb = StringBuilder()
                     val url = "/opisanie_sviat.json"
                     Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {

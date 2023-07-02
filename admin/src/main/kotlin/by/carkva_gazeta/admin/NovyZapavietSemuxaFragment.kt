@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.io.File
 
 class NovyZapavietSemuxaFragment : BaseFragment() {
@@ -66,83 +65,79 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
     }
 
     private fun sendPostRequest(id: Int, spaw: String, sv: Int) {
-        if (MainActivity.isNetworkAvailable()) {
-            bibleJob = CoroutineScope(Dispatchers.Main).launch {
-                _binding?.progressBar2?.visibility = View.VISIBLE
-                val localFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("Semucha", "txt")
-                }
-                val zag = "Разьдзел"
-                Malitounik.referens.child("/chytanne/Semucha/biblian$id.txt").getFile(localFile).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val file = localFile.readText()
-                        val file2 = file.split("===")
-                        val fileNew = StringBuilder()
-                        for ((count, element) in file2.withIndex()) {
-                            val fil = element.trim()
-                            var srtn = "\n"
-                            var stringraz = ""
-                            if (fil != "") {
-                                if (count != 0) {
-                                    srtn = "\n\n"
-                                    stringraz = "===\n"
-                                }
-                                if (file2.size == count + 1) {
-                                    srtn = "\n"
-                                }
-                                if (count == sv) {
-                                    fileNew.append(stringraz + "//" + zag + " " + sv + "\n" + spaw.trim() + srtn)
-                                } else {
-                                    fileNew.append(stringraz + fil + srtn)
+        activity?.let {
+            if (MainActivity.isNetworkAvailable()) {
+                bibleJob = CoroutineScope(Dispatchers.Main).launch {
+                    _binding?.progressBar2?.visibility = View.VISIBLE
+                    val localFile = File("${it.filesDir}/cache/cache.txt")
+                    val zag = "Разьдзел"
+                    Malitounik.referens.child("/chytanne/Semucha/biblian$id.txt").getFile(localFile).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val file = localFile.readText()
+                            val file2 = file.split("===")
+                            val fileNew = StringBuilder()
+                            for ((count, element) in file2.withIndex()) {
+                                val fil = element.trim()
+                                var srtn = "\n"
+                                var stringraz = ""
+                                if (fil != "") {
+                                    if (count != 0) {
+                                        srtn = "\n\n"
+                                        stringraz = "===\n"
+                                    }
+                                    if (file2.size == count + 1) {
+                                        srtn = "\n"
+                                    }
+                                    if (count == sv) {
+                                        fileNew.append(stringraz + "//" + zag + " " + sv + "\n" + spaw.trim() + srtn)
+                                    } else {
+                                        fileNew.append(stringraz + fil + srtn)
+                                    }
                                 }
                             }
-                        }
-                        localFile.writer().use {
-                            it.write(fileNew.toString())
-                        }
-                    } else {
-                        activity?.let {
-                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
-                        }
-                    }
-                }.await()
-                val logFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("piasochnica", "json")
-                }
-                val sb = StringBuilder()
-                val url = "/chytanne/Semucha/biblian$id.txt"
-                Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
-                    activity?.let {
-                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
-                    }
-                }.await()
-                var ref = true
-                logFile.readLines().forEach {
-                    sb.append("$it\n")
-                    if (it.contains(url)) {
-                        ref = false
-                    }
-                }
-                if (ref) {
-                    sb.append("$url\n")
-                }
-                logFile.writer().use {
-                    it.write(sb.toString())
-                }
-                Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
-
-                Malitounik.referens.child("/chytanne/Semucha/biblian$id.txt").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
-                    activity?.let {
-                        if (task.isSuccessful) {
-                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
+                            localFile.writer().use {
+                                it.write(fileNew.toString())
+                            }
                         } else {
                             MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
+                    }.await()
+                    val logFile = File("${it.filesDir}/cache/log.txt")
+                    val sb = StringBuilder()
+                    val url = "/chytanne/Semucha/biblian$id.txt"
+                    Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                        activity?.let {
+                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        }
+                    }.await()
+                    var ref = true
+                    logFile.readLines().forEach {
+                        sb.append("$it\n")
+                        if (it.contains(url)) {
+                            ref = false
+                        }
                     }
-                }.await()
-                localFile.delete()
-                logFile.delete()
-                _binding?.progressBar2?.visibility = View.GONE
+                    if (ref) {
+                        sb.append("$url\n")
+                    }
+                    logFile.writer().use {
+                        it.write(sb.toString())
+                    }
+                    Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+
+                    Malitounik.referens.child("/chytanne/Semucha/biblian$id.txt").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
+                        activity?.let {
+                            if (task.isSuccessful) {
+                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
+                            } else {
+                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                            }
+                        }
+                    }.await()
+                    localFile.delete()
+                    logFile.delete()
+                    _binding?.progressBar2?.visibility = View.GONE
+                }
             }
         }
     }
@@ -182,39 +177,37 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                 26 -> url = "/chytanne/Semucha/biblian27.txt"
             }
             urlJob = CoroutineScope(Dispatchers.Main).launch {
-                val sb = StringBuilder()
-                try {
-                    val localFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("SemuchaRead", "txt")
-                    }
-                    Malitounik.referens.child(url).getFile(localFile).addOnCompleteListener { it ->
-                        if (it.isSuccessful) {
-                            val text = localFile.readText()
-                            val split = text.split("===")
-                            val knig = split[page + 1]
-                            val split2 = knig.split("\n")
-                            split2.forEach {
-                                val t1 = it.indexOf("//")
-                                if (t1 != -1) {
-                                    sb.append(it.substring(0, t1)).append("\n")
-                                } else {
-                                    sb.append(it).append("\n")
+                activity?.let { fragmentActivity ->
+                    val sb = StringBuilder()
+                    try {
+                        val localFile = File("${fragmentActivity.filesDir}/cache/cache.txt")
+                        Malitounik.referens.child(url).getFile(localFile).addOnCompleteListener { it ->
+                            if (it.isSuccessful) {
+                                val text = localFile.readText()
+                                val split = text.split("===")
+                                val knig = split[page + 1]
+                                val split2 = knig.split("\n")
+                                split2.forEach {
+                                    val t1 = it.indexOf("//")
+                                    if (t1 != -1) {
+                                        sb.append(it.substring(0, t1)).append("\n")
+                                    } else {
+                                        sb.append(it).append("\n")
+                                    }
+                                }
+                            } else {
+                                activity?.let {
+                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
                                 }
                             }
-                        } else {
-                            activity?.let {
-                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
-                            }
-                        }
-                    }.await()
-                    localFile.delete()
-                } catch (e: Throwable) {
-                    activity?.let {
-                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }.await()
+                        localFile.delete()
+                    } catch (e: Throwable) {
+                        MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
+                    binding.textView.setText(sb.toString().trim())
+                    binding.progressBar2.visibility = View.GONE
                 }
-                binding.textView.setText(sb.toString().trim())
-                binding.progressBar2.visibility = View.GONE
             }
         }
     }

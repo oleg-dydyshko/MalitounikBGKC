@@ -57,7 +57,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         if (it.resultCode == Activity.RESULT_OK) {
             val imageUri = it.data?.data
             imageUri?.let { image ->
-                val bitmap = if(Build.VERSION.SDK_INT >= 28) {
+                val bitmap = if (Build.VERSION.SDK_INT >= 28) {
                     val source = ImageDecoder.createSource(contentResolver, image)
                     ImageDecoder.decodeBitmap(source)
                 } else {
@@ -133,22 +133,18 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: (c[Calendar.MONTH] + 1)
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         CoroutineScope(Dispatchers.Main).launch {
-            val localFile2 = withContext(Dispatchers.IO) {
-                File.createTempFile("icons", "json")
-            }
-            Malitounik.referens.child("/icons.json").getFile(localFile2).addOnCompleteListener {
+            val localFile = File("$filesDir/cache/cache2.txt")
+            Malitounik.referens.child("/icons.json").getFile(localFile).addOnCompleteListener {
                 if (it.isSuccessful) {
-                    if (localFile2.exists()) {
-                        val gson = Gson()
-                        val json = localFile2.readText()
-                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                        arrayListIcon.addAll(gson.fromJson(json, type))
-                    }
+                    val gson = Gson()
+                    val json = localFile.readText()
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                    arrayListIcon.addAll(gson.fromJson(json, type))
                 } else {
                     MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
             }.await()
-            if (localFile2.exists()) localFile2.delete()
+            localFile.delete()
             getIcons()
         }
         adapter = ItemAdapter(by.carkva_gazeta.malitounik.R.id.image, false)
@@ -261,9 +257,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
-                val localFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("imageSave", "jpeg")
-                }
+                val localFile = File("$filesDir/cache/cache.txt")
                 withContext(Dispatchers.IO) {
                     bitmap?.let {
                         val out = FileOutputStream(localFile)
@@ -333,22 +327,20 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                     arrayListIcon.add(array)
                 }
             }
-            val localFile2 = withContext(Dispatchers.IO) {
-                File.createTempFile("icons", "json")
-            }
+            val localFile = File("$filesDir/cache/cache.txt")
             arrayListIcon.sortBy {
                 it[0]
             }
-            localFile2.writer().use {
+            localFile.writer().use {
                 val gson = Gson()
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                 it.write(gson.toJson(arrayListIcon, type))
             }
-            Malitounik.referens.child("/icons.json").putFile(Uri.fromFile(localFile2)).addOnCompleteListener {
+            Malitounik.referens.child("/icons.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                 if (it.isSuccessful) MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.save))
                 else MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.error))
             }.await()
-            localFile2.delete()
+            localFile.delete()
         }
     }
 

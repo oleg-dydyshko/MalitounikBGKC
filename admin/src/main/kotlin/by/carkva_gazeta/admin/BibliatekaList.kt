@@ -52,7 +52,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
         if (it.resultCode == Activity.RESULT_OK) {
             val imageUri = it.data?.data
             imageUri?.let { image ->
-                val bitmap = if(Build.VERSION.SDK_INT >= 28) {
+                val bitmap = if (Build.VERSION.SDK_INT >= 28) {
                     val source = ImageDecoder.createSource(contentResolver, image)
                     ImageDecoder.decodeBitmap(source)
                 } else {
@@ -225,9 +225,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
     }
 
     private suspend fun saveBibliatekaJson() {
-        val localFile = withContext(Dispatchers.IO) {
-            File.createTempFile("bibliateka", "json")
-        }
+        val localFile = File("$filesDir/cache/cache.txt")
         val gson = Gson()
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
         localFile.writer().use {
@@ -317,9 +315,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
     private suspend fun getBibliatekaJson(): String {
         var text = ""
         val pathReference = Malitounik.referens.child("/bibliateka.json")
-        val localFile = withContext(Dispatchers.IO) {
-            File.createTempFile("bibliateka", "json")
-        }
+        val localFile = File("$filesDir/cache/cache.txt")
         pathReference.getFile(localFile).addOnCompleteListener {
             if (it.isSuccessful) text = localFile.readText()
             else MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))

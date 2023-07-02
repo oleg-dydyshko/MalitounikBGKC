@@ -38,7 +38,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.net.URLEncoder
 import java.util.Calendar
@@ -268,9 +267,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 var resourse = ""
-                val localFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("piasochnica", "html")
-                }
+                val localFile = File("$filesDir/cache/cache.txt")
                 try {
                     Malitounik.referens.child("/$dirToFile").getFile(localFile).addOnFailureListener {
                         MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
@@ -344,9 +341,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 try {
-                    val localFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("piasochnica", "html")
-                    }
+                    val localFile = File("$filesDir/cache/cache.txt")
                     if (isSite) {
                         Malitounik.referens.child("/$oldFileName").getFile(localFile).addOnFailureListener {
                             MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))

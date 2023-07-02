@@ -22,7 +22,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.io.File
 
 class DialogPasochnicaMkDir : DialogFragment() {
@@ -106,9 +105,7 @@ class DialogPasochnicaMkDir : DialogFragment() {
                         try {
                             val storage = Firebase.storage
                             val referens = storage.reference
-                            val localFile = withContext(Dispatchers.IO) {
-                                File.createTempFile("mkdir", "html")
-                            }
+                            val localFile = File("${fragmentActivity.filesDir}/cache/cache.txt")
                             referens.child("/admin/piasochnica/$oldName").getFile(localFile).addOnFailureListener {
                                 MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error))
                             }.await()

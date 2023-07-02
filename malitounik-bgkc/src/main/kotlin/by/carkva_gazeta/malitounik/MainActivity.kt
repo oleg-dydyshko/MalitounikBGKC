@@ -142,9 +142,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (log.isNotEmpty() && isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 val fileZip = withContext(Dispatchers.IO) {
-                    val localFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("resource", "txt")
-                    }
+                    val localFile = File("$filesDir/cache/cache.txt")
                     val zip = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "MalitounikResource.zip")
                     val out = ZipOutputStream(BufferedOutputStream(FileOutputStream(zip)))
                     for (file in log) {
@@ -186,9 +184,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     override fun clearLogFile(isClear: Boolean) {
         if (isClear && isNetworkAvailable()) {
             CoroutineScope(Dispatchers.IO).launch {
-                val localFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("log", "txt")
-                }
+                val localFile = File("$filesDir/cache/cache.txt")
                 localFile.writer().use {
                     it.write("")
                 }
@@ -738,9 +734,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 edit.apply()
             }
             if (k.getBoolean("admin", false) && isNetworkAvailable()) {
-                val localFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("log", "txt")
-                }
+                val localFile = File("$filesDir/cache/cache.txt")
                 Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
                     toastView(this@MainActivity, getString(R.string.error))
                 }.await()
@@ -792,6 +786,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             dir.mkdir()
         }
         dir = File("$filesDir/BibliaSinodalStaryZavet")
+        if (!dir.exists()) {
+            dir.mkdir()
+        }
+        dir = File("$filesDir/cache")
         if (!dir.exists()) {
             dir.mkdir()
         }
@@ -1828,11 +1826,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private suspend fun getUpdateMalitounikBGKC(): String {
         val pathReference = Malitounik.referens.child("/updateMalitounikBGKC.json")
         var text = ""
-        val localFile = withContext(Dispatchers.IO) {
-            File.createTempFile("updateMalitounikBGKC", "json")
-        }
+        val localFile = File("$filesDir/cache/cache.txt")
         pathReference.getFile(localFile).addOnSuccessListener {
-            if (localFile.exists()) text = localFile.readText()
+            text = localFile.readText()
         }.await()
         localFile.delete()
         return text

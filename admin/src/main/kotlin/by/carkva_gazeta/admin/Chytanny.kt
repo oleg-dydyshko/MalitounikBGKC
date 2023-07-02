@@ -38,7 +38,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -65,12 +64,10 @@ class Chytanny : BaseActivity() {
         urlJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             binding.linear.removeAllViewsInLayout()
-            val localFile = withContext(Dispatchers.IO) {
-                File.createTempFile("cytanne", "php")
-            }
+            val localFile = File("$filesDir/cache/cache.txt")
             var text = ""
             Malitounik.referens.child("/calendar-cytanne_$year.php").getFile(localFile).addOnCompleteListener {
-                if (it.isSuccessful) text = localFile.readText()
+                if (it.isSuccessful && localFile.exists()) text = localFile.readText()
                 else MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
             }.await()
             localFile.delete()
@@ -268,15 +265,11 @@ class Chytanny : BaseActivity() {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 try {
-                    val localFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("cytanne", "php")
-                    }
+                    val localFile = File("$filesDir/cache/cache.txt")
                     localFile.writer().use {
                         it.write(cytanni)
                     }
-                    val logFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("piasochnica", "json")
-                    }
+                    val logFile = File("$filesDir/cache/log.txt")
                     val sb = StringBuilder()
                     val url = "/calendar-cytanne_$year.php"
                     Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
@@ -305,7 +298,7 @@ class Chytanny : BaseActivity() {
                         }
                     }.await()
                     localFile.delete()
-                    localFile.delete()
+                    logFile.delete()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }

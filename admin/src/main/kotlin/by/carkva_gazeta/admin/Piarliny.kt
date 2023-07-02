@@ -35,7 +35,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -130,9 +129,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
         urlJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             try {
-                val localFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("piarliny", "json")
-                }
+                val localFile = File("$filesDir/cache/cache.txt")
                 Malitounik.referens.child("/chytanne/piarliny.json").getFile(localFile).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val jsonFile = localFile.readText()
@@ -383,15 +380,11 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 try {
-                    val localFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("piarliny", "json")
-                    }
+                    val localFile = File("$filesDir/cache/cache.txt")
                     localFile.writer().use {
                         it.write(piarliny)
                     }
-                    val logFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("piasochnica", "json")
-                    }
+                    val logFile = File("$filesDir/cache/log.txt")
                     val sb = StringBuilder()
                     val url = "/chytanne/piarliny.json"
                     Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {

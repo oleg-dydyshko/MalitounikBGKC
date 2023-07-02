@@ -158,7 +158,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     private var sqlJob: Job? = null
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf", "text/fb2", "application/zip", "application/epub+zip", "text/plain", "text/html"))
             val dir = File("$filesDir/BookCache")
             if (!dir.exists()) dir.mkdir()
             val fileUri = it.data?.data
@@ -168,7 +167,11 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             if (t1 != -1) {
                 mime = path.substring(t1 + 1)
             }
-            if (!(mime.contains(".htm", ignoreCase = true) || mime.contains(".txt", ignoreCase = true) || mime.contains(".pdf", ignoreCase = true) || mime.contains(".fb2", ignoreCase = true) || mime.contains(".epub", ignoreCase = true))) return@registerForActivityResult
+            if (!(mime.contains(".htm", ignoreCase = true) || mime.contains(".txt", ignoreCase = true) || mime.contains(".pdf", ignoreCase = true) || mime.contains(".fb2", ignoreCase = true) || mime.contains(".epub", ignoreCase = true))) {
+                val dialog = DialogMimeError()
+                dialog.show(supportFragmentManager, "DialogMimeError")
+                return@registerForActivityResult
+            }
             fileUri?.let { uri ->
                 copyInputStreamToFile(contentResolver.openInputStream(uri), mime)
             }
@@ -1753,11 +1756,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     private suspend fun getBibliatekaJson(): String {
         var text = ""
         val pathReference = Malitounik.referens.child("/bibliateka.json")
-        val localFile = withContext(Dispatchers.IO) {
-            File.createTempFile("bibliateka", "json")
-        }
+        val localFile = File("$filesDir/cache/cache.txt")
         pathReference.getFile(localFile).addOnCompleteListener {
-            if (it.isSuccessful && localFile.exists()) text = localFile.readText()
+            if (it.isSuccessful) text = localFile.readText()
             else MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
         }.await()
         localFile.delete()

@@ -21,7 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.io.File
 
 class DialogLogView : DialogFragment() {
@@ -70,9 +69,7 @@ class DialogLogView : DialogFragment() {
                 displayBinding.title.text = getString(R.string.log)
                 if (MainActivity.isNetworkAvailable()) {
                     logJob = CoroutineScope(Dispatchers.Main).launch {
-                        val localFile = withContext(Dispatchers.IO) {
-                            File.createTempFile("log", "txt")
-                        }
+                        val localFile = File("${fragmentActivity.filesDir}/cache/cache.txt")
                         Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
                             MainActivity.toastView(fragmentActivity, getString(R.string.error))
                         }.await()

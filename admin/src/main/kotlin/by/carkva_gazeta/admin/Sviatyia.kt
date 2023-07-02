@@ -47,7 +47,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -169,9 +168,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
             urlJob = CoroutineScope(Dispatchers.Main).launch {
                 var res = ""
                 try {
-                    val localFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("opisanieEdit", "json")
-                    }
+                    val localFile = File("$filesDir/cache/cache.txt")
                     var builder = ""
                     referens.child("/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json").getFile(localFile).addOnCompleteListener {
                         if (it.isSuccessful) builder = localFile.readText()
@@ -183,9 +180,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                         val arrayList: ArrayList<String> = gson.fromJson(builder, type)
                         res = arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
                     }
-                    val localFile2 = withContext(Dispatchers.IO) {
-                        File.createTempFile("calendarsviatyiaEdit", "json")
-                    }
+                    val localFile2 = File("$filesDir/cache/cache2.txt")
                     var builder2 = ""
                     referens.child("/calendarsviatyia.txt").getFile(localFile2).addOnCompleteListener {
                         if (it.isSuccessful) builder2 = localFile2.readText()
@@ -451,9 +446,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                     2 -> style = 8
                 }
                 binding.progressBar2.visibility = View.VISIBLE
-                val localFile2 = withContext(Dispatchers.IO) {
-                    File.createTempFile("calendarsviatyiaEdit", "json")
-                }
+                val localFile2 = File("$filesDir/cache/cache2.txt")
                 val sviatyiaNewList = ArrayList<ArrayList<String>>()
                 referens.child("/calendarsviatyia.txt").getFile(localFile2).addOnCompleteListener {
                     if (it.isSuccessful) {
@@ -480,20 +473,14 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                     if (sviatyiaNewList[i][3] != "0") sw3 = sviatyiaNewList[i][3]
                     sb.append(sviatyiaNewList[i][0] + "<>" + sviatyiaNewList[i][1] + "<>" + sviatyiaNewList[i][2] + "<>" + sw3 + "\n")
                 }
-                val localFile3 = withContext(Dispatchers.IO) {
-                    File.createTempFile("calendarsviatyiaSave", "txt")
-                }
+                val localFile3 = File("$filesDir/cache/cache3.txt")
                 if (sviatyiaNewList.isNotEmpty()) {
                     localFile3.writer().use {
                         it.write(sb.toString())
                     }
                 }
-                val localFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("opisanieEdit", "json")
-                }
-                val localFile4 = withContext(Dispatchers.IO) {
-                    File.createTempFile("opisanieSave", "json")
-                }
+                val localFile = File("$filesDir/cache/cache.txt")
+                val localFile4 = File("$filesDir/cache/cache4.txt")
                 var builder = ""
                 referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").getFile(localFile).addOnCompleteListener {
                     if (it.isSuccessful) {
@@ -511,9 +498,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                         it.write(gson.toJson(arrayList, type))
                     }
                 }
-                val logFile = withContext(Dispatchers.IO) {
-                    File.createTempFile("piasochnica", "json")
-                }
+                val logFile = File("$filesDir/cache/log.txt")
                 val stringBuilder = StringBuilder()
                 var url = "/calendarsviatyia.txt"
                 referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {

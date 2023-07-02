@@ -21,7 +21,6 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.io.*
-import java.lang.reflect.Type
 import java.util.*
 
 
@@ -263,14 +262,14 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         val dir = File("$filesDir/icons/")
         if (!dir.exists()) dir.mkdir()
         val arrayList = ArrayList<ArrayList<String>>()
-        val localFile = withContext(Dispatchers.IO) {
-            File.createTempFile("icons", "json")
-        }
+        val localFile = File("$filesDir/cache/cache.txt")
         Malitounik.referens.child("/icons.json").getFile(localFile).addOnSuccessListener {
-            val gson = Gson()
-            val json = localFile.readText()
-            val type: Type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-            arrayList.addAll(gson.fromJson(json, type))
+            if (localFile.exists()) {
+                val gson = Gson()
+                val json = localFile.readText()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                arrayList.addAll(gson.fromJson(json, type))
+            }
         }.await()
         localFile.delete()
         dirList.clear()

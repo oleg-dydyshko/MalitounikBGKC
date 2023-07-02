@@ -46,7 +46,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import org.apache.commons.text.StringEscapeUtils
 import java.io.File
 
@@ -554,12 +553,8 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 try {
-                    val localFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("piasochnica", "json")
-                    }
-                    val localFile2 = withContext(Dispatchers.IO) {
-                        File.createTempFile("piasochnica", "json")
-                    }
+                    val localFile = File("$filesDir/cache/cache.txt")
+                    val localFile2 = File("$filesDir/cache/cache2.txt")
                     val string = StringBuilder()
                     val t1 = fileName.indexOf(".")
                     val nawFileName = if (t1 != -1) fileName.substring(0, t1)
@@ -646,12 +641,8 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 try {
-                    val localFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("piasochnica", "json")
-                    }
-                    val logFile = withContext(Dispatchers.IO) {
-                        File.createTempFile("piasochnica", "json")
-                    }
+                    val localFile = File("$filesDir/cache/cache.txt")
+                    val logFile = File("$filesDir/cache/log.txt")
                     val sb = StringBuilder()
                     val url = "/$dirToFile"
                     Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
@@ -756,9 +747,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 if (isSite) {
                     intent.removeExtra("isSite")
                     try {
-                        val localFile = withContext(Dispatchers.IO) {
-                            File.createTempFile("piasochnica", "json")
-                        }
+                        val localFile = File("$filesDir/cache/cache.txt")
                         Malitounik.referens.child("/admin/piasochnica/$fileName").getFile(localFile).addOnFailureListener {
                             MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }.await()
@@ -769,9 +758,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     }
                 } else {
                     try {
-                        val localFile = withContext(Dispatchers.IO) {
-                            File.createTempFile("piasochnica", "json")
-                        }
+                        val localFile = File("$filesDir/cache/cache.txt")
                         result = getTextOnSite(resours)
                         if (!isSaveAs) {
                             if (result == "") result = content
@@ -841,9 +828,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     private suspend fun getTextOnSite(fileName: String): String {
         var text = ""
         try {
-            val localFile = withContext(Dispatchers.IO) {
-                File.createTempFile("piasochnica", "json")
-            }
+            val localFile = File("$filesDir/cache/cache.txt")
             val result = PasochnicaList.findDirAsSave
             for (i in 0 until result.size) {
                 val t1 = result[i].lastIndexOf("/")

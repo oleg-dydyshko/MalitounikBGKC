@@ -1,8 +1,9 @@
 package by.carkva_gazeta.admin
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
@@ -23,6 +24,22 @@ class DialogUpdateHelp : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var binding: AdminDialogEditviewDisplayBinding? = null
     private var updateHelpJob: Job? = null
+    private var mListener: DialogUpdateHelpListener? = null
+
+    interface DialogUpdateHelpListener {
+        fun setViersionApp(releaseCode: String, release: Boolean)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is Activity) {
+            mListener = try {
+                context as DialogUpdateHelpListener
+            } catch (e: ClassCastException) {
+                throw ClassCastException("$activity must implement DialogUpdateHelpListener")
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -48,7 +65,7 @@ class DialogUpdateHelp : DialogFragment() {
                 builder.setPositiveButton(resources.getString(by.carkva_gazeta.malitounik.R.string.admin_update_ok)) { _: DialogInterface, _: Int ->
                     val ver = displayBinding.edittext.text.toString()
                     if (ver != "") {
-                        setViersionApp(ver, release)
+                        mListener?.setViersionApp(ver, release)
                     }
                 }
                 builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
@@ -78,46 +95,6 @@ class DialogUpdateHelp : DialogFragment() {
             }
         }
         return alert
-    }
-
-    private fun setViersionApp(releaseCode: String, release: Boolean) {
-        activity?.let {
-            if (MainActivity.isNetworkAvailable()) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    try {
-                        val localFile = File("${it.filesDir}/cache/cache.txt")
-                        Malitounik.referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val jsonFile = localFile.readText()
-                                val gson = Gson()
-                                val type = TypeToken.getParameterized(MutableMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
-                                val updeteArrayText = gson.fromJson<MutableMap<String, String>>(jsonFile, type)
-                                if (release) {
-                                    updeteArrayText["release"] = releaseCode
-                                } else {
-                                    updeteArrayText["devel"] = releaseCode
-                                }
-                                localFile.writer().use {
-                                    it.write(gson.toJson(updeteArrayText, type))
-                                }
-                            } else {
-                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
-                            }
-                        }.await()
-                        Malitounik.referens.child("/updateMalitounikBGKC.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
-                            } else {
-                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
-                            }
-                        }.await()
-                        localFile.delete()
-                    } catch (e: Throwable) {
-                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                    }
-                }
-            }
-        }
     }
 
     companion object {

@@ -63,6 +63,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private var tolbarTitle = ""
     private var mLastClickTime: Long = 0
     private var resetTollbarJob: Job? = null
+    private var logJob: Job? = null
+    private var versionCodeJob: Job? = null
     private var snackbar: Snackbar? = null
     private var isConnectServise = false
     private var mRadyjoMaryiaService: ServiceRadyjoMaryia? = null
@@ -138,9 +140,15 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        logJob?.cancel()
+        versionCodeJob?.cancel()
+    }
+
     override fun createAndSentFile(log: ArrayList<String>, isClear: Boolean) {
         if (log.isNotEmpty() && isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.Main).launch {
+            logJob = CoroutineScope(Dispatchers.Main).launch {
                 val fileZip = withContext(Dispatchers.IO) {
                     val localFile = File("$filesDir/cache/cache.txt")
                     val zip = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "MalitounikResource.zip")
@@ -183,7 +191,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     override fun clearLogFile(isClear: Boolean) {
         if (isClear && isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.IO).launch {
+            logJob?.cancel()
+            logJob = CoroutineScope(Dispatchers.IO).launch {
                 val localFile = File("$filesDir/cache/cache.txt")
                 localFile.writer().use {
                     it.write("")
@@ -720,7 +729,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 selectFragment(binding.label1, true)
             }
         }
-        CoroutineScope(Dispatchers.IO).launch {
+        logJob?.cancel()
+        logJob = CoroutineScope(Dispatchers.IO).launch {
             cacheDir?.listFiles()?.forEach {
                 it?.deleteRecursively()
             }
@@ -1797,7 +1807,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     private fun getVersionCode() {
         if (isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.Main).launch {
+            versionCodeJob = CoroutineScope(Dispatchers.Main).launch {
                 val gson = Gson()
                 val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
                 val text = getUpdateMalitounikBGKC()

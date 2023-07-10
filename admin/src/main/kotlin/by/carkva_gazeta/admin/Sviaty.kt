@@ -127,7 +127,6 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                         MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
                 }.await()
-                localFile.delete()
             } catch (e: Throwable) {
                 MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
             }
@@ -260,8 +259,6 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                         MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
                 }
-                localFile.delete()
-                localFile2.delete()
                 binding.progressBar2.visibility = View.GONE
             }
         }
@@ -540,8 +537,6 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                             MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
                     }.await()
-                    localFile.delete()
-                    logFile.delete()
                 } catch (e: Throwable) {
                     withContext(Dispatchers.Main) {
                         MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))

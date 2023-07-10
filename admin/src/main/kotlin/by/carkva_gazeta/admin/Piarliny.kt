@@ -165,7 +165,6 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                         }
                     }
                 }.await()
-                localFile.delete()
             } catch (e: Throwable) {
                 MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
             }
@@ -414,8 +413,6 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                             MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
                     }.await()
-                    localFile.delete()
-                    logFile.delete()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }

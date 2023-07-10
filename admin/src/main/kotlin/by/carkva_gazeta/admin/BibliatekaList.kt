@@ -232,7 +232,6 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
             it.write(gson.toJson(arrayList, type))
         }
         Malitounik.referens.child("/bibliateka.json").putFile(Uri.fromFile(localFile)).await()
-        localFile.delete()
     }
 
     override fun onDialogDeliteClick(position: Int, name: String) {
@@ -320,7 +319,6 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
             if (it.isSuccessful) text = localFile.readText()
             else MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
         }.await()
-        localFile.delete()
         return text
     }
 

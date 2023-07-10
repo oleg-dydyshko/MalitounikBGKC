@@ -144,7 +144,6 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                     MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
             }.await()
-            localFile.delete()
             getIcons()
         }
         adapter = ItemAdapter(by.carkva_gazeta.malitounik.R.id.image, false)
@@ -301,7 +300,6 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                     adapter.updateList(images)
                 }
                 saveIconJson()
-                localFile.delete()
                 binding.progressBar2.visibility = View.GONE
             }
         }
@@ -340,7 +338,6 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                 if (it.isSuccessful) MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.save))
                 else MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.error))
             }.await()
-            localFile.delete()
         }
     }
 

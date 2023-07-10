@@ -86,7 +86,6 @@ class DialogUpdateHelp : DialogFragment() {
                                     MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error))
                                 }
                             }.await()
-                            localFile.delete()
                         } catch (_: Throwable) {
                             MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }

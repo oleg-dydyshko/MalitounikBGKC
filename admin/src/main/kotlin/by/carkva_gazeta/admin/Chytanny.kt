@@ -70,7 +70,6 @@ class Chytanny : BaseActivity() {
                 if (it.isSuccessful && localFile.exists()) text = localFile.readText()
                 else MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
             }.await()
-            localFile.delete()
             val a = year % 19
             val b = year % 4
             val cx = year % 7
@@ -297,8 +296,6 @@ class Chytanny : BaseActivity() {
                             MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
                     }.await()
-                    localFile.delete()
-                    logFile.delete()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }

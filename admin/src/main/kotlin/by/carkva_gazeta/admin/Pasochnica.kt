@@ -604,8 +604,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                             }
                         }
                     }.await()
-                    localFile.delete()
-                    localFile2.delete()
                     PasochnicaList.getFindFileListAsSave()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
@@ -717,8 +715,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                             }
                         }
                     }.await()
-                    localFile.delete()
-                    logFile.delete()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
@@ -795,7 +791,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                                 }
                             }
                         }.await()
-                        localFile.delete()
                     } catch (e: Throwable) {
                         MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
@@ -842,7 +837,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     break
                 }
             }
-            localFile.delete()
         } catch (e: Throwable) {
             text = ""
             MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))

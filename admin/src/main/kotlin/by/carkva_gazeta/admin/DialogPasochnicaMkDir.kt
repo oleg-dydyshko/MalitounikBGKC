@@ -110,7 +110,6 @@ class DialogPasochnicaMkDir : DialogFragment() {
                                 MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error))
                             }.await()
                             referens.child("/$dir/$dirName/$newName").putFile(Uri.fromFile(localFile)).await()
-                            localFile.delete()
                         } catch (e: Throwable) {
                             activity?.let {
                                 MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))

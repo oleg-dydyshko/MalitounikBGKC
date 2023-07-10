@@ -70,7 +70,6 @@ class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
                             MainActivity.toastView(this@AdminMain, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
                     }.await()
-                    localFile.delete()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@AdminMain, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }

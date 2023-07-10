@@ -844,6 +844,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 prefEditors.putBoolean("setAlarm", true)
                 prefEditors.apply()
                 checkBrightness = true
+                val dir = File("$filesDir/cache")
+                val list = dir.listFiles()
+                list?.let { listfales ->
+                    for (file in listfales) {
+                        file.delete()
+                    }
+                }
                 super.onBack()
             } else {
                 backPressed = System.currentTimeMillis()
@@ -1812,7 +1819,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
                 val text = getUpdateMalitounikBGKC()
                 if (text != "") {
-                    val updeteArrayText = gson.fromJson<Map<String, String>>(text, type)
+                    val updeteArrayText: Map<String, String> = gson.fromJson(text, type)
                     val currentVersionName = BuildConfig.VERSION_NAME
                     val currentVersionCode = BuildConfig.VERSION_CODE
                     val versionSize = currentVersionName.split(".")

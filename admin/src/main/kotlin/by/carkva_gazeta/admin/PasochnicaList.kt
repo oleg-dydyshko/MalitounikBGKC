@@ -310,7 +310,6 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 intent.putExtra("isSite", true)
                 intent.putExtra("fileName", "$resourse$res")
                 startActivity(intent)
-                localFile.delete()
             }
         }
     }
@@ -355,7 +354,6 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                         Malitounik.referens.child("/admin/piasochnica/$oldFileName").delete().await()
                         Malitounik.referens.child("/admin/piasochnica/$fileName").putFile(Uri.fromFile(localFile)).await()
                     }
-                    localFile.delete()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }

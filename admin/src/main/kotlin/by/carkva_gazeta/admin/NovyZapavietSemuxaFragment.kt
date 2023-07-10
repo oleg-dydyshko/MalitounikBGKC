@@ -134,8 +134,6 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                             }
                         }
                     }.await()
-                    localFile.delete()
-                    logFile.delete()
                     _binding?.progressBar2?.visibility = View.GONE
                 }
             }
@@ -183,16 +181,22 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                         val localFile = File("${fragmentActivity.filesDir}/cache/cache.txt")
                         Malitounik.referens.child(url).getFile(localFile).addOnCompleteListener { it ->
                             if (it.isSuccessful) {
-                                val text = localFile.readText()
-                                val split = text.split("===")
-                                val knig = split[page + 1]
-                                val split2 = knig.split("\n")
-                                split2.forEach {
-                                    val t1 = it.indexOf("//")
-                                    if (t1 != -1) {
-                                        sb.append(it.substring(0, t1)).append("\n")
-                                    } else {
-                                        sb.append(it).append("\n")
+                                if (localFile.length() != 0L) {
+                                    val text = localFile.readText()
+                                    val split = text.split("===")
+                                    val knig = split[page + 1]
+                                    val split2 = knig.split("\n")
+                                    split2.forEach {
+                                        val t1 = it.indexOf("//")
+                                        if (t1 != -1) {
+                                            sb.append(it.substring(0, t1)).append("\n")
+                                        } else {
+                                            sb.append(it).append("\n")
+                                        }
+                                    }
+                                } else {
+                                    activity?.let {
+                                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
                                     }
                                 }
                             } else {
@@ -201,7 +205,6 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                                 }
                             }
                         }.await()
-                        localFile.delete()
                     } catch (e: Throwable) {
                         MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }

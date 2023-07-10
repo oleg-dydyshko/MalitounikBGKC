@@ -290,6 +290,9 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(176, "Нараджэньне сьвятога прарока Прадвесьніка і Хрысьціцеля", "mm_24_06_naradzennie_jana_chrysciciela_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(181, "Сьвятых слаўных i годных пахвалы апосталаў Пятра i Паўла", "mm_29_06_apostalau_piatra_i_paula_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(182, "Сабор сьвятых 12-ці апосталаў", "mm_30_06_sabor_12_apostalau_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(192, "Сьвятога Антона Кіевапячорскага", "mm_10_07_antona_kijevapiaczorskaha_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(193, "Сьвятой мучаніцы Аўхіміі ўсяхвальнай", "mm_11_07_auchimii_usiachvalnaj_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(NIADZELIA_AICOU_VI_SABORY, "Нядзеля сьвятых Айцоў першых шасьці Сабораў", "mm_13_19_07_ndz_ajcou_pierszych_szasci_saborau_viaczernia", VIACZERNIA))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {
@@ -589,28 +592,34 @@ class SlugbovyiaTextu {
 
     private fun getFictionalDay(dayOfYear: Int): Int {
         var fictionalDay = dayOfYear
-        val calendar = Calendar.getInstance()
+        val calendar = GregorianCalendar()
         //Айцоў VII Сусьветнага Сабору
         for (i in 11..17) {
             calendar.set(calendar.get(Calendar.YEAR), Calendar.OCTOBER, i)
+            var addDay = 0
+            if (!calendar.isLeapYear(calendar.get(Calendar.YEAR))) addDay = 1
             val wik = calendar.get(Calendar.DAY_OF_WEEK)
-            if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR]) {
+            if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR] + addDay) {
                 fictionalDay = AICOU_VII_SUSVETNAGA_SABORY
             }
         }
         //Нядзеля праайцоў
         for (i in 11..17) {
             calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
+            var addDay = 0
+            if (!calendar.isLeapYear(calendar.get(Calendar.YEAR))) addDay = 1
             val wik = calendar.get(Calendar.DAY_OF_WEEK)
-            if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR]) {
+            if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR] + addDay) {
                 fictionalDay = NIADZELIA_PRA_AICOU
             }
         }
         //Нядзеля сьвятых Айцоў першых шасьці Сабораў
         for (i in 13..19) {
             calendar.set(calendar.get(Calendar.YEAR), Calendar.JULY, i)
+            var addDay = 0
+            if (!calendar.isLeapYear(calendar.get(Calendar.YEAR))) addDay = 1
             val wik = calendar.get(Calendar.DAY_OF_WEEK)
-            if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR]) {
+            if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR] + addDay) {
                 fictionalDay = NIADZELIA_AICOU_VI_SABORY
             }
         }

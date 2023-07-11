@@ -53,6 +53,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
     private var day = 1
     private val images = ArrayList<DataImages>()
     private val arrayListIcon = ArrayList<ArrayList<String>>()
+    private var position = 0
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             val imageUri = it.data?.data
@@ -63,8 +64,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                 } else {
                     @Suppress("DEPRECATION") MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
                 }
-                val position = it.data?.extras?.getInt("position", 0) ?: 0
-                fileUpload(bitmap, position)
+                fileUpload(bitmap)
             }
         }
         binding.dragListView.resetSwipedViews(null)
@@ -81,7 +81,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         intent.type = "*/*"
         intent.action = Intent.ACTION_GET_CONTENT
         intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-        intent.putExtra("position", position)
+        this.position = position
         mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
     }
 
@@ -168,7 +168,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                     intent.type = "*/*"
                     intent.action = Intent.ACTION_GET_CONTENT
                     intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-                    intent.putExtra("position", pos)
+                    position = pos
                     mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
                 }
             }
@@ -252,7 +252,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         binding.titleToolbar.isSingleLine = true
     }
 
-    private fun fileUpload(bitmap: Bitmap?, position: Int) {
+    private fun fileUpload(bitmap: Bitmap?) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
@@ -511,7 +511,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                     intent.type = "*/*"
                     intent.action = Intent.ACTION_GET_CONTENT
                     intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-                    intent.putExtra("position", bindingAdapterPosition)
+                    this@SviatyiaImage.position = bindingAdapterPosition
                     mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
                 }
             }
@@ -522,7 +522,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                     intent.type = "*/*"
                     intent.action = Intent.ACTION_GET_CONTENT
                     intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-                    intent.putExtra("position", bindingAdapterPosition)
+                    this@SviatyiaImage.position = bindingAdapterPosition
                     mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
                 } else {
                     val contextMenu = DialogPiarlinyContextMenu.getInstance(bindingAdapterPosition, getString(by.carkva_gazeta.malitounik.R.string.sviatyia))

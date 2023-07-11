@@ -103,16 +103,19 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     binding.TextView1.textSize = fontBiblia
                     binding.TextView1.text = spanned.trim()
                 }
+
                 1 -> {
                     binding.TextView2.textSize = fontBiblia
                     binding.TextView2.text = spanned.trim()
                     binding.TextView2.visibility = View.VISIBLE
                 }
+
                 2 -> {
                     binding.TextView3.textSize = fontBiblia
                     binding.TextView3.text = spanned.trim()
                     binding.TextView3.visibility = View.VISIBLE
                 }
+
                 3 -> {
                     binding.TextView4.textSize = fontBiblia
                     binding.TextView4.text = spanned.trim()
@@ -264,14 +267,11 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         val arrayList = ArrayList<ArrayList<String>>()
         val localFile = File("$filesDir/cache/cache.txt")
         Malitounik.referens.child("/icons.json").getFile(localFile).addOnSuccessListener {
-            if (localFile.exists()) {
-                val gson = Gson()
-                val json = localFile.readText()
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                arrayList.addAll(gson.fromJson(json, type))
-            }
+            val gson = Gson()
+            val json = localFile.readText()
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+            arrayList.addAll(gson.fromJson(json, type))
         }.await()
-        localFile.delete()
         dirList.clear()
         var size = 0L
         val images = ArrayList<String>()

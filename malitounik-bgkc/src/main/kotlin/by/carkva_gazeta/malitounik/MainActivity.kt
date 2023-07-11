@@ -1816,21 +1816,24 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
                 val text = getUpdateMalitounikBGKC()
                 if (text != "") {
-                    val updeteArrayText: Map<String, String> = gson.fromJson(text, type)
-                    val currentVersionName = BuildConfig.VERSION_NAME
-                    val currentVersionCode = BuildConfig.VERSION_CODE
-                    val versionSize = currentVersionName.split(".")
-                    if (versionSize.size == 4) {
-                        val versionCode = updeteArrayText["devel"]?.toInt() ?: currentVersionCode
-                        if (currentVersionCode < versionCode) {
-                            popupSnackbarForCompleteUpdate(versionCode)
+                    try {
+                        val updeteArrayText = gson.fromJson<Map<String, String>>(text, type)
+                        val currentVersionName = BuildConfig.VERSION_NAME
+                        val currentVersionCode = BuildConfig.VERSION_CODE
+                        val versionSize = currentVersionName.split(".")
+                        if (versionSize.size == 4) {
+                            val versionCode = updeteArrayText["devel"]?.toInt() ?: currentVersionCode
+                            if (currentVersionCode < versionCode) {
+                                popupSnackbarForCompleteUpdate(versionCode)
+                            }
                         }
-                    }
-                    if (versionSize.size == 3) {
-                        val versionCode = updeteArrayText["release"]?.toInt() ?: currentVersionCode
-                        if (currentVersionCode < versionCode) {
-                            popupSnackbarForCompleteUpdate(versionCode)
+                        if (versionSize.size == 3) {
+                            val versionCode = updeteArrayText["release"]?.toInt() ?: currentVersionCode
+                            if (currentVersionCode < versionCode) {
+                                popupSnackbarForCompleteUpdate(versionCode)
+                            }
                         }
+                    } catch (_: Throwable) {
                     }
                 }
             }

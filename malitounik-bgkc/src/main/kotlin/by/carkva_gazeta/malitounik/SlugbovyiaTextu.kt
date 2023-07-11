@@ -552,7 +552,9 @@ class SlugbovyiaTextu {
 
     fun getRealDay(day: Int): Int {
         var realDay = day
-        val calendar = Calendar.getInstance()
+        val calendar = GregorianCalendar()
+        var addDay = 0
+        if (!calendar.isLeapYear(calendar.get(Calendar.YEAR))) addDay = 1
         when (day) {
             AICOU_VII_SUSVETNAGA_SABORY -> {
                 //Айцоў VII Сусьветнага Сабору
@@ -560,7 +562,7 @@ class SlugbovyiaTextu {
                     calendar.set(calendar.get(Calendar.YEAR), Calendar.OCTOBER, i)
                     val wik = calendar.get(Calendar.DAY_OF_WEEK)
                     if (wik == Calendar.SUNDAY) {
-                        realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                        realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
                     }
                 }
             }
@@ -571,7 +573,7 @@ class SlugbovyiaTextu {
                     calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
                     val wik = calendar.get(Calendar.DAY_OF_WEEK)
                     if (wik == Calendar.SUNDAY) {
-                        realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                        realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
                     }
                 }
             }
@@ -582,7 +584,7 @@ class SlugbovyiaTextu {
                     calendar.set(calendar.get(Calendar.YEAR), Calendar.JULY, i)
                     val wik = calendar.get(Calendar.DAY_OF_WEEK)
                     if (wik == Calendar.SUNDAY) {
-                        realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                        realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
                     }
                 }
             }

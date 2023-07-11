@@ -1761,7 +1761,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             if (it.isSuccessful) text = localFile.readText()
             else MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
         }.await()
-        localFile.delete()
         return text
     }
 

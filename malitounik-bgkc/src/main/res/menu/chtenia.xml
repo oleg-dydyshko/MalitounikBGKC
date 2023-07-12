@@ -22,8 +22,6 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_semuxa"
-        android:checkable="true"
-        android:checked="false"
         android:orderInCategory="100"
         android:title="@string/title_biblia"
         android:visible="false"

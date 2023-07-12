@@ -1139,7 +1139,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             diffScroll == 0 -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_up)
             else -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
         }
-
         val spanString = SpannableString(itemAuto.title.toString())
         val end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -1148,9 +1147,14 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isChecked = k.getBoolean("paralel_maranata", true)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isVisible = true
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
+
         if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).isVisible = true
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).isChecked = k.getBoolean("belarus", true)
+        val actionSemuxaTitle = if (!k.getBoolean("belarus", true)) SpannableString(getString(by.carkva_gazeta.malitounik.R.string.title_biblia))
+        else SpannableString(getString(by.carkva_gazeta.malitounik.R.string.bsinaidal))
+        val endSem = actionSemuxaTitle.length
+        actionSemuxaTitle.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, endSem, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).title = actionSemuxaTitle
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
@@ -1174,8 +1178,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_semuxa) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
+            val belarus = k.getBoolean("belarus", true)
+            if (!belarus) {
                 prefEditor.putBoolean("belarus", true)
                 if (k.getBoolean("SemuxaNoKnigi", true)) {
                     val semuxaNoKnigi = DialogSemuxaNoKnigi()

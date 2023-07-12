@@ -11,8 +11,8 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 442074
-        versionName "4.3.2.22"
+        versionCode 442075
+        versionName "4.3.2.23"
 
         //multiDexEnabled true
 
@@ -71,8 +71,8 @@ dependencies {
     //api 'com.google.firebase:firebase-core:21.1.1'
     api 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.google.android.exoplayer:exoplayer:2.18.7'
-    implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.7'
+    implementation 'com.google.android.exoplayer:exoplayer:2.19.0'
+    implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.19.0'
     implementation 'androidx.core:core-ktx:1.10.1'
     //implementation 'androidx.multidex:multidex:2.0.1'
     testImplementation 'junit:junit:4.13.2'

@@ -166,7 +166,6 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(6, "Сьветлая субота", "l_svietlaja_subota", LITURHIJA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(6, "Сьветлая субота", "vielikodnyja_hadziny", VIALHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
 
-        datMinALL.add(SlugbovyiaTextuData(98, "Айцы першых 6-ці Ўсяленскіх сабораў", "l_ajcy_6_saborau", LITURHIJA, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(313, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "mm_08_11_jutran", JUTRAN))
         datMinALL.add(SlugbovyiaTextuData(313, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "mm_08_11_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(313, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "mm_08_11_liturhija", LITURHIJA))
@@ -293,6 +292,9 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(182, "Сабор сьвятых 12-ці апосталаў", "mm_30_06_sabor_12_apostalau_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(192, "Сьвятога Антона Кіевапячорскага", "mm_10_07_antona_kijevapiaczorskaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(193, "Сьвятой мучаніцы Аўхіміі ўсяхвальнай", "mm_11_07_auchimii_usiachvalnaj_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(201, "Сьвятое маці нашае Макрыны, сястры сьв. Васіля Вялікага", "mm_19_07_maci_makryny_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(202, "Сьвятога прарока Ільлі", "mm_20_07_praroka_illi_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(202, "Сьвятога прарока Ільлі", "mm_20_07_praroka_illi_viaczernia", VIACZERNIA))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {

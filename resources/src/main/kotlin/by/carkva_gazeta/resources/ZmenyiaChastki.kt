@@ -6,7 +6,7 @@ import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.MenuCaliandar
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.*
+import java.util.Calendar
 
 internal class ZmenyiaChastki {
     private var dzenNoch: Boolean = false

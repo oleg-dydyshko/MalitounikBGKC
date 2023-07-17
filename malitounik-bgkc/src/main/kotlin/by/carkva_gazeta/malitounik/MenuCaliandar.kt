@@ -319,7 +319,8 @@ class MenuCaliandar : BaseFragment() {
                 }
                 day != -1 -> {
                     val dayList = ArrayList<ArrayList<String>>()
-                    val g = Calendar.getInstance()
+                    val g = GregorianCalendar()
+                    if(!g.isLeapYear(g[Calendar.YEAR])) g.add(Calendar.DAY_OF_YEAR, 1)
                     data.forEach { arrayList ->
                         if (day == arrayList[1].toInt() && g[Calendar.MONTH] == arrayList[2].toInt() && g[Calendar.YEAR] == arrayList[3].toInt()) {
                             dayList.add(arrayList)

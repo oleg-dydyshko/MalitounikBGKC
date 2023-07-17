@@ -295,7 +295,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["uzniasienne_liturhija"] = R.raw.uzniasienne_liturhija
             resursMap["uzniasienne_viaczernia"] = R.raw.uzniasienne_viaczernia
             resursMap["mm_21_11_liturhija"] = R.raw.mm_21_11_liturhija
-            resursMap["l_ajcy_6_saborau"] = R.raw.l_ajcy_6_saborau
             resursMap["mm_13_11_liturhija"] = R.raw.mm_13_11_liturhija
             resursMap["mm_13_11_viaczernia"] = R.raw.mm_13_11_viaczernia
             resursMap["mm_01_01_malebien_novy_hod"] = R.raw.mm_01_01_malebien_novy_hod
@@ -513,6 +512,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_10_07_antona_kijevapiaczorskaha_viaczernia"] = R.raw.mm_10_07_antona_kijevapiaczorskaha_viaczernia
             resursMap["mm_11_07_auchimii_usiachvalnaj_viaczernia"] = R.raw.mm_11_07_auchimii_usiachvalnaj_viaczernia
             resursMap["mm_13_19_07_ndz_ajcou_pierszych_szasci_saborau_viaczernia"] = R.raw.mm_13_19_07_ndz_ajcou_pierszych_szasci_saborau_viaczernia
+            resursMap["mm_19_07_maci_makryny_viaczernia"] = R.raw.mm_19_07_maci_makryny_viaczernia
+            resursMap["mm_20_07_praroka_illi_liturhija"] = R.raw.mm_20_07_praroka_illi_liturhija
+            resursMap["mm_20_07_praroka_illi_viaczernia"] = R.raw.mm_20_07_praroka_illi_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -967,10 +969,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             raznica = zmenyiaChastki.raznica()
             dayOfYear = zmenyiaChastki.dayOfYear()
             var zmennyiaCastkiTitle = ""
-            val cal = Calendar.getInstance()
-            cal[Calendar.YEAR] = 2020
-            checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
-            if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR]))) {
+            val cal = GregorianCalendar()
+            val dayOfYar = if(cal.isLeapYear(cal[Calendar.YEAR])) 0
+            else 1
+            checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
+            if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar))) {
                 chechZmena = true
                 val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
                 val idZmenyiaChastki = resursMap[resours] ?: R.raw.bogashlugbovya_error
@@ -1586,7 +1589,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     val slugbovyiaTextu = SlugbovyiaTextu()
                     val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
                     val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
-                    intent.putExtra("autoscrollOFF", autoscroll)
+                   intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugbovyiaTextu.getTitle(resours))

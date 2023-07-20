@@ -295,6 +295,11 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(201, "Сьвятое маці нашае Макрыны, сястры сьв. Васіля Вялікага", "mm_19_07_maci_makryny_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(202, "Сьвятога прарока Ільлі", "mm_20_07_praroka_illi_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(202, "Сьвятога прарока Ільлі", "mm_20_07_praroka_illi_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(202, "Сьвятога прарока Ільлі", "mm_20_07_praroka_illi_jutran", JUTRAN))
+        datMinALL.add(SlugbovyiaTextuData(204, "Сьвятой і роўнай апосталам Марыі Магдалены", "mm_22_07_maryi_mahdaleny_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(207, "Усьпеньне сьвятой Ганны, маці Найсьвяцейшай Багародзіцы", "mm_25_07_uspiennie_sviatoj_hanny_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(207, "Усьпеньне сьвятой Ганны, маці Найсьвяцейшай Багародзіцы", "mm_25_07_uspiennie_sviatoj_hanny_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(209, "Сьвятога вялікамучаніка і лекара Панцялеймана", "mm_27_07_vialikamuczanika_pancialejmana_viaczernia", VIACZERNIA))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {

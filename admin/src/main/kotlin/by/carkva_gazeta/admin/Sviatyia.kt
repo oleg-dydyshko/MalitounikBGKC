@@ -12,6 +12,7 @@ import android.os.SystemClock
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
@@ -158,13 +159,15 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         setTollbarTheme()
     }
 
-    private fun setDate(dayOfYear: Int) {
+    private fun setDate(dayOfYear: Int, count: Int = 0) {
         if (MainActivity.isNetworkAvailable()) {
+            Log.d("Oleg", count.toString())
             binding.progressBar2.visibility = View.VISIBLE
             cal.set(Calendar.YEAR, 2020)
             cal.set(Calendar.DAY_OF_YEAR, dayOfYear)
             val munName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
             binding.date.text = getString(by.carkva_gazeta.malitounik.R.string.admin_date, cal[Calendar.DAY_OF_MONTH], munName[cal[Calendar.MONTH]])
+            urlJob?.cancel()
             urlJob = CoroutineScope(Dispatchers.Main).launch {
                 var res = ""
                 try {
@@ -222,7 +225,11 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 }
                 if (res == "") res = getString(by.carkva_gazeta.malitounik.R.string.error)
                 binding.apisanne.setText(res)
-                binding.progressBar2.visibility = View.GONE
+                if ((binding.apisanne.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error) || binding.sviaty.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error)) && count < 3) {
+                    setDate(dayOfYear, count + 1)
+                } else {
+                    binding.progressBar2.visibility = View.GONE
+                }
             }
         }
     }
@@ -437,120 +444,128 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
     private fun sendPostRequest(data: Int, mun: Int, dayOfYear: Int, name: String, chtenie: String, bold: Int, tipicon: String, spaw: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                var style = 8
-                when (bold) {
-                    0 -> style = 6
-                    1 -> style = 7
-                    2 -> style = 8
-                }
-                binding.progressBar2.visibility = View.VISIBLE
-                val localFile2 = File("$filesDir/cache/cache2.txt")
-                val sviatyiaNewList = ArrayList<ArrayList<String>>()
-                referens.child("/calendarsviatyia.txt").getFile(localFile2).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        val sviatyiaNew = localFile2.readLines()
-                        for (element in sviatyiaNew) {
-                            val re1 = element.split("<>")
-                            val list = ArrayList<String>()
-                            for (element2 in re1) {
-                                list.add(element2)
-                            }
-                            sviatyiaNewList.add(list)
-                        }
-                        sviatyiaNewList[dayOfYear][0] = name
-                        sviatyiaNewList[dayOfYear][1] = chtenie
-                        sviatyiaNewList[dayOfYear][2] = style.toString()
-                        sviatyiaNewList[dayOfYear][3] = tipicon
-                    } else {
-                        MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
-                    }
-                }.await()
-                var sw3 = ""
-                val sb = StringBuilder()
-                for (i in 0 until 366) {
-                    if (sviatyiaNewList[i][3] != "0") sw3 = sviatyiaNewList[i][3]
-                    sb.append(sviatyiaNewList[i][0] + "<>" + sviatyiaNewList[i][1] + "<>" + sviatyiaNewList[i][2] + "<>" + sw3 + "\n")
-                }
-                val localFile3 = File("$filesDir/cache/cache3.txt")
-                if (sviatyiaNewList.isNotEmpty()) {
-                    localFile3.writer().use {
-                        it.write(sb.toString())
-                    }
-                }
-                val localFile = File("$filesDir/cache/cache.txt")
-                val localFile4 = File("$filesDir/cache/cache4.txt")
-                var builder = ""
-                referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").getFile(localFile).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        builder = localFile.readText()
-                    } else {
-                        MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
-                    }
-                }.await()
-                val gson = Gson()
-                if (builder != "") {
-                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
-                    val arrayList: ArrayList<String> = gson.fromJson(builder, type)
-                    arrayList[data - 1] = spaw
-                    localFile4.writer().use {
-                        it.write(gson.toJson(arrayList, type))
-                    }
-                }
                 val logFile = File("$filesDir/cache/log.txt")
-                val stringBuilder = StringBuilder()
-                var url = "/calendarsviatyia.txt"
-                referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
-                    MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
-                }.await()
-                var ref = true
-                logFile.readLines().forEach {
-                    stringBuilder.append("$it\n")
-                    if (it.contains(url)) {
-                        ref = false
+                if (name != getString(by.carkva_gazeta.malitounik.R.string.error)) {
+                    var style = 8
+                    when (bold) {
+                        0 -> style = 6
+                        1 -> style = 7
+                        2 -> style = 8
                     }
-                }
-                if (ref) {
-                    stringBuilder.append("$url\n")
-                }
-                if (sviatyiaNewList.isNotEmpty()) {
-                    logFile.writer().use {
-                        it.write(stringBuilder.toString())
-                    }
-                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
-                }
-                sb.clear()
-                url = "/chytanne/sviatyja/opisanie" + (mun + 1) + ".json"
-                referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
-                    MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
-                }.await()
-                ref = true
-                logFile.readLines().forEach {
-                    sb.append("$it\n")
-                    if (it.contains(url)) {
-                        ref = false
-                    }
-                }
-                if (ref) {
-                    sb.append("$url\n")
-                }
-                if (builder != "") {
-                    logFile.writer().use {
-                        it.write(sb.toString())
-                    }
-                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
-                }
-
-                if (sviatyiaNewList.isNotEmpty()) {
-                    referens.child("/calendarsviatyia.txt").putFile(Uri.fromFile(localFile3)).await()
-                }
-                if (builder != "") {
-                    referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").putFile(Uri.fromFile(localFile4)).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    binding.progressBar2.visibility = View.VISIBLE
+                    val localFile2 = File("$filesDir/cache/cache2.txt")
+                    val sviatyiaNewList = ArrayList<ArrayList<String>>()
+                    referens.child("/calendarsviatyia.txt").getFile(localFile2).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            val sviatyiaNew = localFile2.readLines()
+                            for (element in sviatyiaNew) {
+                                val re1 = element.split("<>")
+                                val list = ArrayList<String>()
+                                for (element2 in re1) {
+                                    list.add(element2)
+                                }
+                                sviatyiaNewList.add(list)
+                            }
+                            sviatyiaNewList[dayOfYear][0] = name
+                            sviatyiaNewList[dayOfYear][1] = chtenie
+                            sviatyiaNewList[dayOfYear][2] = style.toString()
+                            sviatyiaNewList[dayOfYear][3] = tipicon
                         } else {
                             MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
                     }.await()
+                    var sw3 = ""
+                    val sb = StringBuilder()
+                    for (i in 0 until 366) {
+                        if (sviatyiaNewList[i][3] != "0") sw3 = sviatyiaNewList[i][3]
+                        sb.append(sviatyiaNewList[i][0] + "<>" + sviatyiaNewList[i][1] + "<>" + sviatyiaNewList[i][2] + "<>" + sw3 + "\n")
+                    }
+                    val localFile3 = File("$filesDir/cache/cache3.txt")
+                    if (sviatyiaNewList.isNotEmpty()) {
+                        localFile3.writer().use {
+                            it.write(sb.toString())
+                        }
+                    }
+                    val stringBuilder = StringBuilder()
+                    val url = "/calendarsviatyia.txt"
+                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                        MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }.await()
+                    var ref = true
+                    logFile.readLines().forEach {
+                        stringBuilder.append("$it\n")
+                        if (it.contains(url)) {
+                            ref = false
+                        }
+                    }
+                    if (ref) {
+                        stringBuilder.append("$url\n")
+                    }
+                    if (sviatyiaNewList.isNotEmpty()) {
+                        logFile.writer().use {
+                            it.write(stringBuilder.toString())
+                        }
+                        referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+                    }
+                    sb.clear()
+                    if (sviatyiaNewList.isNotEmpty()) {
+                        referens.child("/calendarsviatyia.txt").putFile(Uri.fromFile(localFile3)).await()
+                    }
+                } else {
+                    MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
+                }
+                if (spaw != getString(by.carkva_gazeta.malitounik.R.string.error)) {
+                    val sb = StringBuilder()
+                    val localFile = File("$filesDir/cache/cache.txt")
+                    val localFile4 = File("$filesDir/cache/cache4.txt")
+                    var builder = ""
+                    referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").getFile(localFile).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            builder = localFile.readText()
+                        } else {
+                            MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        }
+                    }.await()
+                    val gson = Gson()
+                    if (builder != "") {
+                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
+                        val arrayList: ArrayList<String> = gson.fromJson(builder, type)
+                        arrayList[data - 1] = spaw
+                        localFile4.writer().use {
+                            it.write(gson.toJson(arrayList, type))
+                        }
+                    }
+                    val url = "/chytanne/sviatyja/opisanie" + (mun + 1) + ".json"
+                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                        MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }.await()
+                    var ref = true
+                    logFile.readLines().forEach {
+                        sb.append("$it\n")
+                        if (it.contains(url)) {
+                            ref = false
+                        }
+                    }
+                    if (ref) {
+                        sb.append("$url\n")
+                    }
+                    if (builder != "") {
+                        logFile.writer().use {
+                            it.write(sb.toString())
+                        }
+                        referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+                    }
+                    if (builder != "") {
+                        referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").putFile(Uri.fromFile(localFile4)).addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.save))
+                            } else {
+                                MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
+                            }
+                        }.await()
+                    }
+                } else {
+                    MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
                 binding.progressBar2.visibility = View.GONE
             }

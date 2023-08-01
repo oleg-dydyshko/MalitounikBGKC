@@ -20,16 +20,8 @@ import android.provider.MediaStore
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
-import android.util.Base64.DEFAULT
-import android.util.Base64.decode
 import android.util.TypedValue
 import android.view.*
-import android.view.animation.Animation
-import android.view.animation.Animation.AnimationListener
-import android.view.animation.AnimationUtils
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
@@ -47,23 +39,16 @@ import com.github.barteksc.pdfviewer.util.FitPolicy
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.kursx.parser.fb2.*
 import com.shockwave.pdfium.PdfDocument
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import org.xml.sax.SAXException
 import java.io.*
 import java.util.*
-import java.util.zip.ZipEntry
-import java.util.zip.ZipInputStream
-import javax.xml.parsers.ParserConfigurationException
-import kotlin.math.abs
 
 
-class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener {
+class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, AdapterView.OnItemLongClickListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener {
 
 
-    private lateinit var gestureDetector: GestureDetector
     private lateinit var pdfView: PDFView
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
@@ -81,80 +66,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     private val naidaunia = ArrayList<ArrayList<String>>()
     private var saveindep = true
     private var runSql = false
-    private var biblioteka: BibliotekaEpub? = null
-    private var positionY = 0
-    private var fb2: FictionBook? = null
-    private var fb2PageText = ""
-    private var spid = 60
-    private var autoScrollJob: Job? = null
-    private var autoStartScrollJob: Job? = null
-    private var procentJob: Job? = null
-    private var autoscroll = false
-    private lateinit var animInRight: Animation
-    private lateinit var animOutRight: Animation
-    private lateinit var animInLeft: Animation
-    private lateinit var animOutLeft: Animation
     private lateinit var binding: BibliotekaViewBinding
-    private var animationStoronaLeft = true
     private var site = false
-    private var mActionDown = false
     private var resetTollbarJob: Job? = null
-    private val animationListenerOutRight = object : AnimationListener {
-        override fun onAnimationStart(animation: Animation) {}
-        override fun onAnimationEnd(animation: Animation) {
-            if (biblioteka != null) {
-                val t1 = fileName.lastIndexOf(".")
-                val dirName = if (t1 != -1) fileName.substring(0, t1)
-                else fileName
-                val dir = File("$filesDir/Book/$dirName/")
-                if (defaultPage - 1 >= 0) {
-                    defaultPage--
-                    binding.webView.loadUrl("file://" + dir.absolutePath + "/" + biblioteka?.getPageName(defaultPage))
-                }
-            } else {
-                if (defaultPage - 1 >= 0) {
-                    defaultPage--
-                    fb2PageText = getFB2Page()
-                    binding.webView.loadDataWithBaseURL(null, fb2PageText, "text/html", "utf-8", null)
-                }
-            }
-            if (autoscroll) {
-                binding.webView.postDelayed({
-                    startAutoScroll()
-                }, 300)
-            }
-        }
-
-        override fun onAnimationRepeat(animation: Animation) {}
-    }
-    private val animationListenerOutLeft = object : AnimationListener {
-        override fun onAnimationStart(animation: Animation) {}
-        override fun onAnimationEnd(animation: Animation) {
-            if (biblioteka != null) {
-                val t1 = fileName.lastIndexOf(".")
-                val dirName = if (t1 != -1) fileName.substring(0, t1)
-                else fileName
-                val dir = File("$filesDir/Book/$dirName/")
-                if (defaultPage + 1 < (biblioteka?.content?.size ?: 0)) {
-                    defaultPage++
-                    binding.webView.loadUrl("file://" + dir.absolutePath + "/" + biblioteka?.getPageName(defaultPage))
-                }
-            } else {
-                if (defaultPage + 1 < bookTitle.size) {
-                    defaultPage++
-                    fb2PageText = getFB2Page()
-                    binding.webView.loadDataWithBaseURL(null, fb2PageText, "text/html", "utf-8", null)
-                }
-            }
-            if (autoscroll) {
-                binding.webView.postDelayed({
-                    startAutoScroll()
-                }, 300)
-            }
-        }
-
-        override fun onAnimationRepeat(animation: Animation) {}
-    }
     private var sqlJob: Job? = null
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
@@ -166,11 +80,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             var mime = "Bibliateka.file"
             if (t1 != -1) {
                 mime = path.substring(t1 + 1)
-            }
-            if (!(mime.contains(".htm", ignoreCase = true) || mime.contains(".txt", ignoreCase = true) || mime.contains(".pdf", ignoreCase = true) || mime.contains(".fb2", ignoreCase = true) || mime.contains(".epub", ignoreCase = true))) {
-                val dialog = DialogMimeError()
-                dialog.show(supportFragmentManager, "DialogMimeError")
-                return@registerForActivityResult
             }
             fileUri?.let { uri ->
                 copyInputStreamToFile(contentResolver.openInputStream(uri), mime)
@@ -194,26 +103,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             }
         }
         inputStream?.close()
-    }
-
-    override fun onScroll(t: Int) {
-        positionY = t
-    }
-
-    override fun onBottom() {
-        stopAutoScroll()
-    }
-
-    override fun onScrollDiff(diff: Int) {
-    }
-
-    override fun onDialogFontSize(fontSize: Float) {
-        if (binding.scrollViewB.visibility == View.VISIBLE) {
-            binding.textViewB.textSize = fontSize
-        } else {
-            val webSettings: WebSettings = binding.webView.settings
-            webSettings.defaultFontSize = fontSize.toInt()
-        }
     }
 
     override fun fileDeliteCancel() {
@@ -310,8 +199,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             fileName = title
             loadFilePDF()
             binding.swipeRefreshLayout.visibility = View.GONE
-            binding.webView.visibility = View.GONE
-            binding.scrollViewB.visibility = View.GONE
             invalidateOptionsMenu()
         } else {
             if (MainActivity.isNetworkAvailable(true)) {
@@ -341,8 +228,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 binding.progressBar2.visibility = View.GONE
                 loadFilePDF()
                 binding.swipeRefreshLayout.visibility = View.GONE
-                binding.webView.visibility = View.GONE
-                binding.scrollViewB.visibility = View.GONE
                 invalidateOptionsMenu()
             } else {
                 DialogNoInternet().show(supportFragmentManager, "no_internet")
@@ -373,53 +258,19 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         setRubrika(MainActivity.NIADAUNIA)
         filePath = file.absolutePath
         fileName = file.name
-        when {
-            fileName.contains(".fb2.zip", true) -> {
-                loadFileFB2ZIP()
-            }
-
-            fileName.contains(".fb2", true) -> {
-                loadFileFB2()
-            }
-
-            fileName.contains(".pdf", true) -> {
-                loadFilePDF()
-            }
-
-            fileName.contains(".txt", true) -> {
-                loadFileTXT()
-            }
-
-            fileName.contains(".htm", true) -> {
-                loadFileHTML()
-            }
-
-            else -> {
-                loadFileEPUB()
-            }
+        if (fileName.contains(".pdf", true)) {
+            loadFilePDF()
         }
         invalidateOptionsMenu()
     }
 
     override fun onDialogTitle(page: Int) {
-        if (binding.webView.visibility == View.VISIBLE) {
-            defaultPage = page
-            fb2PageText = getFB2Page()
-            binding.webView.loadDataWithBaseURL(null, fb2PageText, "text/html", "utf-8", null)
-        } else {
-            pdfView.jumpTo(page)
-            binding.pageToolbar.text = String.format("%d/%d", page + 1, pdfView.pageCount)
-            binding.pageToolbar.visibility = View.VISIBLE
-        }
+        pdfView.jumpTo(page)
+        binding.pageToolbar.text = String.format("%d/%d", page + 1, pdfView.pageCount)
+        binding.pageToolbar.visibility = View.VISIBLE
     }
 
     override fun onDialogTitleString(page: String) {
-        val t1 = fileName.lastIndexOf(".")
-        val dirName = if (t1 != -1) fileName.substring(0, t1)
-        else fileName
-        val dir = File("$filesDir/Book/$dirName/")
-        binding.webView.loadUrl("file://" + dir.absolutePath.toString() + "/" + page)
-        defaultPage = biblioteka?.setPage(page) ?: 0
         binding.titleToolbar.visibility = View.GONE
     }
 
@@ -521,7 +372,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         }
         ////////////////////////////////////
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding = BibliotekaViewBinding.inflate(layoutInflater)
         try {
             setContentView(binding.root)
@@ -534,15 +384,11 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         }
         pdfView = binding.pdfView
 
-        autoscroll = k.getBoolean("autoscroll", false)
         adapter = BibliotekaAdapter(this)
         binding.listView.adapter = adapter
         if (dzenNoch) {
-            binding.textViewB.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
             binding.listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
             binding.swipeRefreshLayout.setColorSchemeResources(by.carkva_gazeta.malitounik.R.color.colorPrimary_black)
-            binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         } else {
             binding.listView.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.color.colorDivider)
             binding.listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default_bibliateka)
@@ -577,37 +423,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 if (file.exists()) {
                     filePath = file.absolutePath
                     fileName = file.name
-                    when {
-                        fileName.contains(".pdf", true) -> {
-                            loadFilePDF()
-                        }
-
-                        fileName.contains(".fb2.zip", true) -> {
-                            loadFileFB2ZIP()
-                        }
-
-                        fileName.contains(".fb2", true) -> {
-                            loadFileFB2()
-                        }
-
-                        fileName.contains(".txt", true) -> {
-                            loadFileTXT()
-                        }
-
-                        fileName.contains(".htm", true) -> {
-                            loadFileHTML()
-                        }
-
-                        else -> {
-                            loadFileEPUB()
-                        }
-                    }
-                    if (!fileName.contains(".pdf", true)) {
-                        autoscroll = k.getBoolean("autoscroll", false)
-                        spid = k.getInt("autoscrollSpid", 60)
-                        if (autoscroll) {
-                            startAutoScroll()
-                        }
+                    if (fileName.contains(".pdf", true)) {
+                        loadFilePDF()
                     }
                     binding.swipeRefreshLayout.visibility = View.GONE
                     invalidateOptionsMenu()
@@ -639,8 +456,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                     fileName = file.name
                     loadFilePDF()
                     binding.swipeRefreshLayout.visibility = View.GONE
-                    binding.webView.visibility = View.GONE
-                    binding.scrollViewB.visibility = View.GONE
                     pdfView.visibility = View.VISIBLE
                     invalidateOptionsMenu()
                 } else {
@@ -653,64 +468,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             }
         }
 
-        animInRight = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
-        animOutRight = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
-        animInLeft = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
-        animOutLeft = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_out_left)
-        animOutRight.setAnimationListener(animationListenerOutRight)
-        animOutLeft.setAnimationListener(animationListenerOutLeft)
-        positionY = k.getInt("webViewBibliotekaScroll", 0)
-        gestureDetector = GestureDetector(this, GestureListener())
-        binding.webView.setOnScrollChangedCallback(this)
-        binding.webView.setOnTouchListener { _, event ->
-            when (event?.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    if (autoscroll) mActionDown = true
-                }
-
-                MotionEvent.ACTION_UP -> {
-                    if (autoscroll) mActionDown = false
-                }
-
-                MotionEvent.ACTION_CANCEL -> {
-                    if (autoscroll) mActionDown = false
-                }
-            }
-            return@setOnTouchListener gestureDetector.onTouchEvent(event)
-        }
-        binding.webView.webViewClient = HelloWebViewClient()
-        val webSettings = binding.webView.settings
-        webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
-        webSettings.standardFontFamily = "sans-serif-condensed"
-        webSettings.defaultFontSize = fontBiblia.toInt()
-        webSettings.allowFileAccess = true
-
-        binding.actionPlus.setOnClickListener {
-            if (spid in 20..235) {
-                spid -= 5
-                val proc = 100 - (spid - 15) * 100 / 215
-                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                binding.progress.visibility = View.VISIBLE
-                startProcent()
-                val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
-                prefEditors.apply()
-            }
-        }
-        binding.actionMinus.setOnClickListener {
-            if (spid in 10..225) {
-                spid += 5
-                val proc = 100 - (spid - 15) * 100 / 215
-                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                binding.progress.visibility = View.VISIBLE
-                startProcent()
-                val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
-                prefEditors.apply()
-            }
-        }
         setTollbarTheme()
 
         val gson = Gson()
@@ -732,20 +489,16 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             fileName = savedInstanceState.getString("fileName") ?: ""
             idSelect = savedInstanceState.getInt("idSelect")
             nameRubrika = savedInstanceState.getString("nameRubrika") ?: ""
-            //binding.titleToolbar.text = savedInstanceState.getString("titleToolbar") ?: getString(by.carkva_gazeta.malitounik.R.string.bibliateka_carkvy)
             MainActivity.dialogVisable = false
             when {
                 savedInstanceState.getInt("pdfView", 0) == 1 -> {
                     binding.swipeRefreshLayout.visibility = View.GONE
                     pdfView.visibility = View.VISIBLE
-                    binding.webView.visibility = View.GONE
-                    binding.scrollViewB.visibility = View.GONE
                     savedInstance = 1
                 }
 
                 savedInstanceState.getInt("pdfView", 0) == 2 -> {
                     binding.swipeRefreshLayout.visibility = View.GONE
-                    binding.webView.visibility = View.VISIBLE
                     pdfView.visibility = View.GONE
                     savedInstance = 2
                 }
@@ -753,8 +506,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 else -> {
                     binding.swipeRefreshLayout.visibility = View.VISIBLE
                     pdfView.visibility = View.GONE
-                    binding.webView.visibility = View.GONE
-                    binding.scrollViewB.visibility = View.GONE
                     savedInstance = 0
                 }
             }
@@ -812,8 +563,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 binding.swipeRefreshLayout.visibility = View.GONE
                 if (fileName.contains(".pdf", true)) {
                     pdfView.visibility = View.VISIBLE
-                } else {
-                    binding.webView.visibility = View.VISIBLE
                 }
                 if (!json.equals("")) {
                     val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
@@ -841,6 +590,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 val intent = Intent()
                 intent.type = "*/*"
                 intent.action = Intent.ACTION_GET_CONTENT
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf"))
                 mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
                 binding.progressBar2.visibility = View.GONE
                 setRubrika(MainActivity.NIADAUNIA)
@@ -852,40 +602,13 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 val t1 = filePath.indexOf("raw:")
                 filePath = filePath.substring(t1 + 4)
             }
-            when {
-                filePath.contains(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString()) -> {
-                    loadFilePDF()
-                }
-
-                else -> {
-                    when {
-                        fileName.contains(".pdf", true) -> {
-                            loadFilePDF()
-                        }
-
-                        fileName.contains(".fb2.zip", true) -> {
-                            loadFileFB2ZIP()
-                        }
-
-                        fileName.contains(".fb2", true) -> {
-                            loadFileFB2()
-                        }
-
-                        fileName.contains(".txt", true) -> {
-                            loadFileTXT()
-                        }
-
-                        fileName.contains(".htm", true) -> {
-                            loadFileHTML()
-                        }
-
-                        else -> {
-                            loadFileEPUB()
-                        }
-                    }
-                    saveindep = false
-                    binding.swipeRefreshLayout.visibility = View.GONE
-                }
+            if (fileName.contains(".pdf", true)) {
+                saveindep = false
+                binding.swipeRefreshLayout.visibility = View.GONE
+                loadFilePDF()
+            }
+            if (filePath.contains(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString())) {
+                loadFilePDF()
             }
         }
     }
@@ -933,7 +656,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             }
 
             else -> {
-                // MainActivity.NIADAUNIA
                 arrayList.clear()
                 arrayList.addAll(naidaunia)
                 arrayList.reverse()
@@ -956,8 +678,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             if (saveindep) {
                 binding.swipeRefreshLayout.visibility = View.VISIBLE
                 pdfView.visibility = View.GONE
-                binding.webView.visibility = View.GONE
-                binding.scrollViewB.visibility = View.GONE
             }
             if (binding.swipeRefreshLayout.visibility == View.VISIBLE) {
                 val gson = Gson()
@@ -1033,379 +753,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         pdfView.fromFile(file).enableAntialiasing(true).enableSwipe(true).swipeHorizontal(false).enableDoubletap(true).defaultPage(defaultPage).onLoad(this).onPageChange(this).onError(this).enableAnnotationRendering(false).password(null).scrollHandle(null).enableAntialiasing(true).spacing(2).autoSpacing(false).pageFitPolicy(FitPolicy.WIDTH).pageSnap(false).pageFling(false).nightMode(k.getBoolean("inversion", false)).load()
     }
 
-    private fun loadFileTXT() {
-        binding.progressBar2.visibility = View.GONE
-        binding.scrollViewB.visibility = View.VISIBLE
-        val file = File(filePath)
-        binding.textViewB.text = file.readText()
-        val t1 = file.name.lastIndexOf(".")
-        binding.titleToolbar.text = file.name.substring(0, t1)
-        for (i in 0 until naidaunia.size) {
-            if (naidaunia[i][1].contains(filePath)) {
-                naidaunia.removeAt(i)
-                break
-            }
-        }
-        val gson = Gson()
-        val temp: ArrayList<String> = ArrayList()
-        temp.add(file.name.substring(0, t1))
-        temp.add(filePath)
-        temp.add("")
-        naidaunia.add(temp)
-        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-        val prefEditor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
-        prefEditor.apply()
-    }
-
-    private fun loadFileHTML() {
-        binding.progressBar2.visibility = View.GONE
-        binding.webView.visibility = View.VISIBLE
-        val file = File(filePath)
-        binding.webView.loadUrl("file://" + file.absolutePath)
-        val t1 = file.name.lastIndexOf(".")
-        binding.titleToolbar.text = file.name.substring(0, t1)
-        for (i in 0 until naidaunia.size) {
-            if (naidaunia[i][1].contains(filePath)) {
-                naidaunia.removeAt(i)
-                break
-            }
-        }
-        val gson = Gson()
-        val temp: ArrayList<String> = ArrayList()
-        temp.add(file.name.substring(0, t1))
-        temp.add(filePath)
-        temp.add("")
-        naidaunia.add(temp)
-        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-        val prefEditor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
-        prefEditor.apply()
-    }
-
-    private fun loadFileEPUB() {
-        val naidauCount = naidaunia.size - 1
-        if (biblioteka == null || naidaunia.size <= 0 || !naidaunia[naidauCount][1].contains(filePath)) {
-            val file = File(filePath)
-            val t1 = fileName.lastIndexOf(".")
-            val dirName = if (t1 != -1) fileName.substring(0, t1)
-            else fileName
-            val dir = File("$filesDir/Book/$dirName/")
-            if (!dir.exists()) {
-                binding.progressBar2.visibility = View.VISIBLE
-                dir.mkdirs()
-                CoroutineScope(Dispatchers.Main).launch {
-                    val unzip = withContext(Dispatchers.IO) {
-                        return@withContext unzip(file, dir)
-                    }
-                    if (unzip) {
-                        loadFileEPUB(dir)
-                    }
-                    binding.progressBar2.visibility = View.GONE
-                }
-            } else {
-                loadFileEPUB(dir)
-            }
-        } else {
-            binding.webView.visibility = View.VISIBLE
-            binding.titleToolbar.text = biblioteka?.bookTitle
-        }
-    }
-
-    private fun loadFileEPUB(dir: File) {
-        animationStoronaLeft = true
-        val allEntries: Map<String, *> = k.all
-        for ((key) in allEntries) {
-            if (key.contains(fileName)) {
-                defaultPage = k.getInt(fileName, 0)
-                break
-            }
-        }
-        biblioteka = BibliotekaEpub(dir.absolutePath)
-        binding.webView.visibility = View.VISIBLE
-        if (defaultPage >= (biblioteka?.content?.size ?: 0)) {
-            defaultPage = 0
-            positionY = 0
-        }
-        val split = biblioteka?.content?.get(defaultPage)?.get(1)?.split("#") ?: ArrayList()
-        binding.webView.loadUrl("file://" + dir.absolutePath.toString() + "/" + split[0])
-        binding.webView.scrollTo(0, positionY)
-        bookTitle.clear()
-        bookTitle.addAll(biblioteka?.contentList as ArrayList<String>)
-        binding.titleToolbar.text = biblioteka?.bookTitle
-        binding.pageToolbar.visibility = View.GONE
-        for (i in 0 until naidaunia.size) {
-            if (naidaunia[i][1].contains(filePath)) {
-                naidaunia.removeAt(i)
-                break
-            }
-        }
-        val gson = Gson()
-        val temp = ArrayList<String>()
-        temp.add(biblioteka?.bookTitle ?: "")
-        temp.add(filePath)
-        temp.add(biblioteka?.titleImage ?: "")
-        naidaunia.add(temp)
-        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-        val prefEditor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
-        prefEditor.apply()
-    }
-
-    private fun loadFileFB2ZIP() {
-        val dir = File("$filesDir/Book")
-        if (!dir.exists()) {
-            dir.mkdir()
-        }
-        val naidauCount = naidaunia.size - 1
-        if (fb2 == null || naidaunia.size <= 0 || !naidaunia[naidauCount][1].contains(filePath)) {
-            var file = File(filePath)
-            val zis = ZipInputStream(BufferedInputStream(FileInputStream(file)))
-            var ze = ZipEntry("")
-            var count: Int
-            val buffer = ByteArray(8192)
-            while (zis.nextEntry?.also { ze = it } != null) {
-                file = File(dir.canonicalPath, ze.name)
-                val canonicalPath = file.canonicalPath
-                if (!canonicalPath.startsWith(dir.canonicalPath)) {
-                    val securityError = DialogSecurityError()
-                    securityError.show(supportFragmentManager, "securityError")
-                    return
-                }
-                FileOutputStream(file).use { fout ->
-                    while (zis.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count)
-                }
-            }
-            filePath = file.absolutePath
-            loadFileFB2()
-        } else {
-            binding.webView.visibility = View.VISIBLE
-            binding.titleToolbar.text = fb2?.title
-        }
-    }
-
-    private fun loadFileFB2() {
-        animationStoronaLeft = true
-        biblioteka = null
-        val allEntries: Map<String, *> = k.all
-        for ((key) in allEntries) {
-            if (key.contains(fileName)) {
-                defaultPage = k.getInt(fileName, 0)
-                break
-            }
-        }
-        try {
-            fb2 = FictionBook(File(filePath))
-        } catch (e: ParserConfigurationException) {
-            val pdfError: DialogPdfError = DialogPdfError.getInstance("FB2")
-            pdfError.show(supportFragmentManager, "pdf_error")
-            return
-        } catch (e: IOException) {
-            val pdfError: DialogPdfError = DialogPdfError.getInstance("FB2")
-            pdfError.show(supportFragmentManager, "pdf_error")
-            return
-        } catch (e: SAXException) {
-            val pdfError: DialogPdfError = DialogPdfError.getInstance("FB2")
-            pdfError.show(supportFragmentManager, "pdf_error")
-            return
-        }
-        val dir = File("$filesDir/Book")
-        if (!dir.exists()) {
-            dir.mkdir()
-        }
-        var file = File("$filesDir/Book")
-        fb2?.let {
-            val map: Map<String, Binary> = it.binaries
-            for ((key, value) in map) {
-                if (key.contains("cover", true)) {
-                    file = File("$filesDir/Book", File(filePath).name.toString() + key)
-                    val buffer = value.binary
-                    FileOutputStream(file).use { fout -> fout.write(decode(buffer, DEFAULT)) }
-                }
-            }
-        }
-        val section: ArrayList<Section> = fb2?.body?.sections ?: ArrayList()
-        val content: ArrayList<String> = ArrayList()
-        var count = 0
-        for (i in 0 until section.size) {
-            val section2: ArrayList<Section> = section[i].sections
-            if (section2.size > 0) {
-                for (q in 0 until section2.size) {
-                    val titles: ArrayList<Title> = section[i].sections[q].titles
-                    if (titles.size > 0) {
-                        content.add(count.toString() + "<>" + titles[0].paragraphs[0].text)
-                        count++
-                    }
-                }
-            } else {
-                val titles: ArrayList<Title> = section[i].titles
-                if (titles.size > 0) {
-                    content.add(count.toString() + "<>" + titles[0].paragraphs[0].text)
-                    count++
-                }
-            }
-        }
-        bookTitle.clear()
-        bookTitle.addAll(content)
-        fb2PageText = getFB2Page()
-        binding.webView.loadDataWithBaseURL(null, fb2PageText, "text/html", "utf-8", null)
-        binding.webView.visibility = View.VISIBLE
-        if (defaultPage >= content.size) {
-            defaultPage = 0
-            positionY = 0
-        }
-        binding.webView.scrollTo(0, positionY)
-        binding.titleToolbar.text = fb2?.title
-        binding.pageToolbar.visibility = View.GONE
-        for (i in 0 until naidaunia.size) {
-            if (naidaunia[i][1].contains(filePath)) {
-                naidaunia.removeAt(i)
-                break
-            }
-        }
-        val gson = Gson()
-        val temp: ArrayList<String> = ArrayList()
-        temp.add(fb2?.title ?: "")
-        temp.add(filePath)
-        temp.add(file.absolutePath)
-        naidaunia.add(temp)
-        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-        val prefEditor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
-        prefEditor.apply()
-    }
-
-    private fun getFB2Page(): String {
-        val section: ArrayList<Section> = fb2?.body?.sections ?: ArrayList()
-        val sb = StringBuilder()
-        sb.append("<style>::selection {background: #eb9b9a} img{display: inlineheight: automax-width: 100%} a{text-decoration: none}</style>").append("\n")
-        for (i in 0 until section.size) {
-            val section2: ArrayList<Section> = section[i].sections
-            if (section2.size > 0) {
-                for (q in 0 until section2.size) {
-                    val elements: ArrayList<Element> = section2[q].elements
-                    val titles: ArrayList<Title> = section2[q].titles
-                    if (titles.size > 0 && bookTitle[defaultPage].contains(titles[0].paragraphs[0].text)) {
-                        val notes: ArrayList<String> = ArrayList()
-                        if (titles.size > 0) sb.append("<strong>").append(titles[0].paragraphs[0].text).append("</strong>").append("<p>").append("\n")
-                        for (e in 0 until elements.size) {
-                            if (elements[e] is P) {
-                                val p = elements[e] as P
-                                val images: ArrayList<Image>? = p.images
-                                when {
-                                    images != null -> {
-                                        val img: String = images[0].value
-                                        fb2?.let {
-                                            val map: Map<String, Binary> = it.binaries
-                                            var imageRaw = ""
-                                            for ((key, value) in map) {
-                                                if (img.contains(key)) {
-                                                    imageRaw = value.binary
-                                                }
-                                            }
-                                            sb.append("<img src=\"data:image/jpegbase64,").append(imageRaw).append("\" />").append("<p>").append("\n")
-                                        }
-                                    }
-
-                                    elements[e] is EmptyLine -> {
-                                        sb.append("<p>").append("\n")
-                                    }
-
-                                    else -> {
-                                        var text: String = elements[e].text
-                                        val t1 = text.indexOf("[")
-                                        if (t1 != -1) {
-                                            val t2 = text.indexOf("]", t1 + 1)
-                                            notes.add(text.substring(t1 + 1, t2))
-                                            text = text.substring(0, t1) + "<sup><a id=\"s_" + text.substring(t1 + 1, t2) + "\" href=\"#n_" + text.substring(t1 + 1, t2) + "\">" + text.substring(t1, t2 + 1) + "</a></sup>" + text.substring(t2 + 1)
-                                        }
-                                        sb.append(text).append("<p>").append("\n")
-                                    }
-                                }
-                            }
-                        }
-                        if (notes.size > 0) {
-                            sb.append("<hr size=\"2\" color=\"#000000\">").append("<p>").append("\n")
-                            fb2?.let {
-                                val notesK: ArrayList<Section> = it.notes.sections
-                                for (r in 0 until notesK.size) {
-                                    for (w in 0 until notes.size) {
-                                        if (notesK[r].titles[0].paragraphs[0].text.contains(notes[w])) {
-                                            sb.append("[").append(notes[w]).append("] ").append(notesK[r].elements[0].text).append("<p>").append("\n").append(" <a id=\"n_").append(notes[w]).append("\" href=\"#s_").append(notes[w]).append("\">Назад</a>").append("<p>").append("\n")
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break
-                    }
-                }
-            } else {
-                val elements: ArrayList<Element> = section[i].elements
-                val titles: ArrayList<Title> = section[i].titles
-                val t1: Int = bookTitle[defaultPage].indexOf(">")
-                if (titles.size > 0 && titles[0].paragraphs[0].text.contains(bookTitle[defaultPage].substring(t1 + 1))) {
-                    val notes: ArrayList<String> = ArrayList()
-                    sb.append("<strong>").append(titles[0].paragraphs[0].text).append("</strong>").append("<p>").append("\n")
-                    for (e in 0 until elements.size) {
-                        if (elements[e] is P) {
-                            val p = elements[e] as P
-                            val images: ArrayList<Image>? = p.images
-                            when {
-                                images != null -> {
-                                    val img: String = images[0].value
-                                    fb2?.let {
-                                        val map: Map<String, Binary> = it.binaries
-                                        var imageRaw = ""
-                                        for ((key, value) in map) {
-                                            if (img.contains(key)) {
-                                                imageRaw = value.binary
-                                            }
-                                        }
-                                        sb.append("<img src=\"data:image/jpegbase64,").append(imageRaw).append("\" />").append("<p>").append("\n")
-                                    }
-                                }
-
-                                elements[e] is EmptyLine -> {
-                                    sb.append("<p>").append("\n")
-                                }
-
-                                else -> {
-                                    var text: String = elements[e].text
-                                    val t3 = text.indexOf("[")
-                                    if (t3 != -1) {
-                                        val t2 = text.indexOf("]", t3 + 1)
-                                        notes.add(text.substring(t3 + 1, t2))
-                                        text = text.substring(0, t3) + "<sup><a id=\"s_" + text.substring(t3 + 1, t2) + "\" href=\"#n_" + text.substring(t3 + 1, t2) + "\">" + text.substring(t3, t2 + 1) + "</a></sup>" + text.substring(t2 + 1)
-                                    }
-                                    sb.append(text).append("<p>").append("\n")
-                                }
-                            }
-                        }
-                    }
-                    if (notes.size > 0) {
-                        sb.append("<hr size=\"2\" color=\"#000000\">").append("<p>").append("\n")
-                        fb2?.let {
-                            val notesK: ArrayList<Section> = it.notes.sections
-                            for (r in 0 until notesK.size) {
-                                for (w in 0 until notes.size) {
-                                    if (notesK[r].titles[0].paragraphs[0].text.contains(notes[w])) {
-                                        sb.append("[").append(notes[w]).append("] ").append(notesK[r].elements[0].text).append("<p>").append("\n").append(" <a id=\"n_").append(notes[w]).append("\" href=\"#s_").append(notes[w]).append("\">Назад</a>").append("<p>").append("\n")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    break
-                }
-            }
-        }
-        return sb.toString()
-    }
-
     override fun onPrepareMenu(menu: Menu) {
-        autoscroll = k.getBoolean("autoscroll", false)
-        val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         val isTrash = binding.swipeRefreshLayout.visibility == View.VISIBLE
         binding.swipeRefreshLayout.isEnabled = binding.swipeRefreshLayout.visibility == View.VISIBLE
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_trash).isVisible = binding.swipeRefreshLayout.visibility == View.VISIBLE && idSelect == MainActivity.NIADAUNIA && naidaunia.size > 0
@@ -1420,7 +768,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_rub_5).isVisible = isTrash
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_rub_6).isVisible = isTrash
-        itemAuto.isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         if (binding.swipeRefreshLayout.visibility == View.GONE) {
             binding.subtitleToolbar.visibility = View.GONE
@@ -1433,34 +780,9 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_font).isVisible = false
                 if (this.menu) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = true
             } else {
-                if (autoscroll) {
-                    menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
-                } else {
-                    menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
-                }
-                when {
-                    fileName.contains(".txt", true) -> {
-                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
-                        itemAuto.isVisible = false
-                    }
-
-                    fileName.contains(".htm", true) -> {
-                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
-                        itemAuto.isVisible = true
-                    }
-
-                    else -> {
-                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = true
-                        itemAuto.isVisible = true
-                    }
-                }
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_set_page).isVisible = false
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isVisible = false
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_font).isVisible = true
-                val spanString = SpannableString(itemAuto.title.toString())
-                val end = spanString.length
-                spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                itemAuto.title = spanString
             }
         } else {
             binding.subtitleToolbar.visibility = View.VISIBLE
@@ -1561,6 +883,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             val intent = Intent()
             intent.type = "*/*"
             intent.action = Intent.ACTION_GET_CONTENT
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf"))
             mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
             binding.progressBar2.visibility = View.GONE
             idSelect = MainActivity.SETFILE
@@ -1599,19 +922,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             dialogBrightness.show(supportFragmentManager, "brightness")
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
-            autoscroll = k.getBoolean("autoscroll", false)
-            if (autoscroll) {
-                stopAutoScroll()
-                prefEditor.putBoolean("autoscroll", false)
-            } else {
-                startAutoScroll()
-                prefEditor.putBoolean("autoscroll", true)
-            }
-            prefEditor.apply()
-            invalidateOptionsMenu()
-            return true
-        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
             val intent = Intent()
             intent.setClassName(this, MainActivity.BIBLIATEKALIST)
@@ -1625,15 +935,8 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         val prefEditor = k.edit()
         if (pdfView.visibility == View.VISIBLE) {
             prefEditor.putInt(fileName, pdfView.currentPage)
-        } else {
-            prefEditor.putInt("webViewBibliotekaScroll", positionY)
-            prefEditor.putInt(fileName, defaultPage)
         }
         prefEditor.apply()
-        stopAutoScroll(false)
-        autoScrollJob?.cancel()
-        autoStartScrollJob?.cancel()
-        procentJob?.cancel()
         sqlJob?.cancel()
     }
 
@@ -1641,9 +944,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         val prefEditor = k.edit()
         if (pdfView.visibility == View.VISIBLE) {
             prefEditor.putInt(fileName, pdfView.currentPage)
-        } else {
-            prefEditor.putInt("webViewBibliotekaScroll", positionY)
-            prefEditor.putInt(fileName, defaultPage)
         }
         prefEditor.apply()
         if (binding.swipeRefreshLayout.visibility == View.GONE) {
@@ -1672,10 +972,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
                 binding.pageToolbar.text = ""
                 binding.swipeRefreshLayout.visibility = View.VISIBLE
                 pdfView.visibility = View.GONE
-                binding.webView.visibility = View.GONE
-                binding.scrollViewB.visibility = View.GONE
             }
-            stopAutoScroll()
         } else {
             if (site) {
                 val intent = Intent(this, MainActivity::class.java)
@@ -1777,22 +1074,12 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         val prefEditor = k.edit()
         if (pdfView.visibility == View.VISIBLE) prefEditor.putInt(fileName, pdfView.currentPage) else prefEditor.putInt(fileName, defaultPage)
         prefEditor.apply()
-        when {
-            pdfView.visibility == View.VISIBLE -> {
-                outState.putInt("page", pdfView.currentPage)
-                outState.putInt("pdfView", 1)
-            }
-
-            binding.webView.visibility == View.VISIBLE -> {
-                prefEditor.putInt("webViewBibliotekaScroll", positionY)
-                prefEditor.apply()
-                outState.putInt("page", defaultPage)
-                outState.putInt("pdfView", 2)
-            }
-
-            else -> {
-                outState.putInt("pdfView", 0)
-            }
+        if (pdfView.visibility == View.VISIBLE) {
+            outState.putInt("page", pdfView.currentPage)
+            outState.putInt("pdfView", 1)
+        }
+        else {
+            outState.putInt("pdfView", 0)
         }
         outState.putString("filePath", filePath)
         outState.putString("fileName", fileName)
@@ -1801,79 +1088,16 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         outState.putString("titleToolbar", binding.titleToolbar.text.toString())
     }
 
-    private fun unzip(zipFile: File, targetDirectory: File): Boolean {
-        if (zipFile.exists()) {
-            ZipInputStream(BufferedInputStream(FileInputStream(zipFile))).use { zis ->
-                var ze = ZipEntry("")
-                val buffer = ByteArray(8192)
-                while (zis.nextEntry?.also { ze = it } != null) {
-                    val file = File(targetDirectory, ze.name)
-                    val dir = if (ze.isDirectory) file else file.parentFile ?: file
-                    if (!dir.isDirectory && !dir.mkdirs()) return false
-                    if (ze.isDirectory) continue
-                    val canonicalPath = file.canonicalPath
-                    if (!canonicalPath.startsWith(targetDirectory.canonicalPath)) {
-                        val securityError = DialogSecurityError()
-                        securityError.show(supportFragmentManager, "securityError")
-                        targetDirectory.deleteRecursively()
-                        return false
-                    }
-                    FileOutputStream(file).use { fout ->
-                        var count: Int
-                        while (zis.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count)
-                    }
-                }
-            }
-        } else return false
-        return true
-    }
-
-    private fun stopAutoScroll(delayDisplayOff: Boolean = true) {
-        binding.actionMinus.visibility = View.GONE
-        binding.actionPlus.visibility = View.GONE
-        autoScrollJob?.cancel()
-        binding.webView.setOnBottomListener(null)
-        if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
-            CoroutineScope(Dispatchers.Main).launch {
-                delay(60000)
-                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            }
-        }
-    }
-
-    private fun startAutoScroll() {
-        binding.actionMinus.visibility = View.VISIBLE
-        binding.actionPlus.visibility = View.VISIBLE
-        binding.webView.setOnBottomListener(this)
-        autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
-            while (isActive) {
-                if (!mActionDown && !MainActivity.dialogVisable) {
-                    binding.webView.scrollBy(0, 2)
-                }
-                delay(spid.toLong())
-            }
-        }
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
-        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR) {
             MainActivity.dialogVisable = true
         }
         return super.onMenuOpened(featureId, menu)
     }
 
     override fun onPanelClosed(featureId: Int, menu: Menu) {
-        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR) {
             MainActivity.dialogVisable = false
-        }
-    }
-
-    private fun startProcent() {
-        procentJob?.cancel()
-        procentJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(1000)
-            binding.progress.visibility = View.GONE
         }
     }
 
@@ -1932,21 +1156,6 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             false
         }
         popup.show()
-    }
-
-    internal inner class HelloWebViewClient : WebViewClient() {
-        override fun onLoadResource(view: WebView, url: String) {
-            view.visibility = View.GONE
-            binding.progressBar2.visibility = View.VISIBLE
-            super.onLoadResource(view, url)
-        }
-
-        override fun onPageFinished(view: WebView, url: String) {
-            binding.progressBar2.visibility = View.GONE
-            view.visibility = View.VISIBLE
-            if (animationStoronaLeft) binding.webView.startAnimation(animInLeft) else binding.webView.startAnimation(animInRight)
-            super.onPageFinished(view, url)
-        }
     }
 
     internal inner class BibliotekaAdapter(private val context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
@@ -2013,44 +1222,4 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     }
 
     private class ViewHolder(var text: TextView, var imageView: ImageView, var buttonPopup: ImageView)
-
-    private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
-        override fun onDown(e: MotionEvent): Boolean {
-            return false
-        }
-
-        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
-            val diffY = e2.y - e1.y
-            val diffX = e2.x - e1.x
-            if (abs(diffX) > abs(diffY)) {
-                val swipeThreshold = 100
-                val swipeVelocityThreshold = 100
-                if (abs(diffX) > swipeThreshold && abs(velocityX) > swipeVelocityThreshold) {
-                    if (diffX > 0) {
-                        if (defaultPage - 1 >= 0) {
-                            stopAutoScroll()
-                            animationStoronaLeft = false
-                            binding.webView.startAnimation(animOutRight)
-                        }
-                    } else {
-                        if (biblioteka != null) {
-                            if (defaultPage + 1 < (biblioteka?.content?.size ?: 0)) {
-                                stopAutoScroll()
-                                animationStoronaLeft = true
-                                binding.webView.startAnimation(animOutLeft)
-                            }
-                        } else {
-                            if (defaultPage + 1 < bookTitle.size) {
-                                stopAutoScroll()
-                                animationStoronaLeft = true
-                                binding.webView.startAnimation(animOutLeft)
-                            }
-                        }
-                    }
-                    return true
-                }
-            }
-            return false
-        }
-    }
 }

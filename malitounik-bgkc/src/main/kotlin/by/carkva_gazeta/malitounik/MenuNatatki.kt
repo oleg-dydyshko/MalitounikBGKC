@@ -183,7 +183,7 @@ class MenuNatatki : BaseFragment() {
             file.writer().use {
                 val gson = Gson()
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, MyNatatkiFiles::class.java).type
-                it.write(gson.toJson(adapter.itemList))
+                it.write(gson.toJson(adapter.itemList, type))
             }
             adapter.notifyItemRemoved(position)
         }

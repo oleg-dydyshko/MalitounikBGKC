@@ -403,6 +403,7 @@
         <item>да Духа Сьвятога</item>
         <item>сьв. Апосталам Пятру і Паўлу</item>
         <item>Акафіст сьв. Язэпу</item>
+        <item>Акафіст Росіцкім мучанікам</item>
     </string-array>
     <string-array name="sub_bogaslugbovuia_vichernia">
         <item>Вячэрня ў нядзелі і сьвяты</item>
@@ -774,8 +775,6 @@
     <string name="dni_yspamin_pam">ДНІ ЎСПАМІНУ ПАМЁРЛЫХ</string>
     <string name="carkva_pamiat_data">ЦАРКОЎНЫЯ ПАМЯТНЫЯ ДАТЫ</string>
     <string name="parafia_sv">ПАРАФІЯЛЬНЫЯ СЬВЯТЫ</string>
-    <string name="bibliateka_open_file">ПАДТРЫМОЎВАНЫЯ ФАЙЛЫ</string>
-    <string name="bibliateka_open_file_opis">Праграма падтрымлівае файлы: pdf, html, txt, fb2, fb2.zip, epub</string>
     <string-array name="colors">
         <item>#D00505</item>
         <item>#800080</item>

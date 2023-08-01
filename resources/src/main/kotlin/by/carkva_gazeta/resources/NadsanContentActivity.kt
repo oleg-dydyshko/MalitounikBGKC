@@ -1,7 +1,9 @@
 package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString

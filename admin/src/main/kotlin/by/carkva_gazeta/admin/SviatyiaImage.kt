@@ -313,7 +313,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                     tempList.add(it)
                 }
             }
-            arrayListIcon.removeAll(tempList)
+            arrayListIcon.removeAll(tempList.toSet())
             val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
             list.items.forEach { result ->
                 if (result.name.contains("s_${day}_${mun}.") || result.name.contains("s_${day}_${mun}_")) {
@@ -481,7 +481,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         }
 
         override fun getUniqueItemId(position: Int): Long {
-            return mItemList[position].position.toLong()
+            return mItemList[position].position
         }
 
         private fun resizeImage(bitmap: Bitmap?): Bitmap? {

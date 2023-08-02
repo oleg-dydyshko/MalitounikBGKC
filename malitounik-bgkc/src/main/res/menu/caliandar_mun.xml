@@ -2,20 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_left"
-        android:icon="@drawable/menu_left"
-        android:orderInCategory="100"
-        android:title="@string/left_caliandar"
-        android:visible="false"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/action_right"
-        android:icon="@drawable/menu_right"
-        android:orderInCategory="100"
-        android:title="@string/right_caliandar"
-        android:visible="false"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_padzeia"
         android:icon="@drawable/calendar_padzea_off"
         android:orderInCategory="100"

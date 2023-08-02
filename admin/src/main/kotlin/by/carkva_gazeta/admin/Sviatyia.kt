@@ -225,7 +225,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 }
                 if (res == "") res = getString(by.carkva_gazeta.malitounik.R.string.error)
                 binding.apisanne.setText(res)
-                if ((binding.apisanne.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error) || binding.sviaty.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error)) && count < 3) {
+                if ((binding.apisanne.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error) || binding.sviaty.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error)) && count < 2) {
                     setDate(dayOfYear, count + 1)
                 } else {
                     binding.progressBar2.visibility = View.GONE

@@ -24,7 +24,7 @@ class DialogContextMenu : DialogFragment() {
     }
 
     interface DialogContextMenuListener {
-        fun onDialogRenameClick(position: Int, title: String, isSite: Boolean)
+        fun onDialogRenameClick(title: String, isSite: Boolean)
         fun onDialogDeliteClick(position: Int, title: String, isSite: Boolean)
     }
 
@@ -59,7 +59,7 @@ class DialogContextMenu : DialogFragment() {
             dialog = builder.create()
             binding.content.setOnClickListener {
                 dialog.cancel()
-                mListener.onDialogRenameClick(position, name, isSite)
+                mListener.onDialogRenameClick(name, isSite)
             }
             binding.content2.setOnClickListener {
                 dialog.cancel()

@@ -270,7 +270,7 @@ class BibliotekaView : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         binding.pageToolbar.visibility = View.VISIBLE
     }
 
-    override fun onDialogTitleString(page: String) {
+    override fun onDialogTitleString() {
         binding.titleToolbar.visibility = View.GONE
     }
 

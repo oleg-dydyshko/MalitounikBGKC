@@ -28,7 +28,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
@@ -868,12 +867,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
 
     override fun onDialogNegativeClick() {
         actionCansel()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun changeSearchViewElements(view: View?) {

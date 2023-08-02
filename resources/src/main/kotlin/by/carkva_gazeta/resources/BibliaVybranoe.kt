@@ -326,15 +326,15 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
 
     private fun loadBible(savedInstanceState: Bundle?) {
         val ssbTitle = SpannableStringBuilder()
-        DialogVybranoeBibleList.arrayListVybranoe.forEach { VybranoeBibliaData ->
+        DialogVybranoeBibleList.arrayListVybranoe.forEach { vybranoeBibliaData ->
             var inputStream = resources.openRawResource(R.raw.biblias1)
             var file: File? = null
             var intent: Intent? = null
-            if (VybranoeBibliaData.bibleName == 1) {
-                if (VybranoeBibliaData.novyZavet) {
-                    file = File("$filesDir/BibliaSemuxaNovyZavet/${VybranoeBibliaData.kniga}.json")
+            if (vybranoeBibliaData.bibleName == 1) {
+                if (vybranoeBibliaData.novyZavet) {
+                    file = File("$filesDir/BibliaSemuxaNovyZavet/${vybranoeBibliaData.kniga}.json")
                     intent = Intent(this, NovyZapavietSemuxa::class.java)
-                    when (VybranoeBibliaData.kniga) {
+                    when (vybranoeBibliaData.kniga) {
                         0 -> inputStream = resources.openRawResource(R.raw.biblian1)
                         1 -> inputStream = resources.openRawResource(R.raw.biblian2)
                         2 -> inputStream = resources.openRawResource(R.raw.biblian3)
@@ -364,9 +364,9 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                         26 -> inputStream = resources.openRawResource(R.raw.biblian27)
                     }
                 } else {
-                    file = File("$filesDir/BibliaSemuxaStaryZavet/${VybranoeBibliaData.kniga}.json")
+                    file = File("$filesDir/BibliaSemuxaStaryZavet/${vybranoeBibliaData.kniga}.json")
                     intent = Intent(this, StaryZapavietSemuxa::class.java)
-                    when (VybranoeBibliaData.kniga) {
+                    when (vybranoeBibliaData.kniga) {
                         0 -> inputStream = resources.openRawResource(R.raw.biblias1)
                         1 -> inputStream = resources.openRawResource(R.raw.biblias2)
                         2 -> inputStream = resources.openRawResource(R.raw.biblias3)
@@ -408,11 +408,11 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                         38 -> inputStream = resources.openRawResource(R.raw.biblias39)
                     }
                 }
-            } else if (VybranoeBibliaData.bibleName == 2) {
-                if (VybranoeBibliaData.novyZavet) {
-                    file = File("$filesDir/BibliaSinodalNovyZavet/${VybranoeBibliaData.kniga}.json")
+            } else if (vybranoeBibliaData.bibleName == 2) {
+                if (vybranoeBibliaData.novyZavet) {
+                    file = File("$filesDir/BibliaSinodalNovyZavet/${vybranoeBibliaData.kniga}.json")
                     intent = Intent(this, NovyZapavietSinaidal::class.java)
-                    when (VybranoeBibliaData.kniga) {
+                    when (vybranoeBibliaData.kniga) {
                         0 -> inputStream = resources.openRawResource(R.raw.sinaidaln1)
                         1 -> inputStream = resources.openRawResource(R.raw.sinaidaln2)
                         2 -> inputStream = resources.openRawResource(R.raw.sinaidaln3)
@@ -442,9 +442,9 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                         26 -> inputStream = resources.openRawResource(R.raw.sinaidaln27)
                     }
                 } else {
-                    file = File("$filesDir/BibliaSinodalStaryZavet/${VybranoeBibliaData.kniga}.json")
+                    file = File("$filesDir/BibliaSinodalStaryZavet/${vybranoeBibliaData.kniga}.json")
                     intent = Intent(this, StaryZapavietSinaidal::class.java)
-                    when (VybranoeBibliaData.kniga) {
+                    when (vybranoeBibliaData.kniga) {
                         0 -> inputStream = resources.openRawResource(R.raw.sinaidals1)
                         1 -> inputStream = resources.openRawResource(R.raw.sinaidals2)
                         2 -> inputStream = resources.openRawResource(R.raw.sinaidals3)
@@ -497,7 +497,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                         49 -> inputStream = resources.openRawResource(R.raw.sinaidals50)
                     }
                 }
-            } else if (VybranoeBibliaData.bibleName == 3) {
+            } else if (vybranoeBibliaData.bibleName == 3) {
                 inputStream = resources.openRawResource(R.raw.psaltyr_nadsan)
             }
             val builder = StringBuilder()
@@ -517,12 +517,12 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 }
             }
             val split2 = builder.toString().split("===")
-            val titleBibliaData = SpannableString(VybranoeBibliaData.title)
+            val titleBibliaData = SpannableString(vybranoeBibliaData.title)
             if (intent != null) {
                 titleBibliaData.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        intent.putExtra("kniga", VybranoeBibliaData.kniga)
-                        intent.putExtra("glava", VybranoeBibliaData.glava - 1)
+                        intent.putExtra("kniga", vybranoeBibliaData.kniga)
+                        intent.putExtra("glava", vybranoeBibliaData.glava - 1)
                         intent.putExtra("stix", 0)
                         mActivityResult.launch(intent)
                     }
@@ -541,13 +541,13 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 BibleGlobalList.vydelenie.addAll(gson.fromJson(reader.readText(), type))
                 inputStream2.close()
                 val stix = ArrayList<Spanned>()
-                val bibleline = split2[VybranoeBibliaData.glava].split("<br><br>")
+                val bibleline = split2[vybranoeBibliaData.glava].split("<br><br>")
                 bibleline.forEach {
                     if (it.trim() != "") stix.add(MainActivity.fromHtml(it))
                 }
                 for (position in stix.indices) {
                     val ssb = SpannableString(stix[position])
-                    val pos = BibleGlobalList.checkPosition(VybranoeBibliaData.glava - 1, position)
+                    val pos = BibleGlobalList.checkPosition(vybranoeBibliaData.glava - 1, position)
                     if (pos != -1) {
                         if (BibleGlobalList.vydelenie[pos][2] == 1) {
                             ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -559,7 +559,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                     sb.append(ssb).append("\n")
                 }
             } else {
-                val bible = split2[VybranoeBibliaData.glava].replace("<br><br>", "<br>")
+                val bible = split2[vybranoeBibliaData.glava].replace("<br><br>", "<br>")
                 sb.append(MainActivity.fromHtml(bible))
             }
             ssbTitle.append(sb).append("\n")

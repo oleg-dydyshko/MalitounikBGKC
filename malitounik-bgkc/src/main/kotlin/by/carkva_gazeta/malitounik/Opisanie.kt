@@ -223,55 +223,105 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
     }
 
-    private suspend fun getOpisanieSviat() {
+    private suspend fun getOpisanieSviat(count: Int = 0) {
         val pathReference = Malitounik.referens.child("/opisanie_sviat.json")
         val file = File("$filesDir/" + pathReference.name)
         var update = 0L
-        pathReference.metadata.addOnSuccessListener { storageMetadata ->
-            update = storageMetadata.updatedTimeMillis
+        var error = false
+        pathReference.metadata.addOnCompleteListener { storageMetadata ->
+            if (storageMetadata.isSuccessful) {
+                update = storageMetadata.result.updatedTimeMillis
+            } else {
+                error = true
+            }
         }.await()
         val time = file.lastModified()
         if (!file.exists() || time < update) {
-            pathReference.getFile(file).await()
+            pathReference.getFile(file).addOnCompleteListener {
+                if (!it.isSuccessful) {
+                    error = true
+                }
+            }.await()
+        }
+        var read = ""
+        if (file.exists()) read = file.readText()
+        if (read == "") error = true
+        if (error && count < 2) {
+            getOpisanieSviat(count + 1)
+            return
         }
         loadOpisanieSviat()
     }
 
-    private suspend fun getSviatyia() {
+    private suspend fun getSviatyia(count: Int = 0) {
         val dir = File("$filesDir/sviatyja/")
         if (!dir.exists()) dir.mkdir()
         var list: ListResult? = null
-        Malitounik.referens.child("/chytanne/sviatyja").list(12).addOnSuccessListener { listResult ->
-            list = listResult
+        var error = false
+        Malitounik.referens.child("/chytanne/sviatyja").list(12).addOnCompleteListener { listResult ->
+            if (listResult.isSuccessful) {
+                list = listResult.result
+            } else {
+                error = true
+            }
         }.await()
         list?.items?.forEach { storageReference ->
             if (mun == Calendar.getInstance()[Calendar.MONTH] + 1) {
                 var update = 0L
-                storageReference.metadata.addOnSuccessListener { storageMetadata ->
-                    update = storageMetadata.updatedTimeMillis
+                storageReference.metadata.addOnCompleteListener { storageMetadata ->
+                    if (storageMetadata.isSuccessful) {
+                        update = storageMetadata.result.updatedTimeMillis
+                    } else {
+                        error = true
+                    }
                 }.await()
                 val fileOpisanie = File("$filesDir/sviatyja/" + storageReference.name)
                 val time = fileOpisanie.lastModified()
                 if (!fileOpisanie.exists() || time < update) {
-                    storageReference.getFile(fileOpisanie).await()
+                    storageReference.getFile(fileOpisanie).addOnCompleteListener {
+                        if (!it.isSuccessful) {
+                            error = true
+                        }
+                    }.await()
                 }
             }
         }
         val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
-        if (fileOpisanie.exists()) loadOpisanieSviatyia(fileOpisanie.readText())
+        var read = ""
+        if (fileOpisanie.exists()) read = fileOpisanie.readText()
+        if (read == "") error = true
+        if (error && count < 2) {
+            getSviatyia(count + 1)
+            return
+        }
+        loadOpisanieSviatyia(read)
     }
 
-    private suspend fun getIcons(loadIcons: Boolean, isFull: Boolean) {
+    private suspend fun getIcons(loadIcons: Boolean, isFull: Boolean, count: Int = 0) {
         val dir = File("$filesDir/icons/")
         if (!dir.exists()) dir.mkdir()
         val arrayList = ArrayList<ArrayList<String>>()
         val localFile = File("$filesDir/cache/cache.txt")
-        Malitounik.referens.child("/icons.json").getFile(localFile).addOnSuccessListener {
-            val gson = Gson()
-            val json = localFile.readText()
-            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-            arrayList.addAll(gson.fromJson(json, type))
+        var error = false
+        Malitounik.referens.child("/icons.json").getFile(localFile).addOnCompleteListener {
+            if (it.isSuccessful) {
+                val gson = Gson()
+                var json = ""
+                if (localFile.exists()) json = localFile.readText()
+                if (json == "") {
+                    error = true
+                    return@addOnCompleteListener
+                }
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                arrayList.addAll(gson.fromJson(json, type))
+            } else {
+                error = true
+            }
         }.await()
+        if (error && count < 2) {
+            getIcons(loadIcons, isFull, count + 1)
+            return
+        }
         dirList.clear()
         var size = 0L
         val images = ArrayList<String>()

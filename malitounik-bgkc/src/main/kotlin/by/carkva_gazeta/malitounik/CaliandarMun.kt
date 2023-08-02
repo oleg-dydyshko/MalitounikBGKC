@@ -12,7 +12,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.CalendarBinding
@@ -93,12 +92,6 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onBack() {
@@ -208,10 +201,6 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
             } else {
                 if (dzenNoch) menu.findItem(R.id.action_padzeia).setIcon(R.drawable.calendar_padzea_black_off) else menu.findItem(R.id.action_padzeia).setIcon(R.drawable.calendar_padzea_off)
             }
-        }
-        if (pos == 1) {
-            menu.findItem(R.id.action_left).isVisible = true
-            menu.findItem(R.id.action_right).isVisible = true
         }
     }
 

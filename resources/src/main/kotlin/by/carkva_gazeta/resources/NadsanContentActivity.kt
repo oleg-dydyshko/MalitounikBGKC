@@ -1,9 +1,7 @@
 package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -322,8 +320,6 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
             }
         }
         setTollbarTheme()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

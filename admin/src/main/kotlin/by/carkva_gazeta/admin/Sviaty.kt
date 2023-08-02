@@ -264,7 +264,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
         }
     }
 
-    override fun onDialogFile(absolutePath: String, image: Int) {
+    override fun onDialogFile(absolutePath: String) {
         val bitmap = BitmapFactory.decodeFile(absolutePath)
         fileUpload(bitmap)
     }

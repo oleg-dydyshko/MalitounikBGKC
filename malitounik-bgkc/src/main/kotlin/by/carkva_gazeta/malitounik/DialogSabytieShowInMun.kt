@@ -63,7 +63,7 @@ class DialogSabytieShowInMun : DialogFragment() {
         return alert
     }
 
-    private fun sabytieView(DayYear: Int) {
+    private fun sabytieView(dayYear: Int) {
         activity?.let {
             binding.linearLayout.removeAllViewsInLayout()
             val density = (resources.displayMetrics.density).toInt()
@@ -88,7 +88,7 @@ class DialogSabytieShowInMun : DialogFragment() {
                 }
                 gc[r1[2].toInt(), r1[1].toInt() - 1] = r1[0].toInt()
                 for (i in 0 until rezkK) {
-                    if (gc[Calendar.DAY_OF_YEAR] - 1 == DayYear && gc[Calendar.YEAR] == year) {
+                    if (gc[Calendar.DAY_OF_YEAR] - 1 == dayYear && gc[Calendar.YEAR] == year) {
                         title = p.padz
                         val data = p.dat
                         val time = p.tim

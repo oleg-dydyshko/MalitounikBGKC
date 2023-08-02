@@ -3,13 +3,15 @@ package by.carkva_gazeta.malitounik
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.databinding.CalendarTab2Binding
-import java.util.*
+import java.util.Calendar
 
 class CaliandarMunTab2 : BaseFragment() {
     private lateinit var adapterViewPagerNedel: FragmentStateAdapter
@@ -68,24 +70,6 @@ class CaliandarMunTab2 : BaseFragment() {
             val firstPosition = MenuCaliandar.getFirstPositionNiadzel(MenuCaliandar.getPositionCaliandarNiadzel(day, posMun, yearG))
             binding.pagerNedel.setCurrentItem(firstPosition[26].toInt(), false)
         }
-    }
-
-    override fun onPrepareMenu(menu: Menu) {
-        menu.findItem(R.id.action_right).isVisible = adapterViewPagerNedel.itemCount - 1 != binding.pagerNedel.currentItem
-        menu.findItem(R.id.action_left).isVisible = 0 != binding.pagerNedel.currentItem
-    }
-
-    override fun onMenuItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.action_left) {
-            binding.pagerNedel.setCurrentItem(binding.pagerNedel.currentItem - 1, false)
-            return true
-        }
-        if (id == R.id.action_right) {
-            binding.pagerNedel.setCurrentItem(binding.pagerNedel.currentItem + 1, false)
-            return true
-        }
-        return false
     }
 
     private class MyCalendarNedelAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {

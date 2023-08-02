@@ -175,7 +175,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
         getDirPostRequest()
     }
 
-    override fun onDialogRenameClick(position: Int, title: String, isSite: Boolean) {
+    override fun onDialogRenameClick(title: String, isSite: Boolean) {
         val t1 = title.lastIndexOf("/")
         val t2 = title.indexOf(")")
         val saveAs = if (t2 != -1) true

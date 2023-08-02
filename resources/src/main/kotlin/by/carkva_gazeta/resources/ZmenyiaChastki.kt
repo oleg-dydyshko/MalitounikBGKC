@@ -385,9 +385,9 @@ internal class ZmenyiaChastki {
         return ""
     }
 
-    fun traparyIKandakiNaKognyDzen(day_of_week: Int, chast: Int): String {
+    fun traparyIKandakiNaKognyDzen(dayOfWeek: Int, chast: Int): String {
         var result = ""
-        if (day_of_week == 2) {
+        if (dayOfWeek == 2) {
             val res = readFile(R.raw.ton1_budni)
             if (chast == 1) {
                 val tfn = res.indexOf("TRAPARN")
@@ -410,7 +410,7 @@ internal class ZmenyiaChastki {
                 result = res.substring(tfn, tfk)
             }
         }
-        if (day_of_week == 3) {
+        if (dayOfWeek == 3) {
             val res = readFile(R.raw.ton2_budni)
             if (chast == 1) {
                 val tfn = res.indexOf("TRAPARN")
@@ -433,7 +433,7 @@ internal class ZmenyiaChastki {
                 result = res.substring(tfn, tfk)
             }
         }
-        if (day_of_week == 4) {
+        if (dayOfWeek == 4) {
             val res = readFile(R.raw.ton3_budni)
             if (chast == 1) {
                 val tfn = res.indexOf("TRAPARN")
@@ -456,7 +456,7 @@ internal class ZmenyiaChastki {
                 result = res.substring(tfn, tfk)
             }
         }
-        if (day_of_week == 5) {
+        if (dayOfWeek == 5) {
             val res = readFile(R.raw.ton4_budni)
             if (chast == 1) {
                 val tfn = res.indexOf("TRAPARN")
@@ -479,7 +479,7 @@ internal class ZmenyiaChastki {
                 result = res.substring(tfn, tfk)
             }
         }
-        if (day_of_week == 6) {
+        if (dayOfWeek == 6) {
             val res = readFile(R.raw.ton5_budni)
             if (chast == 1) {
                 val tfn = res.indexOf("TRAPARN")
@@ -502,7 +502,7 @@ internal class ZmenyiaChastki {
                 result = res.substring(tfn, tfk)
             }
         }
-        if (day_of_week == 7) {
+        if (dayOfWeek == 7) {
             val res = readFile(R.raw.ton6_budni)
             if (chast == 1) {
                 val tfn = res.indexOf("TRAPARN")

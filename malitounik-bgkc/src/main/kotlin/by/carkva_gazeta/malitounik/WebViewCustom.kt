@@ -24,14 +24,6 @@ class WebViewCustom : WebView {
         mOnScrollChangedCallback?.onScroll(t)
     }
 
-    fun setOnScrollChangedCallback(onScrollChangedCallback: OnScrollChangedCallback?) {
-        mOnScrollChangedCallback = onScrollChangedCallback
-    }
-
-    fun setOnBottomListener(onBottomListener: OnBottomListener?) {
-        mListener = onBottomListener
-    }
-
     interface OnScrollChangedCallback {
         fun onScroll(t: Int)
     }

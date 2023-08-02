@@ -71,10 +71,10 @@ class DialogDeliteAllZakladkiINatatki : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(zakladka_albo_natatka: String?, semuxa: Int): DialogDeliteAllZakladkiINatatki {
+        fun getInstance(zakladkaAlboNatatka: String?, semuxa: Int): DialogDeliteAllZakladkiINatatki {
             val dialogDelite = DialogDeliteAllZakladkiINatatki()
             val bundle = Bundle()
-            bundle.putString("zakladka_albo_natatka", zakladka_albo_natatka)
+            bundle.putString("zakladka_albo_natatka", zakladkaAlboNatatka)
             bundle.putInt("semuxa", semuxa)
             dialogDelite.arguments = bundle
             return dialogDelite

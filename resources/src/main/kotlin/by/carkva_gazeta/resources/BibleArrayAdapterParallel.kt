@@ -26,7 +26,7 @@ import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibleBinding
 
-internal class BibleArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val Zapavet: Boolean, private val mPerevod: Int) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) {
+internal class BibleArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val zapavet: Boolean, private val mPerevod: Int) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) {
     // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана
     private val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     private val dzenNoch get() = (context as BaseActivity).getBaseDzenNoch()
@@ -47,7 +47,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
         val parallel = BibliaParallelChtenia()
         var res = "+-+"
-        if (Zapavet) {
+        if (zapavet) {
             if (kniga == 0) {
                 res = parallel.kniga51(glava + 1, position + 1)
             }
@@ -283,7 +283,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         }
         var stix = stixi[position]
         stix = stix.replace("\\n", "\n")
-        if (!Zapavet && kniga == 21 && mPerevod == 1) {
+        if (!zapavet && kniga == 21 && mPerevod == 1) {
             ea.textView.text = MainActivity.fromHtml(stix)
         } else {
             ea.textView.text = stix
@@ -355,7 +355,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         }
         if (mPerevod == 1) {
             var zav = "0"
-            if (Zapavet) zav = "1"
+            if (zapavet) zav = "1"
             if (BibleGlobalList.natatkiSemuxa.size > 0) {
                 for (i in BibleGlobalList.natatkiSemuxa.indices) {
                     if (BibleGlobalList.natatkiSemuxa[i].list[0].contains(zav) && BibleGlobalList.natatkiSemuxa[i].list[1].toInt() == kniga && BibleGlobalList.natatkiSemuxa[i].list[2].toInt() == glava && BibleGlobalList.natatkiSemuxa[i].list[3].toInt() == position) {
@@ -371,7 +371,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         }
         if (mPerevod == 2) {
             var zav = "0"
-            if (Zapavet) zav = "1"
+            if (zapavet) zav = "1"
             if (BibleGlobalList.natatkiSinodal.size > 0) {
                 for (i in BibleGlobalList.natatkiSinodal.indices) {
                     if (BibleGlobalList.natatkiSinodal[i].list[0].contains(zav) && BibleGlobalList.natatkiSinodal[i].list[1].toInt() == kniga && BibleGlobalList.natatkiSinodal[i].list[2].toInt() == glava && BibleGlobalList.natatkiSinodal[i].list[3].toInt() == position) {
@@ -391,7 +391,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
     private fun setZakladkiSemuxa(position: Int): SpannableStringBuilder {
         val ssb = SpannableStringBuilder()
         var zav = "0"
-        if (Zapavet) zav = "1"
+        if (zapavet) zav = "1"
         if (BibleGlobalList.zakladkiSemuxa.size > 0) {
             for (i in BibleGlobalList.zakladkiSemuxa.indices) {
                 var knigaN = -1
@@ -522,7 +522,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
     private fun setZakladkiSinoidal(position: Int): SpannableStringBuilder {
         val ssb = SpannableStringBuilder()
         var zav = "0"
-        if (Zapavet) zav = "1"
+        if (zapavet) zav = "1"
         if (BibleGlobalList.zakladkiSinodal.size > 0) {
             for (i in BibleGlobalList.zakladkiSinodal.indices) {
                 var knigaN = -1

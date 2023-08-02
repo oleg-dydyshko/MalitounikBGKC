@@ -28,7 +28,7 @@ class DialogImageFileLoad : DialogFragment() {
     private var mListener: DialogFileExplorerListener? = null
 
     internal interface DialogFileExplorerListener {
-        fun onDialogFile(absolutePath: String, image: Int)
+        fun onDialogFile(absolutePath: String)
     }
 
     override fun onAttach(context: Context) {
@@ -68,7 +68,7 @@ class DialogImageFileLoad : DialogFragment() {
                 dialog.cancel()
             }
             builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.save_sabytie)) { _: DialogInterface?, _: Int ->
-                mListener?.onDialogFile(path, binding.content.selectedItemPosition)
+                mListener?.onDialogFile(path)
             }
             alert = builder.create()
         }

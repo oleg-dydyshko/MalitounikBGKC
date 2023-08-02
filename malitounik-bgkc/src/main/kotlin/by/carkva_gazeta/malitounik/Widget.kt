@@ -145,11 +145,11 @@ class Widget : AppWidgetProvider() {
     companion object {
         private var isSettingsCulling = false
 
-        private fun prazdnik(context: Context, updateViews: RemoteViews, R_color_colorPrimary: Int) {
-            updateViews.setInt(R.id.textChislo, "setBackgroundColor", ContextCompat.getColor(context, R_color_colorPrimary))
+        private fun prazdnik(context: Context, updateViews: RemoteViews, rColorColorPrimary: Int) {
+            updateViews.setInt(R.id.textChislo, "setBackgroundColor", ContextCompat.getColor(context, rColorColorPrimary))
             updateViews.setTextColor(R.id.textChislo, ContextCompat.getColor(context, R.color.colorWhite))
-            updateViews.setInt(R.id.textDenNedeli, "setBackgroundColor", ContextCompat.getColor(context, R_color_colorPrimary))
-            updateViews.setInt(R.id.textMesiac, "setBackgroundColor", ContextCompat.getColor(context, R_color_colorPrimary))
+            updateViews.setInt(R.id.textDenNedeli, "setBackgroundColor", ContextCompat.getColor(context, rColorColorPrimary))
+            updateViews.setInt(R.id.textMesiac, "setBackgroundColor", ContextCompat.getColor(context, rColorColorPrimary))
             updateViews.setTextColor(R.id.textDenNedeli, ContextCompat.getColor(context, R.color.colorWhite))
             updateViews.setTextColor(R.id.textMesiac, ContextCompat.getColor(context, R.color.colorWhite))
         }

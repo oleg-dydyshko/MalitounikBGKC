@@ -1,11 +1,13 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.Menu
@@ -108,7 +110,11 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
             dzenNoch = k.getBoolean("dzen_noch", false)
         }
         if (checkDzenNoch != getBaseDzenNoch()) recreate()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (Build.VERSION.SDK_INT >= 34) {
+            overrideActivityTransition(Activity.OVERRIDE_TRANSITION_OPEN, R.anim.alphain, R.anim.alphaout)
+        } else {
+            @Suppress("DEPRECATION") overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        }
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes

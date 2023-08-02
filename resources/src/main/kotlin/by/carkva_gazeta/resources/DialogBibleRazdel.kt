@@ -126,10 +126,10 @@ class DialogBibleRazdel : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(full_glav: Int): DialogBibleRazdel {
+        fun getInstance(fullGlav: Int): DialogBibleRazdel {
             val instance = DialogBibleRazdel()
             val args = Bundle()
-            args.putInt("full_glav", full_glav)
+            args.putInt("full_glav", fullGlav)
             instance.arguments = args
             return instance
         }

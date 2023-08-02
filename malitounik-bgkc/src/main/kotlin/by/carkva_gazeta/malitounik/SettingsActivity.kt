@@ -133,20 +133,22 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         }
 
         fun setAlarm(timeAlarm: Long, pendingIntent: PendingIntent?, padzeia: Boolean = false) {
-            val context = Malitounik.applicationContext()
-            val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            if (padzeia && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !am.canScheduleExactAlarms()) return
-            when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !am.canScheduleExactAlarms() -> {
-                    am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeAlarm, pendingIntent)
-                }
+            pendingIntent?.let {
+                val context = Malitounik.applicationContext()
+                val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                if (padzeia && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !am.canScheduleExactAlarms()) return
+                when {
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !am.canScheduleExactAlarms() -> {
+                        am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeAlarm, it)
+                    }
 
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                    am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeAlarm, pendingIntent)
-                }
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeAlarm, it)
+                    }
 
-                else -> {
-                    am.setExact(AlarmManager.RTC_WAKEUP, timeAlarm, pendingIntent)
+                    else -> {
+                        am.setExact(AlarmManager.RTC_WAKEUP, timeAlarm, it)
+                    }
                 }
             }
         }
@@ -510,149 +512,149 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                     if (notifications != 1) {
                         intent = createIntent(context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "1$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        var pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "2$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "3$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "4$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "5$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "6$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "7$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "8$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "9$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "10$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "11$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "12$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "13$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "14$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "15$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "16$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "17$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                         intent = createIntent(context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "18$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                        am.cancel(pIntent)
+                        pIntent1 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                        am.cancel(pIntent1)
                     }
                     intent = createIntent(context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv1))
                     code = "19$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    var pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv2))
                     code = "20$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv1))
                     code = "21$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv2))
                     code = "22$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv1))
                     code = "23$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv2))
                     code = "24$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv1))
                     code = "25$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv2))
                     code = "26$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv1))
                     code = "27$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv2))
                     code = "28$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv1))
                     code = "29$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv2))
                     code = "30$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv1))
                     code = "31$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv2))
                     code = "32$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv1))
                     code = "33$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv2))
                     code = "34$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv1))
                     code = "35$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                     intent = createIntent(context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv2))
                     code = "36$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
-                    am.cancel(pIntent)
+                    pIntent2 = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
+                    am.cancel(pIntent2)
                 }
             }
         }

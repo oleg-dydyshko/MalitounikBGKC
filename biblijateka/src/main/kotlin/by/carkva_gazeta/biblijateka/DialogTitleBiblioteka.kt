@@ -34,7 +34,7 @@ class DialogTitleBiblioteka : DialogFragment() {
 
     internal interface DialogTitleBibliotekaListener {
         fun onDialogTitle(page: Int)
-        fun onDialogTitleString(page: String)
+        fun onDialogTitleString()
     }
 
     override fun onAttach(context: Context) {
@@ -77,8 +77,7 @@ class DialogTitleBiblioteka : DialogFragment() {
                     val t2 = bookmarks[i].substring(0, t1).toInt()
                     mListener?.onDialogTitle(t2)
                 } else {
-                    val t2 = bookmarks[i].indexOf("<str>")
-                    mListener?.onDialogTitleString(bookmarks[i].substring(0, t2))
+                    mListener?.onDialogTitleString()
                 }
                 alert.cancel()
             }

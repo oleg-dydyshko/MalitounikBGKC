@@ -88,11 +88,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
     }
-    private val bibliatekaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            binding.drawerLayout.openDrawer(GravityCompat.START)
-        }
-    }
     private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         val cw = Calendar.getInstance()
         val intent = Intent(this, ReceiverBroad::class.java)
@@ -485,12 +480,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
 
                 data.toString().contains("shortcuts=2") -> {
-                    //idSelect = R.id.label2
+                    idSelect = R.id.label142
                     selectFragment(binding.label142, true, shortcuts = true)
                 }
 
                 data.scheme == "content" -> {
-                    startBiblioteka(NIADAUNIA, shortcuts = true)
+                    startBiblioteka(NIADAUNIA, true, NIADAUNIA)
                 }/*data.toString().contains("caliandar") -> {
                     idSelect = R.id.label1
                     selectFragment(binding.label1, true)
@@ -717,9 +712,44 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 selectFragment(binding.label13, true)
             }
 
+            R.id.label140 -> {
+                if (!binding.label140.isShown) scroll = true
+                selectFragment(binding.label140, true)
+            }
+
+            R.id.label141 -> {
+                if (!binding.label141.isShown) scroll = true
+                selectFragment(binding.label141, true)
+            }
+
+            R.id.label142 -> {
+                if (!binding.label142.isShown) scroll = true
+                selectFragment(binding.label142, true)
+            }
+
+            R.id.label143 -> {
+                if (!binding.label143.isShown) scroll = true
+                selectFragment(binding.label143, true)
+            }
+
+            R.id.label144 -> {
+                if (!binding.label144.isShown) scroll = true
+                selectFragment(binding.label144, true)
+            }
+
+            R.id.label145 -> {
+                if (!binding.label140.isShown) scroll = true
+                selectFragment(binding.label140, true)
+            }
+
             R.id.label146 -> {
                 if (!binding.label146.isShown) scroll = true
                 selectFragment(binding.label146, true)
+            }
+
+            R.id.label148 -> {
+                if (!binding.label148.isShown) scroll = true
+                selectFragment(binding.label148, true)
             }
 
             else -> {
@@ -1052,7 +1082,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     private fun selectFragment(view: View?, start: Boolean = false, shortcuts: Boolean = false) {
         val id = view?.id ?: R.id.label1
-        val idOld = if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145 || id == R.id.label148 || id == R.id.image5 || id == R.id.image6 || id == R.id.image7) idSelect
+        val idOld = if (id == R.id.image5 || id == R.id.image6 || id == R.id.image7) idSelect
         else id
         if (!(id == R.id.label9a || id == R.id.label10a || id == R.id.label14a || id == R.id.image5 || id == R.id.image6 || id == R.id.image7)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -1177,16 +1207,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
             }
         }
+        bindingappbar.subtitleToolbar.visibility = View.GONE
         when (idOld) {
             R.id.label1 -> {
                 tolbarTitle = getString(R.string.kaliandar2)
                 if (dzenNoch) binding.label1.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label1.setBackgroundResource(R.drawable.selector_gray)
-            }/*R.id.label2 -> {
-                tolbarTitle = getString(R.string.bibliateka_carkvy)
-                if (dzenNoch) binding.label2.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else binding.label2.setBackgroundResource(R.drawable.selector_gray)
-            }*/
+            }
+
             R.id.label3 -> {
                 tolbarTitle = getString(R.string.liturgikon)
                 if (dzenNoch) binding.label3.setBackgroundResource(R.drawable.selector_dark_maranata)
@@ -1302,16 +1330,73 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
 
             R.id.label146 -> {
-                tolbarTitle = getString(R.string.artykuly)
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.artykuly)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
                 if (dzenNoch) binding.label146.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label146.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            R.id.label140 -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_niadaunia)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label140.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label140.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            R.id.label141 -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_gistoryia_carkvy)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label141.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label141.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            R.id.label142 -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_malitouniki)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label142.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label142.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            R.id.label143 -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_speuniki)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label143.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label143.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            R.id.label144 -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_rel_litaratura)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label144.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label144.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            R.id.label145 -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_niadaunia)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label140.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label140.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            R.id.label148 -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.arx_num_gaz)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label148.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label148.setBackgroundResource(R.drawable.selector_gray)
             }
         }
 
         val ftrans = supportFragmentManager.beginTransaction()
         ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
 
-        if (!(id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145 || id == R.id.label146 || id == R.id.label148) && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
         if (tolbarTitle == "") {
             val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
             if (fragment == null) {
@@ -1601,37 +1686,37 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
 
             R.id.label140 -> {
-                startBiblioteka(NIADAUNIA, shortcuts)
+                startBiblioteka(NIADAUNIA, start, id)
             }
 
             R.id.label141 -> {
-                startBiblioteka(GISTORYIACARKVY, shortcuts)
+                startBiblioteka(GISTORYIACARKVY, start, id)
             }
 
             R.id.label142 -> {
-                startBiblioteka(MALITOUNIKI, shortcuts)
+                startBiblioteka(MALITOUNIKI, start, id)
             }
 
             R.id.label143 -> {
-                startBiblioteka(SPEUNIKI, shortcuts)
+                startBiblioteka(SPEUNIKI, start, id)
             }
 
             R.id.label144 -> {
-                startBiblioteka(RELLITARATURA, shortcuts)
+                startBiblioteka(RELLITARATURA, start, id)
             }
 
             R.id.label145 -> {
-                startBiblioteka(SETFILE, shortcuts)
+                startBiblioteka(SETFILE, start, id)
             }
 
             R.id.label148 -> {
-                startBiblioteka(PDF, shortcuts)
+                startBiblioteka(PDF, start, id)
             }
 
             R.id.label146 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuArtykuly")
                 if (fragment == null) {
-                    val menuArtykuly = MenuBibliatekaArtykuly()
+                    val menuArtykuly = MenuBiblijatekaArtykuly()
                     ftrans.replace(R.id.conteiner, menuArtykuly, "menuArtykuly")
                     prefEditors.putInt("id", id)
                     idSelect = id
@@ -1739,25 +1824,23 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         selectFragment(view)
     }
 
-    private fun startBiblioteka(rub: Int, shortcuts: Boolean) {
-        if (checkmoduleResources()) {
-            if (checkmodulesBiblijateka()) {
-                val intentBib = Intent()
-                intentBib.setClassName(this, BIBLIOTEKAVIEW)
-                intentBib.putExtra("rub", rub)
-                if (shortcuts || intent.extras?.containsKey("site") == true) {
-                    intentBib.data = intent.data
-                    if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
-                    if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
-
-                }
-                bibliatekaLauncher.launch(intentBib)
+    private fun startBiblioteka(rub: Int, start: Boolean, id: Int) {
+        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$rub")
+        if (fragment == null) {
+            val ftrans = supportFragmentManager.beginTransaction()
+            ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
+            val vybranoe = MenuBiblijateka.getInstance(rub)
+            ftrans.replace(R.id.conteiner, vybranoe, "MenuBiblijateka$rub")
+            prefEditors.putInt("id", id)
+            prefEditors.apply()
+            idSelect = id
+            if (start) {
+                ftrans.commit()
             } else {
-                downloadDynamicModule(this)
+                bindingappbar.toolbar.postDelayed({
+                    ftrans.commitAllowingStateLoss()
+                }, 300)
             }
-        } else {
-            val dadatak = DialogInstallDadatak()
-            dadatak.show(supportFragmentManager, "dadatak")
         }
     }
 
@@ -1859,7 +1942,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val ADMINSVIATY = "by.carkva_gazeta.admin.Sviaty"
         const val ADMINPIARLINY = "by.carkva_gazeta.admin.Piarliny"
         const val PASOCHNICALIST = "by.carkva_gazeta.admin.PasochnicaList"
-        const val BIBLIOTEKAVIEW = "by.carkva_gazeta.biblijateka.BibliotekaView"
+        const val BIBLIJATEKAPDF = "by.carkva_gazeta.biblijateka.BiblijatekaPdf"
         const val CHYTANNE = "by.carkva_gazeta.resources.Chytanne"
         const val MARANATA = "by.carkva_gazeta.resources.MaranAta"
         const val SEARCHBIBLIA = "by.carkva_gazeta.resources.SearchBiblia"
@@ -1939,6 +2022,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             val layoutDialod = context.findViewById<LinearLayout>(R.id.linear)
             val layoutDialod2 = context.findViewById<LinearLayout>(R.id.linear2)
             val text = context.findViewById<TextView>(R.id.textProgress)
+            if (progressBarModule == null || layoutDialod == null || layoutDialod2 == null || text == null) {
+                return
+            }
             val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) {
                 layoutDialod2.setBackgroundResource(R.color.colorbackground_material_dark)
@@ -1984,14 +2070,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                             SplitInstallHelper.updateAppInfo(context)
                             if (moduleName == "biblijateka") {
                                 CoroutineScope(Dispatchers.Main).launch {
-                                    val intent = Intent()
-                                    intent.setClassName(context, BIBLIOTEKAVIEW)
-                                    intent.data = context.intent.data
-                                    if (intent.extras?.containsKey("filePath") == true) {
-                                        intent.putExtra("filePath", intent.extras?.getString("filePath"))
-                                    }
-                                    if (intent.extras?.containsKey("site") == true) intent.putExtra("site", true)
-                                    context.startActivity(intent)
+                                    val ftrans = context.supportFragmentManager.beginTransaction()
+                                    ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
+                                    val vybranoe = MenuBiblijateka.getInstance(NIADAUNIA)
+                                    ftrans.replace(R.id.conteiner, vybranoe, "MenuBiblijateka")
+                                    ftrans.commit()
                                 }
                             }
                             if (moduleName == "admin") {

@@ -5,7 +5,5 @@
     <exclude domain="file"
         path="image_temp"/>
     <exclude domain="file"
-        path="Biblijateka"/>
-    <exclude domain="file"
-        path="Site"/>
+        path="Malitva"/>
 </full-backup-content>

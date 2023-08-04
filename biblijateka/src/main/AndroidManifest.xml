@@ -16,8 +16,8 @@
         android:hardwareAccelerated="true"
         android:fullBackupContent="@xml/backup_descriptor">
         <activity
-            android:name="by.carkva_gazeta.biblijateka.BibliotekaView"
-            android:label="Бібліятэка Царквы"
+            android:name="by.carkva_gazeta.biblijateka.BiblijatekaPdf"
+            android:label="@string/title_biblijateka"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

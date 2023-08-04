@@ -169,20 +169,22 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
             binding.date.text = getString(by.carkva_gazeta.malitounik.R.string.admin_date, cal[Calendar.DAY_OF_MONTH], munName[cal[Calendar.MONTH]])
             urlJob?.cancel()
             urlJob = CoroutineScope(Dispatchers.Main).launch {
-                var res = ""
                 try {
-                    val localFile = File("$filesDir/cache/cache.txt")
                     var builder = ""
+                    val localFile = File("$filesDir/cache/cache.txt")
                     referens.child("/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json").getFile(localFile).addOnCompleteListener {
                         if (it.isSuccessful) builder = localFile.readText()
                         else MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
                     val gson = Gson()
-                    if (builder != "") {
+                    builder = if (builder != "") {
                         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
                         val arrayList: ArrayList<String> = gson.fromJson(builder, type)
-                        res = arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
+                        arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
+                    } else {
+                        getString(by.carkva_gazeta.malitounik.R.string.error)
                     }
+                    binding.apisanne.setText(builder)
                     val localFile2 = File("$filesDir/cache/cache2.txt")
                     var builder2 = ""
                     referens.child("/calendarsviatyia.txt").getFile(localFile2).addOnCompleteListener {
@@ -223,8 +225,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
-                if (res == "") res = getString(by.carkva_gazeta.malitounik.R.string.error)
-                binding.apisanne.setText(res)
                 if ((binding.apisanne.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error) || binding.sviaty.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error)) && count < 2) {
                     setDate(dayOfYear, count + 1)
                 } else {
@@ -445,7 +445,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 val logFile = File("$filesDir/cache/log.txt")
-                if (name != getString(by.carkva_gazeta.malitounik.R.string.error)) {
+                if (!(name == getString(by.carkva_gazeta.malitounik.R.string.error) || name == "")) {
                     var style = 8
                     when (bold) {
                         0 -> style = 6
@@ -514,7 +514,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 } else {
                     MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
-                if (spaw != getString(by.carkva_gazeta.malitounik.R.string.error)) {
+                if (!(spaw == getString(by.carkva_gazeta.malitounik.R.string.error) || spaw == "")) {
                     val sb = StringBuilder()
                     val localFile = File("$filesDir/cache/cache.txt")
                     val localFile4 = File("$filesDir/cache/cache4.txt")

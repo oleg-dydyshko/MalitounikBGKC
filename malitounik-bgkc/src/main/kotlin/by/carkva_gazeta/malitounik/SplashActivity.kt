@@ -22,7 +22,7 @@ class SplashActivity : BaseActivity() {
         intent1.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         val extras = intent.extras
         if (extras != null) {
-            if (extras.containsKey("site")) intent1.putExtra("site", true)
+            //if (extras.containsKey("site")) intent1.putExtra("site", true)
             val widgetMun = "widget_mun"
             if (extras.getBoolean(widgetMun, false)) {
                 intent1.putExtra(widgetMun, true)

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_trash"
+        android:icon="@drawable/trash"
+        android:orderInCategory="100"
+        android:title="@string/Trash"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_carkva"
+        android:orderInCategory="100"
+        android:title="@string/redagaktirovat"
+        android:visible="false"
+        app:showAsAction="never" />
+</menu>

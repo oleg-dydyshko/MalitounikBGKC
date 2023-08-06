@@ -3,12 +3,14 @@ package by.carkva_gazeta.malitounik
 import android.app.*
 import android.content.*
 import android.content.pm.ActivityInfo
+import android.database.Cursor
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.*
+import android.provider.MediaStore
 import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
@@ -49,7 +51,7 @@ import java.util.zip.ZipOutputStream
 import kotlin.math.roundToLong
 
 
-class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogLogView.DialogLogViewListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener {
+class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, DialogLogView.DialogLogViewListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener {
 
     private val c = Calendar.getInstance()
     private lateinit var k: SharedPreferences
@@ -243,6 +245,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         menuNatatki?.fileDelite(position)
         val menuCaliandar = supportFragmentManager.findFragmentByTag("menuCaliandar") as? MenuCaliandar
         menuCaliandar?.delitePadzeia(position)
+        val menuBiblijateka = supportFragmentManager.findFragmentByTag("MenuBiblijateka") as? MenuBiblijateka
+        menuBiblijateka?.fileDelite(position, file)
     }
 
     override fun deliteAllVybranoe() {
@@ -258,6 +262,26 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     override fun onDialogDeliteClick(position: Int, name: String) {
         val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
         menuNatatki?.onDialogDeliteClick(position, name)
+    }
+
+    override fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) {
+        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka") as? MenuBiblijateka
+        fragment?.onDialogbibliatekaPositiveClick(listPosition, title)
+    }
+
+    override fun onDialogPositiveClick(listPosition: String) {
+        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka") as? MenuBiblijateka
+        fragment?.onDialogPositiveClick(listPosition)
+    }
+
+    override fun delAllNiadaunia() {
+        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka") as? MenuBiblijateka
+        fragment?.delAllNiadaunia()
+    }
+
+    override fun deliteNiadaunia(position: Int, file: String) {
+        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka") as? MenuBiblijateka
+        fragment?.deliteNiadaunia(position, file)
     }
 
     override fun onResume() {
@@ -304,6 +328,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", MODE_PRIVATE)
+        prefEditors = k.edit()
         // Удаление "фантомных" виджетов
         /*val appWidgetManager = AppWidgetManager.getInstance(this)
         val thisAppWidget = ComponentName(packageName, Widget::class.java.name)
@@ -480,84 +505,53 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
 
                 data.toString().contains("shortcuts=2") -> {
-                    idSelect = R.id.label142
-                    selectFragment(binding.label142, true, shortcuts = true)
+                    idSelect = R.id.label140
+                    selectFragment(binding.label140, true, shortcuts = true)
                 }
 
                 data.scheme == "content" -> {
-                    startBiblioteka(NIADAUNIA, true, NIADAUNIA)
-                }/*data.toString().contains("caliandar") -> {
-                    idSelect = R.id.label1
-                    selectFragment(binding.label1, true)
+                    var filePath = ""
+                    var fileName = ""
+                    intent.data?.let { uri ->
+                        var cursor: Cursor? = null
+                        try {
+                            val proj = arrayOf(MediaStore.Images.Media.DATA)
+                            cursor = contentResolver.query(uri, proj, null, null, null)
+                            val columnIndex = cursor?.getColumnIndex(MediaStore.Images.Media.DATA) ?: 0
+                            cursor?.moveToFirst()
+                            filePath = cursor?.getString(columnIndex) ?: ""
+                            fileName = cursor?.getString(0) ?: ""
+                            cursor?.close()
+                            if (filePath == "") {
+                                cursor = contentResolver.query(uri, null, null, null, null)
+                                cursor?.moveToFirst()
+                                filePath = cursor?.getString(columnIndex) ?: ""
+                                fileName = cursor?.getString(0) ?: ""
+                            }
+                            if (filePath != "") {
+                                val t1 = fileName.lastIndexOf("/")
+                                if (t1 != -1) {
+                                    fileName = fileName.substring(t1 + 1)
+                                }
+                                filePath = "$filesDir/Book/$fileName"
+                                val inputStream = contentResolver.openInputStream(uri)
+                                inputStream?.let {
+                                    val file = File(filePath)
+                                    file.outputStream().use { fileOut ->
+                                        it.copyTo(fileOut)
+                                    }
+                                }
+                                inputStream?.close()
+                            }
+                        } catch (_: Throwable) {
+                        } finally {
+                            cursor?.close()
+                        }
+                    }
+                    intent.data = null
+                    idSelect = R.id.label140
+                    selectFragment(binding.label140, true, shortcuts = true, fileName, filePath)
                 }
-                data.toString().contains("biblija") -> {
-                    idSelect = R.id.label8
-                    selectFragment(binding.label8, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?ie=9") -> {
-                    idSelect = R.id.label3
-                    selectFragment(binding.label3, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?ie=17") -> {
-                    idSelect = R.id.label5
-                    selectFragment(binding.label5, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?ie=18") -> {
-                    idSelect = R.id.label6
-                    selectFragment(binding.label6, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?ie=19") -> {
-                    idSelect = R.id.label4
-                    selectFragment(binding.label4, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?ie=20&sub=1") -> {
-                    idSelect = R.id.label91
-                    selectFragment(binding.label91, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?ie=20&sub=2") -> {
-                    idSelect = R.id.label92
-                    selectFragment(binding.label92, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?ie=20&sub=3") -> {
-                    idSelect = R.id.label93
-                    selectFragment(binding.label93, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?ie=20&sub=4") -> {
-                    idSelect = R.id.label94
-                    selectFragment(binding.label94, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?ie=20&sub=5") -> {
-                    idSelect = R.id.label95
-                    selectFragment(binding.label95, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?bib&rub=1") -> {
-                    idSelect = R.id.label2
-                    selectFragment(binding.label2, true, 1, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?bib&rub=2") -> {
-                    idSelect = R.id.label2
-                    selectFragment(binding.label2, true, 2, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?bib&rub=3") -> {
-                    idSelect = R.id.label2
-                    selectFragment(binding.label2, true, 3, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?bib&rub=4") -> {
-                    idSelect = R.id.label2
-                    selectFragment(binding.label2, true, 4, true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?bib") -> {
-                    idSelect = R.id.label2
-                    selectFragment(binding.label2, true, shortcuts = true)
-                }
-                data.toString().contains("carkva-gazeta.by/index.php?ie=10") -> {
-                    idSelect = R.id.label105
-                    selectFragment(binding.label105, true)
-                }
-                !data.toString().contains("https://") -> {
-                    idSelect = R.id.label2
-                    selectFragment(binding.label2, true, shortcuts = true)
-                }*/
             }
             intent.data = null
         }
@@ -856,7 +850,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             if (backPressed + 2000 > System.currentTimeMillis()) {
                 moveTaskToBack(true)
-                prefEditors = k.edit()
                 for ((key) in k.all) {
                     if (key.contains("Scroll") || key.contains("position")) {
                         prefEditors.remove(key)
@@ -1080,7 +1073,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
     }
 
-    private fun selectFragment(view: View?, start: Boolean = false, shortcuts: Boolean = false) {
+    private fun selectFragment(view: View?, start: Boolean = false, shortcuts: Boolean = false, fileName: String = "", filePath: String = "") {
         val id = view?.id ?: R.id.label1
         val idOld = if (id == R.id.image5 || id == R.id.image6 || id == R.id.image7) idSelect
         else id
@@ -1151,7 +1144,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.citata.setBackgroundResource(R.drawable.selector_default)
             }
         }
-        prefEditors = k.edit()
         if (id == R.id.label91 || id == R.id.label92 || id == R.id.label93 || id == R.id.label94 || id == R.id.label95) {
             binding.title9.visibility = View.VISIBLE
             if (dzenNoch) binding.image2.setImageResource(R.drawable.arrow_up_float_black)
@@ -1258,61 +1250,81 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
 
             R.id.label91 -> {
-                tolbarTitle = getString(R.string.pesny1)
+                tolbarTitle = getString(R.string.song)
+                bindingappbar.subtitleToolbar.text = getString(R.string.pesny1)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
                 if (dzenNoch) binding.label91.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label91.setBackgroundResource(R.drawable.selector_gray)
             }
 
             R.id.label92 -> {
-                tolbarTitle = getString(R.string.pesny2)
+                tolbarTitle = getString(R.string.song)
+                bindingappbar.subtitleToolbar.text = getString(R.string.pesny2)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
                 if (dzenNoch) binding.label92.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label92.setBackgroundResource(R.drawable.selector_gray)
             }
 
             R.id.label93 -> {
-                tolbarTitle = getString(R.string.pesny3)
+                tolbarTitle = getString(R.string.song)
+                bindingappbar.subtitleToolbar.text = getString(R.string.pesny3)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
                 if (dzenNoch) binding.label93.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label93.setBackgroundResource(R.drawable.selector_gray)
             }
 
             R.id.label94 -> {
-                tolbarTitle = getString(R.string.pesny4)
+                tolbarTitle = getString(R.string.song)
+                bindingappbar.subtitleToolbar.text = getString(R.string.pesny4)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
                 if (dzenNoch) binding.label94.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label94.setBackgroundResource(R.drawable.selector_gray)
             }
 
             R.id.label95 -> {
-                tolbarTitle = getString(R.string.pesny5)
+                tolbarTitle = getString(R.string.song)
+                bindingappbar.subtitleToolbar.text = getString(R.string.pesny5)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
                 if (dzenNoch) binding.label95.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label95.setBackgroundResource(R.drawable.selector_gray)
             }
 
             R.id.label103 -> {
-                tolbarTitle = getString(R.string.carkva_sviaty)
+                tolbarTitle = getString(R.string.other)
+                bindingappbar.subtitleToolbar.text = getString(R.string.carkva_sviaty)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
                 if (dzenNoch) binding.label103.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label103.setBackgroundResource(R.drawable.selector_gray)
             }
 
             R.id.label104 -> {
-                tolbarTitle = getString(R.string.kaliandar_bel)
+                tolbarTitle = getString(R.string.other)
+                bindingappbar.subtitleToolbar.text = getString(R.string.kaliandar_bel)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
                 if (dzenNoch) binding.label104.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label104.setBackgroundResource(R.drawable.selector_gray)
             }
 
             R.id.label105 -> {
-                tolbarTitle = getString(R.string.parafii)
+                tolbarTitle = getString(R.string.other)
+                bindingappbar.subtitleToolbar.text = getString(R.string.parafii)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
                 if (dzenNoch) binding.label105.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label105.setBackgroundResource(R.drawable.selector_gray)
             }
 
             R.id.label102 -> {
-                tolbarTitle = getString(R.string.pamiatka)
+                tolbarTitle = getString(R.string.other)
+                bindingappbar.subtitleToolbar.text = getString(R.string.pamiatka)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
                 if (dzenNoch) binding.label102.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label102.setBackgroundResource(R.drawable.selector_gray)
             }
 
             R.id.label101 -> {
-                tolbarTitle = getString(R.string.spovedz)
+                tolbarTitle = getString(R.string.other)
+                bindingappbar.subtitleToolbar.text = getString(R.string.spovedz)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
                 if (dzenNoch) binding.label101.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label101.setBackgroundResource(R.drawable.selector_gray)
             }
@@ -1686,7 +1698,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
 
             R.id.label140 -> {
-                startBiblioteka(NIADAUNIA, start, id)
+                startBiblioteka(NIADAUNIA, start, id, fileName, filePath)
             }
 
             R.id.label141 -> {
@@ -1824,16 +1836,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         selectFragment(view)
     }
 
-    private fun startBiblioteka(rub: Int, start: Boolean, id: Int) {
-        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$rub")
+    private fun startBiblioteka(rub: Int, start: Boolean, id: Int, fileName: String = "", filePath: String = "") {
+        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka") as? MenuBiblijateka
         if (fragment == null) {
             val ftrans = supportFragmentManager.beginTransaction()
             ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
-            val vybranoe = MenuBiblijateka.getInstance(rub)
-            ftrans.replace(R.id.conteiner, vybranoe, "MenuBiblijateka$rub")
-            prefEditors.putInt("id", id)
-            prefEditors.apply()
-            idSelect = id
+            val vybranoe = MenuBiblijateka.getInstance(rub, fileName, filePath)
+            ftrans.replace(R.id.conteiner, vybranoe, "MenuBiblijateka")
             if (start) {
                 ftrans.commit()
             } else {
@@ -1841,7 +1850,15 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     ftrans.commitAllowingStateLoss()
                 }, 300)
             }
+        } else {
+            if (fileName != "" && filePath != "") {
+                fragment.loadComplete(fileName, filePath)
+            }
+            fragment.setRubrika(rub)
         }
+        prefEditors.putInt("id", id)
+        prefEditors.apply()
+        idSelect = id
     }
 
     private fun popupSnackbarForCompleteUpdate(code: Int) {
@@ -1941,6 +1958,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val ADMINSVIATYIA = "by.carkva_gazeta.admin.Sviatyia"
         const val ADMINSVIATY = "by.carkva_gazeta.admin.Sviaty"
         const val ADMINPIARLINY = "by.carkva_gazeta.admin.Piarliny"
+        const val ADMINARTYKULY = "by.carkva_gazeta.admin.Artykly"
         const val PASOCHNICALIST = "by.carkva_gazeta.admin.PasochnicaList"
         const val BIBLIJATEKAPDF = "by.carkva_gazeta.biblijateka.BiblijatekaPdf"
         const val CHYTANNE = "by.carkva_gazeta.resources.Chytanne"
@@ -1961,7 +1979,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val NOVYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.NovyZapavietSinaidal"
         const val STARYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.StaryZapavietSinaidal"
         const val BIBLIAVYBRANOE = "by.carkva_gazeta.resources.BibliaVybranoe"
-        const val ARTYKLY = "by.carkva_gazeta.admin.Artykly"
         const val NIADAUNIA = 0
         const val GISTORYIACARKVY = 1
         const val MALITOUNIKI = 2

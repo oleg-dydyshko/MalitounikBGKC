@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.hardware.SensorEvent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Spannable
@@ -98,20 +97,8 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         binding.apisanne.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 binding.linearLayout2.visibility = View.VISIBLE
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                    if (!binding.apisanne.showSoftInputOnFocus) {
-                        imm.hideSoftInputFromWindow(binding.apisanne.windowToken, 0)
-                    }
-                }
             } else {
                 binding.linearLayout2.visibility = View.GONE
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                    if (!binding.apisanne.showSoftInputOnFocus) {
-                        imm.hideSoftInputFromWindow(binding.apisanne.windowToken, 0)
-                    }
-                }
             }
         }
     }
@@ -134,11 +121,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         binding = AdminSviatyiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            binding.actionKeyword.visibility = View.GONE
-        } else {
-            binding.apisanne.showSoftInputOnFocus = false
-        }
         dayOfYear = intent.extras?.getInt("dayOfYear") ?: (cal[Calendar.DAY_OF_YEAR])
 
         arrayList.add(Tipicon(0, "Няма"))
@@ -151,7 +133,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)
         binding.actionP.setOnClickListener(this)
-        binding.actionKeyword.setOnClickListener(this)
         binding.imageViewLeft.setOnClickListener(this)
         binding.imageViewRight.setOnClickListener(this)
         cal.set(Calendar.YEAR, VYSOCOSNYI_GOD)
@@ -427,17 +408,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
             }
             binding.apisanne.setText(build)
             binding.apisanne.setSelection(endSelect + 3)
-        }
-        if (id == R.id.action_keyword) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                if (binding.apisanne.showSoftInputOnFocus) {
-                    imm.hideSoftInputFromWindow(binding.apisanne.windowToken, 0)
-                } else {
-                    imm.showSoftInput(binding.apisanne, 0)
-                }
-                binding.apisanne.showSoftInputOnFocus = !binding.apisanne.showSoftInputOnFocus
-            }
         }
     }
 

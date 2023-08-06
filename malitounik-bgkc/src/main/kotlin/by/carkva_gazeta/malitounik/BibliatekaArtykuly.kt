@@ -329,7 +329,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
         }
         if (id == R.id.action_carkva) {
             val intent = Intent()
-            intent.setClassName(this, MainActivity.ARTYKLY)
+            intent.setClassName(this, MainActivity.ADMINARTYKULY)
             intent.putExtra("rybrika", rubrika)
             intent.putExtra("position", position)
             adminUpdateLauncher.launch(intent)

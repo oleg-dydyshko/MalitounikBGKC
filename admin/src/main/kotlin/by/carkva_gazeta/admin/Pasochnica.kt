@@ -8,7 +8,6 @@ import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.hardware.SensorEvent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.Spannable
@@ -343,12 +342,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         binding.actionA.setOnClickListener(this)
         binding.actionBr.setOnClickListener(this)
         binding.actionBack.setOnClickListener(this)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            binding.actionKeyword.visibility = View.GONE
-        } else {
-            binding.apisanne.showSoftInputOnFocus = false
-        }
-        binding.actionKeyword.setOnClickListener(this)
         binding.scrollView.setOnScrollChangedCallback(this)
         fileName = intent.extras?.getString("fileName", "") ?: "new_file.html"
         resours = intent.extras?.getString("resours", "") ?: ""
@@ -1319,17 +1312,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 }
                 val dialogPasochnicaAHref = DialogPasochnicaAHref.getInstance(url, text?.substring(startSelect, endSelect) ?: "")
                 dialogPasochnicaAHref.show(supportFragmentManager, "dialogPasochnicaAHref")
-            }
-        }
-        if (id == R.id.action_keyword) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                if (binding.apisanne.showSoftInputOnFocus) {
-                    imm.hideSoftInputFromWindow(binding.apisanne.windowToken, 0)
-                } else {
-                    imm.showSoftInput(binding.apisanne, 0)
-                }
-                binding.apisanne.showSoftInputOnFocus = !binding.apisanne.showSoftInputOnFocus
             }
         }
     }

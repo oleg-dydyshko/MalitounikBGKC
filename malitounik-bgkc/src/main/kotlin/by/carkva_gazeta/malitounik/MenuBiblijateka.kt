@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
@@ -12,7 +11,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.SystemClock
-import android.provider.MediaStore
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
@@ -23,7 +21,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.PopupMenu
@@ -48,8 +45,7 @@ import java.io.InputStream
 import java.util.Calendar
 
 
-class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, AdapterView.OnItemLongClickListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener {
-
+class MenuBiblijateka : BaseFragment() {
 
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
@@ -65,8 +61,9 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
     private var saveindep = true
     private var runSql = false
     private var sqlJob: Job? = null
-    private var _binding: BiblijatekaBinding? = null
-    private val binding get() = _binding!!
+    private var setRubrikaJob: Job? = null
+    private var bitmapJob: Job? = null
+    private var binding: BiblijatekaBinding? = null
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             activity?.let { activity ->
@@ -130,10 +127,6 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
                 val prefEditor = k.edit()
                 prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
                 prefEditor.apply()
-                arrayList.clear()
-                arrayList.addAll(naidaunia)
-                arrayList.reverse()
-                adapter.notifyDataSetChanged()
             }
         }
     }
@@ -157,14 +150,11 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
         }
     }
 
-    override fun fileDeliteCancel() {
-    }
-
-    override fun deliteNiadaunia(position: Int, file: String) {
+    fun deliteNiadaunia(position: Int, file: String) {
         deliteCashe(position, file)
     }
 
-    override fun fileDelite(position: Int, file: String) {
+    fun fileDelite(position: Int, file: String) {
         activity?.let {
             val file1 = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), file)
             if (file1.exists()) {
@@ -174,7 +164,7 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
         }
     }
 
-    override fun delAllNiadaunia() {
+    fun delAllNiadaunia() {
         naidaunia.clear()
         arrayList.clear()
         adapter.notifyDataSetChanged()
@@ -183,7 +173,7 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
         prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
         prefEditor.apply()
-        binding.progressBar2.visibility = View.VISIBLE
+        binding?.progressBar2?.visibility = View.VISIBLE
         activity?.let {
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
@@ -196,7 +186,7 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
                         dir2.deleteRecursively()
                     }
                 }
-                binding.progressBar2.visibility = View.GONE
+                binding?.progressBar2?.visibility = View.GONE
             }
         }
     }
@@ -240,7 +230,7 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
         }
     }
 
-    override fun onDialogPositiveClick(listPosition: String) {
+    fun onDialogPositiveClick(listPosition: String) {
         if (!MainActivity.isNetworkAvailable()) {
             val dialogNoInternet = DialogNoInternet()
             dialogNoInternet.show(childFragmentManager, "no_internet")
@@ -249,13 +239,13 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
         }
     }
 
-    override fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) {
+    fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) {
         activity?.let {
             val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), listPosition)
             if (file.exists()) {
                 filePath = file.path
                 fileName = title
-                loadComplete()
+                loadComplete(fileName, filePath)
             } else {
                 if (MainActivity.isNetworkAvailable(true)) {
                     val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition)
@@ -268,7 +258,7 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
     }
 
     private fun writeFile(url: String) {
-        binding.progressBar2.visibility = View.VISIBLE
+        binding?.progressBar2?.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.Main).launch {
             var error = false
             try {
@@ -284,8 +274,8 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
             }
             if (!error) {
                 adapter.notifyDataSetChanged()
-                binding.progressBar2.visibility = View.GONE
-                loadComplete()
+                binding?.progressBar2?.visibility = View.GONE
+                loadComplete(fileName, filePath)
             } else {
                 DialogNoInternet().show(childFragmentManager, "no_internet")
             }
@@ -311,202 +301,154 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
         setRubrika(MainActivity.NIADAUNIA)
         filePath = file.absolutePath
         fileName = file.name
-        if (fileName.contains(".pdf", true)) {
-            loadComplete()
-        }
+        loadComplete(fileName, filePath)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = BiblijatekaBinding.inflate(inflater, container, false)
-        return binding.root
+        binding = BiblijatekaBinding.inflate(inflater, container, false)
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            width = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val display = it.windowManager.currentWindowMetrics
-                val bounds = display.bounds
-                bounds.width()
-            } else {
-                @Suppress("DEPRECATION") val display = it.windowManager.defaultDisplay
-                val size = Point()
-                @Suppress("DEPRECATION") display.getSize(size)
-                size.x
-            }
-            k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            binding?.let { binding ->
+                width = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val display = it.windowManager.currentWindowMetrics
+                    val bounds = display.bounds
+                    bounds.width()
+                } else {
+                    @Suppress("DEPRECATION") val display = it.windowManager.defaultDisplay
+                    val size = Point()
+                    @Suppress("DEPRECATION") display.getSize(size)
+                    size.x
+                }
+                k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
 
-            adapter = BibliotekaAdapter(it)
-            binding.listView.adapter = adapter
-            if (dzenNoch) {
-                binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
-                binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary_black)
-            } else {
-                binding.listView.background = ContextCompat.getDrawable(it, R.color.colorDivider)
-                binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default_bibliateka)
-                binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
-            }
-            binding.swipeRefreshLayout.setOnRefreshListener {
-                if (runSql) return@setOnRefreshListener
-                if (!MainActivity.isNetworkAvailable()) {
-                    val dialogNoInternet = DialogNoInternet()
-                    dialogNoInternet.show(childFragmentManager, "no_internet")
+                adapter = BibliotekaAdapter(it)
+                binding.listView.adapter = adapter
+                if (dzenNoch) {
+                    binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
+                    binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary_black)
                 } else {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        when (idSelect) {
-                            MainActivity.GISTORYIACARKVY -> getSql(MainActivity.GISTORYIACARKVY)
-                            MainActivity.MALITOUNIKI -> getSql(MainActivity.MALITOUNIKI)
-                            MainActivity.SPEUNIKI -> getSql(MainActivity.SPEUNIKI)
-                            MainActivity.RELLITARATURA -> getSql(MainActivity.RELLITARATURA)
-                            MainActivity.PDF -> getSql(MainActivity.PDF)
-                        }
-                    }
+                    binding.listView.background = ContextCompat.getDrawable(it, R.color.colorDivider)
+                    binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default_bibliateka)
+                    binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
                 }
-                binding.swipeRefreshLayout.isRefreshing = false
-            }
-            binding.listView.setOnItemClickListener { _, _, position, _ ->
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                    return@setOnItemClickListener
-                }
-                mLastClickTime = SystemClock.elapsedRealtime()
-                val file: File
-                if (arrayList[position].size == 3) {
-                    file = File(arrayList[position][1])
-                    if (file.exists()) {
-                        filePath = file.absolutePath
-                        fileName = file.name
-                        loadComplete()
+                binding.swipeRefreshLayout.setOnRefreshListener {
+                    if (runSql) return@setOnRefreshListener
+                    if (!MainActivity.isNetworkAvailable()) {
+                        val dialogNoInternet = DialogNoInternet()
+                        dialogNoInternet.show(childFragmentManager, "no_internet")
                     } else {
-                        arrayList.removeAt(position)
-                        naidaunia.clear()
-                        naidaunia.addAll(arrayList)
-                        adapter.notifyDataSetChanged()
-                        val gson = Gson()
-                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                        val prefEditor = k.edit()
-                        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
-                        prefEditor.apply()
-                        MainActivity.toastView(it, getString(R.string.no_file))
-                    }
-                } else {
-                    file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
-                    if (file.exists()) {
-                        filePath = file.absolutePath
-                        fileName = file.name
-                        loadComplete()
-                    } else {
-                        var opisanie = arrayList[position][1]
-                        val t1 = opisanie.indexOf("</span><br>")
-                        if (t1 != -1) opisanie = opisanie.substring(t1 + 11)
-                        val dialogBibliateka = DialogBibliateka.getInstance(arrayList[position][2], opisanie, arrayList[position][0], arrayList[position][3])
-                        dialogBibliateka.show(childFragmentManager, "dialog_bibliateka")
-                    }
-                }
-            }
-            val gson = Gson()
-            val json = k.getString("bibliateka_naidaunia", "")
-            if (json == "") {
-                CoroutineScope(Dispatchers.Main).launch {
-                    withContext(Dispatchers.IO) {
-                        val dir = File("${it.filesDir}/Book")
-                        if (dir.exists()) dir.deleteRecursively()
-                    }
-                }
-            }
-            if (savedInstanceState != null) {
-                filePath = savedInstanceState.getString("filePath") ?: ""
-                fileName = savedInstanceState.getString("fileName") ?: ""
-                idSelect = savedInstanceState.getInt("idSelect")
-                nameRubrika = savedInstanceState.getString("nameRubrika") ?: ""
-                saveindep = false
-                if (!json.equals("")) {
-                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                    naidaunia.addAll(gson.fromJson(json, type))
-                }
-            } else {
-                it.intent.data?.let { uri ->
-                    if (uri.toString().contains("root")) {
-                        val t1 = uri.toString().indexOf("root")
-                        filePath = uri.toString().substring(t1 + 4)
-                    } else {
-                        var cursor: Cursor? = null
-                        try {
-                            val proj = arrayOf(MediaStore.Images.Media.DATA)
-                            cursor = it.contentResolver.query(uri, proj, null, null, null)
-                            val columnIndex = cursor?.getColumnIndex(MediaStore.Images.Media.DATA) ?: 0
-                            cursor?.moveToFirst()
-                            filePath = cursor?.getString(columnIndex) ?: ""
-                            fileName = cursor?.getString(0) ?: ""
-                            cursor?.close()
-                            if (filePath == "") {
-                                cursor = it.contentResolver.query(uri, null, null, null, null)
-                                cursor?.moveToFirst()
-                                fileName = cursor?.getString(0) ?: ""
-                                if (fileName != "") {
-                                    filePath = it.cacheDir.absolutePath + "/MenuBiblijateka/" + fileName
-                                    val inputStream = it.contentResolver.openInputStream(uri)
-                                    inputStream?.let {
-                                        val file = File(filePath)
-                                        file.outputStream().use { fileOut ->
-                                            it.copyTo(fileOut)
-                                        }
-                                    }
-                                    inputStream?.close()
-                                }
+                        CoroutineScope(Dispatchers.IO).launch {
+                            when (idSelect) {
+                                MainActivity.GISTORYIACARKVY -> getSql(MainActivity.GISTORYIACARKVY)
+                                MainActivity.MALITOUNIKI -> getSql(MainActivity.MALITOUNIKI)
+                                MainActivity.SPEUNIKI -> getSql(MainActivity.SPEUNIKI)
+                                MainActivity.RELLITARATURA -> getSql(MainActivity.RELLITARATURA)
+                                MainActivity.PDF -> getSql(MainActivity.PDF)
                             }
-                        } catch (_: Throwable) {
-                        } finally {
-                            cursor?.close()
                         }
                     }
-                    if (filePath != "") {
-                        if (filePath.contains("raw:")) {
-                            val t1 = filePath.indexOf("raw:")
-                            filePath = filePath.substring(t1 + 4)
+                    binding.swipeRefreshLayout.isRefreshing = false
+                }
+                binding.listView.setOnItemLongClickListener { _, _, position, _ ->
+                    val dd = DialogDeliteNiadaunia.getInstance(position, arrayList[position][1], arrayList[position][0])
+                    dd.show(childFragmentManager, "dialog_delite_niadaunia")
+                    return@setOnItemLongClickListener true
+                }
+                binding.listView.setOnItemClickListener { _, _, position, _ ->
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                        return@setOnItemClickListener
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime()
+                    val file: File
+                    if (arrayList[position].size == 3) {
+                        file = File(arrayList[position][1])
+                        if (file.exists()) {
+                            filePath = file.absolutePath
+                            fileName = file.name
+                            loadComplete(fileName, filePath)
+                        } else {
+                            arrayList.removeAt(position)
+                            naidaunia.clear()
+                            naidaunia.addAll(arrayList)
+                            adapter.notifyDataSetChanged()
+                            val gson = Gson()
+                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                            val prefEditor = k.edit()
+                            prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
+                            prefEditor.apply()
+                            MainActivity.toastView(it, getString(R.string.no_file))
                         }
-                        if (fileName.contains(".pdf", true)) {
-                            saveindep = false
-                            loadComplete()
-                        }
-                        if (filePath.contains(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString())) {
-                            loadComplete()
+                    } else {
+                        file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
+                        if (file.exists()) {
+                            filePath = file.absolutePath
+                            fileName = file.name
+                            loadComplete(fileName, filePath)
+                        } else {
+                            var opisanie = arrayList[position][1]
+                            val t1 = opisanie.indexOf("</span><br>")
+                            if (t1 != -1) opisanie = opisanie.substring(t1 + 11)
+                            val dialogBibliateka = DialogBibliateka.getInstance(arrayList[position][2], opisanie, arrayList[position][0], arrayList[position][3])
+                            dialogBibliateka.show(childFragmentManager, "dialog_bibliateka")
                         }
                     }
                 }
-                it.intent.data = null
-                if (!json.equals("")) {
-                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                    naidaunia.addAll(gson.fromJson(json, type))
+                val gson = Gson()
+                val json = k.getString("bibliateka_naidaunia", "")
+                if (json == "") {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        withContext(Dispatchers.IO) {
+                            val dir = File("${it.filesDir}/Book")
+                            if (dir.exists()) dir.deleteRecursively()
+                        }
+                    }
                 }
-            }
-            idSelect = arguments?.getInt("rub", MainActivity.NIADAUNIA) ?: MainActivity.NIADAUNIA
-            when (idSelect) {
-                MainActivity.NIADAUNIA -> setRubrika(MainActivity.NIADAUNIA)
-                MainActivity.GISTORYIACARKVY -> setRubrika(MainActivity.GISTORYIACARKVY)
-                MainActivity.MALITOUNIKI -> setRubrika(MainActivity.MALITOUNIKI)
-                MainActivity.SPEUNIKI -> setRubrika(MainActivity.SPEUNIKI)
-                MainActivity.RELLITARATURA -> setRubrika(MainActivity.RELLITARATURA)
-                MainActivity.PDF -> setRubrika(MainActivity.PDF)
-                MainActivity.SETFILE -> {
-                    val intent = Intent()
-                    intent.type = "*/*"
-                    intent.action = Intent.ACTION_GET_CONTENT
-                    intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf"))
-                    mActivityResultFile.launch(Intent.createChooser(intent, getString(R.string.vybrac_file)))
-                    binding.progressBar2.visibility = View.GONE
-                    setRubrika(MainActivity.NIADAUNIA)
+                if (savedInstanceState != null) {
+                    filePath = savedInstanceState.getString("filePath") ?: ""
+                    fileName = savedInstanceState.getString("fileName") ?: ""
+                    idSelect = savedInstanceState.getInt("idSelect")
+                    nameRubrika = savedInstanceState.getString("nameRubrika") ?: ""
+                    saveindep = false
+                    if (!json.equals("")) {
+                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                        naidaunia.addAll(gson.fromJson(json, type))
+                    }
+                } else {
+                    if (!json.equals("")) {
+                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                        naidaunia.addAll(gson.fromJson(json, type))
+                    }
+                    fileName = arguments?.getString("fileName", "") ?: ""
+                    filePath = arguments?.getString("filePath", "") ?: ""
                 }
+                idSelect = arguments?.getInt("rub", MainActivity.NIADAUNIA) ?: MainActivity.NIADAUNIA
+                when (idSelect) {
+                    MainActivity.NIADAUNIA -> setRubrika(MainActivity.NIADAUNIA)
+                    MainActivity.GISTORYIACARKVY -> setRubrika(MainActivity.GISTORYIACARKVY)
+                    MainActivity.MALITOUNIKI -> setRubrika(MainActivity.MALITOUNIKI)
+                    MainActivity.SPEUNIKI -> setRubrika(MainActivity.SPEUNIKI)
+                    MainActivity.RELLITARATURA -> setRubrika(MainActivity.RELLITARATURA)
+                    MainActivity.PDF -> setRubrika(MainActivity.PDF)
+                    MainActivity.SETFILE -> setRubrika(MainActivity.NIADAUNIA)
+                }
+                if (fileName != "" && filePath != "") {
+                    loadComplete(fileName, filePath)
+                }
+                setTitleBibliateka(idSelect)
             }
-            setTitleBibliateka(idSelect)
         }
     }
 
-    private fun loadComplete() {
+    fun loadComplete(fileName: String, filePath: String) {
         activity?.let {
             if (MainActivity.checkmoduleResources()) {
                 if (MainActivity.checkmodulesBiblijateka()) {
@@ -563,68 +505,65 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
         }
     }
 
-    private fun setRubrika(rub: Int) {
-        CoroutineScope(Dispatchers.Main).launch {
-            binding.progressBar2.visibility = View.VISIBLE
-            val gson = Gson()
-            val jsonB = k.getString("Biblioteka", "") ?: ""
-            val timeUpdate = Calendar.getInstance().timeInMillis
-            val timeUpdateSave = k.getLong("BibliotekaTimeUpdate", timeUpdate)
-            if (!(jsonB == "" || timeUpdate - timeUpdateSave == 0L)) {
-                if (timeUpdate - timeUpdateSave > (24 * 60 * 60 * 1000L)) {
-                    if (MainActivity.isNetworkAvailable()) {
-                        val prefEditors = k.edit()
-                        prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
-                        prefEditors.apply()
-                        getSql(rub)
-                    } else {
-                        arrayList.clear()
-                        adapter.notifyDataSetChanged()
-                        val noInternet = DialogNoInternet()
-                        noInternet.show(childFragmentManager, "no_internet")
-                        binding.progressBar2.visibility = View.GONE
-                    }
-                } else {
-                    arrayList.clear()
-                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                    arrayList.addAll(gson.fromJson(jsonB, type))
-                    val temp = ArrayList<ArrayList<String>>()
-                    for (i in 0 until arrayList.size) {
-                        val rtemp2 = arrayList[i][4].toInt()
-                        if (rtemp2 != rub) temp.add(arrayList[i])
-                    }
-                    arrayList.removeAll(temp.toSet())
-                    adapter.notifyDataSetChanged()
-                    binding.progressBar2.visibility = View.GONE
-                }
-            } else {
+    fun setRubrika(rub: Int) {
+        var rubryka = rub
+        if (rubryka == MainActivity.SETFILE) {
+            val intent = Intent()
+            intent.type = "*/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf"))
+            mActivityResultFile.launch(Intent.createChooser(intent, getString(R.string.vybrac_file)))
+            rubryka = MainActivity.NIADAUNIA
+        }
+        val gson = Gson()
+        val jsonB = k.getString("Biblioteka", "") ?: ""
+        val timeUpdate = Calendar.getInstance().timeInMillis
+        val timeUpdateSave = k.getLong("BibliotekaTimeUpdate", timeUpdate)
+        if (!(jsonB == "" || timeUpdate - timeUpdateSave == 0L)) {
+            if (timeUpdate - timeUpdateSave > (24 * 60 * 60 * 1000L)) {
                 if (MainActivity.isNetworkAvailable()) {
                     val prefEditors = k.edit()
                     prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
                     prefEditors.apply()
-                    getSql(rub)
+                    getSql(rubryka)
                 } else {
                     arrayList.clear()
                     adapter.notifyDataSetChanged()
                     val noInternet = DialogNoInternet()
                     noInternet.show(childFragmentManager, "no_internet")
-                    binding.progressBar2.visibility = View.GONE
                 }
+            } else {
+                arrayList.clear()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                arrayList.addAll(gson.fromJson(jsonB, type))
+                val temp = ArrayList<ArrayList<String>>()
+                for (i in 0 until arrayList.size) {
+                    val rtemp2 = arrayList[i][4].toInt()
+                    if (rtemp2 != rubryka) temp.add(arrayList[i])
+                }
+                arrayList.removeAll(temp.toSet())
+                adapter.notifyDataSetChanged()
             }
-            setTitleBibliateka(rub)
-            saveindep = true
-            if (sqlJob?.isActive != true) binding.progressBar2.visibility = View.GONE
+        } else {
+            if (MainActivity.isNetworkAvailable()) {
+                val prefEditors = k.edit()
+                prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
+                prefEditors.apply()
+                getSql(rubryka)
+            } else {
+                arrayList.clear()
+                adapter.notifyDataSetChanged()
+                val noInternet = DialogNoInternet()
+                noInternet.show(childFragmentManager, "no_internet")
+            }
         }
-    }
-
-    override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
-        val dd = DialogDeliteNiadaunia.getInstance(position, arrayList[position][1], arrayList[position][0])
-        dd.show(childFragmentManager, "dialog_delite_niadaunia")
-        return true
+        setTitleBibliateka(rubryka)
+        saveindep = true
+        if (sqlJob?.isActive != true) binding?.progressBar2?.visibility = View.GONE
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        menu.findItem(R.id.action_trash).isVisible = binding.swipeRefreshLayout.visibility == View.VISIBLE && idSelect == MainActivity.NIADAUNIA && naidaunia.size > 0
+        menu.findItem(R.id.action_trash).isVisible = binding?.swipeRefreshLayout?.visibility == View.VISIBLE && idSelect == MainActivity.NIADAUNIA && naidaunia.size > 0
         menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
     }
 
@@ -659,72 +598,76 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
     override fun onPause() {
         super.onPause()
         sqlJob?.cancel()
+        setRubrikaJob?.cancel()
+        bitmapJob = null
     }
 
-    private suspend fun getSql(rub: Int) {
+    private fun getSql(rub: Int) {
         activity?.let { activity ->
-            withContext(Dispatchers.IO) {
-                runSql = true
-                withContext(Dispatchers.Main) {
-                    arrayList.clear()
-                    adapter.notifyDataSetChanged()
-                    binding.progressBar2.visibility = View.VISIBLE
-                }
-                try {
-                    if (MainActivity.isNetworkAvailable()) {
-                        sqlJob = CoroutineScope(Dispatchers.Main).launch {
-                            val temp = ArrayList<ArrayList<String>>()
-                            val sb = getBibliatekaJson()
-                            if (sb != "") {
-                                val gson = Gson()
-                                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                                val biblioteka: ArrayList<ArrayList<String>> = gson.fromJson(sb, type)
-                                for (i in 0 until biblioteka.size) {
-                                    val mySqlList = ArrayList<String>()
-                                    val kniga = biblioteka[i]
-                                    val rubrika = kniga[4]
-                                    val link = kniga[0]
-                                    val str = kniga[1]
-                                    val pdf = kniga[2]
-                                    val pdfFileSize = kniga[3]
-                                    val image = kniga[5]
-                                    mySqlList.add(link)
-                                    mySqlList.add(str)
-                                    mySqlList.add(pdf)
-                                    mySqlList.add(pdfFileSize)
-                                    mySqlList.add(rubrika)
-                                    val t1 = pdf.lastIndexOf(".")
-                                    mySqlList.add(pdf.substring(0, t1) + ".png")
-                                    val dir = File("${activity.filesDir}/image_temp")
-                                    if (!dir.exists()) dir.mkdir()
-                                    val file = File(image)
-                                    if (!file.exists()) {
-                                        saveImagePdf(pdf, image)
+            setRubrikaJob = CoroutineScope(Dispatchers.IO).launch {
+                withContext(Dispatchers.IO) {
+                    runSql = true
+                    withContext(Dispatchers.Main) {
+                        arrayList.clear()
+                        adapter.notifyDataSetChanged()
+                        binding?.progressBar2?.visibility = View.VISIBLE
+                    }
+                    try {
+                        if (MainActivity.isNetworkAvailable()) {
+                            sqlJob = CoroutineScope(Dispatchers.Main).launch {
+                                val temp = ArrayList<ArrayList<String>>()
+                                val sb = getBibliatekaJson()
+                                if (sb != "") {
+                                    val gson = Gson()
+                                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                                    val biblioteka: ArrayList<ArrayList<String>> = gson.fromJson(sb, type)
+                                    for (i in 0 until biblioteka.size) {
+                                        val mySqlList = ArrayList<String>()
+                                        val kniga = biblioteka[i]
+                                        val rubrika = kniga[4]
+                                        val link = kniga[0]
+                                        val str = kniga[1]
+                                        val pdf = kniga[2]
+                                        val pdfFileSize = kniga[3]
+                                        val image = kniga[5]
+                                        mySqlList.add(link)
+                                        mySqlList.add(str)
+                                        mySqlList.add(pdf)
+                                        mySqlList.add(pdfFileSize)
+                                        mySqlList.add(rubrika)
+                                        val t1 = pdf.lastIndexOf(".")
+                                        mySqlList.add(pdf.substring(0, t1) + ".png")
+                                        val dir = File("${activity.filesDir}/image_temp")
+                                        if (!dir.exists()) dir.mkdir()
+                                        val file = File(image)
+                                        if (!file.exists()) {
+                                            saveImagePdf(pdf, image)
+                                        }
+                                        if (rubrika.toInt() == rub) {
+                                            arrayList.add(mySqlList)
+                                        }
+                                        temp.add(mySqlList)
                                     }
-                                    if (rubrika.toInt() == rub) {
-                                        arrayList.add(mySqlList)
+                                    val json = gson.toJson(temp, type)
+                                    val prefEditors = k.edit()
+                                    prefEditors.putString("Biblioteka", json)
+                                    prefEditors.apply()
+                                    withContext(Dispatchers.Main) {
+                                        adapter.notifyDataSetChanged()
                                     }
-                                    temp.add(mySqlList)
+                                } else {
+                                    withContext(Dispatchers.Main) {
+                                        MainActivity.toastView(activity, getString(R.string.error))
+                                    }
                                 }
-                                val json = gson.toJson(temp, type)
-                                val prefEditors = k.edit()
-                                prefEditors.putString("Biblioteka", json)
-                                prefEditors.apply()
+                                runSql = false
                                 withContext(Dispatchers.Main) {
-                                    adapter.notifyDataSetChanged()
+                                    binding?.progressBar2?.visibility = View.GONE
                                 }
-                            } else {
-                                withContext(Dispatchers.Main) {
-                                    MainActivity.toastView(activity, getString(R.string.error))
-                                }
-                            }
-                            runSql = false
-                            withContext(Dispatchers.Main) {
-                                binding.progressBar2.visibility = View.GONE
                             }
                         }
+                    } catch (_: Throwable) {
                     }
-                } catch (_: Throwable) {
                 }
             }
         }
@@ -841,7 +784,7 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
                 if (arrayList[position].size == 3) {
                     viewHolder.buttonPopup.visibility = View.GONE
                     if (arrayList[position][2] != "") {
-                        CoroutineScope(Dispatchers.Main).launch {
+                        bitmapJob = CoroutineScope(Dispatchers.Main).launch {
                             val bitmap = withContext(Dispatchers.IO) {
                                 val options = BitmapFactory.Options()
                                 options.inPreferredConfig = Bitmap.Config.ARGB_8888
@@ -861,9 +804,10 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
                         }
                     }
                     val t1 = arrayList[position][5].lastIndexOf("/")
-                    val file = File("${activity.filesDir}/image_temp/" + arrayList[position][5].substring(t1 + 1))
-                    if (file.exists()) {
-                        CoroutineScope(Dispatchers.Main).launch {
+                    val image = arrayList[position][5].substring(t1 + 1)
+                    val file = File("${activity.filesDir}/image_temp/" + image)
+                    if (file.exists() && image != "") {
+                        bitmapJob = CoroutineScope(Dispatchers.Main).launch {
                             val bitmap = withContext(Dispatchers.IO) {
                                 val options = BitmapFactory.Options()
                                 options.inPreferredConfig = Bitmap.Config.ARGB_8888
@@ -888,9 +832,11 @@ class MenuBiblijateka : BaseFragment(), DialogBibliotekaWIFI.DialogBibliotekaWIF
     private class ViewHolder(var text: TextView, var imageView: ImageView, var buttonPopup: ImageView)
 
     companion object {
-        fun getInstance(rub: Int): MenuBiblijateka {
+        fun getInstance(rub: Int, fileName: String = "", filePath: String = ""): MenuBiblijateka {
             val bundle = Bundle()
             bundle.putInt("rub", rub)
+            bundle.putString("fileName", fileName)
+            bundle.putString("filePath", filePath)
             val menuPesny = MenuBiblijateka()
             menuPesny.arguments = bundle
             return menuPesny

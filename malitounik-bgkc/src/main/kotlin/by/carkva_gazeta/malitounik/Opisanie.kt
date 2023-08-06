@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.OpisanieBinding
-import com.google.firebase.storage.ListResult
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -225,7 +224,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
 
     private suspend fun getOpisanieSviat(count: Int = 0) {
         val pathReference = Malitounik.referens.child("/opisanie_sviat.json")
-        val file = File("$filesDir/" + pathReference.name)
         var update = 0L
         var error = false
         pathReference.metadata.addOnCompleteListener { storageMetadata ->
@@ -235,6 +233,18 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 error = true
             }
         }.await()
+        if (update == 0L) error = true
+        if (error && count < 2) {
+            getOpisanieSviat(count + 1)
+            return
+        }
+        saveOpisanieSviat(update)
+    }
+
+    private suspend fun saveOpisanieSviat(update: Long, count: Int = 0) {
+        val pathReference = Malitounik.referens.child("/opisanie_sviat.json")
+        val file = File("$filesDir/opisanie_sviat.json")
+        var error = false
         val time = file.lastModified()
         if (!file.exists() || time < update) {
             pathReference.getFile(file).addOnCompleteListener {
@@ -247,7 +257,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         if (file.exists()) read = file.readText()
         if (read == "") error = true
         if (error && count < 2) {
-            getOpisanieSviat(count + 1)
+            saveOpisanieSviat(update, count + 1)
             return
         }
         loadOpisanieSviat()
@@ -256,42 +266,41 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private suspend fun getSviatyia(count: Int = 0) {
         val dir = File("$filesDir/sviatyja/")
         if (!dir.exists()) dir.mkdir()
-        var list: ListResult? = null
         var error = false
-        Malitounik.referens.child("/chytanne/sviatyja").list(12).addOnCompleteListener { listResult ->
-            if (listResult.isSuccessful) {
-                list = listResult.result
+        val pathReference = Malitounik.referens.child("/chytanne/sviatyja/opisanie$mun.json")
+        var update = 0L
+        pathReference.metadata.addOnCompleteListener { storageMetadata ->
+            if (storageMetadata.isSuccessful) {
+                update = storageMetadata.result.updatedTimeMillis
             } else {
                 error = true
             }
         }.await()
-        list?.items?.forEach { storageReference ->
-            if (mun == Calendar.getInstance()[Calendar.MONTH] + 1) {
-                var update = 0L
-                storageReference.metadata.addOnCompleteListener { storageMetadata ->
-                    if (storageMetadata.isSuccessful) {
-                        update = storageMetadata.result.updatedTimeMillis
-                    } else {
-                        error = true
-                    }
-                }.await()
-                val fileOpisanie = File("$filesDir/sviatyja/" + storageReference.name)
-                val time = fileOpisanie.lastModified()
-                if (!fileOpisanie.exists() || time < update) {
-                    storageReference.getFile(fileOpisanie).addOnCompleteListener {
-                        if (!it.isSuccessful) {
-                            error = true
-                        }
-                    }.await()
-                }
-            }
+        if (update == 0L) error = true
+        if (error && count < 2) {
+            getSviatyia(count + 1)
+            return
         }
+        saveOpisanieSviatyia(update)
+    }
+
+    private suspend fun saveOpisanieSviatyia(update: Long, count: Int = 0) {
+        val pathReference = Malitounik.referens.child("/chytanne/sviatyja/opisanie$mun.json")
         val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
+        val time = fileOpisanie.lastModified()
+        var error = false
+        if (!fileOpisanie.exists() || time < update) {
+            pathReference.getFile(fileOpisanie).addOnCompleteListener {
+                if (!it.isSuccessful) {
+                    error = true
+                }
+            }.await()
+        }
         var read = ""
         if (fileOpisanie.exists()) read = fileOpisanie.readText()
         if (read == "") error = true
         if (error && count < 2) {
-            getSviatyia(count + 1)
+            saveOpisanieSviatyia(update,count + 1)
             return
         }
         loadOpisanieSviatyia(read)

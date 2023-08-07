@@ -16,6 +16,7 @@ class WidgetRadyjoMaryia : AppWidgetProvider() {
     companion object {
         private var isFirstRun = false
         private var isProgram = false
+        private var isError = false
     }
 
     override fun onEnabled(context: Context) {
@@ -32,7 +33,8 @@ class WidgetRadyjoMaryia : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        val extra = intent.extras?.getInt("action") ?: 0
+        val extra = intent.extras?.getInt("action", 0) ?: 0
+        isError = intent.extras?.getBoolean("isError", false) ?: false
         if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun && extra == ServiceRadyjoMaryia.STOP) {
             val intent2 = Intent(context, ServiceRadyjoMaryia::class.java)
             intent2.putExtra("action", ServiceRadyjoMaryia.STOP)
@@ -120,6 +122,11 @@ class WidgetRadyjoMaryia : AppWidgetProvider() {
         if (isProgram) {
             updateViews.setImageViewResource(R.id.program, R.drawable.load)
         } else {
+            updateViews.setImageViewResource(R.id.program, R.drawable.programm_rado_maria2)
+        }
+        if (isError) {
+            updateViews.setTextViewText(R.id.textView, context.getString(R.string.padie_maryia_s))
+            updateViews.setImageViewResource(R.id.play, R.drawable.play3)
             updateViews.setImageViewResource(R.id.program, R.drawable.programm_rado_maria2)
         }
         updateViews.setViewVisibility(R.id.stop, View.VISIBLE)

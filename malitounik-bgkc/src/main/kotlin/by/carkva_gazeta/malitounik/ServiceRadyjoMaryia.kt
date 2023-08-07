@@ -114,7 +114,9 @@ class ServiceRadyjoMaryia : Service() {
         isServiceRadioMaryiaRun = false
         val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
-            sendBroadcast(Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java))
+            val intent = Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java)
+            intent.putExtra("isError", isError)
+            sendBroadcast(intent)
         }
         listener?.setTitleRadioMaryia("")
         listener?.unBinding()

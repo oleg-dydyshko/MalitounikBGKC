@@ -11,7 +11,6 @@ import android.os.SystemClock
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
@@ -142,7 +141,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
 
     private fun setDate(dayOfYear: Int, count: Int = 0) {
         if (MainActivity.isNetworkAvailable()) {
-            Log.d("Oleg", count.toString())
             binding.progressBar2.visibility = View.VISIBLE
             cal.set(Calendar.YEAR, 2020)
             cal.set(Calendar.DAY_OF_YEAR, dayOfYear)

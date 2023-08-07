@@ -421,8 +421,17 @@ class DialogCalindarGrid : DialogFragment() {
                                 val listTitle = ArrayList<String>()
                                 if (resours != "0") listTitle.add(slugba.getTitle(resours))
                                 if (resours2 != "0") listTitle.add(slugba.getTitle(resours2))
-                                val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, ton, listResource, denNedzeli)
-                                traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
+                                if (ton != 0 || listResource.size > 1) {
+                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, ton, listResource, denNedzeli)
+                                    traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
+                                } else {
+                                    val intent = Intent()
+                                    intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
+                                    intent.putExtra("resurs", listResource[0])
+                                    intent.putExtra("zmena_chastki", true)
+                                    intent.putExtra("title", listTitle[0])
+                                    startActivity(intent)
+                                }
                             }
 
                             else -> {

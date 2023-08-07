@@ -201,6 +201,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(218, "Перадсьвяцьце Перамяненьня і сьв. муч. Яўсігнея", "mm_05_08_pieradsv_pieramianiennia_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(218, "Перадсьвяцьце Перамяненьня і сьв. муч. Яўсігнея", "mm_05_08_pieradsv_pieramianiennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(219, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "mm_06_08_pieramianiennie_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(219, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "mm_06_08_pieramianiennie_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(222, "Пасьвяцьце Перамяненьня і сьв. апостала Мацея", "mm_09_08_pasviaccie_pieramianiennia_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(222, "Пасьвяцьце Перамяненьня і сьв. апостала Мацея", "mm_09_08_pasviaccie_pieramianennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(228, "Усьпеньне Найсьвяцейшай Багародзіцы і Заўсёды Дзевы Марыі", "mm_15_08_uspiennie_liturhija", LITURHIJA))

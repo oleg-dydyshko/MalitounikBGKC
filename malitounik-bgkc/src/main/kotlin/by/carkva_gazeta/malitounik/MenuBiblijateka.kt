@@ -431,6 +431,10 @@ class MenuBiblijateka : BaseFragment() {
                     filePath = arguments?.getString("filePath", "") ?: ""
                 }
                 idSelect = arguments?.getInt("rub", MainActivity.NIADAUNIA) ?: MainActivity.NIADAUNIA
+                if (idSelect == MainActivity.NIADAUNIA || idSelect == MainActivity.SETFILE) {
+                    binding.swipeRefreshLayout.isEnabled = false
+                    binding.swipeRefreshLayout.isRefreshing = false
+                }
                 when (idSelect) {
                     MainActivity.NIADAUNIA -> setRubrika(MainActivity.NIADAUNIA)
                     MainActivity.GISTORYIACARKVY -> setRubrika(MainActivity.GISTORYIACARKVY)
@@ -438,7 +442,7 @@ class MenuBiblijateka : BaseFragment() {
                     MainActivity.SPEUNIKI -> setRubrika(MainActivity.SPEUNIKI)
                     MainActivity.RELLITARATURA -> setRubrika(MainActivity.RELLITARATURA)
                     MainActivity.PDF -> setRubrika(MainActivity.PDF)
-                    MainActivity.SETFILE -> setRubrika(MainActivity.NIADAUNIA)
+                    MainActivity.SETFILE -> setRubrika(MainActivity.SETFILE)
                 }
                 if (fileName != "" && filePath != "") {
                     loadComplete(fileName, filePath)
@@ -448,7 +452,7 @@ class MenuBiblijateka : BaseFragment() {
         }
     }
 
-    fun loadComplete(fileName: String, filePath: String) {
+    private fun loadComplete(fileName: String, filePath: String) {
         activity?.let {
             if (MainActivity.checkmoduleResources()) {
                 if (MainActivity.checkmodulesBiblijateka()) {
@@ -616,7 +620,10 @@ class MenuBiblijateka : BaseFragment() {
                         if (MainActivity.isNetworkAvailable()) {
                             sqlJob = CoroutineScope(Dispatchers.Main).launch {
                                 val temp = ArrayList<ArrayList<String>>()
-                                val sb = getBibliatekaJson()
+                                var sb = getBibliatekaJson()
+                                if (sb == "") {
+                                    sb = k.getString("Biblioteka", "") ?: ""
+                                }
                                 if (sb != "") {
                                     val gson = Gson()
                                     val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
@@ -629,19 +636,19 @@ class MenuBiblijateka : BaseFragment() {
                                         val str = kniga[1]
                                         val pdf = kniga[2]
                                         val pdfFileSize = kniga[3]
-                                        val image = kniga[5]
                                         mySqlList.add(link)
                                         mySqlList.add(str)
                                         mySqlList.add(pdf)
                                         mySqlList.add(pdfFileSize)
                                         mySqlList.add(rubrika)
                                         val t1 = pdf.lastIndexOf(".")
-                                        mySqlList.add(pdf.substring(0, t1) + ".png")
+                                        val imageName = pdf.substring(0, t1) + ".png"
+                                        mySqlList.add(imageName)
                                         val dir = File("${activity.filesDir}/image_temp")
                                         if (!dir.exists()) dir.mkdir()
-                                        val file = File(image)
+                                        val file = File("${activity.filesDir}/image_temp/$imageName")
                                         if (!file.exists()) {
-                                            saveImagePdf(pdf, image)
+                                            saveImagePdf(file, imageName)
                                         }
                                         if (rubrika.toInt() == rub) {
                                             arrayList.add(mySqlList)
@@ -686,11 +693,9 @@ class MenuBiblijateka : BaseFragment() {
         return text
     }
 
-    private suspend fun saveImagePdf(pdf: String, image: String) {
+    private suspend fun saveImagePdf(imageFile: File, image: String) {
         activity?.let { activity ->
-            val t1 = pdf.lastIndexOf(".")
-            val imageTempFile = File("${activity.filesDir}/image_temp/" + pdf.substring(0, t1) + ".png")
-            Malitounik.referens.child(image).getFile(imageTempFile).addOnFailureListener {
+            Malitounik.referens.child("/images/bibliateka/$image").getFile(imageFile).addOnFailureListener {
                 MainActivity.toastView(activity, getString(R.string.error))
             }.await()
         }
@@ -803,15 +808,18 @@ class MenuBiblijateka : BaseFragment() {
                             showPopupMenu(it, position, arrayList[position][0])
                         }
                     }
-                    val t1 = arrayList[position][5].lastIndexOf("/")
-                    val image = arrayList[position][5].substring(t1 + 1)
-                    val file = File("${activity.filesDir}/image_temp/" + image)
-                    if (file.exists() && image != "") {
-                        bitmapJob = CoroutineScope(Dispatchers.Main).launch {
+                    bitmapJob = CoroutineScope(Dispatchers.Main).launch {
+                        val t1 = arrayList[position][5].lastIndexOf("/")
+                        val image = arrayList[position][5].substring(t1 + 1)
+                        val file = File("${activity.filesDir}/image_temp/$image")
+                        if (!file.exists() && MainActivity.isNetworkAvailable()) {
+                            saveImagePdf(file, image)
+                        }
+                        if (file.exists()) {
                             val bitmap = withContext(Dispatchers.IO) {
                                 val options = BitmapFactory.Options()
                                 options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                                return@withContext BitmapFactory.decodeFile("${activity.filesDir}/image_temp/" + arrayList[position][5].substring(t1 + 1), options)
+                                return@withContext BitmapFactory.decodeFile("${activity.filesDir}/image_temp/$image", options)
                             }
                             viewHolder.imageView.setImageBitmap(bitmap)
                             viewHolder.imageView.visibility = View.VISIBLE

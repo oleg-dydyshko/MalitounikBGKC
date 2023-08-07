@@ -1837,12 +1837,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     private fun startBiblioteka(rub: Int, start: Boolean, id: Int, fileName: String = "", filePath: String = "") {
-        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka") as? MenuBiblijateka
+        val rubNew = if (rub == SETFILE) NIADAUNIA
+        else rub
+        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$rubNew") as? MenuBiblijateka
         if (fragment == null) {
             val ftrans = supportFragmentManager.beginTransaction()
             ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
             val vybranoe = MenuBiblijateka.getInstance(rub, fileName, filePath)
-            ftrans.replace(R.id.conteiner, vybranoe, "MenuBiblijateka")
+            ftrans.replace(R.id.conteiner, vybranoe, "MenuBiblijateka$rubNew")
             if (start) {
                 ftrans.commit()
             } else {
@@ -1850,10 +1852,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     ftrans.commitAllowingStateLoss()
                 }, 300)
             }
-        } else {
-            if (fileName != "" && filePath != "") {
-                fragment.loadComplete(fileName, filePath)
-            }
+        }
+        if (fragment != null && rub == SETFILE) {
             fragment.setRubrika(rub)
         }
         prefEditors.putInt("id", id)

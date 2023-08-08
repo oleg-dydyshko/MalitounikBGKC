@@ -917,14 +917,21 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         if (autoScrollJob?.isActive != true) {
             if (spid < 166) {
                 val autoTime = (230 - spid) / 10
+                var count = 0
                 if (autoStartScrollJob?.isActive != true) {
                     autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
                         delay(1000L)
                         spid = 230
                         autoScroll()
-                        for (i in 0..9) {
+                        while (true) {
                             delay(1000L)
-                            spid -= autoTime
+                            if (!mActionDown && !MainActivity.dialogVisable) {
+                                spid -= autoTime
+                                count++
+                            }
+                            if (count == 10) {
+                                break
+                            }
                         }
                         startAutoScroll()
                     }

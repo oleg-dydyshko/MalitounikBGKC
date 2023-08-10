@@ -343,6 +343,30 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         }
     }
 
+    override fun onPrepareMenu(menu: Menu) {
+        activity?.let {
+            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            menu.findItem(R.id.action_search_tyxt_bogaslug).isVisible = k.getBoolean("admin", false)
+        }
+    }
+
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return false
+        }
+        mLastClickTime = SystemClock.elapsedRealtime()
+        val id = item.itemId
+        if (id == R.id.action_search_tyxt_bogaslug) {
+            activity?.let {
+                val i = Intent()
+                i.setClassName(it, MainActivity.SEARCHBOGASHLUGBOVYA)
+                startActivity(i)
+                return true
+            }
+        }
+        return false
+    }
+
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.pesny, menu)
         val searchViewItem = menu.findItem(R.id.search)

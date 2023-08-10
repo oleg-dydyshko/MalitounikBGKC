@@ -22,24 +22,18 @@ class SplashActivity : BaseActivity() {
         intent1.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         val extras = intent.extras
         if (extras != null) {
-            //if (extras.containsKey("site")) intent1.putExtra("site", true)
+            intent1.putExtras(extras)
             val widgetMun = "widget_mun"
             if (extras.getBoolean(widgetMun, false)) {
                 intent1.putExtra(widgetMun, true)
-                intent1.putExtra("position", extras.getInt("position"))
             }
             val widgetDay = "widget_day"
             if (extras.getBoolean(widgetDay, false)) {
                 intent1.putExtra(widgetDay, true)
             }
-            if (extras.getBoolean("sabytie", false)) {
-                intent1.putExtra("data", extras.getInt("data"))
-                intent1.putExtra("year", extras.getInt("year"))
-            }
         }
         if (data != null) {
             intent1.data = data
-
             var file = ""
             val cursor2 = contentResolver.query(data, arrayOf(MediaStore.MediaColumns.DISPLAY_NAME), null, null, null)
             cursor2?.moveToFirst()

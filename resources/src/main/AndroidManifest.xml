@@ -162,6 +162,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
+        <activity
+            android:name="by.carkva_gazeta.resources.SearchBogashlugbovya"
+            android:label="@string/searche_bogasluz_text"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateVisible|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
     </application>
 </manifest>
 

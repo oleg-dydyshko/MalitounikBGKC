@@ -523,6 +523,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["akafist_rosickim_muczanikam"] = R.raw.akafist_rosickim_muczanikam
             resursMap["mm_04_08_7junakou_efeskich_viaczernia"] = R.raw.mm_04_08_7junakou_efeskich_viaczernia
             resursMap["mm_06_08_pieramianiennie_viaczernia"] = R.raw.mm_06_08_pieramianiennie_viaczernia
+            resursMap["mm_11_08_pasviaccie_pieramianinnie_muczanika_jeupla_viaczernia"] = R.raw.mm_11_08_pasviaccie_pieramianinnie_muczanika_jeupla_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {

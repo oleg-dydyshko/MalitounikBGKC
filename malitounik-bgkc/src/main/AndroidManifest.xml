@@ -236,11 +236,7 @@
             android:excludeFromRecents="true"
             android:exported="false"
             android:taskAffinity=""
-            android:theme="@style/Theme.Transparent">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".NovyZapavietSemuxaList"
             android:theme="@style/AppTheme">
@@ -422,7 +418,13 @@
                 android:resource="@xml/file_path" />
         </provider>
 
-        <receiver android:name=".ReceiverBroad" />
+        <receiver
+            android:name=".ReceiverBroad"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="by.carkva_gazeta.malitounik.sviaty" />
+            </intent-filter>
+        </receiver>
         <receiver
             android:name=".ReceiverBoot"
             android:exported="false">

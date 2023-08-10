@@ -90,18 +90,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
     }
-    private val shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        val cw = Calendar.getInstance()
-        val intent = Intent(this, ReceiverBroad::class.java)
-        intent.putExtra("file", "MalitounikResource.zip")
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_IMMUTABLE or 0
-        } else {
-            0
-        }
-        val pIntent = PendingIntent.getBroadcast(this, 30, intent, flags)
-        SettingsActivity.setAlarm(cw.timeInMillis + 10 * 60 * 1000, pIntent)
-    }
     private val mConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as ServiceRadyjoMaryia.ServiceRadyjoMaryiaBinder
@@ -179,7 +167,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@MainActivity, "by.carkva_gazeta.malitounik.fileprovider", fileZip))
                 sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
                 sendIntent.type = "application/zip"
-                shareLauncher.launch(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
+                startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
                 clearLogFile(isClear)
             }
         }
@@ -1979,6 +1967,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val NOVYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.NovyZapavietSinaidal"
         const val STARYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.StaryZapavietSinaidal"
         const val BIBLIAVYBRANOE = "by.carkva_gazeta.resources.BibliaVybranoe"
+        const val SEARCHBOGASHLUGBOVYA = "by.carkva_gazeta.resources.SearchBogashlugbovya"
         const val NIADAUNIA = 0
         const val GISTORYIACARKVY = 1
         const val MALITOUNIKI = 2

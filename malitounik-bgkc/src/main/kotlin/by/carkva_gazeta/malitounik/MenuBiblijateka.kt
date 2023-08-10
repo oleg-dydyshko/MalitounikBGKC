@@ -30,7 +30,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import by.carkva_gazeta.malitounik.databinding.BiblijatekaBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibliotekaBinding
-import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -770,7 +769,6 @@ class MenuBiblijateka : BaseFragment() {
 
     internal inner class BibliotekaAdapter(private val context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            SplitCompat.install(context)
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {

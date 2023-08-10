@@ -14,7 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import java.util.*
+import java.util.Calendar
 
 class ReceiverBroad : BroadcastReceiver() {
     private var sabytieSet = false
@@ -30,12 +30,13 @@ class ReceiverBroad : BroadcastReceiver() {
             else newId
             sabytieSet = true
         }
-        sendNotif(ctx, intent.action, intent.getStringExtra("extra"), intent.getIntExtra("dayofyear", dayofyear), intent.getIntExtra("year", year))
+        sendNotif(ctx, intent.getStringExtra("title"), intent.getStringExtra("extra"), intent.getIntExtra("dayofyear", dayofyear), intent.getIntExtra("year", year))
     }
 
     private fun sendNotif(context: Context, sviata: String?, name: String?, dayofyear: Int, year: Int) {
         if (sviata == null || name == null) return
-        val notificationIntent = Intent(context, MainActivity::class.java)
+        val notificationIntent = Intent(context, SplashActivity::class.java)
+        notificationIntent.action = id.toString()
         notificationIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         notificationIntent.putExtra("data", dayofyear)
         notificationIntent.putExtra("year", year)

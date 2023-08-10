@@ -98,19 +98,23 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             return calendar[Calendar.YEAR]
         }
 
-        private fun createIntent(action: String, extra: String): Intent {
+        private fun createIntent(title: String, extra: String): Intent {
             val intent = Intent(Malitounik.applicationContext(), ReceiverBroad::class.java)
-            intent.action = action
+            intent.action = "by.carkva_gazeta.malitounik.sviaty"
+            intent.putExtra("title", title)
             intent.putExtra("extra", extra)
+            intent.`package` = Malitounik.applicationContext().packageName
             return intent
         }
 
-        private fun createIntent(action: String, extra: String, dayofyear: Int, year: Int): Intent {
+        private fun createIntent(title: String, extra: String, dayofyear: Int, year: Int): Intent {
             val intent = Intent(Malitounik.applicationContext(), ReceiverBroad::class.java)
-            intent.action = action
+            intent.action = "by.carkva_gazeta.malitounik.sviaty"
+            intent.putExtra("title", title)
             intent.putExtra("extra", extra)
             intent.putExtra("dayofyear", dayofyear)
             intent.putExtra("year", year)
+            intent.`package` = Malitounik.applicationContext().packageName
             return intent
         }
 
@@ -120,19 +124,22 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             return calendar.timeInMillis
         }
 
-        private fun createIntentSabytie(action: String, data: String, time: String): Intent {
+        fun createIntentSabytie(title: String, data: String, time: String): Intent {
             val intent = Intent(Malitounik.applicationContext(), ReceiverBroad::class.java)
-            intent.action = action
+            intent.action = "by.carkva_gazeta.malitounik.sviaty"
+            intent.putExtra("title", title)
             intent.putExtra("sabytieSet", true)
             intent.putExtra("extra", "Падзея $data у $time")
             val dateN = data.split(".")
             val g = GregorianCalendar(dateN[2].toInt(), dateN[1].toInt() - 1, dateN[0].toInt(), 0, 0, 0)
-            intent.putExtra("data", g[Calendar.DAY_OF_YEAR])
             intent.putExtra("year", g[Calendar.YEAR])
+            val timeN = time.split(":")
+            intent.putExtra("dataString", dateN[0] + dateN[1] + timeN[0] + timeN[1])
+            intent.putExtra("dayofyear", g[Calendar.DAY_OF_YEAR])
             return intent
         }
 
-        fun setAlarm(timeAlarm: Long, pendingIntent: PendingIntent?, padzeia: Boolean = false) {
+        private fun setAlarm(timeAlarm: Long, pendingIntent: PendingIntent?, padzeia: Boolean = false) {
             pendingIntent?.let {
                 val context = Malitounik.applicationContext()
                 val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

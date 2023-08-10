@@ -103,7 +103,7 @@ class MenuCaliandar : BaseFragment() {
                     if (sab.count == "0") {
                         if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
                             if (sab.sec != "-1") {
-                                val intent = createIntent(sab.padz, "Падзея" + " " + sab.dat + " у " + sab.tim, sab.dat, sab.tim)
+                                val intent = SettingsActivity.createIntentSabytie(sab.padz, sab.dat, sab.tim)
                                 val londs3 = sab.paznic / 100000L
                                 val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, flags)
                                 am.cancel(pIntent)
@@ -113,7 +113,7 @@ class MenuCaliandar : BaseFragment() {
                             for (p in del) {
                                 if (p.padz.contains(filen)) {
                                     if (p.sec != "-1") {
-                                        val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                                        val intent = SettingsActivity.createIntentSabytie(p.padz, p.dat, p.tim)
                                         val londs3 = p.paznic / 100000L
                                         val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, flags)
                                         am.cancel(pIntent)
@@ -125,7 +125,7 @@ class MenuCaliandar : BaseFragment() {
                     } else {
                         for (p in del) {
                             if (p.sec != "-1") {
-                                val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                                val intent = SettingsActivity.createIntentSabytie(p.padz, p.dat, p.tim)
                                 val londs3 = p.paznic / 100000L
                                 val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, flags)
                                 am.cancel(pIntent)
@@ -157,22 +157,6 @@ class MenuCaliandar : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         page = arguments?.getInt("page") ?: 0
-    }
-
-    private fun createIntent(action: String, extra: String, data: String, time: String): Intent {
-        var i = Intent()
-        activity?.let {
-            i = Intent(it, ReceiverBroad::class.java)
-            i.action = action
-            i.putExtra("sabytieSet", true)
-            i.putExtra("extra", extra)
-            val dateN = data.split(".")
-            val timeN = time.split(":")
-            val g = GregorianCalendar(dateN[2].toInt(), dateN[1].toInt() - 1, dateN[0].toInt(), 0, 0, 0)
-            i.putExtra("dataString", dateN[0] + dateN[1] + timeN[0] + timeN[1])
-            i.putExtra("year", g[Calendar.YEAR])
-        }
-        return i
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {

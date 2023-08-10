@@ -54,15 +54,17 @@ class DialogSabytieTime : DialogFragment() {
             binding.title.text = getString(R.string.set_time_sabytie)
             binding.content.setIs24HourView(true)
             val settime = arguments?.getString("time")?.split(":")
-            val gc = GregorianCalendar(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH], settime?.get(0)?.toInt()?: 0, settime?.get(1)?.toInt()?: 0, 0)
+            c.set(Calendar.HOUR_OF_DAY, settime?.get(0)?.toInt() ?: 0)
+            c.set(Calendar.MINUTE, settime?.get(1)?.toInt() ?: 0)
+            c.set(Calendar.SECOND, 0)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                binding.content.hour = gc[Calendar.HOUR_OF_DAY]
-                binding.content.minute = gc[Calendar.MINUTE]
+                binding.content.hour = c[Calendar.HOUR_OF_DAY]
+                binding.content.minute = c[Calendar.MINUTE]
             } else {
-                binding.content.currentHour = gc[Calendar.HOUR_OF_DAY]
-                binding.content.currentMinute = gc[Calendar.MINUTE]
+                binding.content.currentHour = c[Calendar.HOUR_OF_DAY]
+                binding.content.currentMinute = c[Calendar.MINUTE]
             }
-            val nomerDialoga = arguments?.getInt("numarDialoga")?: 1
+            val nomerDialoga = arguments?.getInt("numarDialoga") ?: 1
             ad.setPositiveButton(resources.getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     dialogSabytieTimeListener?.sabytieTimePositive(nomerDialoga, binding.content.hour, binding.content.minute)

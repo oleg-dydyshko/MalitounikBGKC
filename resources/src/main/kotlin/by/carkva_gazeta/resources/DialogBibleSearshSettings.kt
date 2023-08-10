@@ -112,6 +112,9 @@ class DialogBibleSearshSettings : DialogFragment() {
             val zavet = arguments?.getInt("zavet") ?: 1
             val data = if (zavet == 3) arrayOf(getString(R.string.psalter))
             else resources.getStringArray(R.array.serche_bible)
+            if (zavet == 4) {
+                binding.spinner6.visibility = View.GONE
+            }
             val spinner = binding.spinner6
             val arrayAdapter = DialogBibleAdapter(it, data)
             spinner.adapter = arrayAdapter

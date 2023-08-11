@@ -80,8 +80,19 @@
         android:inputType="text"
         android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@id/barrier2"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonx2"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/buttonx2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:padding="5dp"
+        android:src="@drawable/cancel_black"
+        app:layout_constraintBottom_toBottomOf="@+id/editText2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editText2"
+        tools:ignore="ContentDescription" />
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -107,7 +118,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="editText2" />
+        app:constraint_referenced_ids="editText2,buttonx2" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/settings_grup"

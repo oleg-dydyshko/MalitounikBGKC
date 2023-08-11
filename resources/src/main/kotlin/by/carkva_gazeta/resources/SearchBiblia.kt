@@ -58,7 +58,7 @@ import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.DialogClearHistoryListener, DialogBibleSearshSettings.DiallogBibleSearshListiner {
+class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListener, DialogBibleSearshSettings.DiallogBibleSearshListiner {
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
     private lateinit var chin: SharedPreferences
@@ -241,7 +241,9 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
         binding = SearchBibliaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.filterGrup.visibility = View.VISIBLE
-        binding.buttonx2.setOnClickListener(this)
+        binding.buttonx2.setOnClickListener {
+            binding.editText2.setText("")
+        }
         DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
@@ -783,13 +785,6 @@ class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.Di
             invalidateOptionsMenu()
         }
         historyAdapter.notifyDataSetChanged()
-    }
-
-    override fun onClick(view: View?) {
-        val idSelect = view?.id ?: 0
-        if (idSelect == R.id.buttonx2) {
-            binding.editText2.setText("")
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

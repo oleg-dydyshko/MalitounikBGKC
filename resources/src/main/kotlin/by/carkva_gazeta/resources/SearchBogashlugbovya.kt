@@ -55,7 +55,7 @@ import org.jsoup.Jsoup
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class SearchBogashlugbovya : BaseActivity(), View.OnClickListener, DialogClearHishory.DialogClearHistoryListener, DialogBibleSearshSettings.DiallogBibleSearshListiner {
+class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHistoryListener, DialogBibleSearshSettings.DiallogBibleSearshListiner {
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
     private lateinit var chin: SharedPreferences
@@ -90,10 +90,14 @@ class SearchBogashlugbovya : BaseActivity(), View.OnClickListener, DialogClearHi
         binding = SearchBogaslugBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.filterGrup.visibility = View.VISIBLE
+        binding.buttonx2.setOnClickListener {
+            binding.editText2.setText("")
+        }
         DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            binding.buttonx2.setImageResource(by.carkva_gazeta.malitounik.R.drawable.cancel)
         }
         if (chin.getString("history_bible_bogaslug", "") != "") {
             val gson = Gson()
@@ -389,13 +393,6 @@ class SearchBogashlugbovya : BaseActivity(), View.OnClickListener, DialogClearHi
             invalidateOptionsMenu()
         }
         historyAdapter.notifyDataSetChanged()
-    }
-
-    override fun onClick(view: View?) {
-        val idSelect = view?.id ?: 0
-        if (idSelect == R.id.buttonx2) {
-            binding.editText2.setText("")
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

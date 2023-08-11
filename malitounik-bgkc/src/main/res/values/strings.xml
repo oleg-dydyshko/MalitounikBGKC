@@ -289,6 +289,7 @@
     <string name="poshuk_nadsan">Пошук па перакладу А. Надсана</string>
     <string name="niama">Няма</string>
     <string name="searche_text">Пошук у тэксьце</string>
+    <string name="searche_on_text">Пошук па тэкстах</string>
     <string name="sort_alf">Сартаваць паводле алфавіту</string>
     <string name="sort_time">Сартаваць паводле часу</string>
     <string name="title_biblijateka">Бібліятэка Царквы</string>

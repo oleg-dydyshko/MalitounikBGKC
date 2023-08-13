@@ -29,8 +29,8 @@ class MenuMalitvy : BaseListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (MainActivity.checkmoduleResources()) {
-            activity?.let {
+        (activity as? BaseActivity)?.let {
+            if (it.checkmoduleResources()) {
                 when (position) {
                     0 -> {
                         val intent = Intent()
@@ -39,6 +39,7 @@ class MenuMalitvy : BaseListFragment() {
                         intent.putExtra("resurs", "malitvy_ran")
                         startActivity(intent)
                     }
+
                     1 -> {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
@@ -46,6 +47,7 @@ class MenuMalitvy : BaseListFragment() {
                         intent.putExtra("resurs", "malitvy_viaczernija")
                         startActivity(intent)
                     }
+
                     2 -> {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.MALITVYPRYNAGODNYIA)
@@ -53,10 +55,10 @@ class MenuMalitvy : BaseListFragment() {
                         return
                     }
                 }
+            } else {
+                val dadatak = DialogInstallDadatak()
+                dadatak.show(childFragmentManager, "dadatak")
             }
-        } else {
-            val dadatak = DialogInstallDadatak()
-            dadatak.show(childFragmentManager, "dadatak")
         }
     }
 }

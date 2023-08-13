@@ -28,9 +28,9 @@ class MenuBibleSemuxa : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.let { activity ->
+        (activity as? BaseActivity)?.let { activity ->
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
+            val dzenNoch = activity.getBaseDzenNoch()
             binding.myBible.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
@@ -75,7 +75,7 @@ class MenuBibleSemuxa : BaseFragment() {
                     val dialogBibleTimeError = DialogBibleTimeError()
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
-                    if (MainActivity.checkmoduleResources()) {
+                    if (activity.checkmoduleResources()) {
                         val intent = if (k.getBoolean("bible_time_semuxa_zavet", true)) Intent(activity, NovyZapavietSemuxaList::class.java)
                         else Intent(activity, StaryZapavietSemuxaList::class.java)
                         intent.putExtra("kniga", k.getInt("bible_time_semuxa_kniga", 0))
@@ -94,7 +94,7 @@ class MenuBibleSemuxa : BaseFragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources()) {
+                if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BIBLEZAKLADKI)
                     intent.putExtra("semuxa", 1)
@@ -109,7 +109,7 @@ class MenuBibleSemuxa : BaseFragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources()) {
+                if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BIBLENATATKI)
                     intent.putExtra("semuxa", 1)
@@ -124,7 +124,7 @@ class MenuBibleSemuxa : BaseFragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources()) {
+                if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
                     intent.putExtra("zavet", 1)

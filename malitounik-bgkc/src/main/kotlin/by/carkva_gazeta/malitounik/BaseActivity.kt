@@ -17,11 +17,18 @@ import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
+import com.google.android.play.core.splitinstall.SplitInstallException
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.google.android.play.core.splitinstall.SplitInstallRequest
+import com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener
+import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
+import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.roundToLong
 
 abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProvider {
 
@@ -35,6 +42,18 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     private var startTimeJob3: Job? = null
     private var startTimeJob4: Job? = null
     private var startTimeDelay: Long = 5000
+    private var downloadDynamicModuleListener: DownloadDynamicModuleListener? = null
+
+    interface DownloadDynamicModuleListener {
+        fun dynamicModulePending(bytesDownload: String)
+        fun dynamicModuleDownload()
+        fun dynamicModuleDownloading(bytesDownload: String, totalBytesToDownload: Int, bytesDownloaded: Int)
+        fun dynamicModuleInstalled()
+    }
+
+    fun setDownloadDynamicModuleListener(downloadDynamicModuleListener: DownloadDynamicModuleListener) {
+        this.downloadDynamicModuleListener = downloadDynamicModuleListener
+    }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
     }
@@ -198,7 +217,104 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         mySensorManager.unregisterListener(this, lightSensor)
     }
 
+    fun checkmodulesAdmin(): Boolean {
+        val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
+        for (mod in muduls) {
+            if (mod == "admin") {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun checkmodulesBiblijateka(): Boolean {
+        val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
+        for (mod in muduls) {
+            if (mod == "biblijateka") {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun checkmoduleResources(): Boolean {
+        val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
+        for (mod in muduls) {
+            if (mod == "resources") {
+                return true
+            }
+        }
+        return false
+    }
+    
+    fun downloadDynamicModule(moduleName: String) {
+        val splitInstallManager = SplitInstallManagerFactory.create(this)
+
+        val request = SplitInstallRequest.newBuilder().addModule(moduleName).build()
+
+        val listener = SplitInstallStateUpdatedListener {
+            val state = it
+            if (state.status() == SplitInstallSessionStatus.FAILED) {
+                downloadDynamicModule(moduleName)
+                return@SplitInstallStateUpdatedListener
+            }
+            if (state.status() == SplitInstallSessionStatus.REQUIRES_USER_CONFIRMATION) {
+                splitInstallManager.startConfirmationDialogForResult(state, this, 150)
+            }
+            if (state.sessionId() == sessionId) {
+                val bytesDownload = (state.bytesDownloaded() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
+                val total = (state.totalBytesToDownload() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
+                when (state.status()) {
+                    SplitInstallSessionStatus.PENDING -> {
+                        downloadDynamicModuleListener?.dynamicModulePending(bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб"))
+                    }
+
+                    SplitInstallSessionStatus.DOWNLOADED -> {
+                        downloadDynamicModuleListener?.dynamicModuleDownload()
+                    }
+
+                    SplitInstallSessionStatus.DOWNLOADING -> {
+                        downloadDynamicModuleListener?.dynamicModuleDownloading(bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб"), state.totalBytesToDownload().toInt(), state.bytesDownloaded().toInt())
+                    }
+
+                    SplitInstallSessionStatus.INSTALLED -> {
+                        downloadDynamicModuleListener?.dynamicModuleInstalled()
+                    }
+
+                    SplitInstallSessionStatus.CANCELED -> {
+                    }
+
+                    SplitInstallSessionStatus.CANCELING -> {
+                    }
+
+                    SplitInstallSessionStatus.FAILED -> {
+                    }
+
+                    SplitInstallSessionStatus.INSTALLING -> {
+                    }
+
+                    SplitInstallSessionStatus.REQUIRES_USER_CONFIRMATION -> {
+                    }
+
+                    SplitInstallSessionStatus.UNKNOWN -> {
+                    }
+                }
+            }
+        }
+
+        splitInstallManager.registerListener(listener)
+
+        splitInstallManager.startInstall(request).addOnFailureListener {
+            if ((it as SplitInstallException).errorCode == SplitInstallErrorCode.NETWORK_ERROR) {
+                MainActivity.toastView(this, getString(R.string.no_internet))
+            }
+        }.addOnSuccessListener {
+            sessionId = it
+        }
+    }
+
     companion object {
+        private var sessionId = 0
         private var startAutoDzenNoch = false
     }
 }

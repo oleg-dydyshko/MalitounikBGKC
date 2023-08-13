@@ -16,7 +16,11 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
 import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class NovyZapavietSinaidalList : BaseActivity() {
     private val dzenNoch get() = getBaseDzenNoch()
@@ -174,7 +178,7 @@ class NovyZapavietSinaidalList : BaseActivity() {
                 return@setOnChildClickListener true
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources()) {
+            if (checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.NOVYZAPAVIETSINAIDAL)
                 intent.putExtra("kniga", groupPosition)

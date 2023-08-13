@@ -11,7 +11,11 @@ import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SubMenuBogashlugbovyaVialikiPost : BaseActivity() {
     private val data get() = resources.getStringArray(R.array.sub_bogaslugbovuia_vialiki_post)
@@ -71,7 +75,7 @@ class SubMenuBogashlugbovyaVialikiPost : BaseActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources()) {
+            if (checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
                 when (position) {

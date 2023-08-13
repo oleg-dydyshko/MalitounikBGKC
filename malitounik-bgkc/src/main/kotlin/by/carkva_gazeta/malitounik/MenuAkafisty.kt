@@ -30,8 +30,8 @@ class MenuAkafisty : BaseListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (MainActivity.checkmoduleResources()) {
-            activity?.let {
+        (activity as? BaseActivity)?.let {
+            if (it.checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                 when (position) {
@@ -39,48 +39,57 @@ class MenuAkafisty : BaseListFragment() {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "akafist0")
                     }
+
                     1 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "akafist1")
                     }
+
                     2 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "akafist2")
                     }
+
                     3 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "akafist3")
                     }
+
                     4 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "akafist4")
                     }
+
                     5 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "akafist5")
                     }
+
                     6 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "akafist6")
                     }
+
                     7 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "akafist7")
                     }
+
                     8 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "akafist8")
                     }
+
                     9 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "akafist_rosickim_muczanikam")
                     }
                 }
                 startActivity(intent)
+            } else {
+                val dadatak = DialogInstallDadatak()
+                dadatak.show(childFragmentManager, "dadatak")
             }
-        } else {
-            val dadatak = DialogInstallDadatak()
-            dadatak.show(childFragmentManager, "dadatak")
         }
     }
 }

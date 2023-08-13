@@ -11,7 +11,11 @@ import android.widget.AdapterView.OnItemClickListener
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MalitvyPasliaPrychascia : BaseActivity() {
     private val data get() = resources.getStringArray(R.array.malitvy_pasli_prychastia)
@@ -63,7 +67,7 @@ class MalitvyPasliaPrychascia : BaseActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources()) {
+            if (checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASLIAPRYCHASCIA)
                 intent.putExtra("paslia_prychascia", position)

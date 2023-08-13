@@ -253,7 +253,7 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
             return true
         }
         if (id == R.id.action_carkva) {
-            if (MainActivity.checkmodulesAdmin()) {
+            if (checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
                 val idres = R.raw.citata

@@ -30,8 +30,8 @@ class MenuRuzanec : BaseListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (MainActivity.checkmoduleResources()) {
-            activity?.let {
+        (activity as? BaseActivity)?.let {
+            if (it.checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                 when (position) {
@@ -39,36 +39,42 @@ class MenuRuzanec : BaseListFragment() {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "ruzanec0")
                     }
+
                     1 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "ruzanec2")
                     }
+
                     2 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "ruzanec1")
                     }
+
                     3 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "ruzanec3")
                     }
+
                     4 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "ruzanec4")
                     }
+
                     5 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "ruzanec5")
                     }
+
                     6 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "ruzanec6")
                     }
                 }
                 startActivity(intent)
+            } else {
+                val dadatak = DialogInstallDadatak()
+                dadatak.show(childFragmentManager, "dadatak")
             }
-        } else {
-            val dadatak = DialogInstallDadatak()
-            dadatak.show(childFragmentManager, "dadatak")
         }
     }
 }

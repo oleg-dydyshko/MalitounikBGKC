@@ -195,7 +195,7 @@ class MineiaMesiachnaia : BaseActivity() {
                     val dialog = DialogMineiaList.getInstance(groups[groupPosition][childPosition].day, groups[groupPosition][childPosition].titleResource, resourceUtran, resourceLiturgia, resourceViachernia, resourceAbednica, resourceVialikiaGadziny, resourceViacherniaZLiturgia, false)
                     dialog.show(supportFragmentManager, "dialogMineiaList")
                 } else {
-                    if (MainActivity.checkmoduleResources()) {
+                    if (checkmoduleResources()) {
                         val intent = Intent()
                         intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
                         if (resourceUtran != "0") intent.putExtra("resurs", resourceUtran)

@@ -251,8 +251,8 @@ class MenuNatatki : BaseFragment() {
             return true
         }
         if (id == R.id.action_carkva) {
-            activity?.let {
-                if (MainActivity.checkmodulesAdmin()) {
+            (activity as? BaseActivity)?.let {
+                if (it.checkmodulesAdmin()) {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.PASOCHNICALIST)
                     startActivity(intent)

@@ -564,7 +564,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         }
         prefEditor.apply()
         if (id == R.id.action_carkva) {
-            if (MainActivity.checkmodulesAdmin()) {
+            if (checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
                 val inputStream = resources.openRawResource(resursMap[resurs] ?: R.raw.pesny_prasl_0)

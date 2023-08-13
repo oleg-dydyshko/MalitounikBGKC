@@ -17,10 +17,15 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.PiarlinyBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.File
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 
 class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener {
@@ -215,7 +220,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             return true
         }
         if (id == R.id.action_carkva) {
-            if (MainActivity.checkmodulesAdmin()) {
+            if (checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.ADMINPIARLINY)
                 val calendar = GregorianCalendar(2020, mun - 1, day)

@@ -10,7 +10,11 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.ContentPsalterBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class NadsanContent : BaseActivity() {
     private var dzenNoch = false
@@ -38,7 +42,7 @@ class NadsanContent : BaseActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources()) {
+            if (checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.NADSANCONTENTACTIVITY)
                 intent.putExtra("glava", position)

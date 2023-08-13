@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
@@ -30,6 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import by.carkva_gazeta.malitounik.databinding.BiblijatekaBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibliotekaBinding
+import com.google.android.play.core.splitinstall.SplitInstallHelper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -44,7 +46,7 @@ import java.io.InputStream
 import java.util.Calendar
 
 
-class MenuBiblijateka : BaseFragment() {
+class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListener {
 
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
@@ -244,7 +246,7 @@ class MenuBiblijateka : BaseFragment() {
             if (file.exists()) {
                 filePath = file.path
                 fileName = title
-                loadComplete(fileName, filePath)
+                loadComplete()
             } else {
                 if (MainActivity.isNetworkAvailable(true)) {
                     val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition)
@@ -274,7 +276,7 @@ class MenuBiblijateka : BaseFragment() {
             if (!error) {
                 adapter.notifyDataSetChanged()
                 binding?.progressBar2?.visibility = View.GONE
-                loadComplete(fileName, filePath)
+                loadComplete()
             } else {
                 DialogNoInternet().show(childFragmentManager, "no_internet")
             }
@@ -300,7 +302,7 @@ class MenuBiblijateka : BaseFragment() {
         setRubrika(MainActivity.NIADAUNIA)
         filePath = file.absolutePath
         fileName = file.name
-        loadComplete(fileName, filePath)
+        loadComplete()
     }
 
     override fun onDestroyView() {
@@ -334,6 +336,8 @@ class MenuBiblijateka : BaseFragment() {
                 if (dzenNoch) {
                     binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
                     binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary_black)
+                    binding.linear2.setBackgroundResource(R.color.colorbackground_material_dark)
+                    binding.moduleDownload.setBackgroundResource(R.color.colorPrimary_black)
                 } else {
                     binding.listView.background = ContextCompat.getDrawable(it, R.color.colorDivider)
                     binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default_bibliateka)
@@ -373,7 +377,7 @@ class MenuBiblijateka : BaseFragment() {
                         if (file.exists()) {
                             filePath = file.absolutePath
                             fileName = file.name
-                            loadComplete(fileName, filePath)
+                            loadComplete()
                         } else {
                             arrayList.removeAt(position)
                             naidaunia.clear()
@@ -391,7 +395,7 @@ class MenuBiblijateka : BaseFragment() {
                         if (file.exists()) {
                             filePath = file.absolutePath
                             fileName = file.name
-                            loadComplete(fileName, filePath)
+                            loadComplete()
                         } else {
                             var opisanie = arrayList[position][1]
                             val t1 = opisanie.indexOf("</span><br>")
@@ -444,28 +448,62 @@ class MenuBiblijateka : BaseFragment() {
                     MainActivity.SETFILE -> setRubrika(MainActivity.SETFILE)
                 }
                 if (fileName != "" && filePath != "") {
-                    loadComplete(fileName, filePath)
+                    loadComplete()
                 }
                 setTitleBibliateka(idSelect)
             }
         }
     }
 
-    private fun loadComplete(fileName: String, filePath: String) {
-        activity?.let {
-            if (MainActivity.checkmoduleResources()) {
-                if (MainActivity.checkmodulesBiblijateka()) {
-                    val intent = Intent()
-                    intent.setClassName(it, MainActivity.BIBLIJATEKAPDF)
-                    intent.putExtra("filePath", filePath)
-                    intent.putExtra("fileName", fileName)
-                    mActivityResultPdf.launch(intent)
+    private fun loadComplete() {
+        (activity as? BaseActivity)?.let {
+            if (it.checkmoduleResources()) {
+                if (it.checkmodulesBiblijateka()) {
+                    dynamicModuleInstalled()
                 } else {
-                    MainActivity.downloadDynamicModule(it)
+                    it.setDownloadDynamicModuleListener(this)
+                    it.downloadDynamicModule("biblijateka")
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
                 dadatak.show(childFragmentManager, "dadatak")
+            }
+        }
+    }
+
+    override fun dynamicModulePending(bytesDownload: String) {
+        binding?.let {
+            it.linear.visibility = View.VISIBLE
+            it.textProgress.text = bytesDownload
+        }
+    }
+
+    override fun dynamicModuleDownload() {
+        binding?.let {
+            it.linear.visibility = View.GONE
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
+
+    override fun dynamicModuleDownloading(bytesDownload: String, totalBytesToDownload: Int, bytesDownloaded: Int) {
+        binding?.let {
+            it.linear.visibility = View.VISIBLE
+            it.progressBarModule.max = totalBytesToDownload
+            it.progressBarModule.progress = bytesDownloaded
+            it.textProgress.text = bytesDownload
+        }
+    }
+
+    override fun dynamicModuleInstalled() {
+        activity?.let { activity ->
+            binding?.let {
+                it.linear.visibility = View.GONE
+                SplitInstallHelper.updateAppInfo(activity)
+                val intent = Intent()
+                intent.setClassName(activity, MainActivity.BIBLIJATEKAPDF)
+                intent.putExtra("filePath", filePath)
+                intent.putExtra("fileName", fileName)
+                mActivityResultPdf.launch(intent)
             }
         }
     }

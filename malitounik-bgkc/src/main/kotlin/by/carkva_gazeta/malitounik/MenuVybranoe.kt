@@ -361,7 +361,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                     intent.putExtra("chekVybranoe", true)
                     menuVybranoeLauncher.launch(intent)
                 } else {
-                    if (MainActivity.checkmoduleResources()) {
+                    if (activity.checkmoduleResources()) {
                         when (itemList[bindingAdapterPosition].resurs) {
                             "1" -> {
                                 DialogVybranoeBibleList.biblia = "1"

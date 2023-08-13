@@ -18,7 +18,11 @@ import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemTonBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class TonNiadzelny : BaseActivity() {
     private var mLastClickTime: Long = 0
@@ -73,7 +77,7 @@ class TonNiadzelny : BaseActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources()) {
+            if (checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
                 intent.putExtra("resurs", "ton${position + 1}")

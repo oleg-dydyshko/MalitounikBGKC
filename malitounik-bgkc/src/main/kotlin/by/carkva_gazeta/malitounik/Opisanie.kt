@@ -558,7 +558,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             return true
         }
         if (id == R.id.action_carkva) {
-            if (MainActivity.checkmodulesAdmin()) {
+            if (checkmodulesAdmin()) {
                 val intent = Intent()
                 if (svity) {
                     intent.setClassName(this, MainActivity.ADMINSVIATY)

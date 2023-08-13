@@ -77,10 +77,10 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val id = v?.id ?: 0
-        if (id == R.id.saeche) {
-            activity?.let { activity ->
-                if (MainActivity.checkmoduleResources()) {
+        (activity as? BaseActivity)?.let { activity ->
+            val id = v?.id ?: 0
+            if (id == R.id.saeche) {
+                if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
                     intent.putExtra("zavet", 3)
@@ -90,139 +90,129 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                     dadatak.show(childFragmentManager, "dadatak")
                 }
             }
-        }
-        if (id == R.id.myBible) {
-            val arrayListVybranoe = ArrayList<VybranoeBibliaData>()
-            val bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
-            if (bibleVybranoe != "") {
-                val gson = Gson()
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
-                arrayListVybranoe.addAll(gson.fromJson(bibleVybranoe, type))
+            if (id == R.id.myBible) {
+                val arrayListVybranoe = ArrayList<VybranoeBibliaData>()
+                val bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
+                if (bibleVybranoe != "") {
+                    val gson = Gson()
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
+                    arrayListVybranoe.addAll(gson.fromJson(bibleVybranoe, type))
+                }
+                if (bibleVybranoe == "" || arrayListVybranoe.isEmpty()) {
+                    val dialogBibleVybranoeError = DialogBibleVybranoeError()
+                    dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
+                } else {
+                    DialogVybranoeBibleList.biblia = "3"
+                    val dialogVybranoeList = DialogVybranoeBibleList()
+                    dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                }
             }
-            if (bibleVybranoe == "" || arrayListVybranoe.isEmpty()) {
-                val dialogBibleVybranoeError = DialogBibleVybranoeError()
-                dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
-            } else {
-                DialogVybranoeBibleList.biblia = "3"
-                val dialogVybranoeList = DialogVybranoeBibleList()
-                dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+            if (id == R.id.psalter) {
+                startActivity(Intent(activity, NadsanContent::class.java))
             }
-        }
-        if (id == R.id.psalter) {
-            startActivity(Intent(activity, NadsanContent::class.java))
-        }
-        if (id == R.id.prodolzych) {
-            val bibleTime = k.getString("psalter_time_psalter_nadsan", "") ?: ""
-            if (bibleTime == "") {
-                val dialogBibleTimeError = DialogBibleTimeError()
-                dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
-            } else {
-                val gson = Gson()
-                val type = TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(Integer::class.java).type).type
-                val set = gson.fromJson<ArrayMap<String, Int>>(bibleTime, type)
-                if (MainActivity.checkmoduleResources()) {
-                    val intent = Intent(activity, NadsanContent::class.java)
-                    intent.putExtra("glava", set["glava"])
-                    intent.putExtra("stix", set["stix"])
-                    intent.putExtra("prodolzyt", true)
+            if (id == R.id.prodolzych) {
+                val bibleTime = k.getString("psalter_time_psalter_nadsan", "") ?: ""
+                if (bibleTime == "") {
+                    val dialogBibleTimeError = DialogBibleTimeError()
+                    dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
+                } else {
+                    val gson = Gson()
+                    val type = TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(Integer::class.java).type).type
+                    val set = gson.fromJson<ArrayMap<String, Int>>(bibleTime, type)
+                    if (activity.checkmoduleResources()) {
+                        val intent = Intent(activity, NadsanContent::class.java)
+                        intent.putExtra("glava", set["glava"])
+                        intent.putExtra("stix", set["stix"])
+                        intent.putExtra("prodolzyt", true)
+                        startActivity(intent)
+                    } else {
+                        val dadatak = DialogInstallDadatak()
+                        dadatak.show(childFragmentManager, "dadatak")
+                    }
+                }
+            }
+            if (id == R.id.pravila_chtenia) {
+                val pravila = DialogNadsanPravila()
+                pravila.show(childFragmentManager, "pravila")
+            }
+            if (id == R.id.malitva_pered) {
+                if (activity.checkmoduleResources()) {
+                    val intent = Intent()
+                    intent.setClassName(activity, MainActivity.NADSANMALITVYIPESNI)
+                    intent.putExtra("malitva", 0)
+                    intent.putExtra("malitva_title", binding.malitvaPered.text.toString())
                     startActivity(intent)
                 } else {
                     val dadatak = DialogInstallDadatak()
                     dadatak.show(childFragmentManager, "dadatak")
                 }
             }
-        }
-        if (id == R.id.pravila_chtenia) {
-            val pravila = DialogNadsanPravila()
-            pravila.show(childFragmentManager, "pravila")
-        }
-        if (id == R.id.malitva_pered) {
-            if (MainActivity.checkmoduleResources()) {
-                activity?.let {
+            if (id == R.id.malitva_posle) {
+                if (activity.checkmoduleResources()) {
                     val intent = Intent()
-                    intent.setClassName(it, MainActivity.NADSANMALITVYIPESNI)
-                    intent.putExtra("malitva", 0)
-                    intent.putExtra("malitva_title", binding.malitvaPered.text.toString())
-                    startActivity(intent)
-                }
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
-            }
-        }
-        if (id == R.id.malitva_posle) {
-            if (MainActivity.checkmoduleResources()) {
-                activity?.let {
-                    val intent = Intent()
-                    intent.setClassName(it, MainActivity.NADSANMALITVYIPESNI)
+                    intent.setClassName(activity, MainActivity.NADSANMALITVYIPESNI)
                     intent.putExtra("malitva", 1)
                     intent.putExtra("malitva_title", binding.malitvaPosle.text.toString())
                     startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
             }
-        }
-        if (id == R.id.pesni) {
-            if (MainActivity.checkmoduleResources()) {
-                activity?.let {
+            if (id == R.id.pesni) {
+                if (activity.checkmoduleResources()) {
                     val intent = Intent()
-                    intent.setClassName(it, MainActivity.NADSANMALITVYIPESNILIST)
+                    intent.setClassName(activity, MainActivity.NADSANMALITVYIPESNILIST)
                     intent.putExtra("malitva", 2)
                     startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
             }
-        }
-        if (id == R.id.pravila) {
-            if (MainActivity.checkmoduleResources()) {
-                activity?.let {
+            if (id == R.id.pravila) {
+                if (activity.checkmoduleResources()) {
                     val intent = Intent()
-                    intent.setClassName(it, MainActivity.PSALTERNADSANA)
+                    intent.setClassName(activity, MainActivity.PSALTERNADSANA)
                     startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
             }
-        }
-        val glava = when (id) {
-            R.id.textView1 -> 1
-            R.id.textView2 -> 2
-            R.id.textView3 -> 3
-            R.id.textView4 -> 4
-            R.id.textView5 -> 5
-            R.id.textView6 -> 6
-            R.id.textView7 -> 7
-            R.id.textView8 -> 8
-            R.id.textView9 -> 9
-            R.id.textView10 -> 10
-            R.id.textView11 -> 11
-            R.id.textView12 -> 12
-            R.id.textView13 -> 13
-            R.id.textView14 -> 14
-            R.id.textView15 -> 15
-            R.id.textView16 -> 16
-            R.id.textView17 -> 17
-            R.id.textView18 -> 18
-            R.id.textView19 -> 19
-            R.id.textView20 -> 20
-            else -> -1
-        }
-        if (glava != -1) {
-            if (MainActivity.checkmoduleResources()) {
-                activity?.let {
+            val glava = when (id) {
+                R.id.textView1 -> 1
+                R.id.textView2 -> 2
+                R.id.textView3 -> 3
+                R.id.textView4 -> 4
+                R.id.textView5 -> 5
+                R.id.textView6 -> 6
+                R.id.textView7 -> 7
+                R.id.textView8 -> 8
+                R.id.textView9 -> 9
+                R.id.textView10 -> 10
+                R.id.textView11 -> 11
+                R.id.textView12 -> 12
+                R.id.textView13 -> 13
+                R.id.textView14 -> 14
+                R.id.textView15 -> 15
+                R.id.textView16 -> 16
+                R.id.textView17 -> 17
+                R.id.textView18 -> 18
+                R.id.textView19 -> 19
+                R.id.textView20 -> 20
+                else -> -1
+            }
+            if (glava != -1) {
+                if (activity.checkmoduleResources()) {
                     val intent = Intent()
-                    intent.setClassName(it, MainActivity.NADSANCONTENTACTIVITY)
+                    intent.setClassName(activity, MainActivity.NADSANCONTENTACTIVITY)
                     intent.putExtra("kafizma", glava)
                     startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
             }
         }
     }

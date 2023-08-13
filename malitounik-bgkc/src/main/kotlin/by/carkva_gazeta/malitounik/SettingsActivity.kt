@@ -5,6 +5,7 @@ import android.app.*
 import android.appwidget.AppWidgetManager
 import android.content.*
 import android.content.SharedPreferences.Editor
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
@@ -29,12 +30,13 @@ import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.SettingsActivityBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
+import com.google.android.play.core.splitinstall.SplitInstallHelper
 import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
 
 
-class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
+class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener, BaseActivity.DownloadDynamicModuleListener {
     private lateinit var k: SharedPreferences
     private lateinit var prefEditor: Editor
     private val dzenNoch get() = getBaseDzenNoch()
@@ -820,6 +822,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.line2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.linear2.setBackgroundResource(R.color.colorbackground_material_dark)
+            binding.moduleDownload.setBackgroundResource(R.color.colorPrimary_black)
         }
         binding.textView16.setOnClickListener {
             if (SystemClock.elapsedRealtime() - adminClickTime < 2000) {
@@ -852,12 +856,11 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.checkBox8.visibility = View.VISIBLE
         }
         binding.admin.setOnClickListener {
-            if (MainActivity.checkmodulesAdmin()) {
-                val intent = Intent()
-                intent.setClassName(this, MainActivity.ADMINMAIN)
-                startActivity(intent)
+            if (checkmodulesAdmin()) {
+                dynamicModuleInstalled()
             } else {
-                MainActivity.downloadDynamicModule(this, "admin")
+                setDownloadDynamicModuleListener(this)
+                downloadDynamicModule("admin")
             }
         }
         if (dzenNoch) binding.prav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -1258,6 +1261,31 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         setTollbarTheme()
     }
 
+    override fun dynamicModulePending(bytesDownload: String) {
+        binding.linear.visibility = View.VISIBLE
+        binding.textProgress.text = bytesDownload
+    }
+
+    override fun dynamicModuleDownload() {
+        binding.linear.visibility = View.GONE
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+    }
+
+    override fun dynamicModuleDownloading(bytesDownload: String, totalBytesToDownload: Int, bytesDownloaded: Int) {
+        binding.linear.visibility = View.VISIBLE
+        binding.progressBarModule.max = totalBytesToDownload
+        binding.progressBarModule.progress = bytesDownloaded
+        binding.textProgress.text = bytesDownload
+    }
+
+    override fun dynamicModuleInstalled() {
+        binding.linear.visibility = View.GONE
+        SplitInstallHelper.updateAppInfo(this)
+        val intent = Intent()
+        intent.setClassName(this, MainActivity.ADMINMAIN)
+        startActivity(intent)
+    }
+
     override fun onDialogHelpNotificationApi33(notification: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             prefEditor.putInt("notification", notification)
@@ -1417,8 +1445,9 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         prefEditor.apply()
         binding.admin.visibility = View.VISIBLE
         binding.checkBox8.visibility = View.VISIBLE
-        if (!MainActivity.checkmodulesAdmin()) {
-            MainActivity.downloadDynamicModule(this, "admin")
+        if (!checkmodulesAdmin()) {
+            setDownloadDynamicModuleListener(this)
+            downloadDynamicModule("admin")
         }
     }
 

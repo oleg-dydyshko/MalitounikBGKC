@@ -36,8 +36,8 @@ class DialogMineiaList : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        activity?.let {
-            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
+        (activity as? BaseActivity)?.let {
+            val dzenNoch = it.getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlackVybranoe
             val builder = AlertDialog.Builder(it, style)
@@ -62,7 +62,7 @@ class DialogMineiaList : DialogFragment() {
             if (resourceVialikiaGadziny != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Вялікія гадзіны", resourceVialikiaGadziny))
             if (resourceAbednica != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Абедніца", resourceAbednica))
             binding.content.setOnItemClickListener { _, _, position, _ ->
-                if (MainActivity.checkmoduleResources()) {
+                if (it.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                     intent.putExtra("resurs", fileList[position].resource)

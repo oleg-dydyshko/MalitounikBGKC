@@ -18,7 +18,11 @@ import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MineiaAgulnaia : BaseActivity() {
     private val data = ArrayList<MenuListData>()
@@ -85,7 +89,7 @@ class MineiaAgulnaia : BaseActivity() {
                 val intent = Intent(this, TonNaKoznyDzen::class.java)
                 startActivity(intent)
             } else {
-                if (MainActivity.checkmoduleResources()) {
+                if (checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
                     intent.putExtra("title", data[position].title)

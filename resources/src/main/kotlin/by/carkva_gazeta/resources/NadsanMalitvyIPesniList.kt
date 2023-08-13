@@ -11,10 +11,17 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.DialogInstallDadatak
+import by.carkva_gazeta.malitounik.MenuListAdaprer
 import by.carkva_gazeta.malitounik.R
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class NadsanMalitvyIPesniList : BaseActivity() {
     private val data = ArrayList<String>()
@@ -69,7 +76,7 @@ class NadsanMalitvyIPesniList : BaseActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources()) {
+            if (checkmoduleResources()) {
                 val intent = Intent(this, NadsanMalitvyIPesni::class.java)
                 intent.putExtra("malitva", 2)
                 intent.putExtra("pesnia", position + 1)

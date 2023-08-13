@@ -458,7 +458,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                     startActivity(intent)
                 }
                 else -> {
-                    if (MainActivity.checkmoduleResources()) {
+                    if ((it as BaseActivity).checkmoduleResources()) {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                         var title = data[position].title

@@ -312,7 +312,7 @@ class DialogCalindarGrid : DialogFragment() {
                     }
                     return
                 }
-                if (!MainActivity.checkmoduleResources()) {
+                if ((activity as? BaseActivity)?.checkmoduleResources() == false) {
                     val dadatak = DialogInstallDadatak()
                     dadatak.show(childFragmentManager, "dadatak")
                     return

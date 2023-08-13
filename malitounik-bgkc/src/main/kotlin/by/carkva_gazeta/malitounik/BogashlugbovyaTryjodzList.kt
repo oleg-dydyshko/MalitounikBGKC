@@ -133,7 +133,7 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
                 return@setOnChildClickListener true
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources()) {
+            if (checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
                 intent.putExtra("title", data[groupPosition][childPosition].title)

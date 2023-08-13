@@ -166,8 +166,8 @@ class MenuCaliandar : BaseFragment() {
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_carkva) {
-            activity?.let {
-                if (MainActivity.checkmodulesAdmin()) {
+            (activity as? BaseActivity)?.let {
+                if (it.checkmodulesAdmin()) {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.ADMINSVIATYIA)
                     intent.putExtra("dayOfYear", getPositionCaliandar(binding.pager.currentItem)[24].toInt())

@@ -146,18 +146,22 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                         if (dzenNoch) ContextCompat.getDrawable(it, R.drawable.znaki_krest_black)
                         else ContextCompat.getDrawable(it, R.drawable.znaki_krest)
                     }
+
                     3 -> {
                         if (dzenNoch) ContextCompat.getDrawable(it, R.drawable.znaki_krest_v_polukruge_black)
                         else ContextCompat.getDrawable(it, R.drawable.znaki_krest_v_polukruge)
                     }
+
                     4 -> {
                         if (dzenNoch) ContextCompat.getDrawable(it, R.drawable.znaki_ttk_black_black)
                         else ContextCompat.getDrawable(it, R.drawable.znaki_ttk)
                     }
+
                     5 -> {
                         if (dzenNoch) ContextCompat.getDrawable(it, R.drawable.znaki_ttk_whate)
                         else ContextCompat.getDrawable(it, R.drawable.znaki_ttk_black)
                     }
+
                     else -> null
                 }
                 var dataSviatyia = MenuCaliandar.getPositionCaliandar(position)[4]
@@ -227,6 +231,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                         binding.textPost.text = resources.getString(R.string.No_post)
                     }
                 }
+
                 2 -> {
                     binding.chytanne.setBackgroundResource(R.drawable.selector_post)
                     binding.textChytanne.setBackgroundResource(R.drawable.selector_post)
@@ -253,6 +258,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                         }
                     }
                 }
+
                 3 -> {
                     binding.textDenNedeli.setBackgroundResource(R.drawable.selector_strogi_post)
                     binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -282,6 +288,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     if (dzenNoch) binding.PostFish.setImageResource(R.drawable.fishe_red_black)
                     else binding.PostFish.setImageResource(R.drawable.fishe_red)
                 }
+
                 else -> {
                     binding.textDenNedeli.setBackgroundResource(R.color.colorDivider)
                     binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
@@ -413,9 +420,9 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        when (v?.id ?: 0) {
-            R.id.textTon -> {
-                activity?.let {
+        (activity as? BaseActivity)?.let {
+            when (v?.id ?: 0) {
+                R.id.textTon -> {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                     val ton = MenuCaliandar.getPositionCaliandar(position)[20].toInt()
@@ -424,122 +431,121 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     intent.putExtra("title", "Тон $ton")
                     startActivity(intent)
                 }
-            }
-            R.id.kniga -> {
-                val colorDialog = if (MenuCaliandar.getPositionCaliandar(position)[5].contains("1") || MenuCaliandar.getPositionCaliandar(position)[5].contains("2") || MenuCaliandar.getPositionCaliandar(position)[5].contains("3")) {
-                    4
-                } else {
-                    MenuCaliandar.getPositionCaliandar(position)[7].toInt()
+
+                R.id.kniga -> {
+                    val colorDialog = if (MenuCaliandar.getPositionCaliandar(position)[5].contains("1") || MenuCaliandar.getPositionCaliandar(position)[5].contains("2") || MenuCaliandar.getPositionCaliandar(position)[5].contains("3")) {
+                        4
+                    } else {
+                        MenuCaliandar.getPositionCaliandar(position)[7].toInt()
+                    }
+                    val svity = MenuCaliandar.getPositionCaliandar(position)[6]
+                    var daysv = MenuCaliandar.getPositionCaliandar(position)[1].toInt()
+                    var munsv = MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1
+                    if (svity.contains("уваход у ерусалім", true)) {
+                        daysv = -1
+                        munsv = 0
+                    }
+                    if (svity.contains("уваскрасеньне", true)) {
+                        daysv = -1
+                        munsv = 1
+                    }
+                    if (svity.contains("узьнясеньне", true)) {
+                        daysv = -1
+                        munsv = 2
+                    }
+                    if (svity.contains("зыход", true)) {
+                        daysv = -1
+                        munsv = 3
+                    }
+                    if (svity.contains("Айцоў першых 6-ці Ўсяленскіх сабораў", true)) {
+                        daysv = -1
+                        munsv = 4
+                    }
+                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, MenuCaliandar.getPositionCaliandar(position)[20].toInt(), MenuCaliandar.getPositionCaliandar(position)[0].toInt(), daysv, munsv, MenuCaliandar.getPositionCaliandar(position)[22].toInt(), MenuCaliandar.getPositionCaliandar(position)[4], MenuCaliandar.getPositionCaliandar(position)[3].toInt(), MenuCaliandar.getPositionCaliandar(position)[1].toInt(), MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1, MenuCaliandar.getPositionCaliandar(position)[24])
+                    dialogCalindarGrid.show(childFragmentManager, "grid")
                 }
-                val svity = MenuCaliandar.getPositionCaliandar(position)[6]
-                var daysv = MenuCaliandar.getPositionCaliandar(position)[1].toInt()
-                var munsv = MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1
-                if (svity.contains("уваход у ерусалім", true)) {
-                    daysv = -1
-                    munsv = 0
+
+                R.id.textCviatyGlavnyia -> {
+                    val svity = MenuCaliandar.getPositionCaliandar(position)[6]
+                    var daysv = MenuCaliandar.getPositionCaliandar(position)[1].toInt()
+                    var munsv = MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1
+                    if (svity.contains("уваход у ерусалім", true)) {
+                        daysv = -1
+                        munsv = 0
+                    }
+                    if (svity.contains("уваскрасеньне", true)) {
+                        daysv = -1
+                        munsv = 1
+                    }
+                    if (svity.contains("узьнясеньне", true)) {
+                        daysv = -1
+                        munsv = 2
+                    }
+                    if (svity.contains("зыход", true)) {
+                        daysv = -1
+                        munsv = 3
+                    }
+                    if (svity.contains("Айцоў першых 6-ці Ўсяленскіх сабораў", true)) {
+                        daysv = -1
+                        munsv = 4
+                    }
+                    val i = Intent(it, Opisanie::class.java)
+                    i.putExtra("glavnyia", true)
+                    i.putExtra("mun", munsv)
+                    i.putExtra("day", daysv)
+                    i.putExtra("year", MenuCaliandar.getPositionCaliandar(position)[3].toInt())
+                    startActivity(i)
                 }
-                if (svity.contains("уваскрасеньне", true)) {
-                    daysv = -1
-                    munsv = 1
+
+                R.id.sviatyia -> {
+                    val i = Intent(it, Opisanie::class.java)
+                    i.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1)
+                    i.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
+                    i.putExtra("year", MenuCaliandar.getPositionCaliandar(position)[3].toInt())
+                    startActivity(i)
                 }
-                if (svity.contains("узьнясеньне", true)) {
-                    daysv = -1
-                    munsv = 2
-                }
-                if (svity.contains("зыход", true)) {
-                    daysv = -1
-                    munsv = 3
-                }
-                if (svity.contains("Айцоў першых 6-ці Ўсяленскіх сабораў", true)) {
-                    daysv = -1
-                    munsv = 4
-                }
-                val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, MenuCaliandar.getPositionCaliandar(position)[20].toInt(), MenuCaliandar.getPositionCaliandar(position)[0].toInt(), daysv, munsv, MenuCaliandar.getPositionCaliandar(position)[22].toInt(), MenuCaliandar.getPositionCaliandar(position)[4], MenuCaliandar.getPositionCaliandar(position)[3].toInt(), MenuCaliandar.getPositionCaliandar(position)[1].toInt(), MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1, MenuCaliandar.getPositionCaliandar(position)[24])
-                dialogCalindarGrid.show(childFragmentManager, "grid")
-            }
-            R.id.textCviatyGlavnyia -> activity?.let {
-                val svity = MenuCaliandar.getPositionCaliandar(position)[6]
-                var daysv = MenuCaliandar.getPositionCaliandar(position)[1].toInt()
-                var munsv = MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1
-                if (svity.contains("уваход у ерусалім", true)) {
-                    daysv = -1
-                    munsv = 0
-                }
-                if (svity.contains("уваскрасеньне", true)) {
-                    daysv = -1
-                    munsv = 1
-                }
-                if (svity.contains("узьнясеньне", true)) {
-                    daysv = -1
-                    munsv = 2
-                }
-                if (svity.contains("зыход", true)) {
-                    daysv = -1
-                    munsv = 3
-                }
-                if (svity.contains("Айцоў першых 6-ці Ўсяленскіх сабораў", true)) {
-                    daysv = -1
-                    munsv = 4
-                }
-                val i = Intent(it, Opisanie::class.java)
-                i.putExtra("glavnyia", true)
-                i.putExtra("mun", munsv)
-                i.putExtra("day", daysv)
-                i.putExtra("year", MenuCaliandar.getPositionCaliandar(position)[3].toInt())
-                startActivity(i)
-            }
-            R.id.sviatyia -> activity?.let {
-                val i = Intent(it, Opisanie::class.java)
-                i.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1)
-                i.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
-                i.putExtra("year", MenuCaliandar.getPositionCaliandar(position)[3].toInt())
-                startActivity(i)
-            }
-            R.id.textChytanneSviatyia -> if (MainActivity.checkmoduleResources()) {
-                activity?.let {
+
+                R.id.textChytanneSviatyia -> if (it.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[10])
                     startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
-            }
-            R.id.textChytanne -> if (MainActivity.checkmoduleResources()) {
-                activity?.let {
+
+                R.id.textChytanne -> if (it.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[9])
                     startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
-            }
-            R.id.textChytanneSviatyiaDop -> if (MainActivity.checkmoduleResources()) {
-                activity?.let {
+
+                R.id.textChytanneSviatyiaDop -> if (it.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[11])
                     startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
-            }
-            R.id.maranata -> if (MainActivity.checkmoduleResources()) {
-                activity?.let {
+
+                R.id.maranata -> if (it.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.MARANATA)
                     intent.putExtra("cytanneMaranaty", MenuCaliandar.getPositionCaliandar(position)[13])
                     intent.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt())
                     intent.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
                     startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
             }
         }
     }

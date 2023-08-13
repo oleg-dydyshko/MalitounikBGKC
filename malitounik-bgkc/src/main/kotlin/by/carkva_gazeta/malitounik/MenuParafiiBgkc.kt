@@ -33,7 +33,7 @@ class MenuParafiiBgkc : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.let { activity ->
+        (activity as? BaseActivity)?.let { activity ->
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (dzenNoch) binding.elvMain.selector = ContextCompat.getDrawable(activity, R.drawable.selector_dark)
             else binding.elvMain.selector = ContextCompat.getDrawable(activity, R.drawable.selector_default)
@@ -49,7 +49,7 @@ class MenuParafiiBgkc : BaseFragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources()) {
+                if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                     intent.putExtra("autoscrollOFF", true)
@@ -119,7 +119,7 @@ class MenuParafiiBgkc : BaseFragment() {
                     return@setOnChildClickListener true
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources()) {
+                if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                     intent.putExtra("autoscrollOFF", true)

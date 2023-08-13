@@ -172,7 +172,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources()) {
+                if ((activity as? BaseActivity)?.checkmoduleResources() == true) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BIBLIAVYBRANOE)
                     intent.putExtra("biblia", biblia)
@@ -263,17 +263,17 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources()) {
-                    activity?.let {
+                (activity as? BaseActivity)?.let {
+                    if (it.checkmoduleResources()) {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.BIBLIAVYBRANOE)
                         intent.putExtra("biblia", biblia)
                         intent.putExtra("title", mItemList[bindingAdapterPosition].title)
                         startActivity(intent)
+                    } else {
+                        val dadatak = DialogInstallDadatak()
+                        dadatak.show(childFragmentManager, "dadatak")
                     }
-                } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
                 }
             }
 

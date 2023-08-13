@@ -2,7 +2,6 @@ package by.carkva_gazeta.malitounik
 
 import android.app.*
 import android.content.*
-import android.content.pm.ActivityInfo
 import android.database.Cursor
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -38,8 +37,6 @@ import by.carkva_gazeta.malitounik.databinding.ToastBinding
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.splitinstall.*
-import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
-import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -48,7 +45,6 @@ import java.io.*
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
-import kotlin.math.roundToLong
 
 
 class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, DialogLogView.DialogLogViewListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener {
@@ -233,7 +229,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         menuNatatki?.fileDelite(position)
         val menuCaliandar = supportFragmentManager.findFragmentByTag("menuCaliandar") as? MenuCaliandar
         menuCaliandar?.delitePadzeia(position)
-        val menuBiblijateka = supportFragmentManager.findFragmentByTag("MenuBiblijateka") as? MenuBiblijateka
+        val menuBiblijateka = findMenuBiblijateka()
         menuBiblijateka?.fileDelite(position, file)
     }
 
@@ -253,23 +249,41 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     override fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) {
-        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka") as? MenuBiblijateka
+        val fragment = findMenuBiblijateka()
         fragment?.onDialogbibliatekaPositiveClick(listPosition, title)
     }
 
     override fun onDialogPositiveClick(listPosition: String) {
-        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka") as? MenuBiblijateka
+        val fragment = findMenuBiblijateka()
         fragment?.onDialogPositiveClick(listPosition)
     }
 
     override fun delAllNiadaunia() {
-        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka") as? MenuBiblijateka
+        val fragment = findMenuBiblijateka()
         fragment?.delAllNiadaunia()
     }
 
     override fun deliteNiadaunia(position: Int, file: String) {
-        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka") as? MenuBiblijateka
+        val fragment = findMenuBiblijateka()
         fragment?.deliteNiadaunia(position, file)
+    }
+
+    private fun findMenuBiblijateka(): MenuBiblijateka? {
+        var fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$NIADAUNIA") as? MenuBiblijateka
+        if (fragment != null) return fragment
+        fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$NIADAUNIA") as? MenuBiblijateka
+        if (fragment != null) return fragment
+        fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$GISTORYIACARKVY") as? MenuBiblijateka
+        if (fragment != null) return fragment
+        fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$MALITOUNIKI") as? MenuBiblijateka
+        if (fragment != null) return fragment
+        fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$SPEUNIKI") as? MenuBiblijateka
+        if (fragment != null) return fragment
+        fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$RELLITARATURA") as? MenuBiblijateka
+        if (fragment != null) return fragment
+        fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$PDF") as? MenuBiblijateka
+        if (fragment != null) return fragment
+        return null
     }
 
     override fun onResume() {
@@ -1978,7 +1992,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         var padzeia = ArrayList<Padzeia>()
         private var setDataCalendar = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])[0][25].toInt()
         var checkBrightness = true
-        private var sessionId = 0
         var brightness = 15
         var dialogVisable = false
         fun setListPadzeia() {
@@ -2021,137 +2034,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
             }
             padzeia.sort()
-        }
-
-        fun downloadDynamicModule(context: Activity, moduleName: String = "biblijateka") {
-            val progressBarModule = context.findViewById<ProgressBar>(R.id.progressBarModule)
-            val layoutDialod = context.findViewById<LinearLayout>(R.id.linear)
-            val layoutDialod2 = context.findViewById<LinearLayout>(R.id.linear2)
-            val text = context.findViewById<TextView>(R.id.textProgress)
-            if (progressBarModule == null || layoutDialod == null || layoutDialod2 == null || text == null) {
-                return
-            }
-            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            if (dzenNoch) {
-                layoutDialod2.setBackgroundResource(R.color.colorbackground_material_dark)
-                val maduleDownload = context.findViewById<TextView>(R.id.module_download)
-                maduleDownload.setBackgroundResource(R.color.colorPrimary_black)
-            }
-            val splitInstallManager = SplitInstallManagerFactory.create(context)
-
-            val request = SplitInstallRequest.newBuilder().addModule(moduleName).build()
-
-            val listener = SplitInstallStateUpdatedListener {
-                val state = it
-                if (state.status() == SplitInstallSessionStatus.FAILED) {
-                    downloadDynamicModule(context)
-                    return@SplitInstallStateUpdatedListener
-                }
-                if (state.status() == SplitInstallSessionStatus.REQUIRES_USER_CONFIRMATION) {
-                    splitInstallManager.startConfirmationDialogForResult(state, context, 150)
-                }
-                if (state.sessionId() == sessionId) {
-                    val bytesDownload = (state.bytesDownloaded() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
-                    val total = (state.totalBytesToDownload() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
-                    when (state.status()) {
-                        SplitInstallSessionStatus.PENDING -> {
-                            layoutDialod.visibility = View.VISIBLE
-                            text.text = bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб")
-                        }
-
-                        SplitInstallSessionStatus.DOWNLOADED -> {
-                            layoutDialod.visibility = View.GONE
-                            context.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                        }
-
-                        SplitInstallSessionStatus.DOWNLOADING -> {
-                            layoutDialod.visibility = View.VISIBLE
-                            progressBarModule.max = state.totalBytesToDownload().toInt()
-                            progressBarModule.progress = state.bytesDownloaded().toInt()
-                            text.text = bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб")
-                        }
-
-                        SplitInstallSessionStatus.INSTALLED -> {
-                            layoutDialod.visibility = View.GONE
-                            SplitInstallHelper.updateAppInfo(context)
-                            if (moduleName == "biblijateka") {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    val ftrans = context.supportFragmentManager.beginTransaction()
-                                    ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
-                                    val vybranoe = MenuBiblijateka.getInstance(NIADAUNIA)
-                                    ftrans.replace(R.id.conteiner, vybranoe, "MenuBiblijateka")
-                                    ftrans.commit()
-                                }
-                            }
-                            if (moduleName == "admin") {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    val intent = Intent()
-                                    intent.setClassName(context, ADMINMAIN)
-                                    context.startActivity(intent)
-                                }
-                            }
-                        }
-
-                        SplitInstallSessionStatus.CANCELED -> {
-                        }
-
-                        SplitInstallSessionStatus.CANCELING -> {
-                        }
-
-                        SplitInstallSessionStatus.FAILED -> {
-                        }
-
-                        SplitInstallSessionStatus.INSTALLING -> {
-                        }
-
-                        SplitInstallSessionStatus.REQUIRES_USER_CONFIRMATION -> {
-                        }
-
-                        SplitInstallSessionStatus.UNKNOWN -> {
-                        }
-                    }
-                }
-            }
-
-            splitInstallManager.registerListener(listener)
-
-            splitInstallManager.startInstall(request).addOnFailureListener {
-                if ((it as SplitInstallException).errorCode == SplitInstallErrorCode.NETWORK_ERROR) {
-                    toastView(context, context.getString(R.string.no_internet))
-                }
-            }.addOnSuccessListener {
-                sessionId = it
-            }
-        }
-
-        fun checkmodulesAdmin(): Boolean {
-            val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
-            for (mod in muduls) {
-                if (mod == "admin") {
-                    return true
-                }
-            }
-            return false
-        }
-
-        fun checkmodulesBiblijateka(): Boolean {
-            val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
-            for (mod in muduls) {
-                if (mod == "biblijateka") {
-                    return true
-                }
-            }
-            return false
-        }
-
-        fun checkmoduleResources(): Boolean {
-            val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
-            for (mod in muduls) {
-                if (mod == "resources") {
-                    return true
-                }
-            }
-            return false
         }
 
         fun removeZnakiAndSlovy(ctenie: String): String {
@@ -2297,7 +2179,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
         fun zamena(replase: String, ignoreCase: Boolean = true): String {
             var replase1 = replase
-            replase1 = replase1.replace("ё", "е", ignoreCase)
             replase1 = replase1.replace("и", "і", ignoreCase)
             replase1 = replase1.replace("щ", "ў", ignoreCase)
             replase1 = replase1.replace("ъ", "'", ignoreCase)

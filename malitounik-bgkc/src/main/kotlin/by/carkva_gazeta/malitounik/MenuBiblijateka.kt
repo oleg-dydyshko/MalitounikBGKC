@@ -657,7 +657,11 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                         if (MainActivity.isNetworkAvailable()) {
                             sqlJob = CoroutineScope(Dispatchers.Main).launch {
                                 val temp = ArrayList<ArrayList<String>>()
-                                var sb = getBibliatekaJson()
+                                var sb = ""
+                                for (i in 0..2) {
+                                    sb = getBibliatekaJson()
+                                    if (sb != "") break
+                                }
                                 if (sb == "") {
                                     sb = k.getString("Biblioteka", "") ?: ""
                                 }
@@ -724,18 +728,13 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             val localFile = File("${activity.filesDir}/cache/cache.txt")
             pathReference.getFile(localFile).addOnCompleteListener {
                 if (it.isSuccessful) text = localFile.readText()
-                else MainActivity.toastView(activity, getString(R.string.error))
             }.await()
         }
         return text
     }
 
     private suspend fun saveImagePdf(imageFile: File, image: String) {
-        activity?.let { activity ->
-            Malitounik.referens.child("/images/bibliateka/$image").getFile(imageFile).addOnFailureListener {
-                MainActivity.toastView(activity, getString(R.string.error))
-            }.await()
-        }
+        Malitounik.referens.child("/images/bibliateka/$image").getFile(imageFile).await()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

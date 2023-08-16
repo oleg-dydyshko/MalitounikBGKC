@@ -30,12 +30,9 @@ class DialogHelpListView : DialogFragment() {
             ad = AlertDialog.Builder(it, style)
             if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
-            binding.title.text = getString(R.string.help_davedka).uppercase()
+            binding.title.text = getString(R.string.help_davedka)
             binding.title.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            when (arguments?.getInt("help") ?: 1) {
-                1 -> binding.content.text = getString(R.string.help_list_view)
-                2 -> binding.content.text = getString(R.string.help_list_sabytie)
-            }
+            binding.content.text = getString(R.string.help_list_view)
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) 
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
@@ -43,15 +40,5 @@ class DialogHelpListView : DialogFragment() {
             ad.setPositiveButton(resources.getString(R.string.close)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
         }
         return ad.create()
-    }
-
-    companion object {
-        fun getInstance(help: Int): DialogHelpListView {
-            val dialogHelpListView = DialogHelpListView()
-            val bundle = Bundle()
-            bundle.putInt("help", help)
-            dialogHelpListView.arguments = bundle
-            return dialogHelpListView
-        }
     }
 }

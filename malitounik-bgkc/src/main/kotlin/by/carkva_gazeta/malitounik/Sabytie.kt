@@ -675,13 +675,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             onDialogEditClick(position)
             editCaliandar = true
         }
-        if (k.getBoolean("help_sabytie_list_view", true)) {
-            val dialogHelpListView = DialogHelpListView.getInstance(2)
-            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
-            val prefEditor = k.edit()
-            prefEditor.putBoolean("help_sabytie_list_view", false)
-            prefEditor.apply()
-        }
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
@@ -1535,11 +1528,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         }
         if (id == R.id.action_add) {
             addSabytie()
-            return true
-        }
-        if (id == R.id.action_help) {
-            val dialogHelpListView = DialogHelpListView.getInstance(2)
-            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
             return true
         }
         return false
@@ -2441,6 +2429,13 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             if (updateList) {
                 origData.clear()
                 origData.addAll(newSabytieDataAdapter)
+                if (k.getBoolean("help_sabytie_list_view", true) && origData.size > 1) {
+                    val dialogHelpListView = DialogHelpListView()
+                    dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
+                    val prefEditor = k.edit()
+                    prefEditor.putBoolean("help_sabytie_list_view", false)
+                    prefEditor.apply()
+                }
             }
             val diffCallback = RecyclerViewDiffCallback(MainActivity.padzeia, newSabytieDataAdapter)
             val diffResult = DiffUtil.calculateDiff(diffCallback)

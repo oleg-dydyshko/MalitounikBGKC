@@ -6,10 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
@@ -73,7 +69,7 @@ class DialogLogView : DialogFragment() {
                         Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
                             MainActivity.toastView(fragmentActivity, getString(R.string.error))
                         }.await()
-                        val sb = SpannableStringBuilder()
+                        val sb = StringBuilder()
                         localFile.readLines().forEach {
                             if (it.isNotEmpty()) {
                                 log.add(it)
@@ -81,16 +77,17 @@ class DialogLogView : DialogFragment() {
                                 if (t1 != -1) {
                                     val t2 = it.lastIndexOf("/", t1 - 1)
                                     if (t2 != -1) {
-                                        val span = SpannableString(it.substring(t2))
-                                        span.setSpan(StyleSpan(Typeface.BOLD), 0, t1 - t2 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        sb.append(span).append("\n")
+                                        sb.append(it.substring(t2)).append("\n")
+                                    } else {
+                                        sb.append(it).append("\n")
                                     }
                                 }
                             }
                         }
-                        displayBinding.content.text = sb
+                        displayBinding.content.text = sb.trim()
                     }
                 }
+                displayBinding.content.typeface = MainActivity.createFont(Typeface.BOLD)
                 displayBinding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
                 if (dzenNoch) displayBinding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorWhite))
                 else displayBinding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_text))

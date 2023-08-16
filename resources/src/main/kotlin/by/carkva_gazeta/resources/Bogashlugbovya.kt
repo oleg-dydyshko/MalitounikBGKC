@@ -41,7 +41,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 
-class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener {
+class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener, DialogFullScreenHelp.DialogFullScreenHelpListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -1946,7 +1946,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            hide()
+            hideHelp()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
@@ -2043,7 +2043,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         super.onResume()
         if (fullscreenPage) {
             binding.constraint.post {
-                hide()
+                hideHelp()
             }
         }
         autoscroll = k.getBoolean("autoscroll", false)
@@ -2054,6 +2054,27 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             } else autoStartScroll()
         }
         orientation = resources.configuration.orientation
+    }
+
+    override fun onDialogFullScreenHelpClose() {
+        if (dzenNoch) binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+        else binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
+        hide()
+    }
+
+    private fun hideHelp() {
+        if (k.getBoolean("help_fullscreen", true)) {
+            binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost2))
+            if (dzenNoch) binding.scrollView2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            else binding.scrollView2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
+            val dialogHelpListView = DialogFullScreenHelp()
+            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
+            val prefEditors = k.edit()
+            prefEditors.putBoolean("help_fullscreen", false)
+            prefEditors.apply()
+        } else {
+            hide()
+        }
     }
 
     private fun hide() {
@@ -2069,13 +2090,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (binding.actionMinus.visibility == View.GONE) {
             binding.actionBack.visibility = View.VISIBLE
             binding.actionBack.animation = animation
-        }
-        if (binding.find.visibility == View.VISIBLE) {
-            findRemoveSpan()
-            binding.textSearch.setText("")
-            binding.find.visibility = View.GONE
-            val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
         }
     }
 

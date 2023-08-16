@@ -957,11 +957,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             searchSviatyiaLauncher.launch(i)
             return true
         }
-        if (id == R.id.action_help) {
-            val dialogHelpListView = DialogHelpListView.getInstance(1)
-            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
-            return true
-        }
         if (id == R.id.action_log) {
             val dialog = DialogLogView()
             dialog.show(supportFragmentManager, "DialogLogView")
@@ -996,7 +991,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         menu.findItem(R.id.action_font).isVisible = false
         menu.findItem(R.id.action_bright).isVisible = false
         menu.findItem(R.id.action_dzen_noch).isVisible = false
-        menu.findItem(R.id.action_help).isVisible = false
         menu.findItem(R.id.action_carkva).isVisible = false
         menu.findItem(R.id.action_log).isVisible = k.getBoolean("admin", false)
         if (idSelect == R.id.label1) {
@@ -1030,7 +1024,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             menu.findItem(R.id.action_add).isVisible = true
             menu.findItem(R.id.sortdate).isVisible = true
             menu.findItem(R.id.sorttime).isVisible = true
-            menu.findItem(R.id.action_help).isVisible = true
             menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
             when (k.getInt("natatki_sort", 0)) {
                 1 -> {
@@ -1052,7 +1045,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (idSelect == R.id.label12) {
             menu.findItem(R.id.trash).isVisible = true
             menu.findItem(R.id.sortdate).isVisible = true
-            menu.findItem(R.id.action_help).isVisible = true
             menu.findItem(R.id.sortdate).isChecked = k.getInt("vybranoe_sort", 1) == 1
         }
     }
@@ -1795,14 +1787,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         prefEditors.apply()
 
         bindingappbar.titleToolbar.text = tolbarTitle
-        if (id == R.id.label7 || id == R.id.label12) {
-            if (k.getBoolean("help_main_list_view", true)) {
-                val dialogHelpListView = DialogHelpListView.getInstance(1)
-                dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
-                prefEditors.putBoolean("help_main_list_view", false)
-                prefEditors.apply()
-            }
-        }
     }
 
     override fun setTitleRadioMaryia(title: String) {

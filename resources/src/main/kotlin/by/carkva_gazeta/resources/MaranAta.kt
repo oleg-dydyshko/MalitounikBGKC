@@ -41,7 +41,7 @@ import kotlinx.coroutines.*
 import java.io.*
 import java.util.*
 
-class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener {
+class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener, DialogFullScreenHelp.DialogFullScreenHelpListener {
 
     private var fullscreenPage = false
     private var cytanne = ""
@@ -1062,6 +1062,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 paralel = false
                 invalidateOptionsMenu()
             }
+
             mPedakVisable -> {
                 mPedakVisable = false
                 bibleCopyList.clear()
@@ -1072,6 +1073,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 }
                 invalidateOptionsMenu()
             }
+
             else -> super.onBack()
         }
     }
@@ -1112,7 +1114,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         super.onResume()
         if (fullscreenPage) {
             binding.constraint.post {
-                hide()
+                hideHelp()
             }
         }
         autoscroll = k.getBoolean("autoscroll", false)
@@ -1242,10 +1244,29 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            hide()
+            hideHelp()
             return true
         }
         return false
+    }
+
+    override fun onDialogFullScreenHelpClose() {
+        if (dzenNoch) binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+        else binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
+        hide()
+    }
+
+    private fun hideHelp() {
+        if (k.getBoolean("help_fullscreen", true)) {
+            binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost2))
+            val dialogHelpListView = DialogFullScreenHelp()
+            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
+            val prefEditors = k.edit()
+            prefEditors.putBoolean("help_fullscreen", false)
+            prefEditors.apply()
+        } else {
+            hide()
+        }
     }
 
     private fun hide() {

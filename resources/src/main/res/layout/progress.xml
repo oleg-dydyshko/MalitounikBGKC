@@ -66,10 +66,10 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/selector_red_maran_ata"
+            android:contentDescription="@string/empty"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/minus_auto_scroll" />
     </LinearLayout>
 
@@ -101,8 +101,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/selector_red_maran_ata"
-            android:gravity="center"
             android:contentDescription="@string/empty"
+            android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             app:srcCompat="@drawable/minus_auto_scroll" />

@@ -44,9 +44,4 @@
         android:title="@string/tools_item"
         android:orderInCategory="100"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_help"
-        android:orderInCategory="100"
-        android:title="@string/help_davedka"
-        app:showAsAction="never" />
 </menu>

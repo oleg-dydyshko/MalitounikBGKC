@@ -268,7 +268,10 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     if (dir?.exists() != true) {
                         dir?.mkdir()
                     }
-                    downloadPdfFile(url)
+                    for (i in 0..2) {
+                        error = downloadPdfFile(url)
+                        if(!error) break
+                    }
                 }
             } catch (t: Throwable) {
                 error = true
@@ -283,16 +286,18 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         }
     }
 
-    private suspend fun downloadPdfFile(url: String) {
+    private suspend fun downloadPdfFile(url: String): Boolean {
+        var error = false
         activity?.let { activity ->
             val pathReference = Malitounik.referens.child("/data/bibliateka/$url")
             val localFile = File(activity.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
             pathReference.getFile(localFile).addOnFailureListener {
-                MainActivity.toastView(activity, getString(R.string.error))
+                error = true
             }.await()
             filePath = localFile.path
             fileName = url
         }
+        return error
     }
 
     private fun onDialogFile(file: File) {
@@ -689,7 +694,9 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                                         if (!dir.exists()) dir.mkdir()
                                         val file = File("${activity.filesDir}/image_temp/$imageName")
                                         if (!file.exists()) {
-                                            saveImagePdf(file, imageName)
+                                            for (e in 0..2) {
+                                                if (!saveImagePdf(file, imageName)) break
+                                            }
                                         }
                                         if (rubrika.toInt() == rub) {
                                             arrayList.add(mySqlList)
@@ -733,8 +740,12 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         return text
     }
 
-    private suspend fun saveImagePdf(imageFile: File, image: String) {
-        Malitounik.referens.child("/images/bibliateka/$image").getFile(imageFile).await()
+    private suspend fun saveImagePdf(imageFile: File, image: String): Boolean {
+        var error = false
+        Malitounik.referens.child("/images/bibliateka/$image").getFile(imageFile).addOnFailureListener {
+            error = true
+        }.await()
+        return error
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -848,7 +859,9 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                         val image = arrayList[position][5].substring(t1 + 1)
                         val file = File("${activity.filesDir}/image_temp/$image")
                         if (!file.exists() && MainActivity.isNetworkAvailable()) {
-                            saveImagePdf(file, image)
+                            for (e in 0..2) {
+                                if (!saveImagePdf(file, image)) break
+                            }
                         }
                         if (file.exists()) {
                             val bitmap = withContext(Dispatchers.IO) {

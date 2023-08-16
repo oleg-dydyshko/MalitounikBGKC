@@ -44,7 +44,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.InputStreamReader
 
-class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener {
+class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogFullScreenHelp.DialogFullScreenHelpListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -769,7 +769,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         setTollbarTheme()
         if (fullscreenPage) {
             binding.constraint.post {
-                hide()
+                hideHelp()
             }
         }
         autoscroll = k.getBoolean("autoscroll", false)
@@ -821,11 +821,32 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            hide()
+            hideHelp()
             return true
         }
         prefEditor.apply()
         return false
+    }
+
+    override fun onDialogFullScreenHelpClose() {
+        if (dzenNoch) binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+        else binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
+        hide()
+    }
+
+    private fun hideHelp() {
+        if (k.getBoolean("help_fullscreen", true)) {
+            binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost2))
+            if (dzenNoch) binding.InteractiveScroll.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            else binding.InteractiveScroll.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
+            val dialogHelpListView = DialogFullScreenHelp()
+            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
+            val prefEditors = k.edit()
+            prefEditors.putBoolean("help_fullscreen", false)
+            prefEditors.apply()
+        } else {
+            hide()
+        }
     }
 
     private fun hide() {

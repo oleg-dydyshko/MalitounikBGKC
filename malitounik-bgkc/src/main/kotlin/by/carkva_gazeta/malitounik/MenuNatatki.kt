@@ -170,6 +170,13 @@ class MenuNatatki : BaseFragment() {
             }
         }
         myNatatkiFiles.sort()
+        if (k.getBoolean("help_main_list_view", true) && myNatatkiFiles.size > 1) {
+            val dialogHelpListView = DialogHelpListView()
+            dialogHelpListView.show(childFragmentManager, "DialogHelpListView")
+            val prefEditors = k.edit()
+            prefEditors.putBoolean("help_main_list_view", false)
+            prefEditors.apply()
+        }
         adapter.updateList(myNatatkiFiles)
     }
 

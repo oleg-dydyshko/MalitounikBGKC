@@ -755,18 +755,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
         logJob?.cancel()
         logJob = CoroutineScope(Dispatchers.IO).launch {
-            cacheDir?.listFiles()?.forEach {
-                it?.deleteRecursively()
-            }
-            if (padzeia.size == 0) setListPadzeia()
-            if (k.getBoolean("setAlarm", true)) {
-                getVersionCode()
-                val notify = k.getInt("notification", 2)
-                SettingsActivity.setNotifications(notify)
-                val edit = k.edit()
-                edit.putBoolean("setAlarm", false)
-                edit.apply()
-            }
             if (k.getBoolean("admin", false) && isNetworkAvailable()) {
                 val localFile = File("$filesDir/cache/cache.txt")
                 Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
@@ -778,6 +766,20 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         toastView(this@MainActivity, getString(R.string.check_update_resourse))
                     }
                 }
+            }
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            cacheDir?.listFiles()?.forEach {
+                it?.deleteRecursively()
+            }
+            if (padzeia.size == 0) setListPadzeia()
+            if (k.getBoolean("setAlarm", true)) {
+                getVersionCode()
+                val notify = k.getInt("notification", 2)
+                SettingsActivity.setNotifications(notify)
+                val edit = k.edit()
+                edit.putBoolean("setAlarm", false)
+                edit.apply()
             }
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }

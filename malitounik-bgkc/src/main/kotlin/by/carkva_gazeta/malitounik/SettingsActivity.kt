@@ -45,6 +45,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
     private lateinit var binding: SettingsActivityBinding
     private var resetTollbarJob: Job? = null
     private var adminResetJob: Job? = null
+    private var setNotificationsJob: Job? = null
     private var adminClickTime: Long = 0
     private var adminItemCount = 0
     private var edit = false
@@ -698,6 +699,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
+        setNotificationsJob?.cancel()
+        adminResetJob?.cancel()
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
@@ -763,7 +766,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                     prefEditor.apply()
                     itemDefault = i
                     binding.spinnerTime.isEnabled = false
-                    CoroutineScope(Dispatchers.IO).launch {
+                    setNotificationsJob = CoroutineScope(Dispatchers.IO).launch {
                         setNotifications(notification)
                         withContext(Dispatchers.Main) {
                             binding.spinnerTime.isEnabled = true
@@ -1028,6 +1031,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("slovocalkam", 0)
             prefEditor.putBoolean("AdminDialogSaveAsHelp", true)
             prefEditor.putBoolean("dialogHelpShare", true)
+            prefEditor.putBoolean("help_fullscreen", true)
             binding.maranataBel.isClickable = false
             binding.maranataRus.isClickable = false
             binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
@@ -1306,7 +1310,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         if (dzenNoch) binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
         binding.guk.isClickable = true
         if (dzenNoch) binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-        CoroutineScope(Dispatchers.Main).launch {
+        setNotificationsJob = CoroutineScope(Dispatchers.Main).launch {
             binding.notificationOnly.isChecked = true
             if (dzenNoch) {
                 binding.vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
@@ -1346,7 +1350,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         if (dzenNoch) binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
         binding.guk.isClickable = true
         if (dzenNoch) binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-        CoroutineScope(Dispatchers.Main).launch {
+        setNotificationsJob = CoroutineScope(Dispatchers.Main).launch {
             binding.notificationFull.isChecked = true
             if (dzenNoch) {
                 binding.vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
@@ -1382,7 +1386,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         if (dzenNoch) binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
         binding.guk.isClickable = true
         if (dzenNoch) binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-        CoroutineScope(Dispatchers.Main).launch {
+        setNotificationsJob = CoroutineScope(Dispatchers.Main).launch {
             binding.notificationNon.isChecked = true
             binding.notificationOnly.isClickable = false
             binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))

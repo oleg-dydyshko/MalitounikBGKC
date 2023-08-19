@@ -28,4 +28,4 @@
 -dontwarn org.codehaus.mojo.animal_sniffer.*
 # OkHttp platform used only on JVM and when Conscrypt dependency is available.
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
--dontwarn com.kursx.parser.fb2.*
+# -dontwarn com.kursx.parser.fb2.*

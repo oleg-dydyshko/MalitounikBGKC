@@ -1272,7 +1272,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
 
     override fun dynamicModuleDownload() {
         binding.linear.visibility = View.GONE
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
     override fun dynamicModuleDownloading(bytesDownload: String, totalBytesToDownload: Int, bytesDownloaded: Int) {

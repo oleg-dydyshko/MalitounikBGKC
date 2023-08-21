@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
@@ -486,7 +485,6 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     override fun dynamicModuleDownload() {
         binding?.let {
             it.linear.visibility = View.GONE
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
 

@@ -34,8 +34,13 @@ import by.carkva_gazeta.malitounik.databinding.ActivityMainBinding
 import by.carkva_gazeta.malitounik.databinding.AppBarMainBinding
 import by.carkva_gazeta.malitounik.databinding.ContentMainBinding
 import by.carkva_gazeta.malitounik.databinding.ToastBinding
-import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.splitinstall.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -45,9 +50,10 @@ import java.io.*
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import kotlin.math.roundToLong
 
 
-class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, DialogLogView.DialogLogViewListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener {
+class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, DialogLogView.DialogLogViewListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener {
 
     private val c = Calendar.getInstance()
     private lateinit var k: SharedPreferences
@@ -86,6 +92,20 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
     }
+    private val updateMalitounikLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        if (result.resultCode != Activity.RESULT_OK) {
+            val c = Calendar.getInstance()
+            var updateCount = k.getInt("updateCount", 0)
+            updateCount++
+            prefEditors.putInt("updateCount", updateCount)
+            if (updateCount >= 3) {
+                c.set(Calendar.HOUR_OF_DAY, 8)
+                c.add(Calendar.DATE, 3)
+                prefEditors.putLong("updateTime", c.timeInMillis)
+            }
+            prefEditors.apply()
+        }
+    }
     private val mConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as ServiceRadyjoMaryia.ServiceRadyjoMaryiaBinder
@@ -97,6 +117,20 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         override fun onServiceDisconnected(name: ComponentName?) {
             isConnectServise = false
             mRadyjoMaryiaService = null
+        }
+    }
+    private val installStateUpdatedListener = InstallStateUpdatedListener { state ->
+        if (state.installStatus() == InstallStatus.DOWNLOADING) {
+            val bytesDownload = (state.bytesDownloaded() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
+            val total = (state.totalBytesToDownload() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
+            bindingappbar.linear.visibility = View.VISIBLE
+            bindingappbar.progressBarModule.max = total.toInt()
+            bindingappbar.progressBarModule.progress = bytesDownload.toInt()
+            bindingappbar.textProgress.text = bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб")
+        }
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
+            bindingappbar.linear.visibility = View.GONE
+            completeUpdate()
         }
     }
 
@@ -298,6 +332,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             val lp = window.attributes
             lp.screenBrightness = brightness.toFloat() / 100
             window.attributes = lp
+        }
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                completeUpdate()
+            }
         }
 
         /*val density = resources.displayMetrics.density
@@ -774,12 +814,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
             if (padzeia.size == 0) setListPadzeia()
             if (k.getBoolean("setAlarm", true)) {
-                getVersionCode()
+                checkUpdateMalitounik()
                 val notify = k.getInt("notification", 2)
                 SettingsActivity.setNotifications(notify)
-                val edit = k.edit()
-                edit.putBoolean("setAlarm", false)
-                edit.apply()
+                prefEditors.putBoolean("setAlarm", false)
+                prefEditors.apply()
             }
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
@@ -1849,93 +1888,45 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         idSelect = id
     }
 
-    private fun popupSnackbarForCompleteUpdate(code: Int) {
-        val c = Calendar.getInstance()
-        val updateCode = k.getInt("updateCode", 0)
-        if (updateCode != 0 && updateCode != code) {
-            val edit = k.edit()
-            edit.putInt("updateCount", 0)
-            edit.apply()
-        }
-        var updateCount = k.getInt("updateCount", 0)
-        if (updateCount < 3 || c.timeInMillis > k.getLong("updateTime", c.timeInMillis)) {
-            snackbar = Snackbar.make(bindingcontent.conteiner, getString(R.string.update_title), Snackbar.LENGTH_INDEFINITE).apply {
-                setAction(getString(R.string.update_text)) {
-                    val packageName = context.packageName
-                    try {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
-                        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        startActivity(intent)
-                    } catch (e: ActivityNotFoundException) {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
-                        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        startActivity(intent)
-                    }
-                }
-                setActionTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorWhite))
-                setTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorWhite))
-                if (dzenNoch) setBackgroundTint(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary_black))
-                else setBackgroundTint(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
-                show()
-            }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                    super.onDismissed(transientBottomBar, event)
-                    if (event == Snackbar.Callback.DISMISS_EVENT_MANUAL || event == Snackbar.Callback.DISMISS_EVENT_SWIPE) {
-                        updateCount++
-                        val edit = k.edit()
-                        edit.putInt("updateCount", updateCount)
-                        edit.putInt("updateCode", code)
-                        if (updateCount >= 3) {
-                            c.set(Calendar.HOUR_OF_DAY, 8)
-                            c.add(Calendar.DATE, 7)
-                            edit.putLong("updateTime", c.timeInMillis)
-                        }
-                        edit.apply()
-                    }
-                }
-            })
-        }
+    private fun completeUpdate() {
+        prefEditors.putInt("updateCount", 0)
+        prefEditors.apply()
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        appUpdateManager.unregisterListener(installStateUpdatedListener)
+        appUpdateManager.completeUpdate()
     }
 
-    private fun getVersionCode() {
+    private fun checkUpdateMalitounik() {
         if (isNetworkAvailable()) {
-            versionCodeJob = CoroutineScope(Dispatchers.Main).launch {
-                val gson = Gson()
-                val type = TypeToken.getParameterized(Map::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
-                val text = getUpdateMalitounikBGKC()
-                if (text != "") {
-                    try {
-                        val updeteArrayText = gson.fromJson<Map<String, String>>(text, type)
-                        val currentVersionName = BuildConfig.VERSION_NAME
-                        val currentVersionCode = BuildConfig.VERSION_CODE
-                        val versionSize = currentVersionName.split(".")
-                        if (versionSize.size == 4) {
-                            val versionCode = updeteArrayText["devel"]?.toInt() ?: currentVersionCode
-                            if (currentVersionCode < versionCode) {
-                                popupSnackbarForCompleteUpdate(versionCode)
-                            }
+            val c = Calendar.getInstance()
+            val updateCount = k.getInt("updateCount", 0)
+            if (updateCount < 3 || c.timeInMillis > k.getLong("updateTime", c.timeInMillis)) {
+                val appUpdateManager = AppUpdateManagerFactory.create(this)
+                val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+                appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                        if (isNetworkAvailable(true)) {
+                            val dialog = DialogUpdateWIFI.getInstance(appUpdateInfo.bytesDownloaded().toFloat())
+                            dialog.show(supportFragmentManager, "DialogUpdateWIFI")
+                        } else {
+                            appUpdateManager.registerListener(installStateUpdatedListener)
+                            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateMalitounikLauncher, AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build())
                         }
-                        if (versionSize.size == 3) {
-                            val versionCode = updeteArrayText["release"]?.toInt() ?: currentVersionCode
-                            if (currentVersionCode < versionCode) {
-                                popupSnackbarForCompleteUpdate(versionCode)
-                            }
-                        }
-                    } catch (_: Throwable) {
                     }
                 }
             }
         }
     }
 
-    private suspend fun getUpdateMalitounikBGKC(): String {
-        val pathReference = Malitounik.referens.child("/updateMalitounikBGKC.json")
-        var text = ""
-        val localFile = File("$filesDir/cache/cache.txt")
-        pathReference.getFile(localFile).addOnSuccessListener {
-            text = localFile.readText()
-        }.await()
-        return text
+    override fun onUpdatePositiveWIFI() {
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                appUpdateManager.registerListener(installStateUpdatedListener)
+                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateMalitounikLauncher, AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build())
+            }
+        }
     }
 
     companion object {

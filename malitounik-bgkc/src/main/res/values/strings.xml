@@ -330,9 +330,6 @@
     <string name="copy_big_full">Вылучыць усё</string>
     <string name="set_versh">Выберыце верш</string>
     <string name="add_to_zakladki">Дабаўлена у закладкі</string>
-    <string name="adpravit">Адправіць</string>
-    <string name="open_chrome">Адчыніць у Chrome</string>
-    <string name="update_site">Абнавіць</string>
     <string name="clean_histopy">Ачысьціць гісторыю пошуку</string>
     <string name="clean_histopy_title">АЧЫСЬЦІЦЬ ГІСТОРЫЮ?</string>
     <string name="all_clean_histopy">Вы сапраўды жадаеце выдаліць усю гісторыю пошуку?</string>
@@ -663,8 +660,8 @@
     <string name="del_all_sabytie">Вы сапраўды жадаеце выдаліць усё Падзеі?</string>
     <string name="help_alarm_title">БУДЗІЛЬНІКІ</string>
     <string name="help_alarm_content">Праграме патрэбны будзільнікі для паказу апавяшчэньняў пра Падзеі.</string>
-    <string name="update_title">Даступна абнаўленьне праграмы</string>
-    <string name="update_text">Абнавіць</string>
+    <string name="update_title">СПАМПОЎВАЕМ АБНАЎЛЕНЬНЕ ПРАГРАМЫ</string>
+    <string name="update_title2">АБНАЎЛЕНЬНЕ ПРАГРАМЫ</string>
     <string name="admin_beta">Апублікаваць Beta-версію</string>
     <string name="admin_release">Апублікаваць Release-версію</string>
     <string name="admin_update">АБНАЎЛЕНЬНЕ</string>

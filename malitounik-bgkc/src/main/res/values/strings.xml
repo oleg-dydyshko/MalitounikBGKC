@@ -784,5 +784,6 @@
         <item>#9ACD32</item>
         <item>#20B2AA</item>
     </string-array>
+    <string name="update_program">Даступна абнаўленьне</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

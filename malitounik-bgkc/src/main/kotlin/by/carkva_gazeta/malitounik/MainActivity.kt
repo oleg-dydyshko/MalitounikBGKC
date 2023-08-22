@@ -94,16 +94,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
     private val updateMalitounikLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
         if (result.resultCode != Activity.RESULT_OK) {
-            val c = Calendar.getInstance()
-            var updateCount = k.getInt("updateCount", 0)
-            updateCount++
-            prefEditors.putInt("updateCount", updateCount)
-            if (updateCount >= 3) {
-                c.set(Calendar.HOUR_OF_DAY, 8)
-                c.add(Calendar.DATE, 3)
-                prefEditors.putLong("updateTime", c.timeInMillis)
-            }
-            prefEditors.apply()
+            onUpdateNegativeWIFI()
         }
     }
     private val mConnection = object : ServiceConnection {
@@ -1002,6 +993,21 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             val dialog = DialogLogView()
             dialog.show(supportFragmentManager, "DialogLogView")
         }
+        if (id == R.id.action_update) {
+            val appUpdateManager = AppUpdateManagerFactory.create(this)
+            val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+            appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                    if (isNetworkAvailable(true)) {
+                        val dialog = DialogUpdateWIFI.getInstance(appUpdateInfo.totalBytesToDownload().toFloat())
+                        dialog.show(supportFragmentManager, "DialogUpdateWIFI")
+                    } else {
+                        appUpdateManager.registerListener(installStateUpdatedListener)
+                        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateMalitounikLauncher, AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build())
+                    }
+                }
+            }
+        }
         return false
     }
 
@@ -1033,6 +1039,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         menu.findItem(R.id.action_bright).isVisible = false
         menu.findItem(R.id.action_dzen_noch).isVisible = false
         menu.findItem(R.id.action_carkva).isVisible = false
+        menu.findItem(R.id.action_update).isVisible = updateAvailable
         menu.findItem(R.id.action_log).isVisible = k.getBoolean("admin", false)
         if (idSelect == R.id.label1) {
             val arrayList = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])
@@ -1891,6 +1898,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private fun completeUpdate() {
         prefEditors.putInt("updateCount", 0)
         prefEditors.apply()
+        updateAvailable = false
+        invalidateOptionsMenu()
         val appUpdateManager = AppUpdateManagerFactory.create(this)
         appUpdateManager.unregisterListener(installStateUpdatedListener)
         appUpdateManager.completeUpdate()
@@ -1900,13 +1909,15 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (isNetworkAvailable()) {
             val c = Calendar.getInstance()
             val updateCount = k.getInt("updateCount", 0)
-            if (updateCount < 3 || c.timeInMillis > k.getLong("updateTime", c.timeInMillis)) {
-                val appUpdateManager = AppUpdateManagerFactory.create(this)
-                val appUpdateInfoTask = appUpdateManager.appUpdateInfo
-                appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+            val appUpdateManager = AppUpdateManagerFactory.create(this)
+            val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+            appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                    updateAvailable = true
+                    invalidateOptionsMenu()
+                    if (updateCount < 3 || c.timeInMillis > k.getLong("updateTime", c.timeInMillis)) {
                         if (isNetworkAvailable(true)) {
-                            val dialog = DialogUpdateWIFI.getInstance(appUpdateInfo.bytesDownloaded().toFloat())
+                            val dialog = DialogUpdateWIFI.getInstance(appUpdateInfo.totalBytesToDownload().toFloat())
                             dialog.show(supportFragmentManager, "DialogUpdateWIFI")
                         } else {
                             appUpdateManager.registerListener(installStateUpdatedListener)
@@ -1927,6 +1938,19 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateMalitounikLauncher, AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build())
             }
         }
+    }
+
+    override fun onUpdateNegativeWIFI() {
+        val c = Calendar.getInstance()
+        var updateCount = k.getInt("updateCount", 0)
+        updateCount++
+        prefEditors.putInt("updateCount", updateCount)
+        if (updateCount >= 3) {
+            c.set(Calendar.HOUR_OF_DAY, 8)
+            c.add(Calendar.DATE, 3)
+            prefEditors.putLong("updateTime", c.timeInMillis)
+        }
+        prefEditors.apply()
     }
 
     companion object {
@@ -1971,6 +1995,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         var checkBrightness = true
         var brightness = 15
         var dialogVisable = false
+        var updateAvailable = false
         fun setListPadzeia() {
             padzeia.clear()
             val gson = Gson()

@@ -529,6 +529,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_20_08_pasviaccie_uspiennia_praroka_samuila_viaczernia"] = R.raw.mm_20_08_pasviaccie_uspiennia_praroka_samuila_viaczernia
             resursMap["mm_21_08_pasviaccie_uspiennia_apostala_tadeja_aurama_smalenskaha_liturhija"] = R.raw.mm_21_08_pasviaccie_uspiennia_apostala_tadeja_aurama_smalenskaha_liturhija
             resursMap["mm_21_08_pasviaccie_uspiennia_apostala_tadeja_aurama_smalenskaha_viaczernia"] = R.raw.mm_21_08_pasviaccie_uspiennia_apostala_tadeja_aurama_smalenskaha_viaczernia
+            resursMap["mm_22_08_pasviaccie_uspiennia_muczanikau_ahatonika_lupa_viaczernia"] = R.raw.mm_22_08_pasviaccie_uspiennia_muczanikau_ahatonika_lupa_viaczernia
+            resursMap["mm_23_08_addannie_sviata_uspiennia_viaczernia"] = R.raw.mm_23_08_addannie_sviata_uspiennia_viaczernia
+            resursMap["mm_23_08_addannie_sviata_uspiennia_liturhija"] = R.raw.mm_23_08_addannie_sviata_uspiennia_liturhija
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {

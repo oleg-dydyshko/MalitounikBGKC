@@ -23,10 +23,12 @@ class DialogUpdateWIFI : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        mListener?.onUpdateNegativeWIFI()
     }
 
     internal interface DialogUpdateListener {
         fun onUpdatePositiveWIFI()
+        fun onUpdateNegativeWIFI()
     }
 
     override fun onAttach(context: Context) {
@@ -62,7 +64,7 @@ class DialogUpdateWIFI : DialogFragment() {
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             builder.setView(binding.root)
             builder.setPositiveButton(getString(R.string.dazvolic)) { _: DialogInterface?, _: Int -> mListener?.onUpdatePositiveWIFI() }
-            builder.setNegativeButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setNegativeButton(resources.getString(R.string.cansel)) { _: DialogInterface, _: Int -> mListener?.onUpdateNegativeWIFI() }
         }
         return builder.create()
     }

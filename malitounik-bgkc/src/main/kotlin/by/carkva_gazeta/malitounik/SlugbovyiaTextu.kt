@@ -308,6 +308,9 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(233, "Пасьвяцьце Ўсьпеньня і сьвятога прарока Самуіла", "mm_20_08_pasviaccie_uspiennia_praroka_samuila_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(234, "Пасьвяцьце Ўсьпеньня, сьв. апостала Тадэя і сьвятога айца нашага Аўрама Смаленскага і вучня ягонага Ахрэма", "mm_21_08_pasviaccie_uspiennia_apostala_tadeja_aurama_smalenskaha_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(234, "Пасьвяцьце Ўсьпеньня, сьв. апостала Тадэя і сьвятога айца нашага Аўрама Смаленскага і вучня ягонага Ахрэма", "mm_21_08_pasviaccie_uspiennia_apostala_tadeja_aurama_smalenskaha_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(235, "Пасьвяцьце Ўсьпеньня, сьв. мучаніка Агатоніка і сьв. мучаніка Люпа", "mm_22_08_pasviaccie_uspiennia_muczanikau_ahatonika_lupa_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(236, "Адданьне сьвята Ўсьпеньня Найсьвяцейшай Багародзіцы і Заўсёды Дзевы Марыі", "mm_23_08_addannie_sviata_uspiennia_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(236, "Адданьне сьвята Ўсьпеньня Найсьвяцейшай Багародзіцы і Заўсёды Дзевы Марыі", "mm_23_08_addannie_sviata_uspiennia_liturhija", LITURHIJA))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {

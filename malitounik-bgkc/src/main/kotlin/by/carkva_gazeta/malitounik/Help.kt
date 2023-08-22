@@ -1,16 +1,23 @@
 package by.carkva_gazeta.malitounik
 
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.TypedValue
 import android.view.MenuItem
+import android.view.View
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.HelpBinding
+import com.google.android.play.core.review.ReviewException
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.play.core.review.model.ReviewErrorCode
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class Help : BaseActivity() {
-    
+
     private lateinit var binding: HelpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +42,25 @@ class Help : BaseActivity() {
                 builder.append(line)
             }
         }
-        binding.textView.text = MainActivity.fromHtml(builder.toString())
+        val ss = SpannableString(MainActivity.fromHtml(builder.toString()))
+        val t1 = ss.indexOf("Google play")
+        ss.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                val manager = ReviewManagerFactory.create(this@Help)
+                val request = manager.requestReviewFlow()
+                request.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val reviewInfo = task.result
+                        manager.launchReviewFlow(this@Help, reviewInfo)
+                    } else {
+                        // There was some problem, log or handle the error code.
+                        @ReviewErrorCode val reviewErrorCode = (task.exception as ReviewException).errorCode
+                    }
+                }
+
+            }
+        }, t1, t1 + 11, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        binding.textView.text = ss
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())

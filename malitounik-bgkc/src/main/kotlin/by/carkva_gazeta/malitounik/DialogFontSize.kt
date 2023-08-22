@@ -96,46 +96,18 @@ class DialogFontSize : DialogFragment() {
         activity?.let {
             MainActivity.dialogVisable = true
             _binding = DialogFontBinding.inflate(LayoutInflater.from(it))
-            val builder = AlertDialog.Builder(it)
-            builder.setView(binding.root)
-            alert = builder.create()
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            val builder = AlertDialog.Builder(it, style)
+            builder.setView(binding.root)
             val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             if (dzenNoch) {
                 binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 binding.textSize.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                binding.zmauchanni.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                binding.cansel.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                binding.ok.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                binding.zmauchanni.setBackgroundResource(R.drawable.selector_dialog_font_dark)
-                binding.cansel.setBackgroundResource(R.drawable.selector_dialog_font_dark)
-                binding.ok.setBackgroundResource(R.drawable.selector_dialog_font_dark)
             }
             binding.textSize.text = getString(R.string.get_font, fontBiblia.toInt())
-            binding.zmauchanni.setOnClickListener {
-                val prefEditors = k.edit()
-                prefEditors.putFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-                prefEditors.apply()
-                mListener.onDialogFontSize(SettingsActivity.GET_FONT_SIZE_DEFAULT)
-                dialog?.cancel()
-            }
-            binding.cansel.setOnClickListener {
-                val prefEditors = k.edit()
-                prefEditors.putFloat("font_biblia", fontBiblia)
-                prefEditors.apply()
-                mListener.onDialogFontSize(fontBiblia)
-                dialog?.cancel()
-            }
-            binding.ok.setOnClickListener {
-                val progress = binding.seekBar.progress
-                val fontSize = getFont(progress)
-                val prefEditors = k.edit()
-                prefEditors.putFloat("font_biblia", fontSize)
-                prefEditors.apply()
-                mListener.onDialogFontSize(fontSize)
-                dialog?.cancel()
-            }
             if (savedInstanceState != null) {
                 val seekbar = savedInstanceState.getInt("seekbar")
                 binding.seekBar.progress = seekbar
@@ -154,18 +126,39 @@ class DialogFontSize : DialogFragment() {
 
                 override fun onStartTrackingTouch(seekBar: SeekBar) {
                     binding.title.visibility = View.GONE
-                    binding.zmauchanni.visibility = View.GONE
-                    binding.cansel.visibility = View.GONE
-                    binding.ok.visibility = View.GONE
+                    alert.getButton(DialogInterface.BUTTON_POSITIVE).visibility = View.GONE
+                    alert.getButton(DialogInterface.BUTTON_NEGATIVE).visibility = View.GONE
+                    alert.getButton(DialogInterface.BUTTON_NEUTRAL).visibility = View.GONE
                 }
 
                 override fun onStopTrackingTouch(seekBar: SeekBar) {
                     binding.title.visibility = View.VISIBLE
-                    binding.zmauchanni.visibility = View.VISIBLE
-                    binding.cansel.visibility = View.VISIBLE
-                    binding.ok.visibility = View.VISIBLE
+                    alert.getButton(DialogInterface.BUTTON_POSITIVE).visibility = View.VISIBLE
+                    alert.getButton(DialogInterface.BUTTON_NEGATIVE).visibility = View.VISIBLE
+                    alert.getButton(DialogInterface.BUTTON_NEUTRAL).visibility = View.VISIBLE
                 }
             })
+            builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface, _: Int ->
+                val progress = binding.seekBar.progress
+                val fontSize = getFont(progress)
+                val prefEditors = k.edit()
+                prefEditors.putFloat("font_biblia", fontSize)
+                prefEditors.apply()
+                mListener.onDialogFontSize(fontSize)
+            }
+            builder.setNegativeButton(resources.getString(R.string.cansel)) { _: DialogInterface, _: Int ->
+                val prefEditors = k.edit()
+                prefEditors.putFloat("font_biblia", fontBiblia)
+                prefEditors.apply()
+                mListener.onDialogFontSize(fontBiblia)
+            }
+            builder.setNeutralButton(resources.getString(R.string.font_pa_zmauchanni)) { _: DialogInterface, _: Int ->
+                val prefEditors = k.edit()
+                prefEditors.putFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                prefEditors.apply()
+                mListener.onDialogFontSize(SettingsActivity.GET_FONT_SIZE_DEFAULT)
+            }
+            alert = builder.create()
         }
         return alert
     }

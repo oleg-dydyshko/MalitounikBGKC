@@ -5,7 +5,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.provider.Settings
 import android.provider.Settings.SettingNotFoundException
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,23 +46,14 @@ class DialogBrightness : DialogFragment() {
                 }
             }
             _binding = DialogFontBinding.inflate(LayoutInflater.from(it))
-            val builder = AlertDialog.Builder(it)
-            builder.setView(binding.root)
-            alert = builder.create()
-            binding.zmauchanni.text = resources.getText(R.string.skid_brightness)
-            binding.zmauchanni.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            binding.ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            binding.cansel.visibility = View.GONE
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            val builder = AlertDialog.Builder(it, style)
+            builder.setView(binding.root)
             if (dzenNoch) {
                 binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 binding.textSize.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                binding.zmauchanni.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                binding.cansel.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                binding.ok.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                binding.zmauchanni.setBackgroundResource(R.drawable.selector_dialog_font_dark)
-                binding.cansel.setBackgroundResource(R.drawable.selector_dialog_font_dark)
-                binding.ok.setBackgroundResource(R.drawable.selector_dialog_font_dark)
             }
             binding.title.text = resources.getString(R.string.Bright3)
             binding.seekBar.max = 100
@@ -82,16 +72,16 @@ class DialogBrightness : DialogFragment() {
                 override fun onStartTrackingTouch(seekBar: SeekBar) {}
                 override fun onStopTrackingTouch(seekBar: SeekBar) {}
             })
-            binding.zmauchanni.setOnClickListener { _ ->
+            builder.setPositiveButton(resources.getText(R.string.ok)) { dialog: DialogInterface, _: Int ->
+                dialog.cancel()
+            }
+            builder.setNeutralButton(resources.getString(R.string.skid_brightness)) { _: DialogInterface, _: Int ->
                 MainActivity.checkBrightness = true
                 val lp = it.window.attributes
                 lp.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
                 it.window.attributes = lp
-                dialog?.cancel()
             }
-            binding.ok.setOnClickListener {
-                dialog?.cancel()
-            }
+            alert = builder.create()
         }
         return alert
     }

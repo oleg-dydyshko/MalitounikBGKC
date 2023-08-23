@@ -5,7 +5,6 @@ import android.app.*
 import android.appwidget.AppWidgetManager
 import android.content.*
 import android.content.SharedPreferences.Editor
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
@@ -825,8 +824,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.line2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            binding.linear2.setBackgroundResource(R.color.colorbackground_material_dark)
-            binding.moduleDownload.setBackgroundResource(R.color.colorPrimary_black)
         }
         binding.textView16.setOnClickListener {
             if (SystemClock.elapsedRealtime() - adminClickTime < 2000) {
@@ -862,6 +859,9 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             if (checkmodulesAdmin()) {
                 dynamicModuleInstalled()
             } else {
+                val dialog = DialogUpdateMalitounik.getInstance(getString(R.string.title_download_module2))
+                dialog.isCancelable = false
+                dialog.show(supportFragmentManager, "DialogUpdateMalitounik")
                 setDownloadDynamicModuleListener(this)
                 downloadDynamicModule("admin")
             }
@@ -1265,24 +1265,14 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         setTollbarTheme()
     }
 
-    override fun dynamicModulePending(bytesDownload: String) {
-        binding.linear.visibility = View.VISIBLE
-        binding.textProgress.text = bytesDownload
-    }
-
-    override fun dynamicModuleDownload() {
-        binding.linear.visibility = View.GONE
-    }
-
-    override fun dynamicModuleDownloading(bytesDownload: String, totalBytesToDownload: Int, bytesDownloaded: Int) {
-        binding.linear.visibility = View.VISIBLE
-        binding.progressBarModule.max = totalBytesToDownload
-        binding.progressBarModule.progress = bytesDownloaded
-        binding.textProgress.text = bytesDownload
+    override fun dynamicModuleDownloading(totalBytesToDownload: Double, bytesDownloaded: Double) {
+        val dialog = supportFragmentManager.findFragmentByTag("DialogUpdateMalitounik") as? DialogUpdateMalitounik
+        dialog?.updateProgress(totalBytesToDownload, bytesDownloaded)
     }
 
     override fun dynamicModuleInstalled() {
-        binding.linear.visibility = View.GONE
+        val dialog = supportFragmentManager.findFragmentByTag("DialogUpdateMalitounik") as? DialogUpdateMalitounik
+        dialog?.updateComplete()
         SplitInstallHelper.updateAppInfo(this)
         val intent = Intent()
         intent.setClassName(this, MainActivity.ADMINMAIN)
@@ -1449,6 +1439,9 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         binding.admin.visibility = View.VISIBLE
         binding.checkBox8.visibility = View.VISIBLE
         if (!checkmodulesAdmin()) {
+            val dialog = DialogUpdateMalitounik.getInstance(getString(R.string.title_download_module2))
+            dialog.isCancelable = false
+            dialog.show(supportFragmentManager, "DialogUpdateMalitounik")
             setDownloadDynamicModuleListener(this)
             downloadDynamicModule("admin")
         }

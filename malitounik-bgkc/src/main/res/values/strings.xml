@@ -585,8 +585,6 @@
     <string name="admin_panel">ПАНЭЛЬ КІРАВАНЬНЯ</string>
     <string name="login">Логін</string>
     <string name="password">Пароль</string>
-    <string name="install_dadatak">УСТАЛЮЙЦЕ ДАДАТАК</string>
-    <string name="install_dadatak_opis">Дадзеная функція не даступна, для яе працы усталюйце %1$s.</string>
     <string name="pre_view">Прадпрагляд</string>
     <string name="fing_count">%1$d/%2$d</string>
     <string name="pasochnica">Пясочніца</string>
@@ -785,5 +783,6 @@
         <item>#20B2AA</item>
     </string-array>
     <string name="update_program">Даступна абнаўленьне</string>
+    <string name="update_program_progress">%1$s з %2$s</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

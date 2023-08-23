@@ -106,8 +106,7 @@ class SubMenuBogashlugbovyaVialikiPost : BaseActivity() {
                 }
                 startActivity(intent)
             } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(supportFragmentManager, "dadatak")
+                installFullMalitounik()
             }
         }
     }

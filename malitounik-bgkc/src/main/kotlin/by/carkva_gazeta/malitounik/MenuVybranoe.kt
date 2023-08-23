@@ -391,8 +391,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                             }
                         }
                     } else {
-                        val dadatak = DialogInstallDadatak()
-                        dadatak.show(childFragmentManager, "dadatak")
+                        activity.installFullMalitounik()
                     }
                 }
             }

@@ -470,8 +470,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                         intent.putExtra("resurs", data[position].resurs)
                         startActivity(intent)
                     } else {
-                        val dadatak = DialogInstallDadatak()
-                        dadatak.show(childFragmentManager, "dadatak")
+                        it.installFullMalitounik()
                     }
                 }
             }

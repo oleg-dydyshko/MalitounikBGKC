@@ -57,8 +57,7 @@ class MenuParafiiBgkc : BaseFragment() {
                     intent.putExtra("resurs", "dzie_kuryja")
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                 }
             }
             val children1 = ArrayList<MenuListData>()
@@ -127,8 +126,7 @@ class MenuParafiiBgkc : BaseFragment() {
                     intent.putExtra("resurs", groups[groupPosition][childPosition].resurs)
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                 }
                 false
             }

@@ -71,8 +71,7 @@ class DialogMineiaList : DialogFragment() {
                     startActivity(intent)
 
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    it.installFullMalitounik()
                 }
             }
             val adapter = ListAdaprer(it, fileList)

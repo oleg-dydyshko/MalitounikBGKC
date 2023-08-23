@@ -86,8 +86,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                     intent.putExtra("zavet", 3)
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                 }
             }
             if (id == R.id.myBible) {
@@ -126,8 +125,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                         intent.putExtra("prodolzyt", true)
                         startActivity(intent)
                     } else {
-                        val dadatak = DialogInstallDadatak()
-                        dadatak.show(childFragmentManager, "dadatak")
+                        activity.installFullMalitounik()
                     }
                 }
             }
@@ -143,8 +141,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                     intent.putExtra("malitva_title", binding.malitvaPered.text.toString())
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                 }
             }
             if (id == R.id.malitva_posle) {
@@ -155,8 +152,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                     intent.putExtra("malitva_title", binding.malitvaPosle.text.toString())
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                 }
             }
             if (id == R.id.pesni) {
@@ -166,8 +162,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                     intent.putExtra("malitva", 2)
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                 }
             }
             if (id == R.id.pravila) {
@@ -176,8 +171,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                     intent.setClassName(activity, MainActivity.PSALTERNADSANA)
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                 }
             }
             val glava = when (id) {
@@ -210,8 +204,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                     intent.putExtra("kafizma", glava)
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                 }
             }
         }

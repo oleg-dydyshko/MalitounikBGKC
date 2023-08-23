@@ -72,8 +72,7 @@ class MenuRuzanec : BaseListFragment() {
                 }
                 startActivity(intent)
             } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
+                it.installFullMalitounik()
             }
         }
     }

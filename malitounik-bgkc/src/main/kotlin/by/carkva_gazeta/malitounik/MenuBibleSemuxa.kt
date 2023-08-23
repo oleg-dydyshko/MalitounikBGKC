@@ -84,8 +84,7 @@ class MenuBibleSemuxa : BaseFragment() {
                         intent.putExtra("prodolzyt", true)
                         startActivity(intent)
                     } else {
-                        val dadatak = DialogInstallDadatak()
-                        dadatak.show(childFragmentManager, "dadatak")
+                        activity.installFullMalitounik()
                     }
                 }
             }
@@ -100,8 +99,7 @@ class MenuBibleSemuxa : BaseFragment() {
                     intent.putExtra("semuxa", 1)
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                 }
             }
             binding.natatki.setOnClickListener {
@@ -115,8 +113,7 @@ class MenuBibleSemuxa : BaseFragment() {
                     intent.putExtra("semuxa", 1)
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                 }
             }
             binding.saeche.setOnClickListener {
@@ -130,8 +127,7 @@ class MenuBibleSemuxa : BaseFragment() {
                     intent.putExtra("zavet", 1)
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                 }
             }
             binding.umovyKarystannia.setOnClickListener {

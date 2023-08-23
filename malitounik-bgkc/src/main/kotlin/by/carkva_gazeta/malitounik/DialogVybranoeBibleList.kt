@@ -107,7 +107,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        activity?.let { activity ->
+        (activity as? BaseActivity)?.let { activity ->
             _binding = DialogVybranoeBibleListBinding.inflate(LayoutInflater.from(activity))
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             var style = R.style.AlertDialogTheme
@@ -180,8 +180,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                     intent.putExtra("prodoljyt", true)
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                 }
             }
             builder.setPositiveButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
@@ -271,8 +270,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                         intent.putExtra("title", mItemList[bindingAdapterPosition].title)
                         startActivity(intent)
                     } else {
-                        val dadatak = DialogInstallDadatak()
-                        dadatak.show(childFragmentManager, "dadatak")
+                        it.installFullMalitounik()
                     }
                 }
             }

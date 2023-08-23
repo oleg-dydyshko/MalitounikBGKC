@@ -240,19 +240,23 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     }
 
     fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) {
-        activity?.let {
-            val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), listPosition)
-            if (file.exists()) {
-                filePath = file.path
-                fileName = title
-                loadComplete()
-            } else {
-                if (MainActivity.isNetworkAvailable(true)) {
-                    val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition)
-                    bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
+        (activity as? BaseActivity)?.let {
+            if (it.checkmoduleResources()) {
+                val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), listPosition)
+                if (file.exists()) {
+                    filePath = file.path
+                    fileName = title
+                    loadComplete()
                 } else {
-                    writeFile(listPosition)
+                    if (MainActivity.isNetworkAvailable(true)) {
+                        val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition)
+                        bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
+                    } else {
+                        writeFile(listPosition)
+                    }
                 }
+            } else {
+                it.installFullMalitounik()
             }
         }
     }
@@ -269,7 +273,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     }
                     for (i in 0..2) {
                         error = downloadPdfFile(url)
-                        if(!error) break
+                        if (!error) break
                     }
                 }
             } catch (t: Throwable) {
@@ -280,6 +284,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 binding?.progressBar2?.visibility = View.GONE
                 loadComplete()
             } else {
+                binding?.progressBar2?.visibility = View.GONE
                 DialogNoInternet().show(childFragmentManager, "no_internet")
             }
         }
@@ -340,8 +345,6 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 if (dzenNoch) {
                     binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
                     binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary_black)
-                    binding.linear2.setBackgroundResource(R.color.colorbackground_material_dark)
-                    binding.moduleDownload.setBackgroundResource(R.color.colorPrimary_black)
                 } else {
                     binding.listView.background = ContextCompat.getDrawable(it, R.color.colorDivider)
                     binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default_bibliateka)
@@ -465,42 +468,28 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 if (it.checkmodulesBiblijateka()) {
                     dynamicModuleInstalled()
                 } else {
+                    val dialog = DialogUpdateMalitounik.getInstance(getString(R.string.title_download_module))
+                    dialog.isCancelable = false
+                    dialog.show(childFragmentManager, "DialogUpdateMalitounik")
                     it.setDownloadDynamicModuleListener(this)
                     it.downloadDynamicModule("biblijateka")
                 }
             } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
+                it.installFullMalitounik()
             }
         }
     }
 
-    override fun dynamicModulePending(bytesDownload: String) {
-        binding?.let {
-            it.linear.visibility = View.VISIBLE
-            it.textProgress.text = bytesDownload
-        }
-    }
-
-    override fun dynamicModuleDownload() {
-        binding?.let {
-            it.linear.visibility = View.GONE
-        }
-    }
-
-    override fun dynamicModuleDownloading(bytesDownload: String, totalBytesToDownload: Int, bytesDownloaded: Int) {
-        binding?.let {
-            it.linear.visibility = View.VISIBLE
-            it.progressBarModule.max = totalBytesToDownload
-            it.progressBarModule.progress = bytesDownloaded
-            it.textProgress.text = bytesDownload
-        }
+    override fun dynamicModuleDownloading(totalBytesToDownload: Double, bytesDownloaded: Double) {
+        val dialog = childFragmentManager.findFragmentByTag("DialogUpdateMalitounik") as? DialogUpdateMalitounik
+        dialog?.updateProgress(totalBytesToDownload, bytesDownloaded)
     }
 
     override fun dynamicModuleInstalled() {
         activity?.let { activity ->
             binding?.let {
-                it.linear.visibility = View.GONE
+                val dialog = childFragmentManager.findFragmentByTag("DialogUpdateMalitounik") as? DialogUpdateMalitounik
+                dialog?.updateComplete()
                 SplitInstallHelper.updateAppInfo(activity)
                 val intent = Intent()
                 intent.setClassName(activity, MainActivity.BIBLIJATEKAPDF)

@@ -313,8 +313,7 @@ class DialogCalindarGrid : DialogFragment() {
                     return
                 }
                 if ((activity as? BaseActivity)?.checkmoduleResources() == false) {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    activity.installFullMalitounik()
                     return
                 }
                 when (itemList[bindingAdapterPosition].toInt()) {

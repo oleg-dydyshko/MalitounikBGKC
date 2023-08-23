@@ -50,7 +50,6 @@ import java.io.*
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
-import kotlin.math.roundToLong
 
 
 class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, DialogLogView.DialogLogViewListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener {
@@ -93,7 +92,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
     }
     private val updateMalitounikLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-        if (result.resultCode != Activity.RESULT_OK) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            val dialog = DialogUpdateMalitounik.getInstance(getString(R.string.update_title))
+            dialog.show(supportFragmentManager, "DialogUpdateMalitounik")
+        } else {
             onUpdateNegativeWIFI()
         }
     }
@@ -111,16 +113,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
     }
     private val installStateUpdatedListener = InstallStateUpdatedListener { state ->
+        val dialog = supportFragmentManager.findFragmentByTag("DialogUpdateMalitounik") as? DialogUpdateMalitounik
         if (state.installStatus() == InstallStatus.DOWNLOADING) {
-            val bytesDownload = (state.bytesDownloaded() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
-            val total = (state.totalBytesToDownload() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
-            bindingappbar.linear.visibility = View.VISIBLE
-            bindingappbar.progressBarModule.max = total.toInt()
-            bindingappbar.progressBarModule.progress = bytesDownload.toInt()
-            bindingappbar.textProgress.text = bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб")
+            val bytesDownload = state.bytesDownloaded()
+            val total = state.totalBytesToDownload()
+            dialog?.updateProgress(total.toDouble(), bytesDownload.toDouble())
         }
         if (state.installStatus() == InstallStatus.DOWNLOADED) {
-            bindingappbar.linear.visibility = View.GONE
+            dialog?.updateComplete()
             completeUpdate()
         }
     }
@@ -330,6 +330,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 completeUpdate()
             }
         }
+        /*val bytesDownload = "12000548".toDouble()
+        val total = "25025024".toDouble()
+        val dialog = supportFragmentManager.findFragmentByTag("DialogUpdateMalitounik") as? DialogUpdateMalitounik
+        dialog?.updateProgress(total, bytesDownload)*/
 
         /*val density = resources.displayMetrics.density
 
@@ -370,6 +374,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             //host.deleteAppWidgetId(it)
             Log.d("Oleg", it.toString())
         }*/
+        //val dialog = DialogUpdateMalitounik()
+        //dialog.show(supportFragmentManager, "DialogUpdateMalitounik")
         mkDir()
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain
@@ -1920,6 +1926,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                             val dialog = DialogUpdateWIFI.getInstance(appUpdateInfo.totalBytesToDownload().toFloat())
                             dialog.show(supportFragmentManager, "DialogUpdateWIFI")
                         } else {
+                            val dialog = DialogUpdateMalitounik.getInstance(getString(R.string.update_title))
+                            dialog.show(supportFragmentManager, "DialogUpdateMalitounik")
                             appUpdateManager.registerListener(installStateUpdatedListener)
                             appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateMalitounikLauncher, AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build())
                         }

@@ -96,8 +96,7 @@ class MineiaAgulnaia : BaseActivity() {
                     intent.putExtra("resurs", data[position].resurs)
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(supportFragmentManager, "dadatak")
+                    installFullMalitounik()
                 }
             }
         }

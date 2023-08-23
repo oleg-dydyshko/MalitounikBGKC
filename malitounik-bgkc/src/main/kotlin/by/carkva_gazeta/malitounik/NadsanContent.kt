@@ -48,8 +48,7 @@ class NadsanContent : BaseActivity() {
                 intent.putExtra("glava", position)
                 startActivity(intent)
             } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(supportFragmentManager, "dadatak")
+                installFullMalitounik()
             }
         }
         setTollbarTheme()

@@ -2,6 +2,7 @@ package by.carkva_gazeta.malitounik
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -17,6 +18,7 @@ import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
+import com.google.android.gms.instantapps.InstantApps
 import com.google.android.play.core.splitinstall.SplitInstallException
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
@@ -28,7 +30,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.roundToLong
 
 abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProvider {
 
@@ -45,9 +46,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     private var downloadDynamicModuleListener: DownloadDynamicModuleListener? = null
 
     interface DownloadDynamicModuleListener {
-        fun dynamicModulePending(bytesDownload: String)
-        fun dynamicModuleDownload()
-        fun dynamicModuleDownloading(bytesDownload: String, totalBytesToDownload: Int, bytesDownloaded: Int)
+        fun dynamicModuleDownloading(totalBytesToDownload: Double, bytesDownloaded: Double)
         fun dynamicModuleInstalled()
     }
 
@@ -217,6 +216,13 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         mySensorManager.unregisterListener(this, lightSensor)
     }
 
+    fun installFullMalitounik() {
+        val postInstall = Intent(Intent.ACTION_MAIN)
+        postInstall.addCategory(Intent.CATEGORY_DEFAULT)
+        postInstall.setPackage(packageName)
+        InstantApps.showInstallPrompt(this, postInstall, 500,  null)
+    }
+
     fun checkmodulesAdmin(): Boolean {
         val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
         for (mod in muduls) {
@@ -252,8 +258,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
         val request = SplitInstallRequest.newBuilder().addModule(moduleName).build()
 
-        val listener = SplitInstallStateUpdatedListener {
-            val state = it
+        val listener = SplitInstallStateUpdatedListener { state ->
             if (state.status() == SplitInstallSessionStatus.FAILED) {
                 downloadDynamicModule(moduleName)
                 return@SplitInstallStateUpdatedListener
@@ -262,19 +267,15 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                 splitInstallManager.startConfirmationDialogForResult(state, this, 150)
             }
             if (state.sessionId() == sessionId) {
-                val bytesDownload = (state.bytesDownloaded() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
-                val total = (state.totalBytesToDownload() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
                 when (state.status()) {
                     SplitInstallSessionStatus.PENDING -> {
-                        downloadDynamicModuleListener?.dynamicModulePending(bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб"))
                     }
 
                     SplitInstallSessionStatus.DOWNLOADED -> {
-                        downloadDynamicModuleListener?.dynamicModuleDownload()
                     }
 
                     SplitInstallSessionStatus.DOWNLOADING -> {
-                        downloadDynamicModuleListener?.dynamicModuleDownloading(bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб"), state.totalBytesToDownload().toInt(), state.bytesDownloaded().toInt())
+                        downloadDynamicModuleListener?.dynamicModuleDownloading(state.totalBytesToDownload().toDouble(), state.bytesDownloaded().toDouble())
                     }
 
                     SplitInstallSessionStatus.INSTALLED -> {

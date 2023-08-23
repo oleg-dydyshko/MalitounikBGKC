@@ -85,8 +85,7 @@ class TonNiadzelny : BaseActivity() {
                 intent.putExtra("zmena_chastki", true)
                 startActivity(intent)
             } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(supportFragmentManager, "dadatak")
+                installFullMalitounik()
             }
         }
     }

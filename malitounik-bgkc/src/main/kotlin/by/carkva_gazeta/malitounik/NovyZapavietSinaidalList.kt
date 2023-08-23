@@ -185,8 +185,7 @@ class NovyZapavietSinaidalList : BaseActivity() {
                 intent.putExtra("glava", childPosition)
                 startActivity(intent)
             } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(supportFragmentManager, "dadatak")
+                installFullMalitounik()
             }
             false
         }

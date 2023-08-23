@@ -56,8 +56,7 @@ class MenuMalitvy : BaseListFragment() {
                     }
                 }
             } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
+                it.installFullMalitounik()
             }
         }
     }

@@ -79,7 +79,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.let {
+        (activity as? BaseActivity)?.let {
             val nedelName = it.resources.getStringArray(R.array.dni_nedeli)
             val monthName = it.resources.getStringArray(R.array.meciac)
             val c = Calendar.getInstance()
@@ -511,8 +511,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[10])
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    it.installFullMalitounik()
                 }
 
                 R.id.textChytanne -> if (it.checkmoduleResources()) {
@@ -521,8 +520,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[9])
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    it.installFullMalitounik()
                 }
 
                 R.id.textChytanneSviatyiaDop -> if (it.checkmoduleResources()) {
@@ -531,8 +529,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[11])
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    it.installFullMalitounik()
                 }
 
                 R.id.maranata -> if (it.checkmoduleResources()) {
@@ -543,8 +540,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     intent.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
                     startActivity(intent)
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
+                    it.installFullMalitounik()
                 }
             }
         }

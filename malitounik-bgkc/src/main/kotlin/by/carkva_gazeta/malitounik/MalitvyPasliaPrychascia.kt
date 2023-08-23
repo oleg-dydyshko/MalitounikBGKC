@@ -73,8 +73,7 @@ class MalitvyPasliaPrychascia : BaseActivity() {
                 intent.putExtra("paslia_prychascia", position)
                 startActivity(intent)
             } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(supportFragmentManager, "dadatak")
+                installFullMalitounik()
             }
         }
     }

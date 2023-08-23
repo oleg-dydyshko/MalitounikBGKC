@@ -10,9 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.HelpBinding
-import com.google.android.play.core.review.ReviewException
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.android.play.core.review.model.ReviewErrorCode
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -52,9 +50,6 @@ class Help : BaseActivity() {
                     if (task.isSuccessful) {
                         val reviewInfo = task.result
                         manager.launchReviewFlow(this@Help, reviewInfo)
-                    } else {
-                        // There was some problem, log or handle the error code.
-                        @ReviewErrorCode val reviewErrorCode = (task.exception as ReviewException).errorCode
                     }
                 }
 

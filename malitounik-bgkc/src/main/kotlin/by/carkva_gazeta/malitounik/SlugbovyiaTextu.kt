@@ -311,7 +311,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(235, "Пасьвяцьце Ўсьпеньня, сьв. мучаніка Агатоніка і сьв. мучаніка Люпа", "mm_22_08_pasviaccie_uspiennia_muczanikau_ahatonika_lupa_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(236, "Адданьне сьвята Ўсьпеньня Найсьвяцейшай Багародзіцы і Заўсёды Дзевы Марыі", "mm_23_08_addannie_sviata_uspiennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(236, "Адданьне сьвята Ўсьпеньня Найсьвяцейшай Багародзіцы і Заўсёды Дзевы Марыі", "mm_23_08_addannie_sviata_uspiennia_liturhija", LITURHIJA))
-        datMinALL.add(SlugbovyiaTextuData(237, "Сьвятамучаніка Яўтыха, вучня сьвятога Яна Багаслова", "mm_24_08_sviatamuczanika_jautycha_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(237, "Сьвятамучаніка Яўціха, вучня сьвятога Яна Багаслова", "mm_24_08_sviatamuczanika_jaucicha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(238, "Перанясеньне мошчаў апостала Баўтрамея, апостала Ціта, вучня сьвятога Паўла", "mm_25_08_pieranias_moszczau_apostala_bautramieja_apostala_cita_viaczernia", VIACZERNIA))
     }
 
@@ -430,7 +430,7 @@ class SlugbovyiaTextu {
 
     fun loadPiarliny() {
         if (piarliny.size == 0 && loadPiarlinyJob?.isActive != true) {
-            val filePiarliny = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
+            val filePiarliny = File("${BaseActivity.applicationContext().filesDir}/piarliny.json")
             if (!filePiarliny.exists()) {
                 if (MainActivity.isNetworkAvailable()) {
                     loadPiarlinyJob = CoroutineScope(Dispatchers.Main).launch {
@@ -460,9 +460,9 @@ class SlugbovyiaTextu {
     }
 
     private suspend fun getPiarliny(): String {
-        val pathReference = Malitounik.referens.child("/chytanne/piarliny.json")
+        val pathReference = BaseActivity.referens.child("/chytanne/piarliny.json")
         var text = ""
-        val localFile = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
+        val localFile = File("${BaseActivity.applicationContext().filesDir}/piarliny.json")
         pathReference.getFile(localFile).addOnSuccessListener {
             text = localFile.readText()
         }.await()
@@ -649,7 +649,7 @@ class SlugbovyiaTextu {
     }
 
     fun checkFullChtenia(resource: Int): Boolean {
-        val inputStream = Malitounik.applicationContext().resources.openRawResource(resource)
+        val inputStream = BaseActivity.applicationContext().resources.openRawResource(resource)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         val text = reader.readText()

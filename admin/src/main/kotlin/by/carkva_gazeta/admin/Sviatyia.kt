@@ -34,6 +34,7 @@ import by.carkva_gazeta.malitounik.MenuCaliandar
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemTipiconBinding
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -84,6 +85,11 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
     }
 
     override fun setMyTheme() {
+    }
+
+    override fun attachBaseContext(context: Context) {
+        super.attachBaseContext(context)
+        SplitCompat.installActivity(context)
     }
 
     override fun onResume() {

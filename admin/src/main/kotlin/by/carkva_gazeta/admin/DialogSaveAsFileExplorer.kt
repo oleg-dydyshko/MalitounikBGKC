@@ -19,8 +19,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminDialigSaveAsBinding
 import by.carkva_gazeta.admin.databinding.AdminSimpleListItemBinding
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -201,7 +201,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 try {
                     fileList.clear()
                     val temp = ArrayList<MyNetFile>()
-                    val list = Malitounik.referens.child("/$dir").list(1000).await()
+                    val list = BaseActivity.referens.child("/$dir").list(1000).await()
                     if (dir != "") {
                         val t1 = dir.lastIndexOf("/")
                         temp.add(MyNetFile(R.drawable.directory_up, dir.substring(t1 + 1)))

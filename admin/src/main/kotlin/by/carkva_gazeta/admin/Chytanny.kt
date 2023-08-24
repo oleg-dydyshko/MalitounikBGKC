@@ -1,6 +1,7 @@
 package by.carkva_gazeta.admin
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Typeface
 import android.hardware.SensorEvent
 import android.net.Uri
@@ -29,9 +30,9 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.CustomTypefaceSpan
 import by.carkva_gazeta.malitounik.EditTextCustom
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
+import com.google.android.play.core.splitcompat.SplitCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -54,6 +55,11 @@ class Chytanny : BaseActivity() {
     override fun setMyTheme() {
     }
 
+    override fun attachBaseContext(context: Context) {
+        super.attachBaseContext(context)
+        SplitCompat.installActivity(context)
+    }
+
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
@@ -66,7 +72,7 @@ class Chytanny : BaseActivity() {
             binding.linear.removeAllViewsInLayout()
             val localFile = File("$filesDir/cache/cache.txt")
             var text = ""
-            Malitounik.referens.child("/calendar-cytanne_$year.php").getFile(localFile).addOnCompleteListener {
+            referens.child("/calendar-cytanne_$year.php").getFile(localFile).addOnCompleteListener {
                 if (it.isSuccessful && localFile.exists()) text = localFile.readText()
                 else MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
             }.await()
@@ -271,7 +277,7 @@ class Chytanny : BaseActivity() {
                     val logFile = File("$filesDir/cache/log.txt")
                     val sb = StringBuilder()
                     val url = "/calendar-cytanne_$year.php"
-                    Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
                         MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
                     var ref = true
@@ -287,9 +293,9 @@ class Chytanny : BaseActivity() {
                     logFile.writer().use {
                         it.write(sb.toString())
                     }
-                    Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
 
-                    Malitounik.referens.child("/calendar-cytanne_$year.php").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
+                    referens.child("/calendar-cytanne_$year.php").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                         if (it.isSuccessful) {
                             MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.save))
                         } else {

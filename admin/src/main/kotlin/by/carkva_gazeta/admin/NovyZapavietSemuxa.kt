@@ -21,7 +21,12 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.*
+import com.google.android.play.core.splitcompat.SplitCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class NovyZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelListener {
     private var trak = false
@@ -38,6 +43,11 @@ class NovyZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelLi
     }
 
     override fun setMyTheme() {
+    }
+
+    override fun attachBaseContext(context: Context) {
+        super.attachBaseContext(context)
+        SplitCompat.installActivity(context)
     }
 
     override fun onPause() {

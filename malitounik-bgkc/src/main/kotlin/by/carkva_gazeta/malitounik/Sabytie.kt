@@ -2633,7 +2633,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
     }
 
     companion object {
-        private val colors = Malitounik.applicationContext().resources.getStringArray(R.array.colors)
+        private val colors = applicationContext().resources.getStringArray(R.array.colors)
         var editCaliandar = false
 
         fun getColors(dzenNoch: Boolean, color: Int): String {

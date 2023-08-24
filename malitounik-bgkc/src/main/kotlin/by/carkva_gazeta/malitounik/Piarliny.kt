@@ -112,7 +112,7 @@ class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     private suspend fun getPiarliny(): String {
-        val pathReference = Malitounik.referens.child("/chytanne/piarliny.json")
+        val pathReference = BaseActivity.referens.child("/chytanne/piarliny.json")
         var text = ""
         val localFile = File("$filesDir/piarliny.json")
         pathReference.getFile(localFile).addOnSuccessListener {

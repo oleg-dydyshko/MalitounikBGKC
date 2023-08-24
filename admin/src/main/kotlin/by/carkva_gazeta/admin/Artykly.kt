@@ -8,7 +8,11 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
@@ -16,12 +20,16 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminArtykulyBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.File
 
@@ -34,6 +42,11 @@ class Artykly : BaseActivity(), View.OnClickListener {
     private var path = "history.json"
     private var position = 0
 
+    override fun attachBaseContext(context: Context) {
+        super.attachBaseContext(context)
+        SplitCompat.installActivity(context)
+    }
+    
     override fun onSensorChanged(event: SensorEvent?) {
     }
 
@@ -85,7 +98,7 @@ class Artykly : BaseActivity(), View.OnClickListener {
         urlJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             try {
-                Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
+                referens.child("/$path").getFile(localFile).addOnFailureListener {
                     MainActivity.toastView(this@Artykly, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }.await()
                 load(localFile)
@@ -236,7 +249,7 @@ class Artykly : BaseActivity(), View.OnClickListener {
             localFile.writer().use {
                 it.write(gson.toJson(artykli, type))
             }
-            Malitounik.referens.child("/$path").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
+            referens.child("/$path").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     MainActivity.toastView(this@Artykly, getString(by.carkva_gazeta.malitounik.R.string.save))
                 } else {

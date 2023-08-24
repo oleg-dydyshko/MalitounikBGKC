@@ -293,7 +293,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     private suspend fun downloadPdfFile(url: String): Boolean {
         var error = false
         activity?.let { activity ->
-            val pathReference = Malitounik.referens.child("/data/bibliateka/$url")
+            val pathReference = BaseActivity.referens.child("/data/bibliateka/$url")
             val localFile = File(activity.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
             pathReference.getFile(localFile).addOnFailureListener {
                 error = true
@@ -718,7 +718,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     private suspend fun getBibliatekaJson(): String {
         var text = ""
         activity?.let { activity ->
-            val pathReference = Malitounik.referens.child("/bibliateka.json")
+            val pathReference = BaseActivity.referens.child("/bibliateka.json")
             val localFile = File("${activity.filesDir}/cache/cache.txt")
             pathReference.getFile(localFile).addOnCompleteListener {
                 if (it.isSuccessful) text = localFile.readText()
@@ -729,7 +729,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
 
     private suspend fun saveImagePdf(imageFile: File, image: String): Boolean {
         var error = false
-        Malitounik.referens.child("/images/bibliateka/$image").getFile(imageFile).addOnFailureListener {
+        BaseActivity.referens.child("/images/bibliateka/$image").getFile(imageFile).addOnFailureListener {
             error = true
         }.await()
         return error

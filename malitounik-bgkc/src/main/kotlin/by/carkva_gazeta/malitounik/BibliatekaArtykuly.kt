@@ -42,7 +42,7 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 val localFile = File("$filesDir/Artykuly/$path")
-                Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
+                BaseActivity.referens.child("/$path").getFile(localFile).addOnFailureListener {
                     MainActivity.toastView(this@BibliatekaArtykuly, getString(R.string.error))
                 }.await()
                 load()

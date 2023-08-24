@@ -68,7 +68,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             var opisanie = ""
             if (isSearch) opisanie = "\nВячэрня"
             val dataSearch = ArrayList<MenuListData>()
-            val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.sub_bogaslugbovuia_vichernia)
+            val r1 = BaseActivity.applicationContext().resources.getStringArray(R.array.sub_bogaslugbovuia_vichernia)
             dataSearch.add(MenuListData(r1[0] + opisanie, "viachernia_niadzeli"))
             dataSearch.add(MenuListData(r1[1] + opisanie, "viachernia_liccia_i_blaslavenne_xliabou"))
             dataSearch.add(MenuListData(r1[2] + opisanie, "viachernia_na_kozny_dzen"))
@@ -81,7 +81,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             var opisanie = ""
             if (isSearch) opisanie = "\nАктоіх"
             val dataSearch = ArrayList<MenuListData>()
-            val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.aktoix_list)
+            val r1 = BaseActivity.applicationContext().resources.getStringArray(R.array.aktoix_list)
             dataSearch.add(MenuListData(r1[0] + opisanie, "viachernia_ton1"))
             dataSearch.add(MenuListData(r1[1] + opisanie, "viachernia_ton2"))
             dataSearch.add(MenuListData(r1[2] + opisanie, "viachernia_ton3"))
@@ -98,7 +98,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             var opisanie = ""
             if (isSearch) opisanie = "\nМінэя агульная -> Трапары і кандакі штодзённыя - на кожны дзень тыдня"
             val dataSearch = ArrayList<MenuListData>()
-            val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.ton_kogny_dzen)
+            val r1 = BaseActivity.applicationContext().resources.getStringArray(R.array.ton_kogny_dzen)
             dataSearch.add(MenuListData(r1[0] + opisanie, "ton1_budni"))
             dataSearch.add(MenuListData(r1[1] + opisanie, "ton2_budni"))
             dataSearch.add(MenuListData(r1[2] + opisanie, "ton3_budni"))
@@ -112,7 +112,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             var opisanie = ""
             if (isSearch) opisanie = "\nМінэя агульная"
             val dataSearch = ArrayList<MenuListData>()
-            val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.viachernia_list)
+            val r1 = BaseActivity.applicationContext().resources.getStringArray(R.array.viachernia_list)
             dataSearch.add(MenuListData(r1[0] + opisanie, "viachernia_mineia_agulnaia1"))
             dataSearch.add(MenuListData(r1[1] + opisanie, "viachernia_mineia_agulnaia2"))
             dataSearch.add(MenuListData(r1[2] + opisanie, "viachernia_mineia_agulnaia3"))

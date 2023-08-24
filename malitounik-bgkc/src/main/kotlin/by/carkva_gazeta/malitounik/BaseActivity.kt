@@ -10,6 +10,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.SystemClock
 import android.view.Menu
 import android.view.MenuInflater
@@ -19,17 +20,25 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import com.google.android.gms.instantapps.InstantApps
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.android.play.core.splitinstall.SplitInstallException
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
 import com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener
 import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
+import java.util.Calendar
 
 abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProvider {
 
@@ -63,6 +72,15 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         finish()
     }
 
+    override fun attachBaseContext(context: Context) {
+        super.attachBaseContext(context)
+        instance = this
+        if (checkmoduleResources()) {
+            SplitCompat.install(this)
+        }
+        FirebaseApp.initializeApp(this)
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putLong("mLastClickTime", mLastClickTime)
@@ -94,6 +112,36 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         dzenNoch = k.getBoolean("dzen_noch", false)
         checkDzenNoch = getBaseDzenNoch()
         setMyTheme()
+        if (checkmodulesBiblijateka()) {
+            val c = Calendar.getInstance()
+            var useTime = k.getLong("BiblijatekaUseTime", 0)
+            if (useTime == 0L) {
+                val edit = k.edit()
+                edit.putLong("BiblijatekaUseTime", c.timeInMillis)
+                edit.apply()
+                useTime = c.timeInMillis
+            }
+            c.add(Calendar.DATE, 7)
+            if (c.timeInMillis > useTime) {
+                removeDynamicModule()
+            }
+            c.add(Calendar.DATE, 23)
+            if (c.timeInMillis > useTime) {
+                val file = File("$filesDir/image_temp")
+                if (file.exists()) file.deleteRecursively()
+                val file1 = File("$filesDir/BookCache")
+                if (file1.exists()) file1.deleteRecursively()
+                val file2 = File("$filesDir/Book")
+                if (file2.exists()) file2.deleteRecursively()
+                val list = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString()).listFiles()
+                list?.forEach {
+                    if (it.exists()) it.delete()
+                }
+                val edit = k.edit()
+                edit.remove("Biblioteka")
+                edit.apply()
+            }
+        }
     }
 
     open fun setMyTheme() {
@@ -101,7 +149,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
             if (autoDzenNoch) setTheme(R.style.AppCompatDark)
         } else {
             if (dzenNoch) setTheme(R.style.AppCompatDark)
-       }
+        }
     }
 
     fun getCheckDzenNoch() = checkDzenNoch
@@ -158,6 +206,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                     }
                 }
             }
+
             sensorValue >= 21f -> {
                 if (autoDzenNoch) {
                     startTimeJob1?.cancel()
@@ -170,6 +219,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                     }
                 }
             }
+
             else -> {
                 if (autoDzenNoch != startAutoDzenNoch) {
                     startTimeJob2?.cancel()
@@ -220,11 +270,11 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         val postInstall = Intent(Intent.ACTION_MAIN)
         postInstall.addCategory(Intent.CATEGORY_DEFAULT)
         postInstall.setPackage(packageName)
-        InstantApps.showInstallPrompt(this, postInstall, 500,  null)
+        InstantApps.showInstallPrompt(this, postInstall, 500, null)
     }
 
     fun checkmodulesAdmin(): Boolean {
-        val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
+        val muduls = SplitInstallManagerFactory.create(this).installedModules
         for (mod in muduls) {
             if (mod == "admin") {
                 return true
@@ -234,7 +284,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     }
 
     fun checkmodulesBiblijateka(): Boolean {
-        val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
+        val muduls = SplitInstallManagerFactory.create(this).installedModules
         for (mod in muduls) {
             if (mod == "biblijateka") {
                 return true
@@ -244,7 +294,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     }
 
     fun checkmoduleResources(): Boolean {
-        val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
+        val muduls = SplitInstallManagerFactory.create(applicationContext()).installedModules
         for (mod in muduls) {
             if (mod == "resources") {
                 return true
@@ -252,7 +302,12 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         }
         return false
     }
-    
+
+    private fun removeDynamicModule() {
+        val splitInstallManager = SplitInstallManagerFactory.create(this)
+        splitInstallManager.deferredUninstall(listOf("biblijateka"))
+    }
+
     fun downloadDynamicModule(moduleName: String) {
         val splitInstallManager = SplitInstallManagerFactory.create(this)
 
@@ -317,5 +372,14 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     companion object {
         private var sessionId = 0
         private var startAutoDzenNoch = false
+        private var instance: BaseActivity? = null
+        private val storage: FirebaseStorage
+            get() = Firebase.storage
+        val referens: StorageReference
+            get() = storage.reference
+
+        fun applicationContext(): Context {
+            return instance!!.applicationContext
+        }
     }
 }

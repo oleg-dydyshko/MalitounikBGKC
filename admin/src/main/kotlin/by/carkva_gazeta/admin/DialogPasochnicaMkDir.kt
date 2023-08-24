@@ -13,11 +13,10 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -103,13 +102,11 @@ class DialogPasochnicaMkDir : DialogFragment() {
                 if (MainActivity.isNetworkAvailable()) {
                     CoroutineScope(Dispatchers.Main).launch {
                         try {
-                            val storage = Firebase.storage
-                            val referens = storage.reference
                             val localFile = File("${fragmentActivity.filesDir}/cache/cache.txt")
-                            referens.child("/admin/piasochnica/$oldName").getFile(localFile).addOnFailureListener {
+                            BaseActivity.referens.child("/admin/piasochnica/$oldName").getFile(localFile).addOnFailureListener {
                                 MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error))
                             }.await()
-                            referens.child("/$dir/$dirName/$newName").putFile(Uri.fromFile(localFile)).await()
+                            BaseActivity.referens.child("/$dir/$dirName/$newName").putFile(Uri.fromFile(localFile)).await()
                         } catch (e: Throwable) {
                             activity?.let {
                                 MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))

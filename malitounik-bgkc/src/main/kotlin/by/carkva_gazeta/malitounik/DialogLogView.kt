@@ -66,7 +66,7 @@ class DialogLogView : DialogFragment() {
                 if (MainActivity.isNetworkAvailable()) {
                     logJob = CoroutineScope(Dispatchers.Main).launch {
                         val localFile = File("${fragmentActivity.filesDir}/cache/cache.txt")
-                        Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
+                        BaseActivity.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
                             MainActivity.toastView(fragmentActivity, getString(R.string.error))
                         }.await()
                         val sb = StringBuilder()

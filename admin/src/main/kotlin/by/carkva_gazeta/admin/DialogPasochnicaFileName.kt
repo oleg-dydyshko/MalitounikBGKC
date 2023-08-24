@@ -22,34 +22,7 @@ class DialogPasochnicaFileName : DialogFragment() {
     private var mListener: DialogPasochnicaFileNameListener? = null
     private lateinit var builder: AlertDialog.Builder
     private var _binding: DialogEditviewDisplayBinding? = null
-    private val binding get() = _binding!!/*private val textWatcher = object : TextWatcher {
-        private var editPosition = 0
-        private var check = 0
-        private var editch = true
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            editch = count != after
-            check = after
-        }
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            editPosition = start + count
-        }
-
-        override fun afterTextChanged(s: Editable?) {
-            if (editch) {
-                var edit = s.toString()
-                edit = edit.replace("-", "_")
-                edit = edit.replace(" ", "_").lowercase()
-                if (check != 0) {
-                    binding.content.removeTextChangedListener(this)
-                    binding.content.setText(edit)
-                    binding.content.setSelection(editPosition)
-                    binding.content.addTextChangedListener(this)
-                }
-            }
-        }
-    }*/
+    private val binding get() = _binding!!
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -134,7 +107,6 @@ class DialogPasochnicaFileName : DialogFragment() {
             binding.content.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             binding.content.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorWhite)
             binding.content.requestFocus()
-            //binding.content.addTextChangedListener(textWatcher)
             binding.content.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     setFileName()

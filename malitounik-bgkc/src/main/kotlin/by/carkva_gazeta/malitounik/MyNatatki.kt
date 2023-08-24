@@ -177,12 +177,12 @@ class MyNatatki : DialogFragment() {
         binding.EditText.isCursorVisible = false
         binding.EditText.setBackgroundResource(android.R.color.transparent)
         binding.file.isCursorVisible = false
-        val imm = Malitounik.applicationContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = BaseActivity.applicationContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.EditText.windowToken, 0)
     }
 
     private fun write() {
-        val context = Malitounik.applicationContext()
+        val context = BaseActivity.applicationContext()
         var nazva = binding.file.text.toString()
         var imiafile = "Mae_malitvy"
         val natatka = binding.EditText.text.toString()

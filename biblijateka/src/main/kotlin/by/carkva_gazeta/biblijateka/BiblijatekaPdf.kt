@@ -34,6 +34,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
+import java.util.Calendar
 
 class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListener, OnErrorListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener {
 
@@ -48,9 +49,13 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     private val dzenNoch get() = getBaseDzenNoch()
     private var resetTollbarJob: Job? = null
 
+    override fun attachBaseContext(context: Context) {
+        super.attachBaseContext(context)
+        SplitCompat.installActivity(context)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SplitCompat.install(this)
         binding = BiblijatekaPdfBinding.inflate(layoutInflater)
         try {
             setContentView(binding.root)
@@ -73,6 +78,10 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         }
         setTollbarTheme()
         loadFilePDF()
+        val c = Calendar.getInstance()
+        val edit = k.edit()
+        edit.putLong("BiblijatekaUseTime", c.timeInMillis)
+        edit.apply()
     }
 
     override fun onDialogTitle(page: Int) {

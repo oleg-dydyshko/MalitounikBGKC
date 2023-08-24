@@ -5,7 +5,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import androidx.core.text.toSpannable
-import by.carkva_gazeta.malitounik.Malitounik
+import by.carkva_gazeta.malitounik.BaseActivity
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -72,7 +72,7 @@ class ParalelnyeMesta {
                 }
                 try {
                     var noKnigaSemuxi = false
-                    val r = Malitounik.applicationContext().resources
+                    val r = BaseActivity.applicationContext().resources
                     var inputStream: InputStream? = null
                     if (semuxa) {
                         inputStream = when (nomer) {
@@ -290,7 +290,7 @@ class ParalelnyeMesta {
                             r2 = r2.trim()
                         }
                         if (noKnigaSemuxi) {
-                            val src = Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error).toSpannable()
+                            val src = BaseActivity.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error).toSpannable()
                             src.setSpan(StyleSpan(Typeface.ITALIC), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             stringBuilder.append(src).append("\n")
                         }
@@ -298,7 +298,7 @@ class ParalelnyeMesta {
                         val src = kon.toSpannable()
                         src.setSpan(StyleSpan(Typeface.BOLD), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         stringBuilder.append(src).append("\n")
-                        stringBuilder.append(Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_opis, r2)).append("\n")
+                        stringBuilder.append(BaseActivity.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_opis, r2)).append("\n")
                     }
                 } catch (t: Throwable) {
                     if (semuxa) nazva = nazvaBel
@@ -316,7 +316,7 @@ class ParalelnyeMesta {
                     var src = kon.toSpannable()
                     src.setSpan(StyleSpan(Typeface.BOLD), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     stringBuilder.append(src).append("\n\n")
-                    src = Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch).toSpannable()
+                    src = BaseActivity.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch).toSpannable()
                     src.setSpan(StyleSpan(Typeface.ITALIC), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     stringBuilder.append(src)
                 }

@@ -1,6 +1,7 @@
 package by.carkva_gazeta.admin
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.hardware.SensorEvent
 import android.net.Uri
@@ -23,10 +24,10 @@ import by.carkva_gazeta.admin.databinding.AdminPiarlinyBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.CaliandarMun
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.MenuCaliandar
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -64,6 +65,11 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
     }
 
     override fun setMyTheme() {
+    }
+
+    override fun attachBaseContext(context: Context) {
+        super.attachBaseContext(context)
+        SplitCompat.installActivity(context)
     }
 
     override fun onPause() {
@@ -130,7 +136,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
             binding.progressBar2.visibility = View.VISIBLE
             try {
                 val localFile = File("$filesDir/cache/cache.txt")
-                Malitounik.referens.child("/chytanne/piarliny.json").getFile(localFile).addOnCompleteListener { task ->
+                referens.child("/chytanne/piarliny.json").getFile(localFile).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val jsonFile = localFile.readText()
                         val gson = Gson()
@@ -386,7 +392,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                     val logFile = File("$filesDir/cache/log.txt")
                     val sb = StringBuilder()
                     val url = "/chytanne/piarliny.json"
-                    Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
                         MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
                     var ref = true
@@ -402,9 +408,9 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                     logFile.writer().use {
                         it.write(sb.toString())
                     }
-                    Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
 
-                    Malitounik.referens.child("/chytanne/piarliny.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
+                    referens.child("/chytanne/piarliny.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                         if (it.isSuccessful) {
                             MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.save))
                             binding.addPiarliny.setText("")

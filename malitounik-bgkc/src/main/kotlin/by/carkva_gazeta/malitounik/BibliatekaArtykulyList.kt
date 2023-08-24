@@ -94,11 +94,11 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
                 val localFile = File("$filesDir/Artykuly/$path")
                 if (!localFile.exists()) {
                     if ((MainActivity.isNetworkAvailable() && !MainActivity.isNetworkAvailable(true)) || isLoad) {
-                        Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
+                        BaseActivity.referens.child("/$path").getFile(localFile).addOnFailureListener {
                             MainActivity.toastView(this@BibliatekaArtykulyList, getString(R.string.error))
                         }.await()
                     } else if (MainActivity.isNetworkAvailable()) {
-                        Malitounik.referens.child("/$path").metadata.addOnSuccessListener {
+                        BaseActivity.referens.child("/$path").metadata.addOnSuccessListener {
                             dirSize += it.sizeBytes
                         }.await()
                     }
@@ -174,7 +174,7 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
         if (MainActivity.isNetworkAvailable(true)) {
             if (!localFile.exists()) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
+                    BaseActivity.referens.child("/$path").getFile(localFile).addOnFailureListener {
                         MainActivity.toastView(this@BibliatekaArtykulyList, getString(R.string.error))
                     }.await()
                     load(localFile)
@@ -184,7 +184,7 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
             }
         } else if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
+                BaseActivity.referens.child("/$path").getFile(localFile).addOnFailureListener {
                     MainActivity.toastView(this@BibliatekaArtykulyList, getString(R.string.error))
                 }.await()
                 load(localFile)

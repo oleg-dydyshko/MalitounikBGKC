@@ -101,22 +101,22 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         }
 
         private fun createIntent(title: String, extra: String): Intent {
-            val intent = Intent(Malitounik.applicationContext(), ReceiverBroad::class.java)
+            val intent = Intent(applicationContext(), ReceiverBroad::class.java)
             intent.action = "by.carkva_gazeta.malitounik.sviaty"
             intent.putExtra("title", title)
             intent.putExtra("extra", extra)
-            intent.`package` = Malitounik.applicationContext().packageName
+            intent.`package` = applicationContext().packageName
             return intent
         }
 
         private fun createIntent(title: String, extra: String, dayofyear: Int, year: Int): Intent {
-            val intent = Intent(Malitounik.applicationContext(), ReceiverBroad::class.java)
+            val intent = Intent(applicationContext(), ReceiverBroad::class.java)
             intent.action = "by.carkva_gazeta.malitounik.sviaty"
             intent.putExtra("title", title)
             intent.putExtra("extra", extra)
             intent.putExtra("dayofyear", dayofyear)
             intent.putExtra("year", year)
-            intent.`package` = Malitounik.applicationContext().packageName
+            intent.`package` = applicationContext().packageName
             return intent
         }
 
@@ -127,7 +127,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         }
 
         fun createIntentSabytie(title: String, data: String, time: String): Intent {
-            val intent = Intent(Malitounik.applicationContext(), ReceiverBroad::class.java)
+            val intent = Intent(applicationContext(), ReceiverBroad::class.java)
             intent.action = "by.carkva_gazeta.malitounik.sviaty"
             intent.putExtra("title", title)
             intent.putExtra("sabytieSet", true)
@@ -143,7 +143,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
 
         private fun setAlarm(timeAlarm: Long, pendingIntent: PendingIntent?, padzeia: Boolean = false) {
             pendingIntent?.let {
-                val context = Malitounik.applicationContext()
+                val context = applicationContext()
                 val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 if (padzeia && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !am.canScheduleExactAlarms()) return
                 when {
@@ -163,7 +163,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         }
 
         fun setNotifications(notifications: Int) {
-            val context = Malitounik.applicationContext()
+            val context = applicationContext()
             val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             var intent: Intent
@@ -670,7 +670,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun notificationChannel(channelID: String = NOTIFICATION_CHANNEL_ID_SVIATY) {
-            val context = Malitounik.applicationContext()
+            val context = applicationContext()
             val name = if (channelID == NOTIFICATION_CHANNEL_ID_SVIATY) context.getString(R.string.sviaty)
             else context.getString(R.string.sabytie)
             val channel = NotificationChannel(channelID, name, NotificationManager.IMPORTANCE_HIGH)

@@ -21,7 +21,12 @@ import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
 import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
-import kotlinx.coroutines.*
+import com.google.android.play.core.splitcompat.SplitCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class StaryZapavietSemuxaList : BaseActivity() {
     private var mLastClickTime: Long = 0
@@ -34,6 +39,11 @@ class StaryZapavietSemuxaList : BaseActivity() {
     }
 
     override fun setMyTheme() {
+    }
+
+    override fun attachBaseContext(context: Context) {
+        super.attachBaseContext(context)
+        SplitCompat.installActivity(context)
     }
 
     override fun onPause() {

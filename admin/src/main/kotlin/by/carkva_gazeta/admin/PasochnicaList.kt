@@ -28,9 +28,9 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaListBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.storage.ListResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,6 +73,11 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
     override fun setMyTheme() {
     }
 
+    override fun attachBaseContext(context: Context) {
+        super.attachBaseContext(context)
+        SplitCompat.installActivity(context)
+    }
+
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
@@ -113,7 +118,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 try {
-                    val list = Malitounik.referens.child("/admin/piasochnica").list(1000).await()
+                    val list = referens.child("/admin/piasochnica").list(1000).await()
                     list.items.forEach {
                         it.delete().await()
                     }
@@ -269,7 +274,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 var resourse = ""
                 val localFile = File("$filesDir/cache/cache.txt")
                 try {
-                    Malitounik.referens.child("/$dirToFile").getFile(localFile).addOnFailureListener {
+                    referens.child("/$dirToFile").getFile(localFile).addOnFailureListener {
                         MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
                 } catch (e: Throwable) {
@@ -300,7 +305,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                     preparetext.substring(0, 1).uppercase() + preparetext.substring(1).lowercase()
                 } else newFileName
                 try {
-                    Malitounik.referens.child("/admin/piasochnica/$resourse$res").putFile(Uri.fromFile(localFile)).await()
+                    referens.child("/admin/piasochnica/$resourse$res").putFile(Uri.fromFile(localFile)).await()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
@@ -320,9 +325,9 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 binding.progressBar2.visibility = View.VISIBLE
                 try {
                     if (isSite) {
-                        Malitounik.referens.child("/$fileName").delete().addOnCompleteListener { }.await()
+                        referens.child("/$fileName").delete().addOnCompleteListener { }.await()
                     } else {
-                        Malitounik.referens.child("/admin/piasochnica/$fileName").delete().await()
+                        referens.child("/admin/piasochnica/$fileName").delete().await()
                     }
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
@@ -342,17 +347,30 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 try {
                     val localFile = File("$filesDir/cache/cache.txt")
                     if (isSite) {
-                        Malitounik.referens.child("/$oldFileName").getFile(localFile).addOnFailureListener {
+                        referens.child("/$oldFileName").getFile(localFile).addOnFailureListener {
                             MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }.await()
-                        Malitounik.referens.child("/$oldFileName").delete().await()
-                        Malitounik.referens.child("/$fileName").putFile(Uri.fromFile(localFile)).await()
+                        referens.child("/$oldFileName").delete().await()
+                        referens.child("/$fileName").putFile(Uri.fromFile(localFile)).await()
+                        val logFile = File("$filesDir/cache/log.txt")
+                        referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        }.await()
+                        val sb = StringBuilder()
+                        logFile.readLines().forEach {
+                            if (!it.contains(oldFileName)) sb.append(it)
+                        }
+                        sb.append("/$fileName")
+                        logFile.writer().use {
+                            it.write(sb.toString())
+                        }
+                        referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
                     } else {
-                        Malitounik.referens.child("/admin/piasochnica/$oldFileName").getFile(localFile).addOnFailureListener {
+                        referens.child("/admin/piasochnica/$oldFileName").getFile(localFile).addOnFailureListener {
                             MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }.await()
-                        Malitounik.referens.child("/admin/piasochnica/$oldFileName").delete().await()
-                        Malitounik.referens.child("/admin/piasochnica/$fileName").putFile(Uri.fromFile(localFile)).await()
+                        referens.child("/admin/piasochnica/$oldFileName").delete().await()
+                        referens.child("/admin/piasochnica/$fileName").putFile(Uri.fromFile(localFile)).await()
                     }
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
@@ -394,7 +412,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 binding.progressBar2.visibility = View.VISIBLE
                 try {
                     fileList.clear()
-                    val list = Malitounik.referens.child("/admin/piasochnica").list(500).await()
+                    val list = referens.child("/admin/piasochnica").list(500).await()
                     list.items.forEach {
                         fileList.add(it.name)
                     }
@@ -528,13 +546,13 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
 
         private suspend fun findFile(list: ListResult? = null) {
             CoroutineScope(Dispatchers.Main).launch {
-                val nawList = list ?: Malitounik.referens.child("/admin").list(1000).await()
+                val nawList = list ?: referens.child("/admin").list(1000).await()
                 nawList.items.forEach {
                     findDirAsSave.add(it.path)
                 }
                 nawList.prefixes.forEach {
                     if (it.name != "piasochnica") {
-                        val rList = Malitounik.referens.child(it.path).list(1000).await()
+                        val rList = referens.child(it.path).list(1000).await()
                         findFile(rList)
                     }
                 }
@@ -547,7 +565,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                     try {
                         findFile()
                     } catch (e: Throwable) {
-                        MainActivity.toastView(Malitounik.applicationContext(), Malitounik.applicationContext().getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        MainActivity.toastView(applicationContext(), applicationContext().getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                 }
             }

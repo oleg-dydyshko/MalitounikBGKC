@@ -41,7 +41,7 @@ class BibliatekaPoll : BaseActivity() {
                 val localFile = File("$filesDir/Artykuly/$path")
                 if (!localFile.exists()) {
                     if (MainActivity.isNetworkAvailable() && !MainActivity.isNetworkAvailable(true)) {
-                        Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
+                        BaseActivity.referens.child("/$path").getFile(localFile).addOnFailureListener {
                             MainActivity.toastView(this@BibliatekaPoll, getString(R.string.error))
                         }.await()
                     }

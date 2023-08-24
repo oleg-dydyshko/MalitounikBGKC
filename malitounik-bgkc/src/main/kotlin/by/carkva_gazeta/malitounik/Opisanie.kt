@@ -223,7 +223,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     private suspend fun getOpisanieSviat(count: Int = 0) {
-        val pathReference = Malitounik.referens.child("/opisanie_sviat.json")
+        val pathReference = BaseActivity.referens.child("/opisanie_sviat.json")
         var update = 0L
         var error = false
         pathReference.metadata.addOnCompleteListener { storageMetadata ->
@@ -242,7 +242,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     private suspend fun saveOpisanieSviat(update: Long, count: Int = 0) {
-        val pathReference = Malitounik.referens.child("/opisanie_sviat.json")
+        val pathReference = BaseActivity.referens.child("/opisanie_sviat.json")
         val file = File("$filesDir/opisanie_sviat.json")
         var error = false
         val time = file.lastModified()
@@ -267,7 +267,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         val dir = File("$filesDir/sviatyja/")
         if (!dir.exists()) dir.mkdir()
         var error = false
-        val pathReference = Malitounik.referens.child("/chytanne/sviatyja/opisanie$mun.json")
+        val pathReference = BaseActivity.referens.child("/chytanne/sviatyja/opisanie$mun.json")
         var update = 0L
         pathReference.metadata.addOnCompleteListener { storageMetadata ->
             if (storageMetadata.isSuccessful) {
@@ -285,7 +285,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     private suspend fun saveOpisanieSviatyia(update: Long, count: Int = 0) {
-        val pathReference = Malitounik.referens.child("/chytanne/sviatyja/opisanie$mun.json")
+        val pathReference = BaseActivity.referens.child("/chytanne/sviatyja/opisanie$mun.json")
         val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
         val time = fileOpisanie.lastModified()
         var error = false
@@ -312,7 +312,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         val arrayList = ArrayList<ArrayList<String>>()
         val localFile = File("$filesDir/cache/cache.txt")
         var error = false
-        Malitounik.referens.child("/icons.json").getFile(localFile).addOnCompleteListener {
+        BaseActivity.referens.child("/icons.json").getFile(localFile).addOnCompleteListener {
             if (it.isSuccessful) {
                 val gson = Gson()
                 var json = ""
@@ -379,7 +379,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             var progress = 0
             for (i in 0 until dirList.size) {
                 val fileIcon = File("$filesDir/icons/" + dirList[i].name)
-                val pathReference = Malitounik.referens.child("/chytanne/icons/" + dirList[i].name)
+                val pathReference = BaseActivity.referens.child("/chytanne/icons/" + dirList[i].name)
                 pathReference.getFile(fileIcon).await()
                 progress += dirList[i].sizeBytes.toInt()
                 binding.progressBar2.progress = progress
@@ -428,7 +428,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     private suspend fun getPiarliny() {
-        val pathReference = Malitounik.referens.child("/chytanne/piarliny.json")
+        val pathReference = BaseActivity.referens.child("/chytanne/piarliny.json")
         val localFile = File("$filesDir/piarliny.json")
         pathReference.getFile(localFile).await()
         invalidateOptionsMenu()

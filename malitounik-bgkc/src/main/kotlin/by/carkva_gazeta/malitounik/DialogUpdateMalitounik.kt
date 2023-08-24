@@ -1,6 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
@@ -49,6 +50,11 @@ class DialogUpdateMalitounik : DialogFragment() {
             val title = arguments?.getString("title", getString(R.string.update_title)) ?: getString(R.string.update_title)
             binding.title.text = title
             builder.setView(binding.root)
+            if (title == getString(R.string.update_title)) {
+                builder.setPositiveButton(resources.getText(R.string.close)) { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+                }
+            }
             alert = builder.create()
         }
         return alert

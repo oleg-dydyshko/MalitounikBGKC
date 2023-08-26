@@ -1902,7 +1902,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
         if (fragment != null && rub == SETFILE) {
-            fragment.setRubrika(rub)
+            CoroutineScope(Dispatchers.Main).launch {
+                fragment.setRubrika(rub)
+            }
         }
         prefEditors.putInt("id", id)
         prefEditors.apply()

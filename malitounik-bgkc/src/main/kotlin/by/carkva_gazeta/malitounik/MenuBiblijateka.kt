@@ -42,7 +42,6 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
-import java.util.Calendar
 
 
 class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListener {
@@ -308,7 +307,9 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         saveindep = false
         idSelect = MainActivity.NIADAUNIA
         nameRubrika = getString(R.string.bibliateka_niadaunia)
-        setRubrika(MainActivity.NIADAUNIA)
+        setRubrikaJob = CoroutineScope(Dispatchers.Main).launch {
+            setRubrika(MainActivity.NIADAUNIA)
+        }
         filePath = file.absolutePath
         fileName = file.name
         loadComplete()
@@ -445,14 +446,18 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     binding.swipeRefreshLayout.isEnabled = false
                     binding.swipeRefreshLayout.isRefreshing = false
                 }
-                when (idSelect) {
-                    MainActivity.NIADAUNIA -> setRubrika(MainActivity.NIADAUNIA)
-                    MainActivity.GISTORYIACARKVY -> setRubrika(MainActivity.GISTORYIACARKVY)
-                    MainActivity.MALITOUNIKI -> setRubrika(MainActivity.MALITOUNIKI)
-                    MainActivity.SPEUNIKI -> setRubrika(MainActivity.SPEUNIKI)
-                    MainActivity.RELLITARATURA -> setRubrika(MainActivity.RELLITARATURA)
-                    MainActivity.PDF -> setRubrika(MainActivity.PDF)
-                    MainActivity.SETFILE -> setRubrika(MainActivity.SETFILE)
+                val dir = File("${it.filesDir}/image_temp")
+                if (!dir.exists()) dir.mkdir()
+                setRubrikaJob = CoroutineScope(Dispatchers.Main).launch {
+                    when (idSelect) {
+                        MainActivity.NIADAUNIA -> setRubrika(MainActivity.NIADAUNIA)
+                        MainActivity.GISTORYIACARKVY -> setRubrika(MainActivity.GISTORYIACARKVY)
+                        MainActivity.MALITOUNIKI -> setRubrika(MainActivity.MALITOUNIKI)
+                        MainActivity.SPEUNIKI -> setRubrika(MainActivity.SPEUNIKI)
+                        MainActivity.RELLITARATURA -> setRubrika(MainActivity.RELLITARATURA)
+                        MainActivity.PDF -> setRubrika(MainActivity.PDF)
+                        MainActivity.SETFILE -> setRubrika(MainActivity.SETFILE)
+                    }
                 }
                 if (fileName != "" && filePath != "") {
                     loadComplete()
@@ -538,7 +543,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         }
     }
 
-    fun setRubrika(rub: Int) {
+    suspend fun setRubrika(rub: Int) {
         var rubryka = rub
         if (rubryka == MainActivity.SETFILE) {
             val intent = Intent()
@@ -549,46 +554,35 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             rubryka = MainActivity.NIADAUNIA
         }
         val gson = Gson()
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
         val jsonB = k.getString("Biblioteka", "") ?: ""
-        val timeUpdate = Calendar.getInstance().timeInMillis
-        val timeUpdateSave = k.getLong("BibliotekaTimeUpdate", timeUpdate)
-        if (!(jsonB == "" || timeUpdate - timeUpdateSave == 0L)) {
-            if (timeUpdate - timeUpdateSave > (24 * 60 * 60 * 1000L)) {
-                if (MainActivity.isNetworkAvailable()) {
-                    val prefEditors = k.edit()
-                    prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
-                    prefEditors.apply()
-                    getSql(rubryka)
-                } else {
-                    arrayList.clear()
-                    adapter.notifyDataSetChanged()
-                    val noInternet = DialogNoInternet()
-                    noInternet.show(childFragmentManager, "no_internet")
-                }
-            } else {
-                arrayList.clear()
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                arrayList.addAll(gson.fromJson(jsonB, type))
-                val temp = ArrayList<ArrayList<String>>()
-                for (i in 0 until arrayList.size) {
-                    val rtemp2 = arrayList[i][4].toInt()
-                    if (rtemp2 != rubryka) temp.add(arrayList[i])
-                }
-                arrayList.removeAll(temp.toSet())
-                adapter.notifyDataSetChanged()
+        var sb = ""
+        if (MainActivity.isNetworkAvailable()) {
+            for (i in 0..2) {
+                sb = getBibliatekaJson()
+                if (sb != "") break
+            }
+        }
+        val biblioteka = ArrayList<ArrayList<String>>()
+        if (sb != "") {
+            biblioteka.addAll(gson.fromJson(sb, type))
+        }
+        if (jsonB != "") {
+            arrayList.clear()
+            arrayList.addAll(gson.fromJson(jsonB, type))
+        }
+        if (biblioteka.size > arrayList.size || arrayList.size == 0) {
+            if (MainActivity.isNetworkAvailable()) {
+                getSql(rub)
             }
         } else {
-            if (MainActivity.isNetworkAvailable()) {
-                val prefEditors = k.edit()
-                prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
-                prefEditors.apply()
-                getSql(rubryka)
-            } else {
-                arrayList.clear()
-                adapter.notifyDataSetChanged()
-                val noInternet = DialogNoInternet()
-                noInternet.show(childFragmentManager, "no_internet")
+            val temp = ArrayList<ArrayList<String>>()
+            for (i in 0 until arrayList.size) {
+                val rtemp2 = arrayList[i][4].toInt()
+                if (rtemp2 != rubryka) temp.add(arrayList[i])
             }
+            arrayList.removeAll(temp.toSet())
+            adapter.notifyDataSetChanged()
         }
         setTitleBibliateka(rubryka)
         saveindep = true
@@ -635,81 +629,69 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         bitmapJob = null
     }
 
-    private fun getSql(rub: Int) {
+    private suspend fun getSql(rub: Int) {
         activity?.let { activity ->
-            setRubrikaJob = CoroutineScope(Dispatchers.IO).launch {
-                withContext(Dispatchers.IO) {
-                    runSql = true
-                    withContext(Dispatchers.Main) {
-                        arrayList.clear()
-                        adapter.notifyDataSetChanged()
-                        binding?.progressBar2?.visibility = View.VISIBLE
-                    }
-                    try {
-                        if (MainActivity.isNetworkAvailable()) {
-                            sqlJob = CoroutineScope(Dispatchers.Main).launch {
-                                val temp = ArrayList<ArrayList<String>>()
-                                var sb = ""
-                                for (i in 0..2) {
-                                    sb = getBibliatekaJson()
-                                    if (sb != "") break
+            withContext(Dispatchers.IO) {
+                runSql = true
+                withContext(Dispatchers.Main) {
+                    arrayList.clear()
+                    adapter.notifyDataSetChanged()
+                    binding?.progressBar2?.visibility = View.VISIBLE
+                }
+                try {
+                    sqlJob = CoroutineScope(Dispatchers.Main).launch {
+                        val temp = ArrayList<ArrayList<String>>()
+                        var sb = ""
+                        for (i in 0..2) {
+                            sb = getBibliatekaJson()
+                            if (sb != "") break
+                        }
+                        if (sb == "") {
+                            sb = k.getString("Biblioteka", "") ?: ""
+                        }
+                        if (sb != "") {
+                            val gson = Gson()
+                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                            val biblioteka: ArrayList<ArrayList<String>> = gson.fromJson(sb, type)
+                            for (i in 0 until biblioteka.size) {
+                                val mySqlList = ArrayList<String>()
+                                val kniga = biblioteka[i]
+                                val rubrika = kniga[4]
+                                val link = kniga[0]
+                                val str = kniga[1]
+                                val pdf = kniga[2]
+                                val pdfFileSize = kniga[3]
+                                mySqlList.add(link)
+                                mySqlList.add(str)
+                                mySqlList.add(pdf)
+                                mySqlList.add(pdfFileSize)
+                                mySqlList.add(rubrika)
+                                val t1 = pdf.lastIndexOf(".")
+                                val imageName = pdf.substring(0, t1) + ".png"
+                                mySqlList.add(imageName)
+                                if (rubrika.toInt() == rub) {
+                                    arrayList.add(mySqlList)
                                 }
-                                if (sb == "") {
-                                    sb = k.getString("Biblioteka", "") ?: ""
-                                }
-                                if (sb != "") {
-                                    val gson = Gson()
-                                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                                    val biblioteka: ArrayList<ArrayList<String>> = gson.fromJson(sb, type)
-                                    for (i in 0 until biblioteka.size) {
-                                        val mySqlList = ArrayList<String>()
-                                        val kniga = biblioteka[i]
-                                        val rubrika = kniga[4]
-                                        val link = kniga[0]
-                                        val str = kniga[1]
-                                        val pdf = kniga[2]
-                                        val pdfFileSize = kniga[3]
-                                        mySqlList.add(link)
-                                        mySqlList.add(str)
-                                        mySqlList.add(pdf)
-                                        mySqlList.add(pdfFileSize)
-                                        mySqlList.add(rubrika)
-                                        val t1 = pdf.lastIndexOf(".")
-                                        val imageName = pdf.substring(0, t1) + ".png"
-                                        mySqlList.add(imageName)
-                                        val dir = File("${activity.filesDir}/image_temp")
-                                        if (!dir.exists()) dir.mkdir()
-                                        val file = File("${activity.filesDir}/image_temp/$imageName")
-                                        if (!file.exists()) {
-                                            for (e in 0..2) {
-                                                if (!saveImagePdf(file, imageName)) break
-                                            }
-                                        }
-                                        if (rubrika.toInt() == rub) {
-                                            arrayList.add(mySqlList)
-                                        }
-                                        temp.add(mySqlList)
-                                    }
-                                    val json = gson.toJson(temp, type)
-                                    val prefEditors = k.edit()
-                                    prefEditors.putString("Biblioteka", json)
-                                    prefEditors.apply()
-                                    withContext(Dispatchers.Main) {
-                                        adapter.notifyDataSetChanged()
-                                    }
-                                } else {
-                                    withContext(Dispatchers.Main) {
-                                        MainActivity.toastView(activity, getString(R.string.error))
-                                    }
-                                }
-                                runSql = false
-                                withContext(Dispatchers.Main) {
-                                    binding?.progressBar2?.visibility = View.GONE
-                                }
+                                temp.add(mySqlList)
+                            }
+                            val json = gson.toJson(temp, type)
+                            val prefEditors = k.edit()
+                            prefEditors.putString("Biblioteka", json)
+                            prefEditors.apply()
+                            withContext(Dispatchers.Main) {
+                                adapter.notifyDataSetChanged()
+                            }
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                MainActivity.toastView(activity, getString(R.string.error))
                             }
                         }
-                    } catch (_: Throwable) {
+                        runSql = false
+                        withContext(Dispatchers.Main) {
+                            binding?.progressBar2?.visibility = View.GONE
+                        }
                     }
+                } catch (_: Throwable) {
                 }
             }
         }

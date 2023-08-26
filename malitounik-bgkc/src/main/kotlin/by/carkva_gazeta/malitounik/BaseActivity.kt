@@ -126,7 +126,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                 removeDynamicModule()
             }
             c.add(Calendar.DATE, 23)
-            if (c.timeInMillis > useTime) {
+            if (useTime > c.timeInMillis) {
                 val file = File("$filesDir/image_temp")
                 if (file.exists()) file.deleteRecursively()
                 val file1 = File("$filesDir/BookCache")

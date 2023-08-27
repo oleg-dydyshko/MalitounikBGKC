@@ -967,7 +967,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         }
         if (id == R.id.action_settings) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                SettingsActivity.notificationChannel(SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
+                SettingsActivity.notificationChannel(this, SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
                 try {
                     val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
                     intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
@@ -2633,7 +2633,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
     }
 
     companion object {
-        private val colors = applicationContext().resources.getStringArray(R.array.colors)
+        private val colors = Malitounik.applicationContext().resources.getStringArray(R.array.colors)
         var editCaliandar = false
 
         fun getColors(dzenNoch: Boolean, color: Int): String {

@@ -159,11 +159,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     val localFile = File("$filesDir/cache/cache.txt")
                     val zip = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "MalitounikResource.zip")
                     val out = ZipOutputStream(BufferedOutputStream(FileOutputStream(zip)))
-                    for (file in log) {
+                    var i = 0
+                    for (index in 0 until log.size) {
+                        val file = log[index]
                         val filePath = file.replace("//", "/")
                         var error = false
                         try {
-                            referens.child(filePath).getFile(localFile).addOnFailureListener {
+                            Malitounik.referens.child(filePath).getFile(localFile).addOnFailureListener {
                                 toastView(this@MainActivity, getString(R.string.error))
                                 error = true
                             }.await()
@@ -181,7 +183,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         } finally {
                             origin.close()
                         }
+                        i++
                     }
+                    if (i != 0) out.close()
                     return@withContext zip
                 }
                 val sendIntent = Intent(Intent.ACTION_SEND)
@@ -202,7 +206,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 localFile.writer().use {
                     it.write("")
                 }
-                referens.child("/admin/log.txt").putFile(Uri.fromFile(localFile)).await()
+                Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(localFile)).await()
             }
         }
     }
@@ -794,7 +798,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         logJob = CoroutineScope(Dispatchers.IO).launch {
             if (k.getBoolean("admin", false) && isNetworkAvailable()) {
                 val localFile = File("$filesDir/cache/cache.txt")
-                referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
+                Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
                     toastView(this@MainActivity, getString(R.string.error))
                 }.await()
                 val log = localFile.readText()
@@ -2018,7 +2022,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             padzeia.clear()
             val gson = Gson()
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, Padzeia::class.java).type
-            val dir = File(applicationContext().filesDir.toString() + "/Sabytie")
+            val dir = File(Malitounik.applicationContext().filesDir.toString() + "/Sabytie")
             if (dir.exists()) {
                 dir.walk().forEach { file ->
                     if (file.isFile && file.exists()) {
@@ -2038,13 +2042,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         inputStream.close()
                     }
                 }
-                val file = File(applicationContext().filesDir.toString() + "/Sabytie.json")
+                val file = File(Malitounik.applicationContext().filesDir.toString() + "/Sabytie.json")
                 file.writer().use {
                     it.write(gson.toJson(padzeia, type))
                 }
                 dir.deleteRecursively()
             } else {
-                val file = File(applicationContext().filesDir.toString() + "/Sabytie.json")
+                val file = File(Malitounik.applicationContext().filesDir.toString() + "/Sabytie.json")
                 if (file.exists()) {
                     try {
                         padzeia = gson.fromJson(file.readText(), type)
@@ -2277,7 +2281,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
         @Suppress("DEPRECATION")
         fun isNetworkAvailable(isTypeMobile: Boolean = false): Boolean {
-            val connectivityManager = applicationContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val connectivityManager = Malitounik.applicationContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val nw = connectivityManager.activeNetwork ?: return false
                 val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
@@ -2307,10 +2311,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
         fun createFont(style: Int): Typeface? {
             return when (style) {
-                Typeface.BOLD -> ResourcesCompat.getFont(applicationContext(), R.font.robotocondensedbold)
-                Typeface.ITALIC -> ResourcesCompat.getFont(applicationContext(), R.font.robotocondenseditalic)
-                Typeface.BOLD_ITALIC -> ResourcesCompat.getFont(applicationContext(), R.font.robotocondensedbolditalic)
-                else -> ResourcesCompat.getFont(applicationContext(), R.font.robotocondensed)
+                Typeface.BOLD -> ResourcesCompat.getFont(Malitounik.applicationContext(), R.font.robotocondensedbold)
+                Typeface.ITALIC -> ResourcesCompat.getFont(Malitounik.applicationContext(), R.font.robotocondenseditalic)
+                Typeface.BOLD_ITALIC -> ResourcesCompat.getFont(Malitounik.applicationContext(), R.font.robotocondensedbolditalic)
+                else -> ResourcesCompat.getFont(Malitounik.applicationContext(), R.font.robotocondensed)
             }
         }
     }

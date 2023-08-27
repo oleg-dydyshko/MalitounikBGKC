@@ -430,7 +430,7 @@ class SlugbovyiaTextu {
 
     fun loadPiarliny() {
         if (piarliny.size == 0 && loadPiarlinyJob?.isActive != true) {
-            val filePiarliny = File("${BaseActivity.applicationContext().filesDir}/piarliny.json")
+            val filePiarliny = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
             if (!filePiarliny.exists()) {
                 if (MainActivity.isNetworkAvailable()) {
                     loadPiarlinyJob = CoroutineScope(Dispatchers.Main).launch {
@@ -460,9 +460,9 @@ class SlugbovyiaTextu {
     }
 
     private suspend fun getPiarliny(): String {
-        val pathReference = BaseActivity.referens.child("/chytanne/piarliny.json")
+        val pathReference = Malitounik.referens.child("/chytanne/piarliny.json")
         var text = ""
-        val localFile = File("${BaseActivity.applicationContext().filesDir}/piarliny.json")
+        val localFile = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
         pathReference.getFile(localFile).addOnSuccessListener {
             text = localFile.readText()
         }.await()
@@ -649,7 +649,7 @@ class SlugbovyiaTextu {
     }
 
     fun checkFullChtenia(resource: Int): Boolean {
-        val inputStream = BaseActivity.applicationContext().resources.openRawResource(resource)
+        val inputStream = Malitounik.applicationContext().resources.openRawResource(resource)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         val text = reader.readText()

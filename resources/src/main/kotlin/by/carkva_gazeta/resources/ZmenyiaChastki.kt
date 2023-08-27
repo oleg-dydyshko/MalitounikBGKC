@@ -1,8 +1,8 @@
 package by.carkva_gazeta.resources
 
 import androidx.collection.ArrayMap
-import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.MenuCaliandar
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -26,7 +26,7 @@ internal class ZmenyiaChastki {
 
     fun zmenya(apostal: Int): String {
         val data = arrayData[0][9]
-        return if (data == "" || data.contains(BaseActivity.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + BaseActivity.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
+        return if (data == "" || data.contains(Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
         else chtenia(arrayData[0][9], apostal)
     }
 
@@ -44,7 +44,7 @@ internal class ZmenyiaChastki {
         val res = StringBuilder()
         w1 = MainActivity.removeZnakiAndSlovy(w1)
         val split = w1.split(";")
-        if (split.size == 1) return "<em>" + BaseActivity.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
+        if (split.size == 1) return "<em>" + Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
         var knigaN: String
         var knigaK = "0"
         var zaglnum = 0
@@ -148,7 +148,7 @@ internal class ZmenyiaChastki {
             if (zagl == "2 Цім") kniga = 32
             if (zagl == "Як") kniga = 33
             if (zagl == "1 Цім") kniga = 34
-            val r = BaseActivity.applicationContext().resources
+            val r = Malitounik.applicationContext().resources
             val inputStream = r.openRawResource(data.valueAt(kniga))
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
@@ -537,7 +537,7 @@ internal class ZmenyiaChastki {
     }
 
     private fun readFile(resource: Int): String {
-        val inputStream = BaseActivity.applicationContext().resources.openRawResource(resource)
+        val inputStream = Malitounik.applicationContext().resources.openRawResource(resource)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         val builder = StringBuilder()

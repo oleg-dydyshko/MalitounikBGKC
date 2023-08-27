@@ -24,6 +24,7 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaImageBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ListItemImageBinding
 import com.google.android.play.core.splitcompat.SplitCompat
@@ -104,7 +105,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             val file = images[position].file
-            BaseActivity.referens.child("/chytanne/icons/" + file.name).delete().await()
+            Malitounik.referens.child("/chytanne/icons/" + file.name).delete().await()
             val imageFile = File("$filesDir/icons/" + file.name)
             if (imageFile.exists()) {
                 imageFile.delete()
@@ -140,7 +141,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         CoroutineScope(Dispatchers.Main).launch {
             val localFile = File("$filesDir/cache/cache2.txt")
-            BaseActivity.referens.child("/icons.json").getFile(localFile).addOnCompleteListener {
+            Malitounik.referens.child("/icons.json").getFile(localFile).addOnCompleteListener {
                 if (it.isSuccessful) {
                     val gson = Gson()
                     val json = localFile.readText()
@@ -199,13 +200,13 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                             else -> ""
                         }
                         if (images[i].size != 0L) {
-                            BaseActivity.referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").putFile(Uri.fromFile(images[i].file)).await()
+                            Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").putFile(Uri.fromFile(images[i].file)).await()
                             val file = File("$filesDir/icons/s_${day}_${mun}${posItems}.jpg")
                             arraytemp.add(DataImages(getSviatyia(toPosition), file.length(), file, images[i].position))
                         } else {
                             arraytemp.add(DataImages(getSviatyia(toPosition), 0, File(""), images[i].position))
                             if (images[i].size != 0L) {
-                                BaseActivity.referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").delete().await()
+                                Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").delete().await()
                             }
                         }
                     }
@@ -273,7 +274,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                 }
                 bitmap?.let {
                     if (position == 0) {
-                        BaseActivity.referens.child("/chytanne/icons/s_${day}_${mun}.jpg").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
+                        Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}.jpg").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
                             val file = File("$filesDir/icons/s_${day}_${mun}.jpg")
                             localFile.copyTo(file, true)
                             images[position].file = file
@@ -281,14 +282,14 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                         }.await()
                         arrayListIcon.forEach { result ->
                             if (images[position].file.name == result[0]) {
-                                BaseActivity.referens.child("/chytanne/icons/" + images[position].file.name).metadata.addOnSuccessListener {
+                                Malitounik.referens.child("/chytanne/icons/" + images[position].file.name).metadata.addOnSuccessListener {
                                     result[1] = it.sizeBytes.toString()
                                     result[2] = it.updatedTimeMillis.toString()
                                 }.await()
                             }
                         }
                     } else {
-                        BaseActivity.referens.child("/chytanne/icons/s_${day}_${mun}_${position + 1}.jpg").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
+                        Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}_${position + 1}.jpg").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
                             val file = File("$filesDir/icons/s_${day}_${mun}_${position + 1}.jpg")
                             localFile.copyTo(file, true)
                             images[position].file = file
@@ -296,7 +297,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                         }.await()
                         arrayListIcon.forEach { result ->
                             if (images[position].file.name == result[0]) {
-                                BaseActivity.referens.child("/chytanne/icons/" + images[position].file.name).metadata.addOnSuccessListener {
+                                Malitounik.referens.child("/chytanne/icons/" + images[position].file.name).metadata.addOnSuccessListener {
                                     result[1] = it.sizeBytes.toString()
                                     result[2] = it.updatedTimeMillis.toString()
                                 }.await()
@@ -320,7 +321,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                 }
             }
             arrayListIcon.removeAll(tempList.toSet())
-            val list = BaseActivity.referens.child("/chytanne/icons").list(1000).await()
+            val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
             list.items.forEach { result ->
                 if (result.name.contains("s_${day}_${mun}.") || result.name.contains("s_${day}_${mun}_")) {
                     val array = ArrayList<String>()
@@ -340,7 +341,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                 it.write(gson.toJson(arrayListIcon, type))
             }
-            BaseActivity.referens.child("/icons.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
+            Malitounik.referens.child("/icons.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                 if (it.isSuccessful) MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.save))
                 else MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.error))
             }.await()
@@ -359,7 +360,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
             arrayListIcon.forEach {
                 if (it[0].contains("s_${day}_${mun}.") || it[0].contains("s_${day}_${mun}_")) {
                     val fileIcon = File("$filesDir/icons/" + it[0])
-                    val pathReference = BaseActivity.referens.child("/chytanne/icons/" + it[0])
+                    val pathReference = Malitounik.referens.child("/chytanne/icons/" + it[0])
                     pathReference.getFile(fileIcon).addOnFailureListener {
                         MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
@@ -405,7 +406,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         var title = ""
         val dir = File("$filesDir/sviatyja/")
         if (!dir.exists()) dir.mkdir()
-        val list = BaseActivity.referens.child("/chytanne/sviatyja").list(12).await()
+        val list = Malitounik.referens.child("/chytanne/sviatyja").list(12).await()
         list.items.forEach { storageReference ->
             if (mun == Calendar.getInstance()[Calendar.MONTH] + 1) {
                 var update = 0L

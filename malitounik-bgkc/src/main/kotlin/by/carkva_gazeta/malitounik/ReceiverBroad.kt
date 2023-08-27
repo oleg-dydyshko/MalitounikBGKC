@@ -59,9 +59,9 @@ class ReceiverBroad : BroadcastReceiver() {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (sabytieSet) {
-                SettingsActivity.notificationChannel(SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
+                SettingsActivity.notificationChannel(context, SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
             } else {
-                SettingsActivity.notificationChannel()
+                SettingsActivity.notificationChannel(context)
             }
         } else {
             var sound = chin.getInt("soundnotification", 0)

@@ -28,10 +28,6 @@ import com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListene
 import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -74,7 +70,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     override fun attachBaseContext(context: Context) {
         super.attachBaseContext(context)
-        instance = this
         if (checkmoduleResources()) {
             SplitCompat.install(this)
         }
@@ -294,7 +289,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     }
 
     fun checkmoduleResources(): Boolean {
-        val muduls = SplitInstallManagerFactory.create(applicationContext()).installedModules
+        val muduls = SplitInstallManagerFactory.create(this).installedModules
         for (mod in muduls) {
             if (mod == "resources") {
                 return true
@@ -372,14 +367,5 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     companion object {
         private var sessionId = 0
         private var startAutoDzenNoch = false
-        private var instance: BaseActivity? = null
-        private val storage: FirebaseStorage
-            get() = Firebase.storage
-        val referens: StorageReference
-            get() = storage.reference
-
-        fun applicationContext(): Context {
-            return instance!!.applicationContext
-        }
     }
 }

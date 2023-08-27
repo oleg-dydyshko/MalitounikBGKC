@@ -18,6 +18,7 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminMainBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.gson.Gson
@@ -50,7 +51,7 @@ class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
             CoroutineScope(Dispatchers.Main).launch {
                 try {
                     val localFile = File("$filesDir/cache/cache.txt")
-                    referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener { task ->
+                    Malitounik.referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             val jsonFile = localFile.readText()
                             val gson = Gson()
@@ -68,7 +69,7 @@ class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
                             MainActivity.toastView(this@AdminMain, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
                     }.await()
-                    referens.child("/updateMalitounikBGKC.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
+                    Malitounik.referens.child("/updateMalitounikBGKC.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             MainActivity.toastView(this@AdminMain, getString(by.carkva_gazeta.malitounik.R.string.save))
                         } else {

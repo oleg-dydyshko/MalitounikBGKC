@@ -20,6 +20,7 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminArtykulyBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.gson.Gson
@@ -98,7 +99,7 @@ class Artykly : BaseActivity(), View.OnClickListener {
         urlJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             try {
-                referens.child("/$path").getFile(localFile).addOnFailureListener {
+                Malitounik.referens.child("/$path").getFile(localFile).addOnFailureListener {
                     MainActivity.toastView(this@Artykly, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }.await()
                 load(localFile)
@@ -249,7 +250,7 @@ class Artykly : BaseActivity(), View.OnClickListener {
             localFile.writer().use {
                 it.write(gson.toJson(artykli, type))
             }
-            referens.child("/$path").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
+            Malitounik.referens.child("/$path").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     MainActivity.toastView(this@Artykly, getString(by.carkva_gazeta.malitounik.R.string.save))
                 } else {

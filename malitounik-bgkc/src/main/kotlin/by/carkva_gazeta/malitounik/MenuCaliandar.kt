@@ -208,7 +208,7 @@ class MenuCaliandar : BaseFragment() {
         private val data = ArrayList<ArrayList<String>>()
 
         init {
-            val inputStream = BaseActivity.applicationContext().resources.openRawResource(R.raw.caliandar)
+            val inputStream = Malitounik.applicationContext().resources.openRawResource(R.raw.caliandar)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val builder = reader.use {

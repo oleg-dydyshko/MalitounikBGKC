@@ -101,22 +101,22 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         }
 
         private fun createIntent(title: String, extra: String): Intent {
-            val intent = Intent(applicationContext(), ReceiverBroad::class.java)
+            val intent = Intent(Malitounik.applicationContext(), ReceiverBroad::class.java)
             intent.action = "by.carkva_gazeta.malitounik.sviaty"
             intent.putExtra("title", title)
             intent.putExtra("extra", extra)
-            intent.`package` = applicationContext().packageName
+            intent.`package` = Malitounik.applicationContext().packageName
             return intent
         }
 
         private fun createIntent(title: String, extra: String, dayofyear: Int, year: Int): Intent {
-            val intent = Intent(applicationContext(), ReceiverBroad::class.java)
+            val intent = Intent(Malitounik.applicationContext(), ReceiverBroad::class.java)
             intent.action = "by.carkva_gazeta.malitounik.sviaty"
             intent.putExtra("title", title)
             intent.putExtra("extra", extra)
             intent.putExtra("dayofyear", dayofyear)
             intent.putExtra("year", year)
-            intent.`package` = applicationContext().packageName
+            intent.`package` = Malitounik.applicationContext().packageName
             return intent
         }
 
@@ -127,7 +127,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         }
 
         fun createIntentSabytie(title: String, data: String, time: String): Intent {
-            val intent = Intent(applicationContext(), ReceiverBroad::class.java)
+            val intent = Intent(Malitounik.applicationContext(), ReceiverBroad::class.java)
             intent.action = "by.carkva_gazeta.malitounik.sviaty"
             intent.putExtra("title", title)
             intent.putExtra("sabytieSet", true)
@@ -143,7 +143,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
 
         private fun setAlarm(timeAlarm: Long, pendingIntent: PendingIntent?, padzeia: Boolean = false) {
             pendingIntent?.let {
-                val context = applicationContext()
+                val context = Malitounik.applicationContext()
                 val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 if (padzeia && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !am.canScheduleExactAlarms()) return
                 when {
@@ -163,7 +163,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         }
 
         fun setNotifications(notifications: Int) {
-            val context = applicationContext()
+            val context = Malitounik.applicationContext()
             val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             var intent: Intent
@@ -669,8 +669,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
-        fun notificationChannel(channelID: String = NOTIFICATION_CHANNEL_ID_SVIATY) {
-            val context = applicationContext()
+        fun notificationChannel(context: Context, channelID: String = NOTIFICATION_CHANNEL_ID_SVIATY) {
             val name = if (channelID == NOTIFICATION_CHANNEL_ID_SVIATY) context.getString(R.string.sviaty)
             else context.getString(R.string.sabytie)
             val channel = NotificationChannel(channelID, name, NotificationManager.IMPORTANCE_HIGH)
@@ -779,8 +778,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.vibro.visibility = View.GONE
             binding.guk.visibility = View.GONE
-            notificationChannel()
-            notificationChannel(NOTIFICATION_CHANNEL_ID_SABYTIE)
+            notificationChannel(this)
+            notificationChannel(this, NOTIFICATION_CHANNEL_ID_SABYTIE)
             if (k.getInt("notification", 2) > 0) binding.notifiSvizta.visibility = View.VISIBLE
             binding.notifiSvizta.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {

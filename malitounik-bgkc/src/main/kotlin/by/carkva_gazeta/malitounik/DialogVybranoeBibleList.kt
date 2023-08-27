@@ -293,7 +293,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
         var biblia = "1"
 
         fun checkVybranoe(kniga: Int, glava: Int, bibleName: Int = 1): Boolean {
-            val k = BaseActivity.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val knigaglava = "${kniga + 1}${glava + 1}".toLong()
             val gson = Gson()
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
@@ -336,7 +336,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             }
             if (remove) arrayListVybranoe.add(0, VybranoeBibliaData(knigaglava, "$title ${glava + 1}", kniga, glava + 1, novyZavet, bibleName))
             val gson = Gson()
-            val k = BaseActivity.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val prefEditors = k.edit()
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
             val gsonSave = gson.toJson(arrayListVybranoe, type)

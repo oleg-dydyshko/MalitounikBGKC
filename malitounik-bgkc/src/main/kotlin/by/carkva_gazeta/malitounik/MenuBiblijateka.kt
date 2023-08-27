@@ -58,7 +58,6 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     private var idSelect = MainActivity.NIADAUNIA
     private val naidaunia = ArrayList<ArrayList<String>>()
     private var saveindep = true
-    private var runSql = false
     private var sqlJob: Job? = null
     private var setRubrikaJob: Job? = null
     private var bitmapJob: Job? = null
@@ -292,7 +291,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     private suspend fun downloadPdfFile(url: String): Boolean {
         var error = false
         activity?.let { activity ->
-            val pathReference = BaseActivity.referens.child("/data/bibliateka/$url")
+            val pathReference = Malitounik.referens.child("/data/bibliateka/$url")
             val localFile = File(activity.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
             pathReference.getFile(localFile).addOnFailureListener {
                 error = true
@@ -352,19 +351,14 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
                 }
                 binding.swipeRefreshLayout.setOnRefreshListener {
-                    if (runSql) return@setOnRefreshListener
+                    if (setRubrikaJob?.isActive == true) return@setOnRefreshListener
                     if (!MainActivity.isNetworkAvailable()) {
                         val dialogNoInternet = DialogNoInternet()
                         dialogNoInternet.show(childFragmentManager, "no_internet")
                     } else {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            when (idSelect) {
-                                MainActivity.GISTORYIACARKVY -> getSql(MainActivity.GISTORYIACARKVY)
-                                MainActivity.MALITOUNIKI -> getSql(MainActivity.MALITOUNIKI)
-                                MainActivity.SPEUNIKI -> getSql(MainActivity.SPEUNIKI)
-                                MainActivity.RELLITARATURA -> getSql(MainActivity.RELLITARATURA)
-                                MainActivity.PDF -> getSql(MainActivity.PDF)
-                            }
+                        setRubrikaJob = CoroutineScope(Dispatchers.Main).launch {
+                            if (setRubrika(idSelect) == 0) MainActivity.toastView(it, it.getString(R.string.update_no_biblijateka))
+                            if (setRubrika(idSelect) == 1) MainActivity.toastView(it, it.getString(R.string.error))
                         }
                     }
                     binding.swipeRefreshLayout.isRefreshing = false
@@ -396,7 +390,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                             val prefEditor = k.edit()
                             prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
                             prefEditor.apply()
-                            MainActivity.toastView(it, getString(R.string.no_file))
+                            MainActivity.toastView(it, it.getString(R.string.no_file))
                         }
                     } else {
                         file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
@@ -473,7 +467,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 if (it.checkmodulesBiblijateka()) {
                     dynamicModuleInstalled()
                 } else {
-                    val dialog = DialogUpdateMalitounik.getInstance(getString(R.string.title_download_module))
+                    val dialog = DialogUpdateMalitounik.getInstance(it.getString(R.string.title_download_module))
                     dialog.isCancelable = false
                     dialog.show(childFragmentManager, "DialogUpdateMalitounik")
                     it.setDownloadDynamicModuleListener(this)
@@ -506,51 +500,54 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     }
 
     private fun setTitleBibliateka(rub: Int) {
-        when (rub) {
-            MainActivity.GISTORYIACARKVY -> {
-                idSelect = MainActivity.GISTORYIACARKVY
-                nameRubrika = getString(R.string.bibliateka_gistoryia_carkvy)
-            }
+        activity?.let {
+            when (rub) {
+                MainActivity.GISTORYIACARKVY -> {
+                    idSelect = MainActivity.GISTORYIACARKVY
+                    nameRubrika = it.getString(R.string.bibliateka_gistoryia_carkvy)
+                }
 
-            MainActivity.MALITOUNIKI -> {
-                idSelect = MainActivity.MALITOUNIKI
-                nameRubrika = getString(R.string.bibliateka_malitouniki)
-            }
+                MainActivity.MALITOUNIKI -> {
+                    idSelect = MainActivity.MALITOUNIKI
+                    nameRubrika = it.getString(R.string.bibliateka_malitouniki)
+                }
 
-            MainActivity.SPEUNIKI -> {
-                idSelect = MainActivity.SPEUNIKI
-                nameRubrika = getString(R.string.bibliateka_speuniki)
-            }
+                MainActivity.SPEUNIKI -> {
+                    idSelect = MainActivity.SPEUNIKI
+                    nameRubrika = it.getString(R.string.bibliateka_speuniki)
+                }
 
-            MainActivity.RELLITARATURA -> {
-                idSelect = MainActivity.RELLITARATURA
-                nameRubrika = getString(R.string.bibliateka_rel_litaratura)
-            }
+                MainActivity.RELLITARATURA -> {
+                    idSelect = MainActivity.RELLITARATURA
+                    nameRubrika = it.getString(R.string.bibliateka_rel_litaratura)
+                }
 
-            MainActivity.PDF -> {
-                idSelect = MainActivity.PDF
-                nameRubrika = getString(R.string.arx_num_gaz)
-            }
+                MainActivity.PDF -> {
+                    idSelect = MainActivity.PDF
+                    nameRubrika = it.getString(R.string.arx_num_gaz)
+                }
 
-            else -> {
-                arrayList.clear()
-                arrayList.addAll(naidaunia)
-                arrayList.reverse()
-                adapter.notifyDataSetChanged()
-                idSelect = MainActivity.NIADAUNIA
-                nameRubrika = getString(R.string.bibliateka_niadaunia)
+                else -> {
+                    arrayList.clear()
+                    arrayList.addAll(naidaunia)
+                    arrayList.reverse()
+                    adapter.notifyDataSetChanged()
+                    idSelect = MainActivity.NIADAUNIA
+                    nameRubrika = it.getString(R.string.bibliateka_niadaunia)
+                }
             }
         }
     }
 
-    suspend fun setRubrika(rub: Int) {
+    suspend fun setRubrika(rub: Int): Int {
+        var isUbdate = 0
         var rubryka = rub
         if (rubryka == MainActivity.SETFILE) {
             val intent = Intent()
             intent.type = "*/*"
-            intent.action = Intent.ACTION_GET_CONTENT
+            intent.action = Intent.ACTION_GET_CONTENT/**/
             intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf"))
-            mActivityResultFile.launch(Intent.createChooser(intent, getString(R.string.vybrac_file)))
+            mActivityResultFile.launch(Intent.createChooser(intent, activity?.getString(R.string.vybrac_file)))
             rubryka = MainActivity.NIADAUNIA
         }
         val gson = Gson()
@@ -566,6 +563,8 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         val biblioteka = ArrayList<ArrayList<String>>()
         if (sb != "") {
             biblioteka.addAll(gson.fromJson(sb, type))
+        } else {
+            isUbdate = 1
         }
         if (jsonB != "") {
             arrayList.clear()
@@ -575,6 +574,8 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             if (MainActivity.isNetworkAvailable()) {
                 getSql(rub)
             }
+            isUbdate = if (arrayList.size == 0) 1
+            else 2
         } else {
             val temp = ArrayList<ArrayList<String>>()
             for (i in 0 until arrayList.size) {
@@ -587,6 +588,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         setTitleBibliateka(rubryka)
         saveindep = true
         if (sqlJob?.isActive != true) binding?.progressBar2?.visibility = View.GONE
+        return isUbdate
     }
 
     override fun onPrepareMenu(menu: Menu) {
@@ -632,7 +634,6 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     private suspend fun getSql(rub: Int) {
         activity?.let { activity ->
             withContext(Dispatchers.IO) {
-                runSql = true
                 withContext(Dispatchers.Main) {
                     arrayList.clear()
                     adapter.notifyDataSetChanged()
@@ -683,10 +684,9 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                             }
                         } else {
                             withContext(Dispatchers.Main) {
-                                MainActivity.toastView(activity, getString(R.string.error))
+                                MainActivity.toastView(activity, activity.getString(R.string.error))
                             }
                         }
-                        runSql = false
                         withContext(Dispatchers.Main) {
                             binding?.progressBar2?.visibility = View.GONE
                         }
@@ -700,7 +700,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     private suspend fun getBibliatekaJson(): String {
         var text = ""
         activity?.let { activity ->
-            val pathReference = BaseActivity.referens.child("/bibliateka.json")
+            val pathReference = Malitounik.referens.child("/bibliateka.json")
             val localFile = File("${activity.filesDir}/cache/cache.txt")
             pathReference.getFile(localFile).addOnCompleteListener {
                 if (it.isSuccessful) text = localFile.readText()
@@ -711,7 +711,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
 
     private suspend fun saveImagePdf(imageFile: File, image: String): Boolean {
         var error = false
-        BaseActivity.referens.child("/images/bibliateka/$image").getFile(imageFile).addOnFailureListener {
+        Malitounik.referens.child("/images/bibliateka/$image").getFile(imageFile).addOnFailureListener {
             error = true
         }.await()
         return error
@@ -768,9 +768,9 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                         if (file.exists()) {
                             val sendIntent = Intent(Intent.ACTION_SEND)
                             sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(it, "by.carkva_gazeta.malitounik.fileprovider", file))
-                            sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
+                            sendIntent.putExtra(Intent.EXTRA_SUBJECT, it.getString(R.string.set_log_file))
                             sendIntent.type = "text/html"
-                            startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
+                            startActivity(Intent.createChooser(sendIntent, it.getString(R.string.set_log_file)))
                         } else {
                             val dialogBibliateka = DialogBibliateka.getInstance(arrayList[position][2], arrayList[position][1], arrayList[position][0], arrayList[position][3])
                             dialogBibliateka.show(childFragmentManager, "dialog_bibliateka")

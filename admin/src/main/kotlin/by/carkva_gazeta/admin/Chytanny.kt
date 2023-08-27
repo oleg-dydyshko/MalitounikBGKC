@@ -30,6 +30,7 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.CustomTypefaceSpan
 import by.carkva_gazeta.malitounik.EditTextCustom
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.google.android.play.core.splitcompat.SplitCompat
@@ -72,7 +73,7 @@ class Chytanny : BaseActivity() {
             binding.linear.removeAllViewsInLayout()
             val localFile = File("$filesDir/cache/cache.txt")
             var text = ""
-            referens.child("/calendar-cytanne_$year.php").getFile(localFile).addOnCompleteListener {
+            Malitounik.referens.child("/calendar-cytanne_$year.php").getFile(localFile).addOnCompleteListener {
                 if (it.isSuccessful && localFile.exists()) text = localFile.readText()
                 else MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
             }.await()
@@ -277,7 +278,7 @@ class Chytanny : BaseActivity() {
                     val logFile = File("$filesDir/cache/log.txt")
                     val sb = StringBuilder()
                     val url = "/calendar-cytanne_$year.php"
-                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                    Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
                         MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
                     var ref = true
@@ -293,9 +294,9 @@ class Chytanny : BaseActivity() {
                     logFile.writer().use {
                         it.write(sb.toString())
                     }
-                    referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+                    Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
 
-                    referens.child("/calendar-cytanne_$year.php").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
+                    Malitounik.referens.child("/calendar-cytanne_$year.php").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                         if (it.isSuccessful) {
                             MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.save))
                         } else {

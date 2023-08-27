@@ -27,6 +27,7 @@ import by.carkva_gazeta.admin.databinding.AdminBibliatekaListBinding
 import by.carkva_gazeta.admin.databinding.AdminSimpleListItemBibliotekaBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.google.android.play.core.splitcompat.SplitCompat
@@ -219,8 +220,8 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
                         out.close()
                     }
                     saveBibliatekaJson()
-                    if (binding.pdfTextView.text.toString() != "") referens.child("/data/bibliateka/$pdf").putFile(Uri.fromFile(File(binding.pdfTextView.text.toString()))).await()
-                    referens.child("/images/bibliateka/" + file.name).putFile(Uri.fromFile(file)).await()
+                    if (binding.pdfTextView.text.toString() != "") Malitounik.referens.child("/data/bibliateka/$pdf").putFile(Uri.fromFile(File(binding.pdfTextView.text.toString()))).await()
+                    Malitounik.referens.child("/images/bibliateka/" + file.name).putFile(Uri.fromFile(file)).await()
                 }
                 adapter.notifyDataSetChanged()
                 MainActivity.toastView(this@BibliatekaList, getString(by.carkva_gazeta.malitounik.R.string.save))
@@ -236,7 +237,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
         localFile.writer().use {
             it.write(gson.toJson(arrayList, type))
         }
-        referens.child("/bibliateka.json").putFile(Uri.fromFile(localFile)).await()
+        Malitounik.referens.child("/bibliateka.json").putFile(Uri.fromFile(localFile)).await()
     }
 
     override fun onDialogDeliteClick(position: Int, name: String) {
@@ -246,12 +247,12 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
 
     override fun fileDelite(position: Int, title: String, isSite: Boolean) {
         CoroutineScope(Dispatchers.Main).launch {
-            referens.child("/data/bibliateka/" + arrayList[position][2]).delete().await()
+            Malitounik.referens.child("/data/bibliateka/" + arrayList[position][2]).delete().await()
             val file = File(arrayList[position][5])
             if (file.exists()) {
                 file.delete()
             }
-            referens.child("/images/bibliateka/" + file.name).delete().await()
+            Malitounik.referens.child("/images/bibliateka/" + file.name).delete().await()
             arrayList.removeAt(position)
             adapter.notifyDataSetChanged()
             saveBibliatekaJson()
@@ -311,14 +312,14 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
     private suspend fun saveImagePdf(pdf: String, image: String) {
         val t1 = pdf.lastIndexOf(".")
         val imageTempFile = File("$filesDir/image_temp/" + pdf.substring(0, t1) + ".png")
-        referens.child(image).getFile(imageTempFile).addOnFailureListener {
+        Malitounik.referens.child(image).getFile(imageTempFile).addOnFailureListener {
             MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
         }.await()
     }
 
     private suspend fun getBibliatekaJson(): String {
         var text = ""
-        val pathReference = referens.child("/bibliateka.json")
+        val pathReference = Malitounik.referens.child("/bibliateka.json")
         val localFile = File("$filesDir/cache/cache.txt")
         pathReference.getFile(localFile).addOnCompleteListener {
             if (it.isSuccessful) text = localFile.readText()

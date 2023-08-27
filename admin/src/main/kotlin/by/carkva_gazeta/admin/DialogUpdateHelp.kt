@@ -9,8 +9,8 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminDialogEditviewDisplayBinding
-import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -74,7 +74,7 @@ class DialogUpdateHelp : DialogFragment() {
                     updateHelpJob = CoroutineScope(Dispatchers.Main).launch {
                         try {
                             val localFile = File("${fragmentActivity.filesDir}/cache/cache.txt")
-                            BaseActivity.referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener {
+                            Malitounik.referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener {
                                 if (it.isSuccessful) {
                                     val jsonFile = localFile.readText()
                                     val gson = Gson()

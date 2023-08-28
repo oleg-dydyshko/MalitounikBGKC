@@ -309,6 +309,21 @@
                     android:visibility="gone">
 
                     <TextView
+                        android:id="@+id/label140"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/bibliateka_niadaunia"
+                        android:textSize="14sp"
+                        app:drawableLeftCompat="@drawable/stiker"
+                        app:drawableStartCompat="@drawable/stiker" />
+
+                    <TextView
                         android:id="@+id/label141"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -394,21 +409,6 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/artykuly"
-                        android:textSize="14sp"
-                        app:drawableLeftCompat="@drawable/stiker"
-                        app:drawableStartCompat="@drawable/stiker" />
-
-                    <TextView
-                        android:id="@+id/label140"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/bibliateka_niadaunia"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />

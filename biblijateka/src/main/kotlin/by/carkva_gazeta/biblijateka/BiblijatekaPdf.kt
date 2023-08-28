@@ -119,14 +119,11 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
             naidaunia.addAll(gson.fromJson(json, type))
         }
-        bookTitle.clear()
-        printBookmarksTree(pdfView.tableOfContents)
         var title = pdfView.documentMeta.title
         if (title == "" && filePath != "") {
             val t1 = filePath.lastIndexOf("/")
             title = filePath.substring(t1 + 1)
         }
-        binding.titleToolbar.text = title
         if (filePath != "") {
             for (i in 0 until naidaunia.size) {
                 if (naidaunia[i][1].contains(filePath)) {
@@ -150,6 +147,8 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
             prefEditor.apply()
         }
+        printBookmarksTree(pdfView.tableOfContents)
+        binding.titleToolbar.text = title
         pdfView.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorSecondary_text)
     }
 
@@ -168,6 +167,7 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     }
 
     private fun printBookmarksTree(tree: List<PdfDocument.Bookmark>) {
+        bookTitle.clear()
         for (b in tree) {
             bookTitle.add(b.pageIdx.toString() + "<>" + b.title)
             if (b.hasChildren()) {
@@ -279,7 +279,9 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
 
     override fun onBack() {
         val intent = Intent()
-        intent.putExtra("title", pdfView.documentMeta.title)
+        var title = pdfView.documentMeta.title
+        if (title == "") title = fileName
+        intent.putExtra("title", title)
         setResult(RESULT_OK, intent)
         super.onBack()
         val prefEditor = k.edit()

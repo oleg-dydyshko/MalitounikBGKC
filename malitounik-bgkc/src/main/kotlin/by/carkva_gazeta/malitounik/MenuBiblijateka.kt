@@ -30,7 +30,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import by.carkva_gazeta.malitounik.databinding.BiblijatekaBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibliotekaBinding
-import com.google.android.play.core.splitinstall.SplitInstallHelper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -51,17 +50,19 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     private val dzenNoch get() = (activity as BaseActivity).getBaseDzenNoch()
     private var filePath = ""
     private var fileName = ""
+    private var isLoad = false
     private val arrayList = ArrayList<ArrayList<String>>()
     private var width = 0
     private lateinit var adapter: BibliotekaAdapter
     private var nameRubrika = ""
-    private var idSelect = MainActivity.NIADAUNIA
+    private var idSelect = MainActivity.MALITOUNIKI
     private val naidaunia = ArrayList<ArrayList<String>>()
     private var saveindep = true
     private var sqlJob: Job? = null
     private var setRubrikaJob: Job? = null
     private var bitmapJob: Job? = null
     private var binding: BiblijatekaBinding? = null
+    private var munuBiblijatekaListener: MunuBiblijatekaListener? = null
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             activity?.let { activity ->
@@ -81,21 +82,22 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             }
         }
     }
-    private val mActivityResultPdf = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        var title = result.data?.extras?.getString("title", "") ?: ""
+
+    fun saveNaidauniaBiblijateka(title: String) {
+        var titleNew = title
         var position = -1
-        if (title == "") {
+        if (titleNew == "") {
             arrayList.forEachIndexed { index, kniga ->
                 if (kniga[2] == fileName) {
                     position = index
-                    title = kniga[0]
+                    titleNew = kniga[0]
                     return@forEachIndexed
                 }
             }
         }
-        if (title == "" && filePath != "") {
+        if (titleNew == "" && filePath != "") {
             val t1 = filePath.lastIndexOf("/")
-            title = filePath.substring(t1 + 1)
+            titleNew = filePath.substring(t1 + 1)
         }
         if (filePath != "") {
             activity?.let {
@@ -107,7 +109,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 }
                 val gson = Gson()
                 val temp = java.util.ArrayList<String>()
-                temp.add(title)
+                temp.add(titleNew)
                 temp.add(filePath)
                 val image = if (position != -1) {
                     File(arrayList[position][5]).name
@@ -125,8 +127,24 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 val prefEditor = k.edit()
                 prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
                 prefEditor.apply()
+                munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
             }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is Activity) {
+            munuBiblijatekaListener = try {
+                context as MunuBiblijatekaListener
+            } catch (e: ClassCastException) {
+                throw ClassCastException("$context must implement MunuBiblijatekaListener")
+            }
+        }
+    }
+
+    interface MunuBiblijatekaListener {
+        fun munuBiblijatekaUpdate(isNiadaunia: Boolean)
     }
 
     private fun copyInputStreamToFile(inputStream: InputStream?, mime: String) {
@@ -171,6 +189,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
         prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
         prefEditor.apply()
+        munuBiblijatekaListener?.munuBiblijatekaUpdate(false)
         binding?.progressBar2?.visibility = View.VISIBLE
         activity?.let {
             CoroutineScope(Dispatchers.Main).launch {
@@ -224,6 +243,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                 prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
                 prefEditor.apply()
+                munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
             }
         }
     }
@@ -307,7 +327,8 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         idSelect = MainActivity.NIADAUNIA
         nameRubrika = getString(R.string.bibliateka_niadaunia)
         setRubrikaJob = CoroutineScope(Dispatchers.Main).launch {
-            setRubrika(MainActivity.NIADAUNIA)
+            if (naidaunia.size > 0) setRubrika(MainActivity.NIADAUNIA)
+            else setRubrika(MainActivity.MALITOUNIKI)
         }
         filePath = file.absolutePath
         fileName = file.name
@@ -390,6 +411,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                             val prefEditor = k.edit()
                             prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
                             prefEditor.apply()
+                            munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
                             MainActivity.toastView(it, it.getString(R.string.no_file))
                         }
                     } else {
@@ -421,6 +443,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     filePath = savedInstanceState.getString("filePath") ?: ""
                     fileName = savedInstanceState.getString("fileName") ?: ""
                     idSelect = savedInstanceState.getInt("idSelect")
+                    isLoad = savedInstanceState.getBoolean("isLoad")
                     nameRubrika = savedInstanceState.getString("nameRubrika") ?: ""
                     saveindep = false
                     if (!json.equals("")) {
@@ -434,8 +457,10 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     }
                     fileName = arguments?.getString("fileName", "") ?: ""
                     filePath = arguments?.getString("filePath", "") ?: ""
+                    isLoad = arguments?.getBoolean("isLoad", false) ?: false
                 }
-                idSelect = arguments?.getInt("rub", MainActivity.NIADAUNIA) ?: MainActivity.NIADAUNIA
+                munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
+                idSelect = arguments?.getInt("rub", MainActivity.MALITOUNIKI) ?: MainActivity.MALITOUNIKI
                 if (idSelect == MainActivity.NIADAUNIA || idSelect == MainActivity.SETFILE) {
                     binding.swipeRefreshLayout.isEnabled = false
                     binding.swipeRefreshLayout.isRefreshing = false
@@ -486,15 +511,14 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
 
     override fun dynamicModuleInstalled() {
         activity?.let { activity ->
-            binding?.let {
-                val dialog = childFragmentManager.findFragmentByTag("DialogUpdateMalitounik") as? DialogUpdateMalitounik
-                dialog?.updateComplete()
-                SplitInstallHelper.updateAppInfo(activity)
+            val dialog = childFragmentManager.findFragmentByTag("DialogUpdateMalitounik") as? DialogUpdateMalitounik
+            dialog?.updateComplete()
+            if (!isLoad) {
                 val intent = Intent()
                 intent.setClassName(activity, MainActivity.BIBLIJATEKAPDF)
                 intent.putExtra("filePath", filePath)
                 intent.putExtra("fileName", fileName)
-                mActivityResultPdf.launch(intent)
+                startActivity(intent)
             }
         }
     }
@@ -548,7 +572,8 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             intent.action = Intent.ACTION_GET_CONTENT/**/
             intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf"))
             mActivityResultFile.launch(Intent.createChooser(intent, activity?.getString(R.string.vybrac_file)))
-            rubryka = MainActivity.NIADAUNIA
+            rubryka = if (naidaunia.size > 0) MainActivity.NIADAUNIA
+            else MainActivity.MALITOUNIKI
         }
         val gson = Gson()
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
@@ -723,6 +748,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         outState.putString("fileName", fileName)
         outState.putInt("idSelect", idSelect)
         outState.putString("nameRubrika", nameRubrika)
+        outState.putBoolean("isLoad", isLoad)
     }
 
     private fun showPopupMenu(view: View, position: Int, name: String) {
@@ -857,11 +883,12 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     private class ViewHolder(var text: TextView, var imageView: ImageView, var buttonPopup: ImageView)
 
     companion object {
-        fun getInstance(rub: Int, fileName: String = "", filePath: String = ""): MenuBiblijateka {
+        fun getInstance(rub: Int, isLoad: Boolean, fileName: String = "", filePath: String = ""): MenuBiblijateka {
             val bundle = Bundle()
             bundle.putInt("rub", rub)
             bundle.putString("fileName", fileName)
             bundle.putString("filePath", filePath)
+            bundle.putBoolean("isLoad", isLoad)
             val menuPesny = MenuBiblijateka()
             menuPesny.arguments = bundle
             return menuPesny

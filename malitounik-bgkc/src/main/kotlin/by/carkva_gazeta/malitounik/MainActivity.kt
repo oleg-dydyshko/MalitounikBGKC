@@ -52,7 +52,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 
-class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, DialogLogView.DialogLogViewListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener {
+class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, DialogLogView.DialogLogViewListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener, MenuBiblijateka.MunuBiblijatekaListener {
 
     private val c = Calendar.getInstance()
     private lateinit var k: SharedPreferences
@@ -97,6 +97,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             dialog.show(supportFragmentManager, "DialogUpdateMalitounik")
         } else {
             onUpdateNegativeWIFI()
+        }
+    }
+    private val setFileBiblijatekaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val title = result.data?.extras?.getString("title", "") ?: ""
+            val fragment = findMenuBiblijateka()
+            fragment?.saveNaidauniaBiblijateka(title)
+            selectFragment(binding.label140, true)
         }
     }
     private val mConnection = object : ServiceConnection {
@@ -333,8 +341,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
                 completeUpdate()
             }
-        }
-        /*val bytesDownload = "12000548".toDouble()
+        }/*val bytesDownload = "12000548".toDouble()
         val total = "25025024".toDouble()
         val dialog = supportFragmentManager.findFragmentByTag("DialogUpdateMalitounik") as? DialogUpdateMalitounik
         dialog?.updateProgress(total, bytesDownload)*/
@@ -1260,6 +1267,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
         bindingappbar.subtitleToolbar.visibility = View.GONE
+        if (!isNiadaunia()) {
+            binding.label140.visibility = View.GONE
+        }
         when (idOld) {
             R.id.label1 -> {
                 tolbarTitle = getString(R.string.kaliandar2)
@@ -1408,78 +1418,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (dzenNoch) binding.label146.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label146.setBackgroundResource(R.drawable.selector_gray)
             }
-
-            R.id.label140 -> {
-                tolbarTitle = getString(R.string.bibliateka_carkvy)
-                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_niadaunia)
-                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
-                if (dzenNoch) binding.label140.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else binding.label140.setBackgroundResource(R.drawable.selector_gray)
-            }
-
-            R.id.label141 -> {
-                tolbarTitle = getString(R.string.bibliateka_carkvy)
-                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_gistoryia_carkvy)
-                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
-                if (dzenNoch) binding.label141.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else binding.label141.setBackgroundResource(R.drawable.selector_gray)
-            }
-
-            R.id.label142 -> {
-                tolbarTitle = getString(R.string.bibliateka_carkvy)
-                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_malitouniki)
-                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
-                if (dzenNoch) binding.label142.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else binding.label142.setBackgroundResource(R.drawable.selector_gray)
-            }
-
-            R.id.label143 -> {
-                tolbarTitle = getString(R.string.bibliateka_carkvy)
-                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_speuniki)
-                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
-                if (dzenNoch) binding.label143.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else binding.label143.setBackgroundResource(R.drawable.selector_gray)
-            }
-
-            R.id.label144 -> {
-                tolbarTitle = getString(R.string.bibliateka_carkvy)
-                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_rel_litaratura)
-                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
-                if (dzenNoch) binding.label144.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else binding.label144.setBackgroundResource(R.drawable.selector_gray)
-            }
-
-            R.id.label145 -> {
-                tolbarTitle = getString(R.string.bibliateka_carkvy)
-                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_niadaunia)
-                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
-                if (dzenNoch) binding.label140.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else binding.label140.setBackgroundResource(R.drawable.selector_gray)
-            }
-
-            R.id.label148 -> {
-                tolbarTitle = getString(R.string.bibliateka_carkvy)
-                bindingappbar.subtitleToolbar.text = getString(R.string.arx_num_gaz)
-                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
-                if (dzenNoch) binding.label148.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else binding.label148.setBackgroundResource(R.drawable.selector_gray)
-            }
         }
 
         val ftrans = supportFragmentManager.beginTransaction()
         ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
-
-        if (tolbarTitle == "") {
-            val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
-            if (fragment == null) {
-                val caliandar = MenuCaliandar.newInstance(setDataCalendar)
-                ftrans.replace(R.id.conteiner, caliandar, "menuCaliandar")
-                prefEditors.putInt("id", idSelect)
-                tolbarTitle = getString(R.string.kaliandar2)
-                if (dzenNoch) binding.label1.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else binding.label1.setBackgroundResource(R.drawable.selector_gray)
-            }
-        }
         when (id) {
             R.id.label1 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
@@ -1842,6 +1784,18 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             R.id.citata -> {
                 startActivity(Intent(this, Cytaty::class.java))
             }
+
+            else -> {
+                val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
+                if (fragment == null) {
+                    val caliandar = MenuCaliandar.newInstance(setDataCalendar)
+                    ftrans.replace(R.id.conteiner, caliandar, "menuCaliandar")
+                    prefEditors.putInt("id", idSelect)
+                    tolbarTitle = getString(R.string.kaliandar2)
+                    if (dzenNoch) binding.label1.setBackgroundResource(R.drawable.selector_dark_maranata)
+                    else binding.label1.setBackgroundResource(R.drawable.selector_gray)
+                }
+            }
         }
         if (start) {
             ftrans.commit()
@@ -1889,13 +1843,27 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     private fun startBiblioteka(rub: Int, start: Boolean, id: Int, fileName: String = "", filePath: String = "") {
-        val rubNew = if (rub == SETFILE) NIADAUNIA
-        else rub
+        var isload = false
+        if (fileName != "" && filePath != "") {
+            if (checkmodulesBiblijateka()) {
+                isload = true
+                val intent = Intent()
+                intent.setClassName(this, BIBLIJATEKAPDF)
+                intent.putExtra("filePath", filePath)
+                intent.putExtra("fileName", fileName)
+                setFileBiblijatekaLauncher.launch(intent)
+            }
+        }
+        var rubNew = if (rub == SETFILE) {
+            if (isNiadaunia()) NIADAUNIA
+            else MALITOUNIKI
+        } else rub
+        if (rub == NIADAUNIA && !isNiadaunia()) rubNew = MALITOUNIKI
         val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$rubNew") as? MenuBiblijateka
         if (fragment == null) {
             val ftrans = supportFragmentManager.beginTransaction()
             ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
-            val vybranoe = MenuBiblijateka.getInstance(rub, fileName, filePath)
+            val vybranoe = MenuBiblijateka.getInstance(rubNew, isload, fileName, filePath)
             ftrans.replace(R.id.conteiner, vybranoe, "MenuBiblijateka$rubNew")
             if (start) {
                 ftrans.commit()
@@ -1910,9 +1878,74 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 fragment.setRubrika(rub)
             }
         }
+        when (rubNew) {
+            NIADAUNIA -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_niadaunia)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label140.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label140.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            GISTORYIACARKVY -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_gistoryia_carkvy)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label141.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label141.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            MALITOUNIKI -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_malitouniki)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label142.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label142.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            SPEUNIKI -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_speuniki)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label143.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label143.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            RELLITARATURA -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.bibliateka_rel_litaratura)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label144.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label144.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            PDF -> {
+                tolbarTitle = getString(R.string.bibliateka_carkvy)
+                bindingappbar.subtitleToolbar.text = getString(R.string.arx_num_gaz)
+                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
+                if (dzenNoch) binding.label148.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label148.setBackgroundResource(R.drawable.selector_gray)
+            }
+        }
         prefEditors.putInt("id", id)
         prefEditors.apply()
         idSelect = id
+    }
+
+    override fun munuBiblijatekaUpdate(isNiadaunia: Boolean) {
+        if (isNiadaunia) binding.label140.visibility = View.VISIBLE
+        else binding.label140.visibility = View.GONE
+    }
+
+    private fun isNiadaunia(): Boolean {
+        val naidaunia = ArrayList<ArrayList<String>>()
+        val gson = Gson()
+        val json = k.getString("bibliateka_naidaunia", "")
+        if (json != "") {
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+            naidaunia.addAll(gson.fromJson(json, type))
+        }
+        return naidaunia.size > 0
     }
 
     private fun completeUpdate() {

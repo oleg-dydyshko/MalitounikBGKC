@@ -317,86 +317,77 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(242, "Адсячэньне галавы сьвятога Яна Хрысьціцеля", "mm_29_08_adsiaczennie_halavy_jana_chrysciciela_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(242, "Адсячэньне галавы сьвятога Яна Хрысьціцеля", "mm_29_08_adsiaczennie_halavy_jana_chrysciciela_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(252, "Нараджэньне Найсьвяцейшай Багародзіцы", "mm_08_09_naradzennie_baharodzicy_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(257, "Перадсьвяцьце Ўзвышэньня, памяць аднаўленьня царквы Ўваскрасеньня і сьвятога мучаніка Карніла", "mm_13_09_pieradsv_uzvyszennia_adnaul_carkvy_uvaskr_mucz_karnila_viaczernia", VIACZERNIA))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {
         val list = datMinALL.filter {
             it.mineia == MINEIA_VIALIKI_POST_1
         }
-        list.sorted()
-        return list
+        return list.sorted()
     }
 
     fun getTydzen2(): List<SlugbovyiaTextuData> {
         val list = datMinALL.filter {
             it.mineia == MINEIA_VIALIKI_POST_2
         }
-        list.sorted()
-        return list
+        return list.sorted()
     }
 
     fun getTydzen3(): List<SlugbovyiaTextuData> {
         val list = datMinALL.filter {
             it.mineia == MINEIA_VIALIKI_POST_3
         }
-        list.sorted()
-        return list
+        return list.sorted()
     }
 
     fun getTydzen4(): List<SlugbovyiaTextuData> {
         val list = datMinALL.filter {
             it.mineia == MINEIA_VIALIKI_POST_4
         }
-        list.sorted()
-        return list
+        return list.sorted()
     }
 
     fun getTydzen5(): List<SlugbovyiaTextuData> {
         val list = datMinALL.filter {
             it.mineia == MINEIA_VIALIKI_POST_5
         }
-        list.sorted()
-        return list
+        return list.sorted()
     }
 
     fun getTydzen6(): List<SlugbovyiaTextuData> {
         val list = datMinALL.filter {
             it.mineia == MINEIA_VIALIKI_POST_6
         }
-        list.sorted()
-        return list
+        return list.sorted()
     }
 
     fun getVilikiTydzen(): List<SlugbovyiaTextuData> {
         val list = datMinALL.filter {
             it.mineia == MINEIA_VIALIKI_TYDZEN
         }
-        list.sorted()
-        return list
+        return list.sorted()
     }
 
     fun getSvetlyTydzen(): List<SlugbovyiaTextuData> {
         val list = datMinALL.filter {
             it.mineia == MINEIA_SVITLY_TYDZEN
         }
-        list.sorted()
-        return list
+        return list.sorted()
     }
 
     fun getMineiaMesiachnaia(): List<SlugbovyiaTextuData> {
         val list = datMinALL.filter {
             it.mineia == MINEIA_MESIACHNAIA
         }
-        list.sorted()
-        return list
+        return list.sorted()
     }
 
     fun getMineiaSviatochnaia(): List<SlugbovyiaTextuData> {
         val list = datMinALL.filter {
             it.mineia == MINEIA_SVIATOCHNAIA
         }
-        list.sorted()
-        return list
+        return list.sorted()
     }
 
     fun getResource(day: Int, dayOfYear: Int, sluzba: Int): String {

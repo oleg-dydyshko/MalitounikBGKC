@@ -1,7 +1,7 @@
 package by.carkva_gazeta.resources
 
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
@@ -24,17 +23,21 @@ import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
 import android.view.animation.AnimationUtils
+import android.widget.AbsListView
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.widget.ListViewCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
-import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
-import by.carkva_gazeta.resources.databinding.AkafistChytanneBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
+import by.carkva_gazeta.resources.databinding.AkafistBibliaVybranoeBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -44,7 +47,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.InputStreamReader
 
-class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogFullScreenHelp.DialogFullScreenHelpListener {
+class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogFullScreenHelp.DialogFullScreenHelpListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -54,63 +57,61 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private var n = 0
     private var spid = 60
     private var mActionDown = false
-    private lateinit var binding: AkafistChytanneBinding
+    private lateinit var binding: AkafistBibliaVybranoeBinding
     private lateinit var bindingprogress: ProgressBinding
     private var autoScrollJob: Job? = null
     private var autoStartScrollJob: Job? = null
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
     private var resetScreenJob: Job? = null
-    private var diffScroll = false
+    private var resetTitleJob: Job? = null
+    private var diffScroll = -1
+    private var scrolltosatrt = false
     private var title = ""
-    private var firstTextPosition = ""
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private var positionY = 0
     private var resurs = "0"
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
     private var prodoljyt = false
+    private lateinit var adapter: BibliaVybranoeListAdaprer
+    private val bibliaVybranoeList = ArrayList<BibliaVybranoeData>()
     private val mActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        title = ""
         prodoljyt = true
-        loadBible(null)
+        loadBible()
     }
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
-        binding.textView.textSize = fontBiblia
+        adapter.notifyDataSetChanged()
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        binding = AkafistChytanneBinding.inflate(layoutInflater)
+        binding = AkafistBibliaVybranoeBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
         if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             orientation = savedInstanceState.getInt("orientation")
+            binding.subtitleToolbar.text = savedInstanceState.getString("subTollBarText", "") ?: ""
         } else {
             fullscreenPage = k.getBoolean("fullscreenPage", false)
+            if (k.getBoolean("autoscrollAutostart", false)) {
+                autoStartScroll()
+            }
         }
         title = intent.extras?.getString("title", "") ?: ""
         resurs = intent.extras?.getString("biblia", "1") ?: "1"
+        positionY = k.getInt(resurs + "BibleVybranoeScroll", 0)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-        binding.textView.textSize = fontBiblia
+        adapter = BibliaVybranoeListAdaprer(this)
+        binding.ListView.adapter = adapter
+        binding.ListView.divider = null
+        binding.ListView.setSelection(positionY)
         binding.constraint.setOnTouchListener(this)
-        binding.InteractiveScroll.setOnBottomReachedListener(object : OnBottomReachedListener {
-            override fun onBottomReached(checkDiff: Boolean) {
-                diffScroll = checkDiff
-                autoscroll = false
-                stopAutoScroll()
-                invalidateOptionsMenu()
-            }
-
-            override fun onTouch(action: Boolean) {
-                mActionDown = action
-            }
-        })
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
@@ -126,7 +127,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         }
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
-        loadBible(savedInstanceState)
+        loadBible()
         bindingprogress.fontSizePlus.setOnClickListener {
             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
@@ -214,9 +215,60 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             onBack()
         }
         prodoljyt = intent?.extras?.getBoolean("prodoljyt", false) ?: false
-        binding.InteractiveScroll.setOnScrollChangedCallback(this)
-        binding.textView.movementMethod = setLinkMovementMethodCheck()
-        if (dzenNoch) binding.textView.setLinkTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
+        binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            private var checkDiff = false
+
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+                mActionDown = scrollState != 0
+            }
+
+            override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+                if (list.adapter == null || list.getChildAt(0) == null) return
+                val position = list.firstVisiblePosition
+                val nazva = bibliaVybranoeList[list.firstVisiblePosition]
+                if (fullscreenPage) {
+                    if (position < positionY) {
+                        if (binding.textViewTitle.visibility == View.GONE) {
+                            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                            binding.textViewTitle.visibility = View.VISIBLE
+                            binding.textViewTitle.animation = animation
+                        }
+                        if (resetTitleJob?.isActive == true) resetTitleJob?.cancel()
+                        if (resetTitleJob?.isActive != true) {
+                            resetTitleJob = CoroutineScope(Dispatchers.Main).launch {
+                                delay(3000L)
+                                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+                                binding.textViewTitle.visibility = View.GONE
+                                binding.textViewTitle.animation = animation2
+                            }
+                        }
+                    }
+                    binding.textViewTitle.text = nazva.title
+                }
+                positionY = position
+                if (position == 0 && scrolltosatrt) {
+                    autoStartScroll()
+                    scrolltosatrt = false
+                    invalidateOptionsMenu()
+                }
+                diffScroll = if (list.lastVisiblePosition == list.adapter.count - 1) list.getChildAt(list.childCount - 1).bottom - list.height
+                else -1
+                if (checkDiff && diffScroll > 0) {
+                    checkDiff = false
+                    invalidateOptionsMenu()
+                }
+                if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
+                    checkDiff = true
+                    autoscroll = false
+                    stopAutoScroll()
+                    invalidateOptionsMenu()
+                }
+                val nazvaView = binding.subtitleToolbar.text.toString()
+                if (nazva.title != nazvaView || nazvaView == "") {
+                    binding.subtitleToolbar.text = nazva.title
+                }
+            }
+        })
     }
 
     private fun setTollbarTheme() {
@@ -229,12 +281,10 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.str_short_label1)
-        binding.subtitleToolbar.visibility = View.VISIBLE
         when (resurs) {
-            "1" -> binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_biblia)
-            "2" -> binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bsinaidal)
-            "3" -> binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_psalter)
+            "1" -> binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_biblia)
+            "2" -> binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bsinaidal)
+            "3" -> binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_psalter)
         }
         if (dzenNoch) {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
@@ -324,8 +374,9 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         return true
     }
 
-    private fun loadBible(savedInstanceState: Bundle?) {
-        val ssbTitle = SpannableStringBuilder()
+    private fun loadBible() {
+        var scrollToPosition = 0
+        var count = 0
         DialogVybranoeBibleList.arrayListVybranoe.forEach { vybranoeBibliaData ->
             var inputStream = resources.openRawResource(R.raw.biblias1)
             var file: File? = null
@@ -528,10 +579,10 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                     }
                 }, 0, titleBibliaData.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            ssbTitle.append(titleBibliaData)
-            ssbTitle.setSpan(StyleSpan(Typeface.BOLD), ssbTitle.length - titleBibliaData.length, ssbTitle.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            ssbTitle.append("\n")
-            val sb = SpannableStringBuilder()
+            titleBibliaData.setSpan(StyleSpan(Typeface.BOLD), 0, titleBibliaData.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, titleBibliaData))
+            if (title == vybranoeBibliaData.title) scrollToPosition = count
+            count++
             if (file?.exists() == true) {
                 BibleGlobalList.vydelenie.clear()
                 val inputStream2 = FileReader(file)
@@ -540,13 +591,9 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
                 BibleGlobalList.vydelenie.addAll(gson.fromJson(reader.readText(), type))
                 inputStream2.close()
-                val stix = ArrayList<Spanned>()
                 val bibleline = split2[vybranoeBibliaData.glava].split("<br><br>")
-                bibleline.forEach {
-                    if (it.trim() != "") stix.add(MainActivity.fromHtml(it))
-                }
-                for (position in stix.indices) {
-                    val ssb = SpannableString(stix[position])
+                for (position in bibleline.indices) {
+                    val ssb = SpannableString(MainActivity.fromHtml(bibleline[position]))
                     val pos = BibleGlobalList.checkPosition(vybranoeBibliaData.glava - 1, position)
                     if (pos != -1) {
                         if (BibleGlobalList.vydelenie[pos][2] == 1) {
@@ -556,52 +603,27 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                         if (BibleGlobalList.vydelenie[pos][3] == 1) ssb.setSpan(UnderlineSpan(), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         if (BibleGlobalList.vydelenie[pos][4] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
-                    sb.append(ssb).append("\n")
+                    bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, ssb))
+                    count++
                 }
             } else {
-                val bible = split2[vybranoeBibliaData.glava].replace("<br><br>", "<br>")
-                sb.append(MainActivity.fromHtml(bible))
+                val bibleline = split2[vybranoeBibliaData.glava].split("<br><br>")
+                for (position in bibleline.indices) {
+                    bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, MainActivity.fromHtml(bibleline[position])))
+                    count++
+                }
             }
-            ssbTitle.append(sb).append("\n")
         }
-        positionY = k.getInt(resurs + "BibleVybranoeScroll", 0)
-        binding.textView.text = ssbTitle.trim()
-        if (savedInstanceState != null) {
-            binding.textView.post {
-                val textline = savedInstanceState.getString("textLine", "")
-                if (textline != "") {
-                    binding.textView.layout?.let { layout ->
-                        val index = binding.textView.text.indexOf(textline)
-                        val line = layout.getLineForOffset(index)
-                        val y = layout.getLineTop(line)
-                        binding.InteractiveScroll.scrollY = y
-                    }
-                }
-            }
+        adapter.notifyDataSetChanged()
+        if (prodoljyt) {
+            binding.ListView.setSelection(positionY)
         } else {
-            binding.InteractiveScroll.post {
-                var y = positionY
-                binding.textView.layout?.let { layout ->
-                    val strPosition = binding.textView.text.indexOf(title + "\n", ignoreCase = true)
-                    val line = layout.getLineForOffset(strPosition)
-                    if (!prodoljyt) {
-                        y = layout.getLineTop(line)
-                    }
-                }
-                val anim = ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", binding.InteractiveScroll.scrollY, y)
-                anim.setDuration(1000).start()
-                if (k.getBoolean("autoscrollAutostart", false)) {
-                    autoStartScroll()
-                }
-            }
+            binding.ListView.setSelection(scrollToPosition)
         }
     }
 
     private fun autoScroll() {
         if (autoScrollJob?.isActive != true) {
-            binding.textView.clearFocus()
-            binding.textView.setTextIsSelectable(false)
-            binding.textView.movementMethod = setLinkMovementMethodCheck()
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             autoscroll = true
             val prefEditor = k.edit()
@@ -612,7 +634,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 while (isActive) {
                     delay(spid.toLong())
                     if (!mActionDown && !MainActivity.dialogVisable) {
-                        binding.InteractiveScroll.smoothScrollBy(0, 2)
+                        ListViewCompat.scrollListBy(binding.ListView, 2)
                     }
                 }
             }
@@ -682,8 +704,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             }
             autoScrollJob?.cancel()
             stopAutoStartScroll()
-            binding.textView.setTextIsSelectable(true)
-            binding.textView.movementMethod = setLinkMovementMethodCheck()
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
@@ -694,7 +714,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     }
 
     private fun startAutoScroll() {
-        if (!diffScroll) {
+        if (diffScroll != 0) {
             spid = k.getInt("autoscrollSpid", 60)
             if (binding.actionMinus.visibility == View.GONE) {
                 binding.actionMinus.visibility = View.VISIBLE
@@ -710,12 +730,8 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             stopAutoStartScroll()
             autoScroll()
         } else {
-            val duration: Long = 1000
-            ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", 0).setDuration(duration).start()
-            binding.InteractiveScroll.postDelayed({
-                autoStartScroll()
-                invalidateOptionsMenu()
-            }, duration)
+            binding.ListView.smoothScrollToPosition(0)
+            scrolltosatrt = true
         }
     }
 
@@ -748,7 +764,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         when {
             autoscroll -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
-            diffScroll -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_up)
+            diffScroll == 0 -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_up)
             else -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
@@ -757,9 +773,13 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
 
     override fun onPause() {
         super.onPause()
-        val prefEditor = k.edit()
-        prefEditor.putInt(resurs + "BibleVybranoeScroll", positionY)
-        prefEditor.apply()
+        val firstVisiblePosition = binding.ListView.firstVisiblePosition
+        if (firstVisiblePosition != 0) {
+            positionY = firstVisiblePosition
+            val prefEditor = k.edit()
+            prefEditor.putInt(resurs + "BibleVybranoeScroll", positionY)
+            prefEditor.apply()
+        }
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         stopAutoStartScroll()
     }
@@ -837,8 +857,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private fun hideHelp() {
         if (k.getBoolean("help_fullscreen", true)) {
             binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost2))
-            if (dzenNoch) binding.InteractiveScroll.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            else binding.InteractiveScroll.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
             val dialogHelpListView = DialogFullScreenHelp()
             dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
             val prefEditors = k.edit()
@@ -878,14 +896,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         binding.actionBack.animation = animation
     }
 
-    override fun onScroll(t: Int, oldt: Int) {
-        positionY = t
-        binding.textView.layout?.let {
-            val textForVertical = binding.textView.text.substring(it.getLineStart(it.getLineForVertical(t)), it.getLineEnd(it.getLineForVertical(t))).trim()
-            if (textForVertical != "") firstTextPosition = textForVertical
-        }
-    }
-
     override fun linkMovementMethodCheckOnTouch(onTouch: Boolean) {
         mActionDown = onTouch
     }
@@ -900,6 +910,33 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         super.onSaveInstanceState(outState)
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
-        outState.putString("textLine", firstTextPosition)
+        outState.putString("subTollBarText", binding.subtitleToolbar.text.toString())
     }
+
+    private inner class BibliaVybranoeListAdaprer(private val activity: Activity) : ArrayAdapter<BibliaVybranoeData>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_maranata, bibliaVybranoeList) {
+
+        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (mView == null) {
+                val binding = SimpleListItemMaranataBinding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.label)
+                rootView.tag = viewHolder
+            } else {
+                rootView = mView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            viewHolder.text.movementMethod = setLinkMovementMethodCheck()
+            val textView = bibliaVybranoeList[position].text
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+            if (dzenNoch) viewHolder.text.setLinkTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
+            viewHolder.text.text = textView
+            return rootView
+        }
+    }
+
+    private class ViewHolder(var text: TextView)
+
+    private data class BibliaVybranoeData(val title: String, val text: Spanned)
 }

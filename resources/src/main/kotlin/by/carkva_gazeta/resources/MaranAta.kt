@@ -444,7 +444,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     invalidateOptionsMenu()
                 }
                 val nazvaView = binding.subtitleToolbar.text.toString()
-                if (!nazva.contains(nazvaView) || nazvaView == "") {
+                if (nazva != nazvaView || nazvaView == "") {
                     binding.subtitleToolbar.text = nazva
                 }
             }

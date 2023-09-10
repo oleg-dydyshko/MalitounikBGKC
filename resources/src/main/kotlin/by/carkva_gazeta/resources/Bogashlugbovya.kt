@@ -414,7 +414,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_01_09_novy_hod_liturhija"] = R.raw.mm_01_09_novy_hod_liturhija
             resursMap["mm_05_09_liturhija"] = R.raw.mm_05_09_liturhija
             resursMap["mm_07_09_pieradsv_naradz_baharodz_liturhija"] = R.raw.mm_07_09_pieradsv_naradz_baharodz_liturhija
-            resursMap["mm_08_09_naradz_baharodzicy_liturhija"] = R.raw.mm_08_09_naradz_baharodzicy_liturhija
+            resursMap["mm_08_09_naradzennie_baharodzicy_liturhija"] = R.raw.mm_08_09_naradzennie_baharodzicy_liturhija
             resursMap["mm_09_09_pasviaccie_naradz_baharodz_liturhija"] = R.raw.mm_09_09_pasviaccie_naradz_baharodz_liturhija
             resursMap["mm_10_09_pasviaccie_naradz_baharodz_viaczernia"] = R.raw.mm_10_09_pasviaccie_naradz_baharodz_viaczernia
             resursMap["mm_11_09_pasviaccie_naradz_baharodz_viaczernia"] = R.raw.mm_11_09_pasviaccie_naradz_baharodz_viaczernia

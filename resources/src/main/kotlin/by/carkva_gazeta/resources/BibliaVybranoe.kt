@@ -375,6 +375,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     }
 
     private fun loadBible() {
+        bibliaVybranoeList.clear()
         var scrollToPosition = 0
         var count = 0
         DialogVybranoeBibleList.arrayListVybranoe.forEach { vybranoeBibliaData ->
@@ -592,16 +593,20 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 BibleGlobalList.vydelenie.addAll(gson.fromJson(reader.readText(), type))
                 inputStream2.close()
                 val bibleline = split2[vybranoeBibliaData.glava].split("<br><br>")
-                for (position in bibleline.indices) {
-                    val ssb = SpannableString(MainActivity.fromHtml(bibleline[position]))
-                    val pos = BibleGlobalList.checkPosition(vybranoeBibliaData.glava - 1, position)
-                    if (pos != -1) {
-                        if (BibleGlobalList.vydelenie[pos][2] == 1) {
-                            ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                var position = 0
+                for (i in bibleline.indices) {
+                    val ssb = SpannableString(MainActivity.fromHtml(bibleline[i]))
+                    if (bibleline[i] != "") {
+                        val pos = BibleGlobalList.checkPosition(vybranoeBibliaData.glava - 1, position)
+                        if (pos != -1) {
+                            if (BibleGlobalList.vydelenie[pos][2] == 1) {
+                                ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            }
+                            if (BibleGlobalList.vydelenie[pos][3] == 1) ssb.setSpan(UnderlineSpan(), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (BibleGlobalList.vydelenie[pos][4] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
-                        if (BibleGlobalList.vydelenie[pos][3] == 1) ssb.setSpan(UnderlineSpan(), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        if (BibleGlobalList.vydelenie[pos][4] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        position++
                     }
                     bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, ssb))
                     count++

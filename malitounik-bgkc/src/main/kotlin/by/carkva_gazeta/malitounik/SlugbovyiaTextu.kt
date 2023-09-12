@@ -190,7 +190,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(253, "Пасьвяцьце Нараджэньня Багародзіцы і сьвятых Якіма і Ганны", "mm_09_09_pasviaccie_naradz_baharodz_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(254, "Пасьвяцьце Нараджэньня Багародзіцы і сьвятых мучаніц Мінадоры, Мітрадоры і Німфадоры", "mm_10_09_pasviaccie_naradz_baharodz_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(255, "Пасьвяцьце Нараджэньня Багародзіцы і сьвятое маці нашае Тадоры", "mm_11_09_pasviaccie_naradz_baharodz_viaczernia", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(256, "Адданьне сьвята Нараджэньня Багародзіцы", "mm_12_09_addannie_naradz_baharodzicy_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(256, "Адданьне сьвята Нараджэньня Багародзіцы", "mm_12_09_addannie_naradzennia_baharodzicy_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(257, "Перадсьвяцьце Ўзвышэньня, памяць аднаўленьня царквы Ўваскрасеньня і сьвятога мучаніка Карніла", "mm_13_09_pieradsv_uzvyszennia_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(258, "Сусьветнае Ўзвышэньне Пачэснага і Жыцьцядайнага Крыжа", "mm_14_09_uzvyszennie_kryza_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(259, "Пасьвяцьце Ўзвышэньня і сьвятога вялікамучаніка Мікіты", "mm_15_09_pasviaccie_uzvyszennia_viaczernia", VIACZERNIA))

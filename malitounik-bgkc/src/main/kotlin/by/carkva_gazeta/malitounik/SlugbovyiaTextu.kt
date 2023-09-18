@@ -318,6 +318,8 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(242, "Адсячэньне галавы сьвятога Яна Хрысьціцеля", "mm_29_08_adsiaczennie_halavy_jana_chrysciciela_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(252, "Нараджэньне Найсьвяцейшай Багародзіцы", "mm_08_09_naradzennie_baharodzicy_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(257, "Перадсьвяцьце Ўзвышэньня, памяць аднаўленьня царквы Ўваскрасеньня і сьвятога мучаніка Карніла", "mm_13_09_pieradsv_uzvyszennia_adnaul_carkvy_uvaskr_mucz_karnila_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(262, "Пасьвяцьце Ўзвышэньня і сьвятога Яўмена, біскупа Гартынскага, цудатворцы", "mm_18_09_pasviaccie_uzvyszennia_jaumiena_cudatvorcy_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(263, "Пасьвяцьце Ўзвышэньня і сьвятых мучанікаў Трахіма, Савацея і Дарымедонта", "mm_19_09_pasviaccie_uzvyszennia_muczanikau_trachima_savacieja_darymiedonta_viaczernia", VIACZERNIA))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {

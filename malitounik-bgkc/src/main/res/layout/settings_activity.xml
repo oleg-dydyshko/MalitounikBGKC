@@ -69,33 +69,38 @@
                 android:layout_marginBottom="10dp"
                 android:background="@color/colorPrimary" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/checkBox5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:checked="false"
-                android:drawableStart="@drawable/stiker"
-                android:drawablePadding="10dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:text="@string/widget_day_d_n"
-                android:textSize="14sp" />
+            <RadioGroup
+                android:id="@+id/nightGrup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/checkBox10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:checked="false"
-                android:drawableStart="@drawable/stiker"
-                android:drawablePadding="10dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:text="@string/auto_widget_day_d_n"
-                android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/day"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/night"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/widget_day_d_n"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/autoNight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/auto_widget_day_d_n"
+                    android:textSize="14sp" />
+            </RadioGroup>
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/checkBox9"

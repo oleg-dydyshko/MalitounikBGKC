@@ -47,7 +47,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.InputStreamReader
 
-class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogFullScreenHelp.DialogFullScreenHelpListener {
+class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -846,11 +846,29 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            hideHelp()
+            if (!k.getBoolean("fullscreenPage", false)) {
+                var fullscreenCount = k.getInt("fullscreenCount", 0)
+                if (fullscreenCount > 3) {
+                    val dialogFullscreen = DialogHelpFullScreenSettings()
+                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
+                    fullscreenCount = 0
+                } else {
+                    fullscreenCount++
+                    hideHelp()
+                }
+                prefEditor.putInt("fullscreenCount", fullscreenCount)
+                prefEditor.apply()
+            } else {
+                hideHelp()
+            }
             return true
         }
         prefEditor.apply()
         return false
+    }
+
+    override fun dialogHelpFullScreenSettingsClose() {
+        hideHelp()
     }
 
     override fun onDialogFullScreenHelpClose() {
@@ -862,7 +880,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private fun hideHelp() {
         if (k.getBoolean("help_fullscreen", true)) {
             binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost2))
-            val dialogHelpListView = DialogFullScreenHelp()
+            val dialogHelpListView = DialogHelpFullScreen()
             dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
             val prefEditors = k.edit()
             prefEditors.putBoolean("help_fullscreen", false)

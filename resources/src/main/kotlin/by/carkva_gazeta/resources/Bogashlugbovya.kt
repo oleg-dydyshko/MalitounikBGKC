@@ -41,7 +41,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 
-class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener, DialogFullScreenHelp.DialogFullScreenHelpListener {
+class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -1964,7 +1964,21 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            hideHelp()
+            if (!k.getBoolean("fullscreenPage", false)) {
+                var fullscreenCount = k.getInt("fullscreenCount", 0)
+                if (fullscreenCount > 3) {
+                    val dialogFullscreen = DialogHelpFullScreenSettings()
+                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
+                    fullscreenCount = 0
+                } else {
+                    fullscreenCount++
+                    hideHelp()
+                }
+                prefEditor.putInt("fullscreenCount", fullscreenCount)
+                prefEditor.apply()
+            } else {
+                hideHelp()
+            }
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
@@ -2017,6 +2031,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             return true
         }
         return false
+    }
+
+    override fun dialogHelpFullScreenSettingsClose() {
+        hideHelp()
     }
 
     override fun sentShareText(shareText: String) {
@@ -2085,7 +2103,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost2))
             if (dzenNoch) binding.scrollView2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
             else binding.scrollView2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            val dialogHelpListView = DialogFullScreenHelp()
+            val dialogHelpListView = DialogHelpFullScreen()
             dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
             val prefEditors = k.edit()
             prefEditors.putBoolean("help_fullscreen", false)

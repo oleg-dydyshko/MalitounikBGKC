@@ -32,7 +32,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 
-class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
+class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
 
     private var fullscreenPage = false
     private var paralel = false
@@ -481,10 +481,29 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            hide()
+            if (!k.getBoolean("fullscreenPage", false)) {
+                var fullscreenCount = k.getInt("fullscreenCount", 0)
+                if (fullscreenCount > 3) {
+                    val dialogFullscreen = DialogHelpFullScreenSettings()
+                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
+                    fullscreenCount = 0
+                } else {
+                    fullscreenCount++
+                    hide()
+                }
+                val prefEditor = k.edit()
+                prefEditor.putInt("fullscreenCount", fullscreenCount)
+                prefEditor.apply()
+            } else {
+                hide()
+            }
             return true
         }
         return false
+    }
+
+    override fun dialogHelpFullScreenSettingsClose() {
+        hide()
     }
 
     override fun onResume() {

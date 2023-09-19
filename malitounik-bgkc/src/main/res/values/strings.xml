@@ -786,5 +786,6 @@
     <string name="update_program_progress">%1$s з %2$s</string>
     <string name="update_no_biblijateka">Абнаўленьняў няма</string>
     <string name="day">Дзённы рэжым</string>
+    <string name="full_screen_opis">Захаваць выбар?\nМожна пазней зьмяніць у наладах.</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

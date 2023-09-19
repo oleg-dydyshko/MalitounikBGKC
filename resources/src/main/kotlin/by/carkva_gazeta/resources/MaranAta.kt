@@ -41,7 +41,7 @@ import kotlinx.coroutines.*
 import java.io.*
 import java.util.*
 
-class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener, DialogFullScreenHelp.DialogFullScreenHelpListener {
+class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
 
     private var fullscreenPage = false
     private var cytanne = ""
@@ -1265,10 +1265,28 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            hideHelp()
+            if (!k.getBoolean("fullscreenPage", false)) {
+                var fullscreenCount = k.getInt("fullscreenCount", 0)
+                if (fullscreenCount > 3) {
+                    val dialogFullscreen = DialogHelpFullScreenSettings()
+                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
+                    fullscreenCount = 0
+                } else {
+                    fullscreenCount++
+                    hideHelp()
+                }
+                prefEditor.putInt("fullscreenCount", fullscreenCount)
+                prefEditor.apply()
+            } else {
+                hideHelp()
+            }
             return true
         }
         return false
+    }
+
+    override fun dialogHelpFullScreenSettingsClose() {
+        hideHelp()
     }
 
     override fun onDialogFullScreenHelpClose() {
@@ -1280,7 +1298,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private fun hideHelp() {
         if (k.getBoolean("help_fullscreen", true)) {
             binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost2))
-            val dialogHelpListView = DialogFullScreenHelp()
+            val dialogHelpListView = DialogHelpFullScreen()
             dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
             val prefEditors = k.edit()
             prefEditors.putBoolean("help_fullscreen", false)

@@ -38,7 +38,7 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
-class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogFullScreenHelp.DialogFullScreenHelpListener {
+class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -1146,10 +1146,28 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            hideHelp()
+            if (!k.getBoolean("fullscreenPage", false)) {
+                var fullscreenCount = k.getInt("fullscreenCount", 0)
+                if (fullscreenCount > 3) {
+                    val dialogFullscreen = DialogHelpFullScreenSettings()
+                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
+                    fullscreenCount = 0
+                } else {
+                    fullscreenCount++
+                    hideHelp()
+                }
+                prefEditor.putInt("fullscreenCount", fullscreenCount)
+                prefEditor.apply()
+            } else {
+                hideHelp()
+            }
             return true
         }
         return false
+    }
+
+    override fun dialogHelpFullScreenSettingsClose() {
+        hideHelp()
     }
 
     override fun onDialogFullScreenHelpClose() {
@@ -1163,7 +1181,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost2))
             if (dzenNoch) binding.InteractiveScroll.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
             else binding.InteractiveScroll.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            val dialogHelpListView = DialogFullScreenHelp()
+            val dialogHelpListView = DialogHelpFullScreen()
             dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
             val prefEditors = k.edit()
             prefEditors.putBoolean("help_fullscreen", false)

@@ -1038,6 +1038,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putBoolean("AdminDialogSaveAsHelp", true)
             prefEditor.putBoolean("dialogHelpShare", true)
             prefEditor.putBoolean("help_fullscreen", true)
+            prefEditor.putInt("fullscreenCount", 0)
             binding.maranataBel.isClickable = false
             binding.maranataRus.isClickable = false
             binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))

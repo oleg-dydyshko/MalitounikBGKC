@@ -31,7 +31,7 @@ import java.util.*
 import kotlin.math.ceil
 
 
-class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener {
+class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -249,7 +249,21 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
             return true
         }
         if (id == R.id.action_fullscreen) {
-            hide()
+            if (!k.getBoolean("fullscreenPage", false)) {
+                var fullscreenCount = k.getInt("fullscreenCount", 0)
+                if (fullscreenCount > 3) {
+                    val dialogFullscreen = DialogHelpFullScreenSettings()
+                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
+                    fullscreenCount = 0
+                } else {
+                    fullscreenCount++
+                    hide()
+                }
+                prefEditor.putInt("fullscreenCount", fullscreenCount)
+                prefEditor.apply()
+            } else {
+                hide()
+            }
             return true
         }
         if (id == R.id.action_carkva) {
@@ -271,6 +285,10 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
             return true
         }
         return false
+    }
+
+    override fun dialogHelpFullScreenSettingsClose() {
+        hide()
     }
 
     override fun onPrepareMenu(menu: Menu) {

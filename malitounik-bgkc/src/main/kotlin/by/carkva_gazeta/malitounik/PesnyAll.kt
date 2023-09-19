@@ -28,7 +28,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 
-class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener {
+class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -529,7 +529,21 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             return true
         }
         if (id == R.id.action_fullscreen) {
-            hide()
+            if (!k.getBoolean("fullscreenPage", false)) {
+                var fullscreenCount = k.getInt("fullscreenCount", 0)
+                if (fullscreenCount > 3) {
+                    val dialogFullscreen = DialogHelpFullScreenSettings()
+                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
+                    fullscreenCount = 0
+                } else {
+                    fullscreenCount++
+                    hide()
+                }
+                prefEditor.putInt("fullscreenCount", fullscreenCount)
+                prefEditor.apply()
+            } else {
+                hide()
+            }
             return true
         }
         if (id == R.id.action_share) {
@@ -581,6 +595,10 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             return true
         }
         return false
+    }
+
+    override fun dialogHelpFullScreenSettingsClose() {
+        hide()
     }
 
     override fun sentShareText(shareText: String) {

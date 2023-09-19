@@ -32,7 +32,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.File
 
-class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibleRazdelListener, BibleListiner {
+class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibleRazdelListener, BibleListiner, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
 
     private var fullscreenPage = false
     private var glava = 0
@@ -306,10 +306,29 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
             return true
         }
         if (id == R.id.action_fullscreen) {
-            hide()
+            if (!k.getBoolean("fullscreenPage", false)) {
+                var fullscreenCount = k.getInt("fullscreenCount", 0)
+                if (fullscreenCount > 3) {
+                    val dialogFullscreen = DialogHelpFullScreenSettings()
+                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
+                    fullscreenCount = 0
+                } else {
+                    fullscreenCount++
+                    hide()
+                }
+                val prefEditor = k.edit()
+                prefEditor.putInt("fullscreenCount", fullscreenCount)
+                prefEditor.apply()
+            } else {
+                hide()
+            }
             return true
         }
         return false
+    }
+
+    override fun dialogHelpFullScreenSettingsClose() {
+        hide()
     }
 
     override fun onResume() {

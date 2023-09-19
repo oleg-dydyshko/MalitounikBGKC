@@ -27,7 +27,7 @@ import kotlinx.coroutines.tasks.await
 import java.io.File
 
 
-class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener {
+class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
     private var fullscreenPage = false
     private lateinit var binding: BibliatekaArtykulyBinding
     private var resetTollbarJob: Job? = null
@@ -300,7 +300,22 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
             return true
         }
         if (id == R.id.action_fullscreen) {
-            hide()
+            if (!chin.getBoolean("fullscreenPage", false)) {
+                var fullscreenCount = chin.getInt("fullscreenCount", 0)
+                if (fullscreenCount > 3) {
+                    val dialogFullscreen = DialogHelpFullScreenSettings()
+                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
+                    fullscreenCount = 0
+                } else {
+                    fullscreenCount++
+                    hide()
+                }
+                val prefEditor = chin.edit()
+                prefEditor.putInt("fullscreenCount", fullscreenCount)
+                prefEditor.apply()
+            } else {
+                hide()
+            }
             return true
         }
         if (id == R.id.action_bright) {
@@ -335,6 +350,10 @@ class BibliatekaArtykuly : BaseActivity(), DialogFontSize.DialogFontSizeListener
             adminUpdateLauncher.launch(intent)
         }
         return false
+    }
+
+    override fun dialogHelpFullScreenSettingsClose() {
+        hide()
     }
 
     override fun sentShareText(shareText: String) {

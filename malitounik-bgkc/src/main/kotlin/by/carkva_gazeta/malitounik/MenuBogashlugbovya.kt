@@ -173,6 +173,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         dataSearch.add(MenuListData("Служба за памерлых на кожны дзень тыдня$opisanie", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
         dataSearch.add(MenuListData("Служба Найсьвяцейшай Багародзіцы$opisanie", "sluzba_najsviaciejszaj_baharodzicy"))
         dataSearch.add(MenuListData("Служба аб вызваленьні бязьвінна зьняволеных$opisanie", "sluzba_vyzvalen_biazvinna_zniavolenych"))
+        dataSearch.add(MenuListData("Павячэрніца малая$opisanie", "paviaczernica_malaja"))
         dataSearch.sort()
         return dataSearch
     }

@@ -1492,7 +1492,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 outputStream.close()
                 MainActivity.padzeia.sort()
                 if (binding.editText2.text.toString() != "") {
-                    if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
+                    if (k.getBoolean("help_check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
@@ -2059,7 +2059,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             outputStream.close()
             MainActivity.padzeia.sort()
             if (binding.editText2.text.toString() != "") {
-                if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
+                if (k.getBoolean("help_check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
                     val notifi = DialogHelpNotification()
                     notifi.show(supportFragmentManager, "help_notification")
                 }

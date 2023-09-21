@@ -39,7 +39,7 @@ class DialogHelpNotification : DialogFragment() {
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             builder.setView(binding.root)
             val prefEditor = k.edit()
-            prefEditor.putBoolean("check_notifi", false)
+            prefEditor.putBoolean("help_check_notifi", false)
             prefEditor.apply()
             builder.setPositiveButton(resources.getText(R.string.tools_item)) { dialog: DialogInterface, _: Int ->
                 try {

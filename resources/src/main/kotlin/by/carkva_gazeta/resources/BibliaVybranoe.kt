@@ -880,6 +880,8 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private fun hideHelp() {
         if (k.getBoolean("help_fullscreen", true)) {
             binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost2))
+            if (dzenNoch) binding.ListView.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            else binding.ListView.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
             val dialogHelpListView = DialogHelpFullScreen()
             dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
             val prefEditors = k.edit()

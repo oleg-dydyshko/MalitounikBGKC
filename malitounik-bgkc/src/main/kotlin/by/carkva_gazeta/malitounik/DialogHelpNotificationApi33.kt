@@ -52,7 +52,7 @@ class DialogHelpNotificationApi33 : DialogFragment() {
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             builder.setView(binding.root)
             builder.setPositiveButton(resources.getText(R.string.dazvolic)) { dialog: DialogInterface, _: Int ->
-                mListener?.onDialogHelpNotificationApi33(arguments?.getInt("notification", -1) ?: -1)
+                mListener?.onDialogHelpNotificationApi33(arguments?.getInt("notification", SettingsActivity.NOTIFICATION_SVIATY_FULL) ?: SettingsActivity.NOTIFICATION_SVIATY_FULL)
                 dialog.cancel()
             }
             builder.setNegativeButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
@@ -62,7 +62,7 @@ class DialogHelpNotificationApi33 : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(notification: Int = 0): DialogHelpNotificationApi33 {
+        fun getInstance(notification: Int): DialogHelpNotificationApi33 {
             val dialogClearHishory = DialogHelpNotificationApi33()
             val bundle = Bundle()
             bundle.putInt("notification", notification)

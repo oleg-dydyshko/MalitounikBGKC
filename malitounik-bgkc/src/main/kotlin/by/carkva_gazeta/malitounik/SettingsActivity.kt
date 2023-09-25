@@ -40,7 +40,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
     private lateinit var prefEditor: Editor
     private val dzenNoch get() = getBaseDzenNoch()
     private var mLastClickTime: Long = 0
-    private var itemDefault = 0
     private lateinit var binding: SettingsActivityBinding
     private var resetTollbarJob: Job? = null
     private var adminResetJob: Job? = null
@@ -51,7 +50,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
     private var editFull = false
     private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (it) {
-            when (k.getInt("notification", 2)) {
+            when (k.getInt("notification", NOTIFICATION_SVIATY_FULL)) {
                 1 -> setNotificationOnly()
                 2 -> setNotificationFull()
                 0 -> setNotificationNon()
@@ -76,6 +75,9 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         const val NOTIFICATION_CHANNEL_ID_SABYTIE = "3003"
         const val NOTIFICATION_CHANNEL_ID_SVIATY = "2003"
         const val NOTIFICATION_CHANNEL_ID_RADIO_MARYIA = "4007"
+        const val NOTIFICATION_SVIATY_NONE = 0
+        const val NOTIFICATION_SVIATY_ONLY = 1
+        const val NOTIFICATION_SVIATY_FULL = 2
         val vibrate = longArrayOf(0, 1000, 700, 1000)
         var isPadzeiaSetAlarm = false
 
@@ -726,11 +728,11 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        var notification = k.getInt("notification", 2)
+        var notification = k.getInt("notification", NOTIFICATION_SVIATY_FULL)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
             if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                notification = 0
+                notification = NOTIFICATION_SVIATY_NONE
             }
         }
         binding = SettingsActivityBinding.inflate(layoutInflater)
@@ -742,7 +744,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         val guk = k.getInt("guk", 1)
         if (dzenNoch) binding.guk.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         if (guk == 0) binding.guk.isChecked = false
-        if (notification == 0) binding.spinnerTime.visibility = View.GONE
+        if (notification == NOTIFICATION_SVIATY_NONE) binding.spinnerTime.visibility = View.GONE
         if (savedInstanceState != null) {
             edit = savedInstanceState.getBoolean("edit", false)
             editFull = savedInstanceState.getBoolean("editFull", false)
@@ -751,23 +753,16 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         for (i in 6..17) {
             dataTimes.add(DataTime(getString(R.string.pavedamic, i), i))
         }
-        for (time in dataTimes) {
-            if (time.data == k.getInt("timeNotification", 8)) break
-            itemDefault++
-        }
         binding.spinnerTime.adapter = TimeAdapter(this, dataTimes)
-        binding.spinnerTime.setSelection(itemDefault)
+        binding.spinnerTime.setSelection(k.getInt("timeNotification", 8) - 6)
         binding.spinnerTime.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
-                if (itemDefault != i) {
-                    prefEditor.putInt("timeNotification", dataTimes[i].data)
-                    prefEditor.apply()
-                    itemDefault = i
-                    when (notification) {
-                        0 -> setNotificationNon()
-                        1 -> setNotificationOnly()
-                        2 -> setNotificationFull()
-                    }
+                prefEditor.putInt("timeNotification", dataTimes[i].data)
+                prefEditor.apply()
+                when (notification) {
+                    0 -> setNotificationNon()
+                    1 -> setNotificationOnly()
+                    2 -> setNotificationFull()
                 }
             }
 
@@ -778,7 +773,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.guk.visibility = View.GONE
             notificationChannel(this)
             notificationChannel(this, NOTIFICATION_CHANNEL_ID_SABYTIE)
-            if (k.getInt("notification", 2) > 0) binding.notifiSvizta.visibility = View.VISIBLE
+            val notifi = k.getInt("notification", NOTIFICATION_SVIATY_FULL)
+            if (notifi == NOTIFICATION_SVIATY_ONLY || notifi == NOTIFICATION_SVIATY_FULL) binding.notifiSvizta.visibility = View.VISIBLE
             binding.notifiSvizta.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
@@ -926,9 +922,9 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.maranataRus.isChecked = true
             binding.maranataBel.isChecked = false
         }
-        binding.notificationOnly.isChecked = notification == 1
-        binding.notificationFull.isChecked = notification == 2
-        binding.notificationNon.isChecked = notification == 0
+        binding.notificationOnly.isChecked = notification == NOTIFICATION_SVIATY_ONLY
+        binding.notificationFull.isChecked = notification == NOTIFICATION_SVIATY_FULL
+        binding.notificationNon.isChecked = notification == NOTIFICATION_SVIATY_NONE
         val sinoidal = k.getInt("sinoidal", 0)
         if (dzenNoch) binding.sinoidal.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         if (sinoidal == 1) binding.sinoidal.isChecked = true
@@ -1020,7 +1016,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("gosud", 0)
             prefEditor.putInt("pafesii", 0)
             prefEditor.putBoolean("belarus", true)
-            prefEditor.putInt("notification", 2)
+            prefEditor.putInt("notification", NOTIFICATION_SVIATY_FULL)
             prefEditor.putInt("power", 1)
             prefEditor.putInt("vibra", 1)
             prefEditor.putInt("guk", 1)
@@ -1101,7 +1097,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                         if (PackageManager.PERMISSION_DENIED == permissionCheck) {
                             if (k.getBoolean("permissionNotificationApi33", true) && supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
-                                val dialogHelpNotificationApi33 = DialogHelpNotificationApi33.getInstance(1)
+                                val dialogHelpNotificationApi33 = DialogHelpNotificationApi33.getInstance(NOTIFICATION_SVIATY_ONLY)
                                 dialogHelpNotificationApi33.show(supportFragmentManager, "dialogHelpNotificationApi33")
                             }
                             binding.pavedamic3.visibility = View.VISIBLE
@@ -1119,7 +1115,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                         if (PackageManager.PERMISSION_DENIED == permissionCheck) {
                             if (k.getBoolean("permissionNotificationApi33", true) && supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
-                                val dialogHelpNotificationApi33 = DialogHelpNotificationApi33.getInstance(2)
+                                val dialogHelpNotificationApi33 = DialogHelpNotificationApi33.getInstance(NOTIFICATION_SVIATY_FULL)
                                 dialogHelpNotificationApi33.show(supportFragmentManager, "dialogHelpNotificationApi33")
                             }
                             binding.pavedamic3.visibility = View.VISIBLE
@@ -1255,7 +1251,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         binding.checkBox9.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.night.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.autoNight.typeface = MainActivity.createFont(Typeface.NORMAL)
-        if (k.getBoolean("help_check_notifi", true) && Build.MANUFACTURER.contains("huawei", true) && (notification == 1 || notification == 2)) {
+        if (k.getBoolean("help_check_notifi", true) && Build.MANUFACTURER.contains("huawei", true) && (notification == NOTIFICATION_SVIATY_ONLY || notification == NOTIFICATION_SVIATY_FULL)) {
             val notifi = DialogHelpNotification()
             notifi.show(supportFragmentManager, "help_notification")
         }
@@ -1285,7 +1281,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
     }
 
     private fun setNotificationOnly() {
-        prefEditor.putInt("notification", 1)
+        prefEditor.putInt("notification", NOTIFICATION_SVIATY_ONLY)
         prefEditor.apply()
         binding.notifiSvizta.visibility = View.VISIBLE
         binding.spinnerTime.visibility = View.VISIBLE
@@ -1293,42 +1289,22 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             val notifi = DialogHelpNotification()
             notifi.show(supportFragmentManager, "help_notification")
         }
-        if (dzenNoch) binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-        binding.guk.isClickable = true
-        if (dzenNoch) binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+        if (dzenNoch) {
+            binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+        } else {
+            binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+            binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+        }
+        binding.notificationOnly.isChecked = true
         setNotificationsJob?.cancel()
-        setNotificationsJob = CoroutineScope(Dispatchers.Main).launch {
-            binding.notificationOnly.isChecked = true
-            binding.spinnerTime.isEnabled = false
-            if (dzenNoch) {
-                binding.vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-                binding.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-            } else {
-                binding.vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-                binding.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-            }
-            binding.notificationNon.isClickable = false
-            binding.notificationFull.isClickable = false
-            binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
-            binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
-            withContext(Dispatchers.IO) {
-                setNotifications(1)
-            }
-            binding.notificationNon.isClickable = true
-            binding.notificationFull.isClickable = true
-            binding.spinnerTime.isEnabled = true
-            if (dzenNoch) {
-                binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-                binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-            } else {
-                binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-                binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-            }
+        setNotificationsJob = CoroutineScope(Dispatchers.IO).launch {
+            setNotifications(1)
         }
     }
 
     private fun setNotificationFull() {
-        prefEditor.putInt("notification", 2)
+        prefEditor.putInt("notification", NOTIFICATION_SVIATY_FULL)
         prefEditor.apply()
         binding.notifiSvizta.visibility = View.VISIBLE
         binding.spinnerTime.visibility = View.VISIBLE
@@ -1336,69 +1312,36 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             val notifi = DialogHelpNotification()
             notifi.show(supportFragmentManager, "help_notification")
         }
-        if (dzenNoch) binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-        binding.guk.isClickable = true
-        if (dzenNoch) binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+        if (dzenNoch) {
+            binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+        } else {
+            binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+            binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+        }
+        binding.notificationFull.isChecked = true
         setNotificationsJob?.cancel()
-        setNotificationsJob = CoroutineScope(Dispatchers.Main).launch {
-            binding.notificationFull.isChecked = true
-            binding.spinnerTime.isEnabled = false
-            if (dzenNoch) {
-                binding.vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-                binding.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-            } else {
-                binding.vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-                binding.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-            }
-            binding.notificationOnly.isClickable = false
-            binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
-            binding.notificationNon.isClickable = false
-            binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
-            withContext(Dispatchers.IO) {
-                setNotifications(2)
-            }
-            binding.notificationOnly.isClickable = true
-            binding.notificationNon.isClickable = true
-            binding.spinnerTime.isEnabled = true
-            if (dzenNoch) {
-                binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-                binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-            } else {
-                binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-                binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-            }
+        setNotificationsJob = CoroutineScope(Dispatchers.IO).launch {
+            setNotifications(2)
         }
     }
 
     private fun setNotificationNon() {
-        prefEditor.putInt("notification", 0)
+        prefEditor.putInt("notification", NOTIFICATION_SVIATY_NONE)
         prefEditor.apply()
         binding.notifiSvizta.visibility = View.GONE
         binding.spinnerTime.visibility = View.GONE
-        if (dzenNoch) binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-        binding.guk.isClickable = true
-        if (dzenNoch) binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+        if (dzenNoch) {
+            binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+        } else {
+            binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+            binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+        }
+        binding.notificationNon.isChecked = true
         setNotificationsJob?.cancel()
-        setNotificationsJob = CoroutineScope(Dispatchers.Main).launch {
-            binding.spinnerTime.isEnabled = false
-            binding.notificationNon.isChecked = true
-            binding.notificationOnly.isClickable = false
-            binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
-            binding.notificationFull.isClickable = false
-            binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
-            withContext(Dispatchers.IO) {
-                setNotifications(0)
-            }
-            binding.notificationOnly.isClickable = true
-            binding.notificationFull.isClickable = true
-            binding.spinnerTime.isEnabled = true
-            if (dzenNoch) {
-                binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-                binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-            } else {
-                binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-                binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-            }
+        setNotificationsJob = CoroutineScope(Dispatchers.IO).launch {
+            setNotifications(0)
         }
     }
 

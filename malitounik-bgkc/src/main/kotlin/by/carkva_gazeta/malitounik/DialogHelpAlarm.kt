@@ -53,7 +53,7 @@ class DialogHelpAlarm : DialogFragment() {
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             builder.setView(binding.root)
-            val notification = arguments?.getInt("notification", 2) ?: 2
+            val notification = arguments?.getInt("notification", SettingsActivity.NOTIFICATION_SVIATY_FULL) ?: SettingsActivity.NOTIFICATION_SVIATY_FULL
             builder.setPositiveButton(resources.getText(R.string.tools_item)) { _: DialogInterface, _: Int ->
                 mListener?.onSettingsAlarm(notification)
             }

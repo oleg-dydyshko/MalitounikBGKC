@@ -823,7 +823,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             if (padzeia.size == 0) setListPadzeia()
             if (k.getBoolean("setAlarm", true)) {
                 checkUpdateMalitounik()
-                val notify = k.getInt("notification", 2)
+                val notify = k.getInt("notification", SettingsActivity.NOTIFICATION_SVIATY_FULL)
                 SettingsActivity.setNotifications(notify)
                 prefEditors.putBoolean("setAlarm", false)
                 prefEditors.apply()

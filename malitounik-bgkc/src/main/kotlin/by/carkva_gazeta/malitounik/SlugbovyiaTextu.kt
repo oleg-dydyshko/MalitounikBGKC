@@ -322,6 +322,9 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(263, "Пасьвяцьце Ўзвышэньня і сьвятых мучанікаў Трахіма, Савацея і Дарымедонта", "mm_19_09_pasviaccie_uzvyszennia_muczanikau_trachima_savacieja_darymiedonta_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(267, "Зачацьце сьвятога Яна Хрысьціцеля", "mm_23_09_zaczaccie_jana_chrysciciela_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(267, "Зачацьце сьвятога Яна Хрысьціцеля", "mm_23_09_zaczaccie_jana_chrysciciela_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(270, "Перастаўленьне сьвятога апостала і евангеліста Яна Багаслова", "mm_26_09_pierastaulennie_apostala_jana_bahaslova_jutran", JUTRAN))
+        datMinALL.add(SlugbovyiaTextuData(270, "Перастаўленьне сьвятога апостала і евангеліста Яна Багаслова", "mm_26_09_pierastaulennie_apostala_jana_bahaslova_liturhija", LITURHIJA))
+
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {

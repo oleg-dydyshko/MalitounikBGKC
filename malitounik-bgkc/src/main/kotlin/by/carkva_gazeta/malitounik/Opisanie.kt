@@ -300,7 +300,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         if (fileOpisanie.exists()) read = fileOpisanie.readText()
         if (read == "") error = true
         if (error && count < 2) {
-            saveOpisanieSviatyia(update,count + 1)
+            saveOpisanieSviatyia(update, count + 1)
             return
         }
         loadOpisanieSviatyia(read)
@@ -344,7 +344,9 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             val setIsFull = if (isFull) true
             else it[0].contains("${pref}_${day}_${mun}.") || it[0].contains("${pref}_${day}_${mun}_")
             if (setIsFull) {
-                val fileIcon = File("$filesDir/icons/" + it[0])
+                val fileIconName = if (it.size == 3) it[0]
+                else "v_${it[0]}_${it[1]}.jpg"
+                val fileIcon = File("$filesDir/icons/$fileIconName")
                 for (i in 0 until images.size) {
                     if (fileIcon.name == images[i]) {
                         images.removeAt(i)
@@ -352,9 +354,12 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     }
                 }
                 val time = fileIcon.lastModified()
-                val update = it[2].toLong()
+                val update = if (it.size == 3) it[2].toLong()
+                else 0
                 if (!fileIcon.exists() || time < update) {
-                    dirList.add(DirList(it[0], it[1].toLong()))
+                    val updateFile = if (it.size == 3) it[1].toLong()
+                    else 0
+                    dirList.add(DirList(fileIconName, updateFile))
                     size += it[1].toLong()
                 }
             }
@@ -378,11 +383,14 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             binding.progressBar2.max = size.toInt()
             var progress = 0
             for (i in 0 until dirList.size) {
-                val fileIcon = File("$filesDir/icons/" + dirList[i].name)
-                val pathReference = Malitounik.referens.child("/chytanne/icons/" + dirList[i].name)
-                pathReference.getFile(fileIcon).await()
-                progress += dirList[i].sizeBytes.toInt()
-                binding.progressBar2.progress = progress
+                try {
+                    val fileIcon = File("$filesDir/icons/" + dirList[i].name)
+                    val pathReference = Malitounik.referens.child("/chytanne/icons/" + dirList[i].name)
+                    pathReference.getFile(fileIcon).await()
+                    progress += dirList[i].sizeBytes.toInt()
+                    binding.progressBar2.progress = progress
+                } catch (_: Throwable) {
+                }
             }
             loadIconsOnImageView()
         }

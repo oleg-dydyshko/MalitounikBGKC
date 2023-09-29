@@ -1262,14 +1262,19 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     }
                 }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            stringVB = "вершы Пс 140"
+            stringVB = "прапускаюцца"
             strLigVB = stringVB.length
             vbt1 = text.indexOf(stringVB)
             if (vbt1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val dialogLiturgia = DialogLiturgia.getInstance(12)
-                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                        binding.textView.layout?.let { layout ->
+                            val strPosition = text.indexOf("Вызваль з вязьніцы душу маю", vbt1 + strLigVB, true)
+                            val line = layout.getLineForOffset(strPosition)
+                            val y = layout.getLineTop(line)
+                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            anim.setDuration(1500).start()
+                        }
                     }
                 }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }

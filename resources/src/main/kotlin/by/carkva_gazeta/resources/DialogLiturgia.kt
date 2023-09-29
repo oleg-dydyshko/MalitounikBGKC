@@ -17,7 +17,7 @@ import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.util.*
+import java.util.Calendar
 
 class DialogLiturgia : DialogFragment() {
     private var chast = 1
@@ -108,10 +108,6 @@ class DialogLiturgia : DialogFragment() {
                 11 -> {
                     inputStream = r.openRawResource(R.raw.viaczernia_bierascie_1)
                     binding.title.setText(by.carkva_gazeta.malitounik.R.string.viaczernia_bierascie_1)
-                }
-                12 -> {
-                    inputStream = r.openRawResource(R.raw.viaczernia_bierascie_2)
-                    binding.title.setText(by.carkva_gazeta.malitounik.R.string.viaczernia_bierascie_2)
                 }
                 13 -> {
                     inputStream = r.openRawResource(R.raw.viaczernia_bierascie_3)

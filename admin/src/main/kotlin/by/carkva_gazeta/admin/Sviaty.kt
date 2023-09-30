@@ -221,50 +221,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                     out.close()
                 }
                 val fileName = File("/chytanne/icons/v_" + sviaty[binding.spinnerSviaty.selectedItemPosition].data.toString() + "_" + sviaty[binding.spinnerSviaty.selectedItemPosition].mun.toString() + ".jpg")
-                val localFile2 = File("$filesDir/cache/cache2.txt")
                 Malitounik.referens.child("/chytanne/icons/" + fileName.name).putFile(Uri.fromFile(localFile)).await()
-                val arrayListIcon = ArrayList<ArrayList<String>>()
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                Malitounik.referens.child("/icons.json").getFile(localFile2).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        val gson = Gson()
-                        val json = localFile.readText()
-
-                        arrayListIcon.addAll(gson.fromJson(json, type))
-                    } else {
-                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
-                    }
-                }.await()
-                var chek = false
-                arrayListIcon.forEach { result ->
-                    if (fileName.name == result[0]) {
-                        Malitounik.referens.child("/chytanne/icons/" + fileName.name).metadata.addOnSuccessListener {
-                            result[1] = it.sizeBytes.toString()
-                            result[2] = it.updatedTimeMillis.toString()
-                            chek = true
-                        }.await()
-                    }
-                }
-                if (!chek) {
-                    Malitounik.referens.child("/chytanne/icons/" + fileName.name).metadata.addOnSuccessListener {
-                        val result = java.util.ArrayList<String>()
-                        result.add(it.name ?: "")
-                        result.add(it.sizeBytes.toString())
-                        result.add(it.updatedTimeMillis.toString())
-                        arrayListIcon.add(result)
-                    }.await()
-                }
-                localFile2.writer().use {
-                    val gson = Gson()
-                    it.write(gson.toJson(arrayListIcon, type))
-                }
-                Malitounik.referens.child("/icons.json").putFile(Uri.fromFile(localFile2)).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.save))
-                    } else {
-                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
-                    }
-                }
                 binding.progressBar2.visibility = View.GONE
             }
         }

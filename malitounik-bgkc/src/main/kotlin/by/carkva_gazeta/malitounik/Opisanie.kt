@@ -309,25 +309,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private suspend fun getIcons(loadIcons: Boolean, isFull: Boolean, count: Int = 0) {
         val dir = File("$filesDir/icons/")
         if (!dir.exists()) dir.mkdir()
-        val arrayList = ArrayList<ArrayList<String>>()
-        val localFile = File("$filesDir/cache/cache.txt")
-        var error = false
-        Malitounik.referens.child("/icons.json").getFile(localFile).addOnCompleteListener {
-            if (it.isSuccessful) {
-                val gson = Gson()
-                var json = ""
-                if (localFile.exists()) json = localFile.readText()
-                if (json == "") {
-                    error = true
-                    return@addOnCompleteListener
-                }
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                arrayList.addAll(gson.fromJson(json, type))
-            } else {
-                error = true
-            }
-        }.await()
-        if (error && count < 2) {
+        if (count < 2) {
             getIcons(loadIcons, isFull, count + 1)
             return
         }
@@ -338,29 +320,27 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         images.add("s_${day}_${mun}_2.jpg")
         images.add("s_${day}_${mun}_3.jpg")
         images.add("s_${day}_${mun}_4.jpg")
-        arrayList.forEach {
+        val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
+        list.items.forEach {
             val pref = if (svity) "v"
             else "s"
             val setIsFull = if (isFull) true
-            else it[0].contains("${pref}_${day}_${mun}.") || it[0].contains("${pref}_${day}_${mun}_")
+            else it.name.contains("${pref}_${day}_${mun}.") || it.name.contains("${pref}_${day}_${mun}_")
             if (setIsFull) {
-                val fileIconName = if (it.size == 3) it[0]
-                else "v_${it[0]}_${it[1]}.jpg"
-                val fileIcon = File("$filesDir/icons/$fileIconName")
+                val fileIcon = File("$filesDir/icons/${it.name}")
                 for (i in 0 until images.size) {
                     if (fileIcon.name == images[i]) {
                         images.removeAt(i)
                         break
                     }
                 }
+                val meta = it.metadata.await()
                 val time = fileIcon.lastModified()
-                val update = if (it.size == 3) it[2].toLong()
-                else 0
+                val update = meta.updatedTimeMillis
                 if (!fileIcon.exists() || time < update) {
-                    val updateFile = if (it.size == 3) it[1].toLong()
-                    else 0
-                    dirList.add(DirList(fileIconName, updateFile))
-                    size += it[1].toLong()
+                    val updateFile = meta.sizeBytes
+                    dirList.add(DirList(it.name, updateFile))
+                    size += updateFile
                 }
             }
         }

@@ -385,8 +385,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             //host.deleteAppWidgetId(it)
             Log.d("Oleg", it.toString())
         }*/
-        //val dialog = DialogUpdateMalitounik()
-        //dialog.show(supportFragmentManager, "DialogUpdateMalitounik")
         mkDir()
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain
@@ -421,7 +419,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
             fileNatatki.writer().use {
                 val gson = Gson()
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, MyNatatkiFiles::class.java).type
+                val type = TypeToken.getParameterized(ArrayList::class.java, MyNatatkiFiles::class.java).type
                 it.write(gson.toJson(MenuNatatki.myNatatkiFiles, type))
             }
         }
@@ -1495,12 +1493,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     if (file.exists() && BibleGlobalList.natatkiSemuxa.size == 0) {
                         try {
                             val gson = Gson()
-                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, BibleNatatkiData::class.java).type
                             BibleGlobalList.natatkiSemuxa.addAll(gson.fromJson(file.readText(), type))
                         } catch (t: Throwable) {
                             try {
                                 val gson = Gson()
-                                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                                 val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(file.readText(), type)
                                 for (i in 0 until arrayList.size) BibleGlobalList.natatkiSemuxa.add(BibleNatatkiData(i.toLong(), arrayList[i]))
                             } catch (t: Throwable) {
@@ -1512,12 +1510,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     if (file2.exists() && BibleGlobalList.zakladkiSemuxa.size == 0) {
                         try {
                             val gson = Gson()
-                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleZakladkiData::class.java).type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, BibleZakladkiData::class.java).type
                             BibleGlobalList.zakladkiSemuxa.addAll(gson.fromJson(file2.readText(), type))
                         } catch (t: Throwable) {
                             try {
                                 val gson = Gson()
-                                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
+                                val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
                                 val arrayList = gson.fromJson<ArrayList<String>>(file2.readText(), type)
                                 for (i in 0 until arrayList.size) BibleGlobalList.zakladkiSemuxa.add(BibleZakladkiData(i.toLong(), arrayList[i]))
                             } catch (t: Throwable) {
@@ -1651,12 +1649,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     if (file.exists() && BibleGlobalList.natatkiSinodal.size == 0) {
                         try {
                             val gson = Gson()
-                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, BibleNatatkiData::class.java).type
                             BibleGlobalList.natatkiSinodal.addAll(gson.fromJson(file.readText(), type))
                         } catch (t: Throwable) {
                             try {
                                 val gson = Gson()
-                                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                                 val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(file.readText(), type)
                                 for (i in 0 until arrayList.size) BibleGlobalList.natatkiSinodal.add(BibleNatatkiData(i.toLong(), arrayList[i]))
                             } catch (t: Throwable) {
@@ -1668,12 +1666,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     if (file2.exists() && BibleGlobalList.zakladkiSinodal.size == 0) {
                         try {
                             val gson = Gson()
-                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleZakladkiData::class.java).type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, BibleZakladkiData::class.java).type
                             BibleGlobalList.zakladkiSinodal.addAll(gson.fromJson(file2.readText(), type))
                         } catch (t: Throwable) {
                             try {
                                 val gson = Gson()
-                                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
+                                val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
                                 val arrayList = gson.fromJson<ArrayList<String>>(file2.readText(), type)
                                 for (i in 0 until arrayList.size) BibleGlobalList.zakladkiSinodal.add(BibleZakladkiData(i.toLong(), arrayList[i]))
                             } catch (t: Throwable) {
@@ -1942,7 +1940,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         val gson = Gson()
         val json = k.getString("bibliateka_naidaunia", "")
         if (json != "") {
-            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
             naidaunia.addAll(gson.fromJson(json, type))
         }
         return naidaunia.size > 0
@@ -2054,7 +2052,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         fun setListPadzeia() {
             padzeia.clear()
             val gson = Gson()
-            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, Padzeia::class.java).type
+            val type = TypeToken.getParameterized(ArrayList::class.java, Padzeia::class.java).type
             val dir = File(Malitounik.applicationContext().filesDir.toString() + "/Sabytie")
             if (dir.exists()) {
                 dir.walk().forEach { file ->

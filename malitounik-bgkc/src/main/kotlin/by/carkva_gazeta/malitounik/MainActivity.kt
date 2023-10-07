@@ -1836,6 +1836,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         setTitleRadioMaryia(ServiceRadyjoMaryia.titleRadyjoMaryia)
     }
 
+    override fun errorRadioMaria() {
+        toastView(this, getString(R.string.error_ch2), Toast.LENGTH_LONG)
+    }
+
     override fun onClick(view: View?) {
         selectFragment(view)
     }

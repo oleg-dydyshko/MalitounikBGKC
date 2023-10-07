@@ -12,7 +12,6 @@ import android.os.Binder
 import android.os.Build
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -66,6 +65,7 @@ class ServiceRadyjoMaryia : Service() {
         fun unBinding()
         fun playingRadioMaria(isPlayingRadioMaria: Boolean)
         fun playingRadioMariaStateReady()
+        fun errorRadioMaria()
     }
 
     fun setServiceRadyjoMaryiaListener(serviceRadyjoMaryiaListener: ServiceRadyjoMaryiaListener) {
@@ -121,7 +121,7 @@ class ServiceRadyjoMaryia : Service() {
         listener?.setTitleRadioMaryia("")
         listener?.unBinding()
         isPlaybackStateReady = false
-        if (isError) MainActivity.toastView(this, getString(R.string.error_ch2), Toast.LENGTH_LONG)
+        if (isError) listener?.errorRadioMaria()
     }
 
     fun playOrPause() {

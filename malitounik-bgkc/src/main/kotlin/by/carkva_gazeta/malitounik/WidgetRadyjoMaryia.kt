@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
+import android.widget.Toast
 
 
 class WidgetRadyjoMaryia : AppWidgetProvider() {
@@ -128,6 +129,7 @@ class WidgetRadyjoMaryia : AppWidgetProvider() {
             updateViews.setTextViewText(R.id.textView, context.getString(R.string.padie_maryia_s))
             updateViews.setImageViewResource(R.id.play, R.drawable.play3)
             updateViews.setImageViewResource(R.id.program, R.drawable.programm_rado_maria2)
+            MainActivity.toastView(context, context.getString(R.string.error_ch2), Toast.LENGTH_LONG)
         }
         updateViews.setViewVisibility(R.id.stop, View.VISIBLE)
         updateViews.setViewVisibility(R.id.play, View.VISIBLE)

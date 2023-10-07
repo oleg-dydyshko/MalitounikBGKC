@@ -11,7 +11,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 34
         versionCode 442136
-        versionName "4.3.6.8"
+        versionName "4.3.7"
 
         //multiDexEnabled true
 

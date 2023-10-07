@@ -194,9 +194,10 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(257, "Перадсьвяцьце Ўзвышэньня, памяць аднаўленьня царквы Ўваскрасеньня і сьвятога мучаніка Карніла", "mm_13_09_pieradsv_uzvyszennia_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(258, "Сусьветнае Ўзвышэньне Пачэснага і Жыцьцядайнага Крыжа", "mm_14_09_uzvyszennie_kryza_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(259, "Пасьвяцьце Ўзвышэньня і сьвятога вялікамучаніка Мікіты", "mm_15_09_pasviaccie_uzvyszennia_viaczernia", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(AICOU_VII_SUSVETNAGA_SABORY, "Нядзеля сьвятых айцоў VII Сусьветнага сабору", "mm_11_17_10_ajcou_7_susviet_saboru_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(AICOU_VII_SUSVETNAGA_SABORY, "Нядзеля сьвятых айцоў VII Сусьветнага сабору", "mm_11_17_10_ndz_ajcou_7susvietnaha_saboru_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(AICOU_VII_SUSVETNAGA_SABORY, "Нядзеля сьвятых айцоў VII Сусьветнага сабору", "mm_11_17_10_ndz_ajcou_7susvietnaha_saboru_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(NIADZELIA_PRA_AICOU, "Нядзеля праайцоў", "mm_11_17_12_ndz_praajcou_liturhija", LITURHIJA))
-        datMinALL.add(SlugbovyiaTextuData(NIADZELIA_AICOU_VI_SABORY, "Нядзеля сьвятых Айцоў першых шасьці Сабораў", "mm_13_19_07_ndz_ajcou_6_saborau_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(NIADZELIA_AICOU_VI_SABORY, "Нядзеля сьвятых Айцоў першых шасьці Сабораў", "mm_13_19_ndz_ajcou_pierszych_szasci_saborau_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(NIADZELIA_AICOU_VI_SABORY, "Нядзеля сьвятых Айцоў першых шасьці Сабораў", "mm_13_19_07_ndz_ajcou_pierszych_szasci_saborau_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(218, "Перадсьвяцьце Перамяненьня і сьв. муч. Яўсігнея", "mm_05_08_pieradsv_pieramianiennia_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(218, "Перадсьвяцьце Перамяненьня і сьв. муч. Яўсігнея", "mm_05_08_pieradsv_pieramianiennia_viaczernia", VIACZERNIA))
@@ -332,6 +333,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(280, "Сьвятога апостала Тамаша", "mm_06_10_apostala_tamasza_viaczarnia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(283, "Сьвятога апостала Якуба Алфеевага", "mm_09_10_apostala_jakuba_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(283, "Сьвятога апостала Якуба Алфеевага", "mm_09_10_apostala_jakuba_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(285, "Сьвятога апостала Піліпа, аднаго з сямі дыяканаў", "mm_11_10_apostala_pilipa_viaczernia", VIACZERNIA))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {

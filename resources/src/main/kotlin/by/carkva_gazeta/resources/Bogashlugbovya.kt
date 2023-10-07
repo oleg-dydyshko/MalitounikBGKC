@@ -424,7 +424,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_15_09_pasviaccie_uzvyszennia_viaczernia"] = R.raw.mm_15_09_pasviaccie_uzvyszennia_viaczernia
             resursMap["mltv_za_chrosnikau"] = R.raw.mltv_za_chrosnikau
             resursMap["mm_01_10_pokryva_baharodzicy_liturhija"] = R.raw.mm_01_10_pokryva_baharodzicy_liturhija
-            resursMap["mm_11_17_10_ajcou_7_susviet_saboru_liturhija"] = R.raw.mm_11_17_10_ajcou_7_susviet_saboru_liturhija
+            resursMap["mm_11_17_10_ndz_ajcou_7susvietnaha_saboru_liturhija"] = R.raw.mm_11_17_10_ndz_ajcou_7susvietnaha_saboru_liturhija
+            resursMap["mm_11_17_10_ndz_ajcou_7susvietnaha_saboru_viaczernia"] = R.raw.mm_11_17_10_ndz_ajcou_7susvietnaha_saboru_viaczernia
             resursMap["mltv_mb_barunskaja"] = R.raw.mltv_mb_barunskaja
             resursMap["mltv_za_carkvu_2"] = R.raw.mltv_za_carkvu_2
             resursMap["mltv_za_usich_i_za_usio"] = R.raw.mltv_za_usich_i_za_usio
@@ -448,7 +449,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_28_12_liturhija"] = R.raw.mm_28_12_liturhija
             resursMap["sluzba_vyzvalen_biazvinna_zniavolenych"] = R.raw.sluzba_vyzvalen_biazvinna_zniavolenych
             resursMap["mm_11_17_12_ndz_praajcou_liturhija"] = R.raw.mm_11_17_12_ndz_praajcou_liturhija
-            resursMap["mm_13_19_07_ndz_ajcou_6_saborau_liturhija"] = R.raw.mm_13_19_07_ndz_ajcou_6_saborau_liturhija
+            resursMap[""] = R.raw.mm_13_19_ndz_ajcou_pierszych_szasci_saborau_liturhija
             resursMap["mltv_za_carkounuju_jednasc"] = R.raw.mltv_za_carkounuju_jednasc
             resursMap["mltv_razam_z_padlaszskimi_muczanikami_ab_ednasci"] = R.raw.mltv_razam_z_padlaszskimi_muczanikami_ab_ednasci
             resursMap["mltv_ab_jednadci_carkvy_leanida_fiodarava"] = R.raw.mltv_ab_jednadci_carkvy_leanida_fiodarava
@@ -555,6 +556,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_06_10_apostala_tamasza_viaczarnia"] = R.raw.mm_06_10_apostala_tamasza_viaczarnia
             resursMap["mm_09_10_apostala_jakuba_liturhija"] = R.raw.mm_09_10_apostala_jakuba_liturhija
             resursMap["mm_09_10_apostala_jakuba_viaczernia"] = R.raw.mm_09_10_apostala_jakuba_viaczernia
+            resursMap["mm_11_10_apostala_pilipa_viaczernia"] = R.raw.mm_11_10_apostala_pilipa_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {

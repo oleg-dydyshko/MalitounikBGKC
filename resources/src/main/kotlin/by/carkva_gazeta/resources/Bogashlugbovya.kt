@@ -449,7 +449,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_28_12_liturhija"] = R.raw.mm_28_12_liturhija
             resursMap["sluzba_vyzvalen_biazvinna_zniavolenych"] = R.raw.sluzba_vyzvalen_biazvinna_zniavolenych
             resursMap["mm_11_17_12_ndz_praajcou_liturhija"] = R.raw.mm_11_17_12_ndz_praajcou_liturhija
-            resursMap[""] = R.raw.mm_13_19_ndz_ajcou_pierszych_szasci_saborau_liturhija
+            resursMap["mm_13_19_ndz_ajcou_pierszych_szasci_saborau_liturhija"] = R.raw.mm_13_19_ndz_ajcou_pierszych_szasci_saborau_liturhija
             resursMap["mltv_za_carkounuju_jednasc"] = R.raw.mltv_za_carkounuju_jednasc
             resursMap["mltv_razam_z_padlaszskimi_muczanikami_ab_ednasci"] = R.raw.mltv_razam_z_padlaszskimi_muczanikami_ab_ednasci
             resursMap["mltv_ab_jednadci_carkvy_leanida_fiodarava"] = R.raw.mltv_ab_jednadci_carkvy_leanida_fiodarava
@@ -1014,7 +1014,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val cal = GregorianCalendar()
             val dayOfYar = if(cal.isLeapYear(cal[Calendar.YEAR])) 0
             else 1
-            checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
+            checkDayOfYear = if (liturgia) slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
+            else slugbovyiaTextu.checkViachernia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
             if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar))) {
                 chechZmena = true
                 val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
@@ -1022,7 +1023,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 zmennyiaCastkiTitle = slugbovyiaTextu.getTitle(resours)
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
             }
-            if ((resurs == "lit_ran_asv_dar" || resurs == "viaczernia_bierascie") && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, c[Calendar.DAY_OF_YEAR]))) {
+            val viachernia = resurs == "lit_ran_asv_dar" || resurs == "viaczernia_bierascie" || resurs == "viachernia_niadzeli" || resurs == "viachernia_liccia_i_blaslavenne_xliabou" || resurs == "viachernia_na_kozny_dzen" || resurs == "viachernia_u_vialikim_poscie"
+            if (viachernia && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar))) {
                 chechZmena = true
                 checkLiturgia = 1
             }
@@ -1917,7 +1919,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }
 
                 checkDayOfYear -> {
-                    val resours = slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
+                    val resours = if (checkLiturgia == 0) slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
+                    else slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.VIACZERNIA)
                     intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
@@ -1925,8 +1928,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }
 
                 else -> {
-                    val resours = if (checkLiturgia == 0) slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
-                    else slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.VIACZERNIA)
+                    val resours = slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
                     intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)

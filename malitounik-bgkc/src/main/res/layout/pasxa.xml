@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetStartWithNavigation="0sp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <TextView
@@ -36,7 +36,7 @@
     <by.carkva_gazeta.malitounik.WebViewCustom
         android:id="@+id/pasxa"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="0sp"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,15 +45,15 @@
 
     <ImageView
         android:id="@+id/action_back"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_marginEnd="10sp"
+        android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
         android:contentDescription="@string/empty"
         android:gravity="center"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_fullscreen"
@@ -61,15 +61,15 @@
 
     <ImageView
         android:id="@+id/action_fullscreen"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_marginEnd="10sp"
+        android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
         android:contentDescription="@string/empty"
         android:gravity="center"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

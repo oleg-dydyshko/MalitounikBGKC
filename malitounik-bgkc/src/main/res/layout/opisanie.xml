@@ -26,7 +26,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:contentInsetStartWithNavigation="0dp"
+                app:contentInsetStartWithNavigation="0sp"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
                 <TextView
@@ -44,8 +44,8 @@
     <ProgressBar
         android:id="@+id/progressBar2"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="0dp"
-        android:layout_height="10dp"
+        android:layout_width="0sp"
+        android:layout_height="10sp"
         android:indeterminate="true"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,13 +54,13 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:layout_marginStart="10sp"
+        android:layout_marginLeft="10sp"
+        android:layout_marginEnd="10sp"
+        android:layout_marginRight="10sp"
+        android:layout_marginBottom="10sp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="10sp"
                     android:visibility="gone"
                     android:contentDescription="@string/empty" />
 
@@ -92,7 +92,7 @@
                     android:id="@+id/TextView1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="10sp"
                     android:textIsSelectable="true" />
 
                 <ImageView
@@ -100,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="10sp"
                     android:visibility="gone"
                     android:contentDescription="@string/empty" />
 
@@ -108,7 +108,7 @@
                     android:id="@+id/TextView2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="10sp"
                     android:textIsSelectable="true"
                     android:visibility="gone" />
 
@@ -117,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="10sp"
                     android:visibility="gone"
                     android:contentDescription="@string/empty" />
 
@@ -125,7 +125,7 @@
                     android:id="@+id/TextView3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="10sp"
                     android:textIsSelectable="true"
                     android:visibility="gone" />
 
@@ -134,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="10sp"
                     android:visibility="gone"
                     android:contentDescription="@string/empty" />
 
@@ -142,7 +142,7 @@
                     android:id="@+id/TextView4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="10sp"
                     android:textIsSelectable="true"
                     android:visibility="gone" />
             </LinearLayout>
@@ -151,8 +151,8 @@
 
     <by.carkva_gazeta.malitounik.ZoomImageView
         android:id="@+id/imageViewFull"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
         android:layout_gravity="center"
         android:background="@android:color/transparent"
         android:contentDescription="@string/empty"

@@ -14,7 +14,7 @@
         android:layout_alignTop="@+id/item_layout"
         android:layout_alignBottom="@+id/item_layout"
         android:gravity="start|center_vertical"
-        android:padding="5dp"
+        android:padding="5sp"
         android:text="@string/redagaktirovat"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -26,7 +26,7 @@
         android:layout_alignTop="@+id/item_layout"
         android:layout_alignBottom="@+id/item_layout"
         android:gravity="end|center_vertical"
-        android:padding="5dp"
+        android:padding="5sp"
         android:text="@string/delite"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -35,14 +35,14 @@
         android:id="@id/item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
+        android:layout_marginBottom="1sp"
         android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/color"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="10dp"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_marginStart="10sp"
             android:background="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,9 +50,9 @@
 
         <TextView
             android:id="@+id/text"
-            android:layout_width="0dp"
+            android:layout_width="0sp"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_popup"
             app:layout_constraintStart_toEndOf="@+id/color"
@@ -60,8 +60,8 @@
 
         <ImageView
             android:id="@+id/button_popup"
-            android:layout_width="24dp"
-            android:layout_height="0dp"
+            android:layout_width="24sp"
+            android:layout_height="0sp"
             android:contentDescription="@string/content_open_popup"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,8 +70,8 @@
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="28dp"
-            android:layout_height="0dp"
+            android:layout_width="28sp"
+            android:layout_height="0sp"
             android:contentDescription="@string/empty"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"

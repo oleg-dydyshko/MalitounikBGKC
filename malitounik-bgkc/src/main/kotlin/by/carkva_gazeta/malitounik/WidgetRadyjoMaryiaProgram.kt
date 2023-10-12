@@ -12,7 +12,7 @@ class WidgetRadyjoMaryiaProgram : AppCompatActivity() {
             val dialog = DialogNoInternet()
             dialog.show(supportFragmentManager, "DialogNoInternet")
         } else {
-            val dialog = DialogProgramPadoiMaryia()
+            val dialog = DialogProgramRadoiMaryia()
             dialog.show(supportFragmentManager, "DialogWidgetProgramPadoiMaryia")
         }
     }

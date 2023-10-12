@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetStartWithNavigation="0sp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <LinearLayout
@@ -48,13 +48,13 @@
 
     <ListView
         android:id="@+id/ListView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:layout_marginStart="10sp"
+        android:layout_marginLeft="10sp"
+        android:layout_marginEnd="10sp"
+        android:layout_marginRight="10sp"
+        android:layout_marginBottom="10sp"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="@+id/progressView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,9 +63,9 @@
 
     <ScrollView
         android:id="@+id/scroll"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:padding="10dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:padding="10sp"
         android:scrollbars="none"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -83,10 +83,10 @@
 
     <by.carkva_gazeta.malitounik.InteractiveScrollView
         android:id="@+id/linearLayout4"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryMaranAta"
-        android:padding="10dp"
+        android:padding="10sp"
         android:scrollbars="none"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -99,16 +99,16 @@
 
             <ImageView
                 android:id="@+id/copyBig"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_marginBottom="20dp"
+                android:layout_width="28sp"
+                android:layout_height="28sp"
+                android:layout_marginBottom="20sp"
                 android:contentDescription="@string/copy_big"
                 app:srcCompat="@drawable/copy" />
 
             <ImageView
                 android:id="@+id/adpravit"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="28sp"
+                android:layout_height="28sp"
                 android:contentDescription="@string/share"
                 app:srcCompat="@drawable/share_bible" />
 
@@ -116,28 +116,28 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp" />
+                android:layout_marginBottom="20sp" />
 
             <TextView
                 android:id="@+id/yelloy"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_marginBottom="20dp"
+                android:layout_width="28sp"
+                android:layout_height="28sp"
+                android:layout_marginBottom="20sp"
                 android:background="@color/colorBezPosta2"
                 android:contentDescription="@string/set_yelloy" />
 
             <ImageView
                 android:id="@+id/underline"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_marginBottom="20dp"
+                android:layout_width="28sp"
+                android:layout_height="28sp"
+                android:layout_marginBottom="20sp"
                 android:contentDescription="@string/set_underline"
                 app:srcCompat="@drawable/underline" />
 
             <ImageView
                 android:id="@+id/bold"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="28sp"
+                android:layout_height="28sp"
                 android:contentDescription="@string/set_bold"
                 app:srcCompat="@drawable/bold" />
         </LinearLayout>
@@ -146,8 +146,8 @@
     <include
         android:id="@+id/progressView"
         layout="@layout/progress"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -155,15 +155,15 @@
 
     <ImageView
         android:id="@+id/action_back"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_marginEnd="10sp"
+        android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
         android:contentDescription="@string/empty"
         android:gravity="center"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_minus"
@@ -171,15 +171,15 @@
 
     <ImageView
         android:id="@+id/action_fullscreen"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_marginEnd="10sp"
+        android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
         android:contentDescription="@string/empty"
         android:gravity="center"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
@@ -187,15 +187,15 @@
 
     <ImageView
         android:id="@+id/action_minus"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_marginEnd="10sp"
+        android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
         android:contentDescription="@string/empty"
         android:gravity="center"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_plus"
@@ -203,15 +203,15 @@
 
     <ImageView
         android:id="@+id/action_plus"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_marginEnd="10sp"
+        android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
         android:contentDescription="@string/empty"
         android:gravity="center"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_fullscreen"
@@ -221,10 +221,10 @@
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="5sp"
         android:background="@drawable/selector_red_maran_ata"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
+        android:paddingStart="10sp"
+        android:paddingEnd="10sp"
         android:textColor="@color/colorWhite"
         android:textSize="18sp"
         android:visibility="gone"

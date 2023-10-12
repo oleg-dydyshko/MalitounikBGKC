@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:padding="10dp"
+        android:padding="10sp"
         android:textColor="@color/colorWhite"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -28,7 +28,7 @@
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="10sp"
                 android:textSize="18sp" />
 
             <by.carkva_gazeta.malitounik.EditTextCustom
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:padding="10dp"
+                android:padding="10sp"
                 android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>

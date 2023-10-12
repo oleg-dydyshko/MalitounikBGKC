@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetStartWithNavigation="0sp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <TextView
@@ -48,8 +48,8 @@
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
                 android:ems="10"
                 android:hint="@string/sabytie_name"
                 android:inputType="text|textCapSentences" />
@@ -64,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="10sp"
                     android:text="@string/sabytie_pachatak"
                     android:textSize="15sp" />
 
@@ -73,9 +73,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_default"
-                    android:drawablePadding="10dp"
+                    android:drawablePadding="10sp"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="10sp"
                     android:textSize="15sp"
                     app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
                     app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
@@ -85,9 +85,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_default"
-                    android:drawablePadding="10dp"
+                    android:drawablePadding="10sp"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="10sp"
                     android:textSize="15sp"
                     app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
                     app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
@@ -113,7 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="10sp"
                     android:text="@string/Sabytie_end"
                     android:textSize="15sp" />
 
@@ -122,9 +122,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_default"
-                    android:drawablePadding="10dp"
+                    android:drawablePadding="10sp"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="10sp"
                     android:textSize="15sp"
                     app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
                     app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
@@ -134,9 +134,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_default"
-                    android:drawablePadding="10dp"
+                    android:drawablePadding="10sp"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="10sp"
                     android:textSize="15sp"
                     app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
                     app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
@@ -153,9 +153,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingStart="10sp"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp"
                     android:text="@string/Sabytie_uved"
                     android:textSize="15sp"
                     tools:ignore="RtlSymmetry" />
@@ -164,14 +164,14 @@
                     android:id="@+id/editText2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginRight="10sp"
                     android:ems="3"
                     android:inputType="number" />
 
                 <Spinner
                     android:id="@+id/spinner3"
-                    android:layout_width="0dp"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
@@ -182,9 +182,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:paddingStart="10dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:paddingStart="10sp"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
                 android:text="@string/sabytie_no_pavedam"
                 android:textSize="15sp"
                 tools:ignore="RtlSymmetry" />
@@ -195,7 +195,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_default"
                 android:gravity="center_vertical"
-                android:padding="10dp"
+                android:padding="10sp"
                 android:text="@string/no_notifikations"
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp"
@@ -213,13 +213,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="10sp"
                     android:text="@string/Sabytie_repit"
                     android:textSize="15sp" />
 
                 <Spinner
                     android:id="@+id/spinner4"
-                    android:layout_width="0dp"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
@@ -229,10 +229,10 @@
                 android:id="@+id/radioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingEnd="10dp"
-                android:paddingRight="10dp"
+                android:paddingStart="10sp"
+                android:paddingLeft="10sp"
+                android:paddingEnd="10sp"
+                android:paddingRight="10sp"
                 android:visibility="gone">
 
                 <RadioButton
@@ -259,8 +259,8 @@
                         android:id="@+id/editText4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_marginRight="10sp"
                         android:ems="2"
                         android:gravity="center"
                         android:inputType="number"
@@ -268,7 +268,7 @@
 
                     <TextView
                         android:id="@+id/pazov"
-                        android:layout_width="0dp"
+                        android:layout_width="0sp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/Sabytie_paz"
@@ -286,9 +286,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_default"
-                    android:drawablePadding="10dp"
+                    android:drawablePadding="10sp"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="10sp"
                     android:textSize="15sp"
                     app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
                     app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
@@ -305,13 +305,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="10sp"
                     android:text="@string/color_padzei"
                     android:textSize="15sp" />
 
                 <Spinner
                     android:id="@+id/spinner5"
-                    android:layout_width="0dp"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 

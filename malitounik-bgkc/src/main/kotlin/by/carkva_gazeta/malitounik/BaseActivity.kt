@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -69,6 +70,12 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     }
 
     override fun attachBaseContext(context: Context) {
+        Configuration(context.resources.configuration).apply {
+            if (this.fontScale != 1.0f) {
+                this.fontScale = 1.0f
+            }
+            applyOverrideConfiguration(this)
+        }
         super.attachBaseContext(context)
         if (checkmoduleResources()) {
             SplitCompat.install(this)

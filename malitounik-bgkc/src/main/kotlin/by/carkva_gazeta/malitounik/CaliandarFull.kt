@@ -595,8 +595,8 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                             res = getString(R.string.sabytie_pavedam, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR], gc[Calendar.HOUR_OF_DAY], nol3, gc[Calendar.MINUTE])
                             if (realTime > paz) paznicia = true
                         }
-                        val density = resources.displayMetrics.density
-                        val realpadding = (5 * density).toInt()
+                        val density = resources.displayMetrics.density.toInt()
+                        val realpadding = 5 * density
                         val textViewT = TextView(activity)
                         textViewT.text = title
                         textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)

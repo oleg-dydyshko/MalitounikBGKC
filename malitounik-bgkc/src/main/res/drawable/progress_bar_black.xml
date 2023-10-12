@@ -3,7 +3,7 @@
     <item android:id="@+id/bar_background">
         <shape>
             <solid android:color="@color/colorprimary_material_dark" />
-            <!--<corners android:radius="2dp" />
+            <!--<corners android:radius="2sp" />
             <gradient android:startColor="#666666"
                 android:centerColor="#111111"
                 android:endColor="#555555"
@@ -15,7 +15,7 @@
         <clip>
             <shape>
                 <solid android:color="@color/colorWhite" />
-                <!--<corners android:radius="2dp" />
+                <!--<corners android:radius="2sp" />
                 <gradient android:startColor="#cfb73f"
                     android:centerColor="#635a30"
                     android:endColor="#918030"

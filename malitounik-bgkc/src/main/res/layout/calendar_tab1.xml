@@ -18,9 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/selector_default"
-            android:drawablePadding="10dp"
+            android:drawablePadding="10sp"
             android:gravity="end|center_vertical"
-            android:padding="10dp"
+            android:padding="10sp"
             android:textSize="18sp"
             app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
             app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
@@ -30,9 +30,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/selector_default"
-            android:drawablePadding="10dp"
+            android:drawablePadding="10sp"
             android:gravity="center_vertical"
-            android:padding="10dp"
+            android:padding="10sp"
             android:textSize="18sp"
             app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
             app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />

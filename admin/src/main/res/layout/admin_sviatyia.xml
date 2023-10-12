@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetStartWithNavigation="0sp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <LinearLayout
@@ -41,10 +41,10 @@
 
     <ImageView
         android:id="@+id/imageViewLeft"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="18sp"
+        android:layout_height="18sp"
+        android:layout_marginStart="10sp"
+        android:layout_marginTop="10sp"
         android:contentDescription="@string/empty"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
@@ -62,10 +62,10 @@
 
     <ImageView
         android:id="@+id/imageViewRight"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_width="18sp"
+        android:layout_height="18sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginEnd="10sp"
         android:contentDescription="@string/empty"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
@@ -73,8 +73,8 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +83,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="10sp"
             android:orientation="vertical">
 
             <by.carkva_gazeta.malitounik.EditTextCustom
@@ -104,15 +104,15 @@
                 android:id="@+id/spinnerStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="10sp" />
 
             <Spinner
                 android:id="@+id/spinnerZnak"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="10sp" />
 
             <by.carkva_gazeta.malitounik.EditTextCustom
                 android:id="@+id/apisanne"
@@ -136,7 +136,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryMaranAta"
         android:gravity="center"
@@ -148,55 +148,55 @@
 
         <ImageView
             android:id="@+id/action_bold"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_width="28sp"
+            android:layout_height="28sp"
+            android:layout_marginStart="10sp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="5sp"
             android:contentDescription="@string/empty"
             app:srcCompat="@drawable/bold_menu" />
 
         <ImageView
             android:id="@+id/action_em"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_width="28sp"
+            android:layout_height="28sp"
+            android:layout_marginStart="10sp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="5sp"
             android:contentDescription="@string/empty"
             app:srcCompat="@drawable/italic" />
 
         <ImageView
             android:id="@+id/action_red"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_width="28sp"
+            android:layout_height="28sp"
+            android:layout_marginStart="10sp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="5sp"
             android:contentDescription="@string/empty"
             app:srcCompat="@drawable/red_menu" />
 
         <ImageView
             android:id="@+id/action_p"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
+            android:layout_width="28sp"
+            android:layout_height="28sp"
+            android:layout_marginStart="10sp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginTop="5sp"
+            android:layout_marginEnd="10sp"
+            android:layout_marginRight="10sp"
+            android:layout_marginBottom="5sp"
             android:contentDescription="@string/empty"
             app:srcCompat="@drawable/p_menu" />
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/scrollpreView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
         android:background="@color/colorWhite"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -208,7 +208,7 @@
             android:id="@+id/preView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="10sp"
             android:textSize="18sp" />
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

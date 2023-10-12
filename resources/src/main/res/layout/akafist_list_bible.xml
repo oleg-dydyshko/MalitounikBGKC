@@ -20,7 +20,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetStartWithNavigation="0sp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <TextView
@@ -37,8 +37,8 @@
 
     <ListView
         android:id="@+id/ListView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,8 +48,8 @@
 
     <ListView
         android:id="@+id/History"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
         android:scrollbars="none"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -60,12 +60,12 @@
 
     <TextView
         android:id="@+id/help"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:layout_margin="10sp"
+        android:layout_marginStart="8sp"
+        android:layout_marginTop="8sp"
+        android:layout_marginBottom="8sp"
         android:gravity="center"
         android:text="@string/helpbible"
         android:textColor="@color/colorPrimary_text"

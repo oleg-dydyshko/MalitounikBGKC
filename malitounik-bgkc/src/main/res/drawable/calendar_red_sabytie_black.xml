@@ -11,8 +11,8 @@
                 </shape>
             </item>
             <item
-                android:bottom="1dp"
-                android:right="1dp">
+                android:bottom="1sp"
+                android:right="1sp">
                 <bitmap
                     android:gravity="right|bottom"
                     android:src="@drawable/calendar_plus">
@@ -31,8 +31,8 @@
                 </shape>
             </item>
             <item
-                android:bottom="1dp"
-                android:right="1dp">
+                android:bottom="1sp"
+                android:right="1sp">
                 <bitmap
                     android:gravity="right|bottom"
                     android:src="@drawable/calendar_plus">
@@ -51,8 +51,8 @@
                 </shape>
             </item>
             <item
-                android:bottom="1dp"
-                android:right="1dp">
+                android:bottom="1sp"
+                android:right="1sp">
                 <bitmap
                     android:gravity="right|bottom"
                     android:src="@drawable/calendar_plus">

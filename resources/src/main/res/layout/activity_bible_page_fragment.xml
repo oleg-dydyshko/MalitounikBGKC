@@ -6,8 +6,8 @@
 
     <ListView
         android:id="@+id/listView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,10 +16,10 @@
 
     <by.carkva_gazeta.malitounik.InteractiveScrollView
         android:id="@+id/linearLayout4"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryMaranAta"
-        android:padding="10dp"
+        android:padding="10sp"
         android:scrollbars="none"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,24 +32,24 @@
 
             <ImageView
                 android:id="@+id/copyBigFull"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginBottom="20dp"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginBottom="20sp"
                 android:contentDescription="@string/copy_big_full"
                 app:srcCompat="@drawable/select_all" />
 
             <ImageView
                 android:id="@+id/copyBig"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginBottom="20dp"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginBottom="20sp"
                 android:contentDescription="@string/copy_big"
                 app:srcCompat="@drawable/copy" />
 
             <ImageView
                 android:id="@+id/adpravit"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
                 android:contentDescription="@string/share"
                 app:srcCompat="@drawable/share_bible" />
 
@@ -57,44 +57,44 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp" />
+                android:layout_marginBottom="20sp" />
 
             <TextView
                 android:id="@+id/yelloy"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginBottom="20dp"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginBottom="20sp"
                 android:background="@color/colorBezPosta2"
                 android:contentDescription="@string/set_yelloy" />
 
             <ImageView
                 android:id="@+id/underline"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginBottom="20dp"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginBottom="20sp"
                 android:contentDescription="@string/set_underline"
                 app:srcCompat="@drawable/underline" />
 
             <ImageView
                 android:id="@+id/bold"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginBottom="20dp"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginBottom="20sp"
                 android:contentDescription="@string/set_bold"
                 app:srcCompat="@drawable/bold" />
 
             <ImageView
                 android:id="@+id/zakladka"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginBottom="20dp"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginBottom="20sp"
                 android:contentDescription="@string/set_bookmark"
                 app:srcCompat="@drawable/bookmark" />
 
             <ImageView
                 android:id="@+id/zametka"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
                 android:contentDescription="@string/natatka_add"
                 app:srcCompat="@drawable/sketch" />
         </LinearLayout>

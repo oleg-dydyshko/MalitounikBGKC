@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="10sp">
 
         <TextView
             android:id="@+id/titleToolbar"
@@ -36,8 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/appBarLayout2"
         android:background="@drawable/selector_default_list"
-        android:drawablePadding="10dp"
-        android:padding="10dp"
+        android:drawablePadding="10sp"
+        android:padding="10sp"
         android:text="@string/bible_time"
         android:textSize="14sp"
         app:drawableLeftCompat="@drawable/stiker"
@@ -46,7 +46,7 @@
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1sp"
         android:layout_below="@id/textView"
         android:background="@color/colorDivider" />
 

@@ -8,7 +8,7 @@
                     <stroke android:width="2sp" android:color="@color/colorPrimaryDark" />
                 </shape>
             </item>
-            <item android:bottom="2dp" android:right="2dp">
+            <item android:bottom="2sp" android:right="2sp">
                 <bitmap android:gravity="right|bottom" android:src="@drawable/calendar_plus" />
             </item>
         </layer-list>
@@ -21,7 +21,7 @@
                     <stroke android:width="2sp" android:color="@color/colorPrimaryDark" />
                 </shape>
             </item>
-            <item android:bottom="2dp" android:right="2dp">
+            <item android:bottom="2sp" android:right="2sp">
                 <bitmap android:gravity="right|bottom" android:src="@drawable/calendar_plus" />
             </item>
         </layer-list>
@@ -34,7 +34,7 @@
                     <stroke android:width="2sp" android:color="@color/colorPrimaryDark" />
                 </shape>
             </item>
-            <item android:bottom="2dp" android:right="2dp">
+            <item android:bottom="2sp" android:right="2sp">
                 <bitmap android:gravity="right|bottom" android:src="@drawable/calendar_plus" />
             </item>
         </layer-list>

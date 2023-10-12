@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:padding="10dp"
+        android:padding="10sp"
         android:text="@string/symbols"
         android:textColor="@color/colorWhite"
         android:textStyle="bold" />
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="10sp">
 
             <TextView
                 android:id="@+id/textView7"
@@ -37,8 +37,8 @@
             <View
                 android:id="@+id/line2"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="10dp"
+                android:layout_height="1sp"
+                android:layout_marginBottom="10sp"
                 android:background="@color/colorPrimary" />
 
             <LinearLayout
@@ -46,26 +46,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:paddingTop="5sp"
+                android:paddingBottom="5sp">
 
                 <ImageView
                     android:id="@+id/image1"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="20sp"
+                    android:layout_height="20sp"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/Vial_Dvun"
                     android:src="@drawable/znaki_krest_v_kruge" />
 
                 <TextView
                     android:id="@+id/textView8"
-                    android:layout_width="0dp"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingStart="10sp"
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -75,26 +75,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:paddingTop="5sp"
+                android:paddingBottom="5sp">
 
                 <ImageView
                     android:id="@+id/image2"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="20sp"
+                    android:layout_height="20sp"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/Z_Lic_na_ve"
                     android:src="@drawable/znaki_krest_v_polukruge" />
 
                 <TextView
                     android:id="@+id/textView9"
-                    android:layout_width="0dp"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingStart="10sp"
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp"
                     android:text="@string/Z_Lic_na_ve"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -104,26 +104,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:paddingTop="5sp"
+                android:paddingBottom="5sp">
 
                 <ImageView
                     android:id="@+id/image3"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="20sp"
+                    android:layout_height="20sp"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/Z_v_v_v_u_n_u"
                     android:src="@drawable/znaki_krest" />
 
                 <TextView
                     android:id="@+id/textView10"
-                    android:layout_width="0dp"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingStart="10sp"
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp"
                     android:text="@string/Z_v_v_v_u_n_u"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -133,26 +133,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:paddingTop="5sp"
+                android:paddingBottom="5sp">
 
                 <ImageView
                     android:id="@+id/image4"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="20sp"
+                    android:layout_height="20sp"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/Z_sh_v_v_u_u"
                     android:src="@drawable/znaki_ttk" />
 
                 <TextView
                     android:id="@+id/textView11"
-                    android:layout_width="0dp"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingStart="10sp"
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp"
                     android:text="@string/Z_sh_v_v_u_u"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -162,26 +162,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:paddingTop="5sp"
+                android:paddingBottom="5sp">
 
                 <ImageView
                     android:id="@+id/imageView14"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="20sp"
+                    android:layout_height="20sp"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/Z_sh_v_m_u_u"
                     android:src="@drawable/znaki_ttk_black" />
 
                 <TextView
                     android:id="@+id/textView12"
-                    android:layout_width="0dp"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingStart="10sp"
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp"
                     android:text="@string/Z_sh_v_m_u_u"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -191,7 +191,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:paddingTop="10dp"
+                android:paddingTop="10sp"
                 android:text="@string/tipicon_fon"
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp" />
@@ -199,8 +199,8 @@
             <View
                 android:id="@+id/line1"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="10dp"
+                android:layout_height="1sp"
+                android:layout_marginBottom="10sp"
                 android:background="@color/colorPrimary" />
 
             <TextView
@@ -208,12 +208,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:background="@color/colorPrimary"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingStart="10sp"
+                android:paddingLeft="10sp"
+                android:paddingRight="10sp"
                 android:text="@string/niadzeli_i_sviaty"
                 android:textColor="@color/colorWhite"
                 android:textSize="14sp" />
@@ -223,12 +223,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:background="@color/colorDivider"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingStart="10sp"
+                android:paddingLeft="10sp"
+                android:paddingRight="10sp"
                 android:text="@string/zvychaynye_dny"
                 android:textSize="14sp" />
 
@@ -237,12 +237,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:background="@color/colorBezPosta"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingStart="10sp"
+                android:paddingLeft="10sp"
+                android:paddingRight="10sp"
                 android:text="@string/No_post_n"
                 android:textSize="14sp" />
 
@@ -251,12 +251,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:background="@color/colorPost"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingStart="10sp"
+                android:paddingLeft="10sp"
+                android:paddingRight="10sp"
                 android:text="@string/Post"
                 android:textSize="14sp" />
 
@@ -265,12 +265,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:background="@color/colorStrogiPost"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingStart="10sp"
+                android:paddingLeft="10sp"
+                android:paddingRight="10sp"
                 android:text="@string/Strogi_post_n"
                 android:textColor="@color/colorWhite"
                 android:textSize="14sp" />

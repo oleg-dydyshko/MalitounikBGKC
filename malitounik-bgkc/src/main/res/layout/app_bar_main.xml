@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetStartWithNavigation="0sp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,7 +26,7 @@
 
                 <TextView
                     android:id="@+id/title_toolbar"
-                    android:layout_width="0dp"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:textSize="20sp"

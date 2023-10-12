@@ -3,7 +3,7 @@
     android:id="@+id/label"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingBottom="5dp"
+    android:paddingLeft="10sp"
+    android:paddingRight="10sp"
+    android:paddingBottom="5sp"
     android:textSize="18sp" />

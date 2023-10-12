@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetStartWithNavigation="0sp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <TextView
@@ -36,8 +36,8 @@
 
     <ListView
         android:id="@+id/ListView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/textSearch"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,12 +46,12 @@
 
     <TextView
         android:id="@+id/help"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:layout_margin="10sp"
+        android:layout_marginStart="8sp"
+        android:layout_marginTop="8sp"
+        android:layout_marginBottom="8sp"
         android:gravity="center"
         android:text="@string/helpbible"
         android:textSize="18sp"
@@ -63,13 +63,13 @@
 
     <by.carkva_gazeta.malitounik.EditTextCustom
         android:id="@+id/textSearch"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8sp"
+        android:layout_marginLeft="8sp"
+        android:layout_marginEnd="8sp"
+        android:layout_marginRight="8sp"
+        android:layout_marginBottom="8sp"
         android:hint="@string/filter"
         android:imeOptions="actionDone|flagNoEnterAction"
         android:inputType="text|textAutoCorrect"
@@ -83,9 +83,9 @@
         android:id="@+id/count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8sp"
+        android:layout_marginEnd="8sp"
+        android:layout_marginBottom="8sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/textSearch"
         app:layout_constraintEnd_toEndOf="parent"

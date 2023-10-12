@@ -6,7 +6,7 @@
 
     <com.woxthebox.draglistview.DragListView
         android:id="@+id/drag_grid_view"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"

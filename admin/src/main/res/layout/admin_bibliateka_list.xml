@@ -7,7 +7,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="0sp"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetStartWithNavigation="0sp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <LinearLayout
@@ -39,8 +39,8 @@
 
     <ListView
         android:id="@+id/listView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,12 +49,12 @@
 
     <ScrollView
         android:id="@+id/edit"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:layout_marginStart="10sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginEnd="10sp"
+        android:layout_marginBottom="10sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +71,7 @@
 
             <EditText
                 android:id="@+id/textViewTitle"
-                android:layout_width="0dp"
+                android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:hint="@string/admin_title"
                 android:inputType="text"
@@ -83,9 +83,9 @@
                 android:id="@+id/rubrika"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginEnd="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
@@ -94,7 +94,7 @@
                 android:id="@+id/imagePdf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="10sp"
                 android:contentDescription="@string/empty"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -102,9 +102,9 @@
 
             <TextView
                 android:id="@+id/pdfTextView"
-                android:layout_width="0dp"
+                android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="10sp"
                 android:hint="@string/file_name2"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/admin"
@@ -115,11 +115,11 @@
                 android:id="@+id/admin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10sp"
+                android:layout_marginEnd="10sp"
                 android:background="@drawable/knopka_ser"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="10sp"
+                android:paddingRight="10sp"
                 android:text="@string/bibliateka_file"
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="12sp"
@@ -130,7 +130,7 @@
                 android:id="@+id/opisanie"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="10sp"
                 android:hint="@string/opisanie"
                 android:inputType="textMultiLine"
                 app:layout_constraintBottom_toBottomOf="parent"

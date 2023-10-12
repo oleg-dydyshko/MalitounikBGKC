@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:padding="10dp"
+            android:padding="10sp"
             android:text="@string/save_as_up"
             android:textColor="@color/colorWhite"
             android:textSize="14sp"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/selector_red"
             android:gravity="right|end"
-            android:padding="10dp"
+            android:padding="10sp"
             android:text="@string/mk_dir"
             android:textColor="@color/colorWhite"
             android:textSize="14sp"
@@ -50,7 +50,7 @@
             android:id="@+id/filetitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="10sp"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -60,9 +60,9 @@
             android:layout_height="wrap_content"
             android:hint="@string/file_name2"
             android:inputType="text"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp"
+            android:paddingBottom="10sp"
             android:textSize="14sp" />
 
         <ListView

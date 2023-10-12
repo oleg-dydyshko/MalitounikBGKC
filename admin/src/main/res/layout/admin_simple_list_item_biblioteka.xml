@@ -5,16 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:paddingBottom="5dp">
+    android:paddingBottom="5sp">
 
     <TextView
         android:id="@+id/label"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:drawablePadding="10dp"
+        android:drawablePadding="10sp"
         android:gravity="center_vertical"
-        android:padding="10dp"
+        android:padding="10sp"
         android:textSize="14sp"
         app:drawableLeftCompat="@drawable/stiker"
         app:drawableStartCompat="@drawable/stiker"
@@ -35,12 +35,12 @@
 
     <TextView
         android:id="@+id/rubrika"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:drawablePadding="10dp"
+        android:drawablePadding="10sp"
         android:gravity="center|center_vertical"
-        android:padding="10dp"
+        android:padding="10sp"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

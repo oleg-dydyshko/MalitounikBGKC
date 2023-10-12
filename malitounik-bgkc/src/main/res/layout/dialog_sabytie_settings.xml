@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:padding="10dp"
+        android:padding="10sp"
         android:text="@string/type_signal_notif"
         android:textColor="@color/colorWhite"
         android:textSize="14sp"
@@ -25,36 +25,36 @@
             android:id="@+id/notificationNotification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:paddingBottom="10dp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:paddingBottom="10sp"
             android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/notificationAlarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:paddingBottom="10dp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:paddingBottom="10sp"
             android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/notificationRingtone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:paddingBottom="5dp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:paddingBottom="5sp"
             android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/notificationPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:paddingBottom="5dp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:paddingBottom="5sp"
             android:textSize="12sp" />
     </RadioGroup>
 
@@ -65,18 +65,18 @@
 
         <ImageView
             android:id="@+id/play"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_margin="10dp"
+            android:layout_width="24sp"
+            android:layout_height="24sp"
+            android:layout_margin="10sp"
             android:layout_weight="1"
             android:contentDescription="@string/empty"
             app:srcCompat="@drawable/play" />
 
         <ImageView
             android:id="@+id/stop"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_margin="10dp"
+            android:layout_width="24sp"
+            android:layout_height="24sp"
+            android:layout_margin="10sp"
             android:layout_weight="1"
             android:contentDescription="@string/empty"
             app:srcCompat="@drawable/stop" />
@@ -86,14 +86,14 @@
         android:id="@+id/guk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
         android:checked="true"
         android:drawableLeft="@drawable/stiker"
-        android:drawablePadding="10dp"
+        android:drawablePadding="10sp"
         android:drawableStart="@drawable/stiker"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
+        android:paddingBottom="5sp"
+        android:paddingTop="5sp"
         android:text="@string/sound"
         android:textSize="12sp" />
 

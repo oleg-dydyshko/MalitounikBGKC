@@ -26,7 +26,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:contentInsetStartWithNavigation="0dp"
+                app:contentInsetStartWithNavigation="0sp"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
                 <by.carkva_gazeta.malitounik.EditTextCustom
@@ -48,8 +48,8 @@
     <by.carkva_gazeta.malitounik.ProgressBarTextView
         android:id="@+id/toolbarprogress"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_marginTop="52dp"
+        android:layout_height="3sp"
+        android:layout_marginTop="52sp"
         android:background="@drawable/progress_bar"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,8 +58,8 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

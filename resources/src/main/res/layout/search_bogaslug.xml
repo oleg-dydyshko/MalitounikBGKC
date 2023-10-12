@@ -21,7 +21,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetStartWithNavigation="0sp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <TextView
@@ -50,7 +50,7 @@
     <ListView
         android:id="@+id/ListView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="0sp"
         android:layout_alignParentStart="true"
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@id/barrier"
@@ -61,7 +61,7 @@
     <ListView
         android:id="@+id/History"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="0sp"
         android:layout_alignParentStart="true"
         android:scrollbars="none"
         android:visibility="gone"
@@ -72,7 +72,7 @@
 
     <by.carkva_gazeta.malitounik.EditTextCustom
         android:id="@+id/editText2"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:hint="@string/filter"
@@ -85,9 +85,9 @@
 
     <ImageView
         android:id="@+id/buttonx2"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:padding="5dp"
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        android:padding="5sp"
         android:src="@drawable/cancel_black"
         app:layout_constraintBottom_toBottomOf="@+id/editText2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -96,7 +96,7 @@
 
     <CheckBox
         android:id="@+id/checkBox"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
         android:text="@string/registr"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -105,10 +105,10 @@
 
     <CheckBox
         android:id="@+id/checkBox2"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8sp"
+        android:layout_marginRight="8sp"
         android:text="@string/dakladnae_supadzenne"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

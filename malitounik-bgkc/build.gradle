@@ -10,8 +10,8 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 19
         targetSdkVersion 34
-        versionCode 442137
-        versionName "4.3.7.1"
+        versionCode 442138
+        versionName "4.3.7.2"
 
         //multiDexEnabled true
 
@@ -58,7 +58,7 @@ android {
 dependencies {
     //implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.10.0'
     api 'androidx.appcompat:appcompat:1.6.1'
     api 'androidx.gridlayout:gridlayout:1.0.0'
     api 'com.google.android.play:feature-delivery:2.1.0'

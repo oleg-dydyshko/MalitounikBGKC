@@ -6,11 +6,11 @@
 
     <ImageView
         android:id="@+id/search"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
         android:foregroundGravity="center"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/item"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,11 +20,11 @@
 
     <TextView
         android:id="@+id/item"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

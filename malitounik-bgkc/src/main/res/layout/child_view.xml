@@ -4,9 +4,9 @@
     android:id="@+id/textChild"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:drawablePadding="10dp"
+    android:drawablePadding="10sp"
     android:gravity="center_vertical"
-    android:padding="10dp"
+    android:padding="10sp"
     android:textSize="14sp"
     app:drawableStartCompat="@drawable/stiker"
     app:drawableLeftCompat="@drawable/stiker" />

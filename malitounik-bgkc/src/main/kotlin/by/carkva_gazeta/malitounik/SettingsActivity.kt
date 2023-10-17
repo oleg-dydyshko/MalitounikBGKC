@@ -1033,6 +1033,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putBoolean("dialogHelpShare", true)
             prefEditor.putBoolean("help_fullscreen", true)
             prefEditor.putInt("fullscreenCount", 0)
+            prefEditor.putInt("menuPiarlinyPage", 0)
+            prefEditor.putInt("menuCytatyPage", 0)
             binding.maranataBel.isClickable = false
             binding.maranataRus.isClickable = false
             binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))

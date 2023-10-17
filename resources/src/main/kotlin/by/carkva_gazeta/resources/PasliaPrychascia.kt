@@ -99,7 +99,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         }
         binding.pager.offscreenPageLimit = 1
         binding.pager.setCurrentItem(pasliaPrychascia, false)
-        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {

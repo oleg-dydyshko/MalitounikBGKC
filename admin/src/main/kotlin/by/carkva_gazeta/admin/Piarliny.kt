@@ -41,7 +41,7 @@ import java.io.File
 import java.util.Calendar
 import java.util.GregorianCalendar
 
-class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDeliteListener {
+class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener {
 
     private lateinit var binding: AdminPiarlinyBinding
     private var urlJob: Job? = null
@@ -91,18 +91,22 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
         }
     }
 
-    private fun onDialogEditClick(position: Int) {
+    override fun onDialogEditClick(position: Int) {
         edit = position
         binding.addPiarliny.setText(piarliny[edit].data)
         binding.addPiarliny.setSelection(piarliny[edit].data.length)
         timeListCalendar.timeInMillis = piarliny[edit].time * 1000
         timeListCalendar.set(Calendar.MILLISECOND, 0)
-        timeListCalendar.set(Calendar.YEAR, 2020)
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, timeListCalendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[timeListCalendar.get(Calendar.MONTH)])
         binding.listView.visibility = View.GONE
         binding.addPiarliny.visibility = View.VISIBLE
         binding.linearLayout2.visibility = View.VISIBLE
         invalidateOptionsMenu()
+    }
+
+    override fun onDialogDeliteClick(position: Int, name: String) {
+        val dialogDelite = DialogDelite.getInstance(position, name, false)
+        dialogDelite.show(supportFragmentManager, "DialogDelite")
     }
 
     override fun fileDelite(position: Int, title: String, isSite: Boolean) {
@@ -128,6 +132,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)
         binding.actionP.setOnClickListener(this)
+
         urlJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             try {
@@ -148,20 +153,22 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
                         MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
                     binding.progressBar2.visibility = View.GONE
-                    val time = intent.extras?.getLong("time") ?: Calendar.getInstance().timeInMillis
-                    val cal = GregorianCalendar()
-                    cal.timeInMillis = time
-                    val day = cal[Calendar.DATE]
-                    val mun = cal[Calendar.MONTH]
-                    val cal2 = GregorianCalendar()
-                    for (i in 0 until piarliny.size) {
-                        val t = piarliny[i].time * 1000
-                        cal2.timeInMillis = t
-                        val day2 = cal2[Calendar.DATE]
-                        val mun2 = cal2[Calendar.MONTH]
-                        if (day == day2 && mun == mun2) {
-                            onDialogEditClick(i)
-                            break
+                    if (intent.extras != null) {
+                        val time = intent.extras?.getLong("time") ?: Calendar.getInstance().timeInMillis
+                        val cal = GregorianCalendar()
+                        cal.timeInMillis = time
+                        val day = cal[Calendar.DATE]
+                        val mun = cal[Calendar.MONTH]
+                        val cal2 = GregorianCalendar()
+                        for (i in 0 until piarliny.size) {
+                            val t = piarliny[i].time * 1000
+                            cal2.timeInMillis = t
+                            val day2 = cal2[Calendar.DATE]
+                            val mun2 = cal2[Calendar.MONTH]
+                            if (day == day2 && mun == mun2) {
+                                onDialogEditClick(i)
+                                break
+                            }
                         }
                     }
                 }.await()
@@ -175,12 +182,18 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
                 text = text.substring(0, 30)
                 text = "$text..."
             }
-            val dialogDelite = DialogDelite.getInstance(position, text, false)
-            dialogDelite.show(supportFragmentManager, "DialogDelite")
+            val dialog = DialogPiarlinyContextMenu.getInstance(position, text)
+            dialog.show(supportFragmentManager, "DialogPiarlinyContextMenu")
             return@setOnItemLongClickListener true
         }
         binding.listView.setOnItemClickListener { _, _, position, _ ->
-            onDialogEditClick(position)
+            var text = piarliny[position].data
+            if (text.length > 30) {
+                text = text.substring(0, 30)
+                text = "$text..."
+            }
+            val dialog = DialogPiarlinyContextMenu.getInstance(position, text)
+            dialog.show(supportFragmentManager, "DialogPiarlinyContextMenu")
         }
         setTollbarTheme()
     }

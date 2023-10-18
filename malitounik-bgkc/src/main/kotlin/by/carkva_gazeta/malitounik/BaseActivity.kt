@@ -74,13 +74,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
             if (this.fontScale != 1.0f) {
                 this.fontScale = 1.0f
             }
-            if (this.densityDpi in 300..479) {
-                if (480 - this.densityDpi > 100) {
-                    this.densityDpi += 100
-                } else {
-                    this.densityDpi = 480
-                }
-            }
             applyOverrideConfiguration(this)
         }
         super.attachBaseContext(context)

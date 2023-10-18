@@ -395,7 +395,7 @@
             android:taskAffinity=""
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".MenuCytaty"
+            android:name=".Cytaty"
             android:label="@string/cytaty_z_biblii"
             android:theme="@style/AppTheme">
             <meta-data

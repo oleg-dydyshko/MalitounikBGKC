@@ -236,10 +236,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         menuPadryxtoukaDaSpovedzi?.onDialogFontSize()
         val menuPamiatka = supportFragmentManager.findFragmentByTag("MenuPamiatka") as? MenuPamiatka
         menuPamiatka?.onDialogFontSize()
-        val menuCytaty = supportFragmentManager.findFragmentByTag("MenuCytaty") as? MenuCytaty
-        menuCytaty?.onDialogFontSize()
-        val menuPiarliny = supportFragmentManager.findFragmentByTag("MenuPiarliny") as? MenuPiarliny
-        menuPiarliny?.onDialogFontSize()
     }
 
     override fun setPage(page: Int) {
@@ -468,8 +464,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.label103.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label105.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label104.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            binding.label106.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            binding.label107.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label140.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label141.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label142.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -521,8 +515,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.label103.setOnClickListener(this)
         binding.label104.setOnClickListener(this)
         binding.label105.setOnClickListener(this)
-        binding.label106.setOnClickListener(this)
-        binding.label107.setOnClickListener(this)
         binding.label11.setOnClickListener(this)
         binding.label12.setOnClickListener(this)
         binding.label13.setOnClickListener(this)
@@ -540,6 +532,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.image5.setOnClickListener(this)
         binding.image6.setOnClickListener(this)
         binding.image7.setOnClickListener(this)
+        binding.citata.setOnClickListener(this)
 
         val data = intent.data
         if (data != null) {
@@ -744,16 +737,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             R.id.label105 -> {
                 if (!binding.label105.isShown) scroll = true
                 selectFragment(binding.label105, true)
-            }
-
-            R.id.label106 -> {
-                if (!binding.label106.isShown) scroll = true
-                selectFragment(binding.label106, true)
-            }
-
-            R.id.label107 -> {
-                if (!binding.label107.isShown) scroll = true
-                selectFragment(binding.label107, true)
             }
 
             R.id.label11 -> {
@@ -1095,7 +1078,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 menu.findItem(R.id.action_glava).setIcon(R.drawable.calendar_black)
             }
         }
-        if (idSelect == R.id.label101 || idSelect == R.id.label102 || idSelect == R.id.label106 || idSelect == R.id.label107) {
+        if (idSelect == R.id.label101 || idSelect == R.id.label102) {
             menu.findItem(R.id.action_font).isVisible = true
             menu.findItem(R.id.action_bright).isVisible = true
             if (!k.getBoolean("auto_dzen_noch", false)) {
@@ -1103,7 +1086,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 menu.findItem(R.id.action_dzen_noch).isVisible = true
             }
         }
-        if (idSelect == R.id.label106 || idSelect == R.id.label107) menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         if (idSelect == R.id.label103) menu.findItem(R.id.prazdnik).isVisible = true
         if (idSelect == R.id.label104) {
             menu.findItem(R.id.pasxa_opis).isVisible = true
@@ -1183,8 +1165,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.label103.setBackgroundResource(R.drawable.selector_dark)
                 binding.label104.setBackgroundResource(R.drawable.selector_dark)
                 binding.label105.setBackgroundResource(R.drawable.selector_dark)
-                binding.label106.setBackgroundResource(R.drawable.selector_dark)
-                binding.label107.setBackgroundResource(R.drawable.selector_dark)
                 binding.label11.setBackgroundResource(R.drawable.selector_dark)
                 binding.label12.setBackgroundResource(R.drawable.selector_dark)
                 binding.label13.setBackgroundResource(R.drawable.selector_dark)
@@ -1215,8 +1195,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.label103.setBackgroundResource(R.drawable.selector_default)
                 binding.label104.setBackgroundResource(R.drawable.selector_default)
                 binding.label105.setBackgroundResource(R.drawable.selector_default)
-                binding.label106.setBackgroundResource(R.drawable.selector_default)
-                binding.label107.setBackgroundResource(R.drawable.selector_default)
                 binding.label11.setBackgroundResource(R.drawable.selector_default)
                 binding.label12.setBackgroundResource(R.drawable.selector_default)
                 binding.label13.setBackgroundResource(R.drawable.selector_default)
@@ -1236,7 +1214,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             if (dzenNoch) binding.image2.setImageResource(R.drawable.arrow_up_float_black)
             else binding.image2.setImageResource(R.drawable.arrow_up_float)
         }
-        if (id == R.id.label101 || id == R.id.label102 || id == R.id.label103 || id == R.id.label104 || id == R.id.label105 || id == R.id.label106 || id == R.id.label107) {
+        if (id == R.id.label101 || id == R.id.label102 || id == R.id.label103 || id == R.id.label104 || id == R.id.label105) {
             binding.title10.visibility = View.VISIBLE
             if (dzenNoch) binding.image3.setImageResource(R.drawable.arrow_up_float_black)
             else binding.image3.setImageResource(R.drawable.arrow_up_float)
@@ -1401,22 +1379,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 bindingappbar.subtitleToolbar.visibility = View.VISIBLE
                 if (dzenNoch) binding.label105.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label105.setBackgroundResource(R.drawable.selector_gray)
-            }
-
-            R.id.label106 -> {
-                tolbarTitle = getString(R.string.other)
-                bindingappbar.subtitleToolbar.text = getString(R.string.cytaty_z_biblii)
-                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
-                if (dzenNoch) binding.label106.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else binding.label106.setBackgroundResource(R.drawable.selector_gray)
-            }
-
-            R.id.label107 -> {
-                tolbarTitle = getString(R.string.other)
-                bindingappbar.subtitleToolbar.text = getString(R.string.piarliny)
-                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
-                if (dzenNoch) binding.label107.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else binding.label107.setBackgroundResource(R.drawable.selector_gray)
             }
 
             R.id.label102 -> {
@@ -1660,26 +1622,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
             }
 
-            R.id.label106 -> {
-                val fragment = supportFragmentManager.findFragmentByTag("MenuCytaty")
-                if (fragment == null) {
-                    val parafiiBgkc = MenuCytaty()
-                    ftrans.replace(R.id.conteiner, parafiiBgkc, "MenuCytaty")
-                    prefEditors.putInt("id", id)
-                    idSelect = id
-                }
-            }
-
-            R.id.label107 -> {
-                val fragment = supportFragmentManager.findFragmentByTag("MenuPiarliny")
-                if (fragment == null) {
-                    val parafiiBgkc = MenuPiarliny()
-                    ftrans.replace(R.id.conteiner, parafiiBgkc, "MenuPiarliny")
-                    prefEditors.putInt("id", id)
-                    idSelect = id
-                }
-            }
-
             R.id.label102 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("MenuPamiatka")
                 if (fragment == null) {
@@ -1835,6 +1777,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             R.id.image7 -> {
                 val dialog = DialogProgramRadoiMaryia()
                 dialog.show(supportFragmentManager, "DialogProgramRadoiMaryia")
+            }
+
+            R.id.citata -> {
+                startActivity(Intent(this, Cytaty::class.java))
             }
 
             else -> {

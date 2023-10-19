@@ -69,7 +69,7 @@ class TonPlay : BaseActivity() {
             }
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.titleToolbar.text = resources.getString(R.string.ton, ton.toString())
         when(ton) {
             1 -> binding.viewWeb.loadUrl("https://soundcloud.com/24dwbqqpu9sk/trapar-1?in=24dwbqqpu9sk/sets/trapary-bgkts&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing")

@@ -48,6 +48,9 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
+        val edit = k.edit()
+        edit.putInt("menuCitatyPage", binding.pager.currentItem)
+        edit.apply()
     }
 
     override fun onResume() {
@@ -71,7 +74,7 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding = CytatyActivityBinding.inflate(layoutInflater)
-        bindingprogress = binding .progressView
+        bindingprogress = binding.progressView
         setContentView(binding.root)
         pasliaPrychascia = savedInstanceState?.getInt("pasliaPrychascia") ?: (intent.extras?.getInt("paslia_prychascia") ?: 0)
         binding.constraint.setOnTouchListener(this)
@@ -92,7 +95,6 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         }
         binding.pager.offscreenPageLimit = 1
         binding.pager.setCurrentItem(pasliaPrychascia, false)
-        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -170,6 +172,7 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         binding.actionBack.setOnClickListener {
             onBack()
         }
+        binding.pager.currentItem = k.getInt("menuCitatyPage", 0)
     }
 
     private fun setTollbarTheme() {
@@ -190,7 +193,7 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
             }
             TransitionManager.beginDelayedTransition(binding.toolbar)
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = resources.getString(R.string.cytaty_z_biblii)
@@ -298,11 +301,6 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         menu.findItem(R.id.action_share).isVisible = false
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
-        val item = menu.findItem(R.id.action_vybranoe)
-        val spanString = SpannableString(menu.findItem(R.id.action_vybranoe).title.toString())
-        val end = spanString.length
-        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        item.title = spanString
         menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
     }
 

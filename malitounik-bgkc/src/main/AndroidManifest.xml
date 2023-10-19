@@ -402,6 +402,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
+        <activity
+            android:name=".PiarlinyAll"
+            android:label="@string/piarliny"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
 
         <meta-data
             android:name="com.google.android.backup.api_key"

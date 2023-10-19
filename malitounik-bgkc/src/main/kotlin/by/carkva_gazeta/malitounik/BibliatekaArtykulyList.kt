@@ -247,7 +247,7 @@ class BibliatekaArtykulyList : BaseActivity(), AdapterView.OnItemClickListener, 
             binding.listView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
             binding.buttonx2.setImageResource(R.drawable.cancel)
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.titleToolbar.text = resources.getStringArray(R.array.artykuly)[position]
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams

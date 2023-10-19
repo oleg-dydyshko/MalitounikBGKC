@@ -91,7 +91,7 @@ class MyNatatki : DialogFragment() {
             if (dzenNoch) {
                 binding.file.setBackgroundResource(R.color.colorPrimary_black)
             }
-            binding.file.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+            binding.file.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.EditText.tag = binding.EditText.keyListener
             binding.file.tag = binding.file.keyListener
             when (redak) {

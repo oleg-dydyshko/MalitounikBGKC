@@ -45,7 +45,7 @@ class Onas : BaseActivity() {
             TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         if (dzenNoch) binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.titleToolbar.text = resources.getString(R.string.pra_nas)
         val inputStream = resources.openRawResource(R.raw.onas)
         val isr = InputStreamReader(inputStream)

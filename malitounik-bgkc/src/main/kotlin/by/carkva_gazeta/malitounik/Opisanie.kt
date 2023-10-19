@@ -470,7 +470,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             }
             TransitionManager.beginDelayedTransition(binding.toolbar)
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = resources.getText(R.string.zmiest)
@@ -527,6 +527,10 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == R.id.action_piarliny_all) {
+            startActivity(Intent(this, PiarlinyAll::class.java))
             return true
         }
         if (id == R.id.action_download_all) {

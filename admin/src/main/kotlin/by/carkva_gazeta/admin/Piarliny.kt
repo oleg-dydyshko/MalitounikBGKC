@@ -96,6 +96,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
         binding.addPiarliny.setText(piarliny[edit].data)
         binding.addPiarliny.setSelection(piarliny[edit].data.length)
         timeListCalendar.timeInMillis = piarliny[edit].time * 1000
+        timeListCalendar.set(Calendar.YEAR, VYSOCOSNYI_GOD)
         timeListCalendar.set(Calendar.MILLISECOND, 0)
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, timeListCalendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[timeListCalendar.get(Calendar.MONTH)])
         binding.listView.visibility = View.GONE
@@ -202,7 +203,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
         binding.titleToolbar.setOnClickListener {
             fullTextTollbar()
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny)

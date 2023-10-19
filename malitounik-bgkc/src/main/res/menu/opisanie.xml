@@ -29,6 +29,11 @@
         android:title="@string/download_opisanie_del"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_piarliny_all"
+        android:orderInCategory="100"
+        android:title="@string/piarliny_all"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_dzen_noch"
         android:checkable="true"
         android:orderInCategory="100"

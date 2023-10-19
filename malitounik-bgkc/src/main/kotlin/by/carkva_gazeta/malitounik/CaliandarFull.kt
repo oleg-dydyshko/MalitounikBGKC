@@ -20,6 +20,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
+import android.text.style.AbsoluteSizeSpan
 import android.text.style.AlignmentSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
@@ -128,10 +129,20 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                 binding.textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
                 binding.textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             }
-            binding.textDenNedeli.text = nedelName[MenuCaliandar.getPositionCaliandar(position)[0].toInt()]
-            binding.textChislo.text = MenuCaliandar.getPositionCaliandar(position)[1]
-            if (MenuCaliandar.getPositionCaliandar(position)[3].toInt() != c[Calendar.YEAR]) binding.textMesiac.text = getString(R.string.mesiach, monthName[MenuCaliandar.getPositionCaliandar(position)[2].toInt()], MenuCaliandar.getPositionCaliandar(position)[3])
-            else binding.textMesiac.text = monthName[MenuCaliandar.getPositionCaliandar(position)[2].toInt()]
+            val dzn = nedelName[MenuCaliandar.getPositionCaliandar(position)[0].toInt()]
+            val dznL = dzn.length
+            val chislo = MenuCaliandar.getPositionCaliandar(position)[1]
+            val chisloL = chislo.length
+            val mesiac = if (MenuCaliandar.getPositionCaliandar(position)[3].toInt() != c[Calendar.YEAR]) getString(R.string.mesiach, monthName[MenuCaliandar.getPositionCaliandar(position)[2].toInt()], MenuCaliandar.getPositionCaliandar(position)[3])
+            else monthName[MenuCaliandar.getPositionCaliandar(position)[2].toInt()]
+            val ssb = SpannableStringBuilder()
+            ssb.append(dzn)
+            ssb.append("\n")
+            ssb.append(chislo)
+            ssb.append("\n")
+            ssb.append(mesiac)
+            ssb.setSpan(AbsoluteSizeSpan(80, true), dznL + 1, dznL + chisloL + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            binding.textChisloCalendara.text = ssb
             if (k.getBoolean("adminDayInYear", false)) {
                 binding.textDayInYear.visibility = View.VISIBLE
                 binding.textDayInYear.text = getString(R.string.admin_show_day_in_year, MenuCaliandar.getPositionCaliandar(position)[24], MenuCaliandar.getPositionCaliandar(position)[22])
@@ -209,13 +220,9 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
             }
             when (MenuCaliandar.getPositionCaliandar(position)[7].toInt()) {
                 1 -> {
-                    binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                    binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                    binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                    binding.textChisloCalendara.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                     binding.textDayInYear.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                    binding.textDenNedeli.setBackgroundResource(R.drawable.selector_bez_posta)
-                    binding.textChislo.setBackgroundResource(R.drawable.selector_bez_posta)
-                    binding.textMesiac.setBackgroundResource(R.drawable.selector_bez_posta)
+                    binding.textChisloCalendara.setBackgroundResource(R.drawable.selector_bez_posta)
                     binding.textDayInYear.setBackgroundResource(R.drawable.selector_bez_posta)
                     if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_bez_posta_black)
                     else binding.kniga.setImageResource(R.drawable.book_bez_posta)
@@ -238,12 +245,8 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     binding.textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_post)
                     binding.textChytanneSviatyia.setBackgroundResource(R.drawable.selector_post)
                     binding.textBlaslavenne.setBackgroundResource(R.drawable.selector_post)
-                    binding.textDenNedeli.setBackgroundResource(R.drawable.selector_post)
-                    binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                    binding.textChislo.setBackgroundResource(R.drawable.selector_post)
-                    binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                    binding.textMesiac.setBackgroundResource(R.drawable.selector_post)
-                    binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                    binding.textChisloCalendara.setBackgroundResource(R.drawable.selector_post)
+                    binding.textChisloCalendara.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                     binding.textDayInYear.setBackgroundResource(R.drawable.selector_post)
                     binding.textDayInYear.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                     if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_post_black)
@@ -260,12 +263,8 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                 }
 
                 3 -> {
-                    binding.textDenNedeli.setBackgroundResource(R.drawable.selector_strogi_post)
-                    binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    binding.textChislo.setBackgroundResource(R.drawable.selector_strogi_post)
-                    binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    binding.textMesiac.setBackgroundResource(R.drawable.selector_strogi_post)
-                    binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                    binding.textChisloCalendara.setBackgroundResource(R.drawable.selector_strogi_post)
+                    binding.textChisloCalendara.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     binding.textDayInYear.setBackgroundResource(R.drawable.selector_strogi_post)
                     binding.textDayInYear.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_strogi_post_black)
@@ -290,12 +289,8 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                 }
 
                 else -> {
-                    binding.textDenNedeli.setBackgroundResource(R.color.colorDivider)
-                    binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                    binding.textChislo.setBackgroundResource(R.color.colorDivider)
-                    binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                    binding.textMesiac.setBackgroundResource(R.color.colorDivider)
-                    binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                    binding.textChisloCalendara.setBackgroundResource(R.color.colorDivider)
+                    binding.textChisloCalendara.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                     binding.textDayInYear.setBackgroundResource(R.color.colorDivider)
                     binding.textDayInYear.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                     if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_divider_black)
@@ -303,15 +298,11 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                 }
             }
             if (MenuCaliandar.getPositionCaliandar(position)[5].contains("1") || MenuCaliandar.getPositionCaliandar(position)[5].contains("2") || MenuCaliandar.getPositionCaliandar(position)[5].contains("3")) {
-                binding.textDenNedeli.setBackgroundResource(rColorColorprimary)
-                binding.textChislo.setBackgroundResource(rColorColorprimary)
-                binding.textMesiac.setBackgroundResource(rColorColorprimary)
+                binding.textChisloCalendara.setBackgroundResource(rColorColorprimary)
                 binding.textDayInYear.setBackgroundResource(rColorColorprimary)
                 if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_red_black)
                 else binding.kniga.setImageResource(R.drawable.book_red)
-                binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                binding.textChisloCalendara.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 binding.textDayInYear.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 if (MenuCaliandar.getPositionCaliandar(position)[7].toInt() != 3) {
                     binding.chytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))

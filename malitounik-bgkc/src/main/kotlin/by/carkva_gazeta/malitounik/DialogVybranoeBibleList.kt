@@ -196,7 +196,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
         binding.subtitleToolbar.setOnClickListener {
             fullTextTollbar()
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.titleToolbar.text = resources.getText(R.string.str_short_label1)
         when (biblia) {
             "1" -> binding.subtitleToolbar.text = getString(R.string.title_biblia)

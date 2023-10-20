@@ -786,6 +786,5 @@
     <string name="update_no_biblijateka">Абнаўленьняў няма</string>
     <string name="day">Дзённы рэжым</string>
     <string name="full_screen_opis">Захаваць выбар?\nМожна пазней зьмяніць у наладах.</string>
-    <string name="piarliny_all">Усе пярліны</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

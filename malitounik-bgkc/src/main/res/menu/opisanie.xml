@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/action_piarliny"
-        android:icon="@drawable/book_piarliny"
-        android:orderInCategory="100"
-        android:title="@string/piarliny"
-        app:showAsAction="always" />
+
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/share"
@@ -29,9 +24,10 @@
         android:title="@string/download_opisanie_del"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_piarliny_all"
+        android:id="@+id/action_piarliny"
+        android:icon="@drawable/book_piarliny"
         android:orderInCategory="100"
-        android:title="@string/piarliny_all"
+        android:title="@string/piarliny"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_dzen_noch"

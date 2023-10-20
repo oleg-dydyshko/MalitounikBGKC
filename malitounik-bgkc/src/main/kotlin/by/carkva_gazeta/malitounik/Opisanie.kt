@@ -511,7 +511,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        menu.findItem(R.id.action_piarliny).isVisible = checkParliny()
+        if (checkParliny()) menu.findItem(R.id.action_piarliny).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        else menu.findItem(R.id.action_piarliny).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         menu.findItem(R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         if (chin.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
@@ -529,10 +530,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             onBack()
             return true
         }
-        if (id == R.id.action_piarliny_all) {
-            startActivity(Intent(this, PiarlinyAll::class.java))
-            return true
-        }
         if (id == R.id.action_download_all) {
             startLoadIconsJob(!MainActivity.isNetworkAvailable(true), isFull = true)
             return true
@@ -544,8 +541,10 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
         if (id == R.id.action_piarliny) {
             val i = Intent(this, PiarlinyAll::class.java)
-            i.putExtra("mun", mun)
-            i.putExtra("day", day)
+            if (checkParliny()) {
+                i.putExtra("mun", mun)
+                i.putExtra("day", day)
+            }
             startActivity(i)
             return true
         }

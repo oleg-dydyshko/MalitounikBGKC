@@ -543,7 +543,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             return true
         }
         if (id == R.id.action_piarliny) {
-            val i = Intent(this, Piarliny::class.java)
+            val i = Intent(this, PiarlinyAll::class.java)
             i.putExtra("mun", mun)
             i.putExtra("day", day)
             startActivity(i)

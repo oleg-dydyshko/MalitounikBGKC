@@ -219,7 +219,27 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
             data.timeInMillis = piarliny[position].time * 1000L
             tab.text = data[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[data[Calendar.MONTH]]
         }.attach()
-        binding.pager.currentItem = k.getInt("menuPiarlinyPage", 0)
+        var find = findPiarliny()
+        if (find == -1) find = k.getInt("menuPiarlinyPage", 0)
+        binding.pager.currentItem = find
+    }
+
+    private fun findPiarliny(): Int {
+        var result = -1
+        val mun = intent.extras?.getInt("mun")
+        val day = intent.extras?.getInt("day")
+        if (mun != null && day != null) {
+            val cal = GregorianCalendar()
+            piarliny.forEachIndexed { i, piarliny ->
+                cal.timeInMillis = piarliny.time * 1000
+                if (day == cal.get(Calendar.DATE) && mun - 1 == cal.get(Calendar.MONTH)) {
+                    result = i
+                    intent?.removeExtra("mun")
+                    intent?.removeExtra("day")
+                }
+            }
+        }
+        return result
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

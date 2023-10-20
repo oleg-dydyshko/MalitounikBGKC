@@ -140,7 +140,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         binding.actionP.setOnClickListener(this)
         binding.imageViewLeft.setOnClickListener(this)
         binding.imageViewRight.setOnClickListener(this)
-        cal.set(Calendar.YEAR, VYSOCOSNYI_GOD)
         setDate(dayOfYear)
         setTollbarTheme()
     }
@@ -148,7 +147,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
     private fun setDate(dayOfYear: Int, count: Int = 0) {
         if (MainActivity.isNetworkAvailable()) {
             binding.progressBar2.visibility = View.VISIBLE
-            cal.set(Calendar.YEAR, 2020)
+            cal.set(Calendar.YEAR, VYSOCOSNYI_GOD)
             cal.set(Calendar.DAY_OF_YEAR, dayOfYear)
             val munName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
             binding.date.text = getString(by.carkva_gazeta.malitounik.R.string.admin_date, cal[Calendar.DAY_OF_MONTH], munName[cal[Calendar.MONTH]])

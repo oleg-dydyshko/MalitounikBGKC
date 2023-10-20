@@ -305,7 +305,7 @@ class DialogCalindarGrid : DialogFragment() {
                 }
                 if (itemList[bindingAdapterPosition].toInt() == 8) {
                     if (slugba.checkParliny(data, mun)) {
-                        val i = Intent(activity, Piarliny::class.java)
+                        val i = Intent(activity, PiarlinyAll::class.java)
                         i.putExtra("mun", munreal)
                         i.putExtra("day", datareal)
                         startActivity(i)

@@ -41,7 +41,7 @@ import java.io.File
 import java.util.Calendar
 import java.util.GregorianCalendar
 
-class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener {
+class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDeliteListener {
 
     private lateinit var binding: AdminPiarlinyBinding
     private var urlJob: Job? = null
@@ -91,7 +91,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
         }
     }
 
-    override fun onDialogEditClick(position: Int) {
+    private fun onDialogEditClick(position: Int) {
         edit = position
         binding.addPiarliny.setText(piarliny[edit].data)
         binding.addPiarliny.setSelection(piarliny[edit].data.length)
@@ -103,11 +103,6 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
         binding.addPiarliny.visibility = View.VISIBLE
         binding.linearLayout2.visibility = View.VISIBLE
         invalidateOptionsMenu()
-    }
-
-    override fun onDialogDeliteClick(position: Int, name: String) {
-        val dialogDelite = DialogDelite.getInstance(position, name, false)
-        dialogDelite.show(supportFragmentManager, "DialogDelite")
     }
 
     override fun fileDelite(position: Int, title: String, isSite: Boolean) {
@@ -183,18 +178,12 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogPiarlinyContextMenu
                 text = text.substring(0, 30)
                 text = "$text..."
             }
-            val dialog = DialogPiarlinyContextMenu.getInstance(position, text)
-            dialog.show(supportFragmentManager, "DialogPiarlinyContextMenu")
+            val dialogDelite = DialogDelite.getInstance(position, text, false)
+            dialogDelite.show(supportFragmentManager, "DialogDelite")
             return@setOnItemLongClickListener true
         }
         binding.listView.setOnItemClickListener { _, _, position, _ ->
-            var text = piarliny[position].data
-            if (text.length > 30) {
-                text = text.substring(0, 30)
-                text = "$text..."
-            }
-            val dialog = DialogPiarlinyContextMenu.getInstance(position, text)
-            dialog.show(supportFragmentManager, "DialogPiarlinyContextMenu")
+            onDialogEditClick(position)
         }
         setTollbarTheme()
     }

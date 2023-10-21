@@ -46,7 +46,11 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
     private var resetTollbarJob: Job? = null
     private val piarlinyLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
         piarlinyJob = CoroutineScope(Dispatchers.Main).launch {
-            getPiarliny()
+            val localFile = File("$filesDir/cache/cache.txt")
+            Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
+                MainActivity.toastView(this@PiarlinyAll, getString(R.string.error))
+            }.await()
+            if (localFile.readText().contains("piarliny.json")) getPiarliny()
         }
     }
 

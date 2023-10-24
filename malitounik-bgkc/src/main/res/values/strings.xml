@@ -222,8 +222,8 @@
     <string name="widget_day_d_n">Начны рэжым</string>
     <string name="auto_widget_day_d_n">Аўтаматычны выбар</string>
     <string name="type_signal_notif">СІГНАЛ ДЛЯ АПАВЯШЧЭНЬНЯ ПРА ПАДЗЕЮ:</string>
-    <string name="sviaty_pfes">Прафесійныя сьвяты ў Беларусі</string>
-    <string name="sviaty_dziar">Дзяржаўныя сьвяты і памятныя даты ў Беларусі</string>
+    <string name="sviaty_pfes">Прафесійныя сьвяты і памятныя даты ў Беларусі</string>
+    <string name="sviaty_dziar">Дзяржаўныя сьвяты ў Беларусі</string>
     <string name="sviaty_ulian">Сьвяты паводле юльянскага календара</string>
     <string name="uriAlarm">Гук будзільніка: %1$s</string>
     <string name="uriNotification">Гук апавяшчэньня: %1$s</string>

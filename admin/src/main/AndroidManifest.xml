@@ -128,14 +128,5 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.admin.AdminMain" />
         </activity>
-        <activity
-            android:name="by.carkva_gazeta.admin.Artykly"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
-            android:label="@string/artykuly"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.admin.AdminMain" />
-        </activity>
     </application>
 </manifest>

@@ -356,31 +356,6 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".BibliatekaArtykulyList"
-            android:label="@string/artykuly"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateVisible|adjustResize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name=".BibliatekaArtykuly"
-            android:label="@string/artykuly"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.BibliatekaArtykulyList" />
-        </activity>
-        <activity
-            android:name=".BibliatekaPoll"
-            android:label="@string/artykuly"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.BibliatekaArtykulyList" />
-        </activity>
-        <activity
             android:name=".WidgetRadyjoMaryiaProgram"
             android:excludeFromRecents="true"
             android:exported="false"

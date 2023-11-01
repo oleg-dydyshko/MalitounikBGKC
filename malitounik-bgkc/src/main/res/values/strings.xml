@@ -714,43 +714,10 @@
     <string name="arx_num_gaz">Архіў нумароў газеты</string>
     <string name="dialog_help_share">Калі тэкст у сацыяльных сетках не з\'явіцца, яго трэба ўставіць уручную.</string>
     <string name="copy_text">Тэкст скапіяваны</string>
-    <string name="arx_navin">Архіў навін</string>
-    <string name="svitlo_usxodu">Сьвятло Ўсходу</string>
-    <string name="carkva_gramadstva">Царква і грамадзтва</string>
-    <string name="arx_abvestak">Архіў абвестак</string>
-    <string name="arx_videa">Відэа</string>
-    <string name="arx_adkaz">Катэдральны пляц</string>
-    <string name="artykuly">Артыкулы</string>
     <string name="admin_resourse_error">Шмат рэсурсаў у %1$d дзень!</string>
-    <string-array name="artykuly">
-        <item>Сьвятло Ўсходу</item>
-        <item>Гісторыя Царквы</item>
-        <item>Царква і грамадзтва</item>
-        <item>Відэа</item>
-        <item>Катэдральны пляц</item>
-        <item>Архіў навін за 2022 год</item>
-        <item>Архіў навін за 2021 год</item>
-        <item>Архіў навін за 2020 год</item>
-        <item>Архіў навін за 2019 год</item>
-        <item>Архіў навін за 2018 год</item>
-        <item>Архіў навін за 2017 год</item>
-        <item>Архіў навін за 2016 год</item>
-        <item>Архіў навін за 2015 год</item>
-        <item>Архіў навін за 2014 год</item>
-        <item>Архіў навін за 2013 год</item>
-        <item>Архіў навін за 2012 год</item>
-        <item>Архіў навін за 2011 год</item>
-        <item>Архіў навін за 2010 год</item>
-        <item>Архіў навін за 2009 год</item>
-        <item>Архіў навін за 2008 год</item>
-        <item>Архіў абвестак</item>
-        <item>Архіў апытанак</item>
-    </string-array>
-    <string name="artykuly_opisanie">Для пошуку па ўсіх матэрыялах трэба спампаваць %1$s.\nІнакш пошук будзе весьціся толькі па раней агледжаных рубрыках.</string>
     <string name="padie_maryia">РАДЫЁ МАРЫЯ</string>
     <string name="padie_maryia_s">Радыё Марыя</string>
     <string name="program_radio_maryia">ПРАГРАМА ПЕРАДАЧ РАДЫЁ МАРЫЯ</string>
-    <string name="artykuly_apytanki_count">Усяго: %1$d</string>
     <string name="widget_title">Каляндар на дзень</string>
     <string name="widget_mun_title">Каляндар на месяц</string>
     <string name="cytaty_staronka">Старонка %1$d</string>

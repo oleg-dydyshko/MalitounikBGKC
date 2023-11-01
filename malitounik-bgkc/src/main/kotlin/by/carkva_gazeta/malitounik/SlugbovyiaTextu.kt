@@ -338,6 +338,10 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(297, "Сьвятога апостала Якуба, сваяка Гасподняга", "mm_23_10_apostala_jakuba_svajaka_haspodniaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(300, "Сьвятога вялікамучаніка Зьмітра і ўспамін землятрусу", "mm_26_10_vialikamuczanika_zmitra_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(300, "Сьвятога вялікамучаніка Зьмітра і ўспамін землятрусу", "mm_26_10_vialikamuczanika_zmitra_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(316, "Пачэснага айца нашага Тодара Студыта", "mm_11_11_todara_studyta_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(319, "Сьвятога апостала Піліпа", "mm_14_11_apostala_pilipa_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(319, "Сьвятога апостала Піліпа", "mm_14_11_apostala_pilipa_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(321, "Сьвятога апостала і евангеліста Мацьвея", "mm_16_11_apostala_macvieja_liturhija", LITURHIJA))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {

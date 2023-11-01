@@ -450,9 +450,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            binding.label145.visibility = View.GONE
-        }
         if (dzenNoch) {
             binding.label91.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label92.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -470,7 +467,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.label143.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label144.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label145.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            binding.label146.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label148.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             binding.label15b.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             bindingappbar.toolbar.popupTheme = R.style.AppCompatDark
@@ -527,7 +523,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.label143.setOnClickListener(this)
         binding.label144.setOnClickListener(this)
         binding.label145.setOnClickListener(this)
-        binding.label146.setOnClickListener(this)
         binding.label148.setOnClickListener(this)
         binding.image5.setOnClickListener(this)
         binding.image6.setOnClickListener(this)
@@ -782,11 +777,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             R.id.label145 -> {
                 if (!binding.label140.isShown) scroll = true
                 selectFragment(binding.label140, true)
-            }
-
-            R.id.label146 -> {
-                if (!binding.label146.isShown) scroll = true
-                selectFragment(binding.label146, true)
             }
 
             R.id.label148 -> {
@@ -1140,7 +1130,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     private fun selectFragment(view: View?, start: Boolean = false, shortcuts: Boolean = false, fileName: String = "", filePath: String = "") {
         val id = view?.id ?: R.id.label1
-        val idOld = if (id == R.id.image5 || id == R.id.image6 || id == R.id.image7) idSelect
+        val idOld = if (id == R.id.label14a || id == R.id.label9a || id == R.id.label10a) idSelect
         else id
         if (!(id == R.id.label9a || id == R.id.label10a || id == R.id.label14a || id == R.id.image5 || id == R.id.image6 || id == R.id.image7)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -1174,7 +1164,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.label143.setBackgroundResource(R.drawable.selector_dark)
                 binding.label144.setBackgroundResource(R.drawable.selector_dark)
                 binding.label145.setBackgroundResource(R.drawable.selector_dark)
-                binding.label146.setBackgroundResource(R.drawable.selector_dark)
                 binding.label148.setBackgroundResource(R.drawable.selector_dark)
                 binding.citata.setBackgroundResource(R.drawable.selector_dark)
             } else {
@@ -1204,7 +1193,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.label143.setBackgroundResource(R.drawable.selector_default)
                 binding.label144.setBackgroundResource(R.drawable.selector_default)
                 binding.label145.setBackgroundResource(R.drawable.selector_default)
-                binding.label146.setBackgroundResource(R.drawable.selector_default)
                 binding.label148.setBackgroundResource(R.drawable.selector_default)
                 binding.citata.setBackgroundResource(R.drawable.selector_default)
             }
@@ -1219,7 +1207,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             if (dzenNoch) binding.image3.setImageResource(R.drawable.arrow_up_float_black)
             else binding.image3.setImageResource(R.drawable.arrow_up_float)
         }
-        if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145 || id == R.id.label146 || id == R.id.label148) {
+        if (id == R.id.label140 || id == R.id.label141 || id == R.id.label142 || id == R.id.label143 || id == R.id.label144 || id == R.id.label145 || id == R.id.label148) {
             binding.title14.visibility = View.VISIBLE
             if (dzenNoch) binding.image4.setImageResource(R.drawable.arrow_up_float_black)
             else binding.image4.setImageResource(R.drawable.arrow_up_float)
@@ -1408,19 +1396,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (dzenNoch) binding.label12.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label12.setBackgroundResource(R.drawable.selector_gray)
             }
-
-            R.id.label146 -> {
-                tolbarTitle = getString(R.string.bibliateka_carkvy)
-                bindingappbar.subtitleToolbar.text = getString(R.string.artykuly)
-                bindingappbar.subtitleToolbar.visibility = View.VISIBLE
-                if (dzenNoch) binding.label146.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else binding.label146.setBackgroundResource(R.drawable.selector_gray)
-            }
         }
 
         val ftrans = supportFragmentManager.beginTransaction()
         ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
-        when (id) {
+        when (idOld) {
             R.id.label1 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
                 if (fragment == null) {
@@ -1725,16 +1705,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 startBiblioteka(PDF, start, id)
             }
 
-            R.id.label146 -> {
-                val fragment = supportFragmentManager.findFragmentByTag("menuArtykuly")
-                if (fragment == null) {
-                    val menuArtykuly = MenuBiblijatekaArtykuly()
-                    ftrans.replace(R.id.conteiner, menuArtykuly, "menuArtykuly")
-                    prefEditors.putInt("id", id)
-                    idSelect = id
-                }
-            }
-
             R.id.image5 -> {
                 if (isNetworkAvailable()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -2018,7 +1988,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val ADMINSVIATYIA = "by.carkva_gazeta.admin.Sviatyia"
         const val ADMINSVIATY = "by.carkva_gazeta.admin.Sviaty"
         const val ADMINPIARLINY = "by.carkva_gazeta.admin.Piarliny"
-        const val ADMINARTYKULY = "by.carkva_gazeta.admin.Artykly"
         const val PASOCHNICALIST = "by.carkva_gazeta.admin.PasochnicaList"
         const val BIBLIJATEKAPDF = "by.carkva_gazeta.biblijateka.BiblijatekaPdf"
         const val CHYTANNE = "by.carkva_gazeta.resources.Chytanne"
@@ -2325,6 +2294,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     return when {
                         actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
                         actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                        actNw.hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> true
+                        actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
                         else -> false
                     }
                 }
@@ -2336,6 +2307,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         return when (activeNetwork.type) {
                             ConnectivityManager.TYPE_WIFI -> true
                             ConnectivityManager.TYPE_MOBILE -> true
+                            ConnectivityManager.TYPE_VPN -> true
+                            ConnectivityManager.TYPE_ETHERNET -> true
                             else -> false
                         }
                     }

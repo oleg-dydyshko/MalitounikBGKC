@@ -57,6 +57,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private var n = 0
     private var spid = 60
     private var mActionDown = false
+    private var mAutoScroll = true
     private lateinit var binding: AkafistBibliaVybranoeBinding
     private lateinit var bindingprogress: ProgressBinding
     private var autoScrollJob: Job? = null
@@ -101,6 +102,13 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             if (k.getBoolean("autoscrollAutostart", false)) {
                 autoStartScroll()
+            }
+        }
+        binding.ListView.post {
+            if (binding.ListView.getChildAt(binding.ListView.childCount - 1).bottom <= binding.ListView.height) {
+                stopAutoStartScroll()
+                mAutoScroll = false
+                invalidateOptionsMenu()
             }
         }
         title = intent.extras?.getString("title", "") ?: ""
@@ -359,14 +367,16 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                         startProcent(3000)
                     }
                     if (y > heightConstraintLayout - otstup && x < widthConstraintLayout - otstup3) {
-                        spid = k.getInt("autoscrollSpid", 60)
-                        proc = 100 - (spid - 15) * 100 / 215
-                        bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                        bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
-                        bindingprogress.progress.visibility = View.VISIBLE
-                        startProcent()
-                        startAutoScroll()
-                        invalidateOptionsMenu()
+                        if (mAutoScroll) {
+                            spid = k.getInt("autoscrollSpid", 60)
+                            proc = 100 - (spid - 15) * 100 / 215
+                            bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                            bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
+                            bindingprogress.progress.visibility = View.VISIBLE
+                            startProcent()
+                            startAutoScroll()
+                            invalidateOptionsMenu()
+                        }
                     }
                 }
             }
@@ -378,7 +388,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         bibliaVybranoeList.clear()
         var scrollToPosition = 0
         var count = 0
-        DialogVybranoeBibleList.arrayListVybranoe.forEach { vybranoeBibliaData ->
+        DialogVybranoeBibleList.arrayListVybranoe.forEachIndexed { index, vybranoeBibliaData ->
             var inputStream = resources.openRawResource(R.raw.biblias1)
             var file: File? = null
             var intent: Intent? = null
@@ -582,6 +592,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             }
             titleBibliaData.setSpan(StyleSpan(Typeface.BOLD), 0, titleBibliaData.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, titleBibliaData))
+            //bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, SpannableString("")))
             if (title == vybranoeBibliaData.title) scrollToPosition = count
             count++
             if (file?.exists() == true) {
@@ -596,7 +607,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 var position = 0
                 for (i in bibleline.indices) {
                     val ssb = SpannableString(MainActivity.fromHtml(bibleline[i]))
-                    if (bibleline[i] != "") {
+                    if (!(bibleline[i] == "" && bibleline.size - 1 == position && DialogVybranoeBibleList.arrayListVybranoe.size - 1 == index)) {
                         val pos = BibleGlobalList.checkPosition(vybranoeBibliaData.glava - 1, position)
                         if (pos != -1) {
                             if (BibleGlobalList.vydelenie[pos][2] == 1) {
@@ -607,14 +618,16 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                             if (BibleGlobalList.vydelenie[pos][4] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
                         position++
+                        bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, ssb))
                     }
-                    bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, ssb))
                     count++
                 }
             } else {
                 val bibleline = split2[vybranoeBibliaData.glava].split("<br><br>")
                 for (position in bibleline.indices) {
-                    bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, MainActivity.fromHtml(bibleline[position])))
+                    if (!(bibleline[position] == "" && bibleline.size - 1 == position && DialogVybranoeBibleList.arrayListVybranoe.size - 1 == index)) {
+                        bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, MainActivity.fromHtml(bibleline[position])))
+                    }
                     count++
                 }
             }
@@ -765,12 +778,17 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        autoscroll = k.getBoolean("autoscroll", false)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
-        when {
-            autoscroll -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
-            diffScroll == 0 -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_up)
-            else -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
+        if (mAutoScroll) {
+            autoscroll = k.getBoolean("autoscroll", false)
+            when {
+                autoscroll -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
+                diffScroll == 0 -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_up)
+                else -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
+            }
+        } else {
+            itemAuto.isVisible = false
+            stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
         if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = false

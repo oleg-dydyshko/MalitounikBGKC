@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.ArrayMap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -110,18 +109,15 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                 startActivity(Intent(activity, NadsanContent::class.java))
             }
             if (id == R.id.prodolzych) {
-                val bibleTime = k.getString("psalter_time_psalter_nadsan", "") ?: ""
-                if (bibleTime == "") {
+                val bibleTime = k.getInt("psalter_time_psalter_nadsan_glava", -1)
+                if (bibleTime == -1) {
                     val dialogBibleTimeError = DialogBibleTimeError()
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
-                    val gson = Gson()
-                    val type = TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(Integer::class.java).type).type
-                    val set = gson.fromJson<ArrayMap<String, Int>>(bibleTime, type)
                     if (activity.checkmoduleResources()) {
                         val intent = Intent(activity, NadsanContent::class.java)
-                        intent.putExtra("glava", set["glava"])
-                        intent.putExtra("stix", set["stix"])
+                        intent.putExtra("glava", k.getInt("psalter_time_psalter_nadsan_glava", 0))
+                        intent.putExtra("stix", k.getInt("psalter_time_psalter_nadsan_stix", 0))
                         intent.putExtra("prodolzyt", true)
                         startActivity(intent)
                     } else {

@@ -9,7 +9,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
-import androidx.collection.ArrayMap
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -47,12 +46,8 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
     override fun onPause() {
         super.onPause()
         val prefEditors = k.edit()
-        val set = ArrayMap<String, Int>()
-        set["glava"] = binding.pager.currentItem
-        set["stix"] = fierstPosition
-        val gson = Gson()
-        val type = TypeToken.getParameterized(ArrayMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(Integer::class.java).type).type
-        prefEditors.putString("psalter_time_psalter_nadsan", gson.toJson(set, type))
+        prefEditors.putInt("psalter_time_psalter_nadsan_glava", binding.pager.currentItem)
+        prefEditors.putInt("psalter_time_psalter_nadsan_stix", fierstPosition)
         prefEditors.apply()
         resetTollbarJob?.cancel()
     }

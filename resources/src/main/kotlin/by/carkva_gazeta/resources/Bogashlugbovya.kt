@@ -569,6 +569,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_14_09_uzvyszennie_kryza_viaczernia"] = R.raw.mm_14_09_uzvyszennie_kryza_viaczernia
             resursMap["mm_21_11_uvachod_u_sviatyniu_baharodzicy_jutran"] = R.raw.mm_21_11_uvachod_u_sviatyniu_baharodzicy_jutran
             resursMap["mm_22_11_pasviaccie_uvachodu_baharodzicy_apostala_chalimona_viaczernia"] = R.raw.mm_22_11_pasviaccie_uvachodu_baharodzicy_apostala_chalimona_viaczernia
+            resursMap["mm_21_11_uvachod_u_sviatyniu_baharodzicy_viaczernia"] = R.raw.mm_21_11_uvachod_u_sviatyniu_baharodzicy_viaczernia
+            resursMap["mm_23_11_pasviaccie_uvachodu_baharodzicy_amfilocha_ryhora"] = R.raw.mm_23_11_pasviaccie_uvachodu_baharodzicy_amfilocha_ryhora
+            resursMap["mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_liturhija"] = R.raw.mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_liturhija
+            resursMap["mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_viaczernia"] = R.raw.mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {

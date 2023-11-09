@@ -273,6 +273,7 @@ class MineiaMesiachnaia : BaseActivity() {
             }
         }
         binding.elvMain.expandGroup(month ?: 0)
+        binding.elvMain.setSelectedGroup(month ?: 0)
     }
 
     override fun onBack() {

@@ -461,14 +461,20 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                 else -> {
                     if ((it as BaseActivity).checkmoduleResources()) {
                         val intent = Intent()
-                        intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                        var title = data[position].title
-                        val t1 = title.lastIndexOf("\n")
-                        if (t1 != -1) {
-                            title = title.substring(0, t1)
+                        if (data[position].resurs.contains("paslia_prychascia")) {
+                            val pos = data[position].resurs.substring("paslia_prychascia".length).toInt()
+                            intent.setClassName(it, MainActivity.PASLIAPRYCHASCIA)
+                            intent.putExtra("paslia_prychascia", pos - 1)
+                        } else {
+                            intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                            var title = data[position].title
+                            val t1 = title.lastIndexOf("\n")
+                            if (t1 != -1) {
+                                title = title.substring(0, t1)
+                            }
+                            intent.putExtra("title", title)
+                            intent.putExtra("resurs", data[position].resurs)
                         }
-                        intent.putExtra("title", title)
-                        intent.putExtra("resurs", data[position].resurs)
                         startActivity(intent)
                     } else {
                         it.installFullMalitounik()

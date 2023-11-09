@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
 import android.content.*
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -7,14 +8,20 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.OpisanieBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItemOpisanieBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -34,6 +41,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private var resetTollbarJob: Job? = null
     private var loadIconsJob: Job? = null
     private val dirList = ArrayList<DirList>()
+    private val arrayList = ArrayList<OpisanieData>()
+    private lateinit var adapter: OpisanieAdapter
 
     private fun viewSviaryiaIIcon() {
         val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
@@ -55,7 +64,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         bitmap?.let {
             var newHeight = it.height.toFloat()
             var newWidth = it.width.toFloat()
-            val widthLinear = binding.linearLayout.width.toFloat()
+            val widthLinear = binding.swipeRefreshLayout.width.toFloat()
             val resoluton = newWidth / newHeight
             newWidth = 500f * resoluton
             newHeight = 500f
@@ -95,33 +104,22 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             }
         }
         title.forEachIndexed { index, text ->
-            val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-            val spanned = MainActivity.fromHtml(text)
-            when (index) {
-                0 -> {
-                    binding.TextView1.textSize = fontBiblia
-                    binding.TextView1.text = spanned.trim()
-                }
-
-                1 -> {
-                    binding.TextView2.textSize = fontBiblia
-                    binding.TextView2.text = spanned.trim()
-                    binding.TextView2.visibility = View.VISIBLE
-                }
-
-                2 -> {
-                    binding.TextView3.textSize = fontBiblia
-                    binding.TextView3.text = spanned.trim()
-                    binding.TextView3.visibility = View.VISIBLE
-                }
-
-                3 -> {
-                    binding.TextView4.textSize = fontBiblia
-                    binding.TextView4.text = spanned.trim()
-                    binding.TextView4.visibility = View.VISIBLE
-                }
+            val t1 = text.indexOf("</strong>")
+            var textTitle = ""
+            var fulText = ""
+            if (t1 != -1) {
+                textTitle = text.substring(0, t1 + 9)
+                fulText = text.substring(t1 + 9)
             }
+            val spannedtitle = MainActivity.fromHtml(textTitle)
+            val spanned = MainActivity.fromHtml(fulText)
+            var check = false
+            this.arrayList.forEach {
+                if (it.index == index) check = true
+            }
+            if (!check) this.arrayList.add(OpisanieData(index, spannedtitle, spanned, ""))
         }
+        adapter.notifyDataSetChanged()
     }
 
     private fun loadOpisanieSviat() {
@@ -132,14 +130,17 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
             val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(builder, type)
             if (arrayList != null) {
-                arrayList.forEach {
-                    if (day == it[0].toInt() && mun == it[1].toInt()) {
-                        var res = it[2]
+                arrayList.forEach { strings ->
+                    if (day == strings[0].toInt() && mun == strings[1].toInt()) {
+                        var res = strings[2]
                         if (dzenNoch) res = res.replace("#d00505", "#f44336")
-                        val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
                         val spanned = MainActivity.fromHtml(res)
-                        binding.TextView1.textSize = fontBiblia
-                        binding.TextView1.text = spanned.trim()
+                        var check = false
+                        this.arrayList.forEach {
+                            if (it.index == 0) check = true
+                        }
+                        if (!check) this.arrayList.add(OpisanieData(0, SpannableString(""), spanned, ""))
+                        adapter.notifyDataSetChanged()
                     }
                 }
             } else {
@@ -171,6 +172,9 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 binding.swipeRefreshLayout.visibility = View.GONE
             }
         }
+        adapter = OpisanieAdapter(this)
+        binding.listview.adapter = adapter
+        binding.listview.divider = null
         binding.swipeRefreshLayout.setOnRefreshListener {
             startLoadIconsJob(!MainActivity.isNetworkAvailable(true))
             binding.swipeRefreshLayout.isRefreshing = false
@@ -384,33 +388,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             if (e > 0) schet = "_${e + 1}"
             val file2 = if (svity) File("$filesDir/icons/v_${day}_${mun}.jpg")
             else File("$filesDir/icons/s_${day}_${mun}$schet.jpg")
-            val imageView = when (e) {
-                1 -> binding.image2
-                2 -> binding.image3
-                3 -> binding.image4
-                else -> binding.image1
-            }
-            if (file2.exists()) {
-                imageView.post {
-                    imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file2.absolutePath)))
-                    imageView.visibility = View.VISIBLE
-                    imageView.setOnClickListener {
-                        if (file2.exists()) {
-                            val bitmap = BitmapFactory.decodeFile(file2.absolutePath)
-                            binding.imageViewFull.setImageBitmap(bitmap)
-                            binding.imageViewFull.visibility = View.VISIBLE
-                            binding.progressBar2.visibility = View.INVISIBLE
-                            binding.swipeRefreshLayout.visibility = View.GONE
-                        }
-                    }
-                }
-            } else {
-                imageView.post {
-                    imageView.setImageBitmap(null)
-                    imageView.visibility = View.GONE
-                    imageView.setOnClickListener(null)
-                }
-            }
+            if (file2.exists()) arrayList[e].image = file2.absolutePath
         }
         binding.progressBar2.visibility = View.INVISIBLE
     }
@@ -446,10 +424,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     override fun onDialogFontSize(fontSize: Float) {
-        binding.TextView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
-        binding.TextView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
-        binding.TextView3.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
-        binding.TextView4.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
+        adapter.notifyDataSetChanged()
     }
 
     private fun setTollbarTheme() {
@@ -590,32 +565,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             dialogFontSize.show(supportFragmentManager, "font")
             return true
         }
-        if (id == R.id.action_share) {
-            val sb = StringBuilder()
-            val text1 = binding.TextView1.text.toString()
-            if (text1 != "") sb.append(text1).append("\n\n")
-            val text2 = binding.TextView2.text.toString()
-            if (text2 != "") sb.append(text2).append("\n\n")
-            val text3 = binding.TextView3.text.toString()
-            if (text3 != "") sb.append(text3).append("\n\n")
-            val text4 = binding.TextView4.text.toString()
-            if (text4 != "") sb.append(text4)
-            val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText(getString(R.string.copy_text), sb.toString())
-            clipboard.setPrimaryClip(clip)
-            MainActivity.toastView(this, getString(R.string.copy_text), Toast.LENGTH_LONG)
-            if (chin.getBoolean("dialogHelpShare", true)) {
-                val dialog = DialogHelpShare.getInstance(sb.toString())
-                dialog.show(supportFragmentManager, "DialogHelpShare")
-            } else {
-                val sendIntent = Intent(Intent.ACTION_SEND)
-                sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString())
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getText(R.string.zmiest))
-                sendIntent.type = "text/plain"
-                startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.zmiest)))
-            }
-            return true
-        }
         return false
     }
 
@@ -630,12 +579,90 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun deliteAllImagesOpisanie() {
         val dir = File("$filesDir/icons/")
         if (dir.exists()) dir.deleteRecursively()
-        binding.image1.setImageBitmap(null)
-        binding.image2.setImageBitmap(null)
-        binding.image3.setImageBitmap(null)
-        binding.image4.setImageBitmap(null)
+        arrayList.forEach {
+            it.image = ""
+        }
+        adapter.notifyDataSetChanged()
         MainActivity.toastView(this, getString(R.string.remove_padzea))
     }
 
+    private inner class OpisanieAdapter(private val context: Activity) : ArrayAdapter<OpisanieData>(context, R.layout.simple_list_item_opisanie, arrayList) {
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (convertView == null) {
+                val binding = SimpleListItemOpisanieBinding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.title, binding.text, binding.image, binding.buttonPopup)
+                rootView.tag = viewHolder
+            } else {
+                rootView = convertView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            val file2 = File(arrayList[position].image)
+            viewHolder.buttonPopup.visibility = View.VISIBLE
+            viewHolder.buttonPopup.let {
+                viewHolder.buttonPopup.setOnClickListener {
+                    val sb = StringBuilder()
+                    sb.append(viewHolder.textTitle.text)
+                    sb.append(viewHolder.text.text)
+                    val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip = ClipData.newPlainText(getString(R.string.copy_text), sb.toString())
+                    clipboard.setPrimaryClip(clip)
+                    MainActivity.toastView(this@Opisanie, getString(R.string.copy_text), Toast.LENGTH_LONG)
+                    if (file2.exists()) {
+                        val sendIntent = Intent(Intent.ACTION_SEND)
+                        sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@Opisanie, "by.carkva_gazeta.malitounik.fileprovider", file2))
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
+                        sendIntent.type = "image/*"
+                        startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
+                    } else {
+                        if (chin.getBoolean("dialogHelpShare", true)) {
+                            val dialog = DialogHelpShare.getInstance(sb.toString())
+                            dialog.show(supportFragmentManager, "DialogHelpShare")
+                        } else {
+                            sentShareText(sb.toString())
+                        }
+                    }
+                }
+            }
+            if (file2.exists()) {
+                viewHolder.imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file2.absolutePath)))
+                viewHolder.imageView.visibility = View.VISIBLE
+                viewHolder.imageView.setOnClickListener {
+                    if (file2.exists()) {
+                        val bitmap = BitmapFactory.decodeFile(file2.absolutePath)
+                        binding.imageViewFull.setImageBitmap(bitmap)
+                        binding.imageViewFull.visibility = View.VISIBLE
+                        binding.progressBar2.visibility = View.INVISIBLE
+                        binding.swipeRefreshLayout.visibility = View.GONE
+                    }
+                }
+            } else {
+                viewHolder.imageView.setImageBitmap(null)
+                viewHolder.imageView.visibility = View.GONE
+                viewHolder.imageView.setOnClickListener(null)
+            }
+            if (dzenNoch) {
+                viewHolder.text.setTextColor(ContextCompat.getColor(this@Opisanie, R.color.colorWhite))
+            }
+            val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+            viewHolder.textTitle.textSize = fontBiblia
+            viewHolder.textTitle.text = arrayList[position].title.trim()
+            val text = arrayList[position].text.trim()
+            if (text.isNotEmpty()) {
+                viewHolder.text.textSize = fontBiblia
+                viewHolder.text.text = text
+            } else {
+                viewHolder.text.visibility = View.GONE
+            }
+            return rootView
+        }
+    }
+
+    private class ViewHolder(var textTitle: TextView, var text: TextView, var imageView: ImageView, var buttonPopup: ImageView)
+
     private data class DirList(val name: String?, val sizeBytes: Long)
+
+    private data class OpisanieData(val index: Int, val title: Spanned, val text: Spanned, var image: String)
 }

@@ -276,12 +276,12 @@
         </activity>
         <activity
             android:name=".PesnyAll"
-            android:label="@string/pesny3"
+            android:label="@string/piarliny"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+                android:value="by.carkva_gazeta.malitounik.Opisanie" />
         </activity>
         <activity
             android:name=".MineiaAgulnaia"

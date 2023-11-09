@@ -17,6 +17,7 @@ class DialogHelpShare : DialogFragment() {
     private var _binding: DialogTextviewCheckboxDisplayBinding? = null
     private val binding get() = _binding!!
     private var mListener: DialogHelpShareListener? = null
+    private var shareText = ""
 
     interface DialogHelpShareListener {
         fun sentShareText(shareText: String)
@@ -30,6 +31,7 @@ class DialogHelpShare : DialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         MainActivity.dialogVisable = false
+        mListener?.sentShareText(shareText)
     }
 
     override fun onAttach(context: Context) {
@@ -60,6 +62,7 @@ class DialogHelpShare : DialogFragment() {
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             binding.checkbox.typeface = MainActivity.createFont(Typeface.NORMAL)
             binding.checkbox.text = getString(R.string.sabytie_check_mun)
+            shareText = arguments?.getString("shareText") ?: ""
             binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
                 val edit = chin.edit()
                 if (isChecked) {
@@ -70,7 +73,7 @@ class DialogHelpShare : DialogFragment() {
                 edit.apply()
             }
             ad.setView(binding.root)
-            ad.setPositiveButton(resources.getString(R.string.close)) { _: DialogInterface, _: Int -> mListener?.sentShareText(arguments?.getString("shareText") ?: "") }
+            ad.setPositiveButton(resources.getString(R.string.close)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = ad.create()
         }
         return alert

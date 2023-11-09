@@ -285,9 +285,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["viachernia_mineia_sviatochnaia5"] = R.raw.viachernia_mineia_sviatochnaia5
             resursMap["viachernia_mineia_sviatochnaia6"] = R.raw.viachernia_mineia_sviatochnaia6
             resursMap["viachernia_mineia_sviatochnaia7"] = R.raw.viachernia_mineia_sviatochnaia7
-            resursMap["mm_08_11_jutran"] = R.raw.mm_08_11_jutran
-            resursMap["mm_08_11_viaczernia"] = R.raw.mm_08_11_viaczernia
-            resursMap["mm_08_11_liturhija"] = R.raw.mm_08_11_liturhija
+            resursMap["mm_08_11_sabor_archaniola_michaila_jutran"] = R.raw.mm_08_11_sabor_archaniola_michaila_jutran
+            resursMap["mm_08_11_sabor_archaniola_michaila_viaczernia"] = R.raw.mm_08_11_sabor_archaniola_michaila_viaczernia
+            resursMap["mm_08_11_sabor_archaniola_michaila_liturhija"] = R.raw.mm_08_11_sabor_archaniola_michaila_liturhija
             resursMap["zychod_sv_ducha_jutran"] = R.raw.zychod_sv_ducha_jutran
             resursMap["zychod_sv_ducha_liturhija"] = R.raw.zychod_sv_ducha_liturhija
             resursMap["paniadzielak_sv_ducha_ndz_viaczaram"] = R.raw.paniadzielak_sv_ducha_ndz_viaczaram

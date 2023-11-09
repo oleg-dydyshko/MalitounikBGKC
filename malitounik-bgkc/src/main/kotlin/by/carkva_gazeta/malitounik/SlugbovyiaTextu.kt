@@ -166,9 +166,9 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(6, "Сьветлая субота", "l_svietlaja_subota", LITURHIJA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(6, "Сьветлая субота", "vielikodnyja_hadziny", VIALHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
 
-        datMinALL.add(SlugbovyiaTextuData(313, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "mm_08_11_jutran", JUTRAN))
-        datMinALL.add(SlugbovyiaTextuData(313, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "mm_08_11_viaczernia", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(313, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "mm_08_11_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(313, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "mm_08_11_sabor_archaniola_michaila_jutran", JUTRAN))
+        datMinALL.add(SlugbovyiaTextuData(313, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "mm_08_11_sabor_archaniola_michaila_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(313, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "mm_08_11_sabor_archaniola_michaila_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(318, "Між сьвятымі айца нашага Яна Залатавуснага", "mm_13_11_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(318, "Між сьвятымі айца нашага Яна Залатавуснага", "mm_13_11_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(1, "Малебен на Новы год", "mm_01_01_malebien_novy_hod", LITURHIJA))

@@ -565,11 +565,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                     val dialog = DialogHelpShare.getInstance(sent)
                     dialog.show(supportFragmentManager, "DialogHelpShare")
                 } else {
-                    val sendIntent = Intent(Intent.ACTION_SEND)
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, sent)
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, title)
-                    sendIntent.type = "text/plain"
-                    startActivity(Intent.createChooser(sendIntent, title))
+                    sentShareText(sent)
                 }
             } else {
                 MainActivity.toastView(this, getString(R.string.error_ch))

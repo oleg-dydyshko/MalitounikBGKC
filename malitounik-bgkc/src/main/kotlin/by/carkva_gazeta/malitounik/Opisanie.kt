@@ -571,9 +571,9 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun sentShareText(shareText: String) {
         val sendIntent = Intent(Intent.ACTION_SEND)
         sendIntent.putExtra(Intent.EXTRA_TEXT, shareText)
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getText(R.string.zmiest))
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getText(R.string.zmiest))
         sendIntent.type = "text/plain"
-        startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.zmiest)))
+        startActivity(Intent.createChooser(sendIntent, getText(R.string.zmiest)))
     }
 
     override fun deliteAllImagesOpisanie() {
@@ -613,9 +613,10 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     if (file2.exists()) {
                         val sendIntent = Intent(Intent.ACTION_SEND)
                         sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@Opisanie, "by.carkva_gazeta.malitounik.fileprovider", file2))
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString())
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.zmiest))
                         sendIntent.type = "image/*"
-                        startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
+                        startActivity(Intent.createChooser(sendIntent, getString(R.string.zmiest)))
                     } else {
                         if (chin.getBoolean("dialogHelpShare", true)) {
                             val dialog = DialogHelpShare.getInstance(sb.toString())

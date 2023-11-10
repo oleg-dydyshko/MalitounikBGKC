@@ -712,7 +712,7 @@
     <string name="admin_img_sviat">Іконкі сьвятых</string>
     <string name="admin_title">Назва кнігі</string>
     <string name="arx_num_gaz">Архіў нумароў газеты</string>
-    <string name="dialog_help_share">Калі тэкст у сацыяльных сетках не з\'явіцца, яго трэба ўставіць уручную.</string>
+    <string name="dialog_help_share">У некаторых сацыяльных сетках, напрыклад Ficebook, тэкст не з\'явіцца, яго трэба ўставіць уручную.</string>
     <string name="copy_text">Тэкст скапіяваны</string>
     <string name="admin_resourse_error">Шмат рэсурсаў у %1$d дзень!</string>
     <string name="padie_maryia">РАДЫЁ МАРЫЯ</string>

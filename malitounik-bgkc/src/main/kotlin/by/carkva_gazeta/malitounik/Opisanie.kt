@@ -134,12 +134,20 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     if (day == strings[0].toInt() && mun == strings[1].toInt()) {
                         var res = strings[2]
                         if (dzenNoch) res = res.replace("#d00505", "#f44336")
-                        val spanned = MainActivity.fromHtml(res)
+                        val t1 = res.indexOf("</strong>")
+                        var textTitle = ""
+                        var fulText = ""
+                        if (t1 != -1) {
+                            textTitle = res.substring(0, t1 + 9)
+                            fulText = res.substring(t1 + 9)
+                        }
+                        val spannedtitle = MainActivity.fromHtml(textTitle)
+                        val spanned = MainActivity.fromHtml(fulText)
                         var check = false
                         this.arrayList.forEach {
                             if (it.index == 0) check = true
                         }
-                        if (!check) this.arrayList.add(OpisanieData(0, SpannableString(""), spanned, ""))
+                        if (!check) this.arrayList.add(OpisanieData(0, spannedtitle, spanned, ""))
                         adapter.notifyDataSetChanged()
                     }
                 }
@@ -176,6 +184,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         binding.listview.adapter = adapter
         binding.listview.divider = null
         binding.swipeRefreshLayout.setOnRefreshListener {
+            arrayList.clear()
             startLoadIconsJob(!MainActivity.isNetworkAvailable(true))
             binding.swipeRefreshLayout.isRefreshing = false
         }

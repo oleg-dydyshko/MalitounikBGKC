@@ -29,8 +29,8 @@
 
     <ImageView
         android:id="@+id/button_popup"
-        android:layout_width="24sp"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:background="@drawable/btn_drawable"
         android:contentDescription="@string/content_open_popup"
         android:src="@drawable/share_opisanie"

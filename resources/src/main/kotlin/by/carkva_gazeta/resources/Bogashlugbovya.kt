@@ -815,10 +815,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding = BogasluzbovyaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
-        resurs = intent?.extras?.getString("resurs") ?: ""
-        title = intent?.extras?.getString("title") ?: ""
+        resurs = intent.extras?.getString("resurs") ?: ""
+        title = intent.extras?.getString("title") ?: ""
         spid = k.getInt("autoscrollSpid", 60)
-        val autoscrollOFF = intent?.extras?.containsKey("autoscrollOFF") ?: false
+        val autoscrollOFF = intent.extras?.containsKey("autoscrollOFF") ?: false
         if (autoscrollOFF) {
             mAutoScroll = false
         }
@@ -1596,6 +1596,18 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     }
                 }
             }
+            val searchString = intent.extras?.getString("search", "") ?: ""
+            if (searchString != "") {
+                stopAutoStartScroll()
+                stopAutoScroll()
+                invalidateOptionsMenu()
+                binding.textSearch.setText(searchString)
+                binding.find.visibility = View.VISIBLE
+                binding.textSearch.requestFocus()
+                EditTextCustom.focusAndShowKeyboard(binding.textSearch)
+                findAllAsanc()
+            }
+
         }
         if (dzenNoch) binding.imageView6.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_up_black)
         binding.imageView6.setOnClickListener { findNext(previous = true) }
@@ -1966,6 +1978,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_find) {
+            stopAutoStartScroll()
             stopAutoScroll()
             invalidateOptionsMenu()
             binding.find.visibility = View.VISIBLE

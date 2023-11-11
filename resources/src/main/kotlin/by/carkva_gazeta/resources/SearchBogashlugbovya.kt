@@ -154,8 +154,8 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             val intent = Intent(this@SearchBogashlugbovya, Bogashlugbovya::class.java)
             val t1 = title.indexOf("-->")
             intent.putExtra("title", title.substring(t1 + 3))
-
             intent.putExtra("resurs", title.substring(4, t1))
+            intent.putExtra("search", autoCompleteTextView?.text.toString())
             startActivity(intent)
         }
         historyAdapter = HistoryAdapter(this, history)
@@ -563,11 +563,8 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         override fun afterTextChanged(s: Editable) {
             var edit = s.toString()
             if (editch) {
-                edit = edit.replace("и", "і")
-                edit = edit.replace("щ", "ў")
-                edit = edit.replace("И", "І")
-                edit = edit.replace("Щ", "Ў")
-                edit = edit.replace("ъ", "'")
+                edit = MainActivity.zamena(edit)
+                editPosition = edit.length
                 if (check != 0) {
                     editText?.removeTextChangedListener(this)
                     editText?.setText(edit)

@@ -350,6 +350,8 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(319, "Сьвятога апостала Піліпа", "mm_14_11_apostala_pilipa_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(319, "Сьвятога апостала Піліпа", "mm_14_11_apostala_pilipa_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(321, "Сьвятога апостала і евангеліста Мацьвея", "mm_16_11_apostala_macvieja_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(317, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "mm_12_11_sviatamuczanika_jazafata_jutran", JUTRAN))
+        datMinALL.add(SlugbovyiaTextuData(317, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "mm_12_11_sviatamuczanika_jazafata_viaczernia", VIACZERNIA))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {

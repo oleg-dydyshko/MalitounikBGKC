@@ -79,6 +79,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private var sviaty = false
     private var daysv = 1
     private var munsv = 0
+    private var vybranoePosition = -1
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private val zmenyiaChastki = ZmenyiaChastki()
@@ -99,6 +100,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         val resursMap = ArrayMap<String, Int>()
 
         init {
+            PesnyAll.resursMap.forEach {
+                resursMap[it.key] = it.value
+            }
             resursMap["lit_jan_zalat"] = R.raw.lit_jan_zalat
             resursMap["lit_jan_zalat_vielikodn"] = R.raw.lit_jan_zalat_vielikodn
             resursMap["nabazenstva_maci_bozaj_niast_dap"] = R.raw.nabazenstva_maci_bozaj_niast_dap
@@ -573,6 +577,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_23_11_pasviaccie_uvachodu_baharodzicy_amfilocha_ryhora"] = R.raw.mm_23_11_pasviaccie_uvachodu_baharodzicy_amfilocha_ryhora
             resursMap["mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_liturhija"] = R.raw.mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_liturhija
             resursMap["mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_viaczernia"] = R.raw.mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_viaczernia
+            resursMap["mm_12_11_sviatamuczanika_jazafata_jutran"] = R.raw.mm_12_11_sviatamuczanika_jazafata_jutran
+            resursMap["mm_12_11_sviatamuczanika_jazafata_viaczernia"] = R.raw.mm_12_11_sviatamuczanika_jazafata_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -585,7 +591,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
-                    if (MenuVybranoe.vybranoe[i].resurs?.intern() == resurs) {
+                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
                         MenuVybranoe.vybranoe.removeAt(i)
                         check = false
                         break
@@ -627,7 +633,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
-                    if (MenuVybranoe.vybranoe[i].resurs?.intern() == resurs) return true
+                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) return true
                 }
             } catch (t: Throwable) {
                 file.delete()
@@ -833,8 +839,14 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
             c.set(Calendar.DAY_OF_YEAR, savedInstanceState.getInt("day_of_year"))
             c.set(Calendar.YEAR, savedInstanceState.getInt("year"))
+            vybranoePosition = savedInstanceState.getInt("vybranoePosition")
+            if (vybranoePosition != -1) {
+                resurs = MenuVybranoe.vybranoe[vybranoePosition].resurs
+                title = MenuVybranoe.vybranoe[vybranoePosition].data
+            }
         } else {
             fullscreenPage = k.getBoolean("fullscreenPage", false)
+            vybranoePosition = intent.extras?.getInt("vybranaePos") ?: 0
         }
         setDatacalendar(savedInstanceState)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
@@ -946,15 +958,56 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding.scrollView2.setOnBottomReachedListener(object : InteractiveScrollView.OnBottomReachedListener {
             override fun onBottomReached(checkDiff: Boolean) {
                 diffScroll = checkDiff
-                autoscroll = false
-                stopAutoScroll()
-                invalidateOptionsMenu()
+                if (diffScroll) {
+                    autoscroll = false
+                    stopAutoScroll()
+                    invalidateOptionsMenu()
+                }
             }
 
             override fun onTouch(action: Boolean) {
                 mActionDown = action
             }
         })
+        if (intent.extras?.getBoolean("isVybranae", false) == true) {
+            binding.textViewNext.visibility = View.VISIBLE
+            var pos = vybranoePosition + 1
+            if (MenuVybranoe.vybranoe.size == pos) pos = 0
+            binding.textViewNext.text = MenuVybranoe.vybranoe[pos].data
+            binding.textViewNext.setOnClickListener {
+                vybranoePosition += 1
+                if (MenuVybranoe.vybranoe.size == vybranoePosition) vybranoePosition = 0
+                resurs = MenuVybranoe.vybranoe[vybranoePosition].resurs
+                title = MenuVybranoe.vybranoe[vybranoePosition].data
+                var pos1 = vybranoePosition + 1
+                if (MenuVybranoe.vybranoe.size == pos1) pos1 = 0
+                binding.textViewNext.text = MenuVybranoe.vybranoe[pos1].data
+                mAutoScroll = true
+                when (resurs) {
+                    "1" -> {
+                        DialogVybranoeBibleList.biblia = "1"
+                        val dialogVybranoeList = DialogVybranoeBibleList()
+                        dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
+                    }
+
+                    "2" -> {
+                        DialogVybranoeBibleList.biblia = "2"
+                        val dialogVybranoeList = DialogVybranoeBibleList()
+                        dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
+                    }
+
+                    "3" -> {
+                        DialogVybranoeBibleList.biblia = "3"
+                        val dialogVybranoeList = DialogVybranoeBibleList()
+                        dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
+                    }
+
+                    else -> {
+                        setDatacalendar(savedInstanceState)
+                    }
+                }
+            }
+        }
         binding.textView.movementMethod = setLinkMovementMethodCheck()
         setTollbarTheme()
     }
@@ -1028,7 +1081,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             dayOfYear = zmenyiaChastki.dayOfYear()
             var zmennyiaCastkiTitle = ""
             val cal = GregorianCalendar()
-            val dayOfYar = if(cal.isLeapYear(cal[Calendar.YEAR])) 0
+            val dayOfYar = if (cal.isLeapYear(cal[Calendar.YEAR])) 0
             else 1
             checkDayOfYear = if (liturgia) slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
             else slugbovyiaTextu.checkViachernia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
@@ -1666,7 +1719,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     val slugbovyiaTextu = SlugbovyiaTextu()
                     val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
                     val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
-                   intent.putExtra("autoscrollOFF", autoscroll)
+                    intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugbovyiaTextu.getTitle(resours))
@@ -2198,6 +2251,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         outState.putString("textLine", firstTextPosition)
         outState.putInt("day_of_year", c[Calendar.DAY_OF_YEAR])
         outState.putInt("year", c[Calendar.YEAR])
+        outState.putInt("vybranoePosition", vybranoePosition)
     }
 
     private data class SpanStr(val color: Int, val start: Int, val size: Int)

@@ -121,10 +121,10 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
 
             override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
         })
-        if (chin.getString("search_string", "") != "") {
-            if (chin.getString("search_array", "") != "") {
+        if (chin.getString("search_bogashugbovya_string", "") != "") {
+            if (chin.getString("search_bogashugbovya_array", "") != "") {
                 val gson = Gson()
-                val json = chin.getString("search_array", "")
+                val json = chin.getString("search_bogashugbovya_array", "")
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
                 val arrayList = ArrayList<String>()
                 val arraySpan = ArrayList<Spannable>()
@@ -155,7 +155,15 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             val t1 = title.indexOf("-->")
             intent.putExtra("title", title.substring(t1 + 3))
             intent.putExtra("resurs", title.substring(4, t1))
-            intent.putExtra("search", autoCompleteTextView?.text.toString())
+            val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
+            var poshuk1 = autoCompleteTextView?.text.toString()
+            for (aM in m) {
+                val r = poshuk1.length - 1
+                if (poshuk1[r] == aM && r >= 3) {
+                    poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), true)
+                }
+            }
+            intent.putExtra("search", poshuk1)
             startActivity(intent)
         }
         historyAdapter = HistoryAdapter(this, history)
@@ -170,7 +178,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             val edit = history[position]
             binding.History.visibility = View.GONE
             binding.ListView.visibility = View.VISIBLE
-            prefEditors.putString("search_string", edit)
+            prefEditors.putString("search_bogashugbovya_string", edit)
             prefEditors.apply()
             autoCompleteTextView?.setText(edit)
             execute(edit)
@@ -251,7 +259,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             autoCompleteTextView?.imeOptions = EditorInfo.IME_ACTION_DONE
             autoCompleteTextView?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
             autoCompleteTextView?.addTextChangedListener(MyTextWatcher(autoCompleteTextView))
-            autoCompleteTextView?.setText(chin.getString("search_string", "")) ?: history[0]
+            autoCompleteTextView?.setText(chin.getString("search_bogashugbovya_string", "")) ?: history[0]
             autoCompleteTextView?.setSelection(autoCompleteTextView?.text?.length ?: 0)
             autoCompleteTextView?.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -279,7 +287,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
     override fun setSettingsBibliaSeash(position: Int) {
         val edit = autoCompleteTextView?.text.toString()
         val bibliaSeash = chin.getInt("biblia_seash", 0)
-        if (chin.getString("search_string", "") != edit || bibliaSeash != position) {
+        if (chin.getString("search_bogashugbovya_string", "") != edit || bibliaSeash != position) {
             prefEditors.putInt("biblia_seash", position)
             prefEditors.apply()
             execute(edit, true)
@@ -309,7 +317,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
         val closeButton = searchView?.findViewById(androidx.appcompat.R.id.search_close_btn) as ImageView
         closeButton.setOnClickListener {
-            prefEditors.putString("search_string", "")
+            prefEditors.putString("search_bogashugbovya_string", "")
             prefEditors.apply()
             searchJob?.cancel()
             searchView?.setQuery("", false)
@@ -399,7 +407,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         super.onSaveInstanceState(outState)
         outState.putBoolean("list_view", binding.ListView.visibility == View.VISIBLE)
         outState.putInt("fierstPosition", fierstPosition)
-        prefEditors.putString("search_string", autoCompleteTextView?.text.toString())
+        prefEditors.putString("search_bogashugbovya_string", autoCompleteTextView?.text.toString())
         prefEditors.apply()
     }
 
@@ -431,7 +439,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         binding.ListView.visibility = View.GONE
         val edit = autoCompleteTextView?.text.toString()
         if (edit != "") {
-            prefEditors.putString("search_string", edit)
+            prefEditors.putString("search_bogashugbovya_string", edit)
             prefEditors.apply()
         }
     }
@@ -449,7 +457,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         adapter.addAll(result)
         adapter.filter.filter(binding.editText2.text.toString())
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
-        if (chin.getString("search_string", "") != "") {
+        if (chin.getString("search_bogashugbovya_string", "") != "") {
             binding.ListView.post { binding.ListView.setSelection(chin.getInt("search_position", 0)) }
         }
         binding.progressBar.visibility = View.GONE
@@ -460,7 +468,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         val gson = Gson()
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
         val json = gson.toJson(arrayList, type)
-        prefEditors.putString("search_array", json)
+        prefEditors.putString("search_bogashugbovya_array", json)
         prefEditors.apply()
         val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView
         val search = searcheTextView.text.toString()
@@ -514,7 +522,6 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             }
             prepinanie = prepinanie.replace("\"", "")
             prepinanie = prepinanie.replace("?", "")
-            prepinanie = prepinanie.replace("ё", "е", registr)
             if (chin.getInt("slovocalkam", 0) == 0) {
                 if (prepinanie.contains(poshuk1, registr)) {
                     seashpost.add(SpannableString(nazva))
@@ -563,8 +570,9 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         override fun afterTextChanged(s: Editable) {
             var edit = s.toString()
             if (editch) {
+                val editarig = edit.length
                 edit = MainActivity.zamena(edit)
-                editPosition = edit.length
+                editPosition += edit.length - editarig
                 if (check != 0) {
                     editText?.removeTextChangedListener(this)
                     editText?.setText(edit)
@@ -577,7 +585,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
                         searchJob?.cancel()
                         binding.progressBar.visibility = View.GONE
                     } else {
-                        if (chin.getString("search_string", "") != edit) execute(edit)
+                        if (chin.getString("search_bogashugbovya_string", "") != edit) execute(edit)
                     }
                 }
             }

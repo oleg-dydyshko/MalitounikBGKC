@@ -87,9 +87,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         binding.InteractiveScroll.setOnBottomReachedListener(object : OnBottomReachedListener {
             override fun onBottomReached(checkDiff: Boolean) {
                 diffScroll = checkDiff
-                autoscroll = false
-                stopAutoScroll()
-                invalidateOptionsMenu()
+                if (diffScroll) {
+                    autoscroll = false
+                    stopAutoScroll()
+                    invalidateOptionsMenu()
+                }
             }
 
             override fun onTouch(action: Boolean) {

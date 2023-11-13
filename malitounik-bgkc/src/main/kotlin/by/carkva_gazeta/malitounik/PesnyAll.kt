@@ -202,7 +202,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
-                    if (MenuVybranoe.vybranoe[i].resurs?.intern() == resurs) {
+                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
                         MenuVybranoe.vybranoe.removeAt(i)
                         check = false
                         break
@@ -244,7 +244,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
-                    if (MenuVybranoe.vybranoe[i].resurs?.intern() == resurs) return true
+                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) return true
                 }
             } catch (t: Throwable) {
                 file.delete()

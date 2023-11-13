@@ -13,7 +13,7 @@ class InteractiveScrollView : ScrollView {
     private var mListener: OnBottomReachedListener? = null
     private var initialPosition = 0
     private var scrollJob: Job? = null
-    private var checkDiff = false
+    private var checkDiff = true
 
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -44,14 +44,8 @@ class InteractiveScrollView : ScrollView {
         super.onScrollChanged(l, t, oldl, oldt)
         val view = getChildAt(childCount - 1)
         val diff = view.bottom - (height + scrollY)
-        if (checkDiff && diff != 0) {
-            checkDiff = false
-            mListener?.onBottomReached(false)
-        }
-        if (diff == 0) {
-            checkDiff = true
-            mListener?.onBottomReached(true)
-        }
+        checkDiff = diff <= 0
+        mListener?.onBottomReached(checkDiff)
         mOnInteractiveScrollChangedCallback?.onScroll(t, oldt)
     }
 
@@ -62,6 +56,7 @@ class InteractiveScrollView : ScrollView {
                 mListener?.onTouch(true)
                 scrollJob?.cancel()
             }
+
             MotionEvent.ACTION_UP -> {
                 startScrollerTask()
             }

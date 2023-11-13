@@ -69,11 +69,6 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
     }
 
     private fun checkBibleVybranoe() {
-        val arrayPositions = ArrayList<VybranoeData>()
-        vybranoe.forEach {
-            if (it.data == null) arrayPositions.add(it)
-        }
-        vybranoe.removeAll(arrayPositions.toSet())
         val gson = Gson()
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
         var bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
@@ -246,7 +241,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                     if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
                         val adapterItem = item.tag as VybranoeData
                         val pos = binding.dragListView.adapter.getPositionForItem(adapterItem)
-                        val dd = DialogDelite.getInstance(pos, "", "з выбранага", adapter.itemList[pos].data ?: "")
+                        val dd = DialogDelite.getInstance(pos, "", "з выбранага", adapter.itemList[pos].data)
                         dd.show(childFragmentManager, "dialog_dilite")
                     }
                 }
@@ -353,51 +348,55 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return
                 }
-                mLastClickTime = SystemClock.elapsedRealtime()
-                if (itemList[bindingAdapterPosition].resurs?.contains("pesny") == true) {
+                mLastClickTime = SystemClock.elapsedRealtime()/*if (itemList[bindingAdapterPosition].resurs.contains("pesny")) {
                     val intent = Intent(activity, PesnyAll::class.java)
                     intent.putExtra("type", itemList[bindingAdapterPosition].resurs)
                     intent.putExtra("pesny", itemList[bindingAdapterPosition].data)
                     intent.putExtra("chekVybranoe", true)
                     menuVybranoeLauncher.launch(intent)
-                } else {
-                    if (activity.checkmoduleResources()) {
-                        when (itemList[bindingAdapterPosition].resurs) {
-                            "1" -> {
-                                DialogVybranoeBibleList.biblia = "1"
-                                val dialogVybranoeList = DialogVybranoeBibleList()
-                                dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
-                                dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
-                            }
-                            "2" -> {
-                                DialogVybranoeBibleList.biblia = "2"
-                                val dialogVybranoeList = DialogVybranoeBibleList()
-                                dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
-                                dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
-                            }
-                            "3" -> {
-                                DialogVybranoeBibleList.biblia = "3"
-                                val dialogVybranoeList = DialogVybranoeBibleList()
-                                dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
-                                dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
-                            }
-                            else -> {
-                                val intent = Intent()
-                                intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("resurs", itemList[bindingAdapterPosition].resurs)
-                                intent.putExtra("title", itemList[bindingAdapterPosition].data)
-                                intent.putExtra("chekVybranoe", true)
-                                menuVybranoeLauncher.launch(intent)
-                            }
+                } else {*/
+                if (activity.checkmoduleResources()) {
+                    when (itemList[bindingAdapterPosition].resurs) {
+                        "1" -> {
+                            DialogVybranoeBibleList.biblia = "1"
+                            val dialogVybranoeList = DialogVybranoeBibleList()
+                            dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
+                            dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                         }
-                    } else {
-                        activity.installFullMalitounik()
+
+                        "2" -> {
+                            DialogVybranoeBibleList.biblia = "2"
+                            val dialogVybranoeList = DialogVybranoeBibleList()
+                            dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
+                            dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                        }
+
+                        "3" -> {
+                            DialogVybranoeBibleList.biblia = "3"
+                            val dialogVybranoeList = DialogVybranoeBibleList()
+                            dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
+                            dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                        }
+
+                        else -> {
+                            val intent = Intent()
+                            intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
+                            intent.putExtra("resurs", itemList[bindingAdapterPosition].resurs)
+                            intent.putExtra("title", itemList[bindingAdapterPosition].data)
+                            intent.putExtra("isVybranae", true)
+                            intent.putExtra("vybranaePos", bindingAdapterPosition)
+                            intent.putExtra("chekVybranoe", true)
+                            menuVybranoeLauncher.launch(intent)
+                        }
                     }
+                } else {
+                    activity.installFullMalitounik()
                 }
+                //}
             }
 
             override fun onItemLongClicked(view: View): Boolean {
-                val dd = DialogDelite.getInstance(bindingAdapterPosition, "", "з выбранага", itemList[bindingAdapterPosition].data ?: "")
+                val dd = DialogDelite.getInstance(bindingAdapterPosition, "", "з выбранага", itemList[bindingAdapterPosition].data)
                 dd.show(childFragmentManager, "dialog_dilite")
                 return true
             }

@@ -997,7 +997,6 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                         }
                         prepinanie = prepinanie.replace("\"", "")
                         prepinanie = prepinanie.replace("?", "")
-                        prepinanie = prepinanie.replace("ё", "е", registr)
                         prepinanie = prepinanie.replace("<em>", "", registr)
                         prepinanie = prepinanie.replace("</em>", " ", registr)
                         prepinanie = prepinanie.replace("<br>", "", registr)
@@ -1063,7 +1062,6 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         var poshuk1 = poshuk
         val seashpost = ArrayList<Spannable>()
         val registr = chin.getBoolean("pegistrbukv", true)
-        poshuk1 = poshuk1.replace("ё", "е", registr)
         if (secondRun) {
             val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
             for (aM in m) {
@@ -1191,7 +1189,6 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                         }
                         prepinanie = prepinanie.replace("\"", "")
                         prepinanie = prepinanie.replace("?", "")
-                        prepinanie = prepinanie.replace("ё", "е", registr)
                         if (chin.getInt("slovocalkam", 0) == 0) {
                             if (prepinanie.contains(poshuk1, registr)) {
                                 var aSviatyia = bibleline[r]
@@ -1293,7 +1290,6 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 }
                 prepinanie = prepinanie.replace("\"", "")
                 prepinanie = prepinanie.replace("?", "")
-                prepinanie = prepinanie.replace("ё", "е")
                 prepinanie = prepinanie.replace("<em>", "", registr)
                 prepinanie = prepinanie.replace("</em>", " ", registr)
                 prepinanie = prepinanie.replace("<br>", "", registr)

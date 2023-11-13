@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/constraint"
-    android:background="@color/colorWhite"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -39,9 +39,7 @@
         android:layout_width="0sp"
         android:layout_height="0sp"
         android:layout_marginStart="10sp"
-        android:layout_marginLeft="10sp"
         android:layout_marginEnd="10sp"
-        android:layout_marginRight="10sp"
         android:layout_marginBottom="10sp"
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/find"
@@ -49,13 +47,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-        <TextView
-            android:id="@+id/textView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10sp"
-            android:paddingBottom="10sp"
-            android:textIsSelectable="true" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
+                android:textIsSelectable="true"
+                app:layout_constraintBottom_toTopOf="@+id/textViewNext"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/knopka_ser"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="14sp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
     </by.carkva_gazeta.malitounik.InteractiveScrollView>
 
     <TextView
@@ -116,7 +139,6 @@
             android:layout_width="24sp"
             android:layout_height="24sp"
             android:layout_marginEnd="20sp"
-            android:layout_marginRight="15sp"
             android:contentDescription="@string/empty"
             android:padding="4sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -129,7 +151,6 @@
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5sp"
-            android:layout_marginRight="5sp"
             android:text="@string/niama"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView6"
@@ -166,9 +187,10 @@
         android:id="@+id/action_fullscreen"
         android:layout_width="40sp"
         android:layout_height="40sp"
-        android:layout_marginRight="10sp"
+        android:layout_marginEnd="10sp"
         android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
+        android:contentDescription="@string/empty"
         android:gravity="center"
         android:paddingLeft="5sp"
         android:paddingRight="5sp"
@@ -184,11 +206,11 @@
         android:layout_marginEnd="10sp"
         android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
+        android:contentDescription="@string/empty"
         android:gravity="center"
         android:paddingLeft="5sp"
         android:paddingRight="5sp"
         android:visibility="gone"
-        android:contentDescription="@string/empty"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_plus"
         app:srcCompat="@drawable/minus_auto_scroll" />
@@ -200,11 +222,11 @@
         android:layout_marginEnd="10sp"
         android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
+        android:contentDescription="@string/empty"
         android:gravity="center"
         android:paddingLeft="5sp"
         android:paddingRight="5sp"
         android:visibility="gone"
-        android:contentDescription="@string/empty"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_fullscreen"
         app:srcCompat="@drawable/plus_auto_scroll" />

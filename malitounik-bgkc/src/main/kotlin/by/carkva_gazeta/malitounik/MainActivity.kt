@@ -897,6 +897,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 prefEditors.remove("search_svityx_string")
                 prefEditors.remove("search_string")
                 prefEditors.remove("search_array")
+                prefEditors.remove("search_bogashugbovya_string")
+                prefEditors.remove("search_bogashugbovya_array")
                 prefEditors.remove("search_bible_fierstPosition")
                 prefEditors.remove("search_position")
                 prefEditors.putBoolean("autoscroll", false)
@@ -2237,7 +2239,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             replase1 = replase1.replace("сць", "сьць", ignoreCase)
             replase1 = replase1.replace("сцю", "сьцю", ignoreCase)
             replase1 = replase1.replace("сця", "сьця", ignoreCase)
-            replase1 = replase1.replace("цце", "цьце", ignoreCase)
+            replase1 = replase1.replace("ццё", "цьцё", ignoreCase)
             replase1 = replase1.replace("цці", "цьці", ignoreCase)
             replase1 = replase1.replace("ццю", "цьцю", ignoreCase)
             replase1 = replase1.replace("ззе", "зьзе", ignoreCase)
@@ -2261,8 +2263,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             replase1 = replase1.replace("лля", "льля", ignoreCase)
             replase1 = replase1.replace("дск", "дзк", ignoreCase)
             replase1 = replase1.replace("дств", "дзтв", ignoreCase)
-            replase1 = replase1.replace("з’е", "зье", ignoreCase)
-            replase1 = replase1.replace("з’я", "зья", ignoreCase)
+            replase1 = replase1.replace("з'е", "зье", ignoreCase)
+            replase1 = replase1.replace("з'я", "зья", ignoreCase)
             return replase1
         }
 

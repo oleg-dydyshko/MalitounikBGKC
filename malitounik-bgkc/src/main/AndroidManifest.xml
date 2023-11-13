@@ -281,7 +281,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.Opisanie" />
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
             android:name=".MineiaAgulnaia"
@@ -375,7 +375,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+                android:value="by.carkva_gazeta.malitounik.Opisanie" />
         </activity>
 
         <meta-data

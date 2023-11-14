@@ -348,13 +348,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return
                 }
-                mLastClickTime = SystemClock.elapsedRealtime()/*if (itemList[bindingAdapterPosition].resurs.contains("pesny")) {
-                    val intent = Intent(activity, PesnyAll::class.java)
-                    intent.putExtra("type", itemList[bindingAdapterPosition].resurs)
-                    intent.putExtra("pesny", itemList[bindingAdapterPosition].data)
-                    intent.putExtra("chekVybranoe", true)
-                    menuVybranoeLauncher.launch(intent)
-                } else {*/
+                mLastClickTime = SystemClock.elapsedRealtime()
                 if (activity.checkmoduleResources()) {
                     when (itemList[bindingAdapterPosition].resurs) {
                         "1" -> {
@@ -383,8 +377,10 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                             intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                             intent.putExtra("resurs", itemList[bindingAdapterPosition].resurs)
                             intent.putExtra("title", itemList[bindingAdapterPosition].data)
-                            intent.putExtra("isVybranae", true)
-                            intent.putExtra("vybranaePos", bindingAdapterPosition)
+                            if (itemList.size > 1) {
+                                intent.putExtra("isVybranae", true)
+                                intent.putExtra("vybranaePos", bindingAdapterPosition)
+                            }
                             intent.putExtra("chekVybranoe", true)
                             menuVybranoeLauncher.launch(intent)
                         }
@@ -392,7 +388,6 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                 } else {
                     activity.installFullMalitounik()
                 }
-                //}
             }
 
             override fun onItemLongClicked(view: View): Boolean {

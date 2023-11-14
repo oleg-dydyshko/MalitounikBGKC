@@ -90,8 +90,8 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                 if (diffScroll) {
                     autoscroll = false
                     stopAutoScroll()
-                    invalidateOptionsMenu()
                 }
+                invalidateOptionsMenu()
             }
 
             override fun onTouch(action: Boolean) {

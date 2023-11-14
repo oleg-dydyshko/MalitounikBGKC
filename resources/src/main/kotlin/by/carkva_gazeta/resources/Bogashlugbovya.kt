@@ -848,7 +848,20 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             vybranoePosition = intent.extras?.getInt("vybranaePos") ?: 0
         }
-        setDatacalendar(savedInstanceState)
+        if (resurs == "1" || resurs == "2" || resurs == "3") {
+            DialogVybranoeBibleList.biblia = resurs
+            val text = SpannableString(title)
+            text.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val dialogVybranoeList = DialogVybranoeBibleList()
+                    dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
+                }
+            }, 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            binding.textView.text = text
+            binding.titleToolbar.text = title
+        } else {
+            setDatacalendar(savedInstanceState)
+        }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.textSize = fontBiblia
         DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
@@ -961,8 +974,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 if (diffScroll) {
                     autoscroll = false
                     stopAutoScroll()
-                    invalidateOptionsMenu()
                 }
+                invalidateOptionsMenu()
             }
 
             override fun onTouch(action: Boolean) {
@@ -983,28 +996,20 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 if (MenuVybranoe.vybranoe.size == pos1) pos1 = 0
                 binding.textViewNext.text = MenuVybranoe.vybranoe[pos1].data
                 mAutoScroll = true
-                when (resurs) {
-                    "1" -> {
-                        DialogVybranoeBibleList.biblia = "1"
-                        val dialogVybranoeList = DialogVybranoeBibleList()
-                        dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
-                    }
-
-                    "2" -> {
-                        DialogVybranoeBibleList.biblia = "2"
-                        val dialogVybranoeList = DialogVybranoeBibleList()
-                        dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
-                    }
-
-                    "3" -> {
-                        DialogVybranoeBibleList.biblia = "3"
-                        val dialogVybranoeList = DialogVybranoeBibleList()
-                        dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
-                    }
-
-                    else -> {
-                        setDatacalendar(savedInstanceState)
-                    }
+                if (resurs == "1" || resurs == "2" || resurs == "3") {
+                    DialogVybranoeBibleList.biblia = resurs
+                    val dialogVybranoeList = DialogVybranoeBibleList()
+                    dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
+                    val text = SpannableString(title)
+                    text.setSpan(object : ClickableSpan() {
+                        override fun onClick(widget: View) {
+                            dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
+                        }
+                    }, 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    binding.textView.text = text
+                    binding.titleToolbar.text = title
+                } else {
+                    setDatacalendar(savedInstanceState)
                 }
             }
         }

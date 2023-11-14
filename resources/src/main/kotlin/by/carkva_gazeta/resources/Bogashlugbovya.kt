@@ -41,7 +41,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 
-class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
+class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogVybranoeBibleList.DialogVybranoeBibleListListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -52,7 +52,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private var spid = 60
     private var resurs = ""
     private var men = true
-    private var checkVybranoe = false
     private var positionY = 0
     private var title = ""
     private var mActionDown = false
@@ -854,6 +853,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
                     val dialogVybranoeList = DialogVybranoeBibleList()
+                    dialogVybranoeList.setDialogVybranoeBibleListListener(this@Bogashlugbovya)
                     dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
                 }
             }, 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -881,7 +881,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
         men = checkVybranoe(this, resurs)
-        checkVybranoe = men
         bindingprogress.fontSizePlus.setOnClickListener {
             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
@@ -988,33 +987,50 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (MenuVybranoe.vybranoe.size == pos) pos = 0
             binding.textViewNext.text = MenuVybranoe.vybranoe[pos].data
             binding.textViewNext.setOnClickListener {
-                vybranoePosition += 1
-                if (MenuVybranoe.vybranoe.size == vybranoePosition) vybranoePosition = 0
-                resurs = MenuVybranoe.vybranoe[vybranoePosition].resurs
-                title = MenuVybranoe.vybranoe[vybranoePosition].data
-                var pos1 = vybranoePosition + 1
-                if (MenuVybranoe.vybranoe.size == pos1) pos1 = 0
-                binding.textViewNext.text = MenuVybranoe.vybranoe[pos1].data
-                mAutoScroll = true
-                if (resurs == "1" || resurs == "2" || resurs == "3") {
-                    DialogVybranoeBibleList.biblia = resurs
-                    val dialogVybranoeList = DialogVybranoeBibleList()
-                    dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
-                    val text = SpannableString(title)
-                    text.setSpan(object : ClickableSpan() {
-                        override fun onClick(widget: View) {
-                            dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
-                        }
-                    }, 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    binding.textView.text = text
-                    binding.titleToolbar.text = title
-                } else {
-                    setDatacalendar(savedInstanceState)
-                }
+                nextText()
             }
         }
         binding.textView.movementMethod = setLinkMovementMethodCheck()
         setTollbarTheme()
+    }
+
+    override fun onAllDeliteBible() {
+        if (MenuVybranoe.vybranoe.size == 0) {
+            onBack()
+        } else {
+            if (MenuVybranoe.vybranoe.size < 2) {
+                binding.textViewNext.visibility = View.GONE
+            }
+            nextText()
+        }
+    }
+
+    private fun nextText() {
+        vybranoePosition += 1
+        if (MenuVybranoe.vybranoe.size == vybranoePosition) vybranoePosition = 0
+        resurs = MenuVybranoe.vybranoe[vybranoePosition].resurs
+        title = MenuVybranoe.vybranoe[vybranoePosition].data
+        var pos1 = vybranoePosition + 1
+        if (MenuVybranoe.vybranoe.size == pos1) pos1 = 0
+        binding.textViewNext.text = MenuVybranoe.vybranoe[pos1].data
+        mAutoScroll = true
+        if (resurs == "1" || resurs == "2" || resurs == "3") {
+            DialogVybranoeBibleList.biblia = resurs
+            val dialogVybranoeList = DialogVybranoeBibleList()
+            dialogVybranoeList.setDialogVybranoeBibleListListener(this@Bogashlugbovya)
+            dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
+            val text = SpannableString(title)
+            text.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    dialogVybranoeList.setDialogVybranoeBibleListListener(this@Bogashlugbovya)
+                    dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
+                }
+            }, 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            binding.textView.text = text
+            binding.titleToolbar.text = title
+        } else {
+            setDatacalendar(null)
+        }
     }
 
     override fun linkMovementMethodCheckOnTouch(onTouch: Boolean) {
@@ -2160,7 +2176,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
             }
 
-            intent.extras?.getBoolean("chekVybranoe", false) == true && men != checkVybranoe -> {
+            intent.extras?.getBoolean("chekVybranoe", false) == true -> {
                 setResult(200)
                 super.onBack()
             }

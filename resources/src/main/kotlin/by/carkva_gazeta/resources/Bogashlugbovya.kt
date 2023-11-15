@@ -1013,7 +1013,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         var pos1 = vybranoePosition + 1
         if (MenuVybranoe.vybranoe.size == pos1) pos1 = 0
         binding.textViewNext.text = MenuVybranoe.vybranoe[pos1].data
-        mAutoScroll = true
+        mAutoScroll = false
+        diffScroll = false
+        autoscroll = false
+        stopAutoScroll()
+        invalidateOptionsMenu()
+        val duration: Long = 1000
+        ObjectAnimator.ofInt(binding.scrollView2, "scrollY", 0).setDuration(duration).start()
         if (resurs == "1" || resurs == "2" || resurs == "3") {
             DialogVybranoeBibleList.biblia = resurs
             val dialogVybranoeList = DialogVybranoeBibleList()
@@ -1636,11 +1642,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 if (!autoscroll && savedInstanceState.getBoolean("seach")) {
                     findAllAsanc()
                 }
-                if (binding.textView.bottom <= binding.scrollView2.height) {
+                mAutoScroll = if (binding.textView.bottom <= binding.scrollView2.height) {
                     stopAutoStartScroll()
-                    mAutoScroll = false
-                    invalidateOptionsMenu()
+                    false
+                } else {
+                    true
                 }
+                invalidateOptionsMenu()
             } else {
                 if (resurs.contains("viachernia_ton")) {
                     binding.textView.layout?.let { layout ->
@@ -1659,11 +1667,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         autoStartScroll()
                     }
                 } else {
-                    if (binding.textView.bottom <= binding.scrollView2.height) {
+                    mAutoScroll = if (binding.textView.bottom <= binding.scrollView2.height) {
                         stopAutoStartScroll()
-                        mAutoScroll = false
-                        invalidateOptionsMenu()
+                        false
+                    } else {
+                        true
                     }
+                    invalidateOptionsMenu()
                     binding.scrollView2.scrollBy(0, positionY)
                     if (((k.getBoolean("autoscrollAutostart", false) && mAutoScroll) || autoscroll) && !diffScroll) {
                         autoStartScroll()

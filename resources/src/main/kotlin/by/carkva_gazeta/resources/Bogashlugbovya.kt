@@ -438,9 +438,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_06_12_mikoly_cudatvorcy_jutran"] = R.raw.mm_06_12_mikoly_cudatvorcy_jutran
             resursMap["mm_06_12_mikoly_cudatvorcy_liturhija"] = R.raw.mm_06_12_mikoly_cudatvorcy_liturhija
             resursMap["mm_06_12_mikoly_cudatvorcy_viaczernia"] = R.raw.mm_06_12_mikoly_cudatvorcy_viaczernia
-            resursMap["mm_12_11_sviatamucz_jazafat_jutran"] = R.raw.mm_12_11_sviatamucz_jazafat_jutran
             resursMap["mm_12_11_sviatamucz_jazafat_liturhija"] = R.raw.mm_12_11_sviatamucz_jazafat_liturhija
-            resursMap["mm_12_11_sviatamucz_jazafat_viaczernia"] = R.raw.mm_12_11_sviatamucz_jazafat_viaczernia
             resursMap["mm_20_12_rastvo_peradsviaccie_liturhija"] = R.raw.mm_20_12_rastvo_peradsviaccie_liturhija
             resursMap["mm_20_12_rastvo_peradsviaccie_viaczernia"] = R.raw.mm_20_12_rastvo_peradsviaccie_viaczernia
             resursMap["mm_24_12_rastvo_sv_vieczar_abednica"] = R.raw.mm_24_12_rastvo_sv_vieczar_abednica

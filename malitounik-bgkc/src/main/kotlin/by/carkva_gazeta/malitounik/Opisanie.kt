@@ -185,6 +185,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         binding.listview.divider = null
         binding.swipeRefreshLayout.setOnRefreshListener {
             arrayList.clear()
+            viewSviaryiaIIcon()
             startLoadIconsJob(!MainActivity.isNetworkAvailable(true))
             binding.swipeRefreshLayout.isRefreshing = false
         }

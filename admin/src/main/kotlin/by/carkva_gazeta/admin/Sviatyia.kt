@@ -503,7 +503,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                     if (builder != "") {
                         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
                         val arrayList: ArrayList<String> = gson.fromJson(builder, type)
-                        arrayList[data - 1] = spaw
+                        arrayList[data - 1] = spaw.replace(" ", " ")
                         localFile4.writer().use {
                             it.write(gson.toJson(arrayList, type))
                         }

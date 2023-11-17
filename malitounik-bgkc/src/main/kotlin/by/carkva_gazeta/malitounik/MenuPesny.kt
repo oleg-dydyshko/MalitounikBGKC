@@ -51,8 +51,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
     private var search = false
     private var pesny = "prasl"
     private lateinit var adapter: MenuPesnyListAdapter
-    private val menuListOrig = ArrayList<MenuListData>()
-    private val menuList = ArrayList<MenuListData>()
+    private val menuList = ArrayList<MenuPesnyData.Data>()
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private lateinit var chin: SharedPreferences
@@ -76,21 +75,6 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
         activity?.let { fraragment ->
             chin = fraragment.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             pesny = arguments?.getString("pesny") ?: "prasl"
-            val inputStream = resources.openRawResource(R.raw.pesny_menu)
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            var line: String
-            reader.forEachLine {
-                line = it
-                val split = line.split("<>")
-                var opisanie = ""
-                if (split[0].contains("prasl")) opisanie = "\nПесьні праслаўленьня"
-                if (split[0].contains("bel")) opisanie = "\nЗ малітвай за Беларусь"
-                if (split[0].contains("bag")) opisanie = "\nДа Багародзіцы"
-                if (split[0].contains("kal")) opisanie = "\nКалядныя"
-                if (split[0].contains("taize")) opisanie = "\nСьпевы Taize"
-                menuListOrig.add(MenuListData(split[1] + opisanie, split[0]))
-            }
             getMenuListData(pesny)
             adapter = MenuPesnyListAdapter(fraragment, menuList)
             binding.ListView.adapter = adapter
@@ -126,10 +110,12 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
                         stopPosukPesen()
                         startPosukPesen(searchViewQwery)
                     }
+
                     searchViewQwery.length in 1..2 -> {
                         binding.History.visibility = View.VISIBLE
                         binding.ListView.visibility = View.GONE
                     }
+
                     else -> {
                         binding.History.visibility = View.GONE
                         binding.ListView.visibility = View.VISIBLE
@@ -378,8 +364,8 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
         }
         searchViewQwery = poshuk1
         menuList.clear()
-        for (i in menuListOrig.indices) {
-            val inputStream = resources.openRawResource(PesnyAll.resursMap[menuListOrig[i].resurs] ?: R.raw.pesny_prasl_0)
+        for (i in menuList.indices) {
+            val inputStream = resources.openRawResource(PesnyAll.resursMap[menuList[i].resurs] ?: R.raw.pesny_prasl_0)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             var line: String
@@ -395,7 +381,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
             }
             inputStream.close()
             if (builder.toString().replace("ё", "е", true).contains(poshuk1, true)) {
-                menuList.add(menuListOrig[i])
+                menuList.add(menuList[i])
             }
         }
         menuList.sort()
@@ -404,10 +390,16 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
     }
 
     private fun getMenuListData(pesny: String = "") {
+        val menuPesnyData = MenuPesnyData()
         menuList.clear()
-        menuList.addAll(menuListOrig.filter {
-            it.resurs.contains(pesny)
-        })
+        when (pesny) {
+            "bel" -> menuList.addAll(menuPesnyData.getPesnyBel())
+            "bag" -> menuList.addAll(menuPesnyData.getPesnyBag())
+            "kal" -> menuList.addAll(menuPesnyData.getPesnyKal())
+            "prasl" -> menuList.addAll(menuPesnyData.getPesnyPrasl())
+            "taize" -> menuList.addAll(menuPesnyData.getPesnyTaize())
+            else -> menuList.addAll(menuPesnyData.getPesnyAll())
+        }
         menuList.sort()
     }
 
@@ -438,11 +430,13 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
                         binding.History.visibility = View.GONE
                         binding.ListView.visibility = View.VISIBLE
                     }
+
                     edit.length in 1..2 -> {
                         binding.History.visibility = View.VISIBLE
                         binding.ListView.visibility = View.GONE
                         textViewCount?.text = "(0)"
                     }
+
                     else -> {
                         getMenuListData()
                         adapter.notifyDataSetChanged()
@@ -461,7 +455,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
         }
     }
 
-    private inner class MenuPesnyListAdapter(private val activity: Activity, private val menuList: ArrayList<MenuListData>) : ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
+    private inner class MenuPesnyListAdapter(private val activity: Activity, private val menuList: ArrayList<MenuPesnyData.Data>) : ArrayAdapter<MenuPesnyData.Data>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder

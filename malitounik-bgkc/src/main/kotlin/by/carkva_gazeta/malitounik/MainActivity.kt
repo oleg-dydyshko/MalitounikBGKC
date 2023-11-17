@@ -18,7 +18,6 @@ import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
@@ -171,7 +170,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     var i = 0
                     for (index in 0 until log.size) {
                         val file = log[index]
-                        val filePath = file.replace("//", "/")
+                        var filePath = file.replace("//", "/")
+                        val t1 = filePath.indexOf("(")
+                        if (t1 != -1) filePath = filePath.substring(0, t1)
                         var error = false
                         try {
                             Malitounik.referens.child(filePath).getFile(localFile).addOnFailureListener {

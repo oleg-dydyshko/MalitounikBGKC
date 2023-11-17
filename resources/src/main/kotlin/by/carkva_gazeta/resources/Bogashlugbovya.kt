@@ -843,7 +843,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
         } else {
             fullscreenPage = k.getBoolean("fullscreenPage", false)
-            vybranoePosition = intent.extras?.getInt("vybranaePos") ?: 0
+            vybranoePosition = intent.extras?.getInt("vybranaePos", -1) ?: -1
         }
         if (resurs == "1" || resurs == "2" || resurs == "3") {
             DialogVybranoeBibleList.biblia = resurs

@@ -53,7 +53,7 @@ class MenuPesnyData {
         pesnyKal.add(Data("pesny_kal_14", "Радасная вестка"))
         pesnyKal.add(Data("pesny_kal_15", "У начную ціш"))
         pesnyKal.add(Data("pesny_kal_16", "Учора зьвячора — засьвяціла зора"))
-        pesnyKal.add(Data("pesny_kal_17", "Ціхая ноч(пер.Н.Арсеньневай)"))
+        pesnyKal.add(Data("piesni_kalady_cichaja_nocz_arsiennieva", "Ціхая ноч(пер.Н.Арсеньневай)"))
         pesnyKal.add(Data("piesni_kalady_cichaja_nocz_dziunaja_nocz", "Ціхая ноч, дзіўная ноч"))
         pesnyKal.add(Data("piesni_kalady_cichaja_nocz", "Ціхая ноч"))
         pesnyKal.add(Data("pesny_kal_20", "Прыйдзі, прыйдзі, Эмануэль (ХІХ ст.)"))

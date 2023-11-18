@@ -73,11 +73,11 @@ class DialogAddPesny : DialogFragment() {
             binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     when (position) {
-                        0 -> pesny = "pesny_prasl_"
-                        1 -> pesny = "pesny_bel_"
-                        2 -> pesny = "pesny_bag_"
-                        3 -> pesny = "pesny_kal_"
-                        4 -> pesny = "pesny_taize_"
+                        0 -> pesny = "piesni_prasl_"
+                        1 -> pesny = "piesni_belarus_"
+                        2 -> pesny = "piesni_bagar_"
+                        3 -> pesny = "piesni_kalady_"
+                        4 -> pesny = "piesni_taize_"
                     }
                 }
 

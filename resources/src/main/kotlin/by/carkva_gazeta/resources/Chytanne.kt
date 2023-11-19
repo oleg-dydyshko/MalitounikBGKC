@@ -3,7 +3,6 @@ package by.carkva_gazeta.resources
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.content.res.Configuration
@@ -14,7 +13,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
-import android.text.style.ClickableSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
@@ -58,7 +56,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     private var diffScroll = false
     private var titleTwo = SpannableString("")
     private var firstTextPosition = ""
-    private val titleArrayList = ArrayList<TitleList>()
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
 
@@ -419,7 +416,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             0 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian1)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_0, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_0, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -427,7 +424,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             1 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian2)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_1, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_1, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -435,7 +432,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             2 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian3)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_2, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_2, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -443,7 +440,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             3 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian4)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_3, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_3, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -451,7 +448,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             4 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian5)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_4, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_4, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -459,7 +456,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             5 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian6)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_5, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_5, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -467,7 +464,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             6 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian7)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_6, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_6, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -475,7 +472,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             7 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian8)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_7, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_7, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -483,7 +480,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             8 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian9)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_8, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_8, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -491,7 +488,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             9 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian10)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_9, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_9, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -499,7 +496,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             10 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian11)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_10, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_10, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -507,7 +504,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             11 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian12)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_11, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_11, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -515,7 +512,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             12 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian13)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_12, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_12, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -523,7 +520,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             13 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian14)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_13, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_13, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -531,7 +528,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             14 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian15)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_14, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_14, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -539,7 +536,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             15 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian16)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_15, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_15, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -547,7 +544,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             16 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian17)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_16, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_16, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -555,7 +552,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             17 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian18)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_17, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_17, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -563,7 +560,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             18 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian19)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_18, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_18, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -571,7 +568,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             19 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian20)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_19, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_19, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -579,7 +576,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             20 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian21)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_20, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_20, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -587,7 +584,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             21 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian22)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_21, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_21, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -595,7 +592,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             22 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian23)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_22, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_22, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -603,7 +600,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             23 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian24)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_23, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_23, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -611,7 +608,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             24 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian25)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_24, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_24, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -619,7 +616,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             25 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian26)
                                 title = if (e == 0) {
-                                    setTitleArrayList(kniga, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_25, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_25, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -627,7 +624,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             26 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias1)
                                 title = if (e == 0) {
-                                    setTitleArrayList(0, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_26, spln, zaglavieName), 0)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_26, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -635,7 +632,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             27 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias20)
                                 title = if (e == 0) {
-                                    setTitleArrayList(19, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_27, spln, zaglavieName), 0)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_27, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -643,7 +640,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             28 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias26)
                                 title = if (e == 0) {
-                                    setTitleArrayList(25, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_28, spln, zaglavieName), 0)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_28, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -651,7 +648,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             29 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias2)
                                 title = if (e == 0) {
-                                    setTitleArrayList(1, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_29, spln, zaglavieName), 0)
+                                    SpannableString( getString(by.carkva_gazeta.malitounik.R.string.chtinia_29, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -659,7 +656,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             30 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias18)
                                 title = if (e == 0) {
-                                    setTitleArrayList(17, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_30, spln, zaglavieName), 0)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_30, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -667,7 +664,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             31 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias38)
                                 title = if (e == 0) {
-                                    setTitleArrayList(37, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_31, spln, zaglavieName), 0)
+                                    SpannableString( getString(by.carkva_gazeta.malitounik.R.string.chtinia_31, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -675,7 +672,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             32 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias29)
                                 title = if (e == 0) {
-                                    setTitleArrayList(28, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_32, spln, zaglavieName), 0)
+                                    SpannableString( getString(by.carkva_gazeta.malitounik.R.string.chtinia_32, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -683,7 +680,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             33 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias36)
                                 title = if (e == 0) {
-                                    setTitleArrayList(35, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_33, spln, zaglavieName), 0)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_33, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -691,7 +688,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             34 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias23)
                                 title = if (e == 0) {
-                                    setTitleArrayList(22, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_34, spln, zaglavieName), 0)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_34, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -699,7 +696,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             35 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias24)
                                 title = if (e == 0) {
-                                    setTitleArrayList(23, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_35, spln, zaglavieName), 0)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_35, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -707,7 +704,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             36 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias27)
                                 title = if (e == 0) {
-                                    setTitleArrayList(26, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_36, spln, zaglavieName), 0)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_36, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -715,7 +712,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             37 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias4)
                                 title = if (e == 0) {
-                                    setTitleArrayList(3, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_37, spln, zaglavieName), 0)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_37, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -723,7 +720,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             38 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias33)
                                 title = if (e == 0) {
-                                    setTitleArrayList(32, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_38, spln, zaglavieName), 0)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_38, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -731,17 +728,15 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             39 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias5)
                                 title = if (e == 0) {
-                                    setTitleArrayList(4, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_39, spln, zaglavieName), 0)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_39, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             40 -> {
-                                val er = SpannableString(getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error))
-                                er.setSpan(StyleSpan(Typeface.ITALIC), 0, er.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                ssbTitle.append("\n").append(er)
+                                inputStream = resources.openRawResource(R.raw.carniauski)
                                 title = if (e == 0) {
-                                    setTitleArrayList(25, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_40, spln, zaglavieName), 2)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_40, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -749,7 +744,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             41 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias39)
                                 title = if (e == 0) {
-                                    setTitleArrayList(32, zaglnum - 1, (knigaN.toInt()) - 1, getString(by.carkva_gazeta.malitounik.R.string.chtinia_41, spln, zaglavieName), 0)
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_41, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
@@ -841,7 +836,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                 binding.textView.movementMethod = setLinkMovementMethodCheck()
                 if (dzenNoch) binding.textView.setLinkTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
             }
-            setTitleLinkToBible()
             if (k.getBoolean("utran", true) && wOld.contains("На ютрані:") && savedInstanceState == null) {
                 binding.textView.post {
                     binding.textView.layout?.let { layout ->
@@ -875,11 +869,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         }
     }
 
-    private fun setTitleArrayList(myKniga: Int, myGlava: Int, myStix: Int, title: String, zavet: Int = 1): SpannableString {
-        titleArrayList.add(TitleList(myKniga, myGlava, myStix, title.trim(), zavet))
-        return SpannableString(title)
-    }
-
     override fun linkMovementMethodCheckOnTouch(onTouch: Boolean) {
         mActionDown = onTouch
     }
@@ -888,28 +877,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         linkMovementMethodCheck = LinkMovementMethodCheck()
         linkMovementMethodCheck?.setLinkMovementMethodCheckListener(this)
         return linkMovementMethodCheck
-    }
-
-    private fun setTitleLinkToBible() {
-        val text = binding.textView.text.toSpannable()
-        for (i in 0 until titleArrayList.size) {
-            val title = titleArrayList[i].title
-            val t1 = text.indexOf(title)
-            val t2 = title.length
-            text.setSpan(object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    val intent = when (titleArrayList[i].zavet) {
-                        0 -> Intent(this@Chytanne, StaryZapavietSemuxa::class.java)
-                        2 -> Intent(this@Chytanne, StaryZapavietSinaidal::class.java)
-                        else -> Intent(this@Chytanne, NovyZapavietSemuxa::class.java)
-                    }
-                    intent.putExtra("kniga", titleArrayList[i].kniga)
-                    intent.putExtra("glava", titleArrayList[i].glava)
-                    intent.putExtra("stix", titleArrayList[i].stix)
-                    startActivity(intent)
-                }
-            }, t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
     }
 
     private fun error(): SpannableString {
@@ -1238,6 +1205,4 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putString("textLine", firstTextPosition)
     }
-
-    private data class TitleList(val kniga: Int, val glava: Int, val stix: Int, val title: String, val zavet: Int)
 }

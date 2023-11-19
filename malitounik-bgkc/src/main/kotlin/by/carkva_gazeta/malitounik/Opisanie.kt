@@ -366,7 +366,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
         if (!loadIcons && MainActivity.isNetworkAvailable(true)) {
             if (dirList.isNotEmpty()) {
-                val dialog = DialogOpisanieWIFI.getInstance(size.toFloat(), isFull)
+               val dialog = DialogOpisanieWIFI.getInstance(size.toFloat(), isFull)
                 dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
             } else {
                 binding.progressBar2.visibility = View.INVISIBLE
@@ -401,6 +401,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             if (file2.exists()) arrayList[e].image = file2.absolutePath
         }
         binding.progressBar2.visibility = View.INVISIBLE
+        adapter.notifyDataSetChanged()
     }
 
     private suspend fun getPiarliny() {

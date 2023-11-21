@@ -59,7 +59,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
     private var dayOfYear = 1
     private var urlJob: Job? = null
     private val sviatyiaNew1 = ArrayList<ArrayList<String>>()
-    private val cal = Calendar.getInstance()
+    private val c = Calendar.getInstance()
     private val array: Array<String>
         get() = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.admin_svity)
     private val arrayList = ArrayList<Tipicon>()
@@ -126,7 +126,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         binding = AdminSviatyiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        dayOfYear = intent.extras?.getInt("dayOfYear") ?: (cal[Calendar.DAY_OF_YEAR])
+        dayOfYear = intent.extras?.getInt("dayOfYear") ?: (c[Calendar.DAY_OF_YEAR])
 
         arrayList.add(Tipicon(0, "Няма"))
         arrayList.add(Tipicon(by.carkva_gazeta.malitounik.R.drawable.znaki_krest, "З вялікай вячэрняй і вялікім услаўленьнем на ютрані"))
@@ -147,16 +147,16 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
     private fun setDate(dayOfYear: Int, count: Int = 0) {
         if (MainActivity.isNetworkAvailable()) {
             binding.progressBar2.visibility = View.VISIBLE
-            cal.set(Calendar.YEAR, VYSOCOSNYI_GOD)
-            cal.set(Calendar.DAY_OF_YEAR, dayOfYear)
+            c.set(Calendar.YEAR, VYSOCOSNYI_GOD)
+            c.set(Calendar.DAY_OF_YEAR, dayOfYear)
             val munName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
-            binding.date.text = getString(by.carkva_gazeta.malitounik.R.string.admin_date, cal[Calendar.DAY_OF_MONTH], munName[cal[Calendar.MONTH]])
+            binding.date.text = getString(by.carkva_gazeta.malitounik.R.string.admin_date, c[Calendar.DAY_OF_MONTH], munName[c[Calendar.MONTH]])
             urlJob?.cancel()
             urlJob = CoroutineScope(Dispatchers.Main).launch {
                 try {
                     var builder = ""
                     val localFile = File("$filesDir/cache/cache.txt")
-                    referens.child("/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json").getFile(localFile).addOnCompleteListener {
+                    referens.child("/chytanne/sviatyja/opisanie" + (c[Calendar.MONTH] + 1) + ".json").getFile(localFile).addOnCompleteListener {
                         if (it.isSuccessful) builder = localFile.readText()
                         else MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
@@ -164,7 +164,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                     builder = if (builder != "") {
                         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
                         val arrayList: ArrayList<String> = gson.fromJson(builder, type)
-                        arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
+                        arrayList[c[Calendar.DAY_OF_MONTH] - 1]
                     } else {
                         getString(by.carkva_gazeta.malitounik.R.string.error)
                     }
@@ -189,16 +189,16 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                         binding.chytanne.setSelection(0)
                         binding.spinnerStyle.adapter = SpinnerAdapter(this@Sviatyia, array)
                         binding.spinnerZnak.adapter = SpinnerAdapterTipicon(this@Sviatyia, arrayList)
-                        binding.sviaty.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][0])
-                        binding.chytanne.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][1])
+                        binding.sviaty.setText(sviatyiaNew1[c[Calendar.DAY_OF_YEAR] - 1][0])
+                        binding.chytanne.setText(sviatyiaNew1[c[Calendar.DAY_OF_YEAR] - 1][1])
                         var position = 0
-                        when (sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][2].toInt()) {
+                        when (sviatyiaNew1[c[Calendar.DAY_OF_YEAR] - 1][2].toInt()) {
                             6 -> position = 0
                             7 -> position = 1
                             8 -> position = 2
                         }
                         binding.spinnerStyle.setSelection(position)
-                        val znaki = sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][3]
+                        val znaki = sviatyiaNew1[c[Calendar.DAY_OF_YEAR] - 1][3]
                         val position2 = if (znaki == "") 0
                         else znaki.toInt()
                         binding.spinnerZnak.setSelection(position2)
@@ -309,7 +309,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
             return true
         }
         if (id == R.id.action_save) {
-            sendPostRequest(cal[Calendar.DAY_OF_MONTH], cal[Calendar.MONTH], dayOfYear - 1, binding.sviaty.text.toString(), binding.chytanne.text.toString(), binding.spinnerStyle.selectedItemPosition, binding.spinnerZnak.selectedItemPosition.toString(), binding.apisanne.text.toString())
+            sendPostRequest(binding.sviaty.text.toString(), binding.chytanne.text.toString(), binding.spinnerStyle.selectedItemPosition, binding.spinnerZnak.selectedItemPosition.toString(), binding.apisanne.text.toString())
             return true
         }
         if (id == R.id.action_preview) {
@@ -414,9 +414,11 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun sendPostRequest(data: Int, mun: Int, dayOfYear: Int, name: String, chtenie: String, bold: Int, tipicon: String, spaw: String) {
+    private fun sendPostRequest(name: String, chtenie: String, bold: Int, tipicon: String, spaw: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
+                val data = c[Calendar.DAY_OF_MONTH]
+                val mun = c[Calendar.MONTH]
                 val logFile = File("$filesDir/cache/log.txt")
                 if (!(name == getString(by.carkva_gazeta.malitounik.R.string.error) || name == "")) {
                     var style = 8
@@ -439,10 +441,10 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                                 }
                                 sviatyiaNewList.add(list)
                             }
-                            sviatyiaNewList[dayOfYear][0] = name
-                            sviatyiaNewList[dayOfYear][1] = chtenie
-                            sviatyiaNewList[dayOfYear][2] = style.toString()
-                            sviatyiaNewList[dayOfYear][3] = tipicon
+                            sviatyiaNewList[dayOfYear - 1][0] = name
+                            sviatyiaNewList[dayOfYear - 1][1] = chtenie
+                            sviatyiaNewList[dayOfYear - 1][2] = style.toString()
+                            sviatyiaNewList[dayOfYear - 1][3] = tipicon
                         } else {
                             MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }

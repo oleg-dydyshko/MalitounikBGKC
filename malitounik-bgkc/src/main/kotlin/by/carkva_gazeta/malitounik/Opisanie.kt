@@ -501,7 +501,16 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         else menu.findItem(R.id.action_piarliny).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         menu.findItem(R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
-        if (chin.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
+        val spanString = if (chin.getBoolean("auto_dzen_noch", false)) {
+            menu.findItem(R.id.action_dzen_noch).isCheckable = false
+            SpannableString(getString(R.string.auto_widget_day_d_n))
+        } else {
+            menu.findItem(R.id.action_dzen_noch).isCheckable = true
+            SpannableString(getString(R.string.widget_day_d_n))
+        }
+        val end = spanString.length
+        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        menu.findItem(R.id.action_dzen_noch).title = spanString
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -561,14 +570,18 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
         if (id == R.id.action_dzen_noch) {
             val prefEditor = chin.edit()
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                prefEditor.putBoolean("dzen_noch", true)
+            if (item.isCheckable) {
+                item.isChecked = !item.isChecked
+                if (item.isChecked) {
+                    prefEditor.putBoolean("dzen_noch", true)
+                } else {
+                    prefEditor.putBoolean("dzen_noch", false)
+                }
+                prefEditor.apply()
+                recreate()
             } else {
-                prefEditor.putBoolean("dzen_noch", false)
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
-            prefEditor.apply()
-            recreate()
             return true
         }
         if (id == R.id.action_font) {

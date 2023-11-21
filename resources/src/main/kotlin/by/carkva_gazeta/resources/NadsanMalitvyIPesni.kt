@@ -1,6 +1,7 @@
 package by.carkva_gazeta.resources
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Spannable
@@ -165,7 +166,16 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener, DialogHelpFu
     override fun onPrepareMenu(menu: Menu) {
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
-        if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = false
+        val spanString = if (k.getBoolean("auto_dzen_noch", false)) {
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isCheckable = false
+            SpannableString(getString(by.carkva_gazeta.malitounik.R.string.auto_widget_day_d_n))
+        } else {
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isCheckable = true
+            SpannableString(getString(by.carkva_gazeta.malitounik.R.string.widget_day_d_n))
+        }
+        val end = spanString.length
+        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).title = spanString
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
@@ -176,14 +186,18 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener, DialogHelpFu
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                prefEditor.putBoolean("dzen_noch", true)
+            if (item.isCheckable) {
+                item.isChecked = !item.isChecked
+                if (item.isChecked) {
+                    prefEditor.putBoolean("dzen_noch", true)
+                } else {
+                    prefEditor.putBoolean("dzen_noch", false)
+                }
+                prefEditor.apply()
+                recreate()
             } else {
-                prefEditor.putBoolean("dzen_noch", false)
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
-            prefEditor.apply()
-            recreate()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {

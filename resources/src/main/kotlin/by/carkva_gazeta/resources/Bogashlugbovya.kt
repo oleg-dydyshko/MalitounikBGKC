@@ -1958,7 +1958,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         var end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         itemAuto.title = spanString
-
         if (men) {
             itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
             itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
@@ -1967,7 +1966,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
-        if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = false
+        val spanString2 = if (k.getBoolean("auto_dzen_noch", false)) {
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isCheckable = false
+            SpannableString(getString(by.carkva_gazeta.malitounik.R.string.auto_widget_day_d_n))
+        } else {
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isCheckable = true
+            SpannableString(getString(by.carkva_gazeta.malitounik.R.string.widget_day_d_n))
+        }
+        val end2 = spanString2.length
+        spanString2.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).title = spanString2
         spanString = SpannableString(itemVybranoe.title.toString())
         end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -2049,14 +2057,18 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                prefEditor.putBoolean("dzen_noch", true)
+            if (item.isCheckable) {
+                item.isChecked = !item.isChecked
+                if (item.isChecked) {
+                    prefEditor.putBoolean("dzen_noch", true)
+                } else {
+                    prefEditor.putBoolean("dzen_noch", false)
+                }
+                prefEditor.apply()
+                recreate()
             } else {
-                prefEditor.putBoolean("dzen_noch", false)
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
-            prefEditor.apply()
-            recreate()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_find) {

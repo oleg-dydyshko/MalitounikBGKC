@@ -2,6 +2,7 @@ package by.carkva_gazeta.malitounik
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
@@ -37,15 +38,22 @@ class MenuPamiatka : BaseListFragment() {
             return true
         }
         if (id == R.id.action_dzen_noch) {
-            item.isChecked = !item.isChecked
-            val prefEditor = k.edit()
-            if (item.isChecked) {
-                prefEditor?.putBoolean("dzen_noch", true)
-            } else {
-                prefEditor?.putBoolean("dzen_noch", false)
+            activity?.let {
+                val prefEditor = k.edit()
+                if (item.isCheckable) {
+                    item.isChecked = !item.isChecked
+                    if (item.isChecked) {
+                        prefEditor.putBoolean("dzen_noch", true)
+                    } else {
+                        prefEditor.putBoolean("dzen_noch", false)
+                    }
+                    prefEditor.apply()
+                    it.recreate()
+                } else {
+                    startActivity(Intent(it, SettingsActivity::class.java))
+                }
+                activity?.recreate()
             }
-            prefEditor?.apply()
-            activity?.recreate()
             return true
         }
         return false

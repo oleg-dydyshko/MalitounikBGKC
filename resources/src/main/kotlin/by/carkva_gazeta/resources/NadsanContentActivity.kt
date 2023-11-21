@@ -1,6 +1,7 @@
 package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Spannable
@@ -238,7 +239,16 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
     override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_glava).isVisible = true
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
-        if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
+        val spanString = if (k.getBoolean("auto_dzen_noch", false)) {
+            menu.findItem(R.id.action_dzen_noch).isCheckable = false
+            SpannableString(getString(R.string.auto_widget_day_d_n))
+        } else {
+            menu.findItem(R.id.action_dzen_noch).isCheckable = true
+            SpannableString(getString(R.string.widget_day_d_n))
+        }
+        val end = spanString.length
+        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        menu.findItem(R.id.action_dzen_noch).title = spanString
         val itemVybranoe: MenuItem = menu.findItem(R.id.action_vybranoe)
         if (men) {
             itemVybranoe.icon = ContextCompat.getDrawable(this, R.drawable.star_big_on)
@@ -270,15 +280,19 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
             return true
         }
         if (id == R.id.action_dzen_noch) {
-            val prefEditor = k.edit()
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                prefEditor.putBoolean("dzen_noch", true)
+            if (item.isCheckable) {
+                val prefEditor = k.edit()
+                item.isChecked = !item.isChecked
+                if (item.isChecked) {
+                    prefEditor.putBoolean("dzen_noch", true)
+                } else {
+                    prefEditor.putBoolean("dzen_noch", false)
+                }
+                prefEditor.apply()
+                recreate()
             } else {
-                prefEditor.putBoolean("dzen_noch", false)
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
-            prefEditor.apply()
-            recreate()
             return true
         }
         if (id == android.R.id.home) {

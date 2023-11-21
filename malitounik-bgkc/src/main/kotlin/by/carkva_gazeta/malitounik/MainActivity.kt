@@ -1075,10 +1075,18 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (idSelect == R.id.label101 || idSelect == R.id.label102) {
             menu.findItem(R.id.action_font).isVisible = true
             menu.findItem(R.id.action_bright).isVisible = true
-            if (!k.getBoolean("auto_dzen_noch", false)) {
-                menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
-                menu.findItem(R.id.action_dzen_noch).isVisible = true
+            menu.findItem(R.id.action_dzen_noch).isVisible = true
+            menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
+            val spanString = if (k.getBoolean("auto_dzen_noch", false)) {
+                menu.findItem(R.id.action_dzen_noch).isCheckable = false
+                SpannableString(getString(R.string.auto_widget_day_d_n))
+            } else {
+                menu.findItem(R.id.action_dzen_noch).isCheckable = true
+                SpannableString(getString(R.string.widget_day_d_n))
             }
+            val end = spanString.length
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            menu.findItem(R.id.action_dzen_noch).title = spanString
         }
         if (idSelect == R.id.label103) menu.findItem(R.id.prazdnik).isVisible = true
         if (idSelect == R.id.label104) {

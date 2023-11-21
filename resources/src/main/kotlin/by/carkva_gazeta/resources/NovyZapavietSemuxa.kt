@@ -420,7 +420,16 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_bright).isVisible = !paralel
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = !paralel
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
-        if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = false
+        val spanString = if (k.getBoolean("auto_dzen_noch", false)) {
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isCheckable = false
+            SpannableString(getString(by.carkva_gazeta.malitounik.R.string.auto_widget_day_d_n))
+        } else {
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isCheckable = true
+            SpannableString(getString(by.carkva_gazeta.malitounik.R.string.widget_day_d_n))
+        }
+        val end = spanString.length
+        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).title = spanString
         val itemVybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         if (men) {
             itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
@@ -452,15 +461,19 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            val prefEditor = k.edit()
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                prefEditor.putBoolean("dzen_noch", true)
+            if (item.isCheckable) {
+                val prefEditor = k.edit()
+                item.isChecked = !item.isChecked
+                if (item.isChecked) {
+                    prefEditor.putBoolean("dzen_noch", true)
+                } else {
+                    prefEditor.putBoolean("dzen_noch", false)
+                }
+                prefEditor.apply()
+                recreate()
             } else {
-                prefEditor.putBoolean("dzen_noch", false)
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
-            prefEditor.apply()
-            recreate()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_glava) {

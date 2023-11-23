@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.text.isDigitsOnly
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.OpisanieBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemOpisanieBinding
@@ -329,25 +330,16 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
         dirList.clear()
         var size = 0L
-        val images = ArrayList<String>()
-        images.add("s_${day}_${mun}.jpg")
-        images.add("s_${day}_${mun}_2.jpg")
-        images.add("s_${day}_${mun}_3.jpg")
-        images.add("s_${day}_${mun}_4.jpg")
+        val sb = StringBuilder()
         val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
         list.items.forEach {
             val pref = if (svity) "v"
             else "s"
             val setIsFull = if (isFull) true
-            else it.name.contains("${pref}_${day}_${mun}.") || it.name.contains("${pref}_${day}_${mun}_")
+            else it.name.contains("${pref}_${day}_${mun}")
+            sb.append(it.name)
             if (setIsFull) {
                 val fileIcon = File("$filesDir/icons/${it.name}")
-                for (i in 0 until images.size) {
-                    if (fileIcon.name == images[i]) {
-                        images.removeAt(i)
-                        break
-                    }
-                }
                 val meta = it.metadata.await()
                 val time = fileIcon.lastModified()
                 val update = meta.updatedTimeMillis
@@ -358,15 +350,17 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 }
             }
         }
-        if (images.isNotEmpty()) {
-            for (i in 0 until images.size) {
-                val file = File("$filesDir/icons/" + images[i])
+        val fileList = File("$filesDir/icons").list()
+        fileList?.forEach {
+            if (!sb.toString().contains(it)) {
+                val file = File("$filesDir/icons/$it")
                 if (file.exists()) file.delete()
             }
+
         }
         if (!loadIcons && MainActivity.isNetworkAvailable(true)) {
             if (dirList.isNotEmpty()) {
-               val dialog = DialogOpisanieWIFI.getInstance(size.toFloat(), isFull)
+                val dialog = DialogOpisanieWIFI.getInstance(size.toFloat(), isFull)
                 dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
             } else {
                 binding.progressBar2.visibility = View.INVISIBLE
@@ -391,14 +385,22 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     private fun loadIconsOnImageView() {
-        var endImage = 3
-        if (svity) endImage = 0
-        for (e in 0..endImage) {
-            var schet = ""
-            if (e > 0) schet = "_${e + 1}"
-            val file2 = if (svity) File("$filesDir/icons/v_${day}_${mun}.jpg")
-            else File("$filesDir/icons/s_${day}_${mun}$schet.jpg")
-            if (file2.exists()) arrayList[e].image = file2.absolutePath
+        var e = 0
+        val pref = if (svity) "v"
+        else "s"
+        val fileList = File("$filesDir/icons").list()
+        fileList?.forEach {
+            if (it.contains("${pref}_${day}_${mun}")) {
+                if (!svity) {
+                    val s1 = "${pref}_${day}_${mun}".length
+                    val s2 = it.substring(s1, s1 + 1)
+                    val s3 = it.substring(s1 + 1, s1 + 2)
+                    if (s2 == ".") e = 0
+                    else if (s2 == "_" && s3.isDigitsOnly()) e = s3.toInt() - 1
+                }
+                val file2 = File("$filesDir/icons/$it")
+                if (file2.exists()) arrayList[e].image = file2.absolutePath
+            }
         }
         binding.progressBar2.visibility = View.INVISIBLE
         adapter.notifyDataSetChanged()

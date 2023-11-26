@@ -1,74 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.woxthebox.draglistview.swipe.ListSwipeItem xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout android:gravity="center_vertical"
     android:layout_height="wrap_content"
-    app:leftViewId="@+id/item_left"
-    app:rightViewId="@+id/item_right"
-    app:swipeViewId="@+id/item_layout">
+    android:layout_marginBottom="1sp"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/item_left"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignTop="@+id/item_layout"
-        android:layout_alignBottom="@+id/item_layout"
-        android:gravity="start|center_vertical"
-        android:padding="5sp"
-        android:text="@string/redagaktirovat"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/item_right"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignTop="@+id/item_layout"
-        android:layout_alignBottom="@+id/item_layout"
-        android:gravity="end|center_vertical"
-        android:padding="5sp"
-        android:text="@string/delite"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@id/item_layout"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1sp"
-        android:gravity="center_vertical">
+        android:layout_marginTop="10sp"
+        android:contentDescription="@string/empty"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10sp"
-            android:contentDescription="@string/empty"
-            app:layout_constraintEnd_toStartOf="@+id/image"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:hint="@string/niama"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="0sp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8sp"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/image"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="28sp"
-            android:layout_height="28sp"
-            android:contentDescription="@string/empty"
-            android:padding="5sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/menu" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.woxthebox.draglistview.swipe.ListSwipeItem>
+</androidx.constraintlayout.widget.ConstraintLayout>

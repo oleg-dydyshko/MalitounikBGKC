@@ -26,12 +26,10 @@ class DialogDeliteImage : DialogFragment() {
 
     interface DialogDeliteListener {
         fun imageFileDelite(position: Int)
-        fun imageFileDeliteCancel()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mListener?.imageFileDeliteCancel()
         _binding = null
     }
 
@@ -60,7 +58,7 @@ class DialogDeliteImage : DialogFragment() {
             val bitmap = BitmapFactory.decodeFile(path)
             binding.imageView2.setImageBitmap(bitmap)
             builder.setPositiveButton(resources.getText(by.carkva_gazeta.malitounik.R.string.ok)) { _: DialogInterface?, _: Int -> mListener?.imageFileDelite(position) }
-            builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { _: DialogInterface, _: Int -> mListener?.imageFileDeliteCancel() }
+            builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             builder.setView(binding.root)
             alert = builder.create()
         }

@@ -393,10 +393,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             if (it.contains("${pref}_${day}_${mun}")) {
                 if (!svity) {
                     val s1 = "${pref}_${day}_${mun}".length
-                    val s2 = it.substring(s1, s1 + 1)
                     val s3 = it.substring(s1 + 1, s1 + 2)
-                    if (s2 == ".") e = 0
-                    else if (s2 == "_" && s3.isDigitsOnly()) e = s3.toInt() - 1
+                    if (s3.isDigitsOnly()) e = s3.toInt() - 1
                 }
                 val file2 = File("$filesDir/icons/$it")
                 if (file2.exists()) arrayList[e].image = file2.absolutePath

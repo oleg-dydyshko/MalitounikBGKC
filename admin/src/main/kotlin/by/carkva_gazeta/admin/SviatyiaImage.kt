@@ -17,7 +17,13 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.text.isDigitsOnly
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
@@ -25,8 +31,11 @@ import by.carkva_gazeta.admin.databinding.AdminSviatyiaImageBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
+import by.carkva_gazeta.malitounik.MineiaDay
+import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ListItemImageBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
@@ -46,17 +55,17 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.Calendar
 
-class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener {
+class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private lateinit var binding: AdminSviatyiaImageBinding
-    private lateinit var adapter: ItemAdapter
+    private lateinit var adapter: SviatyiaImageAdapter
     private var resetTollbarJob: Job? = null
     private var mLastClickTime: Long = 0
     private var mun = 1
     private var day = 1
     private val images = ArrayList<DataImages>()
-    private val arrayListIcon = ArrayList<StorageReference>()
     private var position = 0
+
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             val imageUri = it.data?.data
@@ -70,7 +79,6 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                 fileUpload(bitmap)
             }
         }
-        binding.dragListView.resetSwipedViews(null)
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -84,24 +92,6 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         SplitCompat.installActivity(context)
     }
 
-    override fun onDialogEditClick(position: Int) {
-        val intent = Intent()
-        intent.type = "*/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-        this.position = position
-        mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
-    }
-
-    override fun onDialogDeliteClick(position: Int, name: String) {
-        val dialog = DialogDeliteImage.getInstance(position, images[position].file.absolutePath)
-        dialog.show(supportFragmentManager, "DialogDeliteImage")
-    }
-
-    override fun imageFileDeliteCancel() {
-        binding.dragListView.resetSwipedViews(null)
-    }
-
     override fun imageFileDelite(position: Int) {
         CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
@@ -113,7 +103,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
             }
             images[position].file = File("")
             images[position].size = 0L
-            adapter.updateList(images)
+            adapter.notifyDataSetChanged()
             binding.progressBar2.visibility = View.GONE
         }
     }
@@ -140,74 +130,13 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: (c[Calendar.MONTH] + 1)
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         CoroutineScope(Dispatchers.Main).launch {
-            val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
-            arrayListIcon.addAll(list.items)
             getIcons()
         }
-        adapter = ItemAdapter(by.carkva_gazeta.malitounik.R.id.image, false)
-        binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
-        binding.dragListView.setLayoutManager(LinearLayoutManager(this))
-        binding.dragListView.setAdapter(adapter, true)
-        binding.dragListView.setCanDragHorizontally(false)
-        binding.dragListView.setCanDragVertically(true)
-        binding.dragListView.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
-            override fun onItemSwipeStarted(item: ListSwipeItem) {
-            }
-
-            override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
-                val adapterItem = item.tag as DataImages
-                val pos = binding.dragListView.adapter.getPositionForItem(adapterItem)
-                if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
-                    val dialog = DialogDeliteImage.getInstance(pos, images[pos].file.absolutePath)
-                    dialog.show(supportFragmentManager, "DialogDeliteImage")
-                }
-                if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
-                    val intent = Intent()
-                    intent.type = "*/*"
-                    intent.action = Intent.ACTION_GET_CONTENT
-                    intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-                    position = pos
-                    mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
-                }
-            }
-        })
-        binding.dragListView.setDragListListener(object : DragListView.DragListListener {
-            override fun onItemDragStarted(position: Int) {
-            }
-
-            override fun onItemDragging(itemPosition: Int, x: Float, y: Float) {
-            }
-
-            override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    binding.progressBar2.visibility = View.VISIBLE
-                    binding.dragListView.isDragEnabled = false
-                    val arraytemp = ArrayList<DataImages>()
-                    for (i in 0 until images.size) {
-                        val posItems = when (i) {
-                            1 -> "_2"
-                            2 -> "_3"
-                            3 -> "_4"
-                            else -> ""
-                        }
-                        if (images[i].size != 0L) {
-                            Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").putFile(Uri.fromFile(images[i].file)).await()
-                            val file = File("$filesDir/icons/s_${day}_${mun}${posItems}.jpg")
-                            arraytemp.add(DataImages(getSviatyia(toPosition), file.length(), file, images[i].position))
-                        } else {
-                            arraytemp.add(DataImages(getSviatyia(toPosition), 0, File(""), images[i].position))
-                            if (images[i].size != 0L) {
-                                Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}${posItems}.jpg").delete().await()
-                            }
-                        }
-                    }
-                    images.clear()
-                    images.addAll(arraytemp)
-                    binding.dragListView.isDragEnabled = true
-                    getIcons()
-                }
-            }
-        })
+        adapter = SviatyiaImageAdapter(this, images)
+        binding.dragListView.isVerticalScrollBarEnabled = false
+        binding.dragListView.onItemClickListener = this
+        binding.dragListView.onItemLongClickListener = this
+        binding.dragListView.adapter = adapter
         setTollbarTheme()
     }
 
@@ -263,22 +192,13 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
                     }
                 }
                 bitmap?.let {
-                    if (position == 0) {
-                        Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}.jpg").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
-                            val file = File("$filesDir/icons/s_${day}_${mun}.jpg")
-                            localFile.copyTo(file, true)
-                            images[position].file = file
-                            images[position].size = file.length()
-                        }.await()
-                    } else {
-                        Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}_${position + 1}.jpg").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
-                            val file = File("$filesDir/icons/s_${day}_${mun}_${position + 1}.jpg")
-                            localFile.copyTo(file, true)
-                            images[position].file = file
-                            images[position].size = file.length()
-                        }.await()
-                    }
-                    adapter.updateList(images)
+                    Malitounik.referens.child("/chytanne/icons/s_${day}_${mun}_${position + 1}.jpg").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
+                        val file = File("$filesDir/icons/s_${day}_${mun}_${position + 1}.jpg")
+                        localFile.copyTo(file, true)
+                        images[position].file = file
+                        images[position].size = file.length()
+                    }.await()
+                    adapter.notifyDataSetChanged()
                 }
                 binding.progressBar2.visibility = View.GONE
             }
@@ -290,50 +210,28 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
             binding.progressBar2.visibility = View.VISIBLE
             val dir = File("$filesDir/icons/")
             if (!dir.exists()) dir.mkdir()
-            var position = 0L
-            val tempArray = ArrayList<DataImages>()
             images.clear()
-            if (arrayListIcon.size == 0) MainActivity.toastView(this@SviatyiaImage, getString(by.carkva_gazeta.malitounik.R.string.error))
-            arrayListIcon.forEach {
-                if (it.name.contains("s_${day}_${mun}.") || it.name.contains("s_${day}_${mun}_")) {
+            val itPos = StringBuilder()
+            val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
+            list.items.forEach {
+                if (it.name.contains("s_${day}_${mun}")) {
                     val fileIcon = File("$filesDir/icons/" + it.name)
                     it.getFile(fileIcon).addOnFailureListener {
                         MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
-                    tempArray.add(DataImages(getSviatyia(position.toInt()), fileIcon.length(), fileIcon, position))
-                    position++
+                    var e = 1
+                    val s1 = "s_${day}_${mun}".length
+                    val s3 = it.name.substring(s1 + 1, s1 + 2)
+                    if (s3.isDigitsOnly()) e = s3.toInt()
+                    images.add(DataImages(getSviatyia(e - 1), fileIcon.length(), fileIcon, e.toLong()))
+                    itPos.append(e)
                 }
             }
-            val tempArraySize = tempArray.size
-            var e = 0
-            for (i in 0..3) {
-                if (i == 0 && tempArraySize > 0) {
-                    if (tempArray[e].file.name.contains("s_${day}_${mun}.")) {
-                        images.add(tempArray[e])
-                        e++
-                    } else {
-                        images.add(DataImages(getSviatyia(position.toInt()), 0, File(""), position))
-                        position++
-                    }
-                } else {
-                    if (e < tempArraySize) {
-                        val t1 = tempArray[e].file.name.lastIndexOf(".")
-                        val t2 = tempArray[e].file.name.lastIndexOf("_")
-                        val chislo = tempArray[e].file.name.substring(t2 + 1, t1).toInt()
-                        if (chislo == i + 1) {
-                            images.add(tempArray[e])
-                            e++
-                        } else {
-                            images.add(DataImages(getSviatyia(position.toInt()), 0, File(""), position))
-                            position++
-                        }
-                    } else {
-                        images.add(DataImages(getSviatyia(position.toInt()), 0, File(""), position))
-                        position++
-                    }
-                }
+            for (i in 1..4) {
+                if (!itPos.contains(i.toString())) images.add(DataImages(getSviatyia(i - 1), 0, File(""), i.toLong()))
             }
-            adapter.updateList(images)
+            images.sort()
+            adapter.notifyDataSetChanged()
             binding.progressBar2.visibility = View.GONE
         }
     }
@@ -342,23 +240,18 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         var title = ""
         val dir = File("$filesDir/sviatyja/")
         if (!dir.exists()) dir.mkdir()
-        val list = Malitounik.referens.child("/chytanne/sviatyja").list(12).await()
-        list.items.forEach { storageReference ->
-            if (mun == Calendar.getInstance()[Calendar.MONTH] + 1) {
-                var update = 0L
-                storageReference.metadata.addOnSuccessListener { storageMetadata ->
-                    update = storageMetadata.updatedTimeMillis
-                }.await()
-                val fileOpisanie = File("$filesDir/sviatyja/" + storageReference.name)
-                val time = fileOpisanie.lastModified()
-                if (!fileOpisanie.exists() || time < update) {
-                    storageReference.getFile(fileOpisanie).addOnFailureListener {
-                        MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
-                    }.await()
-                }
-            }
-        }
         val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
+        val storageReference = Malitounik.referens.child("/chytanne/sviatyja/opisanie$mun.json")
+        var update = 0L
+        storageReference.metadata.addOnSuccessListener { storageMetadata ->
+            update = storageMetadata.updatedTimeMillis
+        }.await()
+        val time = fileOpisanie.lastModified()
+        if (!fileOpisanie.exists() || time < update) {
+            storageReference.getFile(fileOpisanie).addOnFailureListener {
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+            }.await()
+        }
         val gson = Gson()
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
         var res = ""
@@ -406,7 +299,71 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
         return false
     }
 
-    private inner class ItemAdapter(private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<DataImages, ItemAdapter.ViewHolder>() {
+    private fun launch(position: Int) {
+        val intent = Intent()
+        intent.type = "*/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
+        intent.putExtra("position", position)
+        this@SviatyiaImage.position = position
+        mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        launch(position)
+    }
+
+    override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
+        if (images[position].size == 0L) {
+            launch(position)
+        } else {
+            val dialog = DialogDeliteImage.getInstance(position, images[position].file.absolutePath)
+            dialog.show(supportFragmentManager, "DialogDeliteImage")
+        }
+        return true
+    }
+
+    private class SviatyiaImageAdapter(private val activity: Activity, private val list: ArrayList<DataImages>) : ArrayAdapter<DataImages>(activity, R.layout.list_item_image, list) {
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val ea: ViewHolder
+            if (convertView == null) {
+                val binding = ListItemImageBinding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                ea = ViewHolder(binding.imageView, binding.textView)
+                rootView.tag = ea
+            } else {
+                rootView = convertView
+                ea = rootView.tag as ViewHolder
+            }
+            val imgFile = list[position].file
+            val myBitmap = resizeImage(BitmapFactory.decodeFile(imgFile.absolutePath))
+            ea.image.setImageBitmap(myBitmap)
+            ea.textView.text = list[position].title
+            return rootView
+        }
+
+        private fun resizeImage(bitmap: Bitmap?): Bitmap? {
+            bitmap?.let {
+                var newHeight = it.height.toFloat()
+                var newWidth = it.width.toFloat()
+                val widthLinear = 500f
+                val resoluton = newWidth / newHeight
+                newWidth = 500f * resoluton
+                newHeight = 500f
+                if (newWidth > widthLinear) {
+                    newWidth = widthLinear
+                    newHeight = newWidth / resoluton
+                }
+                return Bitmap.createScaledBitmap(it, newWidth.toInt(), newHeight.toInt(), false)
+            }
+            return null
+        }
+    }
+
+    private class ViewHolder(var image: ImageView, var textView: TextView)
+
+    /*private inner class ItemAdapter(private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<DataImages, ItemAdapter.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             view.itemLayout.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default_list)
@@ -450,60 +407,69 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Di
 
             override fun onItemClicked(view: View?) {
                 if (images[bindingAdapterPosition].size == 0L) {
-                    val intent = Intent()
-                    intent.type = "*/*"
-                    intent.action = Intent.ACTION_GET_CONTENT
-                    intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-                    this@SviatyiaImage.position = bindingAdapterPosition
-                    mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
-                }
-            }
+                    val intent = Intent()*/
+//intent.type = "*/*"
+    /*intent.action = Intent.ACTION_GET_CONTENT
+    intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
+    this@SviatyiaImage.position = bindingAdapterPosition
+    mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
+    }
+    }
 
-            override fun onItemLongClicked(view: View): Boolean {
-                if (images[bindingAdapterPosition].size == 0L) {
-                    val intent = Intent()
-                    intent.type = "*/*"
-                    intent.action = Intent.ACTION_GET_CONTENT
-                    intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-                    this@SviatyiaImage.position = bindingAdapterPosition
-                    mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
-                } else {
-                    val contextMenu = DialogPiarlinyContextMenu.getInstance(bindingAdapterPosition, getString(by.carkva_gazeta.malitounik.R.string.sviatyia))
-                    contextMenu.show(supportFragmentManager, "context_menu")
-                }
-                return true
-            }
-        }
+    override fun onItemLongClicked(view: View): Boolean {
+    if (images[bindingAdapterPosition].size == 0L) {
+    val intent = Intent()*/
+//intent.type = "*/*"
+    /*intent.action = Intent.ACTION_GET_CONTENT
+    intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
+    this@SviatyiaImage.position = bindingAdapterPosition
+    mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
+    } else {
+    val contextMenu = DialogPiarlinyContextMenu.getInstance(bindingAdapterPosition, getString(by.carkva_gazeta.malitounik.R.string.sviatyia))
+    contextMenu.show(supportFragmentManager, "context_menu")
+    }
+    return true
+    }
+    }
 
-        fun updateList(newMyNatatkiFiles: ArrayList<DataImages>) {
-            val diffCallback = RecyclerViewDiffCallback(images, newMyNatatkiFiles)
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            diffResult.dispatchUpdatesTo(this)
-            itemList = newMyNatatkiFiles
-        }
+    fun updateList(newMyNatatkiFiles: ArrayList<DataImages>) {
+    val diffCallback = RecyclerViewDiffCallback(images, newMyNatatkiFiles)
+    val diffResult = DiffUtil.calculateDiff(diffCallback)
+    diffResult.dispatchUpdatesTo(this)
+    itemList = newMyNatatkiFiles
+    }
 
-        init {
-            itemList = images
-        }
+    init {
+    itemList = images
+    }
     }
 
     private class RecyclerViewDiffCallback(private val oldArrayList: ArrayList<DataImages>, private val newArrayList: ArrayList<DataImages>) : DiffUtil.Callback() {
-        override fun getOldListSize(): Int {
-            return oldArrayList.size
-        }
-
-        override fun getNewListSize(): Int {
-            return newArrayList.size
-        }
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
-        }
+    override fun getOldListSize(): Int {
+    return oldArrayList.size
     }
 
-    private data class DataImages(var title: String, var size: Long, var file: File, val position: Long)
+    override fun getNewListSize(): Int {
+    return newArrayList.size
+    }
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+    return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
+    }
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+    return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
+    }
+    }*/
+
+    private data class DataImages(var title: String, var size: Long, var file: File, val position: Long) : Comparable<DataImages> {
+        override fun compareTo(other: DataImages): Int {
+            if (this.position > other.position) {
+                return 1
+            } else if (this.position < other.position) {
+                return -1
+            }
+            return 0
+        }
+    }
 }

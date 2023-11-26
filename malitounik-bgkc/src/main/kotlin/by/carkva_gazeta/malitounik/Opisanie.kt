@@ -336,7 +336,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             val pref = if (svity) "v"
             else "s"
             val setIsFull = if (isFull) true
-            else it.name.contains("${pref}_${day}_${mun}")
+            else it.name.contains("${pref}_${day}_${mun}_")
             sb.append(it.name)
             if (setIsFull) {
                 val fileIcon = File("$filesDir/icons/${it.name}")
@@ -390,7 +390,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         else "s"
         val fileList = File("$filesDir/icons").list()
         fileList?.forEach {
-            if (it.contains("${pref}_${day}_${mun}")) {
+            if (it.contains("${pref}_${day}_${mun}_")) {
                 if (!svity) {
                     val s1 = "${pref}_${day}_${mun}".length
                     val s3 = it.substring(s1 + 1, s1 + 2)

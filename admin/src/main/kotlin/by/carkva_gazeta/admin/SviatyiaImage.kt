@@ -214,7 +214,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
             val itPos = StringBuilder()
             val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
             list.items.forEach {
-                if (it.name.contains("s_${day}_${mun}")) {
+                if (it.name.contains("s_${day}_${mun}_")) {
                     val fileIcon = File("$filesDir/icons/" + it.name)
                     it.getFile(fileIcon).addOnFailureListener {
                         MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))

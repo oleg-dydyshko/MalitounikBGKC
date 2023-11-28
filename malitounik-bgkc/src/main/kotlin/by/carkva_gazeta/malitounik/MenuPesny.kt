@@ -364,8 +364,9 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
         }
         searchViewQwery = poshuk1
         menuList.clear()
-        for (i in menuList.indices) {
-            val inputStream = resources.openRawResource(PesnyAll.resursMap[menuList[i].resurs] ?: R.raw.pesny_prasl_0)
+        val fullMenuList = MenuPesnyData().getPesnyAll()
+        for (i in fullMenuList.indices) {
+            val inputStream = resources.openRawResource(PesnyAll.resursMap[fullMenuList[i].resurs] ?: R.raw.pesny_prasl_0)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             var line: String
@@ -381,7 +382,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
             }
             inputStream.close()
             if (builder.toString().replace("ё", "е", true).contains(poshuk1, true)) {
-                menuList.add(menuList[i])
+                menuList.add(fullMenuList[i])
             }
         }
         menuList.sort()

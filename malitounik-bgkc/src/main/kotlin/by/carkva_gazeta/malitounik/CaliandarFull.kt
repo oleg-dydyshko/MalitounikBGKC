@@ -143,7 +143,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
             ssb.setSpan(AbsoluteSizeSpan(80, true), dzn.length + 1, dzn.length + chislo.length + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             ssb.setSpan(StyleSpan(Typeface.BOLD), 0, dzn.length + 1 + chislo.length + 1 + mesiac.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             if (k.getBoolean("adminDayInYear", false)) {
-                ssb.append("\n\n")
+                ssb.append("\n")
                 val adminShowDayInYear = getString(R.string.admin_show_day_in_year, MenuCaliandar.getPositionCaliandar(position)[24], MenuCaliandar.getPositionCaliandar(position)[22])
                 ssb.append(adminShowDayInYear)
             }

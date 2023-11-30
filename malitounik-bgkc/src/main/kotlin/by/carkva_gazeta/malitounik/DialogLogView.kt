@@ -11,7 +11,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.databinding.DialogTextviewCheckboxDisplayBinding
+import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,14 +21,13 @@ import java.io.File
 
 class DialogLogView : DialogFragment() {
     private lateinit var alert: AlertDialog
-    private var binding: DialogTextviewCheckboxDisplayBinding? = null
+    private var binding: DialogTextviewDisplayBinding? = null
     private var log = ArrayList<String>()
     private var mListener: DialogLogViewListener? = null
     private var logJob: Job? = null
 
     interface DialogLogViewListener {
-        fun createAndSentFile(log: ArrayList<String>, isClear: Boolean)
-        fun clearLogFile(isClear: Boolean)
+        fun createAndSentFile(log: ArrayList<String>)
     }
 
     override fun onAttach(context: Context) {
@@ -58,7 +57,7 @@ class DialogLogView : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val ad = AlertDialog.Builder(fragmentActivity, style)
-            binding = DialogTextviewCheckboxDisplayBinding.inflate(LayoutInflater.from(fragmentActivity))
+            binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(fragmentActivity))
             binding?.let { displayBinding ->
                 if (dzenNoch) displayBinding.title.setBackgroundColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_black))
                 else displayBinding.title.setBackgroundColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary))
@@ -91,14 +90,12 @@ class DialogLogView : DialogFragment() {
                 displayBinding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
                 if (dzenNoch) displayBinding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorWhite))
                 else displayBinding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_text))
-                displayBinding.checkbox.typeface = MainActivity.createFont(Typeface.NORMAL)
-                displayBinding.checkbox.text = getString(R.string.clear_log)
                 ad.setView(displayBinding.root)
                 ad.setPositiveButton(resources.getString(R.string.set_log)) { _: DialogInterface, _: Int ->
-                    mListener?.createAndSentFile(log, displayBinding.checkbox.isChecked)
+                    mListener?.createAndSentFile(log)
                 }
-                ad.setNegativeButton(getString(R.string.cansel)) { _: DialogInterface, _: Int ->
-                    mListener?.clearLogFile(displayBinding.checkbox.isChecked)
+                ad.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
                 }
             }
             alert = ad.create()

@@ -569,7 +569,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_14_09_uzvyszennie_kryza_jutran"] = R.raw.mm_14_09_uzvyszennie_kryza_jutran
             resursMap["mm_14_09_uzvyszennie_kryza_viaczernia"] = R.raw.mm_14_09_uzvyszennie_kryza_viaczernia
             resursMap["mm_21_11_uvachod_u_sviatyniu_baharodzicy_jutran"] = R.raw.mm_21_11_uvachod_u_sviatyniu_baharodzicy_jutran
-            resursMap["mm_22_11_pasviaccie_uvachodu_baharodzicy_apostala_chalimona_viaczernia"] = R.raw.mm_22_11_pasviaccie_uvachodu_baharodzicy_apostala_chalimona_viaczernia
             resursMap["mm_21_11_uvachod_u_sviatyniu_baharodzicy_viaczernia"] = R.raw.mm_21_11_uvachod_u_sviatyniu_baharodzicy_viaczernia
             resursMap["mm_23_11_pasviaccie_uvachodu_baharodzicy_amfilocha_ryhora"] = R.raw.mm_23_11_pasviaccie_uvachodu_baharodzicy_amfilocha_ryhora
             resursMap["mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_liturhija"] = R.raw.mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_liturhija
@@ -578,6 +577,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_12_11_sviatamuczanika_jazafata_viaczernia"] = R.raw.mm_12_11_sviatamuczanika_jazafata_viaczernia
             resursMap["mm_25_11_addannie_uvodzinau_bsharodzicy_klimenta_papy_piatra_aleksandryjskaha_liturhija"] = R.raw.mm_25_11_addannie_uvodzinau_bsharodzicy_klimenta_papy_piatra_aleksandryjskaha_liturhija
             resursMap["mm_30_11_apostala_andreja_pierszapaklikanaha_liturhija"] = R.raw.mm_30_11_apostala_andreja_pierszapaklikanaha_liturhija
+            resursMap["mm_01_12_praroka_navuma_viaczernia"] = R.raw.mm_01_12_praroka_navuma_viaczernia
+            resursMap["mm_02_12_praroka_abakuma_viaczernia"] = R.raw.mm_02_12_praroka_abakuma_viaczernia
+            resursMap["mm_22_11_pasviaccie_uvodzinau_baharodzicy_apostala_chalimona_viaczernia"] = R.raw.mm_22_11_pasviaccie_uvodzinau_baharodzicy_apostala_chalimona_viaczernia
+            resursMap["mm_30_11_apostala_andreja_pierszapaklikanaha_viaczernia"] = R.raw.mm_30_11_apostala_andreja_pierszapaklikanaha_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {

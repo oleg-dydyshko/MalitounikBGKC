@@ -233,7 +233,6 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(326, "Уваход у храм Найсьвяцейшай Багародзіцы", "mm_21_11_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(326, "Уваход у храм Найсьвяцейшай Багародзіцы", "mm_21_11_uvachod_u_sviatyniu_baharodzicy_jutran", JUTRAN))
         datMinALL.add(SlugbovyiaTextuData(326, "Уваход у храм Найсьвяцейшай Багародзіцы", "mm_21_11_uvachod_u_sviatyniu_baharodzicy_viaczernia", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(327, "Пасьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы і сьвятога апостала Халімона", "mm_22_11_pasviaccie_uvachodu_baharodzicy_apostala_chalimona_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(328, "Пасьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы і між сьвятымі айцоў нашых Амфілёха і Рыгора", "mm_23_11_pasviaccie_uvachodu_baharodzicy_amfilocha_ryhora", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(329, "Пасьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы, сьвятой вялікамучаніцы Кацярыны і сьвятога мучаніка Мяркура", "mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(329, "Пасьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы, сьвятой вялікамучаніцы Кацярыны і сьвятога мучаніка Мяркура", "mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_viaczernia", VIACZERNIA))
@@ -350,8 +349,12 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(321, "Сьвятога апостала і евангеліста Мацьвея", "mm_16_11_apostala_macvieja_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(317, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "mm_12_11_sviatamuczanika_jazafata_jutran", JUTRAN))
         datMinALL.add(SlugbovyiaTextuData(317, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "mm_12_11_sviatamuczanika_jazafata_viaczernia", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(330, "Адданьне сьвята Ўводзінаў Багародзіцы, сьв. Клімента, папы Рымскага і сьв. Пятра, архібіскупа Александрыйскага", "mm_25_11_addannie_uvodzinau_bsharodzicy_klimenta_papy_piatra_aleksandryjskaha_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(330, "", "", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(335, "Сьвятога апостала Андрэя Першапакліканага", "mm_30_11_apostala_andreja_pierszapaklikanaha_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(336, "Сьвятога прарока Навума", "mm_01_12_praroka_navuma_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(337, "Сьвятога прарока Абакума", "mm_02_12_praroka_abakuma_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(327, "Пасьвяцьце Ўводзінаў Найсьвяцейшай Багародзіцы і сьвятога апостала Халімона і інш.", "mm_22_11_pasviaccie_uvodzinau_baharodzicy_apostala_chalimona_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(335, "Сьвятога апостала Андрэя Першапакліканага", "mm_30_11_apostala_andreja_pierszapaklikanaha_viaczernia", VIACZERNIA))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {

@@ -705,7 +705,6 @@
     <string name="bgkc_resource">БЕЛАРУСКІ ГРЭКА-КАТАЛІЦКІ РЭСУРС</string>
     <string name="log">ЛОГ</string>
     <string name="log_m">Лог праграмы</string>
-    <string name="clear_log">Ачысьціць файл лога</string>
     <string name="set_log">Даслаць файлы</string>
     <string name="check_update_resourse">Ёсьць абнаўленьне рэсурсаў</string>
     <string name="set_log_file">Адправіць файл</string>

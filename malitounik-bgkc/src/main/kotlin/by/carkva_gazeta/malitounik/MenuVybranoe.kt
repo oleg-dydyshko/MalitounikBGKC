@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.malitounik.databinding.MenuVybranoeBinding
@@ -398,32 +397,11 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
         }
 
         fun updateList(newVybranoe: ArrayList<VybranoeData>) {
-            val diffCallback = RecyclerViewDiffCallback(vybranoe, newVybranoe)
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            diffResult.dispatchUpdatesTo(this)
             itemList = newVybranoe
         }
 
         init {
-            itemList = vybranoe
-        }
-    }
-
-    private class RecyclerViewDiffCallback(private val oldArrayList: ArrayList<VybranoeData>, private val newArrayList: ArrayList<VybranoeData>) : DiffUtil.Callback() {
-        override fun getOldListSize(): Int {
-            return oldArrayList.size
-        }
-
-        override fun getNewListSize(): Int {
-            return newArrayList.size
-        }
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
+            updateList(vybranoe)
         }
     }
 

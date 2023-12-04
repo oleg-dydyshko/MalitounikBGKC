@@ -7,14 +7,9 @@
         android:title="@string/menu_font_size_app"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_download_all"
+        android:id="@+id/action_gallery"
         android:orderInCategory="100"
-        android:title="@string/download_opisanie_all"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_download_del"
-        android:orderInCategory="100"
-        android:title="@string/download_opisanie_del"
+        android:title="@string/gallery"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_piarliny"

@@ -19,7 +19,6 @@ class DialogOpisanieWIFI : DialogFragment() {
     private var _binding: DialogTextviewDisplayBinding? = null
     private val binding get() = _binding!!
     private var size = 0f
-    private var isFull = false
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -28,7 +27,7 @@ class DialogOpisanieWIFI : DialogFragment() {
     }
 
     internal interface DialogOpisanieWIFIListener {
-        fun onDialogPositiveOpisanieWIFI(isFull: Boolean)
+        fun onDialogPositiveOpisanieWIFI()
         fun onDialogNegativeOpisanieWIFI()
     }
 
@@ -65,11 +64,10 @@ class DialogOpisanieWIFI : DialogFragment() {
             }
             binding.content.text = getString(R.string.download_opisanie, sizeImage)
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            isFull = arguments?.getBoolean("isFull", false) ?: false
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             builder.setView(binding.root)
-            builder.setPositiveButton(getString(R.string.dazvolic)) { _: DialogInterface?, _: Int -> mListener?.onDialogPositiveOpisanieWIFI(isFull) }
+            builder.setPositiveButton(getString(R.string.dazvolic)) { _: DialogInterface?, _: Int -> mListener?.onDialogPositiveOpisanieWIFI() }
             builder.setNegativeButton(resources.getString(R.string.cansel)) { _: DialogInterface, _: Int -> mListener?.onDialogNegativeOpisanieWIFI() }
         }
         return builder.create()
@@ -81,11 +79,10 @@ class DialogOpisanieWIFI : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(size: Float, isFull: Boolean): DialogOpisanieWIFI {
+        fun getInstance(size: Float): DialogOpisanieWIFI {
             val dialogOpisanieWIFI = DialogOpisanieWIFI()
             val bundle = Bundle()
             bundle.putFloat("size", size)
-            bundle.putBoolean("isFull", isFull)
             dialogOpisanieWIFI.arguments = bundle
             return dialogOpisanieWIFI
         }

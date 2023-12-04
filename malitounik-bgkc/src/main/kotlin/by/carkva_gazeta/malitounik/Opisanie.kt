@@ -1,37 +1,48 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
-import android.content.*
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.Build
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.text.isDigitsOnly
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.OpisanieBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemOpisanieBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.io.*
-import java.util.*
+import java.io.File
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 
-class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener, DialogDeliteAllImagesOpisanie.DialogDeliteAllImagesOpisanieListener, DialogHelpShare.DialogHelpShareListener {
+class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener, DialogHelpShare.DialogHelpShareListener {
     private val dzenNoch get() = getBaseDzenNoch()
     private var mun = 1
     private var day = 1
@@ -44,6 +55,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private val dirList = ArrayList<DirList>()
     private val arrayList = ArrayList<OpisanieData>()
     private lateinit var adapter: OpisanieAdapter
+    private var fullImagePathVisable = ""
 
     private fun viewSviaryiaIIcon() {
         val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
@@ -61,7 +73,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         loadIconsJob?.cancel()
     }
 
-    private fun resizeImage(bitmap: Bitmap?): Bitmap? {
+    /*private fun resizeImage(bitmap: Bitmap?): Bitmap? {
         bitmap?.let {
             var newHeight = it.height.toFloat()
             var newWidth = it.width.toFloat()
@@ -76,7 +88,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             return Bitmap.createScaledBitmap(it, newWidth.toInt(), newHeight.toInt(), false)
         }
         return null
-    }
+    }*/
 
     private fun loadOpisanieSviatyia(builder: String) {
         val gson = Gson()
@@ -94,7 +106,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         for (i in listRes.size - 1 downTo 0) {
             val text = listRes[i].replace("<!--image-->", "")
             if (text.trim() != "") {
-                if (text.contains("Трапар", ignoreCase = true) || text.contains("Кандак", ignoreCase = true)) {
+                if (text.contains("Трапар") || text.contains("Кандак")) {
                     sb = "<strong>$text$sb"
                     continue
                 } else {
@@ -130,30 +142,26 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             val gson = Gson()
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
             val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(builder, type)
-            if (arrayList != null) {
-                arrayList.forEach { strings ->
-                    if (day == strings[0].toInt() && mun == strings[1].toInt()) {
-                        var res = strings[2]
-                        if (dzenNoch) res = res.replace("#d00505", "#f44336")
-                        val t1 = res.indexOf("</strong>")
-                        var textTitle = ""
-                        var fulText = ""
-                        if (t1 != -1) {
-                            textTitle = res.substring(0, t1 + 9)
-                            fulText = res.substring(t1 + 9)
-                        }
-                        val spannedtitle = MainActivity.fromHtml(textTitle)
-                        val spanned = MainActivity.fromHtml(fulText)
-                        var check = false
-                        this.arrayList.forEach {
-                            if (it.index == 0) check = true
-                        }
-                        if (!check) this.arrayList.add(OpisanieData(0, spannedtitle, spanned, ""))
-                        adapter.notifyDataSetChanged()
+            arrayList?.forEach { strings ->
+                if (day == strings[0].toInt() && mun == strings[1].toInt()) {
+                    var res = strings[2]
+                    if (dzenNoch) res = res.replace("#d00505", "#f44336")
+                    val t1 = res.indexOf("</strong>")
+                    var textTitle = ""
+                    var fulText = ""
+                    if (t1 != -1) {
+                        textTitle = res.substring(0, t1 + 9)
+                        fulText = res.substring(t1 + 9)
                     }
+                    val spannedtitle = MainActivity.fromHtml(textTitle)
+                    val spanned = MainActivity.fromHtml(fulText)
+                    var check = false
+                    this.arrayList.forEach {
+                        if (it.index == 0) check = true
+                    }
+                    if (!check) this.arrayList.add(OpisanieData(0, spannedtitle, spanned, ""))
+                    adapter.notifyDataSetChanged()
                 }
-            } else {
-                fileOpisanieSviat.delete()
             }
         }
     }
@@ -169,17 +177,15 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         year = intent.extras?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
         svity = intent.extras?.getBoolean("glavnyia", false) ?: false
         if (savedInstanceState?.getBoolean("imageViewFullVisable") == true) {
-            val bmp = if (Build.VERSION.SDK_INT >= 33) {
-                savedInstanceState.getParcelable("bitmap", Bitmap::class.java)
-            } else {
-                @Suppress("DEPRECATION") savedInstanceState.getParcelable("bitmap")
-            }
-            bmp?.let {
-                binding.imageViewFull.setImageBitmap(Bitmap.createScaledBitmap(it, it.width, it.height, false))
-                binding.imageViewFull.visibility = View.VISIBLE
-                binding.progressBar2.visibility = View.INVISIBLE
-                binding.swipeRefreshLayout.visibility = View.GONE
-            }
+            fullImagePathVisable = savedInstanceState.getString("filePach") ?: ""
+            val file2 = File(fullImagePathVisable)
+            Picasso.get().load(file2).into(binding.imageViewFull)
+            binding.imageViewFull.visibility = View.VISIBLE
+            binding.progressBar2.visibility = View.INVISIBLE
+            binding.swipeRefreshLayout.visibility = View.GONE
+            binding.titleToolbar.text = savedInstanceState.getString("tollbarText")
+        } else {
+            binding.titleToolbar.text = resources.getText(R.string.zmiest)
         }
         adapter = OpisanieAdapter(this)
         binding.listview.adapter = adapter
@@ -202,15 +208,15 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         setTollbarTheme()
     }
 
-    override fun onDialogPositiveOpisanieWIFI(isFull: Boolean) {
-        startLoadIconsJob(true, isFull)
+    override fun onDialogPositiveOpisanieWIFI() {
+        startLoadIconsJob(true)
     }
 
     override fun onDialogNegativeOpisanieWIFI() {
         binding.progressBar2.visibility = View.INVISIBLE
     }
 
-    private fun startLoadIconsJob(loadIcons: Boolean, isFull: Boolean = false) {
+    private fun startLoadIconsJob(loadIcons: Boolean) {
         loadIconsJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.isIndeterminate = true
             binding.progressBar2.visibility = View.VISIBLE
@@ -229,7 +235,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     } else {
                         getSviatyia()
                     }
-                    getIcons(loadIcons, isFull)
+                    getIcons(loadIcons)
                     getPiarliny()
                 } catch (_: Throwable) {
                 }
@@ -321,11 +327,11 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         loadOpisanieSviatyia(read)
     }
 
-    private suspend fun getIcons(loadIcons: Boolean, isFull: Boolean, count: Int = 0) {
+    private suspend fun getIcons(loadIcons: Boolean, count: Int = 0) {
         val dir = File("$filesDir/icons/")
         if (!dir.exists()) dir.mkdir()
         if (count < 2) {
-            getIcons(loadIcons, isFull, count + 1)
+            getIcons(loadIcons, count + 1)
             return
         }
         dirList.clear()
@@ -335,10 +341,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         list.items.forEach {
             val pref = if (svity) "v"
             else "s"
-            val setIsFull = if (isFull) true
-            else it.name.contains("${pref}_${day}_${mun}_")
             sb.append(it.name)
-            if (setIsFull) {
+            if (it.name.contains("${pref}_${day}_${mun}")) {
                 val fileIcon = File("$filesDir/icons/${it.name}")
                 val meta = it.metadata.await()
                 val time = fileIcon.lastModified()
@@ -360,7 +364,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
         if (!loadIcons && MainActivity.isNetworkAvailable(true)) {
             if (dirList.isNotEmpty()) {
-                val dialog = DialogOpisanieWIFI.getInstance(size.toFloat(), isFull)
+                val dialog = DialogOpisanieWIFI.getInstance(size.toFloat())
                 dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
             } else {
                 binding.progressBar2.visibility = View.INVISIBLE
@@ -390,7 +394,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         else "s"
         val fileList = File("$filesDir/icons").list()
         fileList?.forEach {
-            if (it.contains("${pref}_${day}_${mun}_")) {
+            if (it.contains("${pref}_${day}_${mun}")) {
                 if (!svity) {
                     val s1 = "${pref}_${day}_${mun}".length
                     val s3 = it.substring(s1 + 1, s1 + 2)
@@ -459,7 +463,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.text = resources.getText(R.string.zmiest)
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
@@ -480,6 +483,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             binding.imageViewFull.visibility = View.GONE
             binding.swipeRefreshLayout.visibility = View.VISIBLE
             viewSviaryiaIIcon()
+            binding.titleToolbar.text = resources.getText(R.string.zmiest)
         } else {
             super.onBack()
         }
@@ -515,7 +519,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable("bitmap", binding.imageViewFull.drawable?.toBitmap())
+        outState.putString("filePach", fullImagePathVisable)
+        outState.putString("tollbarText", binding.titleToolbar.text.toString())
         outState.putBoolean("imageViewFullVisable", binding.imageViewFull.visibility == View.VISIBLE)
     }
 
@@ -525,21 +530,17 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             onBack()
             return true
         }
-        if (id == R.id.action_download_all) {
-            startLoadIconsJob(!MainActivity.isNetworkAvailable(true), isFull = true)
-            return true
-        }
-        if (id == R.id.action_download_del) {
-            val dialogDeliteAllImagesOpisanie = DialogDeliteAllImagesOpisanie()
-            dialogDeliteAllImagesOpisanie.show(supportFragmentManager, "dialogDeliteAllImagesOpisanie")
-            return true
-        }
         if (id == R.id.action_piarliny) {
             val i = Intent(this, PiarlinyAll::class.java)
             if (checkParliny()) {
                 i.putExtra("mun", mun)
                 i.putExtra("day", day)
             }
+            startActivity(i)
+            return true
+        }
+        if (id == R.id.action_gallery) {
+            val i = Intent(this, Gallery::class.java)
             startActivity(i)
             return true
         }
@@ -600,16 +601,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         startActivity(Intent.createChooser(sendIntent, getText(R.string.zmiest)))
     }
 
-    override fun deliteAllImagesOpisanie() {
-        val dir = File("$filesDir/icons/")
-        if (dir.exists()) dir.deleteRecursively()
-        arrayList.forEach {
-            it.image = ""
-        }
-        adapter.notifyDataSetChanged()
-        MainActivity.toastView(this, getString(R.string.remove_padzea))
-    }
-
     private inner class OpisanieAdapter(private val context: Activity) : ArrayAdapter<OpisanieData>(context, R.layout.simple_list_item_opisanie, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -652,15 +643,16 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 }
             }
             if (file2.exists()) {
-                viewHolder.imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file2.absolutePath)))
+                Picasso.get().load(file2).resize(500, 500).onlyScaleDown().centerInside().into(viewHolder.imageView)
                 viewHolder.imageView.visibility = View.VISIBLE
                 viewHolder.imageView.setOnClickListener {
                     if (file2.exists()) {
-                        val bitmap = BitmapFactory.decodeFile(file2.absolutePath)
-                        binding.imageViewFull.setImageBitmap(bitmap)
+                        Picasso.get().load(file2).into(binding.imageViewFull)
                         binding.imageViewFull.visibility = View.VISIBLE
+                        fullImagePathVisable = file2.absolutePath
                         binding.progressBar2.visibility = View.INVISIBLE
                         binding.swipeRefreshLayout.visibility = View.GONE
+                        binding.titleToolbar.text = arrayList[position].title.trim()
                     }
                 }
             } else {

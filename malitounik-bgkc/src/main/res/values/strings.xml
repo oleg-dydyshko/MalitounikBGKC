@@ -309,7 +309,6 @@
     <string name="download_bibliateka">Спампаваць з дапамогай мабільнай сеткі?</string>
     <string name="download_opisanie">Спампаваць%1$sз дапамогай мабільнай сеткі?</string>
     <string name="download_opisanie_all">Спампаваць усе іконы</string>
-    <string name="download_opisanie_del">Выдаліць усе іконы</string>
     <string name="skid_brightness">СКІД</string>
     <string name="default_font">Па змаўчаньні</string>
     <string name="notifi_fix">Рамонт апавяшчэньняў</string>
@@ -693,7 +692,6 @@
     <string name="settings_poshuk_smoll">Налады пошуку</string>
     <string name="help_notifications_api33">Для паказу апавяшчэньняў пра падзеі і сьвяты, патрабуецца дазвол на паказ апавяшчэньняў.</string>
     <string name="no_notifikations">Апавяшчэньні адключаны. Для ўключэньня апавяшчэньняў перайдзіце ў налады Дадатка.</string>
-    <string name="del_all_image_opisanie">Вы сапраўды жадаеце выдаліць усё іконкі?</string>
     <string name="searsh_null_vynik">Вынікаў няма</string>
     <string name="tryjodz_opisanie">%1$s%2$s</string>
     <string name="bogaslujbovyia_data">%1$s за %2$d %3$s %4$d года</string>
@@ -753,5 +751,8 @@
     <string name="update_no_biblijateka">Абнаўленьняў няма</string>
     <string name="day">Дзённы рэжым</string>
     <string name="full_screen_opis">Захаваць выбар?\nМожна пазней зьмяніць у наладах.</string>
+    <string name="gallery">Галерэя</string>
+    <string name="gallery_search">Шукаем выявы ікон:\n%1$s</string>
+    <string name="gallery_download">Спампоўваем выявы ікон:\n%1$s</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

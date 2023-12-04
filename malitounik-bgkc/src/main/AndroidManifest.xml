@@ -377,6 +377,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.Opisanie" />
         </activity>
+        <activity
+            android:name=".Gallery"
+            android:label="@string/gallery"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.Opisanie" />
+        </activity>
 
         <meta-data
             android:name="com.google.android.backup.api_key"

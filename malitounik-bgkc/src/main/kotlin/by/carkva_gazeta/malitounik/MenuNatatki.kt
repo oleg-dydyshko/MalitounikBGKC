@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.malitounik.databinding.MenuVybranoeBinding
@@ -326,32 +325,11 @@ class MenuNatatki : BaseFragment() {
         }
 
         fun updateList(newMyNatatkiFiles: ArrayList<MyNatatkiFiles>) {
-            val diffCallback = RecyclerViewDiffCallback(myNatatkiFiles, newMyNatatkiFiles)
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            diffResult.dispatchUpdatesTo(this)
             itemList = newMyNatatkiFiles
         }
 
         init {
-            itemList = myNatatkiFiles
-        }
-    }
-
-    private class RecyclerViewDiffCallback(private val oldArrayList: ArrayList<MyNatatkiFiles>, private val newArrayList: ArrayList<MyNatatkiFiles>) : DiffUtil.Callback() {
-        override fun getOldListSize(): Int {
-            return oldArrayList.size
-        }
-
-        override fun getNewListSize(): Int {
-            return newArrayList.size
-        }
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
+            updateList(myNatatkiFiles)
         }
     }
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_download_all"
+        android:orderInCategory="100"
+        android:title="@string/download_opisanie_all"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_dzen_noch"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/widget_day_d_n"
+        app:showAsAction="never" />
+</menu>

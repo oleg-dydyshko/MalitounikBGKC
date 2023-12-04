@@ -503,11 +503,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         val c = Calendar.getInstance()
         if (!(mun == c[Calendar.MONTH] && day == c[Calendar.DATE])) {
             val text = SpannableString(binding.titleToolbar.text)
-            val t1 = text.indexOf(",")
-            if (t1 != -1) {
-                text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorSecondary_text)), t1 + 1, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                binding.titleToolbar.text = text
-            }
+            text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorSecondary_text)), 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            binding.titleToolbar.text = text
         }
     }
 

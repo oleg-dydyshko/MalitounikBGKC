@@ -36,7 +36,7 @@
         android:layout_width="0sp"
         android:layout_height="10sp"
         android:indeterminate="true"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
@@ -48,7 +48,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
 
     <by.carkva_gazeta.malitounik.ZoomImageView
         android:id="@+id/imageViewFull"

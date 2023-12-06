@@ -311,8 +311,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mltv_pierad_jadoj_i_pasla"] = R.raw.mltv_pierad_jadoj_i_pasla
             resursMap["mltv_za_backou"] = R.raw.mltv_za_backou
             resursMap["kanon_a_kryckaha"] = R.raw.kanon_a_kryckaha
-            resursMap["lit_ran_asv_dar"] = R.raw.lit_ran_asv_dar
-            resursMap["viaczernia_bierascie"] = R.raw.viaczernia_bierascie
+            resursMap["lit_ran_asv_dar"] = R.raw.lit_raniej_asviaczanych_darou
+            resursMap["viaczernia_bierascie"] = R.raw.viaczerniaja_sluzba_sztodzionnaja_biez_sviatara
             resursMap["jutran_vial_piatn_12jevanhellau"] = R.raw.vialikaja_piatnica_jutran_12jevanhellau
             resursMap["vialikaja_piatnica_mal_paviaczernica"] = R.raw.vialikaja_piatnica_mal_paviaczernica
             resursMap["vialikaja_piatnica_viaczernia"] = R.raw.vialikaja_piatnica_viaczernia

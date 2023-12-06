@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.MediaStore
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -19,31 +20,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.text.isDigitsOnly
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaImageBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
-import by.carkva_gazeta.malitounik.MineiaDay
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ListItemImageBinding
-import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
 import com.google.android.play.core.splitcompat.SplitCompat
-import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.woxthebox.draglistview.DragItemAdapter
-import com.woxthebox.draglistview.DragListView
-import com.woxthebox.draglistview.swipe.ListSwipeHelper
-import com.woxthebox.draglistview.swipe.ListSwipeItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -55,7 +48,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.Calendar
 
-class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+
+class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, DialogContextMenuImage.DialogContextMenuImageListener, DialogSviatyiaImageApisanne.DialogSviatyiaImageApisanneListener {
 
     private lateinit var binding: AdminSviatyiaImageBinding
     private lateinit var adapter: SviatyiaImageAdapter
@@ -200,8 +194,21 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
                     }.await()
                     adapter.notifyDataSetChanged()
                 }
+                val dialog = DialogSviatyiaImageApisanne.getInstance("s_${day}_${mun}_${position + 1}.jpg")
+                dialog.show(supportFragmentManager, "DialogSviatyiaImageApisanne")
                 binding.progressBar2.visibility = View.GONE
             }
+        }
+    }
+
+    private fun getViewByPosition(): View? {
+        val firstListItemPosition = binding.dragListView.firstVisiblePosition
+        val lastListItemPosition = firstListItemPosition + binding.dragListView.childCount - 1
+        return if (position < firstListItemPosition || position > lastListItemPosition) {
+            binding.dragListView.adapter.getView(position, null, binding.dragListView)
+        } else {
+            val childIndex = position - firstListItemPosition
+            binding.dragListView.getChildAt(childIndex)
         }
     }
 
@@ -299,28 +306,72 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
         return false
     }
 
-    private fun launch(position: Int) {
+    private fun launch() {
         val intent = Intent()
         intent.type = "*/*"
         intent.action = Intent.ACTION_GET_CONTENT
         intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-        intent.putExtra("position", position)
-        this@SviatyiaImage.position = position
         mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        launch(position)
+        this@SviatyiaImage.position = position
+        if (images[position].size == 0L) {
+            launch()
+        } else {
+            val dialog = DialogContextMenuImage.getInstance(images[position].file.name)
+            dialog.show(supportFragmentManager, "DialogContextMenuImage")
+        }
     }
 
     override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
+        this@SviatyiaImage.position = position
         if (images[position].size == 0L) {
-            launch(position)
+            launch()
         } else {
             val dialog = DialogDeliteImage.getInstance(position, images[position].file.absolutePath)
             dialog.show(supportFragmentManager, "DialogDeliteImage")
         }
         return true
+    }
+
+    override fun setApisanneIcon(text: String, fileName: String) {
+        if (MainActivity.isNetworkAvailable()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.progressBar2.visibility = View.VISIBLE
+                val dir = File("$filesDir/iconsApisanne")
+                if (!dir.exists()) dir.mkdir()
+                val t1 = fileName.lastIndexOf(".")
+                val fileNameT = fileName.substring(0, t1) + ".txt"
+                if (text != "") {
+                    val localFile = File("$filesDir/cache/cache.txt")
+                    localFile.writer().use {
+                        it.write(text)
+                    }
+                    Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
+                        val file = File("$filesDir/iconsApisanne/$fileNameT")
+                        localFile.copyTo(file, true)
+                    }.await()
+                    val textViewApisanne: TextView? = getViewByPosition()?.findViewById(by.carkva_gazeta.malitounik.R.id.textViewApisanne)
+                    textViewApisanne?.text = text
+                } else {
+                    try {
+                        Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").delete().await()
+                    } catch (_: Throwable) {
+                    }
+                }
+                binding.progressBar2.visibility = View.GONE
+            }
+        }
+    }
+
+    override fun onDialogOpisanneIcon(fileName: String) {
+        val dialog = DialogSviatyiaImageApisanne.getInstance(fileName)
+        dialog.show(supportFragmentManager, "DialogSviatyiaImageApisanne")
+    }
+
+    override fun onDialogUploadIcon() {
+        launch()
     }
 
     private class SviatyiaImageAdapter(private val activity: Activity, private val list: ArrayList<DataImages>) : ArrayAdapter<DataImages>(activity, R.layout.list_item_image, list) {

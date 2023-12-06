@@ -754,5 +754,6 @@
     <string name="gallery">Галерэя</string>
     <string name="gallery_search">Шукаем выявы ікон:\n%1$s</string>
     <string name="gallery_download">Спампоўваем выявы ікон:\n%1$s</string>
+    <string name="admin_opisanne_icon">Апісаньне іконы</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

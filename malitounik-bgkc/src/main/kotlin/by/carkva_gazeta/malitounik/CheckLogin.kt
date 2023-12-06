@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -44,7 +43,6 @@ class CheckLogin : DialogFragment() {
             builder.setView(binding.root)
             alert = builder.create()
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
-            binding.ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             if (dzenNoch) {
                 binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 binding.username.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))

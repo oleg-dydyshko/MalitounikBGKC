@@ -270,22 +270,24 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
     }
 
     override fun onDialogNegativeOpisanieWIFI() {
-        binding.progressBar2.visibility = View.INVISIBLE
+        binding.progressBar2.visibility = View.GONE
     }
 
     private fun startLoadIconsJob(loadIcons: Boolean) {
-        loadIconsJob = CoroutineScope(Dispatchers.Main).launch {
-            binding.progressBar2.isIndeterminate = true
-            binding.progressBar2.visibility = View.VISIBLE
-            if (!MainActivity.isNetworkAvailable()) {
-                val dialoNoIntent = DialogNoInternet()
-                dialoNoIntent.show(supportFragmentManager, "dialoNoIntent")
-            } else {
-                try {
-                    getSviatyia()
-                    getOpisanieSviat()
-                    getIcons(loadIcons)
-                } catch (_: Throwable) {
+        if (loadIconsJob?.isActive != true) {
+            loadIconsJob = CoroutineScope(Dispatchers.Main).launch {
+                binding.progressBar2.isIndeterminate = true
+                binding.progressBar2.visibility = View.VISIBLE
+                if (!MainActivity.isNetworkAvailable()) {
+                    val dialoNoIntent = DialogNoInternet()
+                    dialoNoIntent.show(supportFragmentManager, "dialoNoIntent")
+                } else {
+                    try {
+                        getSviatyia()
+                        getOpisanieSviat()
+                        getIcons(loadIcons)
+                    } catch (_: Throwable) {
+                    }
                 }
             }
         }
@@ -411,7 +413,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
                 val dialog = DialogOpisanieWIFI.getInstance(size.toFloat())
                 dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
             } else {
-                binding.progressBar2.visibility = View.INVISIBLE
+                binding.progressBar2.visibility = View.GONE
             }
         } else {
             binding.progressBar2.isIndeterminate = false
@@ -437,7 +439,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
                 }
             }
             binding.titleToolbar.text = resources.getText(R.string.gallery)
-            binding.progressBar2.visibility = View.INVISIBLE
+            binding.progressBar2.visibility = View.GONE
             loadGallery()
         }
     }

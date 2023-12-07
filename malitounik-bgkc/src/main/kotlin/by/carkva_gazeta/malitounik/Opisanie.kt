@@ -349,7 +349,9 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 val fileNameT = it.name.substring(0, t1) + ".txt"
                 val file = File("$filesDir/iconsApisanne/$fileNameT")
                 try {
-                    Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").getFile(file).await()
+                    Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").getFile(file).addOnFailureListener {
+                        if (file.exists()) file.delete()
+                    }.await()
                 } catch (_: Throwable) {
                 }
                 val fileIcon = File("$filesDir/icons/${it.name}")
@@ -414,6 +416,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 val file = File("$filesDir/iconsApisanne/$fileNameT")
                 if (file.exists()) {
                     arrayList[e].textApisanne = file.readText()
+                } else {
+                    arrayList[e].textApisanne = ""
                 }
                 val file2 = File("$filesDir/icons/$it")
                 if (file2.exists()) arrayList[e].image = file2.absolutePath
@@ -671,7 +675,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     }
                 }
                 viewHolder.textApisanne.text = arrayList[position].textApisanne
-                viewHolder.textApisanne.visibility = View.VISIBLE
+                if (arrayList[position].textApisanne != "") viewHolder.textApisanne.visibility = View.VISIBLE
+                else viewHolder.textApisanne.visibility = View.GONE
             } else {
                 viewHolder.imageView.setImageBitmap(null)
                 viewHolder.imageView.visibility = View.GONE

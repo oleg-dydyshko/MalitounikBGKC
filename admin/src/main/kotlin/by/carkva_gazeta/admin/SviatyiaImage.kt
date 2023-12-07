@@ -362,14 +362,14 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
                         val file = File("$filesDir/iconsApisanne/$fileNameT")
                         localFile.copyTo(file, true)
                     }.await()
-                    val textViewApisanne: TextView? = getViewByPosition()?.findViewById(by.carkva_gazeta.malitounik.R.id.textViewApisanne)
-                    textViewApisanne?.text = text
                 } else {
                     try {
                         Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").delete().await()
                     } catch (_: Throwable) {
                     }
                 }
+                val textViewApisanne: TextView? = getViewByPosition()?.findViewById(by.carkva_gazeta.malitounik.R.id.textViewApisanne)
+                textViewApisanne?.text = text
                 binding.progressBar2.visibility = View.GONE
             }
         }

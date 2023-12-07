@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
@@ -13,8 +12,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
+import java.io.File
 
 class DialogSviatyiaImageApisanne : DialogFragment() {
     private var mListener: DialogSviatyiaImageApisanneListener? = null
@@ -58,7 +57,10 @@ class DialogSviatyiaImageApisanne : DialogFragment() {
             if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = getString(R.string.admin_opisanne_icon)
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            val t1 = fileName.lastIndexOf(".")
+            val fileNameT = fileName.substring(0, t1) + ".txt"
+            val file = File("${it.filesDir}/iconsApisanne/$fileNameT")
+            if (file.exists()) binding.content.setText(file.readText())
             binding.content.requestFocus()
             builder.setView(binding.root)
             builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int -> // Скрываем клавиатуру

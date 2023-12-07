@@ -194,8 +194,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
                     }.await()
                     adapter.notifyDataSetChanged()
                 }
-                val dialog = DialogSviatyiaImageApisanne.getInstance("s_${day}_${mun}_${position + 1}.jpg")
-                dialog.show(supportFragmentManager, "DialogSviatyiaImageApisanne")
+                onDialogOpisanneIcon("s_${day}_${mun}_${position + 1}.jpg")
                 binding.progressBar2.visibility = View.GONE
             }
         }
@@ -217,6 +216,8 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
             binding.progressBar2.visibility = View.VISIBLE
             val dir = File("$filesDir/icons/")
             if (!dir.exists()) dir.mkdir()
+            val dir2 = File("$filesDir/iconsApisanne")
+            if (!dir2.exists()) dir2.mkdir()
             images.clear()
             val itPos = StringBuilder()
             val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
@@ -226,16 +227,25 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
                     it.getFile(fileIcon).addOnFailureListener {
                         MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
+                    var iconApisanne = ""
+                    try {
+                        val t1 = it.name.lastIndexOf(".")
+                        val fileNameT = it.name.substring(0, t1) + ".txt"
+                        val file = File("$filesDir/iconsApisanne/$fileNameT")
+                        Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").getFile(file).await()
+                        iconApisanne = file.readText()
+                    } catch (_: Throwable) {
+                    }
                     var e = 1
                     val s1 = "s_${day}_${mun}".length
                     val s3 = it.name.substring(s1 + 1, s1 + 2)
                     if (s3.isDigitsOnly()) e = s3.toInt()
-                    images.add(DataImages(getSviatyia(e - 1), fileIcon.length(), fileIcon, e.toLong()))
+                    images.add(DataImages(getSviatyia(e - 1), fileIcon.length(), fileIcon, e.toLong(), iconApisanne))
                     itPos.append(e)
                 }
             }
             for (i in 1..4) {
-                if (!itPos.contains(i.toString())) images.add(DataImages(getSviatyia(i - 1), 0, File(""), i.toLong()))
+                if (!itPos.contains(i.toString())) images.add(DataImages(getSviatyia(i - 1), 0, File(""), i.toLong(), ""))
             }
             images.sort()
             adapter.notifyDataSetChanged()
@@ -381,7 +391,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
             if (convertView == null) {
                 val binding = ListItemImageBinding.inflate(LayoutInflater.from(context), parent, false)
                 rootView = binding.root
-                ea = ViewHolder(binding.imageView, binding.textView)
+                ea = ViewHolder(binding.imageView, binding.textView, binding.textViewApisanne)
                 rootView.tag = ea
             } else {
                 rootView = convertView
@@ -391,6 +401,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
             val myBitmap = resizeImage(BitmapFactory.decodeFile(imgFile.absolutePath))
             ea.image.setImageBitmap(myBitmap)
             ea.textView.text = list[position].title
+            ea.textViewApisanne.text = list[position].iconApisanne
             return rootView
         }
 
@@ -412,9 +423,9 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
         }
     }
 
-    private class ViewHolder(var image: ImageView, var textView: TextView)
+    private class ViewHolder(var image: ImageView, var textView: TextView, var textViewApisanne: TextView)
 
-    private data class DataImages(var title: String, var size: Long, var file: File, val position: Long) : Comparable<DataImages> {
+    private data class DataImages(var title: String, var size: Long, var file: File, val position: Long, val iconApisanne: String) : Comparable<DataImages> {
         override fun compareTo(other: DataImages): Int {
             if (this.position > other.position) {
                 return 1

@@ -130,7 +130,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             this.arrayList.forEach {
                 if (it.index == index) check = true
             }
-            if (!check) this.arrayList.add(OpisanieData(index, spannedtitle, spanned, ""))
+            if (!check) this.arrayList.add(OpisanieData(index, spannedtitle, spanned, "", ""))
         }
         adapter.notifyDataSetChanged()
     }
@@ -159,7 +159,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     this.arrayList.forEach {
                         if (it.index == 0) check = true
                     }
-                    if (!check) this.arrayList.add(OpisanieData(0, spannedtitle, spanned, ""))
+                    if (!check) this.arrayList.add(OpisanieData(0, spannedtitle, spanned, "", ""))
                     adapter.notifyDataSetChanged()
                 }
             }
@@ -330,6 +330,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private suspend fun getIcons(loadIcons: Boolean, count: Int = 0) {
         val dir = File("$filesDir/icons/")
         if (!dir.exists()) dir.mkdir()
+        val dir2 = File("$filesDir/iconsApisanne")
+        if (!dir2.exists()) dir2.mkdir()
         if (count < 2) {
             getIcons(loadIcons, count + 1)
             return
@@ -343,6 +345,13 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             else "s"
             sb.append(it.name)
             if (it.name.contains("${pref}_${day}_${mun}")) {
+                val t1 = it.name.lastIndexOf(".")
+                val fileNameT = it.name.substring(0, t1) + ".txt"
+                val file = File("$filesDir/iconsApisanne/$fileNameT")
+                try {
+                    Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").getFile(file).await()
+                } catch (_: Throwable) {
+                }
                 val fileIcon = File("$filesDir/icons/${it.name}")
                 val meta = it.metadata.await()
                 val time = fileIcon.lastModified()
@@ -399,6 +408,12 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     val s1 = "${pref}_${day}_${mun}".length
                     val s3 = it.substring(s1 + 1, s1 + 2)
                     if (s3.isDigitsOnly()) e = s3.toInt() - 1
+                }
+                val t1 = it.lastIndexOf(".")
+                val fileNameT = it.substring(0, t1) + ".txt"
+                val file = File("$filesDir/iconsApisanne/$fileNameT")
+                if (file.exists()) {
+                    arrayList[e].textApisanne = file.readText()
                 }
                 val file2 = File("$filesDir/icons/$it")
                 if (file2.exists()) arrayList[e].image = file2.absolutePath
@@ -608,7 +623,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             if (convertView == null) {
                 val binding = SimpleListItemOpisanieBinding.inflate(LayoutInflater.from(context), parent, false)
                 rootView = binding.root
-                viewHolder = ViewHolder(binding.title, binding.text, binding.image, binding.buttonPopup)
+                viewHolder = ViewHolder(binding.title, binding.text, binding.image, binding.buttonPopup, binding.textApisanne)
                 rootView.tag = viewHolder
             } else {
                 rootView = convertView
@@ -655,16 +670,20 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                         binding.titleToolbar.text = arrayList[position].title.trim()
                     }
                 }
+                viewHolder.textApisanne.text = arrayList[position].textApisanne
+                viewHolder.textApisanne.visibility = View.VISIBLE
             } else {
                 viewHolder.imageView.setImageBitmap(null)
                 viewHolder.imageView.visibility = View.GONE
                 viewHolder.imageView.setOnClickListener(null)
+                viewHolder.textApisanne.visibility = View.GONE
             }
             if (dzenNoch) {
                 viewHolder.text.setTextColor(ContextCompat.getColor(this@Opisanie, R.color.colorWhite))
             }
             val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             viewHolder.textTitle.textSize = fontBiblia
+            viewHolder.textApisanne.textSize = fontBiblia
             viewHolder.textTitle.text = arrayList[position].title.trim()
             val text = arrayList[position].text.trim()
             if (text.isNotEmpty()) {
@@ -677,9 +696,9 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
     }
 
-    private class ViewHolder(var textTitle: TextView, var text: TextView, var imageView: ImageView, var buttonPopup: ImageView)
+    private class ViewHolder(var textTitle: TextView, var text: TextView, var imageView: ImageView, var buttonPopup: ImageView, var textApisanne: TextView)
 
     private data class DirList(val name: String?, val sizeBytes: Long)
 
-    private data class OpisanieData(val index: Int, val title: Spanned, val text: Spanned, var image: String)
+    private data class OpisanieData(val index: Int, val title: Spanned, val text: Spanned, var image: String, var textApisanne: String)
 }

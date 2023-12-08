@@ -1323,13 +1323,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.edit_piasochnica, menu)
-        for (i in 0 until menu.size()) {
-            val item = menu.getItem(i)
-            val spanString = SpannableString(menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
-        }
+        super.onCreateMenu(menu, menuInflater)
     }
 
     private data class History(val spannable: Spannable, val editPosition: Int)

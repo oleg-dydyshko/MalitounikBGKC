@@ -36,7 +36,7 @@
         android:padding="10sp"
         android:scrollbars="none">
 
-        <TextView
+        <by.carkva_gazeta.malitounik.TextViewCustom
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

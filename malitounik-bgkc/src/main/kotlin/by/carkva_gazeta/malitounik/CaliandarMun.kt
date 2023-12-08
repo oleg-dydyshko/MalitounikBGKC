@@ -3,9 +3,6 @@ package by.carkva_gazeta.malitounik
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -22,6 +19,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Calendar
+
 
 class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, CaliandarMunTab2.CaliandarMunTab2Listener, DialogCaliandarMunDate.DialogCaliandarMunDateListener {
     private var yearG1 = 0
@@ -181,15 +179,8 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.caliandar_mun, menu)
-        for (i in 0 until menu.size()) {
-            val item = menu.getItem(i)
-            val spanString = SpannableString(menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
-        }
+        super.onCreateMenu(menu, menuInflater)
     }
 
     override fun onPrepareMenu(menu: Menu) {

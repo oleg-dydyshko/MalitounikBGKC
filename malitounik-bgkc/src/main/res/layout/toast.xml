@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary">
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

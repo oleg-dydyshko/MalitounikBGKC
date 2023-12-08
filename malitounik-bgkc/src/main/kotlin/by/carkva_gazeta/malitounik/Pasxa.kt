@@ -17,7 +17,11 @@ import androidx.transition.TransitionManager
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.PasxaBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -108,13 +112,7 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.pasxa, menu)
-        for (i in 0 until menu.size()) {
-            val item: MenuItem = menu.getItem(i)
-            val spanString = SpannableString(menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
-        }
+        super.onCreateMenu(menu, menuInflater)
     }
 
     override fun onPrepareMenu(menu: Menu) {

@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/textView13"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             android:orientation="vertical"
             android:padding="10sp">
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                     android:contentDescription="@string/Vial_Dvun"
                     android:src="@drawable/znaki_krest_v_kruge" />
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/textView8"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                     android:contentDescription="@string/Z_Lic_na_ve"
                     android:src="@drawable/znaki_krest_v_polukruge" />
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/textView9"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                     android:contentDescription="@string/Z_v_v_v_u_n_u"
                     android:src="@drawable/znaki_krest" />
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/textView10"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
                     android:contentDescription="@string/Z_sh_v_v_u_u"
                     android:src="@drawable/znaki_ttk" />
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/textView11"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
@@ -173,7 +173,7 @@
                     android:contentDescription="@string/Z_sh_v_m_u_u"
                     android:src="@drawable/znaki_ttk_black" />
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/textView12"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
@@ -186,7 +186,7 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -203,7 +203,7 @@
                 android:layout_marginBottom="10sp"
                 android:background="@color/colorPrimary" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -218,7 +218,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="14sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -232,7 +232,7 @@
                 android:text="@string/zvychaynye_dny"
                 android:textSize="14sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -246,7 +246,7 @@
                 android:text="@string/No_post_n"
                 android:textSize="14sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -260,7 +260,7 @@
                 android:text="@string/Post"
                 android:textSize="14sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

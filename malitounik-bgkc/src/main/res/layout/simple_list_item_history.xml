@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/search_black"
         android:contentDescription="@string/empty" />
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/item"
         android:layout_width="0sp"
         android:layout_height="wrap_content"

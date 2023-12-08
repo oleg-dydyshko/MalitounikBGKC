@@ -44,10 +44,11 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="25sp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10sp"
         android:layout_marginRight="10sp"
         android:layout_marginBottom="10sp"
+        app:tabTextAppearance="@style/TabTextCaliandarMun"
         app:tabGravity="fill"
         app:tabMaxWidth="0sp"
         app:tabMode="fixed">

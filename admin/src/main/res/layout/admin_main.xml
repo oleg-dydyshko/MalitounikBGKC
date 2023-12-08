@@ -46,7 +46,7 @@
             android:orientation="vertical"
             android:paddingBottom="32sp">
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/staryZavet"
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/novyZavet"
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/staryZavet" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/sviatyia"
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/novyZavet" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/sviaty"
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sviatyia" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/chytanne"
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
@@ -156,7 +156,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sviaty" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/parliny"
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chytanne" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/bibliateka"
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"
@@ -200,7 +200,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/parliny" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/pesochnicha"
                 android:layout_width="200sp"
                 android:layout_height="wrap_content"

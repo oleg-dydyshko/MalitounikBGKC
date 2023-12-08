@@ -581,6 +581,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_02_12_praroka_abakuma_viaczernia"] = R.raw.mm_02_12_praroka_abakuma_viaczernia
             resursMap["mm_22_11_pasviaccie_uvodzinau_baharodzicy_apostala_chalimona_viaczernia"] = R.raw.mm_22_11_pasviaccie_uvodzinau_baharodzicy_apostala_chalimona_viaczernia
             resursMap["mm_30_11_apostala_andreja_pierszapaklikanaha_viaczernia"] = R.raw.mm_30_11_apostala_andreja_pierszapaklikanaha_viaczernia
+            resursMap["mm_03_12_praroka_safonii_viaczernia"] = R.raw.mm_03_12_praroka_safonii_viaczernia
+            resursMap["mm_04_12_muczanicy_barbary_paczesnaha_jana_damaskina_viaczernia"] = R.raw.mm_04_12_muczanicy_barbary_paczesnaha_jana_damaskina_viaczernia
+            resursMap["mm_09_12_zaczaccie_baharodzicy_liturhija"] = R.raw.mm_09_12_zaczaccie_baharodzicy_liturhija
+            resursMap["mm_09_12_zaczaccie_baharodzicy_viaczernia"] = R.raw.mm_09_12_zaczaccie_baharodzicy_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -2005,13 +2009,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.bogashlugbovya, menu)
-        for (i in 0 until menu.size()) {
-            val item: MenuItem = menu.getItem(i)
-            val spanString = SpannableString(menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
-        }
+        super.onCreateMenu(menu, menuInflater)
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {

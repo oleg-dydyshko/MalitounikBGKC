@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/yelloy"
                 android:layout_width="30sp"
                 android:layout_height="30sp"

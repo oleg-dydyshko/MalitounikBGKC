@@ -355,6 +355,10 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(337, "Сьвятога прарока Абакума", "mm_02_12_praroka_abakuma_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(327, "Пасьвяцьце Ўводзінаў Найсьвяцейшай Багародзіцы і сьвятога апостала Халімона і інш.", "mm_22_11_pasviaccie_uvodzinau_baharodzicy_apostala_chalimona_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(335, "Сьвятога апостала Андрэя Першапакліканага", "mm_30_11_apostala_andreja_pierszapaklikanaha_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(338, "Сьвятога прарока Сафоніі", "mm_03_12_praroka_safonii_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(339, "Сьв. мучаніцы Барбары і пачэснага айца нашага Яна Дамаскіна", "mm_04_12_muczanicy_barbary_paczesnaha_jana_damaskina_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(344, "Зачацьце сьв. Ганны, калі яна зачала Найсьвяцейшую Багародзіцу", "mm_09_12_zaczaccie_baharodzicy_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(344, "Зачацьце сьв. Ганны, калі яна зачала Найсьвяцейшую Багародзіцу", "mm_09_12_zaczaccie_baharodzicy_viaczernia", VIACZERNIA))
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {

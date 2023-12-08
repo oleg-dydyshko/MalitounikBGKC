@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/textView"
         android:layout_width="0sp"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/textViewApisanne"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

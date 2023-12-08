@@ -275,7 +275,6 @@ class MenuNatatki : BaseFragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
-            view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
                 view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))

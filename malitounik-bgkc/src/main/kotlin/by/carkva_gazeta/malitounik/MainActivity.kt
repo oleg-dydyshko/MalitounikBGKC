@@ -1,14 +1,22 @@
 package by.carkva_gazeta.malitounik
 
-import android.app.*
-import android.content.*
+import android.app.Activity
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.content.SharedPreferences
 import android.database.Cursor
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
+import android.os.IBinder
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.provider.Settings
 import android.text.Spannable
@@ -19,8 +27,15 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.ContextCompat
@@ -41,13 +56,25 @@ import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.google.android.play.core.splitinstall.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.io.*
-import java.util.*
+import kotlinx.coroutines.withContext
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.FileReader
+import java.io.InputStreamReader
+import java.util.Calendar
+import java.util.Random
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
@@ -658,6 +685,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             setSpan(AbsoluteSizeSpan(30, true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             setSpan(CustomTypefaceSpan("", ResourcesCompat.getFont(this@MainActivity, R.font.comici)), 1, length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
         }
+        if (k.getInt("fontInterface", 0) > 0) {
+            binding.citata.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
+            binding.description.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
+        }
         var scroll = false
         when (idSelect) {
             R.id.label1 -> selectFragment(binding.label1, true)
@@ -1023,13 +1054,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.main, menu)
-        for (i in 0 until menu.size()) {
-            val item = menu.getItem(i)
-            val spanString = SpannableString(menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
-        }
+        super.onCreateMenu(menu, menuInflater)
     }
 
     override fun onPrepareMenu(menu: Menu) {
@@ -1098,7 +1123,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             menu.findItem(R.id.action_add).isVisible = true
             menu.findItem(R.id.sortdate).isVisible = true
             menu.findItem(R.id.sorttime).isVisible = true
-            menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
             when (k.getInt("natatki_sort", 0)) {
                 1 -> {
                     menu.findItem(R.id.sortdate).isChecked = true

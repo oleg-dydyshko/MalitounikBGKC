@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

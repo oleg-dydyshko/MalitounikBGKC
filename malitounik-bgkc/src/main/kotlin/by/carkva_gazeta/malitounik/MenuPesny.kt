@@ -11,7 +11,6 @@ import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextWatcher
-import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
@@ -238,6 +237,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.pesny, menu)
+        super.onCreateMenu(menu, menuInflater)
         val searchViewItem = menu.findItem(R.id.search)
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = getString(R.string.search)
@@ -280,13 +280,6 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
             searchViewItem.expandActionView()
             searchView?.setQuery(searchViewQwery, true)
             searchView?.clearFocus()
-        }
-        for (i in 0 until menu.size()) {
-            val item = menu.getItem(i)
-            val spanString = SpannableString(menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
         }
     }
 

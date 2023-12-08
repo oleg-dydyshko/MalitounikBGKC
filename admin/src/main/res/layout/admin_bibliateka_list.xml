@@ -100,7 +100,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rubrika" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/pdfTextView"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imagePdf" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/admin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

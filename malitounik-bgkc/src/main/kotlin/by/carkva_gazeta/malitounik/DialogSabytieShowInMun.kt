@@ -66,6 +66,7 @@ class DialogSabytieShowInMun : DialogFragment() {
     private fun sabytieView(dayYear: Int) {
         activity?.let {
             binding.linearLayout.removeAllViewsInLayout()
+            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val density = (resources.displayMetrics.density).toInt()
             val gc = Calendar.getInstance() as GregorianCalendar
             var title: String
@@ -110,18 +111,18 @@ class DialogSabytieShowInMun : DialogFragment() {
                             res = getString(R.string.sabytie_pavedam, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR], gc[Calendar.HOUR_OF_DAY], nol3, gc[Calendar.MINUTE])
                             if (realTime > paz) paznicia = true
                         }
-                        val textViewT = TextView(it)
+                        val textViewT = TextViewCustom(it)
                         textViewT.text = title
                         textViewT.setPadding(10 * density, 5 * density, 5 * density, 5 * density)
                         textViewT.typeface = MainActivity.createFont(Typeface.BOLD)
-                        textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                        if (k.getInt("fontInterface", 0) == 0) textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
                         textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(dzenNoch, p.color)))
                         sabytieList.add(textViewT)
-                        val textView = TextView(it)
+                        val textView = TextViewCustom(it)
                         textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                         textView.setPadding(10 * density, 0, 10 * density, 10 * density)
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                        if (k.getInt("fontInterface", 0) == 0) textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
                         if (dzenNoch) {
                             textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             textView.setBackgroundResource(R.color.colorbackground_material_dark_ligte)

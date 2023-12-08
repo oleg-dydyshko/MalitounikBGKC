@@ -13,6 +13,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.SystemClock
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.AbsoluteSizeSpan
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -61,6 +64,15 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        for (i in 0 until menu.size()) {
+            val item = menu.getItem(i)
+            val spanString = SpannableString(menu.getItem(i).title.toString())
+            val end = spanString.length
+            var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+            if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+            spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            item.title = spanString
+        }
     }
 
     override fun onMenuItemSelected(item: MenuItem) = false
@@ -159,6 +171,19 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     fun getBaseDzenNoch(): Boolean {
         return if (k.getBoolean("auto_dzen_noch", false)) autoDzenNoch
         else dzenNoch
+    }
+
+    fun setFontInterface(textSizePixel: Float, isTextSizeSp: Boolean = false): Float {
+        var sp = if (isTextSizeSp) textSizePixel
+        else textSizePixel / resources.displayMetrics.density
+        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        when(k.getInt("fontInterface", 0)) {
+            1 -> sp += 2
+            2 -> sp += 4
+            3 -> sp += 6
+            4 -> sp += 8
+        }
+        return sp
     }
 
     override fun onPause() {

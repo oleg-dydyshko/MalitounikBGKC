@@ -7,7 +7,7 @@
     app:rightViewId="@+id/item_right"
     app:swipeViewId="@+id/item_layout">
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/item_left"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,7 +19,7 @@
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/item_right"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,7 +38,7 @@
         android:layout_marginBottom="1sp"
         android:gravity="center_vertical">
 
-        <TextView
+        <by.carkva_gazeta.malitounik.TextViewCustom
             android:id="@+id/text"
             android:layout_width="0sp"
             android:layout_height="wrap_content"

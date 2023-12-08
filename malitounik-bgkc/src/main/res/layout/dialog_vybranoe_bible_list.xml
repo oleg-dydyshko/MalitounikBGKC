@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:padding="10sp">
 
-        <TextView
+        <by.carkva_gazeta.malitounik.TextViewCustom
             android:id="@+id/titleToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <TextView
+        <by.carkva_gazeta.malitounik.TextViewCustom
             android:id="@+id/subtitleToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
             android:textSize="18sp" />
     </LinearLayout>
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -16,7 +16,7 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView2"
                 android:layout_width="48sp"
                 android:layout_height="33sp"
@@ -27,7 +27,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView3"
                 android:layout_width="48sp"
                 android:layout_height="33sp"
@@ -38,7 +38,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView4"
                 android:layout_width="48sp"
                 android:layout_height="33sp"
@@ -49,7 +49,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView5"
                 android:layout_width="48sp"
                 android:layout_height="33sp"
@@ -60,7 +60,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView6"
                 android:layout_width="48sp"
                 android:layout_height="33sp"
@@ -71,7 +71,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView7"
                 android:layout_width="48sp"
                 android:layout_height="33sp"
@@ -82,7 +82,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView8"
                 android:layout_width="48sp"
                 android:layout_height="33sp"
@@ -101,7 +101,7 @@
             android:minHeight="10sp"
             android:orientation="horizontal">
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button1"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -111,7 +111,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button2"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -120,7 +120,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button3"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -129,7 +129,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button4"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -138,7 +138,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button5"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -147,7 +147,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button6"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -156,7 +156,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button7"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -172,7 +172,7 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button8"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -182,7 +182,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button9"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -191,7 +191,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button10"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -200,7 +200,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button11"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -209,7 +209,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button12"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -218,7 +218,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button13"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -227,7 +227,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button14"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -243,7 +243,7 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button15"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -253,7 +253,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button16"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -262,7 +262,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button17"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -271,7 +271,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button18"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -280,7 +280,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button19"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -289,7 +289,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button20"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -298,7 +298,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button21"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -314,7 +314,7 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button22"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -324,7 +324,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button23"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -333,7 +333,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button24"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -342,7 +342,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button25"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -351,7 +351,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button26"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -360,7 +360,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button27"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -369,7 +369,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button28"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -386,7 +386,7 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button29"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -396,7 +396,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button30"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -405,7 +405,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button31"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -414,7 +414,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button32"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -423,7 +423,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button33"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -432,7 +432,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button34"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -441,7 +441,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button35"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -458,7 +458,7 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button36"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -468,7 +468,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button37"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -477,7 +477,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button38"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -486,7 +486,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button39"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -495,7 +495,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button40"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -504,7 +504,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button41"
                 android:layout_width="48sp"
                 android:layout_height="48sp"
@@ -513,7 +513,7 @@
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/button42"
                 android:layout_width="48sp"
                 android:layout_height="48sp"

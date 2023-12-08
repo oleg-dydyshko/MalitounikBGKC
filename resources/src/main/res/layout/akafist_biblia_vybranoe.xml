@@ -134,7 +134,7 @@
         app:layout_constraintEnd_toStartOf="@+id/action_fullscreen"
         app:srcCompat="@drawable/plus_auto_scroll" />
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

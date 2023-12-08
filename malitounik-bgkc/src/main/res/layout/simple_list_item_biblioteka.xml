@@ -6,7 +6,7 @@
     android:layout_weight="1"
     android:paddingBottom="5sp">
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/label"
         android:layout_width="0sp"
         android:layout_height="wrap_content"

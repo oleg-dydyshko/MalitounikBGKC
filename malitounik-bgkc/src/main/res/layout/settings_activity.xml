@@ -102,6 +102,23 @@
                     android:textSize="14sp" />
             </RadioGroup>
 
+            <TextView
+                android:id="@+id/spinnerFontOpis"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10sp"
+                android:paddingTop="10sp"
+                android:soundEffectsEnabled="false"
+                android:text="@string/settengs_font_size_app"
+                android:textSize="14sp"
+                android:textStyle="italic" />
+
+            <Spinner
+                android:id="@+id/spinnerFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp" />
+
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/checkBox9"
                 android:layout_width="match_parent"

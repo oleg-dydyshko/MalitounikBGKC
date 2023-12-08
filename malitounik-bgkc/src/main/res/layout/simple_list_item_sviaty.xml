@@ -6,7 +6,7 @@
     android:paddingStart="10sp"
     android:paddingEnd="10sp">
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +17,7 @@
         android:textStyle="bold"
         android:visibility="gone" />
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,7 +26,7 @@
         android:textSize="18sp"
         android:textStyle="italic" />
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

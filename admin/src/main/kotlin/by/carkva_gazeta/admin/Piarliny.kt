@@ -6,9 +6,6 @@ import android.content.Intent
 import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
@@ -243,13 +240,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.edit_piarliny, menu)
-        for (i in 0 until menu.size()) {
-            val item = menu.getItem(i)
-            val spanString = SpannableString(menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
-        }
+        super.onCreateMenu(menu, menuInflater)
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
@@ -438,7 +429,6 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
             calendar.timeInMillis = piarliny[position].time * 1000
             val munName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)]
             viewHolder.text.text = MainActivity.fromHtml(calendar.get(Calendar.DATE).toString() + " " + munName)
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             return rootView
         }
     }

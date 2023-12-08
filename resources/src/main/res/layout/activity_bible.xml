@@ -80,7 +80,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout2">
 
-        <TextView
+        <by.carkva_gazeta.malitounik.TextViewCustom
             android:id="@+id/conteiner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

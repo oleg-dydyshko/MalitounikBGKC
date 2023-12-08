@@ -35,7 +35,6 @@ import android.view.ViewTreeObserver
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.widget.TextView
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpannable
@@ -233,7 +232,6 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     binding.textPamerlyia.setBackgroundResource(R.drawable.selector_bez_posta)
                     if (MenuCaliandar.getPositionCaliandar(position)[0].toInt() == Calendar.FRIDAY) {
                         binding.textPost.visibility = View.VISIBLE
-                        binding.textPost.textSize = SettingsActivity.GET_FONT_SIZE_MIN
                         binding.textPost.text = resources.getString(R.string.No_post)
                     }
                 }
@@ -252,7 +250,6 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     if (MenuCaliandar.getPositionCaliandar(position)[0].toInt() == Calendar.FRIDAY) {
                         binding.PostFish.visibility = View.VISIBLE
                         binding.textPost.visibility = View.VISIBLE
-                        binding.textPost.textSize = SettingsActivity.GET_FONT_SIZE_MIN
                         if (dzenNoch) {
                             binding.PostFish.setImageResource(R.drawable.fishe_whate)
                         }
@@ -274,7 +271,6 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     binding.textChytanneSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     binding.textBlaslavenne.setBackgroundResource(R.drawable.selector_strogi_post)
                     binding.textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    binding.textPost.textSize = SettingsActivity.GET_FONT_SIZE_MIN
                     binding.textPost.text = resources.getString(R.string.Strogi_post)
                     binding.textPamerlyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     binding.textPost.visibility = View.VISIBLE
@@ -531,8 +527,9 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
     fun sabytieView(sabytieTitle: String) {
         activity?.let { activity ->
             _binding?.padzei?.removeAllViewsInLayout()
+            val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val gc = Calendar.getInstance() as GregorianCalendar
-            val sabytieList = ArrayList<TextView>()
+            val sabytieList = ArrayList<TextViewCustom>()
             for (index in 0 until MainActivity.padzeia.size) {
                 val p = MainActivity.padzeia[index]
                 val r1 = p.dat.split(".")
@@ -579,20 +576,20 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                         }
                         val density = resources.displayMetrics.density.toInt()
                         val realpadding = 5 * density
-                        val textViewT = TextView(activity)
+                        val textViewT = TextViewCustom(activity)
                         textViewT.text = title
                         textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
                         textViewT.typeface = MainActivity.createFont(Typeface.BOLD)
-                        textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                        if (k.getInt("fontInterface", 0) == 0) textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
 
                         textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                         textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(dzenNoch, p.color)))
                         sabytieList.add(textViewT)
-                        val textView = TextView(activity)
+                        val textView = TextViewCustom(activity)
                         textView.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_text))
                         textView.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorDivider))
                         textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                        if (k.getInt("fontInterface", 0) == 0) textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
                         if (dzenNoch) {
                             textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)

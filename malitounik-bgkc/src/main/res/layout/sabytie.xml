@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/pacatak"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                     android:text="@string/sabytie_pachatak"
                     android:textSize="15sp" />
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/label1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
                     app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
                     app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/label2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/kanec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
                     android:text="@string/Sabytie_end"
                     android:textSize="15sp" />
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/label12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
                     app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
                     app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/label22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/pavedamic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -177,7 +177,7 @@
 
             </LinearLayout>
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/pavedamic2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -189,7 +189,7 @@
                 android:textSize="15sp"
                 tools:ignore="RtlSymmetry" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/pavedamic3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -208,7 +208,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/pavtor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -266,7 +266,7 @@
                         android:inputType="number"
                         android:text="5" />
 
-                    <TextView
+                    <by.carkva_gazeta.malitounik.TextViewCustom
                         android:id="@+id/pazov"
                         android:layout_width="0sp"
                         android:layout_height="wrap_content"
@@ -281,7 +281,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/Sabytie_install_data_end" />
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/labelbutton12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -300,7 +300,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <TextView
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/cvet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

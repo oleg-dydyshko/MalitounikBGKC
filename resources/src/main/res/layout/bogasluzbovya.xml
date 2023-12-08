@@ -52,7 +52,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/textViewNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
         </LinearLayout>
     </by.carkva_gazeta.malitounik.InteractiveScrollView>
 
-    <TextView
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/progress"
         android:layout_width="0sp"
         android:layout_height="0sp"
@@ -147,7 +147,7 @@
             app:layout_constraintTop_toTopOf="@+id/textSearch"
             app:srcCompat="@drawable/find_niz" />
 
-        <TextView
+        <by.carkva_gazeta.malitounik.TextViewCustom
             android:id="@+id/textCount"
             android:layout_width="0sp"
             android:layout_height="wrap_content"

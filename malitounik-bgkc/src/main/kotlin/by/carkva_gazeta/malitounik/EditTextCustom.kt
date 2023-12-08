@@ -2,6 +2,7 @@ package by.carkva_gazeta.malitounik
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
@@ -10,14 +11,22 @@ import androidx.appcompat.widget.AppCompatEditText
 class EditTextCustom : AppCompatEditText {
     constructor(context: Context) : super(context) {
         focusAndShowKeyboard(this)
+        setFontInterface(context)
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         focusAndShowKeyboard(this)
+        setFontInterface(context)
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         focusAndShowKeyboard(this)
+        setFontInterface(context)
+    }
+
+    private fun setFontInterface(context: Context) {
+        val sp = (context as BaseActivity).setFontInterface(textSize)
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
     }
 
     companion object {

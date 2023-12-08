@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.style.AbsoluteSizeSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -32,6 +31,7 @@ import by.carkva_gazeta.malitounik.EditTextCustom
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.TextViewCustom
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.google.android.play.core.splitcompat.SplitCompat
 import kotlinx.coroutines.CoroutineScope
@@ -170,11 +170,10 @@ class Chytanny : BaseActivity() {
     private fun grateTextView(text: SpannableString): TextView {
         val density = resources.displayMetrics.density
         val padding = 10 * density
-        val textView = TextView(this)
+        val textView = TextViewCustom(this)
         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         llp.setMargins(padding.toInt(), padding.toInt(), 0, 0)
         textView.layoutParams = llp
-        textView.textSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
         textView.text = text.trim()
         return textView
     }
@@ -188,7 +187,6 @@ class Chytanny : BaseActivity() {
         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         llp.setMargins(padding.toInt(), padding.toInt(), padding.toInt(), 0)
         textView.layoutParams = llp
-        textView.textSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
         textView.setText(text)
         textView.isSingleLine = true
         return textView
@@ -313,13 +311,7 @@ class Chytanny : BaseActivity() {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.edit_chytanny, menu)
-        for (i in 0 until menu.size()) {
-            val item = menu.getItem(i)
-            val spanString = SpannableString(menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
-        }
+        super.onCreateMenu(menu, menuInflater)
     }
 
     private class SpinnerAdapter(activity: Activity, private val data: ArrayList<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {
@@ -329,7 +321,6 @@ class Chytanny : BaseActivity() {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textView.text = data[position]
             if (gc[Calendar.YEAR] == data[position].toInt()) textView.typeface = MainActivity.createFont(Typeface.BOLD)
             else textView.typeface = MainActivity.createFont(Typeface.NORMAL)
@@ -353,7 +344,6 @@ class Chytanny : BaseActivity() {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text.text = data[position]
             if (gc[Calendar.YEAR] == data[position].toInt()) viewHolder.text.typeface = MainActivity.createFont(Typeface.BOLD)
             else viewHolder.text.typeface = MainActivity.createFont(Typeface.NORMAL)

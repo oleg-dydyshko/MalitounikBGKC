@@ -296,6 +296,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.search_biblia, menu)
+        super.onCreateMenu(menu, menuInflater)
         val searchViewItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.search)
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
@@ -324,13 +325,6 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             onPostExecute(ArrayList())
         }
         changeSearchViewElements(searchView)
-        for (i in 0 until menu.size()) {
-            val item = menu.getItem(i)
-            val spanString = SpannableString(menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
-        }
     }
 
     override fun onPrepareMenu(menu: Menu) {

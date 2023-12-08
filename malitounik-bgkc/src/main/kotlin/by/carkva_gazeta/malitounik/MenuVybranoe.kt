@@ -316,7 +316,6 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
             val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             view.root.supportedSwipeDirection = ListSwipeItem.SwipeDirection.LEFT
             val dzenNoch = activity.getBaseDzenNoch()
-            view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
                 view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))

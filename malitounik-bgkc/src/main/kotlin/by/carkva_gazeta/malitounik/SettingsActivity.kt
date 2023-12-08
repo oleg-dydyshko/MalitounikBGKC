@@ -1,9 +1,18 @@
 package by.carkva_gazeta.malitounik
 
 import android.Manifest
-import android.app.*
+import android.app.Activity
+import android.app.AlarmManager
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -17,7 +26,11 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.provider.Settings
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
@@ -30,9 +43,14 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.SettingsActivityBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.google.android.play.core.splitinstall.SplitInstallHelper
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 
 class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener, BaseActivity.DownloadDynamicModuleListener {
@@ -767,6 +785,18 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
 
             override fun onNothingSelected(adapterView: AdapterView<*>?) {}
         }
+        val fontList = resources.getStringArray(R.array.fonts)
+        binding.spinnerFont.adapter = FontAdapter(this, fontList)
+        binding.spinnerFont.setSelection(k.getInt("fontInterface", 0))
+        binding.spinnerFont.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                prefEditor.putInt("fontInterface", position)
+                prefEditor.apply()
+                editFull = true
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.vibro.visibility = View.GONE
             binding.guk.visibility = View.GONE
@@ -1427,6 +1457,42 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             }
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             viewHolder.text.text = dataTimes[position].string
+            if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
+            else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
+            return rootView
+        }
+    }
+
+    private class FontAdapter(activity: Activity, private val dataFont: Array<String>) : ArrayAdapter<String>(activity, R.layout.simple_list_item_1, dataFont) {
+        private val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
+        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val v = super.getDropDownView(position, convertView, parent)
+            val textView = v as TextView
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+            textView.text = dataFont[position]
+            if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
+            else textView.setBackgroundResource(R.drawable.selector_default)
+            return v
+        }
+
+        override fun getCount(): Int {
+            return dataFont.size
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (convertView == null) {
+                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.text1)
+                rootView.tag = viewHolder
+            } else {
+                rootView = convertView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+            viewHolder.text.text = dataFont[position]
             if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
             else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             return rootView

@@ -888,6 +888,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.sabytie, menu)
+        super.onCreateMenu(menu, menuInflater)
         val searchViewItem = menu.findItem(R.id.action_seashe_text)
         searchView = searchViewItem.actionView as SearchView
         if (actionExpandOn) {
@@ -909,13 +910,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         if (searchViewQwery != "") {
             searchViewItem.expandActionView()
             autoCompleteTextView?.setText(searchViewQwery)
-        }
-        for (i in 0 until menu.size()) {
-            val item = menu.getItem(i)
-            val spanString = SpannableString(menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
         }
     }
 

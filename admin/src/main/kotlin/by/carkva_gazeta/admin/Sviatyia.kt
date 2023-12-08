@@ -8,9 +8,6 @@ import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
@@ -336,13 +333,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.edit_sviatyia, menu)
-        for (i in 0 until menu.size()) {
-            val item = menu.getItem(i)
-            val spanString = SpannableString(menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
-        }
+        super.onCreateMenu(menu, menuInflater)
     }
 
     override fun onClick(v: View?) {
@@ -552,7 +543,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textView.text = data[position]
             textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return v
@@ -574,7 +564,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text.text = data[position]
             viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return rootView
@@ -616,7 +605,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 viewHolderImage.image.setImageResource(data[position].imageResource)
             }
             viewHolderImage.text.text = data[position].title
-            viewHolderImage.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolderImage.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return rootView
         }

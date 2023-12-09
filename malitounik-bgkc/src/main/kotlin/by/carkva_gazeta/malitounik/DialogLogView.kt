@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -87,7 +86,6 @@ class DialogLogView : DialogFragment() {
                     }
                 }
                 displayBinding.content.typeface = MainActivity.createFont(Typeface.BOLD)
-                displayBinding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
                 if (dzenNoch) displayBinding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorWhite))
                 else displayBinding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_text))
                 ad.setView(displayBinding.root)

@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputType
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
@@ -15,7 +14,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
 
 class DialogSetPageBiblioteka : DialogFragment() {
@@ -62,7 +60,6 @@ class DialogSetPageBiblioteka : DialogFragment() {
             if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = String.format("Увядзіце нумар старонкі. Усяго: %s", pageCount)
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             binding.content.setText(page.toString())
             binding.content.inputType = InputType.TYPE_CLASS_NUMBER
             binding.content.requestFocus()

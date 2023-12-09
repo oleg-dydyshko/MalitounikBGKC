@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +39,6 @@ class MineiaExpListAdapter(private val mContext: Activity, private val groups:Ar
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
-            rootView.textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val months = mContext.resources.getStringArray(R.array.meciac3)
             rootView.textGroup.text = months[groups[groupPosition][0].month]
             return rootView.root
@@ -48,7 +46,6 @@ class MineiaExpListAdapter(private val mContext: Activity, private val groups:Ar
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
-            rootView.textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             rootView.textChild.text = groups[groupPosition][childPosition].title

@@ -3,14 +3,12 @@ package by.carkva_gazeta.biblijateka
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 
 class DialogPdfError : DialogFragment() {
@@ -40,7 +38,6 @@ class DialogPdfError : DialogFragment() {
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = getString(R.string.error_up)
             binding.content.text = getString(R.string.pdf_error, format)
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             ad.setView(binding.root)

@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +28,6 @@ class HistoryAdapter(private var context: Activity, private var history: ArrayLi
             viewHolder.text.text = MainActivity.fromHtml(history[position])
         else
             viewHolder.text.text = history[position]
-        viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
         if (dzenNoch)
             viewHolder.image.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.search))
         return rootView

@@ -428,7 +428,9 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
             SpannableString(getString(by.carkva_gazeta.malitounik.R.string.widget_day_d_n))
         }
         val end = spanString.length
-        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+        if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).title = spanString
         val itemVybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         if (men) {

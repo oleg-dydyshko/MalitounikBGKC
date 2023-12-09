@@ -3,7 +3,6 @@ package by.carkva_gazeta.malitounik
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -37,7 +36,6 @@ class DialogNadsanPravila : DialogFragment() {
             val reader = BufferedReader(isr)
             binding.content.text = MainActivity.fromHtml(reader.readText())
             inputStream.close()
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             builder.setView(binding.root)

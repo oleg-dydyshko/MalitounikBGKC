@@ -8,7 +8,6 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,6 @@ import by.carkva_gazeta.admin.databinding.AdminDialigSaveAsBinding
 import by.carkva_gazeta.admin.databinding.AdminSimpleListItemBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
-import by.carkva_gazeta.malitounik.SettingsActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -251,7 +249,6 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             } else {
                 viewHolder.text.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text.background = ContextCompat.getDrawable(mContext, by.carkva_gazeta.malitounik.R.color.colorWhite)
             val image = ContextCompat.getDrawable(mContext, fileList[position].resources)
             val density = resources.displayMetrics.density.toInt()

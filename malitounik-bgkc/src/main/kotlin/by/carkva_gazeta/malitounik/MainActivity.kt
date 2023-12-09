@@ -1079,7 +1079,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             val spanString = SpannableString(item.title.toString())
             if (dzenNoch) spanString.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_black)), 0, spanString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             else spanString.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary)), 0, spanString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, spanString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+            if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+            spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, spanString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
         menu.findItem(R.id.action_update).isVisible = updateAvailable
@@ -1111,7 +1113,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 SpannableString(getString(R.string.widget_day_d_n))
             }
             val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+            if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+            spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             menu.findItem(R.id.action_dzen_noch).title = spanString
         }
         if (idSelect == R.id.label103) menu.findItem(R.id.prazdnik).isVisible = true

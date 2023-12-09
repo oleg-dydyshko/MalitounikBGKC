@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +37,6 @@ class MenuParafiiBgkc : BaseFragment() {
             if (dzenNoch) binding.elvMain.selector = ContextCompat.getDrawable(activity, R.drawable.selector_dark)
             else binding.elvMain.selector = ContextCompat.getDrawable(activity, R.drawable.selector_default)
             binding.label.text = getString(R.string.bgkc_kuryia)
-            binding.label.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
                 binding.label.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                 binding.label.setBackgroundResource(R.drawable.selector_dark)
@@ -164,7 +162,6 @@ class MenuParafiiBgkc : BaseFragment() {
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
-            rootView.textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val bgkc = mContext.resources.getStringArray(R.array.bgkc)
             rootView.textGroup.text = bgkc[groupPosition]
             return rootView.root
@@ -172,7 +169,6 @@ class MenuParafiiBgkc : BaseFragment() {
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
-            rootView.textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if ((mContext as BaseActivity).getBaseDzenNoch())
                 rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             rootView.textChild.text = groups[groupPosition][childPosition].title

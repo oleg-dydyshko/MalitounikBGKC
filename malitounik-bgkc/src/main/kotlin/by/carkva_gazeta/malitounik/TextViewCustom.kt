@@ -8,17 +8,17 @@ import androidx.appcompat.widget.AppCompatTextView
 class TextViewCustom : AppCompatTextView {
 
     constructor(context: Context) : super(context) {
-        setFontInterface()
+        setFontInterface(context)
     }
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        setFontInterface()
+        setFontInterface(context)
     }
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        setFontInterface()
+        setFontInterface(context)
     }
 
-    private fun setFontInterface() {
-        val sp = (context as? BaseActivity)?.setFontInterface(textSize) ?: SettingsActivity.GET_FONT_SIZE_MIN
+    private fun setFontInterface(context: Context) {
+        val sp = (context as? BaseActivity)?.setFontInterface(textSize) ?: SettingsActivity.GET_FONT_SIZE_DEFAULT
         setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
     }
 }

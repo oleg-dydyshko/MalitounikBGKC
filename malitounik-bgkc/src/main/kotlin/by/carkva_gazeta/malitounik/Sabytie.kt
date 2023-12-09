@@ -2324,7 +2324,9 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 val item = popup.menu.getItem(i)
                 val spanString = SpannableString(popup.menu.getItem(i).title.toString())
                 val end = spanString.length
-                spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+                if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+                spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 item.title = spanString
             }
             popup.setOnMenuItemClickListener { menuItem: MenuItem ->

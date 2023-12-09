@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminDialogImageLoadBinding
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.squareup.picasso.Picasso
 import java.io.File
@@ -96,7 +94,6 @@ class DialogImageFileLoad : DialogFragment() {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val text = v as TextView
-            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             text.text = arrayList[position]
             text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return v

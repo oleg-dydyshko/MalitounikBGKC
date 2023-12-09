@@ -7,7 +7,6 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.PashaliiBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemPaschaliiBinding
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class MenuPashalii : BaseFragment() {
     private val pasxi = ArrayList<Pashalii>()
@@ -42,8 +42,6 @@ class MenuPashalii : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            binding.gri.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
-            binding.ula.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             if (savedInstanceState == null) setArrayPasha(it)
             else setArrayPasha(it, savedInstanceState.getInt("year"))
             myArrayAdapter = MyArrayAdapter(it, pasxi)

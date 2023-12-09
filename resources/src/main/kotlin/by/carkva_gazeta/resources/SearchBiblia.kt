@@ -1474,7 +1474,6 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             textView.gravity = Gravity.START
             val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
@@ -1494,7 +1493,6 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
             else viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)

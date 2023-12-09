@@ -1162,7 +1162,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
         val spanString = SpannableString(itemAuto.title.toString())
         val end = spanString.length
-        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+        if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         itemAuto.title = spanString
 
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isChecked = k.getBoolean("paralel_maranata", true)
@@ -1177,13 +1179,13 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             SpannableString(getString(by.carkva_gazeta.malitounik.R.string.widget_day_d_n))
         }
         val end2 = spanString2.length
-        spanString2.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spanString2.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).title = spanString2
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).isVisible = true
         val actionSemuxaTitle = if (!k.getBoolean("belarus", true)) SpannableString(getString(by.carkva_gazeta.malitounik.R.string.title_biblia))
         else SpannableString(getString(by.carkva_gazeta.malitounik.R.string.bsinaidal))
         val endSem = actionSemuxaTitle.length
-        actionSemuxaTitle.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, endSem, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        actionSemuxaTitle.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, endSem, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).title = actionSemuxaTitle
     }
 

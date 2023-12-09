@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -16,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
 
 class DialogBibleRazdel : DialogFragment() {
@@ -62,7 +60,6 @@ class DialogBibleRazdel : DialogFragment() {
             builder = AlertDialog.Builder(it, R.style.AlertDialogTheme)
             binding.title.text = resources.getString(R.string.data_search, fullGlav)
             binding.content.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(3) }
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (savedInstanceState != null) {
                 binding.content.setText(savedInstanceState.getString("glava"))
             } else {

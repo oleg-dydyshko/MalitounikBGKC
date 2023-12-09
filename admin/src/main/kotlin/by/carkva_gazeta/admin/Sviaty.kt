@@ -11,9 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
@@ -520,7 +517,6 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textView.text = data[position].title
             textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return v

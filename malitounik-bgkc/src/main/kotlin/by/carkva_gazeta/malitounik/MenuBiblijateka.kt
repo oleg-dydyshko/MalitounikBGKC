@@ -14,7 +14,6 @@ import android.os.SystemClock
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -761,7 +760,9 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 val item = popup.menu.getItem(i)
                 val spanString = SpannableString(popup.menu.getItem(i).title.toString())
                 val end = spanString.length
-                spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                var itemFontSize = (it as BaseActivity).setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+                if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+                spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 item.title = spanString
             }
             popup.setOnMenuItemClickListener { menuItem: MenuItem ->
@@ -868,7 +869,6 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
                 }
             }
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text.text = arrayList[position][0]
             return rootView
         }

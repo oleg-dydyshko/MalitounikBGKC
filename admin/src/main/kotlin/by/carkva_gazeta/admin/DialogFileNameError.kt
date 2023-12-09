@@ -5,13 +5,11 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 
 class DialogFileNameError : DialogFragment() {
@@ -47,7 +45,6 @@ class DialogFileNameError : DialogFragment() {
             binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = getString(R.string.error_up)
             binding.content.setText(R.string.file_name_error)
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             builder.setView(binding.root)
             builder.setPositiveButton(resources.getText(R.string.vypravic)) { _: DialogInterface, _: Int ->

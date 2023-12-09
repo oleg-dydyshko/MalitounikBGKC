@@ -218,7 +218,6 @@ class NovyZapavietSinaidalList : BaseActivity() {
             }
             TransitionManager.beginDelayedTransition(binding.toolbar)
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setText(R.string.novsinaidal)
@@ -277,7 +276,6 @@ class NovyZapavietSinaidalList : BaseActivity() {
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
-            rootView.textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             when (groupPosition) {
                 0 -> rootView.textGroup.text = "От Матфея"
                 1 -> rootView.textGroup.text = "От Марка"
@@ -312,7 +310,6 @@ class NovyZapavietSinaidalList : BaseActivity() {
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
-            rootView.textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             if (dzenNoch)
                 rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)

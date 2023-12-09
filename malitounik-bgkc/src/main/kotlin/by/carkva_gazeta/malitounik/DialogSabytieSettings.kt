@@ -12,7 +12,6 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.CompoundButton
@@ -61,10 +60,6 @@ class DialogSabytieSettings : DialogFragment(), View.OnClickListener {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             _binding = DialogSabytieSettingsBinding.inflate(LayoutInflater.from(it))
-            binding.notificationNotification.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            binding.notificationAlarm.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            binding.notificationRingtone.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            binding.notificationPicker.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             uriAlarm = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
             uriNotification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             uriRingtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
@@ -83,7 +78,6 @@ class DialogSabytieSettings : DialogFragment(), View.OnClickListener {
             binding.notificationRingtone.isChecked = sound == 2
             binding.notificationPicker.isChecked = sound == 3
             if (dzenNoch) binding.guk.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            binding.guk.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val gukInt = k.getInt("guk", 1)
             if (gukInt == 0) {
                 binding.guk.isChecked = false

@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
@@ -91,7 +90,6 @@ class MyNatatki : DialogFragment() {
             if (dzenNoch) {
                 binding.file.setBackgroundResource(R.color.colorPrimary_black)
             }
-            binding.file.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.EditText.tag = binding.EditText.keyListener
             binding.file.tag = binding.file.keyListener
             when (redak) {

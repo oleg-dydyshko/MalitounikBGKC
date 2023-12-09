@@ -5,13 +5,14 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.BibleGlobalList
+import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
 
@@ -89,7 +90,6 @@ class DialogBibleNatatka : DialogFragment() {
                     }
                 }
             }
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             binding.content.setText(editText)
             binding.content.requestFocus()
             if (dzenNoch) {

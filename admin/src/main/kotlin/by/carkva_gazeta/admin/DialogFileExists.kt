@@ -5,11 +5,9 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 
 class DialogFileExists : DialogFragment() {
@@ -54,7 +52,6 @@ class DialogFileExists : DialogFragment() {
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.file_exists)
             binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.file_exists_opis, fileName)
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val saveAs = arguments?.getBoolean("saveAs") ?: true
             builder.setPositiveButton(resources.getText(by.carkva_gazeta.malitounik.R.string.file_perazapisac)) { _: DialogInterface, _: Int -> mListener?.fileExists(dir, oldFileName, fileName, saveAs) }
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }

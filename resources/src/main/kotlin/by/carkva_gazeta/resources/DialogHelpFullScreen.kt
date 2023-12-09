@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 
 class DialogHelpFullScreen : DialogFragment() {
@@ -70,12 +68,10 @@ class DialogHelpFullScreen : DialogFragment() {
             if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = getString(R.string.help_davedka)
-            binding.title.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val help = SpannableString(getString(R.string.help_full_screen))
             val t1 = help.indexOf("\n")
             help.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPost2)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.content.text = help
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             ad.setView(binding.root)

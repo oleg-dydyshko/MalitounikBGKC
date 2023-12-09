@@ -5,7 +5,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -58,7 +57,6 @@ class Help : BaseActivity() {
         binding.textView.text = ss
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.titleToolbar.text = resources.getString(R.string.help)
     }
 

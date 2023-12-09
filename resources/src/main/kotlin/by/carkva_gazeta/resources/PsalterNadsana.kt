@@ -16,7 +16,11 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogNadsanPravila
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.NadsanPravilaBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PsalterNadsana : BaseActivity(), View.OnClickListener {
     private lateinit var k: SharedPreferences
@@ -165,7 +169,9 @@ class PsalterNadsana : BaseActivity(), View.OnClickListener {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+            if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+            spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
         return true

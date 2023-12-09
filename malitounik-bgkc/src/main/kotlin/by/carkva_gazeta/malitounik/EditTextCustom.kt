@@ -25,7 +25,7 @@ class EditTextCustom : AppCompatEditText {
     }
 
     private fun setFontInterface(context: Context) {
-        val sp = (context as BaseActivity).setFontInterface(textSize)
+        val sp = (context as? BaseActivity)?.setFontInterface(textSize) ?: SettingsActivity.GET_FONT_SIZE_DEFAULT
         setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
     }
 

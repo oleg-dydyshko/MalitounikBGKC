@@ -1965,14 +1965,21 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
         var spanString = SpannableString(itemAuto.title.toString())
         var end = spanString.length
-        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+        if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         itemAuto.title = spanString
-        if (men) {
-            itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
-            itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
+        if (!(resurs == "1" || resurs == "2" || resurs == "3")) {
+            itemVybranoe.isVisible = true
+            if (men) {
+                itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
+                itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
+            } else {
+                itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
+                itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
+            }
         } else {
-            itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
-            itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
+            itemVybranoe.isVisible = false
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
         val spanString2 = if (k.getBoolean("auto_dzen_noch", false)) {
@@ -1983,11 +1990,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             SpannableString(getString(by.carkva_gazeta.malitounik.R.string.widget_day_d_n))
         }
         val end2 = spanString2.length
-        spanString2.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spanString2.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).title = spanString2
         spanString = SpannableString(itemVybranoe.title.toString())
         end = spanString.length
-        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         itemVybranoe.title = spanString
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_zmena).isVisible = chechZmena

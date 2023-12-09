@@ -3,7 +3,6 @@ package by.carkva_gazeta.malitounik
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -40,7 +39,6 @@ class DialogNoInternet : DialogFragment() {
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.setText(R.string.no_internet)
             binding.content.setText(R.string.check_internet)
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             ad.setView(binding.root)

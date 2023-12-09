@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -61,7 +60,6 @@ class DialogPasxa : DialogFragment() {
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = resources.getString(R.string.data_search2)
             binding.content.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(4)}
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (savedInstanceState != null) {
                 val sValue = savedInstanceState.getString("value", "")
                 binding.content.setText(sValue)

@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
@@ -14,7 +13,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
 
 class DialogBibleNatatkaEdit : DialogFragment() {
@@ -75,7 +73,6 @@ class DialogBibleNatatkaEdit : DialogFragment() {
             if (semuxa == 2) {
                 editText = BibleGlobalList.natatkiSinodal[position].list[5]
             }
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             binding.content.setText(editText)
             binding.content.requestFocus()
             ad.setView(binding.root)

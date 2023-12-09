@@ -247,7 +247,9 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
             SpannableString(getString(R.string.widget_day_d_n))
         }
         val end = spanString.length
-        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+        if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         menu.findItem(R.id.action_dzen_noch).title = spanString
         val itemVybranoe: MenuItem = menu.findItem(R.id.action_vybranoe)
         if (men) {

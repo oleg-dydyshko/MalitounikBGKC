@@ -346,7 +346,6 @@ class StaryZapavietSemuxaList : BaseActivity() {
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
-            rootView.textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             when (groupPosition) {
                 0 -> rootView.textGroup.text = "Быцьцё"
                 1 -> rootView.textGroup.text = "Выхад"
@@ -394,7 +393,6 @@ class StaryZapavietSemuxaList : BaseActivity() {
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
             val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            rootView.textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
             rootView.textChild.text = groups[groupPosition][childPosition]

@@ -71,7 +71,6 @@ class DialogZakladkaDelite : DialogFragment() {
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = resources.getString(R.string.remove)
             if (zakladka) binding.content.text = resources.getString(R.string.delite_natatki_i_zakladki, getString(R.string.zakladki_bible2), name) else binding.content.text = resources.getString(R.string.delite_natatki_i_zakladki, getString(R.string.natatki_biblii2), name)
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) 
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             if (zakladka) {

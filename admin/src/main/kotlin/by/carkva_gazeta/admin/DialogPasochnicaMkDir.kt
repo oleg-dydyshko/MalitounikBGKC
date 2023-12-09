@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -15,7 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,7 +60,6 @@ class DialogPasochnicaMkDir : DialogFragment() {
             _binding = DialogEditviewDisplayBinding.inflate(LayoutInflater.from(it))
             builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.set_file_dir)
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (savedInstanceState != null) {
                 binding.content.setText(savedInstanceState.getString("fileName"))
             }

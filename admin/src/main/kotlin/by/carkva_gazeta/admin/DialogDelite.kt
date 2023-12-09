@@ -5,11 +5,9 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 
 class DialogDelite : DialogFragment() {
@@ -54,7 +52,6 @@ class DialogDelite : DialogFragment() {
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.remove)
             binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.vybranoe_biblia_delite, title)
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             builder.setPositiveButton(resources.getText(by.carkva_gazeta.malitounik.R.string.ok)) { _: DialogInterface?, _: Int -> mListener?.fileDelite(position, title, isSite) }
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             builder.setView(binding.root)

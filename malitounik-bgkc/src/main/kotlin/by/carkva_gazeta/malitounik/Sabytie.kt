@@ -572,7 +572,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 MainActivity.toastView(this, getString(R.string.error_ch2))
             }
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.titleToolbar.text = resources.getString(R.string.sabytie)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)

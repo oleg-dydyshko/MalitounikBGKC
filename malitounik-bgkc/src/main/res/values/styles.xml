@@ -76,6 +76,7 @@
     </style>
 
     <style name="TabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">18sp</item>
         <item name="textAllCaps">false</item>
         <item name="android:textAllCaps">false</item>
     </style>
@@ -83,16 +84,12 @@
     <style name="TabTextPasliaPrychastia" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="cursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable">@drawable/cursor</item>
-    </style>
-
-    <style name="TabTextCaliandarMun" parent="TextAppearance.Design.Tab">
-        <item name="textAllCaps">false</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="SplashTheme" parent="AppTheme">

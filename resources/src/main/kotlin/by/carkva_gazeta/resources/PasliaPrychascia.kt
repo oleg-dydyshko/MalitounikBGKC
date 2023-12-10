@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.*
 import android.content.SharedPreferences.Editor
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Spannable
@@ -13,8 +12,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -62,12 +59,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             binding.constraint.post {
                 hide()
             }
-        }
-        malitvy.forEachIndexed { index, _ ->
-            val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(index) as LinearLayout
-            val tabTextView = tabLayout.getChildAt(1) as TextView
-            tabTextView.typeface = MainActivity.createFont(Typeface.BOLD)
-            tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT - 2)
         }
     }
 

@@ -790,9 +790,13 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         binding.spinnerFont.setSelection(k.getInt("fontInterface", 0))
         binding.spinnerFont.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                prefEditor.putInt("fontInterface", position)
-                prefEditor.apply()
-                editFull = true
+                val fontInterface = k.getInt("fontInterface", 0)
+                if (fontInterface != position) {
+                    prefEditor.putInt("fontInterface", position)
+                    prefEditor.apply()
+                    editFull = true
+                    recreate()
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -847,6 +851,27 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.line3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
         }
+        val font = setFontInterface(GET_FONT_SIZE_MIN, true)
+        binding.day.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.night.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.autoNight.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.checkBox9.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.checkBox6.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.checkBox7.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.checkBox8.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.maranata.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.maranataRus.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.maranataBel.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.sinoidal.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.notificationFull.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.notificationOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.notificationNon.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.vibro.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.guk.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.pkc.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.dzair.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.praf.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
         binding.textView16.setOnClickListener {
             if (SystemClock.elapsedRealtime() - adminClickTime < 2000) {
                 adminItemCount++
@@ -1432,7 +1457,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             textView.text = dataTimes[position].string
             if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
             else textView.setBackgroundResource(R.drawable.selector_default)
@@ -1455,7 +1479,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             viewHolder.text.text = dataTimes[position].string
             if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
             else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
@@ -1468,7 +1491,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             textView.text = dataFont[position]
             if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
             else textView.setBackgroundResource(R.drawable.selector_default)
@@ -1491,7 +1513,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             viewHolder.text.text = dataFont[position]
             if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
             else viewHolder.text.setBackgroundResource(R.drawable.selector_default)

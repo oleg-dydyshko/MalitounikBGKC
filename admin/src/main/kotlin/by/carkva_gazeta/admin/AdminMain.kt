@@ -7,8 +7,6 @@ import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.transition.TransitionManager
@@ -156,7 +154,7 @@ class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
             }
             TransitionManager.beginDelayedTransition(binding.toolbar)
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.site_admin)
@@ -178,21 +176,6 @@ class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
             onBack()
             return true
         }
-        if (id == R.id.action_beta) {
-            val dialogUpdateHelp = DialogUpdateHelp.newInstance(false)
-            dialogUpdateHelp.show(supportFragmentManager, "dialogUpdateHelp")
-            return true
-        }
-        if (id == R.id.action_release) {
-            val dialogUpdateHelp = DialogUpdateHelp.newInstance(true)
-            dialogUpdateHelp.show(supportFragmentManager, "dialogUpdateHelp")
-            return true
-        }
         return false
-    }
-
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.edit_admin_main, menu)
-        super.onCreateMenu(menu, menuInflater)
     }
 }

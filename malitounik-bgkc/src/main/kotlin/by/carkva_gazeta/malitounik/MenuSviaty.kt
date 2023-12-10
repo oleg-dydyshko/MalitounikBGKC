@@ -122,28 +122,29 @@ class MenuSviaty : BaseListFragment() {
             }
             val title = SpannableString(list[position].opisanie)
             val data = SpannableStringBuilder()
+            val eaGroup = SpannableStringBuilder()
             when (list[position].svaity) {
                 -1 -> {
                     title.setSpan(StyleSpan(Typeface.BOLD), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
                 -2 -> {
-                    ea.group.text = context.getString(R.string.dvunad_sv)
+                    eaGroup.append(context.getString(R.string.dvunad_sv))
                     ea.group.visibility = View.VISIBLE
                 }
                 -3 -> {
-                    ea.group.text = context.getString(R.string.vial_sv)
+                    eaGroup.append(context.getString(R.string.vial_sv))
                     ea.group.visibility = View.VISIBLE
                 }
                 -4 -> {
-                    ea.group.text = context.getString(R.string.dni_yspamin_pam)
+                    eaGroup.append(context.getString(R.string.dni_yspamin_pam))
                     ea.group.visibility = View.VISIBLE
                 }
                 -5 -> {
-                    ea.group.text = context.getString(R.string.carkva_pamiat_data)
+                    eaGroup.append(context.getString(R.string.carkva_pamiat_data))
                     ea.group.visibility = View.VISIBLE
                 }
                 -6 -> {
-                    ea.group.text = context.getString(R.string.parafia_sv)
+                    eaGroup.append(context.getString(R.string.parafia_sv))
                     ea.group.visibility = View.VISIBLE
                 } else -> {
                     ea.group.visibility = View.GONE
@@ -162,6 +163,9 @@ class MenuSviaty : BaseListFragment() {
                 if (dzenNoch) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
+            if (dzenNoch) eaGroup.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, eaGroup.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            else eaGroup.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, eaGroup.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            ea.group.text = eaGroup
             data.append(list[position].opisanieData)
             ea.title.text = title
             ea.date.text = data

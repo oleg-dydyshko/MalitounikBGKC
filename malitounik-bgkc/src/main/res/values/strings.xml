@@ -660,8 +660,6 @@
     <string name="help_alarm_content">Праграме патрэбны будзільнікі для паказу апавяшчэньняў пра Падзеі.</string>
     <string name="update_title">СПАМПОЎВАЕМ АБНАЎЛЕНЬНЕ ПРАГРАМЫ</string>
     <string name="update_title2">АБНАЎЛЕНЬНЕ ПРАГРАМЫ</string>
-    <string name="admin_beta">Апублікаваць Beta-версію</string>
-    <string name="admin_release">Апублікаваць Release-версію</string>
     <string name="admin_update">АБНАЎЛЕНЬНЕ</string>
     <string name="admin_update_all">Абнаўленьне павінна існаваць у Google Play.\nНапішыце нумар %1$s версіі:</string>
     <string name="admin_update_ok">Апублікаваць</string>

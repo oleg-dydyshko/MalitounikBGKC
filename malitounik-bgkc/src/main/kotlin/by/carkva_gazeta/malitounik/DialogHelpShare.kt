@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -62,6 +63,8 @@ class DialogHelpShare : DialogFragment() {
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             binding.checkbox.typeface = MainActivity.createFont(Typeface.NORMAL)
             binding.checkbox.text = getString(R.string.sabytie_check_mun)
+            val sp = it.setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+            binding.checkbox.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
             shareText = arguments?.getString("shareText") ?: ""
             binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
                 val edit = chin.edit()

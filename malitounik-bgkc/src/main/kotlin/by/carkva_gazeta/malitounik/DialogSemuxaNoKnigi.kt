@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -46,6 +47,8 @@ class DialogSemuxaNoKnigi : DialogFragment() {
                 binding.checkbox.visibility = View.GONE
             binding.checkbox.typeface = MainActivity.createFont(Typeface.NORMAL)
             binding.checkbox.text = getString(R.string.sabytie_check_mun)
+            val sp = it.setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+            binding.checkbox.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
             binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
                 val edit = chin.edit()
                 if (isChecked) {

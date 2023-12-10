@@ -48,7 +48,7 @@
         android:layout_marginLeft="10sp"
         android:layout_marginRight="10sp"
         android:layout_marginBottom="10sp"
-        app:tabTextAppearance="@style/TabTextCaliandarMun"
+        app:tabTextAppearance="@style/TabText"
         app:tabGravity="fill"
         app:tabMaxWidth="0sp"
         app:tabMode="fixed">

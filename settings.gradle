@@ -1,5 +1,0 @@
-include ':malitounik-bgkc'
-include ':resources'
-include ':biblijateka'
-include ':admin'
-rootProject.name = "Malitounik"

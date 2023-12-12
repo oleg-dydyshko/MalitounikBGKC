@@ -13,7 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.databinding.CalendarTab1Binding
-import java.util.*
+import java.util.Calendar
 
 class CaliandarMunTab1 : BaseFragment() {
     private val names get() = resources.getStringArray(R.array.meciac2)
@@ -141,7 +141,7 @@ class CaliandarMunTab1 : BaseFragment() {
         if (item.itemId == R.id.action_padzeia) {
             activity?.let {
                 CaliandarMun.SabytieOnView = !CaliandarMun.SabytieOnView
-                val messege: String = if (!CaliandarMun.SabytieOnView) {
+                val messege = if (!CaliandarMun.SabytieOnView) {
                     resources.getString(R.string.sabytie_disable_mun)
                 } else {
                     resources.getString(R.string.sabytie_enable_mun)

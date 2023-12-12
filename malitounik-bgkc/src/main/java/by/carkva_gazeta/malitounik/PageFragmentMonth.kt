@@ -10,7 +10,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.CalendarMunBinding
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class PageFragmentMonth : BaseFragment() {
     private var wik = 0
@@ -43,6 +44,7 @@ class PageFragmentMonth : BaseFragment() {
 
     private fun sabytieCheck(day: Int): Boolean {
         var sabytie = false
+        if (day == 0) return false
         for (p in padzei) {
             val r1 = p.dat.split(".")
             val date = r1[0].toInt()
@@ -165,6 +167,7 @@ class PageFragmentMonth : BaseFragment() {
                 } else {
                     newDay++
                     day = "end"
+                    i = 0
                 }
                 val calendarPost = GregorianCalendar(year, mun, i)
                 val sab = sabytieCheck(i)
@@ -187,6 +190,7 @@ class PageFragmentMonth : BaseFragment() {
                             }
                         }
                     }
+
                     "end" -> {
                         getTextView(e).text = newDay.toString()
                         getTextView(e).setBackgroundResource(R.drawable.calendar_day)
@@ -205,6 +209,7 @@ class PageFragmentMonth : BaseFragment() {
                             }
                         }
                     }
+
                     else -> {
                         getTextView(e).setOnClickListener {
                             val intent = Intent()
@@ -243,6 +248,7 @@ class PageFragmentMonth : BaseFragment() {
                                 getTextView(e).setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                                 getTextView(e).typeface = MainActivity.createFont(Typeface.BOLD)
                             }
+
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
@@ -264,6 +270,7 @@ class PageFragmentMonth : BaseFragment() {
                                 getTextView(e).setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                                 getTextView(e).typeface = MainActivity.createFont(Typeface.NORMAL)
                             }
+
                             else -> {
                                 if (nopost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today)
@@ -285,7 +292,7 @@ class PageFragmentMonth : BaseFragment() {
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
-                                    if (denNedeli == 1) {
+                                    if (denNedeli == Calendar.SUNDAY) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today)
                                         else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_today)
                                         else if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie)

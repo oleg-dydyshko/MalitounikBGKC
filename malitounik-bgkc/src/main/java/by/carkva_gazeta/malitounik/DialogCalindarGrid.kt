@@ -168,7 +168,9 @@ class DialogCalindarGrid : DialogFragment() {
             } else {
                 for (i in 1..9) mItemArray.add(i)
             }
-            binding.dragGridView.setLayoutManager(GridLayoutManager(it, 3))
+            val spanCount = if (k.getInt("fontInterface", 0) == 0) 3
+            else 2
+            binding.dragGridView.setLayoutManager(GridLayoutManager(it, spanCount))
             val listAdapter = ItemAdapter(it, mItemArray, R.id.item_layout, true)
             binding.dragGridView.setAdapter(listAdapter, true)
             binding.dragGridView.setCanDragHorizontally(true)
@@ -205,7 +207,7 @@ class DialogCalindarGrid : DialogFragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
-            view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            //view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             when (post) {
                 1 -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_bez_posta)
                 2 -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_post)

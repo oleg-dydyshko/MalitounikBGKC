@@ -2,6 +2,18 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/sorttime"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/sort_time"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/sortdate"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/sort_alf"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_download_all"
         android:orderInCategory="100"
         android:title="@string/download_opisanie_all"

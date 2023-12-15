@@ -3,6 +3,7 @@ package by.carkva_gazeta.malitounik
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -43,12 +44,12 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
     private val dzenNoch get() = getBaseDzenNoch()
     private val dirList = ArrayList<DirList>()
     private var loadIconsJob: Job? = null
+    private lateinit var chin: SharedPreferences
 
     override fun onPause() {
         super.onPause()
         loadIconsJob?.cancel()
         val layoutManager = binding.recyclerView.layoutManager as GridLayoutManager
-        val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val prefEditor = chin.edit()
         prefEditor.putInt("galleryPosition", layoutManager.findFirstVisibleItemPosition())
         prefEditor.apply()
@@ -58,6 +59,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
         super.onCreate(savedInstanceState)
         binding = GalleryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (savedInstanceState?.getBoolean("imageViewFullVisable") == true) {
             val file2 = File(fullImagePathVisable)
             Picasso.get().load(file2).into(binding.imageViewFull)
@@ -82,7 +84,6 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
             binding.recyclerView.layoutManager = GridLayoutManager(this, spancount)
             adapter = GalleryAdapter(this, binding, gallery)
             binding.recyclerView.adapter = adapter
-            val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val pos = chin.getInt("galleryPosition", 0)
             binding.recyclerView.scrollToPosition(pos)
         }
@@ -120,14 +121,14 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
             gc.set(Calendar.DATE, day)
             gc.set(Calendar.MONTH, mun - 1)
             if (it.contains("s")) {
-                gallery.add(GalleryData(gc[Calendar.DAY_OF_YEAR], loadOpisanieSviatyia(day, mun, it.substring(t3 + 1, t3 + 2).toInt()), "$filesDir/icons/$it"))
+                gallery.add(GalleryData(gc[Calendar.DAY_OF_YEAR], loadOpisanieSviatyia(day, mun, it.substring(t3 + 1, t3 + 2).toInt()), "$filesDir/icons/$it", File("$filesDir/icons/$it").lastModified()))
             } else {
                 if (day == -1) {
                     val list = svityRuchomyia(mun)
                     gc.set(Calendar.DATE, list[0])
                     gc.set(Calendar.MONTH, list[1])
                 }
-                gallery.add(GalleryData(gc[Calendar.DAY_OF_YEAR], loadOpisanieSviat(day, mun), "$filesDir/icons/$it"))
+                gallery.add(GalleryData(gc[Calendar.DAY_OF_YEAR], loadOpisanieSviat(day, mun), "$filesDir/icons/$it", File("$filesDir/icons/$it").lastModified()))
             }
         }
         gallery.sort()
@@ -450,7 +451,6 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         val spanString = if (chin.getBoolean("auto_dzen_noch", false)) {
             menu.findItem(R.id.action_dzen_noch).isCheckable = false
@@ -465,6 +465,22 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
         spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         menu.findItem(R.id.action_dzen_noch).title = spanString
         menu.findItem(R.id.action_download_all).isVisible = binding.recyclerView.visibility != View.INVISIBLE
+        when (chin.getInt("gallery_sort", 0)) {
+            1 -> {
+                menu.findItem(R.id.sortdate).isChecked = true
+                menu.findItem(R.id.sorttime).isChecked = false
+            }
+
+            2 -> {
+                menu.findItem(R.id.sortdate).isChecked = false
+                menu.findItem(R.id.sorttime).isChecked = true
+            }
+
+            else -> {
+                menu.findItem(R.id.sortdate).isChecked = false
+                menu.findItem(R.id.sorttime).isChecked = false
+            }
+        }
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
@@ -473,12 +489,43 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
             onBack()
             return true
         }
+        if (id == R.id.sortdate) {
+            val prefEditors = chin.edit()
+            if (item.isChecked) {
+                prefEditors.putInt("gallery_sort", 0)
+            } else {
+                prefEditors.putInt("gallery_sort", 1)
+            }
+            prefEditors.apply()
+            val layoutManager = binding.recyclerView.layoutManager as GridLayoutManager
+            val position = layoutManager.findFirstVisibleItemPosition()
+            gallery.sort()
+            adapter.updateList(gallery)
+            binding.recyclerView.scrollToPosition(position)
+            invalidateOptionsMenu()
+            return true
+        }
+        if (id == R.id.sorttime) {
+            val prefEditors = chin.edit()
+            if (item.isChecked) {
+                prefEditors.putInt("gallery_sort", 0)
+            } else {
+                prefEditors.putInt("gallery_sort", 2)
+            }
+            prefEditors.apply()
+            val layoutManager = binding.recyclerView.layoutManager as GridLayoutManager
+            val position = layoutManager.findFirstVisibleItemPosition()
+            gallery.sort()
+            adapter.updateList(gallery)
+            binding.recyclerView.scrollToPosition(position)
+            invalidateOptionsMenu()
+            return true
+        }
         if (id == R.id.action_download_all) {
             startLoadIconsJob(!MainActivity.isNetworkAvailable(true))
             return true
         }
         if (id == R.id.action_dzen_noch) {
-            val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val prefEditor = chin.edit()
             if (item.isCheckable) {
                 item.isChecked = !item.isChecked
@@ -580,12 +627,26 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
         }
     }
 
-    private data class GalleryData(val id: Int, val title: String, val iconPath: String) : Comparable<GalleryData> {
+    private data class GalleryData(val id: Int, val title: String, val iconPath: String, val fileLastModified: Long) : Comparable<GalleryData> {
         override fun compareTo(other: GalleryData): Int {
-            if (this.id > other.id) {
-                return 1
-            } else if (this.id < other.id) {
-                return -1
+            val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            when (k.getInt("gallery_sort", 0)) {
+                1 -> return title.compareTo(other.title, true)
+                2 -> {
+                    if (fileLastModified < other.fileLastModified) {
+                        return 1
+                    } else if (fileLastModified > other.fileLastModified) {
+                        return -1
+                    }
+                }
+
+                else -> {
+                    if (this.id > other.id) {
+                        return 1
+                    } else if (this.id < other.id) {
+                        return -1
+                    }
+                }
             }
             return 0
         }

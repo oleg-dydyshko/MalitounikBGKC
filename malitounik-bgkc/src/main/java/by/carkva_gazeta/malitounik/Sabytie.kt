@@ -44,7 +44,6 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.DialogContextMenuSabytie.DialogContextMenuSabytieListener
@@ -2433,32 +2432,11 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                     prefEditor.apply()
                 }
             }
-            val diffCallback = RecyclerViewDiffCallback(MainActivity.padzeia, newSabytieDataAdapter)
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            diffResult.dispatchUpdatesTo(this)
             itemList = newSabytieDataAdapter
         }
 
         init {
             itemList = list
-        }
-    }
-
-    private class RecyclerViewDiffCallback(private val oldArrayList: ArrayList<Padzeia>, private val newArrayList: ArrayList<Padzeia>) : DiffUtil.Callback() {
-        override fun getOldListSize(): Int {
-            return oldArrayList.size
-        }
-
-        override fun getNewListSize(): Int {
-            return newArrayList.size
-        }
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
         }
     }
 

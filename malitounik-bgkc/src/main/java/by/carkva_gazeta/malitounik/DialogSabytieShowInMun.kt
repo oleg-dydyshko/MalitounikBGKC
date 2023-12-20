@@ -115,14 +115,14 @@ class DialogSabytieShowInMun : DialogFragment() {
                         textViewT.text = title
                         textViewT.setPadding(10 * density, 5 * density, 5 * density, 5 * density)
                         textViewT.typeface = MainActivity.createFont(Typeface.BOLD)
-                        if (k.getInt("fontInterface", 0) == 0) textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                        if (k.getInt("fontInterface", 1) == 0) textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
                         textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(dzenNoch, p.color)))
                         sabytieList.add(textViewT)
                         val textView = TextViewCustom(it)
                         textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                         textView.setPadding(10 * density, 0, 10 * density, 10 * density)
-                        if (k.getInt("fontInterface", 0) == 0) textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                        if (k.getInt("fontInterface", 1) == 0) textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
                         if (dzenNoch) {
                             textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             textView.setBackgroundResource(R.color.colorbackground_material_dark_ligte)

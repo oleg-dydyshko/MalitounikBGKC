@@ -591,14 +591,48 @@ class SlugbovyiaTextu {
         return false
     }
 
-    fun checkVialikiaGadziny(day: Int, dayOfYear: Int): Boolean {
+    fun getDayVialikiaGadziny(dayOfYear: Int, year: Int): Int {
+        val caliandar = MenuCaliandar.getDataCalaindar(year = year)
+        val dayCaliandar = ArrayList<String>()
+        caliandar.forEach {
+            if (dayOfYear == it[24].toInt()) {
+                dayCaliandar.addAll(it)
+                return@forEach
+            }
+        }
+        val chytanne = dayCaliandar[10] + dayCaliandar[11]
+        var rDay = dayOfYear
+        if (chytanne.contains("Вялікія гадзіны", true)) {
+            if (dayCaliandar[0].toInt() == Calendar.FRIDAY) {
+                rDay += 2
+            }
+        }
+        return rDay
+    }
+
+    fun checkVialikiaGadziny(day: Int, dayOfYear: Int, year: Int): Boolean {
+        val caliandar = MenuCaliandar.getDataCalaindar(year = year)
+        val dayCaliandar = ArrayList<String>()
+        caliandar.forEach {
+            if (dayOfYear == it[24].toInt()) {
+                dayCaliandar.addAll(it)
+                return@forEach
+            }
+        }
         datMinALL.forEach {
             if (it.pasxa) {
                 if (day == it.day && it.sluzba == VIALHADZINY) {
                     return true
                 }
             } else {
-                if (getFictionalDay(dayOfYear) == it.day && it.sluzba == VIALHADZINY) {
+                val chytanne = dayCaliandar[10] + dayCaliandar[11]
+                var rDay = dayOfYear
+                if (chytanne.contains("Вялікія гадзіны", true)) {
+                    if (dayCaliandar[0].toInt() == Calendar.FRIDAY) {
+                        rDay += 2
+                    }
+                }
+                if (dayCaliandar[0].toInt() != Calendar.SUNDAY && getFictionalDay(rDay) == it.day && it.sluzba == VIALHADZINY) {
                     return true
                 }
             }

@@ -49,17 +49,17 @@ class DialogFontSize : DialogFragment() {
     private fun setProgressFontSize(fontBiblia: Int): Int {
         var progress = 1
         when (fontBiblia) {
-            14 -> progress = 0
-            18 -> progress = 1
-            22 -> progress = 2
-            26 -> progress = 3
-            30 -> progress = 4
-            34 -> progress = 5
-            38 -> progress = 6
-            42 -> progress = 7
-            46 -> progress = 8
-            50 -> progress = 9
-            54 -> progress = 10
+            18 -> progress = 0
+            22 -> progress = 1
+            26 -> progress = 2
+            30 -> progress = 3
+            34 -> progress = 4
+            38 -> progress = 5
+            42 -> progress = 6
+            46 -> progress = 7
+            50 -> progress = 8
+            54 -> progress = 9
+            58 -> progress = 10
         }
         return progress
     }
@@ -67,17 +67,17 @@ class DialogFontSize : DialogFragment() {
     private fun getFont(progress: Int): Float {
         var font = SettingsActivity.GET_FONT_SIZE_DEFAULT
         when (progress) {
-            0 -> font = 14F
-            1 -> font = 18F
-            2 -> font = 22F
-            3 -> font = 26F
-            4 -> font = 30F
-            5 -> font = 34F
-            6 -> font = 38F
-            7 -> font = 42F
-            8 -> font = 46F
-            9 -> font = 50F
-            10 -> font = 54F
+            0 -> font = 18F
+            1 -> font = 22F
+            2 -> font = 26F
+            3 -> font = 30F
+            4 -> font = 34F
+            5 -> font = 38F
+            6 -> font = 42F
+            7 -> font = 46F
+            8 -> font = 50F
+            9 -> font = 54F
+            10 -> font = 58F
         }
         return font
     }

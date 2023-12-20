@@ -168,7 +168,7 @@ class DialogCalindarGrid : DialogFragment() {
             } else {
                 for (i in 1..9) mItemArray.add(i)
             }
-            val spanCount = if (k.getInt("fontInterface", 0) == 0) 3
+            val spanCount = if (k.getInt("fontInterface", 1) == 0) 3
             else 2
             binding.dragGridView.setLayoutManager(GridLayoutManager(it, spanCount))
             val listAdapter = ItemAdapter(it, mItemArray, R.id.item_layout, true)
@@ -207,7 +207,6 @@ class DialogCalindarGrid : DialogFragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
-            //view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             when (post) {
                 1 -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_bez_posta)
                 2 -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_post)
@@ -253,7 +252,7 @@ class DialogCalindarGrid : DialogFragment() {
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
 
-                mItemList[position] == 5 && !slugba.checkVialikiaGadziny(raznicia, dayOfYear.toInt()) -> {
+                mItemList[position] == 5 && !slugba.checkVialikiaGadziny(raznicia, dayOfYear.toInt(), year) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
@@ -382,9 +381,9 @@ class DialogCalindarGrid : DialogFragment() {
 
                     5 -> {
                         when {
-                            slugba.checkVialikiaGadziny(raznicia, dayOfYear.toInt()) -> {
+                            slugba.checkVialikiaGadziny(raznicia, dayOfYear.toInt(), year) -> {
                                 val intent = Intent()
-                                val resours = slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.VIALHADZINY)
+                                val resours = slugba.getResource(raznicia, slugba.getDayVialikiaGadziny(dayOfYear.toInt(), year), SlugbovyiaTextu.VIALHADZINY)
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("resurs", resours)
                                 intent.putExtra("zmena_chastki", true)

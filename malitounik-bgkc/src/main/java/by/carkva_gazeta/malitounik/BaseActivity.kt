@@ -177,7 +177,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         var sp = if (isTextSizeSp) textSizePixel
         else textSizePixel / resources.displayMetrics.density
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        when(k.getInt("fontInterface", 0)) {
+        when(k.getInt("fontInterface", 1)) {
             1 -> sp += 2
             2 -> sp += 4
             3 -> sp += 6

@@ -86,7 +86,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         const val RESET_MAIN = "reset_main"
         const val GET_FONT_SIZE_DEFAULT = 18F
         const val GET_FONT_SIZE_MIN = 14F
-        const val GET_FONT_SIZE_MAX = 54F
+        const val GET_FONT_SIZE_MAX = 58F
         const val GET_CALIANDAR_YEAR_MIN = 2022
         const val GET_CALIANDAR_YEAR_MAX = 2025
         const val NOTIFICATION_CHANNEL_ID_SABYTIE = "3003"
@@ -787,10 +787,10 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         }
         val fontList = resources.getStringArray(R.array.fonts)
         binding.spinnerFont.adapter = FontAdapter(this, fontList)
-        binding.spinnerFont.setSelection(k.getInt("fontInterface", 0))
+        binding.spinnerFont.setSelection(k.getInt("fontInterface", 1))
         binding.spinnerFont.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val fontInterface = k.getInt("fontInterface", 0)
+                val fontInterface = k.getInt("fontInterface", 1)
                 if (fontInterface != position) {
                     prefEditor.putInt("fontInterface", position)
                     prefEditor.apply()

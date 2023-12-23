@@ -23,7 +23,6 @@ import by.carkva_gazeta.malitounik.CaliandarMun
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.MenuCaliandar
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.gson.Gson
@@ -189,7 +188,6 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
         binding.titleToolbar.setOnClickListener {
             fullTextTollbar()
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny)

@@ -259,7 +259,6 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
             }
             TransitionManager.beginDelayedTransition(binding.toolbar)
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = resources.getText(R.string.search_svityia)

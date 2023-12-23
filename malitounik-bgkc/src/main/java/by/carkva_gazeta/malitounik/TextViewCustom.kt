@@ -8,6 +8,7 @@ import androidx.appcompat.widget.AppCompatTextView
 class TextViewCustom : AppCompatTextView {
 
     constructor(context: Context) : super(context) {
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOOLBAR)
         setFontInterface(context)
     }
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {

@@ -16,7 +16,6 @@ import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.admin.databinding.AdminBibleBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.play.core.splitcompat.SplitCompat
 import kotlinx.coroutines.CoroutineScope
@@ -207,7 +206,6 @@ class NovyZapavietSemuxa : BaseActivity(), DialogBibleRazdel.DialogBibleRazdelLi
         binding.subtitleToolbar.setOnClickListener {
             fullTextTollbar()
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.novy_zapaviet)

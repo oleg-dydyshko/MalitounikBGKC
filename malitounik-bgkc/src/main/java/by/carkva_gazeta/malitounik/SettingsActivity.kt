@@ -84,7 +84,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
     companion object {
         const val UPDATE_ALL_WIDGETS = "update_all_widgets"
         const val RESET_MAIN = "reset_main"
-        const val GET_FONT_SIZE_DEFAULT = 18F
+        const val GET_FONT_SIZE_DEFAULT = 22F
+        const val GET_FONT_SIZE_TOOLBAR = 18f
         const val GET_FONT_SIZE_MIN = 14F
         const val GET_FONT_SIZE_MAX = 58F
         const val GET_CALIANDAR_YEAR_MIN = 2022

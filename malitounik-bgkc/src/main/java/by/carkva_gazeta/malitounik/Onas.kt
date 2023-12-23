@@ -6,7 +6,11 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.PasxaBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -45,7 +49,6 @@ class Onas : BaseActivity() {
             TransitionManager.beginDelayedTransition(binding.toolbar)
         }
         if (dzenNoch) binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.titleToolbar.text = resources.getString(R.string.pra_nas)
         val inputStream = resources.openRawResource(R.raw.onas)
         val isr = InputStreamReader(inputStream)

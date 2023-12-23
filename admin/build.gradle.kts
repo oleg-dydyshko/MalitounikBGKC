@@ -30,7 +30,7 @@ android {
 dependencies {
     implementation(project(":malitounik-bgkc"))
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation ("com.google.android.material:material:1.10.0")
+    implementation ("com.google.android.material:material:1.11.0")
     implementation ("org.apache.commons:commons-text:1.11.0")
     implementation ("com.squareup.picasso:picasso:2.71828")
     implementation ("androidx.core:core-ktx:1.12.0")

@@ -585,6 +585,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_04_12_muczanicy_barbary_paczesnaha_jana_damaskina_viaczernia"] = R.raw.mm_04_12_muczanicy_barbary_paczesnaha_jana_damaskina_viaczernia
             resursMap["mm_09_12_zaczaccie_baharodzicy_liturhija"] = R.raw.mm_09_12_zaczaccie_baharodzicy_liturhija
             resursMap["mm_09_12_zaczaccie_baharodzicy_viaczernia"] = R.raw.mm_09_12_zaczaccie_baharodzicy_viaczernia
+            resursMap["mm_23_12_pieradsviaccie_rastva_10muczanikau_kryckich_viaczernia"] = R.raw.mm_23_12_pieradsviaccie_rastva_10muczanikau_kryckich_viaczernia
+            resursMap["mm_24_12_ndz_ajcou_pierad_rastvom_liturhija"] = R.raw.mm_24_12_ndz_ajcou_pierad_rastvom_liturhija
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -1078,7 +1080,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
             TransitionManager.beginDelayedTransition(binding.toolbar)
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {

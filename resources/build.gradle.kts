@@ -30,7 +30,7 @@ android {
 dependencies {
     implementation(project(":malitounik-bgkc"))
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation ("com.google.android.material:material:1.10.0")
+    implementation ("com.google.android.material:material:1.11.0")
     implementation ("androidx.core:core-ktx:1.12.0")
     implementation ("org.jsoup:jsoup:1.17.1")
     testImplementation ("junit:junit:4.13.2")

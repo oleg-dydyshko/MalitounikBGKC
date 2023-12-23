@@ -27,7 +27,6 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.LeadingMarginSpan.LeadingMarginSpan2
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -527,7 +526,6 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
     fun sabytieView(sabytieTitle: String) {
         activity?.let { activity ->
             _binding?.padzei?.removeAllViewsInLayout()
-            val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val gc = Calendar.getInstance() as GregorianCalendar
             val sabytieList = ArrayList<TextViewCustom>()
             for (index in 0 until MainActivity.padzeia.size) {
@@ -580,7 +578,6 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                         textViewT.text = title
                         textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
                         textViewT.typeface = MainActivity.createFont(Typeface.BOLD)
-                        if (k.getInt("fontInterface", 1) == 0) textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
 
                         textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                         textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(dzenNoch, p.color)))
@@ -589,7 +586,6 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                         textView.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_text))
                         textView.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorDivider))
                         textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        if (k.getInt("fontInterface", 1) == 0) textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
                         if (dzenNoch) {
                             textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)

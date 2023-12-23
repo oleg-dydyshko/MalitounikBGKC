@@ -686,8 +686,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             setSpan(CustomTypefaceSpan("", ResourcesCompat.getFont(this@MainActivity, R.font.comici)), 1, length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
         }
         if (k.getInt("fontInterface", 1) > 0) {
-            binding.citata.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
-            binding.description.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
+            binding.citata.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOOLBAR)
+            binding.description.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOOLBAR)
         }
         var scroll = false
         when (idSelect) {

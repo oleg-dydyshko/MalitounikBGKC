@@ -106,7 +106,6 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener, DialogHelpFu
         binding.subtitleToolbar.setOnClickListener {
             fullTextTollbar()
         }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {

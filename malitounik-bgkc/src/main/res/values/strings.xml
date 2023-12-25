@@ -754,6 +754,7 @@
     <string name="gallery_download">Спампоўваем выявы ікон:\n%1$s</string>
     <string name="admin_opisanne_icon">Апісаньне іконы</string>
     <string name="settengs_font_size_app">Выбраць памер шрыфту інтэрфэйсу:</string>
+    <string name="mineia_slugba">%1$s %2$s</string>
     <string-array name="fonts">
         <item>18sp</item>
         <item>22sp(па змаўчаньні)</item>

@@ -12,7 +12,6 @@
         android:background="@color/colorPrimary"
         android:padding="10sp"
         android:textColor="@color/colorWhite"
-        android:textSize="14sp"
         android:textStyle="bold" />
 
     <ListView

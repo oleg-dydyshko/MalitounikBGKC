@@ -265,13 +265,13 @@ class MenuCaliandar : BaseFragment() {
             return data[pos]
         }
 
-        fun getDataCalaindar(day: Int = -1, mun: Int = -1, year: Int = -1): ArrayList<ArrayList<String>> {
+        fun getDataCalaindar(dayOfMun: Int = -1, dayOfYear: Int = -1, mun: Int = -1, year: Int = -1): ArrayList<ArrayList<String>> {
             when {
-                day != -1 && mun != -1 && year != -1 -> {
+                dayOfMun != -1 && mun != -1 && year != -1 -> {
                     val niadzeliaList = ArrayList<ArrayList<String>>()
                     var count = 0
                     data.forEach { arrayList ->
-                        if (day == arrayList[1].toInt() && mun == arrayList[2].toInt() && year == arrayList[3].toInt()) {
+                        if (dayOfMun == arrayList[1].toInt() && mun == arrayList[2].toInt() && year == arrayList[3].toInt()) {
                             count++
                             if (arrayList[26].toInt() == 0) count = arrayList[0].toInt()
                         }
@@ -292,6 +292,16 @@ class MenuCaliandar : BaseFragment() {
                     }
                     return munList
                 }
+                dayOfYear != -1 && year != -1 -> {
+                    val dayList = ArrayList<ArrayList<String>>()
+                    data.forEach { arrayList ->
+                        if (dayOfYear == arrayList[24].toInt() && year == arrayList[3].toInt()) {
+                            dayList.add(arrayList)
+                            return@forEach
+                        }
+                    }
+                    return dayList
+                }
                 year != -1 -> {
                     val yearList = ArrayList<ArrayList<String>>()
                     data.forEach { arrayList ->
@@ -301,12 +311,12 @@ class MenuCaliandar : BaseFragment() {
                     }
                     return yearList
                 }
-                day != -1 -> {
+                dayOfMun != -1 -> {
                     val dayList = ArrayList<ArrayList<String>>()
                     val g = GregorianCalendar()
                     if(!g.isLeapYear(g[Calendar.YEAR])) g.add(Calendar.DAY_OF_YEAR, 1)
                     data.forEach { arrayList ->
-                        if (day == arrayList[1].toInt() && g[Calendar.DAY_OF_YEAR] == arrayList[24].toInt() && g[Calendar.YEAR] == arrayList[3].toInt()) {
+                        if (dayOfMun == arrayList[1].toInt() && g[Calendar.DAY_OF_YEAR] == arrayList[24].toInt() && g[Calendar.YEAR] == arrayList[3].toInt()) {
                             dayList.add(arrayList)
                             return@forEach
                         }

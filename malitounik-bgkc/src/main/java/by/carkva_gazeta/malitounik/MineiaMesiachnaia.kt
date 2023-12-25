@@ -46,7 +46,7 @@ class MineiaMesiachnaia : BaseActivity() {
             }
         }
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (k.getBoolean("admin", false) && errorCount > 1) MainActivity.toastView(this,  getString(R.string.admin_resourse_error, day), Toast.LENGTH_LONG)
+        if (k.getBoolean("admin", false) && errorCount > 1) MainActivity.toastView(this, getString(R.string.admin_resourse_error, day), Toast.LENGTH_LONG)
         return count
     }
 
@@ -103,6 +103,7 @@ class MineiaMesiachnaia : BaseActivity() {
                 mineiaList[i].day == SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY -> {
                     c.set(Calendar.DAY_OF_YEAR, SlugbovyiaTextu().getRealDay(SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY))
                 }
+
                 mineiaList[i].pasxa -> {
                     MenuCaliandar.getDataCalaindar(year = Calendar.getInstance()[Calendar.YEAR]).forEach {
                         if (it[22].toInt() == day) {
@@ -111,6 +112,7 @@ class MineiaMesiachnaia : BaseActivity() {
                         }
                     }
                 }
+
                 else -> {
                     c.set(Calendar.DAY_OF_YEAR, day)
                 }
@@ -166,47 +168,28 @@ class MineiaMesiachnaia : BaseActivity() {
             val resourceAbednica = groups[groupPosition][childPosition].resourceAbednica
             val resourceVialikiaGadziny = groups[groupPosition][childPosition].resourceVialikiaGadziny
             val resourceViacherniaZLiturgia = groups[groupPosition][childPosition].resourceViacherniaZLiturgia
-            if (groups[groupPosition][childPosition].titleResource == "") {
-                val intent = Intent(this, Opisanie::class.java)
-                intent.putExtra("mun", groups[groupPosition][childPosition].month + 1)
-                intent.putExtra("day", groups[groupPosition][childPosition].day.toInt())
-                intent.putExtra("year", c[Calendar.YEAR])
-                startActivity(intent)
+            var count = 0
+            if (resourceUtran != "0") count++
+            if (resourceLiturgia != "0") count++
+            if (resourceViachernia != "0") count++
+            if (resourceAbednica != "0") count++
+            if (resourceVialikiaGadziny != "0") count++
+            if (resourceViacherniaZLiturgia != "0") count++
+            if (count > 1) {
+                val dialog = DialogMineiaList.getInstance(groups[groupPosition][childPosition].day)
+                dialog.show(supportFragmentManager, "dialogMineiaList")
             } else {
-                var count = 0
-                if (resourceUtran != "0") count++
-                if (resourceLiturgia != "0") count++
-                if (resourceViachernia != "0") count++
-                if (resourceAbednica != "0") count++
-                if (resourceVialikiaGadziny != "0") count++
-                if (resourceViacherniaZLiturgia != "0") count++
-                if (count > 1) {
-                    val resourceArrayList = ArrayList<String>()
-                    for (i in mineiaList.indices) {
-                        if (groups[groupPosition][childPosition].day.toInt() == mineiaList[i].day) {
-                            when (mineiaList[i].sluzba) {
-                                SlugbovyiaTextu.JUTRAN -> resourceArrayList.add(mineiaList[i].resource)
-                                SlugbovyiaTextu.LITURHIJA -> resourceArrayList.add(mineiaList[i].resource)
-                                SlugbovyiaTextu.VIACZERNIA -> resourceArrayList.add(mineiaList[i].resource)
-                                SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA -> resourceArrayList.add(mineiaList[i].resource)
-                            }
-                        }
-                    }
-                    val dialog = DialogMineiaList.getInstance(groups[groupPosition][childPosition].day, groups[groupPosition][childPosition].titleResource, resourceUtran, resourceLiturgia, resourceViachernia, resourceAbednica, resourceVialikiaGadziny, resourceViacherniaZLiturgia, false)
-                    dialog.show(supportFragmentManager, "dialogMineiaList")
+                if (checkmoduleResources()) {
+                    val intent = Intent()
+                    intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
+                    if (resourceUtran != "0") intent.putExtra("resurs", resourceUtran)
+                    if (resourceLiturgia != "0") intent.putExtra("resurs", resourceLiturgia)
+                    if (resourceViachernia != "0") intent.putExtra("resurs", resourceViachernia)
+                    intent.putExtra("zmena_chastki", true)
+                    intent.putExtra("title", groups[groupPosition][childPosition].titleResource)
+                    startActivity(intent)
                 } else {
-                    if (checkmoduleResources()) {
-                        val intent = Intent()
-                        intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
-                        if (resourceUtran != "0") intent.putExtra("resurs", resourceUtran)
-                        if (resourceLiturgia != "0") intent.putExtra("resurs", resourceLiturgia)
-                        if (resourceViachernia != "0") intent.putExtra("resurs", resourceViachernia)
-                        intent.putExtra("zmena_chastki", true)
-                        intent.putExtra("title", groups[groupPosition][childPosition].titleResource)
-                        startActivity(intent)
-                    } else {
-                        installFullMalitounik()
-                    }
+                    installFullMalitounik()
                 }
             }
             month = groupPosition

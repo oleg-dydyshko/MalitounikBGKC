@@ -2,8 +2,10 @@ package by.carkva_gazeta.malitounik
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context.MODE_PRIVATE
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,16 +25,18 @@ class DialogMineiaList : DialogFragment() {
     private lateinit var binding: DialogListviewDisplayBinding
     private lateinit var alert: AlertDialog
     private var resetTollbarJob: Job? = null
-    private var resourceUtran = "0"
-    private var resourceLiturgia = "0"
-    private var resourceViachernia = "0"
-    private var resourceAbednica = "0"
-    private var resourceVialikiaGadziny = "0"
-    private var resourceViacherniaZLiturgia = "0"
+    private lateinit var k: SharedPreferences
 
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val prefEditors = k.edit()
+        prefEditors.putInt("sortMineiaList", 0)
+        prefEditors.apply()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -46,28 +50,27 @@ class DialogMineiaList : DialogFragment() {
             if (dzenNoch) {
                 binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             }
-            val fileList = ArrayList<MineiaDay>()
+            val fileList = ArrayList<SlugbovyiaTextuData>()
             val dayOfYear = arguments?.getString("dayOfYear") ?: "1"
-            val titleResource = arguments?.getString("titleResource") ?: "0"
-            resourceUtran = arguments?.getString("resourceUtran", "0") ?: "0"
-            resourceLiturgia = arguments?.getString("resourceLiturgia", "0") ?: "0"
-            resourceViachernia = arguments?.getString("resourceViachernia", "0") ?: "0"
-            resourceAbednica = arguments?.getString("resourceAbednica", "0") ?: "0"
-            resourceVialikiaGadziny = arguments?.getString("resourceVialikiaGadziny", "0") ?: "0"
-            resourceViacherniaZLiturgia = arguments?.getString("resourceViacherniaZLiturgia", "0") ?: "0"
-            if (resourceViacherniaZLiturgia != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Вячэрня з Літургіяй", resourceViacherniaZLiturgia))
-            if (resourceViachernia != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Вячэрня", resourceViachernia))
-            if (resourceUtran != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Ютрань", resourceUtran))
-            if (resourceLiturgia != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Літургія", resourceLiturgia))
-            if (resourceVialikiaGadziny != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Вялікія гадзіны", resourceVialikiaGadziny))
-            if (resourceAbednica != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource. Абедніца", resourceAbednica))
+            val slugba = SlugbovyiaTextu()
+            val mineia = slugba.getMineiaMesiachnaia()
+            mineia.forEach { data ->
+                if (data.day == dayOfYear.toInt()) {
+                    fileList.add(data)
+                }
+            }
+            k = it.getSharedPreferences("biblia", MODE_PRIVATE)
+            val prefEditors = k.edit()
+            prefEditors.putInt("sortMineiaList", 1)
+            prefEditors.apply()
+            fileList.sort()
             binding.content.setOnItemClickListener { _, _, position, _ ->
                 if (it.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                     intent.putExtra("resurs", fileList[position].resource)
                     intent.putExtra("zmena_chastki", true)
-                    intent.putExtra("title", fileList[position].titleResource)
+                    intent.putExtra("title", fileList[position].title)
                     startActivity(intent)
 
                 } else {
@@ -89,7 +92,7 @@ class DialogMineiaList : DialogFragment() {
         return alert
     }
 
-    private class ListAdaprer(private val context: Activity, private val fileList: ArrayList<MineiaDay>) : ArrayAdapter<MineiaDay>(context, R.layout.simple_list_item_2, R.id.label, fileList) {
+    private class ListAdaprer(private val context: Activity, private val fileList: ArrayList<SlugbovyiaTextuData>) : ArrayAdapter<SlugbovyiaTextuData>(context, R.layout.simple_list_item_2, R.id.label, fileList) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -104,7 +107,18 @@ class DialogMineiaList : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            viewHolder.text.text = fileList[position].titleResource
+            val slugba = when (fileList[position].sluzba) {
+                SlugbovyiaTextu.VIACZERNIA -> ". Вячэрня"
+                SlugbovyiaTextu.JUTRAN -> ". Ютрань"
+                SlugbovyiaTextu.LITURHIJA -> ". Літургія"
+                SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA -> ". Вячэрня з Літургіяй"
+                SlugbovyiaTextu.VIALHADZINY -> ". Вялікія гадзіны"
+                SlugbovyiaTextu.ABIEDNICA -> ". Абедніца"
+                SlugbovyiaTextu.VIACZERNIA_SUNDAY_2412 -> ". Вячэрня"
+                SlugbovyiaTextu.LITURHIJA_SUNDAY_2412 -> ". Літургія"
+                else -> ". Іншае"
+            }
+            viewHolder.text.text = context.resources.getString(R.string.mineia_slugba, fileList[position].title, slugba)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
@@ -112,20 +126,10 @@ class DialogMineiaList : DialogFragment() {
 
     private class ViewHolder(var text: TextView)
 
-    private data class MineiaDay(val dayOfYear: String, val titleResource: String, val resource: String)
-
     companion object {
-        fun getInstance(dayOfYear: String, titleResource: String, resourceUtran: String, resourceLiturgia: String, resourceViachernia: String, resourceAbednica: String, resourceVialikiaGadziny: String, resourceViacherniaZLiturgia: String, isSvity: Boolean): DialogMineiaList {
+        fun getInstance(dayOfYear: String): DialogMineiaList {
             val bundle = Bundle()
-            bundle.putString("resourceUtran", resourceUtran)
-            bundle.putString("resourceLiturgia", resourceLiturgia)
-            bundle.putString("resourceViachernia", resourceViachernia)
-            bundle.putString("resourceAbednica", resourceAbednica)
-            bundle.putString("resourceVialikiaGadziny", resourceVialikiaGadziny)
-            bundle.putString("resourceViacherniaZLiturgia", resourceViacherniaZLiturgia)
             bundle.putString("dayOfYear", dayOfYear)
-            bundle.putString("titleResource", titleResource)
-            bundle.putBoolean("isSvity", isSvity)
             val dialog = DialogMineiaList()
             dialog.arguments = bundle
             return dialog

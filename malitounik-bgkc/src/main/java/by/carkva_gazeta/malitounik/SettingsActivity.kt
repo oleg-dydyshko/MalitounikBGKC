@@ -1064,6 +1064,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             MainActivity.toastView(this, getString(R.string.save))
             prefEditor.putInt("id", id)
             prefEditor.putFloat("font_biblia", GET_FONT_SIZE_DEFAULT)
+            prefEditor.putInt("fontInterface", 1)
             prefEditor.putBoolean("dzen_noch", false)
             prefEditor.putInt("pravas", 0)
             prefEditor.putInt("pkc", 0)

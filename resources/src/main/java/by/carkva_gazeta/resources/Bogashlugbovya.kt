@@ -1119,9 +1119,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val cal = GregorianCalendar()
             val dayOfYar = if (cal.isLeapYear(cal[Calendar.YEAR])) 0
             else 1
-            checkDayOfYear = if (liturgia) slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
-            else slugbovyiaTextu.checkViachernia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt())
-            if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar))) {
+            checkDayOfYear = if (liturgia) slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt(), zmenyiaChastki.getYear())
+            else slugbovyiaTextu.checkViachernia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt(), zmenyiaChastki.getYear())
+            if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, zmenyiaChastki.getYear()))) {
                 chechZmena = true
                 val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
                 val idZmenyiaChastki = resursMap[resours] ?: R.raw.bogashlugbovya_error
@@ -1129,7 +1129,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
             }
             val viachernia = resurs == "lit_ran_asv_dar" || resurs == "viaczernia_bierascie" || resurs == "viachernia_niadzeli" || resurs == "viachernia_liccia_i_blaslavenne_xliabou" || resurs == "viachernia_na_kozny_dzen" || resurs == "viachernia_u_vialikim_poscie"
-            if (viachernia && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar))) {
+            if (viachernia && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, zmenyiaChastki.getYear()))) {
                 chechZmena = true
                 checkLiturgia = 1
             }

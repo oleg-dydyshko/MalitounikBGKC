@@ -45,6 +45,7 @@
             android:layout_marginEnd="8sp"
             android:drawablePadding="10sp"
             android:padding="10sp"
+            android:textSize="14sp"
             app:drawableLeftCompat="@drawable/stiker"
             app:drawableStartCompat="@drawable/stiker"
             app:layout_constraintBottom_toBottomOf="parent"

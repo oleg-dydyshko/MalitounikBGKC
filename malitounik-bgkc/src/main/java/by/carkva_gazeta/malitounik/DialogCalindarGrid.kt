@@ -143,7 +143,7 @@ class DialogCalindarGrid : DialogFragment() {
             alert = builder.create()
             post = arguments?.getInt("post") ?: 0
             ton = arguments?.getInt("ton") ?: 0
-            denNedzeli = arguments?.getInt("denNedzeli") ?: 1
+            denNedzeli = arguments?.getInt("denNedzeli") ?: Calendar.SUNDAY
             data = arguments?.getInt("data") ?: 1
             mun = arguments?.getInt("mun") ?: 1
             datareal = arguments?.getInt("datareal") ?: 1
@@ -168,9 +168,7 @@ class DialogCalindarGrid : DialogFragment() {
             } else {
                 for (i in 1..9) mItemArray.add(i)
             }
-            val spanCount = if (k.getInt("fontInterface", 1) == 0) 3
-            else 2
-            binding.dragGridView.setLayoutManager(GridLayoutManager(it, spanCount))
+            binding.dragGridView.setLayoutManager(GridLayoutManager(it, 3))
             val listAdapter = ItemAdapter(it, mItemArray, R.id.item_layout, true)
             binding.dragGridView.setAdapter(listAdapter, true)
             binding.dragGridView.setCanDragHorizontally(true)
@@ -267,7 +265,7 @@ class DialogCalindarGrid : DialogFragment() {
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
 
-                mItemList[position] == 6 && !(slugba.checkLiturgia(raznicia, dayOfYear.toInt()) || (ton == 0 && denNedzeli != Calendar.SUNDAY) || ton != 0) -> {
+                mItemList[position] == 6 && !(slugba.checkLiturgia(raznicia, dayOfYear.toInt(), year) || (ton == 0 && denNedzeli != Calendar.SUNDAY) || ton != 0) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
@@ -320,9 +318,9 @@ class DialogCalindarGrid : DialogFragment() {
                 when (itemList[bindingAdapterPosition].toInt()) {
                     1 -> {
                         when {
-                            slugba.checkViachernia(raznicia, dayOfYear.toInt()) -> {
-                                val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.VIACZERNIA)
-                                val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.VIACZERNIA)
+                            slugba.checkViachernia(raznicia, dayOfYear.toInt(), year) -> {
+                                val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.VIACZERNIA, year)
+                                val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.VIACZERNIA, year)
                                 val listResource = ArrayList<String>()
                                 if (resours != "0") listResource.add(resours)
                                 if (resours2 != "0") listResource.add(resours2)
@@ -335,11 +333,9 @@ class DialogCalindarGrid : DialogFragment() {
                                 } else {
                                     val intent = Intent()
                                     intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                                    if (resours != "0") intent.putExtra("resurs", resours)
-                                    if (resours2 != "0") intent.putExtra("resurs", resours2)
+                                    intent.putExtra("resurs", listResource[0])
                                     intent.putExtra("zmena_chastki", true)
-                                    if (resours != "0") intent.putExtra("title", slugba.getTitle(resours))
-                                    else intent.putExtra("title", slugba.getTitle(resours2))
+                                    intent.putExtra("title", listTitle[0])
                                     startActivity(intent)
                                 }
                             }
@@ -412,9 +408,9 @@ class DialogCalindarGrid : DialogFragment() {
                                 startActivity(intent)
                             }
 
-                            slugba.checkLiturgia(raznicia, dayOfYear.toInt()) -> {
-                                val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.LITURHIJA)
-                                val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.LITURHIJA)
+                            slugba.checkLiturgia(raznicia, dayOfYear.toInt(), year) -> {
+                                val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.LITURHIJA, year)
+                                val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.LITURHIJA, year)
                                 val listResource = ArrayList<String>()
                                 if (resours != "0") listResource.add(resours)
                                 if (resours2 != "0") listResource.add(resours2)
@@ -459,8 +455,8 @@ class DialogCalindarGrid : DialogFragment() {
                     4 -> {
                         when {
                             slugba.checkUtran(raznicia, dayOfYear.toInt()) -> {
-                                val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.JUTRAN)
-                                val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.JUTRAN)
+                                val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.JUTRAN, year)
+                                val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.JUTRAN, year)
                                 val listResource = ArrayList<String>()
                                 if (resours != "0") listResource.add(resours)
                                 if (resours2 != "0") listResource.add(resours2)

@@ -405,7 +405,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         else "s"
         val fileList = File("$filesDir/icons").list()
         fileList?.forEach {
-            if (it.contains("${pref}_${day}_${mun}")) {
+            if (it.contains("${pref}_${day}_${mun}_")) {
                 if (!svity) {
                     val s1 = "${pref}_${day}_${mun}".length
                     val s3 = it.substring(s1 + 1, s1 + 2)

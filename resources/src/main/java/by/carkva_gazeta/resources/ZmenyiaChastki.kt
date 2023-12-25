@@ -39,6 +39,8 @@ internal class ZmenyiaChastki {
 
     fun dayOfYear() = arrayData[0][24]
 
+    fun getYear() = arrayData[0][3].toInt()
+
     private fun chtenia(w: String, apostal: Int): String {
         var w1 = w
         val res = StringBuilder()

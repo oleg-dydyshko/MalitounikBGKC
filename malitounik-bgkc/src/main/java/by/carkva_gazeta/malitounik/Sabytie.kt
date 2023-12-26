@@ -648,6 +648,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             da = savedInstanceState.getString("da") ?: "0.0.0"
             taK = savedInstanceState.getString("taK") ?: "0:0"
             daK = savedInstanceState.getString("daK") ?: "0.0.0"
+            binding.labelbutton12.text = savedInstanceState.getString("labelbutton12")
             binding.label1.text = da
             binding.label2.text = ta
             binding.label12.text = daK
@@ -2271,6 +2272,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         outState.putString("daK", binding.label12.text.toString())
         outState.putString("SearchViewQwery", autoCompleteTextView?.text.toString())
         outState.putBoolean("actionExpandOn", actionExpandOn)
+        outState.putString("labelbutton12", binding.labelbutton12.text.toString())
     }
 
     private inner class SabytieAdapter(list: ArrayList<Padzeia>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<Padzeia, SabytieAdapter.ViewHolder>(), Filterable {

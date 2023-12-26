@@ -265,7 +265,7 @@ class MenuCaliandar : BaseFragment() {
             return data[pos]
         }
 
-        fun getDataCalaindar(dayOfMun: Int = -1, dayOfYear: Int = -1, mun: Int = -1, year: Int = -1): ArrayList<ArrayList<String>> {
+        fun getDataCalaindar(dayOfMun: Int = -1, mun: Int = -1, year: Int = -1, dayOfYear: Int = -1): ArrayList<ArrayList<String>> {
             when {
                 dayOfMun != -1 && mun != -1 && year != -1 -> {
                     val niadzeliaList = ArrayList<ArrayList<String>>()

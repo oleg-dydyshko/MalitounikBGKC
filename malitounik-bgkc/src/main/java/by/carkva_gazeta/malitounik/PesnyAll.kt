@@ -255,6 +255,38 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         }
     }
 
+    /*private fun checkResourcesCount() {
+        var count = 0
+        for (i in 0 until resursMap.size) {
+            for (e in 0 until resursMap.size) {
+                if (resursMap.keyAt(i) == resursMap.keyAt(e)) {
+                    count++
+                }
+            }
+            if (count > 1) {
+                Log.d("Oleg", "name: ${resursMap.keyAt(i)}")
+            }
+            count = 0
+        }
+    }
+
+    private fun checkResources() {
+        val fields = R.raw::class.java.fields
+        for (element in fields) {
+            val name = element.name
+            var test = true
+            for (e in 0 until resursMap.size) {
+                if (name == resursMap.keyAt(e)) {
+                    test = false
+                    break
+                }
+            }
+            if (test) {
+                Log.d("Oleg", "name: $name")
+            }
+        }
+    }*/
+
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
@@ -282,6 +314,8 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         binding = PesnyBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
+        //checkResources()
+        //checkResourcesCount()
         binding.constraint.setOnTouchListener(this)
         fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)

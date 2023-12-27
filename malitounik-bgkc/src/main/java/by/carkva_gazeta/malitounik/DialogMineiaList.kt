@@ -107,17 +107,7 @@ class DialogMineiaList : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            val slugba = when (fileList[position].sluzba) {
-                SlugbovyiaTextu.VIACZERNIA -> ". Вячэрня"
-                SlugbovyiaTextu.JUTRAN -> ". Ютрань"
-                SlugbovyiaTextu.LITURHIJA -> ". Літургія"
-                SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA -> ". Вячэрня з Літургіяй"
-                SlugbovyiaTextu.VIALHADZINY -> ". Вялікія гадзіны"
-                SlugbovyiaTextu.ABIEDNICA -> ". Абедніца"
-                SlugbovyiaTextu.VIACZERNIA_SUNDAY_2412 -> ". Вячэрня"
-                SlugbovyiaTextu.LITURHIJA_SUNDAY_2412 -> ". Літургія"
-                else -> ". Іншае"
-            }
+            val slugba = ". " + SlugbovyiaTextu().getNazouSluzby(fileList[position].sluzba)
             viewHolder.text.text = context.resources.getString(R.string.mineia_slugba, fileList[position].title, slugba)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView

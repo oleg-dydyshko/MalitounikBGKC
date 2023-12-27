@@ -52,6 +52,7 @@ class MineiaMesiachnaia : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        resources
         val dzenNoch = getBaseDzenNoch()
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -77,12 +78,7 @@ class MineiaMesiachnaia : BaseActivity() {
             val count = getMineiaDayCount(mineiaList, mineiaList[i].day, mineiaList[i].sluzba)
             var opisanie = ""
             if (count == 1) {
-                when (mineiaList[i].sluzba) {
-                    SlugbovyiaTextu.JUTRAN -> opisanie = ". Ютрань"
-                    SlugbovyiaTextu.LITURHIJA -> opisanie = ". Літургія"
-                    SlugbovyiaTextu.VIACZERNIA -> opisanie = ". Вячэрня"
-                    SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA -> opisanie = ". Вячэрня з Літургіяй"
-                }
+                opisanie = ". " + slugba.getNazouSluzby(mineiaList[i].sluzba)
             }
             if (day == mineiaList[i].day) {
                 day = mineiaList[i].day

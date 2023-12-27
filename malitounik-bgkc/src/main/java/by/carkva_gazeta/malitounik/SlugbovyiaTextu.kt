@@ -24,11 +24,14 @@ class SlugbovyiaTextu {
         const val LITURHIJA = 3
         const val VIACZERNIA_Z_LITURHIJA = 4
         const val VIALHADZINY = 5
-        const val ABIEDNICA = 6
-        const val PAVIACHERNICA = 7
-        const val PAUNOCHNICA = 8
-        const val VIACZERNIA_SUNDAY_2412 = 9
-        const val LITURHIJA_SUNDAY_2412 = 10
+        const val VELIKODNYIAHADZINY = 6
+        const val HADZINA6 = 7
+        const val ABIEDNICA = 8
+        const val PAVIACHERNICA = 9
+        const val PAUNOCHNICA = 10
+        const val VIACZERNIA_SUNDAY_2412 = 11
+        const val LITURHIJA_SUNDAY_2412 = 12
+        const val JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX = 13
         const val AICOU_VII_SUSVETNAGA_SABORY = 1000
         const val NIADZELIA_PRA_AICOU = 1001
         const val NIADZELIA_AICOU_VI_SABORY = 1002
@@ -49,18 +52,18 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха)", "ndz_tamasza_jutran", JUTRAN, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха)", "ndz_tamasza_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха)", "ndz_tamasza_uvieczary", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
-        datMinALL.add(SlugbovyiaTextuData(8, "Панядзелак пасьля нядзелі Тамаша", "ndz_tamasza_paniadzielak", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
-        datMinALL.add(SlugbovyiaTextuData(9, "Аўторак пасьля нядзелі Тамаша", "ndz_tamasza_autorak", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
-        datMinALL.add(SlugbovyiaTextuData(10, "Серада пасьля нядзелі Тамаша", "ndz_tamasza_sierada", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
-        datMinALL.add(SlugbovyiaTextuData(11, "Чацьвер пасьля нядзелі Тамаша", "ndz_tamasza_czacvier", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
-        datMinALL.add(SlugbovyiaTextuData(12, "Пятніца пасьля нядзелі Тамаша", "ndz_tamasza_piatnica", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
+        datMinALL.add(SlugbovyiaTextuData(8, "Панядзелак пасьля нядзелі Тамаша", "ndz_tamasza_01paniadzielak", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
+        datMinALL.add(SlugbovyiaTextuData(9, "Аўторак пасьля нядзелі Тамаша", "ndz_tamasza_02autorak", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
+        datMinALL.add(SlugbovyiaTextuData(10, "Серада пасьля нядзелі Тамаша", "ndz_tamasza_03sierada", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
+        datMinALL.add(SlugbovyiaTextuData(11, "Чацьвер пасьля нядзелі Тамаша", "ndz_tamasza_04czacvier", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
+        datMinALL.add(SlugbovyiaTextuData(12, "Пятніца пасьля нядзелі Тамаша", "ndz_tamasza_05piatnica", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў", "ndz_miranosic_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(20, "Нядзеля расслабленага", "ndz_rasslablenaha_viaczernia_u_subotu_vieczaram", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(21, "Нядзеля расслабленага", "ndz_rasslablenaha_jutran", JUTRAN, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(21, "Нядзеля расслабленага", "ndz_rasslablenaha_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(21, "Нядзеля расслабленага", "ndz_rasslablenaha_uvieczary_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
-        datMinALL.add(SlugbovyiaTextuData(23, "Палова сьвята Пяцідзясятніцы", "palova_sviata_vialikadnia_viaczernia_u_autorak", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
-        datMinALL.add(SlugbovyiaTextuData(24, "Палова сьвята Пяцідзясятніцы", "palova_sviata_vialikadnia_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
+        datMinALL.add(SlugbovyiaTextuData(23, "Палова сьвята Пяцідзясятніцы", "palova_sviata_piacidziasiatnicy_viaczernia_u_autorak", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
+        datMinALL.add(SlugbovyiaTextuData(24, "Палова сьвята Пяцідзясятніцы", "palova_sviata_piacidziasiatnicy_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(28, "Нядзеля самаранкі", "ndz_samaranki_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(35, "Нядзеля сьлепанароджанага", "ndz_slepanarodz_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(49, "Тройца (Сёмуха)", "paniadzielak_sv_ducha_ndz_viaczaram", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
@@ -130,12 +133,12 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(-7, "Уваход у Ерусалім Госпада, Бога і Збаўцы нашага Ісуса Хрыста (Вербніца)", "bogashlugbovya17_9", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak_liturhija_raniej_asviacz_darou", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak_hadzina_6", VIALHADZINY, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak_hadzina_6", HADZINA6, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-5, "Вялікі аўторак", "vialiki_autorak", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-4, "Вялікая серада", "vialikaja_sierada", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-4, "Вялікая серада", "vialikaja_sierada_liturhija_raniej_asviacz_darou", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-3, "Вялікі чацьвер", "vialiki_czacvier", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "jutran_vial_piatn_12jevanhellau", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_jutran_12jevanhellau", JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_mal_paviaczernica", PAVIACHERNICA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_paunocznica", PAUNOCHNICA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
@@ -147,26 +150,26 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак", "u_svietly_paniadzielak", JUTRAN, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак", "l_svietly_paniadzielak", LITURHIJA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак", "v_svietly_paniadzielak", VIACZERNIA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак", "vielikodnyja_hadziny", VIALHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак", "vielikodnyja_hadziny", VELIKODNYIAHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(2, "Сьветлы аўторак", "u_svietly_autorak", JUTRAN, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(2, "Сьветлы аўторак", "l_svietly_autorak", LITURHIJA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(2, "Сьветлы аўторак", "v_svietly_autorak", VIACZERNIA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(2, "Сьветлы аўторак", "vielikodnyja_hadziny", VIALHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(2, "Сьветлы аўторак", "vielikodnyja_hadziny", VELIKODNYIAHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(3, "Сьветлая серада", "u_svietlaja_sierada", JUTRAN, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(3, "Сьветлая серада", "l_svietlaja_sierada", LITURHIJA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(3, "Сьветлая серада", "v_svietlaja_sierada", VIACZERNIA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(3, "Сьветлая серада", "vielikodnyja_hadziny", VIALHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(3, "Сьветлая серада", "vielikodnyja_hadziny", VELIKODNYIAHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(4, "Сьветлы чацьвер", "u_svietly_czacvier", JUTRAN, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(4, "Сьветлы чацьвер", "l_svietly_czacvier", LITURHIJA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(4, "Сьветлы чацьвер", "v_svietly_czacvier", VIACZERNIA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(4, "Сьветлы чацьвер", "vielikodnyja_hadziny", VIALHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(4, "Сьветлы чацьвер", "vielikodnyja_hadziny", VELIKODNYIAHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(5, "Сьветлая пятніца", "u_svietlaja_piatnica", JUTRAN, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(5, "Сьветлая пятніца", "l_svietlaja_piatnica", LITURHIJA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(5, "Сьветлая пятніца", "v_svietlaja_piatnica", VIACZERNIA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(5, "Сьветлая пятніца", "vielikodnyja_hadziny", VIALHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(5, "Сьветлая пятніца", "vielikodnyja_hadziny", VELIKODNYIAHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(6, "Сьветлая субота", "u_svietlaja_subota", JUTRAN, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(6, "Сьветлая субота", "l_svietlaja_subota", LITURHIJA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(6, "Сьветлая субота", "vielikodnyja_hadziny", VIALHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(6, "Сьветлая субота", "vielikodnyja_hadziny", VELIKODNYIAHADZINY, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
 
         datMinALL.add(SlugbovyiaTextuData(313, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "mm_08_11_sabor_archaniola_michaila_jutran", JUTRAN))
         datMinALL.add(SlugbovyiaTextuData(313, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "mm_08_11_sabor_archaniola_michaila_viaczernia", VIACZERNIA))
@@ -291,8 +294,8 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(163, "Сьвятых апосталаў Баўтрамея і Варнавы", "mm_11_06_apostalau_bautramieja_i_varnavy_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(164, "Сьвятога Анупрэя Вялікага", "mm_12_06_anupreja_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(164, "Сьвятога Анупрэя Вялікага", "mm_12_06_anupreja_viaczernia", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(24, "Палова сьвята Пяцідзясятніцы", "palova_sviata_vialikadnia_liturhija", LITURHIJA, pasxa = true))
-        datMinALL.add(SlugbovyiaTextuData(23, "Палова сьвята Пяцідзясятніцы", "palova_sviata_vialikadnia_viaczernia_u_autorak", VIACZERNIA, pasxa = true))
+        datMinALL.add(SlugbovyiaTextuData(24, "Палова сьвята Пяцідзясятніцы", "palova_sviata_piacidziasiatnicy_liturhija", LITURHIJA, pasxa = true))
+        datMinALL.add(SlugbovyiaTextuData(23, "Палова сьвята Пяцідзясятніцы", "palova_sviata_piacidziasiatnicy_viaczernia_u_autorak", VIACZERNIA, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(171, "Сьвятога апостала Юды, сваяка Гасподняга", "mm_19_06_apostala_judy_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(171, "Сьвятога апостала Юды, сваяка Гасподняга", "mm_19_06_apostala_judy_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(176, "Нараджэньне сьвятога прарока Прадвесьніка і Хрысьціцеля", "mm_24_06_jana_chrysciciela_liturhija", LITURHIJA))
@@ -351,7 +354,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(321, "Сьвятога апостала і евангеліста Мацьвея", "mm_16_11_apostala_macvieja_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(317, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "mm_12_11_sviatamuczanika_jazafata_jutran", JUTRAN))
         datMinALL.add(SlugbovyiaTextuData(317, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "mm_12_11_sviatamuczanika_jazafata_viaczernia", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(330, "", "", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(330, "Адданьне сьвята Ўводзінаў Багародзіцы, сьв. Клімента, папы Рымскага і сьв. Пятра, архібіскупа Александрыйскага", "mm_25_11_addannie_uvodzinau_bsharodzicy_klimenta_papy_piatra_aleksandryjskaha_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(335, "Сьвятога апостала Андрэя Першапакліканага", "mm_30_11_apostala_andreja_pierszapaklikanaha_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(336, "Сьвятога прарока Навума", "mm_01_12_praroka_navuma_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(337, "Сьвятога прарока Абакума", "mm_02_12_praroka_abakuma_viaczernia", VIACZERNIA))
@@ -364,6 +367,25 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(358, "Перадсьвяцьце нараджэньня Госпада нашага Ісуса Хрыста і сьвятых 10-ці мучанікаў Крыцкіх", "mm_23_12_pieradsviaccie_rastva_10muczanikau_kryckich_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(359, "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста (Нядзеля айцоў) – калі 24 сьнежня", "mm_24_12_ndz_ajcou_pierad_rastvom_liturhija", LITURHIJA_SUNDAY_2412))
         datMinALL.add(SlugbovyiaTextuData(359, "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста (Нядзеля айцоў) – калі 24 сьнежня", "mm_24_12_ndz_ajcou_pierad_rastvom_viaczernia", VIACZERNIA_SUNDAY_2412))
+    }
+
+    fun getNazouSluzby(sluzba: Int): String {
+        return when (sluzba) {
+            JUTRAN -> "Ютрань"
+            LITURHIJA -> "Літургія"
+            VIACZERNIA -> "Вячэрня"
+            VIACZERNIA_Z_LITURHIJA -> "Вячэрня з Літургіяй"
+            VELIKODNYIAHADZINY -> "Велікодныя гадзіны"
+            VIALHADZINY -> "Вялікія гадзіны"
+            ABIEDNICA -> "Абедніца"
+            HADZINA6 -> "Шостая гадзіна"
+            PAVIACHERNICA -> "Малая павячэрніца"
+            PAUNOCHNICA -> "Паўночніца"
+            VIACZERNIA_SUNDAY_2412 -> "Вячэрня"
+            LITURHIJA_SUNDAY_2412 -> "Літургія"
+            JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX -> "Ютрань (12 Евангельляў Мукаў Хрыстовых)"
+            else -> "Іншае"
+        }
     }
 
     fun getTydzen1(): List<SlugbovyiaTextuData> {
@@ -440,10 +462,30 @@ class SlugbovyiaTextu {
         val checkDay = getRealDay(day)
         datMinALL.forEach {
             if (it.pasxa) {
+                if (sluzba == VIALHADZINY) {
+                    if (checkDay == it.day && (it.sluzba == VIALHADZINY || it.sluzba == VELIKODNYIAHADZINY || it.sluzba == HADZINA6)) {
+                        return it.resource
+                    }
+                }
+                if (sluzba == JUTRAN) {
+                    if (checkDay == it.day && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
+                        return it.resource
+                    }
+                }
                 if (checkDay == it.day && it.sluzba == sluzba) {
                     return it.resource
                 }
             } else {
+                if (sluzba == VIALHADZINY) {
+                    if (checkDay == it.day && (it.sluzba == VIALHADZINY || it.sluzba == VELIKODNYIAHADZINY || it.sluzba == HADZINA6)) {
+                        return it.resource
+                    }
+                }
+                if (sluzba == JUTRAN) {
+                    if (checkDay == it.day && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
+                        return it.resource
+                    }
+                }
                 if (getFictionalDay(dayOfYear) == it.day && it.sluzba == sluzba) {
                     return it.resource
                 }
@@ -469,6 +511,16 @@ class SlugbovyiaTextu {
             }
         }
         datMinALL.forEach {
+            if (sluzba == VIALHADZINY) {
+                if (checkDay == it.day && (it.sluzba == VIALHADZINY || it.sluzba == VELIKODNYIAHADZINY || it.sluzba == HADZINA6)) {
+                    return it.resource
+                }
+            }
+            if (sluzba == JUTRAN) {
+                if (checkDay == it.day && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
+                    return it.resource
+                }
+            }
             if (checkDay == it.day && pasxa == it.pasxa && it.sluzba == findSluzba) {
                 return it.resource
             }
@@ -538,11 +590,11 @@ class SlugbovyiaTextu {
     fun checkUtran(day: Int, dayOfYear: Int): Boolean {
         datMinALL.forEach {
             if (it.pasxa) {
-                if (day == it.day && it.sluzba == JUTRAN) {
+                if (day == it.day && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
                     return true
                 }
             } else {
-                if (getFictionalDay(dayOfYear) == it.day && it.sluzba == JUTRAN) {
+                if (getFictionalDay(dayOfYear) == it.day && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
                     return true
                 }
             }
@@ -660,7 +712,7 @@ class SlugbovyiaTextu {
         }
         datMinALL.forEach {
             if (it.pasxa) {
-                if (day == it.day && it.sluzba == VIALHADZINY) {
+                if (day == it.day && (it.sluzba == VIALHADZINY || it.sluzba == VELIKODNYIAHADZINY || it.sluzba == HADZINA6)) {
                     return true
                 }
             } else {
@@ -671,7 +723,7 @@ class SlugbovyiaTextu {
                         rDay += 2
                     }
                 }
-                if (dayCaliandar[0].toInt() != Calendar.SUNDAY && getFictionalDay(rDay) == it.day && it.sluzba == VIALHADZINY) {
+                if (dayCaliandar[0].toInt() != Calendar.SUNDAY && getFictionalDay(rDay) == it.day && (it.sluzba == VIALHADZINY || it.sluzba == VELIKODNYIAHADZINY || it.sluzba == HADZINA6)) {
                     return true
                 }
             }

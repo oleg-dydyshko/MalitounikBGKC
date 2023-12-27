@@ -197,18 +197,7 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
             val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
             val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            var opisanie = when (groups[groupPosition][childPosition].sluzba) {
-                SlugbovyiaTextu.JUTRAN -> "Ютрань"
-                SlugbovyiaTextu.LITURHIJA -> "Літургія"
-                SlugbovyiaTextu.VIACZERNIA -> "Вячэрня"
-                SlugbovyiaTextu.VIALHADZINY -> "Вялікія гадзіны"
-                SlugbovyiaTextu.PAVIACHERNICA -> "Малая павячэрніца"
-                SlugbovyiaTextu.PAUNOCHNICA -> "Паўночніца"
-                else -> ""
-            }
-            if (groups[groupPosition][childPosition].day == -2 && groups[groupPosition][childPosition].sluzba == SlugbovyiaTextu.JUTRAN) {
-                opisanie = "Ютрань (12 Евангельляў Мукаў Хрыстовых)"
-            }
+            val opisanie = SlugbovyiaTextu().getNazouSluzby(groups[groupPosition][childPosition].sluzba)
             rootView.textChild.text = opisanie
             return rootView.root
         }

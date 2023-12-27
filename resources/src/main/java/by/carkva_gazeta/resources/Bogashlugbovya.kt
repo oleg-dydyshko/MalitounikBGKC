@@ -41,6 +41,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 
+
 class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogVybranoeBibleList.DialogVybranoeBibleListListener {
 
     private var fullscreenPage = false
@@ -311,9 +312,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mltv_pierad_jadoj_i_pasla"] = R.raw.mltv_pierad_jadoj_i_pasla
             resursMap["mltv_za_backou"] = R.raw.mltv_za_backou
             resursMap["kanon_a_kryckaha"] = R.raw.kanon_a_kryckaha
-            resursMap["lit_ran_asv_dar"] = R.raw.lit_raniej_asviaczanych_darou
-            resursMap["viaczernia_bierascie"] = R.raw.viaczerniaja_sluzba_sztodzionnaja_biez_sviatara
-            resursMap["jutran_vial_piatn_12jevanhellau"] = R.raw.vialikaja_piatnica_jutran_12jevanhellau
+            resursMap["lit_raniej_asviaczanych_darou"] = R.raw.lit_raniej_asviaczanych_darou
+            resursMap["viaczerniaja_sluzba_sztodzionnaja_biez_sviatara"] = R.raw.viaczerniaja_sluzba_sztodzionnaja_biez_sviatara
+            resursMap["vialikaja_piatnica_jutran_12jevanhellau"] = R.raw.vialikaja_piatnica_jutran_12jevanhellau
             resursMap["vialikaja_piatnica_mal_paviaczernica"] = R.raw.vialikaja_piatnica_mal_paviaczernica
             resursMap["vialikaja_piatnica_viaczernia"] = R.raw.vialikaja_piatnica_viaczernia
             resursMap["vialiki_czacvier"] = R.raw.vialiki_czacvier
@@ -344,11 +345,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["l_svietlaja_subota"] = R.raw.l_svietlaja_subota
             resursMap["vielikodnyja_hadziny"] = R.raw.vielikodnyja_hadziny
             resursMap["ndz_tamasza_viaczernia_subota"] = R.raw.ndz_tamasza_viaczernia_subota
-            resursMap["ndz_tamasza_paniadzielak"] = R.raw.ndz_tamasza_01paniadzielak
-            resursMap["ndz_tamasza_autorak"] = R.raw.ndz_tamasza_02autorak
-            resursMap["ndz_tamasza_sierada"] = R.raw.ndz_tamasza_03sierada
-            resursMap["ndz_tamasza_czacvier"] = R.raw.ndz_tamasza_04czacvier
-            resursMap["ndz_tamasza_piatnica"] = R.raw.ndz_tamasza_05piatnica
+            resursMap["ndz_tamasza_01paniadzielak"] = R.raw.ndz_tamasza_01paniadzielak
+            resursMap["ndz_tamasza_02autorak"] = R.raw.ndz_tamasza_02autorak
+            resursMap["ndz_tamasza_03sierada"] = R.raw.ndz_tamasza_03sierada
+            resursMap["ndz_tamasza_04czacvier"] = R.raw.ndz_tamasza_04czacvier
+            resursMap["ndz_tamasza_05piatnica"] = R.raw.ndz_tamasza_05piatnica
             resursMap["ndz_tamasza_jutran"] = R.raw.ndz_tamasza_jutran
             resursMap["ndz_tamasza_uvieczary"] = R.raw.ndz_tamasza_uvieczary
             resursMap["mm_15_08_uspiennie_liturhija"] = R.raw.mm_15_08_uspiennie_liturhija
@@ -492,8 +493,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["ndz_rasslablenaha_viaczernia_u_subotu_vieczaram"] = R.raw.ndz_rasslablenaha_viaczernia_u_subotu_vieczaram
             resursMap["ndz_rasslablenaha_uvieczary_viaczernia"] = R.raw.ndz_rasslablenaha_uvieczary_viaczernia
             resursMap["ndz_rasslablenaha_jutran"] = R.raw.ndz_rasslablenaha_jutran
-            resursMap["palova_sviata_vialikadnia_liturhija"] = R.raw.palova_sviata_vialikadnia_liturhija
-            resursMap["palova_sviata_vialikadnia_viaczernia_u_autorak"] = R.raw.palova_sviata_vialikadnia_viaczernia_u_autorak
+            resursMap["palova_sviata_piacidziasiatnicy_liturhija"] = R.raw.palova_sviata_piacidziasiatnicy_liturhija
+            resursMap["palova_sviata_piacidziasiatnicy_viaczernia_u_autorak"] = R.raw.palova_sviata_piacidziasiatnicy_viaczernia_u_autorak
             resursMap["mm_06_05_jova_szmatpakutnaha_viaczernia"] = R.raw.mm_06_05_jova_szmatpakutnaha_viaczernia
             resursMap["mm_10_05_apostala_symana_zilota_liturhija"] = R.raw.mm_10_05_apostala_symana_zilota_liturhija
             resursMap["ndz_usich_sviatych_jutran"] = R.raw.ndz_usich_sviatych_jutran
@@ -503,8 +504,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_11_06_apostalau_bautramieja_i_varnavy_viaczernia"] = R.raw.mm_11_06_apostalau_bautramieja_i_varnavy_viaczernia
             resursMap["mm_12_06_anupreja_liturhija"] = R.raw.mm_12_06_anupreja_liturhija
             resursMap["mm_12_06_anupreja_viaczernia"] = R.raw.mm_12_06_anupreja_viaczernia
-            resursMap["palova_sviata_vialikadnia_liturhija"] = R.raw.palova_sviata_vialikadnia_liturhija
-            resursMap["palova_sviata_vialikadnia_viaczernia_u_autorak"] = R.raw.palova_sviata_vialikadnia_viaczernia_u_autorak
             resursMap["mm_19_06_apostala_judy_liturhija"] = R.raw.mm_19_06_apostala_judy_liturhija
             resursMap["mm_19_06_apostala_judy_viaczernia"] = R.raw.mm_19_06_apostala_judy_viaczernia
             resursMap["mm_24_06_jana_chrysciciela_liturhija"] = R.raw.mm_24_06_jana_chrysciciela_liturhija
@@ -651,6 +650,38 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             return false
         }
     }
+
+    /*private fun checkResourcesCount() {
+        var count = 0
+        for (i in 0 until resursMap.size) {
+            for (e in 0 until resursMap.size) {
+                if (resursMap.keyAt(i) == resursMap.keyAt(e)) {
+                    count++
+                }
+            }
+            if (count > 1) {
+                Log.d("Oleg", "name: ${resursMap.keyAt(i)}")
+            }
+            count = 0
+        }
+    }
+
+    private fun checkResources() {
+        val fields = R.raw::class.java.fields
+        for (element in fields) {
+            val name = element.name
+            var test = true
+            for (e in 0 until resursMap.size) {
+                if (name == resursMap.keyAt(e)) {
+                    test = false
+                    break
+                }
+            }
+            if (test) {
+                Log.d("Oleg", "name: $name")
+            }
+        }
+    }*/
 
     private fun findAllAsanc(noNext: Boolean = true) {
         CoroutineScope(Dispatchers.Main).launch {
@@ -830,6 +861,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding = BogasluzbovyaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
+        //checkResources()
+        //checkResourcesCount()
         resurs = intent.extras?.getString("resurs") ?: ""
         title = intent.extras?.getString("title") ?: ""
         spid = k.getInt("autoscrollSpid", 60)
@@ -1128,7 +1161,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 zmennyiaCastkiTitle = slugbovyiaTextu.getTitle(resours)
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
             }
-            val viachernia = resurs == "lit_ran_asv_dar" || resurs == "viaczernia_bierascie" || resurs == "viachernia_niadzeli" || resurs == "viachernia_liccia_i_blaslavenne_xliabou" || resurs == "viachernia_na_kozny_dzen" || resurs == "viachernia_u_vialikim_poscie"
+            val viachernia = resurs == "lit_raniej_asviaczanych_darou" || resurs == "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara" || resurs == "viachernia_niadzeli" || resurs == "viachernia_liccia_i_blaslavenne_xliabou" || resurs == "viachernia_na_kozny_dzen" || resurs == "viachernia_u_vialikim_poscie"
             if (viachernia && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, zmenyiaChastki.getYear()))) {
                 chechZmena = true
                 checkLiturgia = 1
@@ -1349,7 +1382,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
-        if (resurs == "lit_ran_asv_dar") {
+        if (resurs == "lit_raniej_asviaczanych_darou") {
             val stringVB = "зусім прапускаюцца"
             val strLigVB = stringVB.length
             val vbt1 = text.indexOf(stringVB)
@@ -1367,7 +1400,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
-        if (resurs == "viaczernia_bierascie") {
+        if (resurs == "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara") {
             var stringVB = "выбраныя вершы з псалмаў 1-3"
             var strLigVB = stringVB.length
             var vbt1 = text.indexOf(stringVB)

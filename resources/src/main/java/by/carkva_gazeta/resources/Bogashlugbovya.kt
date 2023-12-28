@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.*
-import android.content.SharedPreferences.Editor
 import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
@@ -19,6 +18,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
@@ -448,7 +448,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_24_12_rastvo_sv_vieczar_vial_hadziny"] = R.raw.mm_24_12_rastvo_sv_vieczar_vial_hadziny
             resursMap["mm_25_12_naradzennie_chrystova_liturhija"] = R.raw.mm_25_12_naradzennie_chrystova_liturhija
             resursMap["mm_26_12_sabor_baharodzicy_liturhija"] = R.raw.mm_26_12_sabor_baharodzicy_liturhija
-            resursMap["mm_28_12_liturhija"] = R.raw.mm_28_12_liturhija
             resursMap["sluzba_vyzvalen_biazvinna_zniavolenych"] = R.raw.sluzba_vyzvalen_biazvinna_zniavolenych
             resursMap["mm_11_17_12_ndz_praajcou_liturhija"] = R.raw.mm_11_17_12_ndz_praajcou_liturhija
             resursMap["mm_13_19_ndz_ajcou_pierszych_szasci_saborau_liturhija"] = R.raw.mm_13_19_ndz_ajcou_pierszych_szasci_saborau_liturhija
@@ -587,6 +586,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_23_12_pieradsviaccie_rastva_10muczanikau_kryckich_viaczernia"] = R.raw.mm_23_12_pieradsviaccie_rastva_10muczanikau_kryckich_viaczernia
             resursMap["mm_24_12_ndz_ajcou_pierad_rastvom_liturhija"] = R.raw.mm_24_12_ndz_ajcou_pierad_rastvom_liturhija
             resursMap["mm_24_12_ndz_ajcou_pierad_rastvom_viaczernia"] = R.raw.mm_24_12_ndz_ajcou_pierad_rastvom_viaczernia
+            resursMap["mm_28_12_20000_muczanikau_nikamiedyjskich_liturhija"] = R.raw.mm_28_12_20000_muczanikau_nikamiedyjskich_liturhija
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -916,75 +916,54 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.brighessPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.brighessMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.fontSizePlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.fontSizeMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+            bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_grid_black)
+            bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_grid_black)
         }
         men = checkVybranoe(this, resurs)
-        bindingprogress.fontSizePlus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
-            if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
-                fontBiblia += 4
+        bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                fontBiblia = SettingsActivity.getFontSize(progress)
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
-                bindingprogress.progress.visibility = View.VISIBLE
-                val prefEditor: Editor = k.edit()
+                val prefEditor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)
+                startProcent()
             }
-            startProcent(3000)
-        }
-        bindingprogress.fontSizeMinus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
-            if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
-                fontBiblia -= 4
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
-                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
-                bindingprogress.progress.visibility = View.VISIBLE
-                val prefEditor: Editor = k.edit()
-                prefEditor.putFloat("font_biblia", fontBiblia)
-                prefEditor.apply()
-                onDialogFontSize(fontBiblia)
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
-            startProcent(3000)
-        }
-        bindingprogress.brighessPlus.setOnClickListener {
-            if (MainActivity.brightness < 100) {
-                MainActivity.brightness = MainActivity.brightness + 1
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+        bindingprogress.seekBarBrighess.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                MainActivity.brightness = progress
                 val lp = window.attributes
                 lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                 window.attributes = lp
-                bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
-                bindingprogress.progress.visibility = View.VISIBLE
                 MainActivity.checkBrightness = false
+                startProcent()
             }
-            startProcent(3000)
-        }
-        bindingprogress.brighessMinus.setOnClickListener {
-            if (MainActivity.brightness > 0) {
-                MainActivity.brightness = MainActivity.brightness - 1
-                val lp = window.attributes
-                lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                window.attributes = lp
-                bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
-                bindingprogress.progress.visibility = View.VISIBLE
-                MainActivity.checkBrightness = false
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
-            startProcent(3000)
-        }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
         binding.actionPlus.setOnClickListener {
             if (spid in 20..235) {
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
                 bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
-                bindingprogress.progress.visibility = View.VISIBLE
                 startProcent()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
@@ -997,7 +976,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 val proc = 100 - (spid - 15) * 100 / 215
                 bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
-                bindingprogress.progress.visibility = View.VISIBLE
                 startProcent()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
@@ -1837,13 +1815,21 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         autoStartScrollJob?.cancel()
     }
 
-    private fun startProcent(delayTime: Long = 1000) {
+    private fun startProcent() {
         procentJob?.cancel()
+        bindingprogress.progress.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(delayTime)
+            delay(1000)
             bindingprogress.progress.visibility = View.GONE
-            bindingprogress.fontSize.visibility = View.GONE
-            bindingprogress.brighess.visibility = View.GONE
+            delay(4000)
+            if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
+                bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@Bogashlugbovya, by.carkva_gazeta.malitounik.R.anim.slide_out_left)
+                bindingprogress.seekBarBrighess.visibility = View.GONE
+            }
+            if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
+                bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@Bogashlugbovya, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
+                bindingprogress.seekBarFontSize.visibility = View.GONE
+            }
         }
     }
 
@@ -1953,18 +1939,24 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     n = event?.y?.toInt() ?: 0
                     val proc: Int
                     if (x < otstup) {
-                        bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                        bindingprogress.seekBarBrighess.progress = MainActivity.brightness
+                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
-                        bindingprogress.progress.visibility = View.VISIBLE
-                        bindingprogress.brighess.visibility = View.VISIBLE
-                        startProcent(3000)
+                        if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
+                            bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
+                            bindingprogress.seekBarBrighess.visibility = View.VISIBLE
+                        }
+                        startProcent()
                     }
                     if (x > widthConstraintLayout - otstup && y < heightConstraintLayout - otstup2) {
+                        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
                         bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
-                        bindingprogress.progress.visibility = View.VISIBLE
-                        bindingprogress.fontSize.visibility = View.VISIBLE
-                        startProcent(3000)
+                        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+                            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
+                            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+                        }
+                        startProcent()
                     }
                     if (y > heightConstraintLayout - otstup) {
                         if (mAutoScroll && binding.find.visibility == View.GONE) {
@@ -1972,7 +1964,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             proc = 100 - (spid - 15) * 100 / 215
                             bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                             bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
-                            bindingprogress.progress.visibility = View.VISIBLE
                             startProcent()
                             startAutoScroll()
                             invalidateOptionsMenu()

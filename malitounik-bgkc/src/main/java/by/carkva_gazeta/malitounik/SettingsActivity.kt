@@ -99,6 +99,42 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         val vibrate = longArrayOf(0, 1000, 700, 1000)
         var isPadzeiaSetAlarm = false
 
+        fun setProgressFontSize(fontBiblia: Int): Int {
+            var progress = 1
+            when (fontBiblia) {
+                18 -> progress = 0
+                22 -> progress = 1
+                26 -> progress = 2
+                30 -> progress = 3
+                34 -> progress = 4
+                38 -> progress = 5
+                42 -> progress = 6
+                46 -> progress = 7
+                50 -> progress = 8
+                54 -> progress = 9
+                58 -> progress = 10
+            }
+            return progress
+        }
+
+        fun getFontSize(progress: Int): Float {
+            var font = GET_FONT_SIZE_DEFAULT
+            when (progress) {
+                0 -> font = 18F
+                1 -> font = 22F
+                2 -> font = 26F
+                3 -> font = 30F
+                4 -> font = 34F
+                5 -> font = 38F
+                6 -> font = 42F
+                7 -> font = 46F
+                8 -> font = 50F
+                9 -> font = 54F
+                10 -> font = 58F
+            }
+            return font
+        }
+
         private fun mkTime(year: Int, month: Int, day: Int, hour: Int): Long {
             val calendar = Calendar.getInstance()
             calendar[year, month, day, hour, 0] = 0

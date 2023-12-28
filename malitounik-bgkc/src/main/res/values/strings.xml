@@ -650,8 +650,6 @@
     <string name="left_caliandar">Лева календаря</string>
     <string name="right_caliandar">Права календаря</string>
     <string name="speed_auto_scroll">Хуткасьць прагорткі</string>
-    <string name="max_font">Максымум</string>
-    <string name="min_font">Мінімум</string>
     <string name="search_sabytie">Пошук Падзей</string>
     <string name="sabytie_data_name">%1$s %2$s</string>
     <string name="trash_sabytie">ВЫДАЛІЦЬ УСЁ ПАДЗЕІ?</string>

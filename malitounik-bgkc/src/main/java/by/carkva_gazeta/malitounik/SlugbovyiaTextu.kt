@@ -256,7 +256,6 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(359, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "mm_24_12_rastvo_sv_vieczar_vial_hadziny", VIALHADZINY))
         datMinALL.add(SlugbovyiaTextuData(360, "Нараджэньне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "mm_25_12_naradzennie_chrystova_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(361, "Сабор Найсьвяцейшай Багародзіцы", "mm_26_12_sabor_baharodzicy_liturhija", LITURHIJA))
-        datMinALL.add(SlugbovyiaTextuData(363, "20 тысячаў мучанікаў Нікамедыйскіх", "mm_28_12_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(-70, "Нядзеля мытніка і фарысэя", "ndz_mytnika_i_faryseja_liturhija", LITURHIJA, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(33, "Сустрэча Госпада нашага Ісуса Хрыста (ГРАМНІЦЫ)", "mm_02_02_sustrecza_hospada_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(-56, "Нядзеля мясапусная, пра Страшны суд", "ndz_miasapusnaja_liturhija", LITURHIJA, pasxa = true))
@@ -367,6 +366,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(358, "Перадсьвяцьце нараджэньня Госпада нашага Ісуса Хрыста і сьвятых 10-ці мучанікаў Крыцкіх", "mm_23_12_pieradsviaccie_rastva_10muczanikau_kryckich_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(359, "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста (Нядзеля айцоў) – калі 24 сьнежня", "mm_24_12_ndz_ajcou_pierad_rastvom_liturhija", LITURHIJA_SUNDAY_2412))
         datMinALL.add(SlugbovyiaTextuData(359, "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста (Нядзеля айцоў) – калі 24 сьнежня", "mm_24_12_ndz_ajcou_pierad_rastvom_viaczernia", VIACZERNIA_SUNDAY_2412))
+        datMinALL.add(SlugbovyiaTextuData(363, "20 тысячаў мучанікаў Нікамедыйскіх", "mm_28_12_20000_muczanikau_nikamiedyjskich_liturhija", LITURHIJA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

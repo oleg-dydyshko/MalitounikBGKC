@@ -20,6 +20,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
 import android.view.animation.AnimationUtils
+import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpannable
@@ -102,75 +103,56 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.brighessPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.brighessMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.fontSizePlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.fontSizeMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+            bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_grid_black)
+            bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_grid_black)
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
+        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
+        bindingprogress.seekBarBrighess.progress = MainActivity.brightness
         setChtenia(savedInstanceState)
-        bindingprogress.fontSizePlus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
-            if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
-                fontBiblia += 4
+        bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                fontBiblia = SettingsActivity.getFontSize(progress)
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
-                bindingprogress.progress.visibility = View.VISIBLE
-                val prefEditor: Editor = k.edit()
+                val prefEditor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)
+                startProcent()
             }
-            startProcent(3000)
-        }
-        bindingprogress.fontSizeMinus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
-            if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
-                fontBiblia -= 4
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
-                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
-                bindingprogress.progress.visibility = View.VISIBLE
-                val prefEditor: Editor = k.edit()
-                prefEditor.putFloat("font_biblia", fontBiblia)
-                prefEditor.apply()
-                onDialogFontSize(fontBiblia)
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
-            startProcent(3000)
-        }
-        bindingprogress.brighessPlus.setOnClickListener {
-            if (MainActivity.brightness < 100) {
-                MainActivity.brightness = MainActivity.brightness + 1
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+        bindingprogress.seekBarBrighess.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                MainActivity.brightness = progress
                 val lp = window.attributes
                 lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                 window.attributes = lp
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
-                bindingprogress.progress.visibility = View.VISIBLE
                 MainActivity.checkBrightness = false
+                startProcent()
             }
-            startProcent(3000)
-        }
-        bindingprogress.brighessMinus.setOnClickListener {
-            if (MainActivity.brightness > 0) {
-                MainActivity.brightness = MainActivity.brightness - 1
-                val lp = window.attributes
-                lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                window.attributes = lp
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
-                bindingprogress.progress.visibility = View.VISIBLE
-                MainActivity.checkBrightness = false
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
-            startProcent(3000)
-        }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
         binding.actionPlus.setOnClickListener {
             if (spid in 20..235) {
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
-                bindingprogress.progress.visibility = View.VISIBLE
                 startProcent()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
@@ -183,7 +165,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                 val proc = 100 - (spid - 15) * 100 / 215
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
-                bindingprogress.progress.visibility = View.VISIBLE
                 startProcent()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
@@ -259,25 +240,30 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                     n = event?.y?.toInt() ?: 0
                     val proc: Int
                     if (x < otstup) {
+                        bindingprogress.seekBarBrighess.progress = MainActivity.brightness
                         bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
-                        bindingprogress.progress.visibility = View.VISIBLE
-                        bindingprogress.brighess.visibility = View.VISIBLE
-                        startProcent(3000)
+                        if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
+                            bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
+                            bindingprogress.seekBarBrighess.visibility = View.VISIBLE
+                        }
+                        startProcent()
                     }
                     if (x > widthConstraintLayout - otstup && y < heightConstraintLayout - otstup2) {
+                        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
                         bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
-                        bindingprogress.progress.visibility = View.VISIBLE
-                        bindingprogress.fontSize.visibility = View.VISIBLE
-                        startProcent(3000)
+                        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+                            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
+                            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+                        }
+                        startProcent()
                     }
                     if (y > heightConstraintLayout - otstup && x < widthConstraintLayout - otstup3) {
                         spid = k.getInt("autoscrollSpid", 60)
                         proc = 100 - (spid - 15) * 100 / 215
                         bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
-                        bindingprogress.progress.visibility = View.VISIBLE
                         startProcent()
                         startAutoScroll()
                         invalidateOptionsMenu()
@@ -421,6 +407,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             1 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian2)
                                 title = if (e == 0) {
@@ -429,6 +416,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             2 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian3)
                                 title = if (e == 0) {
@@ -437,6 +425,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             3 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian4)
                                 title = if (e == 0) {
@@ -445,6 +434,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             4 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian5)
                                 title = if (e == 0) {
@@ -453,6 +443,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             5 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian6)
                                 title = if (e == 0) {
@@ -461,6 +452,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             6 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian7)
                                 title = if (e == 0) {
@@ -469,6 +461,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             7 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian8)
                                 title = if (e == 0) {
@@ -477,6 +470,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             8 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian9)
                                 title = if (e == 0) {
@@ -485,6 +479,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             9 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian10)
                                 title = if (e == 0) {
@@ -493,6 +488,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             10 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian11)
                                 title = if (e == 0) {
@@ -501,6 +497,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             11 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian12)
                                 title = if (e == 0) {
@@ -509,6 +506,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             12 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian13)
                                 title = if (e == 0) {
@@ -517,6 +515,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             13 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian14)
                                 title = if (e == 0) {
@@ -525,6 +524,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             14 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian15)
                                 title = if (e == 0) {
@@ -533,6 +533,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             15 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian16)
                                 title = if (e == 0) {
@@ -541,6 +542,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             16 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian17)
                                 title = if (e == 0) {
@@ -549,6 +551,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             17 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian18)
                                 title = if (e == 0) {
@@ -557,6 +560,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             18 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian19)
                                 title = if (e == 0) {
@@ -565,6 +569,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             19 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian20)
                                 title = if (e == 0) {
@@ -573,6 +578,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             20 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian21)
                                 title = if (e == 0) {
@@ -581,6 +587,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             21 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian22)
                                 title = if (e == 0) {
@@ -589,6 +596,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             22 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian23)
                                 title = if (e == 0) {
@@ -597,6 +605,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             23 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian24)
                                 title = if (e == 0) {
@@ -605,6 +614,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             24 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian25)
                                 title = if (e == 0) {
@@ -613,6 +623,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             25 -> {
                                 inputStream = resources.openRawResource(R.raw.biblian26)
                                 title = if (e == 0) {
@@ -621,6 +632,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             26 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias1)
                                 title = if (e == 0) {
@@ -629,6 +641,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             27 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias20)
                                 title = if (e == 0) {
@@ -637,6 +650,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             28 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias26)
                                 title = if (e == 0) {
@@ -645,14 +659,16 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             29 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias2)
                                 title = if (e == 0) {
-                                    SpannableString( getString(by.carkva_gazeta.malitounik.R.string.chtinia_29, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_29, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             30 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias18)
                                 title = if (e == 0) {
@@ -661,22 +677,25 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             31 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias38)
                                 title = if (e == 0) {
-                                    SpannableString( getString(by.carkva_gazeta.malitounik.R.string.chtinia_31, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_31, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             32 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias29)
                                 title = if (e == 0) {
-                                    SpannableString( getString(by.carkva_gazeta.malitounik.R.string.chtinia_32, spln, zaglavieName))
+                                    SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_32, spln, zaglavieName))
                                 } else {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             33 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias36)
                                 title = if (e == 0) {
@@ -685,6 +704,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             34 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias23)
                                 title = if (e == 0) {
@@ -693,6 +713,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             35 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias24)
                                 title = if (e == 0) {
@@ -701,6 +722,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             36 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias27)
                                 title = if (e == 0) {
@@ -709,6 +731,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             37 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias4)
                                 title = if (e == 0) {
@@ -717,6 +740,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             38 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias33)
                                 title = if (e == 0) {
@@ -725,6 +749,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             39 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias5)
                                 title = if (e == 0) {
@@ -733,6 +758,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             40 -> {
                                 inputStream = resources.openRawResource(R.raw.carniauski)
                                 title = if (e == 0) {
@@ -741,6 +767,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             41 -> {
                                 inputStream = resources.openRawResource(R.raw.biblias39)
                                 title = if (e == 0) {
@@ -749,6 +776,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
+
                             else -> {
                                 errorChytanne = true
                             }
@@ -918,13 +946,21 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         autoStartScrollJob?.cancel()
     }
 
-    private fun startProcent(delayTime: Long = 1000) {
+    private fun startProcent() {
         procentJob?.cancel()
+        bindingprogress.progress.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(delayTime)
+            delay(1000)
             bindingprogress.progress.visibility = View.GONE
-            bindingprogress.brighess.visibility = View.GONE
-            bindingprogress.fontSize.visibility = View.GONE
+            delay(4000)
+            if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
+                bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@Chytanne, by.carkva_gazeta.malitounik.R.anim.slide_out_left)
+                bindingprogress.seekBarBrighess.visibility = View.GONE
+            }
+            if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
+                bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@Chytanne, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
+                bindingprogress.seekBarFontSize.visibility = View.GONE
+            }
         }
     }
 

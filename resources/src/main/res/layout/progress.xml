@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -38,73 +39,45 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/brighess"
+    <by.carkva_gazeta.malitounik.VerticalSeekBar
+        android:id="@+id/seekBarBrighess"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10sp"
-        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/selector_grid_gray"
+        android:max="100"
+        android:paddingTop="5sp"
+        android:paddingBottom="5sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@id/guideline" />
 
-        <ImageView
-            android:id="@+id/brighess_plus"
-            android:layout_width="40sp"
-            android:layout_height="40sp"
-            android:layout_marginBottom="10sp"
-            android:background="@drawable/selector_red_maran_ata"
-            android:contentDescription="@string/empty"
-            android:gravity="center"
-            android:paddingLeft="10sp"
-            android:paddingRight="10sp"
-            app:srcCompat="@drawable/plus_auto_scroll" />
+    <by.carkva_gazeta.malitounik.VerticalSeekBar
+        android:id="@+id/seekBarFontSize"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/selector_grid_gray"
+        android:max="10"
+        android:paddingTop="5sp"
+        android:paddingBottom="5sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline" />
 
-        <ImageView
-            android:id="@+id/brighess_minus"
-            android:layout_width="40sp"
-            android:layout_height="40sp"
-            android:background="@drawable/selector_red_maran_ata"
-            android:contentDescription="@string/empty"
-            android:gravity="center"
-            android:paddingLeft="10sp"
-            android:paddingRight="10sp"
-            app:srcCompat="@drawable/minus_auto_scroll" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/fontSize"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10sp"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25" />
 
-        <ImageView
-            android:id="@+id/fontSize_plus"
-            android:layout_width="40sp"
-            android:layout_height="40sp"
-            android:layout_marginBottom="10sp"
-            android:background="@drawable/selector_red_maran_ata"
-            android:contentDescription="@string/empty"
-            android:gravity="center"
-            android:paddingLeft="10sp"
-            android:paddingRight="10sp"
-            app:srcCompat="@drawable/plus_auto_scroll" />
-
-        <ImageView
-            android:id="@+id/fontSize_minus"
-            android:layout_width="40sp"
-            android:layout_height="40sp"
-            android:background="@drawable/selector_red_maran_ata"
-            android:contentDescription="@string/empty"
-            android:gravity="center"
-            android:paddingLeft="10sp"
-            android:paddingRight="10sp"
-            app:srcCompat="@drawable/minus_auto_scroll" />
-    </LinearLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
+import android.widget.SeekBar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -82,65 +83,49 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.tabLayout.setTabTextColors(Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.colorSecondary_text))), Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.colorPrimary_black))))
+            bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, R.drawable.selector_grid_black)
+            bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, R.drawable.selector_grid_black)
         }
         binding.pager.offscreenPageLimit = 1
         piarlinyJob = CoroutineScope(Dispatchers.Main).launch {
             getPiarliny()
         }
-        bindingprogress.fontSizePlus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(R.string.max_font)
-            if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
-                fontBiblia += 4
+        bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                fontBiblia = SettingsActivity.getFontSize(progress)
                 bindingprogress.progressText.text = getString(R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(R.string.font_size)
-                bindingprogress.progress.visibility = View.VISIBLE
                 val prefEditor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)
+                startProcent()
             }
-            startProcent()
-        }
-        bindingprogress.fontSizeMinus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) bindingprogress.progressTitle.text = getString(R.string.min_font)
-            if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
-                fontBiblia -= 4
-                bindingprogress.progressText.text = getString(R.string.get_font, fontBiblia.toInt())
-                bindingprogress.progressTitle.text = getString(R.string.font_size)
-                bindingprogress.progress.visibility = View.VISIBLE
-                val prefEditor = k.edit()
-                prefEditor.putFloat("font_biblia", fontBiblia)
-                prefEditor.apply()
-                onDialogFontSize(fontBiblia)
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
-            startProcent()
-        }
-        bindingprogress.brighessPlus.setOnClickListener {
-            if (MainActivity.brightness < 100) {
-                MainActivity.brightness = MainActivity.brightness + 1
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+        bindingprogress.seekBarBrighess.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                MainActivity.brightness = progress
                 val lp = window.attributes
                 lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                 window.attributes = lp
-                bindingprogress.progressText.text = resources.getString(R.string.procent, MainActivity.brightness)
+                bindingprogress.progressText.text = getString(R.string.procent, MainActivity.brightness)
                 bindingprogress.progressTitle.text = getString(R.string.Bright)
-                bindingprogress.progress.visibility = View.VISIBLE
                 MainActivity.checkBrightness = false
+                startProcent()
             }
-            startProcent()
-        }
-        bindingprogress.brighessMinus.setOnClickListener {
-            if (MainActivity.brightness > 0) {
-                MainActivity.brightness = MainActivity.brightness - 1
-                val lp = window.attributes
-                lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                window.attributes = lp
-                bindingprogress.progressText.text = resources.getString(R.string.procent, MainActivity.brightness)
-                bindingprogress.progressTitle.text = getString(R.string.Bright)
-                bindingprogress.progress.visibility = View.VISIBLE
-                MainActivity.checkBrightness = false
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
-            startProcent()
-        }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
         binding.actionFullscreen.setOnClickListener {
             show()
         }
@@ -347,17 +332,23 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
                     if (x < otstup) {
-                        bindingprogress.progressText.text = resources.getString(R.string.procent, MainActivity.brightness)
+                        bindingprogress.seekBarBrighess.progress = MainActivity.brightness
+                        bindingprogress.progressText.text = getString(R.string.procent, MainActivity.brightness)
                         bindingprogress.progressTitle.text = getString(R.string.Bright)
-                        bindingprogress.progress.visibility = View.VISIBLE
-                        bindingprogress.brighess.visibility = View.VISIBLE
+                        if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
+                            bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
+                            bindingprogress.seekBarBrighess.visibility = View.VISIBLE
+                        }
                         startProcent()
                     }
                     if (x > widthConstraintLayout - otstup) {
+                        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
                         bindingprogress.progressText.text = getString(R.string.get_font, fontBiblia.toInt())
                         bindingprogress.progressTitle.text = getString(R.string.font_size)
-                        bindingprogress.progress.visibility = View.VISIBLE
-                        bindingprogress.fontSize.visibility = View.VISIBLE
+                        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+                            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
+                            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+                        }
                         startProcent()
                     }
                 }
@@ -368,11 +359,19 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
 
     private fun startProcent() {
         procentJob?.cancel()
+        bindingprogress.progress.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(3000)
+            delay(1000)
             bindingprogress.progress.visibility = View.GONE
-            bindingprogress.brighess.visibility = View.GONE
-            bindingprogress.fontSize.visibility = View.GONE
+            delay(4000)
+            if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
+                bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@PiarlinyAll, R.anim.slide_out_left)
+                bindingprogress.seekBarBrighess.visibility = View.GONE
+            }
+            if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
+                bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@PiarlinyAll, R.anim.slide_out_right)
+                bindingprogress.seekBarFontSize.visibility = View.GONE
+            }
         }
     }
 

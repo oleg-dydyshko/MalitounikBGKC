@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.MenuItem
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.PasxaBinding
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +30,6 @@ class Onas : BaseActivity() {
         val dzenNoch = getBaseDzenNoch()
         binding = PasxaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //binding.textView.movementMethod = LinkMovementMethod.getInstance()
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setOnClickListener {
@@ -70,6 +71,7 @@ class Onas : BaseActivity() {
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT.toInt()
         webSettings.domStorageEnabled = true
+        binding.pasxa.webViewClient = MyWebViewClient()
         binding.pasxa.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
     }
 
@@ -90,5 +92,18 @@ class Onas : BaseActivity() {
             return true
         }
         return false
+    }
+
+    private inner class MyWebViewClient : WebViewClient() {
+
+        @Deprecated("Deprecated in Java")
+        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            if (url.contains("https://carkva.chto.navaha.app")) {
+                val dialog = DialogChtoHovaha()
+                dialog.show(supportFragmentManager, "DialogChtoHovaha")
+                return true
+            }
+            return true
+        }
     }
 }

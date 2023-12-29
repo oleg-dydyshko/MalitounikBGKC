@@ -760,5 +760,6 @@
         <item>26sp</item>
         <item>28sp</item>
     </string-array>
+    <string name="chto_novaga_title">ШТО НОВАГА?</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

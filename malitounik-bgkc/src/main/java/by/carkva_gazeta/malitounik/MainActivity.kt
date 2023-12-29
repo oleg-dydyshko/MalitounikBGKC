@@ -852,6 +852,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
+
+        if (BuildConfig.VERSION_CODE != k.getInt("chtoNavaha", 0)) {
+            val dialog = DialogChtoHovaha()
+            dialog.isCancelable = false
+            dialog.show(supportFragmentManager, "DialogChtoHovaha")
+            prefEditors.putInt("chtoNavaha", BuildConfig.VERSION_CODE)
+            prefEditors.apply()
+        }
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams?) {

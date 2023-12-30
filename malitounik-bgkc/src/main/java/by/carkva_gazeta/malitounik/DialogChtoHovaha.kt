@@ -39,6 +39,7 @@ class DialogChtoHovaha : DialogFragment() {
                 content = bufferedReader.readText()
             }
             binding.content.text = content
+            binding.content.setLineSpacing(0f, 1.3f)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             builder.setView(binding.root)

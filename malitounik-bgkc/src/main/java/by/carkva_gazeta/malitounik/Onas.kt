@@ -67,9 +67,10 @@ class Onas : BaseActivity() {
                 builder.append(line)
             }
         }
+        val k = getSharedPreferences("biblia", MODE_PRIVATE)
         val webSettings = binding.pasxa.settings
         webSettings.standardFontFamily = "sans-serif-condensed"
-        webSettings.defaultFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT.toInt()
+        webSettings.defaultFontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT).toInt()
         webSettings.domStorageEnabled = true
         binding.pasxa.webViewClient = MyWebViewClient()
         binding.pasxa.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)

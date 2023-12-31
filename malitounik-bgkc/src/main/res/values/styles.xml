@@ -13,7 +13,6 @@
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>
         <item name="android:textColor">@color/colorPrimary_text</item>
         <item name="fontFamily">@font/robotocondensedfontfamily</item>
-        <item name="android:textSize">18sp</item>
         <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
     </style>
 
@@ -73,7 +72,6 @@
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="fontFamily">@font/robotocondensedfontfamily</item>
-        <item name="android:textSize">18sp</item>
         <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
     </style>
 

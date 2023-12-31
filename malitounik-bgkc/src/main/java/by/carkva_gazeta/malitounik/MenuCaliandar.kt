@@ -314,9 +314,10 @@ class MenuCaliandar : BaseFragment() {
                 dayOfMun != -1 -> {
                     val dayList = ArrayList<ArrayList<String>>()
                     val g = GregorianCalendar()
-                    if(!g.isLeapYear(g[Calendar.YEAR])) g.add(Calendar.DAY_OF_YEAR, 1)
+                    val dayOfYearCal = if(!g.isLeapYear(g[Calendar.YEAR])) g[Calendar.DAY_OF_YEAR] + 1
+                    else g[Calendar.DAY_OF_YEAR]
                     data.forEach { arrayList ->
-                        if (dayOfMun == arrayList[1].toInt() && g[Calendar.DAY_OF_YEAR] == arrayList[24].toInt() && g[Calendar.YEAR] == arrayList[3].toInt()) {
+                        if (dayOfMun == arrayList[1].toInt() && dayOfYearCal == arrayList[24].toInt() && g[Calendar.YEAR] == arrayList[3].toInt()) {
                             dayList.add(arrayList)
                             return@forEach
                         }

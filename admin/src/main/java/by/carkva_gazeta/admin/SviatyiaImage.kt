@@ -29,7 +29,6 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ListItemImageBinding
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.gson.Gson
@@ -95,6 +94,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
             images[position].file = File("")
             images[position].size = 0L
             adapter.notifyDataSetChanged()
+            loadFilesMetaData()
             binding.progressBar2.visibility = View.GONE
         }
     }
@@ -191,9 +191,26 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
                     adapter.notifyDataSetChanged()
                 }
                 onDialogOpisanneIcon("s_${day}_${mun}_${position + 1}.jpg")
+                withContext(Dispatchers.IO) {
+                    loadFilesMetaData()
+                }
                 binding.progressBar2.visibility = View.GONE
             }
         }
+    }
+
+    private suspend fun loadFilesMetaData() {
+        val sb = StringBuilder()
+        val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
+        list.items.forEach {
+            val meta = it.metadata.await()
+            sb.append(it.name).append("<-->").append(meta.sizeBytes).append("<-->").append(meta.updatedTimeMillis).append("\n")
+        }
+        val fileIcon = File("$filesDir/iconsMataData.txt")
+        fileIcon.writer().use {
+            it.write(sb.toString())
+        }
+        Malitounik.referens.child("/chytanne/iconsMataData.txt").putFile(Uri.fromFile(fileIcon)).await()
     }
 
     private fun getViewByPosition(): View? {

@@ -48,14 +48,13 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
     private lateinit var binding: AdminSviatyBinding
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
-    private var fileUploadJob: Job? = null
     private val sviaty = ArrayList<SviatyData>()
     private var edittext: AppCompatEditText? = null
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             val imageUri = it.data?.data
             imageUri?.let { image ->
-                val bitmap = if(Build.VERSION.SDK_INT >= 28) {
+                val bitmap = if (Build.VERSION.SDK_INT >= 28) {
                     val source = ImageDecoder.createSource(contentResolver, image)
                     ImageDecoder.decodeBitmap(source)
                 } else {
@@ -81,7 +80,6 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
         super.onPause()
         resetTollbarJob?.cancel()
         urlJob?.cancel()
-        fileUploadJob?.cancel()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -206,7 +204,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
 
     private fun fileUpload(bitmap: Bitmap) {
         if (MainActivity.isNetworkAvailable()) {
-            fileUploadJob = CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 val localFile = File("$filesDir/cache/cache.txt")
                 withContext(Dispatchers.IO) {
@@ -217,9 +215,24 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                 }
                 val fileName = File("/chytanne/icons/v_" + sviaty[binding.spinnerSviaty.selectedItemPosition].data.toString() + "_" + sviaty[binding.spinnerSviaty.selectedItemPosition].mun.toString() + "_1.jpg")
                 Malitounik.referens.child("/chytanne/icons/" + fileName.name).putFile(Uri.fromFile(localFile)).await()
+                loadFilesMetaData()
                 binding.progressBar2.visibility = View.GONE
             }
         }
+    }
+
+    private suspend fun loadFilesMetaData() {
+        val sb = StringBuilder()
+        val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
+        list.items.forEach {
+            val meta = it.metadata.await()
+            sb.append(it.name).append("<-->").append(meta.sizeBytes).append("<-->").append(meta.updatedTimeMillis).append("\n")
+        }
+        val fileIcon = File("$filesDir/iconsMataData.txt")
+        fileIcon.writer().use {
+            it.write(sb.toString())
+        }
+        Malitounik.referens.child("/chytanne/iconsMataData.txt").putFile(Uri.fromFile(fileIcon)).await()
     }
 
     override fun onDialogFile(absolutePath: String) {
@@ -352,70 +365,87 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                             day = -1
                             mun = 0
                         }
+
                         1 -> {
                             day = -1
                             mun = 1
                         }
+
                         2 -> {
                             day = -1
                             mun = 2
                         }
+
                         3 -> {
                             day = -1
                             mun = 3
                         }
+
                         4 -> {
                             day = 1
                             mun = 1
                         }
+
                         5 -> {
                             day = 6
                             mun = 1
                         }
+
                         6 -> {
                             day = 2
                             mun = 2
                         }
+
                         7 -> {
                             day = 25
                             mun = 3
                         }
+
                         8 -> {
                             day = 24
                             mun = 6
                         }
+
                         9 -> {
                             day = 29
                             mun = 6
                         }
+
                         10 -> {
                             day = 6
                             mun = 8
                         }
+
                         11 -> {
                             day = 15
                             mun = 8
                         }
+
                         12 -> {
                             day = 29
                             mun = 8
                         }
+
                         13 -> {
                             day = 8
                             mun = 9
                         }
+
                         14 -> {
                             day = 14
                             mun = 9
                         }
+
                         15 -> {
                             day = 1
                             mun = 10
                         }
+
                         16 -> {
                             day = 21
                             mun = 11
                         }
+
                         17 -> {
                             day = 25
                             mun = 12

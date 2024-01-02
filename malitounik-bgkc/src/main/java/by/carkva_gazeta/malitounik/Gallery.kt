@@ -375,30 +375,34 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
         dirList.clear()
         var size = 0L
         val sb = StringBuilder()
-        val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
+        val fileIconMataData = File("$filesDir/iconsMataData.txt")
+        val pathReferenceMataData = Malitounik.referens.child("/chytanne/iconsMataData.txt")
+        pathReferenceMataData.getFile(fileIconMataData).await()
+        val list = fileIconMataData.readText().split("\n")
         var sizeUpload = 0f
         binding.titleToolbar.text = getString(R.string.gallery_search, "няма")
-        binding.progressBar2.isIndeterminate = false
-        binding.progressBar2.progress = 0
-        binding.progressBar2.max = list.items.size
-        list.items.forEachIndexed { index, it ->
-            sb.append(it.name)
-            val fileIcon = File("$filesDir/icons/${it.name}")
-            val meta = it.metadata.await()
-            val time = fileIcon.lastModified()
-            val update = meta.updatedTimeMillis
-            binding.progressBar2.progress = index
-            if (!fileIcon.exists() || time < update) {
-                val updateFile = meta.sizeBytes
-                sizeUpload += updateFile
-                val sizeImage = if (size / 1024 > 1000) {
-                    " ${formatFigureTwoPlaces(sizeUpload / 1024 / 1024)} Мб "
-                } else {
-                    " ${formatFigureTwoPlaces(sizeUpload / 1024)} Кб "
+        binding.progressBar2.isIndeterminate = true
+        list.forEach {
+            val t1 = it.indexOf("<-->")
+            if (t1 != -1) {
+                val t2 = it.indexOf("<-->", t1 + 4)
+                val name = it.substring(0, t1)
+                sb.append(name)
+                val fileIcon = File("$filesDir/icons/$name")
+                val time = fileIcon.lastModified()
+                val update = it.substring(t2 + 4).toLong()
+                if (!fileIcon.exists() || time < update) {
+                    val updateFile = it.substring(t1 + 4, t2).toLong()
+                    sizeUpload += updateFile
+                    val sizeImage = if (size / 1024 > 1000) {
+                        " ${formatFigureTwoPlaces(sizeUpload / 1024 / 1024)} Мб "
+                    } else {
+                        " ${formatFigureTwoPlaces(sizeUpload / 1024)} Кб "
+                    }
+                    binding.titleToolbar.text = getString(R.string.gallery_search, sizeImage)
+                    dirList.add(DirList(name, updateFile))
+                    size += updateFile
                 }
-                binding.titleToolbar.text = getString(R.string.gallery_search, sizeImage)
-                dirList.add(DirList(it.name, updateFile))
-                size += updateFile
             }
         }
         val fileList = File("$filesDir/icons").list()

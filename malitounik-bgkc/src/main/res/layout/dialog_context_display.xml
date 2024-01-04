@@ -11,7 +11,7 @@
         android:background="@color/colorPrimary"
         android:padding="10sp"
         android:textColor="@color/colorWhite"
-        android:textSize="14sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <ScrollView
@@ -29,14 +29,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10sp"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
             <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/content2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10sp"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

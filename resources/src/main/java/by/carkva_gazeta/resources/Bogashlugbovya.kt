@@ -103,13 +103,13 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             PesnyAll.resursMap.forEach {
                 resursMap[it.key] = it.value
             }
-            resursMap["lit_jan_zalat"] = R.raw.lit_jan_zalat
+            resursMap["lit_jana_zalatavusnaha"] = R.raw.lit_jana_zalatavusnaha
             resursMap["lit_jan_zalat_vielikodn"] = R.raw.lit_jan_zalat_vielikodn
             resursMap["nabazenstva_maci_bozaj_niast_dap"] = R.raw.nabazenstva_maci_bozaj_niast_dap
             resursMap["jutran_niadzelnaja"] = R.raw.jutran_niadzelnaja
             resursMap["abiednica"] = R.raw.abiednica
             resursMap["kanon_malebny_baharodzicy"] = R.raw.kanon_malebny_baharodzicy
-            resursMap["panichida_mal"] = R.raw.panichida_mal
+            resursMap["panichida_malaja"] = R.raw.panichida_malaja
             resursMap["bogashlugbovya12_1"] = R.raw.bogashlugbovya12_1
             resursMap["bogashlugbovya12_2"] = R.raw.bogashlugbovya12_2
             resursMap["bogashlugbovya12_3"] = R.raw.bogashlugbovya12_3
@@ -151,8 +151,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["bogashlugbovya16_4"] = R.raw.bogashlugbovya16_4
             resursMap["bogashlugbovya16_5"] = R.raw.bogashlugbovya16_5
             resursMap["bogashlugbovya16_6"] = R.raw.bogashlugbovya16_6
-            resursMap["bogashlugbovya16_7"] = R.raw.bogashlugbovya16_7
-            resursMap["bogashlugbovya16_8"] = R.raw.bogashlugbovya16_8
+            resursMap["subota_akafistu_jutran"] = R.raw.subota_akafistu_jutran
+            resursMap["subota_akafistu_liturhija"] = R.raw.subota_akafistu_liturhija
             resursMap["bogashlugbovya16_9"] = R.raw.bogashlugbovya16_9
             resursMap["bogashlugbovya16_10"] = R.raw.bogashlugbovya16_10
             resursMap["bogashlugbovya16_11"] = R.raw.bogashlugbovya16_11
@@ -179,7 +179,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["akafist6"] = R.raw.akafist6
             resursMap["akafist7"] = R.raw.akafist7
             resursMap["akafist8"] = R.raw.akafist8
-            resursMap["malitvy_ran"] = R.raw.malitvy_ran
+            resursMap["malitvy_ranisznija"] = R.raw.malitvy_ranisznija
             resursMap["malitvy_viaczernija"] = R.raw.malitvy_viaczernija
             resursMap["paslia_prychascia1"] = R.raw.paslia_prychascia1
             resursMap["paslia_prychascia2"] = R.raw.paslia_prychascia2
@@ -246,19 +246,19 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["ton6_budni"] = R.raw.ton6_budni
             resursMap["ton7"] = R.raw.ton7
             resursMap["ton8"] = R.raw.ton8
-            resursMap["viachernia_niadzeli"] = R.raw.viachernia_niadzeli
-            resursMap["viachernia_liccia_i_blaslavenne_xliabou"] = R.raw.viachernia_liccia_i_blaslavenne_xliabou
-            resursMap["viachernia_na_kozny_dzen"] = R.raw.viachernia_na_kozny_dzen
-            resursMap["viachernia_u_vialikim_poscie"] = R.raw.viachernia_u_vialikim_poscie
-            resursMap["viachernia_ton1"] = R.raw.viachernia_ton1
-            resursMap["viachernia_ton2"] = R.raw.viachernia_ton2
-            resursMap["viachernia_ton3"] = R.raw.viachernia_ton3
-            resursMap["viachernia_ton4"] = R.raw.viachernia_ton4
-            resursMap["viachernia_ton5"] = R.raw.viachernia_ton5
-            resursMap["viachernia_ton6"] = R.raw.viachernia_ton6
-            resursMap["viachernia_ton7"] = R.raw.viachernia_ton7
-            resursMap["viachernia_ton8"] = R.raw.viachernia_ton8
-            resursMap["viachernia_bagarodzichnia_adpushchalnyia"] = R.raw.viachernia_bagarodzichnia_adpushchalnyia
+            resursMap["viaczernia_niadzelnaja"] = R.raw.viaczernia_niadzelnaja
+            resursMap["viaczernia_liccia_i_blaslavenne_chliabou"] = R.raw.viaczernia_liccia_i_blaslavenne_chliabou
+            resursMap["viaczernia_na_kozny_dzen"] = R.raw.viaczernia_na_kozny_dzen
+            resursMap["viaczernia_u_vialikim_poscie"] = R.raw.viaczernia_u_vialikim_poscie
+            resursMap["viaczernia_ton1"] = R.raw.viaczernia_ton1
+            resursMap["viaczernia_ton2"] = R.raw.viaczernia_ton2
+            resursMap["viaczernia_ton3"] = R.raw.viaczernia_ton3
+            resursMap["viaczernia_ton4"] = R.raw.viaczernia_ton4
+            resursMap["viaczernia_ton5"] = R.raw.viaczernia_ton5
+            resursMap["viaczernia_ton6"] = R.raw.viaczernia_ton6
+            resursMap["viaczernia_ton7"] = R.raw.viaczernia_ton7
+            resursMap["viaczernia_ton8"] = R.raw.viaczernia_ton8
+            resursMap["viaczernia_baharodzicznyja_adpuszczalnyja"] = R.raw.viaczernia_baharodzicznyja_adpuszczalnyja
             resursMap["viachernia_mineia_agulnaia1"] = R.raw.viachernia_mineia_agulnaia1
             resursMap["viachernia_mineia_agulnaia2"] = R.raw.viachernia_mineia_agulnaia2
             resursMap["viachernia_mineia_agulnaia3"] = R.raw.viachernia_mineia_agulnaia3
@@ -298,12 +298,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["uzniasienne_jutran"] = R.raw.uzniasienne_jutran
             resursMap["uzniasienne_liturhija"] = R.raw.uzniasienne_liturhija
             resursMap["uzniasienne_viaczernia"] = R.raw.uzniasienne_viaczernia
-            resursMap["mm_21_11_liturhija"] = R.raw.mm_21_11_liturhija
-            resursMap["mm_13_11_liturhija"] = R.raw.mm_13_11_liturhija
-            resursMap["mm_13_11_viaczernia"] = R.raw.mm_13_11_viaczernia
+            resursMap["mm_21_11_uvachod_u_chram_baharodzicy_liturhija"] = R.raw.mm_21_11_uvachod_u_chram_baharodzicy_liturhija
+            resursMap["mm_13_11_jana_zalatavusnaha_liturhija"] = R.raw.mm_13_11_jana_zalatavusnaha_liturhija
+            resursMap["mm_13_11_jana_zalatavusnaha_viaczernia"] = R.raw.mm_13_11_jana_zalatavusnaha_viaczernia
             resursMap["mm_01_01_malebien_novy_hod"] = R.raw.mm_01_01_malebien_novy_hod
             resursMap["lit_vasila_vialikaha"] = R.raw.lit_vasila_vialikaha
-            resursMap["mm_02_01_liturhija"] = R.raw.mm_02_01_liturhija
+            resursMap["mm_02_01_pieradsv_bohazjaulennia_silviestra_papy_rymskaha_liturhija"] = R.raw.mm_02_01_pieradsv_bohazjaulennia_silviestra_papy_rymskaha_liturhija
             resursMap["mm_04_01_pieradsv_bohazjaulennia_liturhija"] = R.raw.mm_04_01_pieradsv_bohazjaulennia_liturhija
             resursMap["mm_06_01_bohazjaulennie_liturhija"] = R.raw.mm_06_01_bohazjaulennie_liturhija
             resursMap["mm_05_01_sv_vieczar_bohazjaulennia_abiednica"] = R.raw.mm_05_01_sv_vieczar_bohazjaulennia_abiednica
@@ -311,7 +311,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mltv_paciarpieli_za_bielarus"] = R.raw.mltv_paciarpieli_za_bielarus
             resursMap["mltv_pierad_jadoj_i_pasla"] = R.raw.mltv_pierad_jadoj_i_pasla
             resursMap["mltv_za_backou"] = R.raw.mltv_za_backou
-            resursMap["kanon_a_kryckaha"] = R.raw.kanon_a_kryckaha
+            resursMap["kanon_andreja_kryckaha"] = R.raw.kanon_andreja_kryckaha
             resursMap["lit_raniej_asviaczanych_darou"] = R.raw.lit_raniej_asviaczanych_darou
             resursMap["viaczerniaja_sluzba_sztodzionnaja_biez_sviatara"] = R.raw.viaczerniaja_sluzba_sztodzionnaja_biez_sviatara
             resursMap["vialikaja_piatnica_jutran_12jevanhellau"] = R.raw.vialikaja_piatnica_jutran_12jevanhellau
@@ -345,16 +345,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["l_svietlaja_subota"] = R.raw.l_svietlaja_subota
             resursMap["vielikodnyja_hadziny"] = R.raw.vielikodnyja_hadziny
             resursMap["ndz_tamasza_viaczernia_subota"] = R.raw.ndz_tamasza_viaczernia_subota
-            resursMap["ndz_tamasza_01paniadzielak"] = R.raw.ndz_tamasza_01paniadzielak
-            resursMap["ndz_tamasza_02autorak"] = R.raw.ndz_tamasza_02autorak
-            resursMap["ndz_tamasza_03sierada"] = R.raw.ndz_tamasza_03sierada
-            resursMap["ndz_tamasza_04czacvier"] = R.raw.ndz_tamasza_04czacvier
-            resursMap["ndz_tamasza_05piatnica"] = R.raw.ndz_tamasza_05piatnica
+            resursMap["ndz_tamasza_01paniadzielak_viaczernia"] = R.raw.ndz_tamasza_01paniadzielak_viaczernia
+            resursMap["ndz_tamasza_02autorak_viaczernia"] = R.raw.ndz_tamasza_02autorak_viaczernia
+            resursMap["ndz_tamasza_03sierada_viaczernia"] = R.raw.ndz_tamasza_03sierada_viaczernia
+            resursMap["ndz_tamasza_04czacvier_viaczernia"] = R.raw.ndz_tamasza_04czacvier_viaczernia
+            resursMap["ndz_tamasza_05piatnica_viaczernia"] = R.raw.ndz_tamasza_05piatnica_viaczernia
             resursMap["ndz_tamasza_jutran"] = R.raw.ndz_tamasza_jutran
-            resursMap["ndz_tamasza_uvieczary"] = R.raw.ndz_tamasza_uvieczary
+            resursMap["ndz_tamasza_viaczernia_uvieczary"] = R.raw.ndz_tamasza_viaczernia_uvieczary
             resursMap["mm_15_08_uspiennie_liturhija"] = R.raw.mm_15_08_uspiennie_liturhija
             resursMap["mltv_mb_zyrovickaja"] = R.raw.mltv_mb_zyrovickaja
-            resursMap["mm_07_05_liturhija"] = R.raw.mm_07_05_liturhija
+            resursMap["mm_07_05_zyrovickaj_ikony_maci_bozaj_liturhija"] = R.raw.mm_07_05_zyrovickaj_ikony_maci_bozaj_liturhija
             resursMap["ndz_rasslablenaha_liturhija"] = R.raw.ndz_rasslablenaha_liturhija
             resursMap["pesny_prasl_70"] = PesnyAll.resursMap["pesny_prasl_70"]
             resursMap["dzie_kuryja"] = R.raw.dzie_kuryja
@@ -406,30 +406,31 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_30_06_sabor_12_apostalau_liturhija"] = R.raw.mm_30_06_sabor_12_apostalau_liturhija
             resursMap["sluzba_najsviaciejszaj_baharodzicy"] = R.raw.sluzba_najsviaciejszaj_baharodzicy
             resursMap["mltv_mb_budslauskaja"] = R.raw.mltv_mb_budslauskaja
-            resursMap["mm_05_08_pieradsv_pieramianiennia_liturhija"] = R.raw.mm_05_08_pieradsv_pieramianiennia_liturhija
-            resursMap["mm_05_08_pieradsv_pieramianiennia_viaczernia"] = R.raw.mm_05_08_pieradsv_pieramianiennia_viaczernia
-            resursMap["mm_09_08_pasviaccie_pieramianennia_viaczernia"] = R.raw.mm_09_08_pasviaccie_pieramianennia_viaczernia
-            resursMap["mm_09_08_pasviaccie_pieramianiennia_liturhija"] = R.raw.mm_09_08_pasviaccie_pieramianiennia_liturhija
+            resursMap["mm_05_08_pieradsv_pieramianiennia_muczanika_jausihnieja_liturhija"] = R.raw.mm_05_08_pieradsv_pieramianiennia_muczanika_jausihnieja_liturhija
+            resursMap["mm_05_08_pieradsv_pieramianiennia_muczanika_jausihnieja_viaczernia"] = R.raw.mm_05_08_pieradsv_pieramianiennia_muczanika_jausihnieja_viaczernia
+            resursMap["mm_09_08_pasviaccie_pieramianennia_apostala_macieja_viaczernia"] = R.raw.mm_09_08_pasviaccie_pieramianennia_apostala_macieja_viaczernia
+            resursMap["mm_09_08_pasviaccie_pieramianiennia_apostala_macieja_liturhija"] = R.raw.mm_09_08_pasviaccie_pieramianiennia_apostala_macieja_liturhija
             resursMap["mm_15_08_uspiennie_viaczernia"] = R.raw.mm_15_08_uspiennie_viaczernia
-            resursMap["mm_10_08_viaczernia"] = R.raw.mm_10_08_viaczernia
+            resursMap["mm_10_08_pasviaccie_pieramianiennia_muczanika_laurena_viaczernia"] = R.raw.mm_10_08_pasviaccie_pieramianiennia_muczanika_laurena_viaczernia
             resursMap["mm_14_08_pieradsv_uspiennia_viaczernia"] = R.raw.mm_14_08_pieradsv_uspiennia_viaczernia
             resursMap["mm_14_08_pieradsv_uspiennia_liturhija"] = R.raw.mm_14_08_pieradsv_uspiennia_liturhija
-            resursMap["mm_01_09_novy_hod_viaczernia"] = R.raw.mm_01_09_novy_hod_viaczernia
-            resursMap["mm_01_09_novy_hod_liturhija"] = R.raw.mm_01_09_novy_hod_liturhija
-            resursMap["mm_05_09_liturhija"] = R.raw.mm_05_09_liturhija
-            resursMap["mm_07_09_pieradsv_naradz_baharodz_liturhija"] = R.raw.mm_07_09_pieradsv_naradz_baharodz_liturhija
+            resursMap["mm_01_09_paczatak_cark_hodu_siamiona_stoupnika_viaczernia"] = R.raw.mm_01_09_paczatak_cark_hodu_siamiona_stoupnika_viaczernia
+            resursMap["mm_01_09_paczatak_cark_hodu_siamiona_stoupnika_liturhija"] = R.raw.mm_01_09_paczatak_cark_hodu_siamiona_stoupnika_liturhija
+            resursMap["mm_05_09_praroka_zachara_prav_alzbiety_liturhija"] = R.raw.mm_05_09_praroka_zachara_prav_alzbiety_liturhija
+            resursMap["mm_07_09_pieradsv_naradzennia_baharodzicy_liturhija"] = R.raw.mm_07_09_pieradsv_naradzennia_baharodzicy_liturhija
+            resursMap["mm_07_09_pieradsv_naradzennia_baharodzicy_viaczernia"] = R.raw.mm_07_09_pieradsv_naradzennia_baharodzicy_viaczernia
             resursMap["mm_08_09_naradzennie_baharodzicy_liturhija"] = R.raw.mm_08_09_naradzennie_baharodzicy_liturhija
-            resursMap["mm_09_09_pasviaccie_naradz_baharodz_liturhija"] = R.raw.mm_09_09_pasviaccie_naradz_baharodz_liturhija
-            resursMap["mm_10_09_pasviaccie_naradz_baharodz_viaczernia"] = R.raw.mm_10_09_pasviaccie_naradz_baharodz_viaczernia
-            resursMap["mm_11_09_pasviaccie_naradz_baharodz_viaczernia"] = R.raw.mm_11_09_pasviaccie_naradz_baharodz_viaczernia
+            resursMap["mm_09_09_pasviaccie_naradzennia_baharodzicy_jakima_i_hanny_liturhija"] = R.raw.mm_09_09_pasviaccie_naradzennia_baharodzicy_jakima_i_hanny_liturhija
+            resursMap["mm_10_09_pasviaccie_naradzennia_baharodzicy_muczanic_minadory_mitradory_nimfadory_viaczernia"] = R.raw.mm_10_09_pasviaccie_naradzennia_baharodzicy_muczanic_minadory_mitradory_nimfadory_viaczernia
+            resursMap["mm_11_09_pasviaccie_naradzennia_baharodzicy_maci_tadory_viaczernia"] = R.raw.mm_11_09_pasviaccie_naradzennia_baharodzicy_maci_tadory_viaczernia
             resursMap["mm_12_09_addannie_naradzennia_baharodzicy_viaczernia"] = R.raw.mm_12_09_addannie_naradzennia_baharodzicy_viaczernia
-            resursMap["mm_13_09_pieradsv_uzvyszennia_liturhija"] = R.raw.mm_13_09_pieradsv_uzvyszennia_liturhija
+            resursMap["mm_13_09_pieradsv_uzvyszennia_adnaul_carkvy_uvaskr_mucz_karnila_liturhija"] = R.raw.mm_13_09_pieradsv_uzvyszennia_adnaul_carkvy_uvaskr_mucz_karnila_liturhija
             resursMap["mm_14_09_uzvyszennie_kryza_liturhija"] = R.raw.mm_14_09_uzvyszennie_kryza_liturhija
-            resursMap["mm_15_09_pasviaccie_uzvyszennia_viaczernia"] = R.raw.mm_15_09_pasviaccie_uzvyszennia_viaczernia
-            resursMap["mltv_za_chrosnikau"] = R.raw.mltv_za_chrosnikau
+            resursMap["mm_15_09_pasviaccie_uzvyszennia_vialikamuczanika_mikity_viaczernia"] = R.raw.mm_15_09_pasviaccie_uzvyszennia_vialikamuczanika_mikity_viaczernia
             resursMap["mm_01_10_pokryva_baharodzicy_liturhija"] = R.raw.mm_01_10_pokryva_baharodzicy_liturhija
             resursMap["mm_11_17_10_ndz_ajcou_7susvietnaha_saboru_liturhija"] = R.raw.mm_11_17_10_ndz_ajcou_7susvietnaha_saboru_liturhija
             resursMap["mm_11_17_10_ndz_ajcou_7susvietnaha_saboru_viaczernia"] = R.raw.mm_11_17_10_ndz_ajcou_7susvietnaha_saboru_viaczernia
+            resursMap["mm_11_17_10_ndz_sv_ajcou_7susvietnaha_saboru_jutran"] = R.raw.mm_11_17_10_ndz_sv_ajcou_7susvietnaha_saboru_jutran
             resursMap["mltv_mb_barunskaja"] = R.raw.mltv_mb_barunskaja
             resursMap["mltv_za_carkvu_2"] = R.raw.mltv_za_carkvu_2
             resursMap["mltv_za_usich_i_za_usio"] = R.raw.mltv_za_usich_i_za_usio
@@ -439,7 +440,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_06_12_mikoly_cudatvorcy_jutran"] = R.raw.mm_06_12_mikoly_cudatvorcy_jutran
             resursMap["mm_06_12_mikoly_cudatvorcy_liturhija"] = R.raw.mm_06_12_mikoly_cudatvorcy_liturhija
             resursMap["mm_06_12_mikoly_cudatvorcy_viaczernia"] = R.raw.mm_06_12_mikoly_cudatvorcy_viaczernia
-            resursMap["mm_12_11_sviatamucz_jazafat_liturhija"] = R.raw.mm_12_11_sviatamucz_jazafat_liturhija
+            resursMap["mm_12_11_sviatamuczanika_jazafata_liturhija"] = R.raw.mm_12_11_sviatamuczanika_jazafata_liturhija
             resursMap["mm_20_12_rastvo_peradsviaccie_liturhija"] = R.raw.mm_20_12_rastvo_peradsviaccie_liturhija
             resursMap["mm_20_12_rastvo_peradsviaccie_viaczernia"] = R.raw.mm_20_12_rastvo_peradsviaccie_viaczernia
             resursMap["mm_24_12_rastvo_sv_vieczar_abednica"] = R.raw.mm_24_12_rastvo_sv_vieczar_abednica
@@ -452,7 +453,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_11_17_12_ndz_praajcou_liturhija"] = R.raw.mm_11_17_12_ndz_praajcou_liturhija
             resursMap["mm_13_19_ndz_ajcou_pierszych_szasci_saborau_liturhija"] = R.raw.mm_13_19_ndz_ajcou_pierszych_szasci_saborau_liturhija
             resursMap["mltv_za_carkounuju_jednasc"] = R.raw.mltv_za_carkounuju_jednasc
-            resursMap["mltv_razam_z_padlaszskimi_muczanikami_ab_ednasci"] = R.raw.mltv_razam_z_padlaszskimi_muczanikami_ab_ednasci
+            resursMap["mltv_razam_z_padlaszskimi_muczanikami_ab_jednasci"] = R.raw.mltv_razam_z_padlaszskimi_muczanikami_ab_jednasci
             resursMap["mltv_ab_jednadci_carkvy_leanida_fiodarava"] = R.raw.mltv_ab_jednadci_carkvy_leanida_fiodarava
             resursMap["ndz_mytnika_i_faryseja_liturhija"] = R.raw.ndz_mytnika_i_faryseja_liturhija
             resursMap["mm_02_02_sustrecza_hospada_liturhija"] = R.raw.mm_02_02_sustrecza_hospada_liturhija
@@ -475,7 +476,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["vialikaja_sierada_liturhija_raniej_asviacz_darou"] = R.raw.vialikaja_sierada_liturhija_raniej_asviacz_darou
             resursMap["vialiki_paniadzielak_hadzina_6"] = R.raw.vialiki_paniadzielak_hadzina_6
             resursMap["vialiki_paniadzielak_liturhija_raniej_asviacz_darou"] = R.raw.vialiki_paniadzielak_liturhija_raniej_asviacz_darou
-            resursMap["vialikdzien_viaczernia"] = R.raw.vialikdzien_viaczernia
+            resursMap["viaczernia_vialikdzien"] = R.raw.viaczernia_vialikdzien
             resursMap["mm_25_04_apostala_marka_liturhija"] = R.raw.mm_25_04_apostala_marka_liturhija
             resursMap["mm_25_04_apostala_marka_viaczernia"] = R.raw.mm_25_04_apostala_marka_viaczernia
             resursMap["mm_27_04_siamiona_svajaka_haspodniaha_viaczernia"] = R.raw.mm_27_04_siamiona_svajaka_haspodniaha_viaczernia
@@ -488,7 +489,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_jutran"] = R.raw.mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_jutran
             resursMap["mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_liturhija"] = R.raw.mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_liturhija
             resursMap["mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_viaczernia"] = R.raw.mm_11_05_nastaunikau_slavianau_kiryly_i_miatoda_viaczernia
-            resursMap["mm_01_01_abrezannie_viachernia"] = R.raw.mm_01_01_abrezannie_viachernia
+            resursMap["mm_01_01_abrezannie_vasila_vialikaha_viaczernia"] = R.raw.mm_01_01_abrezannie_vasila_vialikaha_viaczernia
             resursMap["ndz_rasslablenaha_viaczernia_u_subotu_vieczaram"] = R.raw.ndz_rasslablenaha_viaczernia_u_subotu_vieczaram
             resursMap["ndz_rasslablenaha_uvieczary_viaczernia"] = R.raw.ndz_rasslablenaha_uvieczary_viaczernia
             resursMap["ndz_rasslablenaha_jutran"] = R.raw.ndz_rasslablenaha_jutran
@@ -547,33 +548,36 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_23_09_zaczaccie_jana_chrysciciela_viaczernia"] = R.raw.mm_23_09_zaczaccie_jana_chrysciciela_viaczernia
             resursMap["mm_26_09_pierastaulennie_apostala_jana_bahaslova_jutran"] = R.raw.mm_26_09_pierastaulennie_apostala_jana_bahaslova_jutran
             resursMap["mm_26_09_pierastaulennie_apostala_jana_bahaslova_liturhija"] = R.raw.mm_26_09_pierastaulennie_apostala_jana_bahaslova_liturhija
+            resursMap["mm_26_09_pierastaulennie_apostala_jana_bahaslova_viaczernia"] = R.raw.mm_26_09_pierastaulennie_apostala_jana_bahaslova_viaczernia
             resursMap["mm_01_10_pokryva_baharodzicy_viaczernia"] = R.raw.mm_01_10_pokryva_baharodzicy_viaczernia
             resursMap["mm_02_10_sviatamuczanika_kipryjana_muczanicy_justyny_viaczernia"] = R.raw.mm_02_10_sviatamuczanika_kipryjana_muczanicy_justyny_viaczernia
             resursMap["mm_03_10_dzianisa_aerapahita_viaczernia"] = R.raw.mm_03_10_dzianisa_aerapahita_viaczernia
             resursMap["mm_04_10_sviatamuczanika_jerateja_viaczernia"] = R.raw.mm_04_10_sviatamuczanika_jerateja_viaczernia
             resursMap["mm_06_10_apostala_tamasza_liturhija"] = R.raw.mm_06_10_apostala_tamasza_liturhija
-            resursMap["mm_06_10_apostala_tamasza_viaczarnia"] = R.raw.mm_06_10_apostala_tamasza_viaczarnia
+            resursMap["mm_06_10_apostala_tamasza_viaczernia"] = R.raw.mm_06_10_apostala_tamasza_viaczernia
             resursMap["mm_09_10_apostala_jakuba_liturhija"] = R.raw.mm_09_10_apostala_jakuba_liturhija
             resursMap["mm_09_10_apostala_jakuba_viaczernia"] = R.raw.mm_09_10_apostala_jakuba_viaczernia
             resursMap["mm_11_10_apostala_pilipa_viaczernia"] = R.raw.mm_11_10_apostala_pilipa_viaczernia
             resursMap["mm_01_10_pokryva_baharodzicy_jutran"] = R.raw.mm_01_10_pokryva_baharodzicy_jutran
             resursMap["mm_23_10_apostala_jakuba_svajaka_haspodniaha_viaczernia"] = R.raw.mm_23_10_apostala_jakuba_svajaka_haspodniaha_viaczernia
+            resursMap["mm_23_10_apostala_jakuba_svajaka_haspodniaha_liturhija"] = R.raw.mm_23_10_apostala_jakuba_svajaka_haspodniaha_liturhija
             resursMap["mm_26_10_vialikamuczanika_zmitra_liturhija"] = R.raw.mm_26_10_vialikamuczanika_zmitra_liturhija
             resursMap["mm_26_10_vialikamuczanika_zmitra_viaczernia"] = R.raw.mm_26_10_vialikamuczanika_zmitra_viaczernia
             resursMap["mm_11_11_todara_studyta_viaczernia"] = R.raw.mm_11_11_todara_studyta_viaczernia
             resursMap["mm_14_11_apostala_pilipa_liturhija"] = R.raw.mm_14_11_apostala_pilipa_liturhija
             resursMap["mm_14_11_apostala_pilipa_viaczernia"] = R.raw.mm_14_11_apostala_pilipa_viaczernia
             resursMap["mm_16_11_apostala_macvieja_liturhija"] = R.raw.mm_16_11_apostala_macvieja_liturhija
+            resursMap["mm_16_11_apostala_macvieja_viaczernia"] = R.raw.mm_16_11_apostala_macvieja_viaczernia
             resursMap["mm_14_09_uzvyszennie_kryza_jutran"] = R.raw.mm_14_09_uzvyszennie_kryza_jutran
             resursMap["mm_14_09_uzvyszennie_kryza_viaczernia"] = R.raw.mm_14_09_uzvyszennie_kryza_viaczernia
-            resursMap["mm_21_11_uvachod_u_sviatyniu_baharodzicy_jutran"] = R.raw.mm_21_11_uvachod_u_sviatyniu_baharodzicy_jutran
-            resursMap["mm_21_11_uvachod_u_sviatyniu_baharodzicy_viaczernia"] = R.raw.mm_21_11_uvachod_u_sviatyniu_baharodzicy_viaczernia
-            resursMap["mm_23_11_pasviaccie_uvachodu_baharodzicy_amfilocha_ryhora"] = R.raw.mm_23_11_pasviaccie_uvachodu_baharodzicy_amfilocha_ryhora
-            resursMap["mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_liturhija"] = R.raw.mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_liturhija
-            resursMap["mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_viaczernia"] = R.raw.mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_muczanika_miarkura_viaczernia
+            resursMap["mm_21_11_uvachod_u_chram_baharodzicy_jutran"] = R.raw.mm_21_11_uvachod_u_chram_baharodzicy_jutran
+            resursMap["mm_21_11_uvachod_u_chram_baharodzicy_viaczernia"] = R.raw.mm_21_11_uvachod_u_chram_baharodzicy_viaczernia
+            resursMap["mm_23_11_pasviaccie_uvodzinau_baharodzicy_amfilocha_ryhora_viaczernia"] = R.raw.mm_23_11_pasviaccie_uvodzinau_baharodzicy_amfilocha_ryhora_viaczernia
+            resursMap["mm_24_11_pasviaccie_uvodzinau_baharodzicy_vialikamuczanicy_kaciaryny_vialikamuczanika_miarkura_miarkura_smalenskaha_liturhija"] = R.raw.mm_24_11_pasviaccie_uvodzinau_baharodzicy_vialikamuczanicy_kaciaryny_vialikamuczanika_miarkura_miarkura_smalenskaha_liturhija
+            resursMap["mm_24_11_pasviaccie_uvodzinau_baharodzicy_vialikamuczanicy_kaciaryny_vialikamuczanika_miarkura_miarkura_smalenskaha_viaczernia"] = R.raw.mm_24_11_pasviaccie_uvodzinau_baharodzicy_vialikamuczanicy_kaciaryny_vialikamuczanika_miarkura_miarkura_smalenskaha_viaczernia
             resursMap["mm_12_11_sviatamuczanika_jazafata_jutran"] = R.raw.mm_12_11_sviatamuczanika_jazafata_jutran
             resursMap["mm_12_11_sviatamuczanika_jazafata_viaczernia"] = R.raw.mm_12_11_sviatamuczanika_jazafata_viaczernia
-            resursMap["mm_25_11_addannie_uvodzinau_bsharodzicy_klimenta_papy_piatra_aleksandryjskaha_liturhija"] = R.raw.mm_25_11_addannie_uvodzinau_bsharodzicy_klimenta_papy_piatra_aleksandryjskaha_liturhija
+            resursMap["mm_25_11_addannie_uvodzinau_baharodzicy_klimenta_papy_piatra_aleksandryjskaha_liturhija"] = R.raw.mm_25_11_addannie_uvodzinau_baharodzicy_klimenta_papy_piatra_aleksandryjskaha_liturhija
             resursMap["mm_30_11_apostala_andreja_pierszapaklikanaha_liturhija"] = R.raw.mm_30_11_apostala_andreja_pierszapaklikanaha_liturhija
             resursMap["mm_01_12_praroka_navuma_viaczernia"] = R.raw.mm_01_12_praroka_navuma_viaczernia
             resursMap["mm_02_12_praroka_abakuma_viaczernia"] = R.raw.mm_02_12_praroka_abakuma_viaczernia
@@ -587,6 +591,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_24_12_ndz_ajcou_pierad_rastvom_liturhija"] = R.raw.mm_24_12_ndz_ajcou_pierad_rastvom_liturhija
             resursMap["mm_24_12_ndz_ajcou_pierad_rastvom_viaczernia"] = R.raw.mm_24_12_ndz_ajcou_pierad_rastvom_viaczernia
             resursMap["mm_28_12_20000_muczanikau_nikamiedyjskich_liturhija"] = R.raw.mm_28_12_20000_muczanikau_nikamiedyjskich_liturhija
+            resursMap["mm_01_11_bieskaryslivych_lekarau_kuzmy_dziamjana_viaczernia"] = R.raw.mm_01_11_bieskaryslivych_lekarau_kuzmy_dziamjana_viaczernia
+            resursMap["mm_18_10_apostala_luki_liturhija"] = R.raw.mm_18_10_apostala_luki_liturhija
+            resursMap["mm_18_10_apostala_luki_viaczernia"] = R.raw.mm_18_10_apostala_luki_viaczernia
+            resursMap["mm_20_09_pasviaccie_uzvyszennia_muczanika_astapa_viaczernia"] = R.raw.mm_20_09_pasviaccie_uzvyszennia_muczanika_astapa_viaczernia
+            resursMap["viaczernia_svietly_tydzien"] = R.raw.viaczernia_svietly_tydzien
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -1110,7 +1119,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
-        val liturgia = resurs == "lit_jan_zalat" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica"
+        val liturgia = resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica"
         val res = withContext(Dispatchers.IO) {
             zmenyiaChastki.setDzenNoch(dzenNoch)
             chechZmena = false
@@ -1139,7 +1148,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 zmennyiaCastkiTitle = slugbovyiaTextu.getTitle(resours)
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
             }
-            val viachernia = resurs == "lit_raniej_asviaczanych_darou" || resurs == "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara" || resurs == "viachernia_niadzeli" || resurs == "viachernia_liccia_i_blaslavenne_xliabou" || resurs == "viachernia_na_kozny_dzen" || resurs == "viachernia_u_vialikim_poscie"
+            val viachernia = resurs == "lit_raniej_asviaczanych_darou" || resurs == "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara" || resurs == "viaczernia_niadzelnaja" || resurs == "viaczernia_liccia_i_blaslavenne_chliabou" || resurs == "viaczernia_na_kozny_dzen" || resurs == "viaczernia_u_vialikim_poscie"
             if (viachernia && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, zmenyiaChastki.getYear()))) {
                 chechZmena = true
                 checkLiturgia = 1
@@ -1344,7 +1353,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }, bsat1, bsat1 + strLigBSA, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
-        if (resurs == "viachernia_niadzeli") {
+        if (resurs == "viaczernia_niadzelnaja") {
             string = "ліцьця і блаславеньне хлябоў"
             strLig = string.length
             t1 = text.indexOf(string)
@@ -1354,7 +1363,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
                         intent.putExtra("autoscrollOFF", autoscroll)
                         intent.putExtra("title", "Ліцьця і блаславеньне хлябоў")
-                        intent.putExtra("resurs", "viachernia_liccia_i_blaslavenne_xliabou")
+                        intent.putExtra("resurs", "viaczernia_liccia_i_blaslavenne_chliabou")
                         startActivity(intent)
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -1558,7 +1567,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     override fun onClick(widget: View) {
                         binding.textView.layout?.let { layout ->
                             var strPosition = text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
-                            if (resurs == "lit_jan_zalat") strPosition = text.indexOf("Адзінародны Сыне", strPosition + 16, true)
+                            if (resurs == "lit_jana_zalatavusnaha") strPosition = text.indexOf("Адзінародны Сыне", strPosition + 16, true)
                             val line = layout.getLineForOffset(strPosition)
                             val y = layout.getLineTop(line)
                             val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)

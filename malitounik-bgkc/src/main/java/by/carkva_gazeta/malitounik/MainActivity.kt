@@ -194,7 +194,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 withContext(Dispatchers.IO) {
                     val localFile = File("$filesDir/cache/cache.txt")
                     val out = ZipOutputStream(BufferedOutputStream(FileOutputStream(zip)))
-                    var i = 0
                     for (index in 0 until log.size) {
                         val file = log[index]
                         var filePath = file.replace("//", "/")
@@ -220,9 +219,21 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         } finally {
                             origin.close()
                         }
-                        i++
                     }
-                    if (i != 0) out.close()
+                    val logFile = File("$filesDir/cache/log.txt")
+                    if (logFile.exists()) {
+                        val fi = FileInputStream(logFile)
+                        val origin = BufferedInputStream(fi)
+                        try {
+                            val entry = ZipEntry("log.txt")
+                            out.putNextEntry(entry)
+                            origin.copyTo(out, 1024)
+                        } catch (_: Throwable) {
+                        } finally {
+                            origin.close()
+                            out.close()
+                        }
+                    }
                 }
                 clearLogFile(zip)
             }
@@ -231,13 +242,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
     }
 
-    private fun clearLogFile(zip: File) {
+    private fun clearLogFile(zip: File, isClear: Boolean = true) {
         val sendIntent = Intent(Intent.ACTION_SEND)
         sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@MainActivity, "by.carkva_gazeta.malitounik.fileprovider", zip))
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
         sendIntent.type = "application/zip"
         startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
-        if (isNetworkAvailable()) {
+        if (isNetworkAvailable() && isClear) {
             logJob?.cancel()
             logJob = CoroutineScope(Dispatchers.IO).launch {
                 val localFile = File("$filesDir/cache/cache.txt")

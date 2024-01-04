@@ -28,7 +28,6 @@ import by.carkva_gazeta.admin.databinding.AdminPasochnicaListBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.storage.ListResult
@@ -44,7 +43,7 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener, DialogDeliteAllPasochnica.DialogDeliteAllPasochnicaListener, DialogFileNameError.DialogFileNameErrorListener {
+class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener, DialogDeliteAllPasochnica.DialogDeliteAllPasochnicaListener, DialogFileNameError.DialogFileNameErrorListener, DialogCheckLogFile.DialogCheckLogFileListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaListBinding
@@ -129,6 +128,26 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 getDirPostRequest()
                 invalidateOptionsMenu()
             }
+        }
+    }
+
+    override fun dialogCheckLogFileClose(isClose: Boolean) {
+        if (isClose) super.onBack()
+    }
+
+    override fun onBack() {
+        val logFile = File("$filesDir/cache/log.txt")
+        if (logFile.exists()) {
+            val text = logFile.readText()
+            if (text != "") {
+                val dialjg = DialogCheckLogFile.getInstance(true)
+                dialjg.isCancelable = false
+                dialjg.show(supportFragmentManager, "DialogCheckLogFile")
+            } else {
+                super.onBack()
+            }
+        } else {
+            super.onBack()
         }
     }
 
@@ -331,11 +350,44 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
+                saveLogFile("/$fileName", "")
                 binding.progressBar2.visibility = View.GONE
                 val fragment = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
                 fragment?.update()
                 getDirPostRequest()
             }
+        }
+    }
+
+    private suspend fun saveLogFile(url: String, oldFileName: String, count: Int = 0) {
+        val sb = StringBuilder()
+        val logFile = File("$filesDir/cache/log.txt")
+        var error = false
+        Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
+            error = true
+        }.await()
+        if (error && count < 2) {
+            saveLogFile(url, oldFileName, count + 1)
+            return
+        }
+        logFile.readLines().forEach {
+            if (!it.contains(oldFileName)) sb.append("$it\n")
+        }
+        if (oldFileName != "") {
+            sb.append("$url --> перайменавана з $oldFileName\n")
+        } else {
+            sb.append("$url --> Выдалена\n")
+        }
+        logFile.writer().use {
+            it.write(sb.toString())
+        }
+        Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).addOnFailureListener {
+            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
+            error = true
+        }.await()
+        if (error && count < 2) {
+            saveLogFile(url, oldFileName,count + 1)
         }
     }
 
@@ -351,19 +403,6 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                         }.await()
                         Malitounik.referens.child("/$oldFileName").delete().await()
                         Malitounik.referens.child("/$fileName").putFile(Uri.fromFile(localFile)).await()
-                        val logFile = File("$filesDir/cache/log.txt")
-                        Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
-                            MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
-                        }.await()
-                        val sb = StringBuilder()
-                        logFile.readLines().forEach {
-                            if (!it.contains(oldFileName)) sb.append(it)
-                        }
-                        sb.append("/$fileName")
-                        logFile.writer().use {
-                            it.write(sb.toString())
-                        }
-                        Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
                     } else {
                         Malitounik.referens.child("/admin/piasochnica/$oldFileName").getFile(localFile).addOnFailureListener {
                             MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error))
@@ -374,6 +413,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
+                if (isSite) saveLogFile("/$fileName", oldFileName)
                 binding.progressBar2.visibility = View.GONE
                 val fragment = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
                 fragment?.update()
@@ -469,6 +509,16 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == android.R.id.home) {
+            onBack()
+            return true
+        }
+        if (id == R.id.action_log) {
+            val dialog = DialogCheckLogFile.getInstance(false)
+            dialog.isCancelable = false
+            dialog.show(supportFragmentManager, "DialogCheckLogFile")
+            return true
+        }
         if (id == R.id.action_plus) {
             val intent = Intent(this, Pasochnica::class.java)
             intent.putExtra("newFile", true)

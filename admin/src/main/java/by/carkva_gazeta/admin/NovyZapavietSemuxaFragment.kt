@@ -64,6 +64,42 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
         return false
     }
 
+    private suspend fun saveLogFile(url: String, count: Int = 0) {
+        activity?.let { activity ->
+            val sb = StringBuilder()
+            val logFile = File("${activity.filesDir}/cache/log.txt")
+            var error = false
+            Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+                MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.error))
+                error = true
+            }.await()
+            if (error && count < 2) {
+                saveLogFile(url, count + 1)
+                return
+            }
+            var ref = true
+            logFile.readLines().forEach {
+                sb.append("$it\n")
+                if (it.contains(url)) {
+                    ref = false
+                }
+            }
+            if (ref) {
+                sb.append("$url\n")
+            }
+            logFile.writer().use {
+                it.write(sb.toString())
+            }
+            Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).addOnFailureListener {
+                MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.error))
+                error = true
+            }.await()
+            if (error && count < 2) {
+                saveLogFile(url, count + 1)
+            }
+        }
+    }
+
     private fun sendPostRequest(id: Int, spaw: String, sv: Int) {
         activity?.let {
             if (MainActivity.isNetworkAvailable()) {
@@ -102,29 +138,8 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                             MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
                     }.await()
-                    val logFile = File("${it.filesDir}/cache/log.txt")
-                    val sb = StringBuilder()
                     val url = "/chytanne/Semucha/biblian$id.txt"
-                    Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
-                        activity?.let {
-                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
-                        }
-                    }.await()
-                    var ref = true
-                    logFile.readLines().forEach {
-                        sb.append("$it\n")
-                        if (it.contains(url)) {
-                            ref = false
-                        }
-                    }
-                    if (ref) {
-                        sb.append("$url\n")
-                    }
-                    logFile.writer().use {
-                        it.write(sb.toString())
-                    }
-                    Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
-
+                    saveLogFile(url)
                     Malitounik.referens.child("/chytanne/Semucha/biblian$id.txt").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
                         activity?.let {
                             if (task.isSuccessful) {

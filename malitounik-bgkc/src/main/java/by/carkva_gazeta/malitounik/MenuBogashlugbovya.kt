@@ -68,11 +68,12 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             if (isSearch) opisanie = "\nВячэрня"
             val dataSearch = ArrayList<MenuListData>()
             val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.sub_bogaslugbovuia_vichernia)
-            dataSearch.add(MenuListData(r1[0] + opisanie, "viachernia_niadzeli"))
-            dataSearch.add(MenuListData(r1[1] + opisanie, "viachernia_liccia_i_blaslavenne_xliabou"))
-            dataSearch.add(MenuListData(r1[2] + opisanie, "viachernia_na_kozny_dzen"))
-            dataSearch.add(MenuListData(r1[3] + opisanie, "viachernia_u_vialikim_poscie"))
+            dataSearch.add(MenuListData(r1[0] + opisanie, "viaczernia_niadzelnaja"))
+            dataSearch.add(MenuListData(r1[1] + opisanie, "viaczernia_liccia_i_blaslavenne_chliabou"))
+            dataSearch.add(MenuListData(r1[2] + opisanie, "viaczernia_na_kozny_dzen"))
+            dataSearch.add(MenuListData(r1[3] + opisanie, "viaczernia_u_vialikim_poscie"))
             dataSearch.add(MenuListData(r1[4] + opisanie, "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara"))
+            dataSearch.add(MenuListData(r1[5] + opisanie, "viaczernia_svietly_tydzien"))
             return dataSearch
         }
 
@@ -81,15 +82,15 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             if (isSearch) opisanie = "\nАктоіх"
             val dataSearch = ArrayList<MenuListData>()
             val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.aktoix_list)
-            dataSearch.add(MenuListData(r1[0] + opisanie, "viachernia_ton1"))
-            dataSearch.add(MenuListData(r1[1] + opisanie, "viachernia_ton2"))
-            dataSearch.add(MenuListData(r1[2] + opisanie, "viachernia_ton3"))
-            dataSearch.add(MenuListData(r1[3] + opisanie, "viachernia_ton4"))
-            dataSearch.add(MenuListData(r1[4] + opisanie, "viachernia_ton5"))
-            dataSearch.add(MenuListData(r1[5] + opisanie, "viachernia_ton6"))
-            dataSearch.add(MenuListData(r1[6] + opisanie, "viachernia_ton7"))
-            dataSearch.add(MenuListData(r1[7] + opisanie, "viachernia_ton8"))
-            dataSearch.add(MenuListData(r1[8] + opisanie, "viachernia_bagarodzichnia_adpushchalnyia"))
+            dataSearch.add(MenuListData(r1[0] + opisanie, "viaczernia_ton1"))
+            dataSearch.add(MenuListData(r1[1] + opisanie, "viaczernia_ton2"))
+            dataSearch.add(MenuListData(r1[2] + opisanie, "viaczernia_ton3"))
+            dataSearch.add(MenuListData(r1[3] + opisanie, "viaczernia_ton4"))
+            dataSearch.add(MenuListData(r1[4] + opisanie, "viaczernia_ton5"))
+            dataSearch.add(MenuListData(r1[5] + opisanie, "viaczernia_ton6"))
+            dataSearch.add(MenuListData(r1[6] + opisanie, "viaczernia_ton7"))
+            dataSearch.add(MenuListData(r1[7] + opisanie, "viaczernia_ton8"))
+            dataSearch.add(MenuListData(r1[8] + opisanie, "viaczernia_baharodzicznyja_adpuszczalnyja"))
             return dataSearch
         }
 
@@ -158,16 +159,16 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         var opisanie = ""
         if (isSearch) opisanie = "\nБогаслужбовыя тэксты"
         val dataSearch = ArrayList<MenuListData>()
-        dataSearch.add(MenuListData("Боская Літургія сьв. Яна Залатавуснага$opisanie", "lit_jan_zalat"))
+        dataSearch.add(MenuListData("Боская Літургія сьв. Яна Залатавуснага$opisanie", "lit_jana_zalatavusnaha"))
         dataSearch.add(MenuListData("Боская Літургія ў Велікодны перыяд$opisanie", "lit_jan_zalat_vielikodn"))
         dataSearch.add(MenuListData("Боская Літургія сьв. Васіля Вялікага$opisanie", "lit_vasila_vialikaha"))
         dataSearch.add(MenuListData("Літургія раней асьвячаных дароў$opisanie", "lit_raniej_asviaczanych_darou"))
         dataSearch.add(MenuListData("Набажэнства ў гонар Маці Божай Нястомнай Дапамогі$opisanie", "nabazenstva_maci_bozaj_niast_dap"))
         dataSearch.add(MenuListData("Ютрань нядзельная (у скароце)$opisanie", "jutran_niadzelnaja"))
         dataSearch.add(MenuListData("Абедніца$opisanie", "abiednica"))
-        dataSearch.add(MenuListData("Служба за памерлых — Малая паніхіда$opisanie", "panichida_mal"))
+        dataSearch.add(MenuListData("Служба за памерлых — Малая паніхіда$opisanie", "panichida_malaja"))
         dataSearch.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы$opisanie", "kanon_malebny_baharodzicy"))
-        dataSearch.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага$opisanie", "kanon_a_kryckaha"))
+        dataSearch.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага$opisanie", "kanon_andreja_kryckaha"))
         dataSearch.add(MenuListData("Малебен сьв. Кірылу і Мятоду, настаўнікам славянскім$opisanie", "malebien_kiryla_miatod"))
         dataSearch.add(MenuListData("Служба за памерлых на кожны дзень тыдня$opisanie", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
         dataSearch.add(MenuListData("Служба Найсьвяцейшай Багародзіцы$opisanie", "sluzba_najsviaciejszaj_baharodzicy"))

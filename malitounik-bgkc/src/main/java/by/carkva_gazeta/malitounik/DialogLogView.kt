@@ -50,6 +50,36 @@ class DialogLogView : DialogFragment() {
         logJob?.cancel()
     }
 
+    private suspend fun getLogFile(count: Int = 0): String {
+        val sb = StringBuilder()
+        activity?.let { fragmentActivity ->
+            val localFile = File("${fragmentActivity.filesDir}/cache/log.txt")
+            var error = false
+            Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
+                MainActivity.toastView(fragmentActivity, getString(R.string.error))
+                error = true
+            }.await()
+            if (error && count < 2) {
+                getLogFile(count + 1)
+                return ""
+            }
+            localFile.readLines().forEach {
+                if (it.isNotEmpty()) {
+                    if (it.contains(" -->")) {
+                        val t1 = it.indexOf(" -->")
+                        log.add(it.substring(0, t1))
+                    } else {
+                        log.add(it)
+                    }
+                    sb.append(it).append("\n")
+                }
+            }
+            //val list = Malitounik.referens.child("/admin").list(1000).await()
+            //runPrefixes(list)
+        }
+        return sb.toString().trim()
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { fragmentActivity ->
             val dzenNoch = (fragmentActivity as BaseActivity).getBaseDzenNoch()
@@ -63,26 +93,7 @@ class DialogLogView : DialogFragment() {
                 displayBinding.title.text = getString(R.string.log)
                 if (MainActivity.isNetworkAvailable()) {
                     logJob = CoroutineScope(Dispatchers.Main).launch {
-                        val localFile = File("${fragmentActivity.filesDir}/cache/cache.txt")
-                        Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
-                            MainActivity.toastView(fragmentActivity, getString(R.string.error))
-                        }.await()
-                        val sb = StringBuilder()
-                        localFile.readLines().forEach {
-                            if (it.isNotEmpty()) {
-                                log.add(it)
-                                val t1 = it.lastIndexOf("/")
-                                if (t1 != -1) {
-                                    val t2 = it.lastIndexOf("/", t1 - 1)
-                                    if (t2 != -1) {
-                                        sb.append(it.substring(t2)).append("\n")
-                                    } else {
-                                        sb.append(it).append("\n")
-                                    }
-                                }
-                            }
-                        }
-                        displayBinding.content.text = sb.trim()
+                        displayBinding.content.text = getLogFile()
                     }
                 }
                 displayBinding.content.typeface = MainActivity.createFont(Typeface.BOLD)
@@ -100,4 +111,27 @@ class DialogLogView : DialogFragment() {
         }
         return alert
     }
+
+    /*private suspend fun runPrefixes(list: ListResult) {
+        list.prefixes.forEach {
+            if (it.name != "piasochnica") {
+                val list2 = it.list(1000).await()
+                runPrefixes(list2)
+                runItems(list2)
+            }
+        }
+    }
+
+    private suspend fun runItems(list: ListResult) {
+        activity?.let { activity ->
+            val dir = File("${activity.filesDir}/test")
+            if (!dir.exists()) dir.mkdir()
+            list.items.forEach {
+                val localFile = File("${activity.filesDir}/test/${it.name}")
+                val pathReference = Malitounik.referens.child(it.path)
+                pathReference.getFile(localFile).await()
+                Log.d("Oleg", it.path + "<-->" + it.name)
+            }
+        }
+    }*/
 }

@@ -11,10 +11,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.Spannable
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
-import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
@@ -37,7 +35,6 @@ import by.carkva_gazeta.malitounik.EditTextCustom
 import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
-import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.splitcompat.SplitCompat
 import kotlinx.coroutines.CoroutineScope
@@ -546,6 +543,40 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         sendSaveAsAddNewPesnyPostRequest(title, pesny, fileName)
     }
 
+    private suspend fun saveLogFile(url: String, count: Int = 0) {
+        val sb = StringBuilder()
+        val logFile = File("$filesDir/cache/log.txt")
+        var error = false
+        Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+            MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
+            error = true
+        }.await()
+        if (error && count < 2) {
+            saveLogFile(url, count + 1)
+            return
+        }
+        var ref = true
+        logFile.readLines().forEach {
+            sb.append("$it\n")
+            if (it.contains(url)) {
+                ref = false
+            }
+        }
+        if (ref) {
+            sb.append("$url\n")
+        }
+        logFile.writer().use {
+            it.write(sb.toString())
+        }
+        Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).addOnFailureListener {
+            MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
+            error = true
+        }.await()
+        if (error && count < 2) {
+            saveLogFile(url, count + 1)
+        }
+    }
+
     private fun sendSaveAsAddNewPesnyPostRequest(title: String, pesny: String, fileName: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -562,26 +593,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     }.await()
                     Malitounik.referens.child("/admin/piasochnica/($pesny$nawFileName) $title").putFile(Uri.fromFile(localFile2)).await()
                     Malitounik.referens.child("/admin/piasochnica/$fileName").delete().await()
-                    val logFile = File("$filesDir/cache/log.txt")
-                    val sb = StringBuilder()
-                    val url = "/admin/pesny/$pesny$fileName($title)"
-                    Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
-                        MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
-                    }.await()
-                    var ref = true
-                    logFile.readLines().forEach {
-                        sb.append("$it\n")
-                        if (it.contains(url)) {
-                            ref = false
-                        }
-                    }
-                    if (ref) {
-                        sb.append("$url\n")
-                    }
-                    logFile.writer().use {
-                        it.write(sb.toString())
-                    }
-                    Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
                     Malitounik.referens.child("/admin/pesny/$pesny$fileName").putFile(Uri.fromFile(localFile2)).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
@@ -598,11 +609,13 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                                 show()
                             }
                         }
-                    } .await()
+                    }.await()
                     PasochnicaList.getFindFileListAsSave()
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
+                val url = "/admin/pesny/$pesny$fileName($title)"
+                saveLogFile(url)
                 binding.progressBar2.visibility = View.GONE
             }
         }
@@ -635,27 +648,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 binding.progressBar2.visibility = View.VISIBLE
                 try {
                     val localFile = File("$filesDir/cache/cache.txt")
-                    val logFile = File("$filesDir/cache/log.txt")
-                    val sb = StringBuilder()
-                    val url = "/$dirToFile"
-                    Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
-                        MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
-                    }.await()
-                    var ref = true
-                    logFile.readLines().forEach {
-                        sb.append("$it\n")
-                        if (it.contains(url)) {
-                            ref = false
-                        }
-                    }
-                    if (ref) {
-                        sb.append("$url\n")
-                    }
-                    logFile.writer().use {
-                        it.write(sb.toString())
-                    }
-                    Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
-
                     Malitounik.referens.child("/admin/piasochnica/" + fileName.replace("\n", " ")).getFile(localFile).addOnFailureListener {
                         MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
@@ -713,6 +705,8 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
+                val url = "/$dirToFile"
+                saveLogFile(url)
                 binding.progressBar2.visibility = View.GONE
                 invalidateOptionsMenu()
             }

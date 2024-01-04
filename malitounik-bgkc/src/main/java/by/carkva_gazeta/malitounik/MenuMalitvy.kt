@@ -36,7 +36,7 @@ class MenuMalitvy : BaseListFragment() {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "malitvy_ran")
+                        intent.putExtra("resurs", "malitvy_ranisznija")
                         startActivity(intent)
                     }
 

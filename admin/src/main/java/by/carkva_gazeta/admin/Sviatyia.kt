@@ -27,6 +27,7 @@ import by.carkva_gazeta.admin.databinding.AdminSviatyiaBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.CaliandarMun
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.MenuCaliandar
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemTipiconBinding
@@ -403,12 +404,45 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         }
     }
 
+    private suspend fun saveLogFile(url: String, count: Int = 0) {
+        val sb = StringBuilder()
+        val logFile = File("$filesDir/cache/log.txt")
+        var error = false
+        Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
+            MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
+            error = true
+        }.await()
+        if (error && count < 2) {
+            saveLogFile(url, count + 1)
+            return
+        }
+        var ref = true
+        logFile.readLines().forEach {
+            sb.append("$it\n")
+            if (it.contains(url)) {
+                ref = false
+            }
+        }
+        if (ref) {
+            sb.append("$url\n")
+        }
+        logFile.writer().use {
+            it.write(sb.toString())
+        }
+        Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).addOnFailureListener {
+            MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
+            error = true
+        }.await()
+        if (error && count < 2) {
+            saveLogFile(url, count + 1)
+        }
+    }
+
     private fun sendPostRequest(name: String, chtenie: String, bold: Int, tipicon: String, spaw: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 val data = c[Calendar.DAY_OF_MONTH]
                 val mun = c[Calendar.MONTH]
-                val logFile = File("$filesDir/cache/log.txt")
                 if (!(name == getString(by.carkva_gazeta.malitounik.R.string.error) || name == "")) {
                     var style = 8
                     when (bold) {
@@ -450,27 +484,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                             it.write(sb.toString())
                         }
                     }
-                    val stringBuilder = StringBuilder()
-                    val url = "/calendarsviatyia.txt"
-                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
-                        MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
-                    }.await()
-                    var ref = true
-                    logFile.readLines().forEach {
-                        stringBuilder.append("$it\n")
-                        if (it.contains(url)) {
-                            ref = false
-                        }
-                    }
-                    if (ref) {
-                        stringBuilder.append("$url\n")
-                    }
-                    if (sviatyiaNewList.isNotEmpty()) {
-                        logFile.writer().use {
-                            it.write(stringBuilder.toString())
-                        }
-                        referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
-                    }
                     sb.clear()
                     if (sviatyiaNewList.isNotEmpty()) {
                         referens.child("/calendarsviatyia.txt").putFile(Uri.fromFile(localFile3)).await()
@@ -479,7 +492,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                     MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
                 if (!(spaw == getString(by.carkva_gazeta.malitounik.R.string.error) || spaw == "")) {
-                    val sb = StringBuilder()
                     val localFile = File("$filesDir/cache/cache.txt")
                     val localFile4 = File("$filesDir/cache/cache4.txt")
                     var builder = ""
@@ -499,26 +511,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                             it.write(gson.toJson(arrayList, type))
                         }
                     }
-                    val url = "/chytanne/sviatyja/opisanie" + (mun + 1) + ".json"
-                    referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
-                        MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
-                    }.await()
-                    var ref = true
-                    logFile.readLines().forEach {
-                        sb.append("$it\n")
-                        if (it.contains(url)) {
-                            ref = false
-                        }
-                    }
-                    if (ref) {
-                        sb.append("$url\n")
-                    }
-                    if (builder != "") {
-                        logFile.writer().use {
-                            it.write(sb.toString())
-                        }
-                        referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
-                    }
                     if (builder != "") {
                         referens.child("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json").putFile(Uri.fromFile(localFile4)).addOnCompleteListener { task ->
                             if (task.isSuccessful) {
@@ -531,6 +523,8 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 } else {
                     MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
+                saveLogFile("/calendarsviatyia.txt")
+                saveLogFile("/chytanne/sviatyja/opisanie" + (mun + 1) + ".json")
                 binding.progressBar2.visibility = View.GONE
             }
         }

@@ -133,7 +133,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                     val t3 = oldName.lastIndexOf(".")
                     filenameTitle = if (t3 != -1) oldName.substring(t2 + 2, t3)
                     else oldName.substring(t2 + 2)
-                    fileName = oldName.substring(1, t2) + oldName.substring(t3)
+                    fileName = oldName.substring(1, t2) + ".html"
                 } else {
                     fileName = oldName
                 }

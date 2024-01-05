@@ -283,12 +283,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["viachernia_mineia_agulnaia22"] = R.raw.viachernia_mineia_agulnaia22
             resursMap["viachernia_mineia_agulnaia23"] = R.raw.viachernia_mineia_agulnaia23
             resursMap["viachernia_mineia_agulnaia24"] = R.raw.viachernia_mineia_agulnaia24
-            resursMap["viachernia_mineia_sviatochnaia2"] = R.raw.viachernia_mineia_sviatochnaia2
-            resursMap["viachernia_mineia_sviatochnaia3"] = R.raw.viachernia_mineia_sviatochnaia3
-            resursMap["viachernia_mineia_sviatochnaia4"] = R.raw.viachernia_mineia_sviatochnaia4
-            resursMap["viachernia_mineia_sviatochnaia5"] = R.raw.viachernia_mineia_sviatochnaia5
-            resursMap["viachernia_mineia_sviatochnaia6"] = R.raw.viachernia_mineia_sviatochnaia6
-            resursMap["viachernia_mineia_sviatochnaia7"] = R.raw.viachernia_mineia_sviatochnaia7
+            resursMap["mm_02_04_01_pieradsv_bohazjaulennia_viaczernia"] = R.raw.mm_02_04_01_pieradsv_bohazjaulennia_viaczernia
+            resursMap["mm_05_01_cakannie_bohazjauliennia_viaczernia"] = R.raw.mm_05_01_cakannie_bohazjauliennia_viaczernia
+            resursMap["mm_06_01_bohazjauliennie_viaczernia"] = R.raw.mm_06_01_bohazjauliennie_viaczernia
+            resursMap["mm_07_01_pasviaccie_bohazjauliennie_viaczernia"] = R.raw.mm_07_01_pasviaccie_bohazjauliennie_viaczernia
+            resursMap["mm_16_01_paklaniennie_kajdanam_apostala_piatra_viaczernia"] = R.raw.mm_16_01_paklaniennie_kajdanam_apostala_piatra_viaczernia
+            resursMap["mm_30_01_troch_sviatanacalnikau_vasilia_vialikaha_ryhora_bahaslova_i_jana_zalatavusnaha_viaczernia"] = R.raw.mm_30_01_troch_sviatanacalnikau_vasilia_vialikaha_ryhora_bahaslova_i_jana_zalatavusnaha_viaczernia
             resursMap["mm_08_11_sabor_archaniola_michaila_jutran"] = R.raw.mm_08_11_sabor_archaniola_michaila_jutran
             resursMap["mm_08_11_sabor_archaniola_michaila_viaczernia"] = R.raw.mm_08_11_sabor_archaniola_michaila_viaczernia
             resursMap["mm_08_11_sabor_archaniola_michaila_liturhija"] = R.raw.mm_08_11_sabor_archaniola_michaila_liturhija
@@ -476,7 +476,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["vialikaja_sierada_liturhija_raniej_asviacz_darou"] = R.raw.vialikaja_sierada_liturhija_raniej_asviacz_darou
             resursMap["vialiki_paniadzielak_hadzina_6"] = R.raw.vialiki_paniadzielak_hadzina_6
             resursMap["vialiki_paniadzielak_liturhija_raniej_asviacz_darou"] = R.raw.vialiki_paniadzielak_liturhija_raniej_asviacz_darou
-            resursMap["viaczernia_vialikdzien"] = R.raw.viaczernia_vialikdzien
+            resursMap["vialikdzien_viaczernia"] = R.raw.vialikdzien_viaczernia
             resursMap["mm_25_04_apostala_marka_liturhija"] = R.raw.mm_25_04_apostala_marka_liturhija
             resursMap["mm_25_04_apostala_marka_viaczernia"] = R.raw.mm_25_04_apostala_marka_viaczernia
             resursMap["mm_27_04_siamiona_svajaka_haspodniaha_viaczernia"] = R.raw.mm_27_04_siamiona_svajaka_haspodniaha_viaczernia

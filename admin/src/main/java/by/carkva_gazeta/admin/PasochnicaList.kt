@@ -350,7 +350,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@PasochnicaList, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
-                saveLogFile("/$fileName", "")
+                if (isSite) saveLogFile("/$fileName", "")
                 binding.progressBar2.visibility = View.GONE
                 val fragment = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
                 fragment?.update()
@@ -372,7 +372,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             return
         }
         logFile.readLines().forEach {
-            if (!it.contains(oldFileName)) sb.append("$it\n")
+            sb.append("$it\n")
         }
         if (oldFileName != "") {
             sb.append("$url --> перайменавана з $oldFileName\n")

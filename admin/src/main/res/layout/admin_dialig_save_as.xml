@@ -18,7 +18,7 @@
             android:padding="10sp"
             android:text="@string/save_as_up"
             android:textColor="@color/colorWhite"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/content"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,11 +29,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/selector_red"
-            android:gravity="right|end"
+            android:gravity="end"
             android:padding="10sp"
             android:text="@string/mk_dir"
             android:textColor="@color/colorWhite"
-            android:textSize="14sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10sp"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <by.carkva_gazeta.malitounik.EditTextCustom
@@ -63,7 +63,7 @@
             android:paddingLeft="10sp"
             android:paddingRight="10sp"
             android:paddingBottom="10sp"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <ListView
             android:id="@+id/listView"

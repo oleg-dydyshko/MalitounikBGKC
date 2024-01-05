@@ -130,7 +130,7 @@ class DialogLogView : DialogFragment() {
                 val localFile = File("${activity.filesDir}/test/${it.name}")
                 val pathReference = Malitounik.referens.child(it.path)
                 pathReference.getFile(localFile).await()
-                Log.d("Oleg", it.path + "<-->" + it.name)
+                Log.d("Oleg", it.path)
             }
         }
     }*/

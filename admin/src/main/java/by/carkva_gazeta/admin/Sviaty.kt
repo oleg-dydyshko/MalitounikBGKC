@@ -365,16 +365,10 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
             saveLogFile(url, count + 1)
             return
         }
-        var ref = true
         logFile.readLines().forEach {
             sb.append("$it\n")
-            if (it.contains(url)) {
-                ref = false
-            }
         }
-        if (ref) {
-            sb.append("$url\n")
-        }
+        sb.append("$url\n")
         logFile.writer().use {
             it.write(sb.toString())
         }

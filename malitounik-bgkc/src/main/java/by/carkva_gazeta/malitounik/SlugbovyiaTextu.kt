@@ -146,7 +146,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_viaczernia_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
 
         datMinALL.add(SlugbovyiaTextuData(0, "Уваскрасеньне Госпада Бога і Збаўцы нашага Ісуса Хрыста (Вялікдзень)", "vialikdzien_jutran", JUTRAN, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(0, "Уваскрасеньне Госпада Бога і Збаўцы нашага Ісуса Хрыста (Вялікдзень)", "viaczernia_vialikdzien", VIACZERNIA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(0, "Уваскрасеньне Госпада Бога і Збаўцы нашага Ісуса Хрыста (Вялікдзень)", "vialikdzien_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак", "u_svietly_paniadzielak", JUTRAN, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак", "l_svietly_paniadzielak", LITURHIJA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак", "v_svietly_paniadzielak", VIACZERNIA, pasxa = true, mineia = MINEIA_SVITLY_TYDZEN))
@@ -220,14 +220,14 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(227, "Перадсьвяцьце Ўсьпеньня і сьв. прарока Міхея", "mm_14_08_pieradsv_uspiennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(227, "Перадсьвяцьце Ўсьпеньня і сьв. прарока Міхея", "mm_14_08_pieradsv_uspiennia_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "mm_01_01_abrezannie_vasila_vialikaha_viaczernia", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "viachernia_mineia_sviatochnaia4", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(3, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "viachernia_mineia_sviatochnaia3", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "viachernia_mineia_sviatochnaia5", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(16, "Пакланеньне кайданам апостала Пятра", "viachernia_mineia_sviatochnaia6", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(30, "Трох сьвятаначальнікаў: Васіля Вялікага, Рыгора Багаслова і Яна Залатавуснага", "viachernia_mineia_sviatochnaia7", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "mm_06_01_bohazjauliennie_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня", "mm_02_04_01_pieradsv_bohazjaulennia_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(3, "Перадсьвяцьце Богазьяўленьня", "mm_02_04_01_pieradsv_bohazjaulennia_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня", "mm_02_04_01_pieradsv_bohazjaulennia_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "mm_05_01_cakannie_bohazjauliennia_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "mm_07_01_pasviaccie_bohazjauliennie_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(16, "Пакланеньне кайданам апостала Пятра", "mm_16_01_paklaniennie_kajdanam_apostala_piatra_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(30, "Трох сьвятаначальнікаў: Васіля Вялікага, Рыгора Багаслова і Яна Залатавуснага", "mm_30_01_troch_sviatanacalnikau_vasilia_vialikaha_ryhora_bahaslova_i_jana_zalatavusnaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста", "uzniasienne_jutran", JUTRAN, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста", "uzniasienne_liturhija", LITURHIJA, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста", "uzniasienne_viaczernia", VIACZERNIA, pasxa = true))
@@ -486,12 +486,12 @@ class SlugbovyiaTextu {
                 }
             } else {
                 if (sluzba == VIALHADZINY) {
-                    if (checkDay == it.day && (it.sluzba == VIALHADZINY || it.sluzba == VELIKODNYIAHADZINY || it.sluzba == HADZINA6)) {
+                    if (dayOfYear == it.day && (it.sluzba == VIALHADZINY || it.sluzba == VELIKODNYIAHADZINY || it.sluzba == HADZINA6)) {
                         return it.resource
                     }
                 }
                 if (sluzba == JUTRAN) {
-                    if (checkDay == it.day && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
+                    if (dayOfYear == it.day && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
                         return it.resource
                     }
                 }
@@ -703,7 +703,7 @@ class SlugbovyiaTextu {
         val chytanne = dayCaliandar[10] + dayCaliandar[11]
         var rDay = dayOfYear
         if (chytanne.contains("Вялікія гадзіны", true)) {
-            if (dayCaliandar[0].toInt() == Calendar.FRIDAY) {
+            if (dayCaliandar[0].toInt() == Calendar.FRIDAY && ((dayCaliandar[1].toInt() == 22 && dayCaliandar[2].toInt() == Calendar.DECEMBER) || (dayCaliandar[1].toInt() == 3 && dayCaliandar[2].toInt() == Calendar.JANUARY))) {
                 rDay += 2
             }
         }
@@ -728,7 +728,7 @@ class SlugbovyiaTextu {
                 val chytanne = dayCaliandar[10] + dayCaliandar[11]
                 var rDay = dayOfYear
                 if (chytanne.contains("Вялікія гадзіны", true)) {
-                    if (dayCaliandar[0].toInt() == Calendar.FRIDAY) {
+                    if (dayCaliandar[0].toInt() == Calendar.FRIDAY && ((dayCaliandar[1].toInt() == 22 && dayCaliandar[2].toInt() == Calendar.DECEMBER) || (dayCaliandar[1].toInt() == 3 && dayCaliandar[2].toInt() == Calendar.JANUARY))) {
                         rDay += 2
                     }
                 }

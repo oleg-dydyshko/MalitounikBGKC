@@ -339,29 +339,36 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         dirList.clear()
         var size = 0L
         val sb = StringBuilder()
-        val list = Malitounik.referens.child("/chytanne/icons").list(1000).await()
-        list.items.forEach {
-            val pref = if (svity) "v"
-            else "s"
-            sb.append(it.name)
-            if (it.name.contains("${pref}_${day}_${mun}")) {
-                val t1 = it.name.lastIndexOf(".")
-                val fileNameT = it.name.substring(0, t1) + ".txt"
-                val file = File("$filesDir/iconsApisanne/$fileNameT")
-                try {
-                    Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").getFile(file).addOnFailureListener {
-                        if (file.exists()) file.delete()
-                    }.await()
-                } catch (_: Throwable) {
-                }
-                val fileIcon = File("$filesDir/icons/${it.name}")
-                val meta = it.metadata.await()
-                val time = fileIcon.lastModified()
-                val update = meta.updatedTimeMillis
-                if (!fileIcon.exists() || time < update) {
-                    val updateFile = meta.sizeBytes
-                    dirList.add(DirList(it.name, updateFile))
-                    size += updateFile
+        val fileIconMataData = File("$filesDir/iconsMataData.txt")
+        val pathReferenceMataData = Malitounik.referens.child("/chytanne/iconsMataData.txt")
+        pathReferenceMataData.getFile(fileIconMataData).await()
+        val list = fileIconMataData.readText().split("\n")
+        list.forEach {
+            val t1 = it.indexOf("<-->")
+            if (t1 != -1) {
+                val t2 = it.indexOf("<-->", t1 + 4)
+                val name = it.substring(0, t1)
+                val pref = if (svity) "v"
+                else "s"
+                sb.append(name)
+                if (name.contains("${pref}_${day}_${mun}")) {
+                    val t3 = name.lastIndexOf(".")
+                    val fileNameT = name.substring(0, t3) + ".txt"
+                    val file = File("$filesDir/iconsApisanne/$fileNameT")
+                    try {
+                        Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").getFile(file).addOnFailureListener {
+                            if (file.exists()) file.delete()
+                        }.await()
+                    } catch (_: Throwable) {
+                    }
+                    val fileIcon = File("$filesDir/icons/${name}")
+                    val time = fileIcon.lastModified()
+                    val update = it.substring(t2 + 4).toLong()
+                    if (!fileIcon.exists() || time < update) {
+                        val updateFile = it.substring(t1 + 4, t2).toLong()
+                        dirList.add(DirList(name, updateFile))
+                        size += updateFile
+                    }
                 }
             }
         }

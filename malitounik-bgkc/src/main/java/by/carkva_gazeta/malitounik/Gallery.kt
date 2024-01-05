@@ -105,6 +105,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
                 binding.actionForward.animation = animation2
             }
         }
+        startLoadIconsJob(!MainActivity.isNetworkAvailable(true))
     }
 
     private fun loadGallery() {
@@ -443,10 +444,10 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
                 } catch (_: Throwable) {
                 }
             }
-            binding.titleToolbar.text = resources.getText(R.string.gallery)
             binding.progressBar2.visibility = View.GONE
             loadGallery()
         }
+        binding.titleToolbar.text = resources.getText(R.string.gallery)
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

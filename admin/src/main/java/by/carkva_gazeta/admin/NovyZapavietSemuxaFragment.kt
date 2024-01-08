@@ -64,32 +64,19 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
         return false
     }
 
-    private suspend fun saveLogFile(url: String, count: Int = 0) {
+    private suspend fun saveLogFile(count: Int = 0) {
         activity?.let { activity ->
-            val sb = StringBuilder()
             val logFile = File("${activity.filesDir}/cache/log.txt")
             var error = false
-            Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
-                MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.error))
-                error = true
-            }.await()
-            if (error && count < 2) {
-                saveLogFile(url, count + 1)
-                return
-            }
-            logFile.readLines().forEach {
-                sb.append("$it\n")
-            }
-            sb.append("$url\n")
             logFile.writer().use {
-                it.write(sb.toString())
+                it.write(getString(by.carkva_gazeta.malitounik.R.string.check_update_resourse))
             }
             Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).addOnFailureListener {
                 MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.error))
                 error = true
             }.await()
             if (error && count < 2) {
-                saveLogFile(url, count + 1)
+                saveLogFile(count + 1)
             }
         }
     }
@@ -132,8 +119,7 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                             MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
                     }.await()
-                    val url = "/chytanne/Semucha/biblian$id.txt"
-                    saveLogFile(url)
+                    saveLogFile()
                     Malitounik.referens.child("/chytanne/Semucha/biblian$id.txt").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
                         activity?.let {
                             if (task.isSuccessful) {

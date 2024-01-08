@@ -187,13 +187,17 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         versionCodeJob?.cancel()
     }
 
-    override fun createAndSentFile(log: ArrayList<String>) {
+    override fun createAndSentFile(log: ArrayList<String>, fileList: String) {
+        bindingappbar.progressBar.visibility = View.VISIBLE
         val zip = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "MalitounikResource.zip")
         if (log.isNotEmpty() && isNetworkAvailable()) {
             logJob = CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
-                    val localFile = File("$filesDir/cache/cache.txt")
                     val out = ZipOutputStream(BufferedOutputStream(FileOutputStream(zip)))
+                    val localFile = File("$filesDir/cache/cache.txt")
+                    val logFile = File("$filesDir/cache/log.txt")
+                    val strB = StringBuilder()
+                    val buffer = ByteArray(1024)
                     for (index in 0 until log.size) {
                         val file = log[index]
                         var filePath = file.replace("//", "/")
@@ -214,50 +218,70 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                         try {
                             val entry = ZipEntry(file.substring(file.lastIndexOf("/")))
                             out.putNextEntry(entry)
-                            origin.copyTo(out, 1024)
-                        } catch (_: Throwable) {
+                            while (true) {
+                                val len = fi.read(buffer)
+                                if (len <= 0) break
+                                out.write(buffer, 0, len)
+                            }
+                            //origin.copyTo(out, 1024)
+                        } catch (e: Throwable) {
+                            e.printStackTrace()
                         } finally {
                             origin.close()
                         }
+                        strB.append(file)
+                        strB.append("\n")
                     }
-                    val logFile = File("$filesDir/cache/log.txt")
-                    if (logFile.exists()) {
-                        val fi = FileInputStream(logFile)
-                        val origin = BufferedInputStream(fi)
-                        try {
-                            val entry = ZipEntry("log.txt")
-                            out.putNextEntry(entry)
-                            origin.copyTo(out, 1024)
-                        } catch (_: Throwable) {
-                        } finally {
-                            origin.close()
-                            out.close()
+                    logFile.writer().use {
+                        it.write(strB.toString())
+                    }
+                    val fi = FileInputStream(logFile)
+                    val origin = BufferedInputStream(fi)
+                    try {
+                        val entry = ZipEntry("log.txt")
+                        out.putNextEntry(entry)
+                        while (true) {
+                            val len = fi.read(buffer)
+                            if (len <= 0) break
+                            out.write(buffer, 0, len)
                         }
+                        //origin.copyTo(out, 1024)
+                    } catch (e: Throwable) {
+                        e.printStackTrace()
+                    } finally {
+                        origin.close()
                     }
+                    out.closeEntry()
+                    out.close()
                 }
-                clearLogFile(zip)
+                clearLogFile(zip, fileList)
             }
         } else {
-            clearLogFile(zip)
+            clearLogFile(zip, fileList)
         }
     }
 
-    private fun clearLogFile(zip: File, isClear: Boolean = true) {
+    private fun clearLogFile(zip: File, fileList: String) {
         val sendIntent = Intent(Intent.ACTION_SEND)
         sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@MainActivity, "by.carkva_gazeta.malitounik.fileprovider", zip))
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
         sendIntent.type = "application/zip"
         startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
-        if (isNetworkAvailable() && isClear) {
-            logJob?.cancel()
-            logJob = CoroutineScope(Dispatchers.IO).launch {
-                val localFile = File("$filesDir/cache/cache.txt")
-                localFile.writer().use {
+        if (isNetworkAvailable()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val logFile = File("$filesDir/cache/log.txt")
+                logFile.writer().use {
                     it.write("")
                 }
-                Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(localFile)).await()
+                val localFile = File("$filesDir/cache/cache.txt")
+                localFile.writer().use {
+                    it.write(fileList)
+                }
+                Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
+                Malitounik.referens.child("/admin/adminListFile.txt").putFile(Uri.fromFile(localFile)).await()
             }
         }
+        bindingappbar.progressBar.visibility = View.GONE
     }
 
     override fun setDataCalendar(dayOfYear: Int, year: Int) {
@@ -834,8 +858,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 selectFragment(binding.label1, true)
             }
         }
-        logJob?.cancel()
-        logJob = CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             if (k.getBoolean("admin", false) && isNetworkAvailable()) {
                 val localFile = File("$filesDir/cache/cache.txt")
                 Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {

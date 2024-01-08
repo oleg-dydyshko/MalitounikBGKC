@@ -263,31 +263,18 @@ class Chytanny : BaseActivity() {
         return false
     }
 
-    private suspend fun saveLogFile(url: String, count: Int = 0) {
-        val sb = StringBuilder()
+    private suspend fun saveLogFile(count: Int = 0) {
         val logFile = File("$filesDir/cache/log.txt")
         var error = false
-        Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
-            MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
-            error = true
-        }.await()
-        if (error && count < 2) {
-            saveLogFile(url, count + 1)
-            return
-        }
-        logFile.readLines().forEach {
-            sb.append("$it\n")
-        }
-        sb.append("$url\n")
         logFile.writer().use {
-            it.write(sb.toString())
+            it.write(getString(by.carkva_gazeta.malitounik.R.string.check_update_resourse))
         }
         Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).addOnFailureListener {
             MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
             error = true
         }.await()
         if (error && count < 2) {
-            saveLogFile(url, count + 1)
+            saveLogFile(count + 1)
         }
     }
 
@@ -310,8 +297,7 @@ class Chytanny : BaseActivity() {
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
-                val url = "/calendar-cytanne_$year.php"
-                saveLogFile(url)
+                saveLogFile()
                 binding.progressBar2.visibility = View.GONE
             }
         }

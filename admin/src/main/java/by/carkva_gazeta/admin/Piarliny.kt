@@ -360,34 +360,6 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
         }
     }
 
-    private suspend fun saveLogFile(url: String, count: Int = 0) {
-        val sb = StringBuilder()
-        val logFile = File("$filesDir/cache/log.txt")
-        var error = false
-        Malitounik.referens.child("/admin/log.txt").getFile(logFile).addOnFailureListener {
-            MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
-            error = true
-        }.await()
-        if (error && count < 2) {
-            saveLogFile(url, count + 1)
-            return
-        }
-        logFile.readLines().forEach {
-            sb.append("$it\n")
-        }
-        sb.append("$url\n")
-        logFile.writer().use {
-            it.write(sb.toString())
-        }
-        Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).addOnFailureListener {
-            MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
-            error = true
-        }.await()
-        if (error && count < 2) {
-            saveLogFile(url, count + 1)
-        }
-    }
-
     private fun sendPostRequest(piarliny: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -409,7 +381,6 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
-                saveLogFile("/chytanne/piarliny.json")
                 val adapter = binding.listView.adapter as PiarlinyListAdaprer
                 adapter.notifyDataSetChanged()
                 binding.progressBar2.visibility = View.GONE

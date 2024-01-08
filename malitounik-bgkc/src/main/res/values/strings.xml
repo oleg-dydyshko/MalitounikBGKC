@@ -764,5 +764,9 @@
     </string-array>
     <string name="chto_novaga_title">ШТО НОВАГА?</string>
     <string name="admin_dialog_check_log_title">ПРАВЕР</string>
+    <string name="admin_upload_contine">Праверка скончана. Няма зьмен.</string>
+    <string name="admin_upload_no_wi_fi">Працуе толькі на WI-FI.</string>
+    <string name="admin_upload_error">Памылковы фармат файла /admin/adminListFile.txt.</string>
+    <string name="admin_upload_log_contine">У логу няма зьмен. Усё роўна праверыць?</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

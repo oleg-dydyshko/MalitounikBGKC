@@ -28,6 +28,7 @@ class DialogLogView : DialogFragment() {
 
     interface DialogLogViewListener {
         fun createAndSentFile(log: ArrayList<String>, fileList: String)
+        fun dialogLogViewClose()
     }
 
     override fun onAttach(context: Context) {
@@ -135,12 +136,12 @@ class DialogLogView : DialogFragment() {
                 else displayBinding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_text))
                 ad.setView(displayBinding.root)
                 ad.setPositiveButton(resources.getString(R.string.set_log)) { _: DialogInterface, _: Int ->
-                    if (logJob?.isActive != true && log.isNotEmpty()) {
+                    if (logJob?.isActive != true) {
                         mListener?.createAndSentFile(log, sb.toString())
                     }
                 }
-                ad.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int ->
-                    dialog.cancel()
+                ad.setNegativeButton(getString(R.string.cansel)) { _: DialogInterface, _: Int ->
+                    mListener?.dialogLogViewClose()
                 }
             }
             alert = ad.create()

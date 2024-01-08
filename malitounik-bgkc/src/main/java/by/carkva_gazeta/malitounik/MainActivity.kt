@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.database.Cursor
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.hardware.SensorEvent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -91,6 +92,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private var backPressed: Long = 0
     private val dzenNoch get() = getBaseDzenNoch()
     private var tolbarTitle = ""
+    private var isLogVisable = false
     private var mLastClickTime: Long = 0
     private var resetTollbarJob: Job? = null
     private var logJob: Job? = null
@@ -282,6 +284,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
         bindingappbar.progressBar.visibility = View.GONE
+        isLogVisable = false
+    }
+
+    override fun dialogLogViewClose() {
+        isLogVisable = false
     }
 
     override fun setDataCalendar(dayOfYear: Int, year: Int) {
@@ -431,12 +438,17 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         textView.setCompoundDrawables(leftDrawable, null, null, null)
     }
 
-    /*override fun onSensorChanged(event: SensorEvent?) {
-        super.onSensorChanged(event)
-        event?.let { sensorEvent ->
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (!isLogVisable) super.onSensorChanged(event)
+        /*event?.let { sensorEvent ->
             bindingappbar.titleToolbar.text = sensorEvent.values[0].toString()
-        }
-    }*/
+        }*/
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("isLogVisable", isLogVisable)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -450,6 +462,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             //host.deleteAppWidgetId(it)
             Log.d("Oleg", it.toString())
         }*/
+        isLogVisable = savedInstanceState?.getBoolean("isLogVisable", false) ?: false
         mkDir()
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain
@@ -1073,7 +1086,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             return true
         }
         if (id == R.id.action_log) {
+            isLogVisable = true
             val dialog = DialogLogView()
+            dialog.isCancelable = false
             dialog.show(supportFragmentManager, "DialogLogView")
         }
         if (id == R.id.action_update) {

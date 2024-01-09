@@ -255,7 +255,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             }
         }.await()
         if (update == 0L) error = true
-        if (error && count < 2) {
+        if (error && count < 3) {
             getOpisanieSviat(count + 1)
             return
         }
@@ -277,7 +277,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         var read = ""
         if (file.exists()) read = file.readText()
         if (read == "") error = true
-        if (error && count < 2) {
+        if (error && count < 3) {
             saveOpisanieSviat(update, count + 1)
             return
         }
@@ -298,7 +298,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             }
         }.await()
         if (update == 0L) error = true
-        if (error && count < 2) {
+        if (error && count < 3) {
             getSviatyia(count + 1)
             return
         }
@@ -320,7 +320,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         var read = ""
         if (fileOpisanie.exists()) read = fileOpisanie.readText()
         if (read == "") error = true
-        if (error && count < 2) {
+        if (error && count < 3) {
             saveOpisanieSviatyia(update, count + 1)
             return
         }
@@ -332,7 +332,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         if (!dir.exists()) dir.mkdir()
         val dir2 = File("$filesDir/iconsApisanne")
         if (!dir2.exists()) dir2.mkdir()
-        if (count < 2) {
+        if (count < 3) {
             getIcons(loadIcons, count + 1)
             return
         }

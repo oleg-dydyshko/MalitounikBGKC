@@ -286,7 +286,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_02_04_01_pieradsv_bohazjaulennia_viaczernia"] = R.raw.mm_02_04_01_pieradsv_bohazjaulennia_viaczernia
             resursMap["mm_05_01_cakannie_bohazjauliennia_viaczernia"] = R.raw.mm_05_01_cakannie_bohazjauliennia_viaczernia
             resursMap["mm_06_01_bohazjauliennie_viaczernia"] = R.raw.mm_06_01_bohazjauliennie_viaczernia
-            resursMap["mm_07_01_pasviaccie_bohazjauliennie_viaczernia"] = R.raw.mm_07_01_pasviaccie_bohazjauliennie_viaczernia
+            resursMap["mm_07_01_pasviaccie_bohazjaulennia_sabor_jana_chrysciciela_viaczernia"] = R.raw.mm_07_01_pasviaccie_bohazjaulennia_sabor_jana_chrysciciela_viaczernia
+            resursMap["mm_07_01_pasviaccie_bohazjaulennia_sabor_jana_chrysciciela_liturhija"] = R.raw.mm_07_01_pasviaccie_bohazjaulennia_sabor_jana_chrysciciela_liturhija
             resursMap["mm_16_01_paklaniennie_kajdanam_apostala_piatra_viaczernia"] = R.raw.mm_16_01_paklaniennie_kajdanam_apostala_piatra_viaczernia
             resursMap["mm_30_01_troch_sviatanacalnikau_vasilia_vialikaha_ryhora_bahaslova_i_jana_zalatavusnaha_viaczernia"] = R.raw.mm_30_01_troch_sviatanacalnikau_vasilia_vialikaha_ryhora_bahaslova_i_jana_zalatavusnaha_viaczernia
             resursMap["mm_08_11_sabor_archaniola_michaila_jutran"] = R.raw.mm_08_11_sabor_archaniola_michaila_jutran
@@ -476,7 +477,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["vialikaja_sierada_liturhija_raniej_asviacz_darou"] = R.raw.vialikaja_sierada_liturhija_raniej_asviacz_darou
             resursMap["vialiki_paniadzielak_hadzina_6"] = R.raw.vialiki_paniadzielak_hadzina_6
             resursMap["vialiki_paniadzielak_liturhija_raniej_asviacz_darou"] = R.raw.vialiki_paniadzielak_liturhija_raniej_asviacz_darou
-            resursMap["vialikdzien_viaczernia"] = R.raw.vialikdzien_viaczernia
+            resursMap["viaczernia_vialikdzien"] = R.raw.viaczernia_vialikdzien
             resursMap["mm_25_04_apostala_marka_liturhija"] = R.raw.mm_25_04_apostala_marka_liturhija
             resursMap["mm_25_04_apostala_marka_viaczernia"] = R.raw.mm_25_04_apostala_marka_viaczernia
             resursMap["mm_27_04_siamiona_svajaka_haspodniaha_viaczernia"] = R.raw.mm_27_04_siamiona_svajaka_haspodniaha_viaczernia
@@ -596,6 +597,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_18_10_apostala_luki_viaczernia"] = R.raw.mm_18_10_apostala_luki_viaczernia
             resursMap["mm_20_09_pasviaccie_uzvyszennia_muczanika_astapa_viaczernia"] = R.raw.mm_20_09_pasviaccie_uzvyszennia_muczanika_astapa_viaczernia
             resursMap["viaczernia_svietly_tydzien"] = R.raw.viaczernia_svietly_tydzien
+            resursMap["mm_06_01_bohazjauliennie_viaczernia_liturhija_asviaczennie_vady"] = R.raw.mm_06_01_bohazjauliennie_viaczernia_liturhija_asviaczennie_vady
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {

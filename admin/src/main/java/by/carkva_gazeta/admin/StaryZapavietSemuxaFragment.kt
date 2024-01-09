@@ -75,7 +75,7 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
                 MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.error))
                 error = true
             }.await()
-            if (error && count < 2) {
+            if (error && count < 3) {
                 saveLogFile(count + 1)
             }
         }

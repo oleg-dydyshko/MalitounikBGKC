@@ -307,7 +307,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
             }
         }.await()
         if (update == 0L) error = true
-        if (error && count < 2) {
+        if (error && count < 3) {
             getOpisanieSviat(count + 1)
             return
         }
@@ -330,7 +330,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
             var read = ""
             if (file.exists()) read = file.readText()
             if (read == "") error = true
-            if (error && count < 2) {
+            if (error && count < 3) {
                 saveOpisanieSviat(update, count + 1)
                 return
             }
@@ -353,7 +353,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
                 var read = ""
                 if (fileOpisanie.exists()) read = fileOpisanie.readText()
                 if (read == "") error = true
-                if (error && count < 2) {
+                if (error && count < 3) {
                     getSviatyia(count + 1)
                     return
                 }
@@ -369,7 +369,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
     private suspend fun getIcons(loadIcons: Boolean, count: Int = 0) {
         val dir = File("$filesDir/icons/")
         if (!dir.exists()) dir.mkdir()
-        if (count < 2) {
+        if (count < 3) {
             getIcons(loadIcons, count + 1)
             return
         }

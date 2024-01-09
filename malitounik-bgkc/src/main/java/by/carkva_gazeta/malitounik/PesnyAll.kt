@@ -88,7 +88,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             resursMap["pesny_kal_10"] = R.raw.pesny_kal_10
             resursMap["pesny_kal_11"] = R.raw.pesny_kal_11
             resursMap["pesny_kal_12"] = R.raw.pesny_kal_12
-            resursMap["pesny_kal_13"] = R.raw.pesny_kal_13
+            resursMap["piesni_kalady_pryjdzicie_da_zbaucy"] = R.raw.piesni_kalady_pryjdzicie_da_zbaucy
             resursMap["pesny_kal_14"] = R.raw.pesny_kal_14
             resursMap["pesny_kal_15"] = R.raw.pesny_kal_15
             resursMap["pesny_kal_16"] = R.raw.pesny_kal_16
@@ -98,11 +98,12 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             resursMap["pesny_kal_21"] = R.raw.pesny_kal_21
             resursMap["piesni_kalady_cichaja_nocz_dziunaja_nocz"] = R.raw.piesni_kalady_cichaja_nocz_dziunaja_nocz
             resursMap["piesni_kalady_pierszaje_rastvo"] = R.raw.piesni_kalady_pierszaje_rastvo
+            resursMap["piesni_kalady_zorka_betlejemska"] = R.raw.piesni_kalady_zorka_betlejemska
             resursMap["pesny_prasl_0"] = R.raw.pesny_prasl_0
             resursMap["pesny_prasl_1"] = R.raw.pesny_prasl_1
             resursMap["pesny_prasl_2"] = R.raw.pesny_prasl_2
             resursMap["pesny_prasl_3"] = R.raw.pesny_prasl_3
-            resursMap["pesny_prasl_4"] = R.raw.pesny_prasl_4
+            resursMap["piesni_prasl_aliluja_chvalecie_z_nieba"] = R.raw.piesni_prasl_aliluja_chvalecie_z_nieba
             resursMap["pesny_prasl_5"] = R.raw.pesny_prasl_5
             resursMap["pesny_prasl_6"] = R.raw.pesny_prasl_6
             resursMap["pesny_prasl_7"] = R.raw.pesny_prasl_7

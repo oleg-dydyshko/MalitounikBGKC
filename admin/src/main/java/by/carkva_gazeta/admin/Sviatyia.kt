@@ -206,7 +206,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
-                if ((binding.apisanne.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error) || binding.sviaty.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error)) && count < 2) {
+                if ((binding.apisanne.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error) || binding.sviaty.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error)) && count < 3) {
                     setDate(dayOfYear, count + 1)
                 } else {
                     binding.progressBar2.visibility = View.GONE
@@ -414,7 +414,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
             MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
             error = true
         }.await()
-        if (error && count < 2) {
+        if (error && count < 3) {
             saveLogFile(count + 1)
         }
     }

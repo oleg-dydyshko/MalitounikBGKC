@@ -60,7 +60,7 @@ class DialogLogView : DialogFragment() {
                 MainActivity.toastView(fragmentActivity, getString(R.string.error))
                 error = true
             }.await()
-            if (error && count < 2) {
+            if (error && count < 3) {
                 getLogFile(count + 1)
                 return
             }
@@ -70,20 +70,7 @@ class DialogLogView : DialogFragment() {
             val list2 = Malitounik.referens.child("/chytanne/Semucha").list(1000).await()
             runItems(list2, checkList)
             val pathReference = Malitounik.referens.child("/calendarsviatyia.txt")
-            val meta = pathReference.metadata.await()
-            sb.append(pathReference.name)
-            sb.append("<meta>")
-            sb.append(meta.updatedTimeMillis)
-            sb.append("</meta>\n")
-            if (checkList.contains(pathReference.name)) {
-                val t1 = checkList.indexOf(pathReference.name)
-                val t2 = checkList.indexOf("<meta>", t1)
-                val t3 = checkList.indexOf("</meta>", t2)
-                val fileLastUpdate = checkList.substring(t2 + 6, t3).toLong()
-                if (fileLastUpdate < meta.updatedTimeMillis) {
-                    log.add(pathReference.path)
-                }
-            }
+            addItems(pathReference.path, pathReference.name, checkList)
             if (log.isEmpty()) {
                 binding?.content?.text = getString(R.string.admin_upload_contine)
             } else {
@@ -161,34 +148,39 @@ class DialogLogView : DialogFragment() {
     }
 
     private suspend fun runItems(list: ListResult, checkList: String) {
-        var error = false
         list.items.forEach { storageReference ->
             if (logJob?.isActive != true) return@forEach
-            val pathReference = Malitounik.referens.child(storageReference.path)
-            val meta = pathReference.metadata.await()
-            sb.append(storageReference.name)
-            sb.append("<meta>")
-            sb.append(meta.updatedTimeMillis)
-            sb.append("</meta>\n")
-            if (checkList.contains(storageReference.name)) {
-                val t1 = checkList.indexOf(storageReference.name)
-                val t2 = checkList.indexOf("<meta>", t1)
-                if (t2 == -1) {
-                    error = true
-                    return@forEach
-                }
-                val t3 = checkList.indexOf("</meta>", t2)
-                val t4 = checkList.lastIndexOf("\n", t1)
-                val resouseName = checkList.substring(t4 + 1, t2)
-                val fileLastUpdate = checkList.substring(t2 + 6, t3).toLong()
-                if (resouseName == storageReference.name && fileLastUpdate < meta.updatedTimeMillis) {
-                    log.add(storageReference.path)
-                }
-            } else {
-                log.add(storageReference.path)
-            }
-            if (error) binding?.content?.text = getString(R.string.admin_upload_error)
-            else binding?.content?.text = storageReference.path
+            addItems(storageReference.path, storageReference.name, checkList)
         }
+    }
+
+    private suspend fun addItems(path: String, name: String, checkList: String, count: Int = 0) {
+        val pathReference = Malitounik.referens.child(path)
+        var error = false
+        val meta = pathReference.metadata.addOnFailureListener {
+            error = true
+        }.await()
+        if (error && count < 3) {
+            addItems(path, name, checkList, count + 1)
+            return
+        }
+        sb.append("<name>")
+        sb.append(name)
+        sb.append("</name>")
+        sb.append("<meta>")
+        sb.append(meta.updatedTimeMillis)
+        sb.append("</meta>\n")
+        if (checkList.contains("<name>$name</name>")) {
+            val t1 = checkList.indexOf("<name>$name</name>")
+            val t2 = checkList.indexOf("<meta>", t1)
+            val t3 = checkList.indexOf("</meta>", t2)
+            val fileLastUpdate = checkList.substring(t2 + 6, t3).toLong()
+            if (fileLastUpdate < meta.updatedTimeMillis) {
+                log.add(path)
+            }
+        } else {
+            log.add(path)
+        }
+        binding?.content?.text = path
     }
 }

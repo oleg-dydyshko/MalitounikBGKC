@@ -269,7 +269,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
         sendIntent.type = "application/zip"
         startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
-        if (isNetworkAvailable()) {
+        if (isNetworkAvailable() && fileList.isNotEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
                 val logFile = File("$filesDir/cache/log.txt")
                 logFile.writer().use {
@@ -439,8 +439,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        if (!isLogVisable) super.onSensorChanged(event)
-        /*event?.let { sensorEvent ->
+        if (!isLogVisable) super.onSensorChanged(event)/*event?.let { sensorEvent ->
             bindingappbar.titleToolbar.text = sensorEvent.values[0].toString()
         }*/
     }
@@ -1096,7 +1095,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             val appUpdateInfoTask = appUpdateManager.appUpdateInfo
             appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
                 if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
-                    if (isNetworkAvailable(true)) {
+                    if (isNetworkAvailable(TRANSPORT_CELLULAR)) {
                         val dialog = DialogUpdateWIFI.getInstance(appUpdateInfo.totalBytesToDownload().toFloat())
                         dialog.show(supportFragmentManager, "DialogUpdateWIFI")
                     } else {
@@ -2039,7 +2038,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     updateAvailable = true
                     invalidateOptionsMenu()
                     if (updateCount < 3 || c.timeInMillis > k.getLong("updateTime", c.timeInMillis)) {
-                        if (isNetworkAvailable(true)) {
+                        if (isNetworkAvailable(TRANSPORT_CELLULAR)) {
                             val dialog = DialogUpdateWIFI.getInstance(appUpdateInfo.totalBytesToDownload().toFloat())
                             dialog.show(supportFragmentManager, "DialogUpdateWIFI")
                         } else {
@@ -2114,6 +2113,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val RELLITARATURA = 4
         const val PDF = 5
         const val SETFILE = 6
+        private const val TRANSPORT_ALL = 100
+        const val TRANSPORT_WIFI = 101
+        const val TRANSPORT_CELLULAR = 102
         var padzeia = ArrayList<Padzeia>()
         private var setDataCalendar = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])[0][25].toInt()
         var checkBrightness = true
@@ -2382,32 +2384,50 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         fun toHtml(html: Spannable) = HtmlCompat.toHtml(html, HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)
 
         @Suppress("DEPRECATION")
-        fun isNetworkAvailable(isTypeMobile: Boolean = false): Boolean {
+        fun isNetworkAvailable(typeTransport: Int = TRANSPORT_ALL): Boolean {
             val connectivityManager = Malitounik.applicationContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val nw = connectivityManager.activeNetwork ?: return false
                 val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
-                if (isTypeMobile && actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) return true
-                if (!isTypeMobile) {
-                    return when {
-                        actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                        actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                        actNw.hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> true
-                        actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                        else -> false
+                when (typeTransport) {
+                    TRANSPORT_CELLULAR -> {
+                        if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) return true
+                    }
+
+                    TRANSPORT_WIFI -> {
+                        if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) return true
+                    }
+
+                    TRANSPORT_ALL -> {
+                        return when {
+                            actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                            actNw.hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> true
+                            actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                            else -> false
+                        }
                     }
                 }
             } else {
                 val activeNetwork = connectivityManager.activeNetworkInfo ?: return false
                 if (activeNetwork.isConnectedOrConnecting) {
-                    if (isTypeMobile && activeNetwork.type == ConnectivityManager.TYPE_MOBILE) return true
-                    if (!isTypeMobile) {
-                        return when (activeNetwork.type) {
-                            ConnectivityManager.TYPE_WIFI -> true
-                            ConnectivityManager.TYPE_MOBILE -> true
-                            ConnectivityManager.TYPE_VPN -> true
-                            ConnectivityManager.TYPE_ETHERNET -> true
-                            else -> false
+                    when (typeTransport) {
+                        TRANSPORT_CELLULAR -> {
+                            if (activeNetwork.type == ConnectivityManager.TYPE_MOBILE) return true
+                        }
+
+                        TRANSPORT_WIFI -> {
+                            if (activeNetwork.type == ConnectivityManager.TYPE_WIFI) return true
+                        }
+
+                        TRANSPORT_ALL -> {
+                            return when (activeNetwork.type) {
+                                ConnectivityManager.TYPE_WIFI -> true
+                                ConnectivityManager.TYPE_MOBILE -> true
+                                ConnectivityManager.TYPE_VPN -> true
+                                ConnectivityManager.TYPE_ETHERNET -> true
+                                else -> false
+                            }
                         }
                     }
                 }

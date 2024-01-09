@@ -95,7 +95,7 @@ class DialogLogView : DialogFragment() {
                 if (dzenNoch) displayBinding.title.setBackgroundColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_black))
                 else displayBinding.title.setBackgroundColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary))
                 displayBinding.title.text = getString(R.string.log)
-                if (MainActivity.isNetworkAvailable() && !MainActivity.isNetworkAvailable(isTypeMobile = true)) {
+                if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI)) {
                     logJob = CoroutineScope(Dispatchers.Main).launch {
                         val localFile = File("${fragmentActivity.filesDir}/cache/cache.txt")
                         Malitounik.referens.child("/admin/log.txt").getFile(localFile)

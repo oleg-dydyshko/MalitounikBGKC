@@ -105,7 +105,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
                 binding.actionForward.animation = animation2
             }
         }
-        startLoadIconsJob(!MainActivity.isNetworkAvailable(true))
+        startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
     }
 
     private fun loadGallery() {
@@ -414,7 +414,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
             }
 
         }
-        if (!loadIcons && MainActivity.isNetworkAvailable(true)) {
+        if (!loadIcons && MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
             if (dirList.isNotEmpty()) {
                 val dialog = DialogOpisanieWIFI.getInstance(size.toFloat())
                 dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
@@ -527,7 +527,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
             return true
         }
         if (id == R.id.action_download_all) {
-            startLoadIconsJob(!MainActivity.isNetworkAvailable(true))
+            startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
             return true
         }
         if (id == R.id.action_dzen_noch) {

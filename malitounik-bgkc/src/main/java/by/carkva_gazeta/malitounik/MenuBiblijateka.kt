@@ -265,7 +265,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     fileName = title
                     loadComplete()
                 } else {
-                    if (MainActivity.isNetworkAvailable(true)) {
+                    if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
                         val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition)
                         bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
                     } else {

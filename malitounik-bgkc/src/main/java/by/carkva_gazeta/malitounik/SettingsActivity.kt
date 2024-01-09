@@ -87,7 +87,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         const val GET_FONT_SIZE_DEFAULT = 22F
         const val GET_FONT_SIZE_TOOLBAR = 18f
         const val GET_FONT_SIZE_MIN = 14F
-        const val GET_FONT_SIZE_MAX = 58F
         const val GET_CALIANDAR_YEAR_MIN = 2022
         const val GET_CALIANDAR_YEAR_MAX = 2025
         const val NOTIFICATION_CHANNEL_ID_SABYTIE = "3003"

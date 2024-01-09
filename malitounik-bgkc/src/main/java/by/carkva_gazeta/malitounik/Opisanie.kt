@@ -193,7 +193,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         binding.swipeRefreshLayout.setOnRefreshListener {
             arrayList.clear()
             viewSviaryiaIIcon()
-            startLoadIconsJob(!MainActivity.isNetworkAvailable(true))
+            startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
             binding.swipeRefreshLayout.isRefreshing = false
         }
         if (dzenNoch) {
@@ -204,7 +204,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         }
         viewSviaryiaIIcon()
-        if (savedInstanceState == null) startLoadIconsJob(!MainActivity.isNetworkAvailable(true))
+        if (savedInstanceState == null) startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
         setTollbarTheme()
     }
 
@@ -380,7 +380,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             }
 
         }
-        if (!loadIcons && MainActivity.isNetworkAvailable(true)) {
+        if (!loadIcons && MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
             if (dirList.isNotEmpty()) {
                 val dialog = DialogOpisanieWIFI.getInstance(size.toFloat())
                 dialog.show(supportFragmentManager, "dialogOpisanieWIFI")

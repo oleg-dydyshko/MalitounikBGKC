@@ -598,6 +598,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_20_09_pasviaccie_uzvyszennia_muczanika_astapa_viaczernia"] = R.raw.mm_20_09_pasviaccie_uzvyszennia_muczanika_astapa_viaczernia
             resursMap["viaczernia_svietly_tydzien"] = R.raw.viaczernia_svietly_tydzien
             resursMap["mm_06_01_bohazjauliennie_viaczernia_liturhija_asviaczennie_vady"] = R.raw.mm_06_01_bohazjauliennie_viaczernia_liturhija_asviaczennie_vady
+            resursMap["mm_06_01_bohazjauliennie_viaczernia"] = R.raw.mm_06_01_bohazjauliennie_viaczernia
+            resursMap[""] = R.raw.mm_11_01_pasviaccie_bohazjaulennia_teadosija_vialikaha_viaczernia
+            resursMap[""] = R.raw.mm_12_01_pasviaccie_bohazjaulennia_muczanicy_taciany_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -1568,8 +1571,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         binding.textView.layout?.let { layout ->
-                            var strPosition = text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
-                            if (resurs == "lit_jana_zalatavusnaha") strPosition = text.indexOf("Адзінародны Сыне", strPosition + 16, true)
+                            val strPosition = text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
                             val line = layout.getLineForOffset(strPosition)
                             val y = layout.getLineTop(line)
                             val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
@@ -1577,6 +1579,80 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         }
                     }
                 }, bst2, bst2 + strLigBS2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
+        if (resurs == "lit_jana_zalatavusnaha") {
+            val stringBS2 = "«Адзінародны Сыне» (↓ гл. тут)"
+            val strLigBS2 = stringBS2.length
+            val bst2 = text.indexOf(stringBS2)
+            if (bst2 != -1) {
+                //text.setSpan(ImageSpan(this@Bogashlugbovya, by.carkva_gazeta.malitounik.R.drawable.maria), bst2 + 21, bst2 + 22, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        binding.textView.layout?.let { layout ->
+                            val strPosition = text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
+                            val line = layout.getLineForOffset(strPosition)
+                            val y = layout.getLineTop(line)
+                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            anim.setDuration(1500).start()
+                        }
+                    }
+                }, bst2, bst2 + strLigBS2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            var stringBS = "«Блаславі, душа мая, Госпада...»"
+            var strLigBS = stringBS.length
+            var bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia = DialogLiturgia.getInstance(1)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            stringBS = "«Добра ёсьць славіць Госпада...»"
+            strLigBS = stringBS.length
+            bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia = DialogLiturgia.getInstance(2)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            stringBS = "«Хвалі, душа мая, Госпада...»"
+            strLigBS = stringBS.length
+            bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia = DialogLiturgia.getInstance(3)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            stringBS = "«Госпад пануе, Ён апрануўся ў красу...»"
+            strLigBS = stringBS.length
+            bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia = DialogLiturgia.getInstance(4)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            stringBS = "«У валадарстве Тваім успомні нас, Госпадзе...»"
+            strLigBS = stringBS.length
+            bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia = DialogLiturgia.getInstance(5)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
         string = "Малітвы пасьля сьвятога прычасьця"

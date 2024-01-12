@@ -244,6 +244,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(329, "Пасьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы, сьвятой вялікамучаніцы Кацярыны і сьвятога мучаніка Мяркура", "mm_24_11_pasviaccie_uvodzinau_baharodzicy_vialikamuczanicy_kaciaryny_vialikamuczanika_miarkura_miarkura_smalenskaha_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(329, "Пасьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы, сьвятой вялікамучаніцы Кацярыны і сьвятога мучаніка Мяркура", "mm_24_11_pasviaccie_uvodzinau_baharodzicy_vialikamuczanicy_kaciaryny_vialikamuczanika_miarkura_miarkura_smalenskaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "mm_06_01_bohazjaulennie_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "mm_06_01_bohazjauliennie_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "mm_05_01_sv_vieczar_bohazjaulennia_vial_hadziny", VIALHADZINY))
         datMinALL.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "mm_05_01_sv_vieczar_bohazjaulennia_abiednica", ABIEDNICA))
         datMinALL.add(SlugbovyiaTextuData(341, "Між сьвятымі айца нашага Міколы Цудатворца, архібіскупа Мірлікійскага", "mm_06_12_mikoly_cudatvorcy_jutran", JUTRAN))
@@ -378,6 +379,8 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(292, "Сьвятога апостала і евангеліста Лукі", "mm_18_10_apostala_luki_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(264, "Пасьвяцьце Ўзвышэньня і сьвятога мучаніка Астапа, жонкі яго Тэапістыі і сыноў іхніх Агапа і Тэапіста", "mm_20_09_pasviaccie_uzvyszennia_muczanika_astapa_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "mm_06_01_bohazjauliennie_viaczernia_liturhija_asviaczennie_vady", VIACZERNIA_Z_LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(11, "Пасьвяцьце Богазьяўленьня. Пачэснага Тэадосія Вялікага", "mm_11_01_pasviaccie_bohazjaulennia_teadosija_vialikaha_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(12, "Пасьвяцьце Богазьяўленьня. Мучаніцы Тацяны", "mm_12_01_pasviaccie_bohazjaulennia_muczanicy_taciany_viaczernia", VIACZERNIA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

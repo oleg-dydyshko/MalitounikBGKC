@@ -599,8 +599,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["viaczernia_svietly_tydzien"] = R.raw.viaczernia_svietly_tydzien
             resursMap["mm_06_01_bohazjauliennie_viaczernia_liturhija_asviaczennie_vady"] = R.raw.mm_06_01_bohazjauliennie_viaczernia_liturhija_asviaczennie_vady
             resursMap["mm_06_01_bohazjauliennie_viaczernia"] = R.raw.mm_06_01_bohazjauliennie_viaczernia
-            resursMap[""] = R.raw.mm_11_01_pasviaccie_bohazjaulennia_teadosija_vialikaha_viaczernia
-            resursMap[""] = R.raw.mm_12_01_pasviaccie_bohazjaulennia_muczanicy_taciany_viaczernia
+            resursMap["mm_11_01_pasviaccie_bohazjaulennia_teadosija_vialikaha_viaczernia"] = R.raw.mm_11_01_pasviaccie_bohazjaulennia_teadosija_vialikaha_viaczernia
+            resursMap["mm_12_01_pasviaccie_bohazjaulennia_muczanicy_taciany_viaczernia"] = R.raw.mm_12_01_pasviaccie_bohazjaulennia_muczanicy_taciany_viaczernia
+            resursMap["mm_13_01_pasviaccie_bohazjaulennia_mucz_jarmila_stratonika_viaczernia"] = R.raw.mm_13_01_pasviaccie_bohazjaulennia_mucz_jarmila_stratonika_viaczernia
+            resursMap["mm_14_01_addannie_bohazjaulennia_ajcou_u_sinai_raicie_liturhija"] = R.raw.mm_14_01_addannie_bohazjaulennia_ajcou_u_sinai_raicie_liturhija
+            resursMap["mm_14_01_addannie_bohazjaulennia_ajcou_u_sinai_raicie_viaczernia"] = R.raw.mm_14_01_addannie_bohazjaulennia_ajcou_u_sinai_raicie_viaczernia
+            resursMap["mm_17_01_paczesnaha_antona_vialikaha_liturhija"] = R.raw.mm_17_01_paczesnaha_antona_vialikaha_liturhija
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -664,38 +668,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             return false
         }
     }
-
-    /*private fun checkResourcesCount() {
-        var count = 0
-        for (i in 0 until resursMap.size) {
-            for (e in 0 until resursMap.size) {
-                if (resursMap.keyAt(i) == resursMap.keyAt(e)) {
-                    count++
-                }
-            }
-            if (count > 1) {
-                Log.d("Oleg", "name: ${resursMap.keyAt(i)}")
-            }
-            count = 0
-        }
-    }
-
-    private fun checkResources() {
-        val fields = R.raw::class.java.fields
-        for (element in fields) {
-            val name = element.name
-            var test = true
-            for (e in 0 until resursMap.size) {
-                if (name == resursMap.keyAt(e)) {
-                    test = false
-                    break
-                }
-            }
-            if (test) {
-                Log.d("Oleg", "name: $name")
-            }
-        }
-    }*/
 
     private fun findAllAsanc(noNext: Boolean = true) {
         CoroutineScope(Dispatchers.Main).launch {
@@ -875,8 +847,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding = BogasluzbovyaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
-        //checkResources()
-        //checkResourcesCount()
         resurs = intent.extras?.getString("resurs") ?: ""
         title = intent.extras?.getString("title") ?: ""
         spid = k.getInt("autoscrollSpid", 60)

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_up_date"
+        android:icon="@drawable/update"
+        android:orderInCategory="100"
+        android:title="@string/admin_update_log"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_sent_log"
+        android:icon="@drawable/scroll_icon_up"
+        android:orderInCategory="100"
+        android:title="@string/setd_log_file"
+        app:showAsAction="always" />
+</menu>

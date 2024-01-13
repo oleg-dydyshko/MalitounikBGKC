@@ -200,7 +200,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.czytanne)
+        binding.titleToolbar.text = getText(by.carkva_gazeta.malitounik.R.string.czytanne)
         if (dzenNoch) {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }

@@ -9,13 +9,10 @@ import android.content.SharedPreferences
 import android.database.Cursor
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.hardware.SensorEvent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.IBinder
 import android.os.SystemClock
 import android.provider.MediaStore
@@ -40,7 +37,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.text.toSpannable
@@ -66,21 +62,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
 import java.io.BufferedReader
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.FileReader
 import java.io.InputStreamReader
 import java.util.Calendar
 import java.util.Random
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
 
 
-class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, DialogLogView.DialogLogViewListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener, MenuBiblijateka.MunuBiblijatekaListener {
+class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener, MenuBiblijateka.MunuBiblijatekaListener {
 
     private val c = Calendar.getInstance()
     private lateinit var k: SharedPreferences
@@ -92,7 +82,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private var backPressed: Long = 0
     private val dzenNoch get() = getBaseDzenNoch()
     private var tolbarTitle = ""
-    private var isLogVisable = false
     private var mLastClickTime: Long = 0
     private var resetTollbarJob: Job? = null
     private var logJob: Job? = null
@@ -187,108 +176,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         super.onPause()
         logJob?.cancel()
         versionCodeJob?.cancel()
-    }
-
-    override fun createAndSentFile(log: ArrayList<String>, fileList: String) {
-        bindingappbar.progressBar.visibility = View.VISIBLE
-        val zip = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "MalitounikResource.zip")
-        if (log.isNotEmpty() && isNetworkAvailable()) {
-            logJob = CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    val out = ZipOutputStream(BufferedOutputStream(FileOutputStream(zip)))
-                    val localFile = File("$filesDir/cache/cache.txt")
-                    val logFile = File("$filesDir/cache/log.txt")
-                    val strB = StringBuilder()
-                    val buffer = ByteArray(1024)
-                    for (index in 0 until log.size) {
-                        val file = log[index]
-                        var filePath = file.replace("//", "/")
-                        val t1 = filePath.indexOf("(")
-                        if (t1 != -1) filePath = filePath.substring(0, t1)
-                        var error = false
-                        try {
-                            Malitounik.referens.child(filePath).getFile(localFile).addOnFailureListener {
-                                toastView(this@MainActivity, getString(R.string.error))
-                                error = true
-                            }.await()
-                        } catch (_: Throwable) {
-                            error = true
-                        }
-                        if (error) continue
-                        val fi = FileInputStream(localFile)
-                        val origin = BufferedInputStream(fi)
-                        try {
-                            val entry = ZipEntry(file.substring(file.lastIndexOf("/")))
-                            out.putNextEntry(entry)
-                            while (true) {
-                                val len = fi.read(buffer)
-                                if (len <= 0) break
-                                out.write(buffer, 0, len)
-                            }
-                            //origin.copyTo(out, 1024)
-                        } catch (e: Throwable) {
-                            e.printStackTrace()
-                        } finally {
-                            origin.close()
-                        }
-                        strB.append(file)
-                        strB.append("\n")
-                    }
-                    logFile.writer().use {
-                        it.write(strB.toString())
-                    }
-                    val fi = FileInputStream(logFile)
-                    val origin = BufferedInputStream(fi)
-                    try {
-                        val entry = ZipEntry("log.txt")
-                        out.putNextEntry(entry)
-                        while (true) {
-                            val len = fi.read(buffer)
-                            if (len <= 0) break
-                            out.write(buffer, 0, len)
-                        }
-                        //origin.copyTo(out, 1024)
-                    } catch (e: Throwable) {
-                        e.printStackTrace()
-                    } finally {
-                        origin.close()
-                    }
-                    out.closeEntry()
-                    out.close()
-                }
-                clearLogFile(zip, fileList)
-            }
-        } else {
-            clearLogFile(zip, fileList)
-        }
-    }
-
-    private fun clearLogFile(zip: File, fileList: String) {
-        val sendIntent = Intent(Intent.ACTION_SEND)
-        sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@MainActivity, "by.carkva_gazeta.malitounik.fileprovider", zip))
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
-        sendIntent.type = "application/zip"
-        startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
-        if (isNetworkAvailable() && fileList.isNotEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val logFile = File("$filesDir/cache/log.txt")
-                logFile.writer().use {
-                    it.write("")
-                }
-                val localFile = File("$filesDir/cache/cache.txt")
-                localFile.writer().use {
-                    it.write(fileList)
-                }
-                Malitounik.referens.child("/admin/log.txt").putFile(Uri.fromFile(logFile)).await()
-                Malitounik.referens.child("/admin/adminListFile.txt").putFile(Uri.fromFile(localFile)).await()
-            }
-        }
-        bindingappbar.progressBar.visibility = View.GONE
-        isLogVisable = false
-    }
-
-    override fun dialogLogViewClose() {
-        isLogVisable = false
     }
 
     override fun setDataCalendar(dayOfYear: Int, year: Int) {
@@ -438,16 +325,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         textView.setCompoundDrawables(leftDrawable, null, null, null)
     }
 
-    override fun onSensorChanged(event: SensorEvent?) {
-        if (!isLogVisable) super.onSensorChanged(event)/*event?.let { sensorEvent ->
+    /*override fun onSensorChanged(event: SensorEvent?) {
+        event?.let { sensorEvent ->
             bindingappbar.titleToolbar.text = sensorEvent.values[0].toString()
-        }*/
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean("isLogVisable", isLogVisable)
-    }
+        }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -461,7 +343,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             //host.deleteAppWidgetId(it)
             Log.d("Oleg", it.toString())
         }*/
-        isLogVisable = savedInstanceState?.getBoolean("isLogVisable", false) ?: false
         mkDir()
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain
@@ -1085,10 +966,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             return true
         }
         if (id == R.id.action_log) {
-            isLogVisable = true
-            val dialog = DialogLogView()
-            dialog.isCancelable = false
-            dialog.show(supportFragmentManager, "DialogLogView")
+            if (checkmoduleResources()) {
+                val intent = Intent()
+                intent.setClassName(this, LOGVIEW)
+                startActivity(intent)
+            }
         }
         if (id == R.id.action_update) {
             val appUpdateManager = AppUpdateManagerFactory.create(this)
@@ -2106,6 +1988,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val STARYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.StaryZapavietSinaidal"
         const val BIBLIAVYBRANOE = "by.carkva_gazeta.resources.BibliaVybranoe"
         const val SEARCHBOGASHLUGBOVYA = "by.carkva_gazeta.resources.SearchBogashlugbovya"
+        const val LOGVIEW = "by.carkva_gazeta.resources.LogView"
         const val NIADAUNIA = 0
         const val GISTORYIACARKVY = 1
         const val MALITOUNIKI = 2

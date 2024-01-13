@@ -381,6 +381,10 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "mm_06_01_bohazjauliennie_viaczernia_liturhija_asviaczennie_vady", VIACZERNIA_Z_LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(11, "Пасьвяцьце Богазьяўленьня. Пачэснага Тэадосія Вялікага", "mm_11_01_pasviaccie_bohazjaulennia_teadosija_vialikaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(12, "Пасьвяцьце Богазьяўленьня. Мучаніцы Тацяны", "mm_12_01_pasviaccie_bohazjaulennia_muczanicy_taciany_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(13, "Пасьвяцьце Богазьяўленьня. Мучанікаў Ярміла і Стратоніка", "mm_13_01_pasviaccie_bohazjaulennia_mucz_jarmila_stratonika_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(14, "Адданьне сьвята Богазьяўленьня. Пачэсных айцоў, у Сінаі і Раіце забітых", "mm_14_01_addannie_bohazjaulennia_ajcou_u_sinai_raicie_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(14, "Адданьне сьвята Богазьяўленьня. Пачэсных айцоў, у Сінаі і Раіце забітых", "mm_14_01_addannie_bohazjaulennia_ajcou_u_sinai_raicie_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(17, "Пачэснага Антона Вялікага", "mm_17_01_paczesnaha_antona_vialikaha_liturhija", LITURHIJA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

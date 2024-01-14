@@ -598,7 +598,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             resursMap["mm_20_09_pasviaccie_uzvyszennia_muczanika_astapa_viaczernia"] = R.raw.mm_20_09_pasviaccie_uzvyszennia_muczanika_astapa_viaczernia
             resursMap["viaczernia_svietly_tydzien"] = R.raw.viaczernia_svietly_tydzien
             resursMap["mm_06_01_bohazjauliennie_viaczernia_liturhija_asviaczennie_vady"] = R.raw.mm_06_01_bohazjauliennie_viaczernia_liturhija_asviaczennie_vady
-            resursMap["mm_06_01_bohazjauliennie_viaczernia"] = R.raw.mm_06_01_bohazjauliennie_viaczernia
             resursMap["mm_11_01_pasviaccie_bohazjaulennia_teadosija_vialikaha_viaczernia"] = R.raw.mm_11_01_pasviaccie_bohazjaulennia_teadosija_vialikaha_viaczernia
             resursMap["mm_12_01_pasviaccie_bohazjaulennia_muczanicy_taciany_viaczernia"] = R.raw.mm_12_01_pasviaccie_bohazjaulennia_muczanicy_taciany_viaczernia
             resursMap["mm_13_01_pasviaccie_bohazjaulennia_mucz_jarmila_stratonika_viaczernia"] = R.raw.mm_13_01_pasviaccie_bohazjaulennia_mucz_jarmila_stratonika_viaczernia

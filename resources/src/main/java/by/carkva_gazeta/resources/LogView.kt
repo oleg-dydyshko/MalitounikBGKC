@@ -88,13 +88,10 @@ class LogView : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = LogBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI)) {
-            upDate()
-        } else {
-            binding.textView.text = getString(by.carkva_gazeta.malitounik.R.string.admin_upload_no_wi_fi)
+        upDate()
+        if (dzenNoch) {
+            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
         }
-        if (dzenNoch) binding.textView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
-        else binding.textView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
         setTollbarTheme()
     }
 
@@ -114,32 +111,55 @@ class LogView : BaseActivity() {
         }
     }
 
+    private fun noCheckResources(name: String): Boolean {
+        val list = ArrayList<String>()
+        list.add("bogashlugbovya_error")
+        list.add("carniauski")
+        list.add("nadsan")
+        list.add("prichasnik")
+        list.add("sinaidaln")
+        list.add("sinaidals")
+        list.add("viaczernia_bierascie_")
+        list.add("biblian")
+        list.add("biblias")
+        list.add("bogashlugbovya1_")
+        for (i in 0 until list.size) {
+            if (name.contains(list[i])) {
+                return true
+            }
+        }
+        return false
+    }
+
     private fun checkResources() {
         val fields = R.raw::class.java.fields
         val fields2 = by.carkva_gazeta.malitounik.R.raw::class.java.fields
         for (element in fields) {
             val name = element.name
-            if (!sb.toString().contains(name)) {
-                checkSB.append("firebase: няма resources.R.raw.$name}\n")
+            if (!sb.toString().contains(name) && !noCheckResources(name)) {
+                checkSB.append("firebase: няма resources.R.raw.$name\n")
             }
         }
         for (element in fields2) {
             val name = element.name
-            if (!sb.toString().contains(name)) {
-                checkSB.append("firebase: няма malitounik.R.raw.$name}\n")
+            if (!sb.toString().contains(name) && (name.contains("pesny_") || name.contains("piesni_"))) {
+                checkSB.append("firebase: няма malitounik.R.raw.$name\n")
             }
         }
         for (element in fields) {
             val name = element.name
             var test = true
             for (e in 0 until Bogashlugbovya.resursMap.size) {
+                if (noCheckResources(name)) {
+                    test = false
+                }
                 if (name == Bogashlugbovya.resursMap.keyAt(e)) {
                     test = false
                     break
                 }
             }
             if (test) {
-                checkSB.append("resources.R.raw: няма $name}\n")
+                checkSB.append("resources.R.raw: няма $name\n")
             }
         }
         for (element in fields2) {
@@ -151,34 +171,38 @@ class LogView : BaseActivity() {
                     break
                 }
             }
-            if (test) {
-                checkSB.append("malitounik.R.raw няма $name}\n")
+            if (test && (name.contains("pesny_") || name.contains("piesni_"))) {
+                checkSB.append("malitounik.R.raw няма $name\n")
             }
         }
         binding.textView2.text = checkSB.toString()
     }
 
     private fun upDate() {
-        logJob?.cancel()
-        logJob = CoroutineScope(Dispatchers.Main).launch {
-            val localFile = File("$filesDir/cache/cache.txt")
-            Malitounik.referens.child("/admin/log.txt").getFile(localFile)
-            val log = localFile.readText()
-            if (log != "") {
-                getLogFile()
-            } else {
-                binding.textView.text = getString(by.carkva_gazeta.malitounik.R.string.admin_upload_log_contine)
-                if (dzenNoch) binding.textView.background = ContextCompat.getDrawable(this@LogView, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                else binding.textView.background = ContextCompat.getDrawable(this@LogView, by.carkva_gazeta.malitounik.R.drawable.selector_default)
-                binding.textView.setOnClickListener {
-                    binding.textView.setOnClickListener(null)
-                    binding.textView.background = null
-                    logJob?.cancel()
-                    logJob = CoroutineScope(Dispatchers.Main).launch {
-                        getLogFile()
+        if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI)) {
+            logJob?.cancel()
+            logJob = CoroutineScope(Dispatchers.Main).launch {
+                val localFile = File("$filesDir/cache/cache.txt")
+                Malitounik.referens.child("/admin/log.txt").getFile(localFile)
+                val log = localFile.readText()
+                if (log != "") {
+                    getLogFile()
+                } else {
+                    binding.textView.text = getString(by.carkva_gazeta.malitounik.R.string.admin_upload_log_contine)
+                    if (dzenNoch) binding.textView.background = ContextCompat.getDrawable(this@LogView, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                    else binding.textView.background = ContextCompat.getDrawable(this@LogView, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+                    binding.textView.setOnClickListener {
+                        binding.textView.setOnClickListener(null)
+                        binding.textView.background = null
+                        logJob?.cancel()
+                        logJob = CoroutineScope(Dispatchers.Main).launch {
+                            getLogFile()
+                        }
                     }
                 }
             }
+        } else {
+            binding.textView.text = getString(by.carkva_gazeta.malitounik.R.string.admin_upload_no_wi_fi)
         }
     }
 
@@ -371,11 +395,15 @@ class LogView : BaseActivity() {
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_up_date) {
-            upDate()
+            if (logJob?.isActive != true) {
+                upDate()
+            }
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_sent_log) {
-            createAndSentFile()
+            if (logJob?.isActive != true) {
+                createAndSentFile()
+            }
             return true
         }
         return false

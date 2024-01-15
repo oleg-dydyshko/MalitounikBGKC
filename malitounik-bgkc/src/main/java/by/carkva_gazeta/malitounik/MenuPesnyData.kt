@@ -137,7 +137,7 @@ class MenuPesnyData {
         pesnyPrasl.add(Data("pesny_prasl_73", "Аднаві маю надзею"))
         pesnyPrasl.add(Data("pesny_prasl_74", "Праслаўляйце Пана Бога"))
         pesnyPrasl.add(Data("pesny_prasl_75", "Радуйся і слаў Яго"))
-        pesnyPrasl.add(Data("pesny_piesni_prasl_aliluja", "Алілуя"))
+        pesnyPrasl.add(Data("piesni_prasl_aliluja", "Алілуя"))
 
         pesnyTaize.add(Data("pesny_taize_0", "Magnifikat"))
         pesnyTaize.add(Data("pesny_taize_1", "Ostende nobis"))

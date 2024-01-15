@@ -60,6 +60,9 @@ class MenuPesnyData {
         pesnyKal.add(Data("pesny_kal_21", "Прыйдзі, прыйдзі, Эмануэль (XII–ХVIII стст.)"))
         pesnyKal.add(Data("piesni_kalady_pierszaje_rastvo", "Першае Раство"))
         pesnyKal.add(Data("piesni_kalady_zorka_betlejemska", "Зорка Бэтлеемска"))
+        pesnyKal.add(Data("piesni_kalady_piesnia_pra_bozaje_naradzennie_boh_prychodzic", "Песьня пра Божае нараджэньне"))
+        pesnyKal.add(Data("piesni_kalady_promien_zorki_z_nieba_liusia", "Промень зоркі з неба ліўся"))
+        pesnyKal.add(Data("piesni_kalady_u_betlejem", "У Бэтлеем"))
 
         pesnyPrasl.add(Data("pesny_prasl_0", "Ён паўсюль"))
         pesnyPrasl.add(Data("pesny_prasl_1", "Ісус вызваліў мяне"))

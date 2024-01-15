@@ -17,7 +17,6 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
-import by.carkva_gazeta.malitounik.PesnyAll
 import by.carkva_gazeta.resources.databinding.LogBinding
 import com.google.firebase.storage.ListResult
 import kotlinx.coroutines.CoroutineScope
@@ -144,35 +143,6 @@ class LogView : BaseActivity() {
             val name = element.name
             if (!sb.toString().contains(name) && (name.contains("pesny_") || name.contains("piesni_"))) {
                 checkSB.append("firebase: няма malitounik.R.raw.$name\n")
-            }
-        }
-        for (element in fields) {
-            val name = element.name
-            var test = true
-            for (e in 0 until Bogashlugbovya.resursMap.size) {
-                if (noCheckResources(name)) {
-                    test = false
-                }
-                if (name == Bogashlugbovya.resursMap.keyAt(e)) {
-                    test = false
-                    break
-                }
-            }
-            if (test) {
-                checkSB.append("resources.R.raw: няма $name\n")
-            }
-        }
-        for (element in fields2) {
-            val name = element.name
-            var test = true
-            for (e in 0 until PesnyAll.resursMap.size) {
-                if (name == PesnyAll.resursMap.keyAt(e)) {
-                    test = false
-                    break
-                }
-            }
-            if (test && (name.contains("pesny_") || name.contains("piesni_"))) {
-                checkSB.append("malitounik.R.raw няма $name\n")
             }
         }
         binding.textView2.text = checkSB.toString()

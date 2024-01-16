@@ -140,42 +140,42 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             if (!isSearch) dataSearch.add(MenuListData(r1[24], "1"))
             return dataSearch
         }
-    }
 
-    private fun getTextBogaslugbovyiaFolderList(): ArrayList<MenuListData> {
-        val dataSearch = ArrayList<MenuListData>()
-        dataSearch.add(MenuListData("МАЛІТВЫ ПАСЬЛЯ СЬВЯТОГА ПРЫЧАСЬЦЯ", "1"))
-        dataSearch.add(MenuListData("ВЯЧЭРНЯ", "2"))
-        dataSearch.add(MenuListData("ТРАПАРЫ І КАНДАКІ НЯДЗЕЛЬНЫЯ ВАСЬМІ ТОНАЎ", "3"))
-        dataSearch.add(MenuListData("МІНЭЯ МЕСЯЧНАЯ", "4"))
-        dataSearch.add(MenuListData("ТРЫЁДЗЬ", "5"))
-        dataSearch.add(MenuListData("МІНЭЯ АГУЛЬНАЯ", "6"))
-        dataSearch.add(MenuListData("АКТОІХ", "7"))
-        dataSearch.sort()
-        return dataSearch
-    }
+        fun getTextBogaslugbovyiaList(isSearch: Boolean = false): ArrayList<MenuListData> {
+            var opisanie = ""
+            if (isSearch) opisanie = "\nБогаслужбовыя тэксты"
+            val dataSearch = ArrayList<MenuListData>()
+            dataSearch.add(MenuListData("Боская Літургія сьв. Яна Залатавуснага$opisanie", "lit_jana_zalatavusnaha"))
+            dataSearch.add(MenuListData("Боская Літургія ў Велікодны перыяд$opisanie", "lit_jan_zalat_vielikodn"))
+            dataSearch.add(MenuListData("Боская Літургія сьв. Васіля Вялікага$opisanie", "lit_vasila_vialikaha"))
+            dataSearch.add(MenuListData("Літургія раней асьвячаных дароў$opisanie", "lit_raniej_asviaczanych_darou"))
+            dataSearch.add(MenuListData("Набажэнства ў гонар Маці Божай Нястомнай Дапамогі$opisanie", "nabazenstva_maci_bozaj_niast_dap"))
+            dataSearch.add(MenuListData("Ютрань нядзельная (у скароце)$opisanie", "jutran_niadzelnaja"))
+            dataSearch.add(MenuListData("Абедніца$opisanie", "abiednica"))
+            dataSearch.add(MenuListData("Служба за памерлых — Малая паніхіда$opisanie", "panichida_malaja"))
+            dataSearch.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы$opisanie", "kanon_malebny_baharodzicy"))
+            dataSearch.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага$opisanie", "kanon_andreja_kryckaha"))
+            dataSearch.add(MenuListData("Малебен сьв. Кірылу і Мятоду, настаўнікам славянскім$opisanie", "malebien_kiryla_miatod"))
+            dataSearch.add(MenuListData("Служба за памерлых на кожны дзень тыдня$opisanie", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
+            dataSearch.add(MenuListData("Служба Найсьвяцейшай Багародзіцы$opisanie", "sluzba_najsviaciejszaj_baharodzicy"))
+            dataSearch.add(MenuListData("Служба аб вызваленьні бязьвінна зьняволеных$opisanie", "sluzba_vyzvalen_biazvinna_zniavolenych"))
+            dataSearch.add(MenuListData("Павячэрніца малая$opisanie", "paviaczernica_malaja"))
+            dataSearch.sort()
+            return dataSearch
+        }
 
-    private fun getTextBogaslugbovyiaList(isSearch: Boolean = false): ArrayList<MenuListData> {
-        var opisanie = ""
-        if (isSearch) opisanie = "\nБогаслужбовыя тэксты"
-        val dataSearch = ArrayList<MenuListData>()
-        dataSearch.add(MenuListData("Боская Літургія сьв. Яна Залатавуснага$opisanie", "lit_jana_zalatavusnaha"))
-        dataSearch.add(MenuListData("Боская Літургія ў Велікодны перыяд$opisanie", "lit_jan_zalat_vielikodn"))
-        dataSearch.add(MenuListData("Боская Літургія сьв. Васіля Вялікага$opisanie", "lit_vasila_vialikaha"))
-        dataSearch.add(MenuListData("Літургія раней асьвячаных дароў$opisanie", "lit_raniej_asviaczanych_darou"))
-        dataSearch.add(MenuListData("Набажэнства ў гонар Маці Божай Нястомнай Дапамогі$opisanie", "nabazenstva_maci_bozaj_niast_dap"))
-        dataSearch.add(MenuListData("Ютрань нядзельная (у скароце)$opisanie", "jutran_niadzelnaja"))
-        dataSearch.add(MenuListData("Абедніца$opisanie", "abiednica"))
-        dataSearch.add(MenuListData("Служба за памерлых — Малая паніхіда$opisanie", "panichida_malaja"))
-        dataSearch.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы$opisanie", "kanon_malebny_baharodzicy"))
-        dataSearch.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага$opisanie", "kanon_andreja_kryckaha"))
-        dataSearch.add(MenuListData("Малебен сьв. Кірылу і Мятоду, настаўнікам славянскім$opisanie", "malebien_kiryla_miatod"))
-        dataSearch.add(MenuListData("Служба за памерлых на кожны дзень тыдня$opisanie", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
-        dataSearch.add(MenuListData("Служба Найсьвяцейшай Багародзіцы$opisanie", "sluzba_najsviaciejszaj_baharodzicy"))
-        dataSearch.add(MenuListData("Служба аб вызваленьні бязьвінна зьняволеных$opisanie", "sluzba_vyzvalen_biazvinna_zniavolenych"))
-        dataSearch.add(MenuListData("Павячэрніца малая$opisanie", "paviaczernica_malaja"))
-        dataSearch.sort()
-        return dataSearch
+        private fun getTextBogaslugbovyiaFolderList(): ArrayList<MenuListData> {
+            val dataSearch = ArrayList<MenuListData>()
+            dataSearch.add(MenuListData("МАЛІТВЫ ПАСЬЛЯ СЬВЯТОГА ПРЫЧАСЬЦЯ", "1"))
+            dataSearch.add(MenuListData("ВЯЧЭРНЯ", "2"))
+            dataSearch.add(MenuListData("ТРАПАРЫ І КАНДАКІ НЯДЗЕЛЬНЫЯ ВАСЬМІ ТОНАЎ", "3"))
+            dataSearch.add(MenuListData("МІНЭЯ МЕСЯЧНАЯ", "4"))
+            dataSearch.add(MenuListData("ТРЫЁДЗЬ", "5"))
+            dataSearch.add(MenuListData("МІНЭЯ АГУЛЬНАЯ", "6"))
+            dataSearch.add(MenuListData("АКТОІХ", "7"))
+            dataSearch.sort()
+            return dataSearch
+        }
     }
 
     override fun onDestroyView() {

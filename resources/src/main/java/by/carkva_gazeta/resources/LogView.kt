@@ -145,8 +145,121 @@ class LogView : BaseActivity() {
                 checkSB.append("firebase: няма malitounik.R.raw.$name\n")
             }
         }
+        /*val data = MenuPesnyData().getPesnyAll()
+        for (i in 0 until PesnyAll.resursMap.size) {
+            var testR = false
+            for (e in 0 until data.size) {
+                if (data[e].resurs.contains("pesny_") || data[e].resurs.contains("piesni_")) {
+                    if (data[e].resurs == PesnyAll.resursMap.keyAt(i)) {
+                        testR = true
+                        break
+                    }
+                } else testR = true
+            }
+            if (!testR) {
+                checkSB.append("У MenuPesnyData няма malitounik.R.raw.${PesnyAll.resursMap.keyAt(i)}\n")
+            }
+        }
+        for (i in 0 until data.size) {
+            var testR = false
+            for (e in 0 until PesnyAll.resursMap.size) {
+                if (data[i].resurs.contains("pesny_") || data[i].resurs.contains("piesni_")) {
+                    if (data[i].resurs == PesnyAll.resursMap.keyAt(e)) {
+                        testR = true
+                        break
+                    }
+                } else testR = true
+            }
+            if (!testR) {
+                checkSB.append("У malitounik.R.raw няма MenuPesnyData -> ${data[i].resurs}\n")
+            }
+        }
+        val data2 = searchText()
+        for (i in 0 until Bogashlugbovya.resursMap.size) {
+            if (!(Bogashlugbovya.resursMap.keyAt(i).contains("pesny_") || Bogashlugbovya.resursMap.keyAt(i).contains("piesni_"))) {
+                var testR = false
+                for (e in 0 until data2.size) {
+                    if (data2[e].resurs == Bogashlugbovya.resursMap.keyAt(i) && !noCheckResources(data2[e].resurs)) {
+                        testR = true
+                        break
+                    }
+                }
+                if (!testR) {
+                    checkSB.append("У MenuBogashlugbovya няма resources.R.raw.${Bogashlugbovya.resursMap.keyAt(i)}\n")
+                }
+            }
+        }
+        for (i in 0 until data2.size) {
+            if (!(Bogashlugbovya.resursMap.keyAt(i).contains("pesny_") || Bogashlugbovya.resursMap.keyAt(i).contains("piesni_"))) {
+                var testR = false
+                for (e in 0 until Bogashlugbovya.resursMap.size) {
+                    if (data2[i].resurs == Bogashlugbovya.resursMap.keyAt(e) && !noCheckResources(data2[i].resurs)) {
+                        testR = true
+                        break
+                    }
+                }
+                if (!testR) {
+                    checkSB.append("У resources.R.raw няма MenuBogashlugbovya -> ${data2[i].resurs}\n")
+                }
+            }
+        }*/
         binding.textView2.text = checkSB.toString()
     }
+
+    /*private fun searchText(): ArrayList<MenuListData> {
+        val dataSearch = ArrayList<MenuListData>()
+        dataSearch.addAll(MenuBogashlugbovya.getTextBogaslugbovyiaList(true))
+        dataSearch.addAll(MenuBogashlugbovya.getTextPasliaPrychascia(true))
+        dataSearch.addAll(MenuBogashlugbovya.getTextSubBogaslugbovuiaVichernia(true))
+        dataSearch.addAll(MenuBogashlugbovya.getTextAktoixList(true))
+        dataSearch.addAll(MenuBogashlugbovya.getTextViacherniaList(true))
+        dataSearch.addAll(MenuBogashlugbovya.getTextTonNaKoznyDzenList(true))
+        for (i in 1..8) {
+            dataSearch.add(MenuListData(getString(by.carkva_gazeta.malitounik.R.string.ton, i.toString()), "ton$i"))
+        }
+        val sluzba = SlugbovyiaTextu()
+        var mesiach = sluzba.getMineiaMesiachnaia()
+        for (i in mesiach.indices) {
+            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba), mesiach[i].resource))
+        }
+        mesiach = sluzba.getVilikiTydzen()
+        for (i in mesiach.indices) {
+            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba), mesiach[i].resource))
+        }
+        mesiach = sluzba.getSvetlyTydzen()
+        for (i in mesiach.indices) {
+            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba), mesiach[i].resource))
+        }
+        mesiach = sluzba.getMineiaSviatochnaia()
+        for (i in mesiach.indices) {
+            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba), mesiach[i].resource))
+        }
+        mesiach = sluzba.getTydzen1()
+        for (i in mesiach.indices) {
+            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba), mesiach[i].resource))
+        }
+        mesiach = sluzba.getTydzen2()
+        for (i in mesiach.indices) {
+            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba), mesiach[i].resource))
+        }
+        mesiach = sluzba.getTydzen3()
+        for (i in mesiach.indices) {
+            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba), mesiach[i].resource))
+        }
+        mesiach = sluzba.getTydzen4()
+        for (i in mesiach.indices) {
+            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba), mesiach[i].resource))
+        }
+        mesiach = sluzba.getTydzen5()
+        for (i in mesiach.indices) {
+            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba), mesiach[i].resource))
+        }
+        mesiach = sluzba.getTydzen6()
+        for (i in mesiach.indices) {
+            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba), mesiach[i].resource))
+        }
+        return dataSearch
+    }*/
 
     private fun upDate() {
         if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI)) {

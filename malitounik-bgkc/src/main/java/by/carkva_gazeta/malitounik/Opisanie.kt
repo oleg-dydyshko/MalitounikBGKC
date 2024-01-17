@@ -421,13 +421,16 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 val t1 = it.lastIndexOf(".")
                 val fileNameT = it.substring(0, t1) + ".txt"
                 val file = File("$filesDir/iconsApisanne/$fileNameT")
-                if (file.exists()) {
-                    arrayList[e].textApisanne = file.readText()
-                } else {
-                    arrayList[e].textApisanne = ""
+                try {
+                    if (file.exists()) {
+                        arrayList[e].textApisanne = file.readText()
+                    } else {
+                        arrayList[e].textApisanne = ""
+                    }
+                    val file2 = File("$filesDir/icons/$it")
+                    if (file2.exists()) arrayList[e].image = file2.absolutePath
+                } catch (_: IndexOutOfBoundsException) {
                 }
-                val file2 = File("$filesDir/icons/$it")
-                if (file2.exists()) arrayList[e].image = file2.absolutePath
             }
         }
         binding.progressBar2.visibility = View.INVISIBLE

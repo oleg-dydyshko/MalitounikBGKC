@@ -198,7 +198,8 @@ class LogView : BaseActivity() {
             logJob = CoroutineScope(Dispatchers.Main).launch {
                 val localFile = File("$filesDir/cache/cache.txt")
                 Malitounik.referens.child("/admin/log.txt").getFile(localFile)
-                val log = localFile.readText()
+                var log = ""
+                if (localFile.exists()) log = localFile.readText()
                 if (log != "") {
                     getLogFile()
                 } else {

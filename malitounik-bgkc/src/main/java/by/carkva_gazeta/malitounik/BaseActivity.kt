@@ -32,6 +32,9 @@ import com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListene
 import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.ktx.appCheck
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -93,6 +96,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
             SplitCompat.install(this)
         }
         FirebaseApp.initializeApp(this)
+        Firebase.appCheck.installAppCheckProviderFactory(PlayIntegrityAppCheckProviderFactory.getInstance())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -177,7 +181,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         var sp = if (isTextSizeSp) textSizePixel
         else textSizePixel / resources.displayMetrics.density
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        when(k.getInt("fontInterface", 1)) {
+        when (k.getInt("fontInterface", 1)) {
             1 -> sp += 2
             2 -> sp += 4
             3 -> sp += 6

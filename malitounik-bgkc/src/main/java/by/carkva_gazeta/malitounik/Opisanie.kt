@@ -421,7 +421,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 val t1 = it.lastIndexOf(".")
                 val fileNameT = it.substring(0, t1) + ".txt"
                 val file = File("$filesDir/iconsApisanne/$fileNameT")
-                try {
+                if (e < arrayList.size) {
                     if (file.exists()) {
                         arrayList[e].textApisanne = file.readText()
                     } else {
@@ -429,7 +429,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     }
                     val file2 = File("$filesDir/icons/$it")
                     if (file2.exists()) arrayList[e].image = file2.absolutePath
-                } catch (_: IndexOutOfBoundsException) {
                 }
             }
         }

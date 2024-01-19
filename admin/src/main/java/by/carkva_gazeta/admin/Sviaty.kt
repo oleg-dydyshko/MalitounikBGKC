@@ -105,6 +105,8 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
         sviaty.add(SviatyData(21, 11, "21 Лістапада"))
         sviaty.add(SviatyData(25, 12, "25 Сьнежня"))
         sviaty.add(SviatyData(-1, 4, "Айцоў першых 6-ці Ўсяленскіх сабораў"))
+        sviaty.add(SviatyData(-1, 5, "Праведнага Язэпа Абручніка, Давіда цара і Якуба, брата Гасподняга"))
+        sviaty.add(SviatyData(-1, 6, "Вялеб. Касьяна Рымляніна"))
         binding.actionBold.setOnClickListener(this)
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)
@@ -449,6 +451,21 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                         17 -> {
                             day = 25
                             mun = 12
+                        }
+
+                        18 -> {
+                            day = -1
+                            mun = 4
+                        }
+
+                        19 -> {
+                            day = -1
+                            mun = 5
+                        }
+
+                        20 -> {
+                            day = -1
+                            mun = 6
                         }
                     }
                     var opisanie: String

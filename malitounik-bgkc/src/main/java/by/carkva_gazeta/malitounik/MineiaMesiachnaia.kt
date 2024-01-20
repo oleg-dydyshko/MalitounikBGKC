@@ -116,7 +116,7 @@ class MineiaMesiachnaia : BaseActivity() {
             val id = dayOfYear.toLong()
             var adminDayOfYear = ""
             if (k.getBoolean("adminDayInYear", false)) {
-                adminDayOfYear = "($dayOfYear(${c[22]}))"
+                adminDayOfYear = " ($dayOfYear (${c[22]}))"
             }
             val dayOfMonth = c[1]
             when (val month = c[2].toInt()) {

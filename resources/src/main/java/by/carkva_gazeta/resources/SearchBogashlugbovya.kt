@@ -507,7 +507,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             prepinanie = prepinanie.replace("[", "")
             prepinanie = prepinanie.replace("]", "")
             prepinanie = prepinanie.replace(" --", "")
-            val t5 = prepinanie.indexOf("-")
+            val t5 = prepinanie.indexOf(" -")
             if (t5 != -1) {
                 prepinanie = if (prepinanie[t5 - 1].toString() == " ") prepinanie.replace(" -", "")
                 else prepinanie.replace("-", " ")

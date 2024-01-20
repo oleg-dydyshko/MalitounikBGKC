@@ -114,6 +114,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 val name = element.name
                 resursMap[name] = element.getInt(name)
             }
+            R.raw.mm_21_01_paczesnaha_maksima_vyznaucy_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {

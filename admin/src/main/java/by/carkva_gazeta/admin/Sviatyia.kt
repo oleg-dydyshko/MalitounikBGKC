@@ -278,6 +278,10 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
             onBack()
             return true
         }
+        if (id == R.id.action_sviaty_pyx) {
+            startActivity(Intent(this, SviatyiaPyxomyia::class.java))
+            return true
+        }
         if (id == R.id.action_bible) {
             val dialogSvityiaBible = DialogSvityiaBible()
             dialogSvityiaBible.show(supportFragmentManager, "dialogSvityiaBible")

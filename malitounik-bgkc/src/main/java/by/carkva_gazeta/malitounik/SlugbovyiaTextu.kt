@@ -384,6 +384,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(14, "Адданьне сьвята Богазьяўленьня. Пачэсных айцоў, у Сінаі і Раіце забітых", "mm_14_01_addannie_bohazjaulennia_ajcou_u_sinai_raicie_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(14, "Адданьне сьвята Богазьяўленьня. Пачэсных айцоў, у Сінаі і Раіце забітых", "mm_14_01_addannie_bohazjaulennia_ajcou_u_sinai_raicie_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(17, "Пачэснага Антона Вялікага", "mm_17_01_paczesnaha_antona_vialikaha_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(21, "Пачэснага Максіма вызнаўцы, мучаніка Неафіта", "mm_21_01_paczesnaha_maksima_vyznaucy_viaczernia", VIACZERNIA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

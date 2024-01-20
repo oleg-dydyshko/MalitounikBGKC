@@ -49,6 +49,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
     private val sviaty = ArrayList<SviatyData>()
+    private val arrayList = ArrayList<ArrayList<String>>()
     private var edittext: AppCompatEditText? = null
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
@@ -105,8 +106,6 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
         sviaty.add(SviatyData(21, 11, "21 Лістапада"))
         sviaty.add(SviatyData(25, 12, "25 Сьнежня"))
         sviaty.add(SviatyData(-1, 4, "Айцоў першых 6-ці Ўсяленскіх сабораў"))
-        sviaty.add(SviatyData(-1, 5, "Праведнага Язэпа Абручніка, Давіда цара і Якуба, брата Гасподняга"))
-        sviaty.add(SviatyData(-1, 6, "Вялеб. Касьяна Рымляніна"))
         binding.actionBold.setOnClickListener(this)
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)
@@ -115,56 +114,69 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
             if (hasFocus) edittext = v as? AppCompatEditText
         }
         urlJob = CoroutineScope(Dispatchers.Main).launch {
-            binding.progressBar2.visibility = View.VISIBLE
-            val arrayList = ArrayList<ArrayList<String>>()
-            try {
-                val localFile = File("$filesDir/cache/cache.txt")
-                Malitounik.referens.child("/opisanie_sviat.json").getFile(localFile).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        val builder = localFile.readText()
-                        val gson = Gson()
-                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                        arrayList.addAll(gson.fromJson(builder, type))
-                    } else {
-                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
-                    }
-                }.await()
-            } catch (e: Throwable) {
-                MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-            }
-            for (i in 0 until arrayList.size) {
-                for (e in 0 until sviaty.size) {
-                    if (arrayList[i][0].toInt() == sviaty[e].data && arrayList[i][1].toInt() == sviaty[e].mun) {
-                        sviaty[e].opisanie = arrayList[i][2]
-                        sviaty[e].utran = arrayList[i][3]
-                        sviaty[e].liturgia = arrayList[i][4]
-                        sviaty[e].viachernia = arrayList[i][5]
-                        break
-                    }
-                }
-            }
-            binding.spinnerSviaty.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    binding.sviaty.setText(sviaty[position].opisanie)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
-            }
-            binding.spinnerSviaty.adapter = SpinnerAdapter(this@Sviaty, sviaty)
-            if (intent.extras != null) {
-                for (i in 0 until sviaty.size) {
-                    if (intent.extras?.getInt("day") == sviaty[i].data && intent.extras?.getInt("mun") == sviaty[i].mun) {
-                        binding.spinnerSviaty.setSelection(i)
-                        break
-                    }
-                }
-            } else {
-                binding.spinnerSviaty.setSelection(0)
-            }
-            binding.progressBar2.visibility = View.GONE
+            getFileSviat()
         }
         setTollbarTheme()
+    }
+
+    private suspend fun getFileSviat(count: Int = 0) {
+        var error = false
+        binding.progressBar2.visibility = View.VISIBLE
+        try {
+            val localFile = File("$filesDir/cache/cache.txt")
+            Malitounik.referens.child("/opisanie_sviat.json").getFile(localFile).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val builder = localFile.readText()
+                    val gson = Gson()
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                    arrayList.addAll(gson.fromJson(builder, type))
+                } else {
+                    error = true
+                }
+            }.await()
+        } catch (e: Throwable) {
+            error = true
+        }
+        if (error && count < 3) {
+            getFileSviat(count + 1)
+            return
+        }
+        if (error) {
+            MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+            binding.progressBar2.visibility = View.GONE
+            return
+        }
+        for (i in 0 until arrayList.size) {
+            for (e in 0 until sviaty.size) {
+                if (arrayList[i][0].toInt() == sviaty[e].data && arrayList[i][1].toInt() == sviaty[e].mun) {
+                    sviaty[e].opisanie = arrayList[i][2]
+                    sviaty[e].utran = arrayList[i][3]
+                    sviaty[e].liturgia = arrayList[i][4]
+                    sviaty[e].viachernia = arrayList[i][5]
+                    break
+                }
+            }
+        }
+        binding.spinnerSviaty.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                binding.sviaty.setText(sviaty[position].opisanie)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+        binding.spinnerSviaty.adapter = SpinnerAdapter(this@Sviaty, sviaty)
+        if (intent.extras != null) {
+            for (i in 0 until sviaty.size) {
+                if (intent.extras?.getInt("day") == sviaty[i].data && intent.extras?.getInt("mun") == sviaty[i].mun) {
+                    binding.spinnerSviaty.setSelection(i)
+                    break
+                }
+            }
+        } else {
+            binding.spinnerSviaty.setSelection(0)
+        }
+        binding.progressBar2.visibility = View.GONE
     }
 
     private fun setTollbarTheme() {
@@ -457,74 +469,54 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogF
                             day = -1
                             mun = 4
                         }
-
-                        19 -> {
-                            day = -1
-                            mun = 5
-                        }
-
-                        20 -> {
-                            day = -1
-                            mun = 6
-                        }
                     }
-                    var opisanie: String
                     var utran = ""
                     var linur = ""
                     var viach = ""
                     var index = -5
-                    val localFile = File("$filesDir/cache/cache.txt")
-                    val gson = Gson()
-                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                    var array = ArrayList<ArrayList<String>>()
-                    Malitounik.referens.child("/opisanie_sviat.json").getFile(localFile).addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            val builder = localFile.readText()
-                            array = gson.fromJson(builder, type)
-                            for (i in 0 until array.size) {
-                                if (day == array[i][0].toInt() && mun == array[i][1].toInt()) {
-                                    opisanie = array[i][2]
-                                    utran = array[i][3]
-                                    linur = array[i][4]
-                                    viach = array[i][5]
-                                    index = i
-                                    break
-                                }
-                            }
-                            opisanie = apisanne
-                            if (index == -5) {
-                                val temp = ArrayList<String>()
-                                temp.add(day.toString())
-                                temp.add(mun.toString())
-                                temp.add(opisanie)
-                                temp.add(utran)
-                                temp.add(linur)
-                                temp.add(viach)
-                                array.add(temp)
+                    for (i in 0 until arrayList.size) {
+                        if (day == arrayList[i][0].toInt() && mun == arrayList[i][1].toInt()) {
+                            utran = arrayList[i][3]
+                            linur = arrayList[i][4]
+                            viach = arrayList[i][5]
+                            index = i
+                            break
+                        }
+                    }
+                    if (index == -5) {
+                        val temp = ArrayList<String>()
+                        temp.add(day.toString())
+                        temp.add(mun.toString())
+                        temp.add(apisanne)
+                        temp.add(utran)
+                        temp.add(linur)
+                        temp.add(viach)
+                        arrayList.add(temp)
+                    } else {
+                        arrayList[index][2] = apisanne
+                        arrayList[index][3] = utran
+                        arrayList[index][4] = linur
+                        arrayList[index][5] = viach
+                    }
+                    if (arrayList.isNotEmpty()) {
+                        val localFile = File("$filesDir/cache/cache.txt")
+                        val gson = Gson()
+                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                        localFile.writer().use {
+                            it.write(gson.toJson(arrayList, type))
+                        }
+                        Malitounik.referens.child("/opisanie_sviat.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.save))
                             } else {
-                                array[index][2] = opisanie
-                                array[index][3] = utran
-                                array[index][4] = linur
-                                array[index][5] = viach
+                                MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
                             }
-                        } else {
-                            MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
-                        }
-                    }.await()
-                    localFile.writer().use {
-                        it.write(gson.toJson(array))
+                        }.await()
+                    } else {
+                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
-                    Malitounik.referens.child("/opisanie_sviat.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.save))
-                        } else {
-                            MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
-                        }
-                    }.await()
                 } catch (e: Throwable) {
-                    withContext(Dispatchers.Main) {
-                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                    }
+                    MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
                 binding.progressBar2.visibility = View.GONE
             }

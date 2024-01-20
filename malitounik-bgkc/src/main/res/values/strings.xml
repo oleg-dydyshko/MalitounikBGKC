@@ -677,7 +677,7 @@
     <string name="del_all_copy">Выдаліць усе рэзервовыя копіі</string>
     <string name="tryjodz">Трыёдзь</string>
     <string name="admin_day_in_year">Дзень ад пачатку года (да і пасьля Пасxi)</string>
-    <string name="admin_show_day_in_year">Год(Пасха): %1$s(%2$s)</string>
+    <string name="admin_show_day_in_year">Год (Пасха): %1$s (%2$s)</string>
     <string name="admin_set_name_link">СПАСЫЛКА</string>
     <string name="admin_link">Спасылка:</string>
     <string name="admin_title_link">Імя спасылкі:</string>
@@ -722,7 +722,7 @@
     <string name="is_html_title">ФАРМАТ HTML</string>
     <string name="is_html">Тэкст у фармаце HTML?</string>
     <string name="citata_error">Памылка: у файле \"citata\" няма \"(\" у страке %1$d</string>
-    <string name="file_name_error">Імя файла рэсурса(надрукавана ў дужках, альбо занаходзяцца ў тэчках праграмы) павінна пачынацца з літары, далей могуць быць лічбы, таксама імя файла можа ўтрымліваць знак падкрэсьленьня, усе літары павінны быць у ніжнім рэгістры. Напрыклад: mm_01_01_malebien_novy_hod.html</string>
+    <string name="file_name_error">Імя файла рэсурса (надрукавана ў дужках, альбо занаходзяцца ў тэчках праграмы) павінна пачынацца з літары, далей могуць быць лічбы, таксама імя файла можа ўтрымліваць знак падкрэсьленьня, усе літары павінны быць у ніжнім рэгістры. Напрыклад: mm_01_01_malebien_novy_hod.html</string>
     <string name="vypravic">Выправіць</string>
     <string name="vybrac_file">ВЫБЕРЫЦЕ ФАЙЛ</string>
     <string name="dvunad_sv">ДВУНАДЗЯСЯТЫЯ СЬВЯТЫ</string>
@@ -757,7 +757,7 @@
     <string name="mineia_slugba">%1$s %2$s</string>
     <string-array name="fonts">
         <item>18sp</item>
-        <item>22sp(па змаўчаньні)</item>
+        <item>22sp (па змаўчаньні)</item>
         <item>24sp</item>
         <item>26sp</item>
         <item>28sp</item>
@@ -768,5 +768,6 @@
     <string name="admin_upload_no_wi_fi">Працуе толькі на WI-FI.</string>
     <string name="admin_upload_log_contine">У логу няма зьмен. Усё роўна праверыць?</string>
     <string name="admin_update_log">Абнаўленьне лога</string>
+    <string name="admin_sviatya_pyxomyia">Сьвятыя рухомыя</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

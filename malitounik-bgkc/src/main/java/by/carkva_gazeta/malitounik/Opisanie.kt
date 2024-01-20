@@ -24,7 +24,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.text.isDigitsOnly
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.OpisanieBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemOpisanieBinding
@@ -57,16 +56,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private lateinit var adapter: OpisanieAdapter
     private var fullImagePathVisable = ""
 
-    private fun viewSviaryiaIIcon() {
-        val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
-        if (svity) {
-            loadOpisanieSviat()
-        } else {
-            if (fileOpisanie.exists()) loadOpisanieSviatyia(fileOpisanie.readText())
-        }
-        loadIconsOnImageView()
-    }
-
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
@@ -90,48 +79,111 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         return null
     }*/
 
-    private fun loadOpisanieSviatyia(builder: String) {
-        val gson = Gson()
-        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
-        var res = ""
-        val arrayList = ArrayList<String>()
-        if (builder.isNotEmpty()) {
-            arrayList.addAll(gson.fromJson(builder, type))
-            res = arrayList[day - 1]
+    private fun loadOpisanieSviatyia() {
+        val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
+        if (fileOpisanie.exists()) {
+            val builder = fileOpisanie.readText()
+            val gson = Gson()
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
+            var res = ""
+            val arrayList = ArrayList<String>()
+            if (builder.isNotEmpty()) {
+                arrayList.addAll(gson.fromJson(builder, type))
+                res = arrayList[day - 1]
+            }
+            if (dzenNoch) res = res.replace("#d00505", "#f44336")
+            val title = ArrayList<String>()
+            val listRes = res.split("<strong>")
+            var sb = ""
+            for (i in listRes.size - 1 downTo 0) {
+                val text = listRes[i].replace("<!--image-->", "")
+                if (text.trim() != "") {
+                    if (text.contains("Трапар") || text.contains("Кандак")) {
+                        sb = "<strong>$text$sb"
+                        continue
+                    } else {
+                        sb = "<strong>$text$sb"
+                        title.add(0, sb)
+                        sb = ""
+                    }
+                }
+            }
+            title.forEachIndexed { index, text ->
+                val t1 = text.indexOf("</strong>")
+                var textTitle = ""
+                var fulText = ""
+                if (t1 != -1) {
+                    textTitle = text.substring(0, t1 + 9)
+                    fulText = text.substring(t1 + 9)
+                }
+                val spannedtitle = MainActivity.fromHtml(textTitle)
+                val spanned = MainActivity.fromHtml(fulText)
+                this.arrayList.add(OpisanieData(index, day, mun, spannedtitle, spanned, "", ""))
+            }
         }
-        if (dzenNoch) res = res.replace("#d00505", "#f44336")
-        val title = ArrayList<String>()
-        val listRes = res.split("<strong>")
-        var sb = ""
-        for (i in listRes.size - 1 downTo 0) {
-            val text = listRes[i].replace("<!--image-->", "")
-            if (text.trim() != "") {
-                if (text.contains("Трапар") || text.contains("Кандак")) {
-                    sb = "<strong>$text$sb"
-                    continue
-                } else {
-                    sb = "<strong>$text$sb"
-                    title.add(0, sb)
-                    sb = ""
+        val fileOpisanie13 = File("$filesDir/sviatyja/opisanie13.json")
+        if (fileOpisanie13.exists()) {
+            val builder = fileOpisanie13.readText()
+            val gson = Gson()
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+            val arrayList = ArrayList<ArrayList<String>>()
+            if (builder.isNotEmpty()) {
+                arrayList.addAll(gson.fromJson(builder, type))
+                val pasha = GregorianCalendar(year, Calendar.DECEMBER, 25)
+                val pastvoW = pasha[Calendar.DAY_OF_WEEK]
+                for (i in 26..31) {
+                    val pastvo = GregorianCalendar(year, Calendar.DECEMBER, i)
+                    val iazepW = pastvo[Calendar.DAY_OF_WEEK]
+                    for (e in 0 until arrayList.size) {
+                        if (pastvoW != Calendar.SUNDAY) {
+                            if (arrayList[e][1].toInt() == 0 && mun - 1 == Calendar.DECEMBER && day == i && Calendar.SUNDAY == iazepW) {
+                                val t1 = arrayList[e][2].indexOf("</strong>")
+                                var textTitle = ""
+                                var fulText = ""
+                                if (t1 != -1) {
+                                    textTitle = arrayList[e][2].substring(0, t1 + 9)
+                                    fulText = arrayList[e][2].substring(t1 + 9)
+                                }
+                                val spannedtitle = MainActivity.fromHtml(textTitle)
+                                val spanned = MainActivity.fromHtml(fulText)
+                                this.arrayList.add(OpisanieData(this.arrayList.size, arrayList[e][0].toInt(), arrayList[e][1].toInt(), spannedtitle, spanned, "", ""))
+                            }
+                        } else {
+                            if (arrayList[e][1].toInt() == 0 && mun - 1 == Calendar.DECEMBER && day == i && Calendar.MONDAY == iazepW) {
+                                val t1 = arrayList[e][2].indexOf("</strong>")
+                                var textTitle = ""
+                                var fulText = ""
+                                if (t1 != -1) {
+                                    textTitle = arrayList[e][2].substring(0, t1 + 9)
+                                    fulText = arrayList[e][2].substring(t1 + 9)
+                                }
+                                val spannedtitle = MainActivity.fromHtml(textTitle)
+                                val spanned = MainActivity.fromHtml(fulText)
+                                this.arrayList.add(OpisanieData(this.arrayList.size, arrayList[e][0].toInt(), arrayList[e][1].toInt(), spannedtitle, spanned, "", ""))
+                            }
+                        }
+                    }
+                }
+                val gc = GregorianCalendar()
+                val dayF = if (gc.isLeapYear(year)) 29
+                else 28
+                for (e in 0 until arrayList.size) {
+                    if (arrayList[e][1].toInt() == 1 && mun - 1 == Calendar.FEBRUARY && day == dayF) {
+                        val t1 = arrayList[e][2].indexOf("</strong>")
+                        var textTitle = ""
+                        var fulText = ""
+                        if (t1 != -1) {
+                            textTitle = arrayList[e][2].substring(0, t1 + 9)
+                            fulText = arrayList[e][2].substring(t1 + 9)
+                        }
+                        val spannedtitle = MainActivity.fromHtml(textTitle)
+                        val spanned = MainActivity.fromHtml(fulText)
+                        this.arrayList.add(OpisanieData(this.arrayList.size, arrayList[e][0].toInt(), arrayList[e][1].toInt(), spannedtitle, spanned, "", ""))
+                    }
                 }
             }
         }
-        title.forEachIndexed { index, text ->
-            val t1 = text.indexOf("</strong>")
-            var textTitle = ""
-            var fulText = ""
-            if (t1 != -1) {
-                textTitle = text.substring(0, t1 + 9)
-                fulText = text.substring(t1 + 9)
-            }
-            val spannedtitle = MainActivity.fromHtml(textTitle)
-            val spanned = MainActivity.fromHtml(fulText)
-            var check = false
-            this.arrayList.forEach {
-                if (it.index == index) check = true
-            }
-            if (!check) this.arrayList.add(OpisanieData(index, spannedtitle, spanned, "", ""))
-        }
+        loadIconsOnImageView()
         adapter.notifyDataSetChanged()
     }
 
@@ -159,7 +211,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     this.arrayList.forEach {
                         if (it.index == 0) check = true
                     }
-                    if (!check) this.arrayList.add(OpisanieData(0, spannedtitle, spanned, "", ""))
+                    if (!check) this.arrayList.add(OpisanieData(0, day, mun, spannedtitle, spanned, "", ""))
+                    loadIconsOnImageView()
                     adapter.notifyDataSetChanged()
                 }
             }
@@ -192,7 +245,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         binding.listview.divider = null
         binding.swipeRefreshLayout.setOnRefreshListener {
             arrayList.clear()
-            viewSviaryiaIIcon()
             startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
             binding.swipeRefreshLayout.isRefreshing = false
         }
@@ -203,7 +255,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         } else {
             binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         }
-        viewSviaryiaIIcon()
         if (savedInstanceState == null) startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
         setTollbarTheme()
     }
@@ -220,14 +271,16 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         loadIconsJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.isIndeterminate = true
             binding.progressBar2.visibility = View.VISIBLE
+            val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
+            val fileOpisanie13 = File("$filesDir/sviatyja/opisanie13.json")
             if (!MainActivity.isNetworkAvailable()) {
-                val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
-                if (!svity && fileOpisanie.exists()) {
-                    loadOpisanieSviatyia(fileOpisanie.readText())
+                if (!svity && (fileOpisanie.exists() || fileOpisanie13.exists())) {
+                    loadOpisanieSviatyia()
                 } else {
                     val dialoNoIntent = DialogNoInternet()
                     dialoNoIntent.show(supportFragmentManager, "dialoNoIntent")
                 }
+                binding.progressBar2.visibility = View.GONE
             } else {
                 try {
                     if (svity) {
@@ -302,10 +355,24 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             getSviatyia(count + 1)
             return
         }
-        saveOpisanieSviatyia(update)
+        val pathReference2 = Malitounik.referens.child("/chytanne/sviatyja/opisanie13.json")
+        var update13 = 0L
+        pathReference2.metadata.addOnCompleteListener { storageMetadata ->
+            if (storageMetadata.isSuccessful) {
+                update13 = storageMetadata.result.updatedTimeMillis
+            } else {
+                error = true
+            }
+        }.await()
+        if (update13 == 0L) error = true
+        if (error && count < 3) {
+            getSviatyia(count + 1)
+            return
+        }
+        saveOpisanieSviatyia(update, update13)
     }
 
-    private suspend fun saveOpisanieSviatyia(update: Long, count: Int = 0) {
+    private suspend fun saveOpisanieSviatyia(update: Long, update13: Long, count: Int = 0) {
         val pathReference = Malitounik.referens.child("/chytanne/sviatyja/opisanie$mun.json")
         val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
         val time = fileOpisanie.lastModified()
@@ -320,11 +387,24 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         var read = ""
         if (fileOpisanie.exists()) read = fileOpisanie.readText()
         if (read == "") error = true
+        val pathReference13 = Malitounik.referens.child("/chytanne/sviatyja/opisanie13.json")
+        val fileOpisanie13 = File("$filesDir/sviatyja/opisanie13.json")
+        val time13 = fileOpisanie13.lastModified()
+        if (!fileOpisanie13.exists() || time13 < update) {
+            pathReference13.getFile(fileOpisanie13).addOnCompleteListener {
+                if (!it.isSuccessful) {
+                    error = true
+                }
+            }.await()
+        }
+        var read13 = ""
+        if (fileOpisanie13.exists()) read13 = fileOpisanie13.readText()
+        if (read13 == "") error = true
         if (error && count < 3) {
-            saveOpisanieSviatyia(update, count + 1)
+            saveOpisanieSviatyia(update, update13, count + 1)
             return
         }
-        loadOpisanieSviatyia(read)
+        loadOpisanieSviatyia()
     }
 
     private suspend fun getIcons(loadIcons: Boolean, count: Int = 0) {
@@ -343,31 +423,33 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         val pathReferenceMataData = Malitounik.referens.child("/chytanne/iconsMataData.txt")
         pathReferenceMataData.getFile(fileIconMataData).await()
         val list = fileIconMataData.readText().split("\n")
-        list.forEach {
-            val t1 = it.indexOf("<-->")
-            if (t1 != -1) {
-                val t2 = it.indexOf("<-->", t1 + 4)
-                val name = it.substring(0, t1)
-                val pref = if (svity) "v"
-                else "s"
-                sb.append(name)
-                if (name.contains("${pref}_${day}_${mun}")) {
-                    val t3 = name.lastIndexOf(".")
-                    val fileNameT = name.substring(0, t3) + ".txt"
-                    val file = File("$filesDir/iconsApisanne/$fileNameT")
-                    try {
-                        Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").getFile(file).addOnFailureListener {
-                            if (file.exists()) file.delete()
-                        }.await()
-                    } catch (_: Throwable) {
-                    }
-                    val fileIcon = File("$filesDir/icons/${name}")
-                    val time = fileIcon.lastModified()
-                    val update = it.substring(t2 + 4).toLong()
-                    if (!fileIcon.exists() || time < update) {
-                        val updateFile = it.substring(t1 + 4, t2).toLong()
-                        dirList.add(DirList(name, updateFile))
-                        size += updateFile
+        for (i in 0 until arrayList.size) {
+            list.forEach {
+                val t1 = it.indexOf("<-->")
+                if (t1 != -1) {
+                    val t2 = it.indexOf("<-->", t1 + 4)
+                    val name = it.substring(0, t1)
+                    val pref = if (svity) "v"
+                    else "s"
+                    sb.append(name)
+                    if (name.contains("${pref}_${arrayList[i].date}_${arrayList[i].mun}")) {
+                        val t3 = name.lastIndexOf(".")
+                        val fileNameT = name.substring(0, t3) + ".txt"
+                        val file = File("$filesDir/iconsApisanne/$fileNameT")
+                        try {
+                            Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").getFile(file).addOnFailureListener {
+                                if (file.exists()) file.delete()
+                            }.await()
+                        } catch (_: Throwable) {
+                        }
+                        val fileIcon = File("$filesDir/icons/${name}")
+                        val time = fileIcon.lastModified()
+                        val update = it.substring(t2 + 4).toLong()
+                        if (!fileIcon.exists() || time < update) {
+                            val updateFile = it.substring(t1 + 4, t2).toLong()
+                            dirList.add(DirList(name, updateFile))
+                            size += updateFile
+                        }
                     }
                 }
             }
@@ -407,28 +489,25 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     private fun loadIconsOnImageView() {
-        var e = 0
         val pref = if (svity) "v"
         else "s"
         val fileList = File("$filesDir/icons").list()
-        fileList?.forEach {
-            if (it.contains("${pref}_${day}_${mun}_")) {
-                if (!svity) {
-                    val s1 = "${pref}_${day}_${mun}".length
-                    val s3 = it.substring(s1 + 1, s1 + 2)
-                    if (s3.isDigitsOnly()) e = s3.toInt() - 1
-                }
-                val t1 = it.lastIndexOf(".")
-                val fileNameT = it.substring(0, t1) + ".txt"
-                val file = File("$filesDir/iconsApisanne/$fileNameT")
-                if (e < arrayList.size) {
+        for (i in 0 until arrayList.size) {
+            fileList?.forEach {
+                if (it.contains("${pref}_${arrayList[i].date}_${arrayList[i].mun}_")) {
+                    val t1 = it.lastIndexOf(".")
+                    val fileNameT = it.substring(0, t1) + ".txt"
+                    val file = File("$filesDir/iconsApisanne/$fileNameT")
                     if (file.exists()) {
-                        arrayList[e].textApisanne = file.readText()
+                        arrayList[i].textApisanne = file.readText()
                     } else {
-                        arrayList[e].textApisanne = ""
+                        arrayList[i].textApisanne = ""
                     }
                     val file2 = File("$filesDir/icons/$it")
-                    if (file2.exists()) arrayList[e].image = file2.absolutePath
+                    if (file2.exists()) {
+                        arrayList[i].image = file2.absolutePath
+                        return@forEach
+                    }
                 }
             }
         }
@@ -509,7 +588,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         if (binding.imageViewFull.visibility == View.VISIBLE) {
             binding.imageViewFull.visibility = View.GONE
             binding.swipeRefreshLayout.visibility = View.VISIBLE
-            viewSviaryiaIIcon()
+            //viewSviaryiaIIcon()
             binding.titleToolbar.text = resources.getText(R.string.zmiest)
         } else {
             super.onBack()
@@ -709,5 +788,5 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
 
     private data class DirList(val name: String?, val sizeBytes: Long)
 
-    private data class OpisanieData(val index: Int, val title: Spanned, val text: Spanned, var image: String, var textApisanne: String)
+    private data class OpisanieData(val index: Int, val date: Int, val mun: Int, val title: Spanned, val text: Spanned, var image: String, var textApisanne: String)
 }

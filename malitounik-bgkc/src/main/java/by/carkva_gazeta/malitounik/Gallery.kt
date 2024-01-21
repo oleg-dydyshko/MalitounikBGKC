@@ -213,40 +213,87 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
     private fun loadOpisanieSviatyia(day: Int, mun: Int, count: Int): String {
         val munName = resources.getStringArray(R.array.meciac_smoll)
         var result = ""
-        val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
-        if (!fileOpisanie.exists()) return result
-        val builder = fileOpisanie.readText()
-        val gson = Gson()
-        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
-        var res: String
-        val arrayList = ArrayList<String>()
-        if (builder.isNotEmpty()) {
-            arrayList.addAll(gson.fromJson(builder, type))
-            res = arrayList[day - 1]
-        } else return result
-        if (dzenNoch) res = res.replace("#d00505", "#f44336")
-        val title = ArrayList<String>()
-        val listRes = res.split("<strong>")
-        var sb = ""
-        for (i in listRes.size - 1 downTo 0) {
-            val text = listRes[i].replace("<!--image-->", "")
-            if (text.trim() != "") {
-                if (text.contains("Трапар") || text.contains("Кандак")) {
-                    sb = "<strong>$text$sb"
-                    continue
-                } else {
-                    sb = "<strong>$text$sb"
-                    title.add(0, sb)
-                    sb = ""
+        if (day == -1) {
+            val fileOpisanie = File("$filesDir/sviatyja/opisanie13.json")
+            if (!fileOpisanie.exists()) return result
+            val builder = fileOpisanie.readText()
+            val gson = Gson()
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+            val arrayList = ArrayList<ArrayList<String>>()
+            if (builder.isNotEmpty()) {
+                arrayList.addAll(gson.fromJson(builder, type))
+                for (i in 0 until arrayList.size) {
+                    var dayR = 1
+                    if (mun == arrayList[i][1].toInt()) {
+                        val t1 = arrayList[i][2].indexOf("<strong>")
+                        val t2 = arrayList[i][2].indexOf("</strong>")
+                        if (t1 != -1 && t2 != -1) {
+                            if (mun == 0) {
+                                val pasha = Calendar.getInstance()
+                                pasha.set(pasha[Calendar.YEAR], Calendar.DECEMBER, 25)
+                                val pastvoW = pasha[Calendar.DAY_OF_WEEK]
+                                for (e in 26..31) {
+                                    val pastvo = GregorianCalendar(pasha[Calendar.YEAR], Calendar.DECEMBER, e)
+                                    val iazepW = pastvo[Calendar.DAY_OF_WEEK]
+                                    if (pastvoW != Calendar.SUNDAY) {
+                                        if (Calendar.SUNDAY == iazepW) {
+                                            dayR = pastvo[Calendar.DATE]
+                                        }
+                                    } else {
+                                        if (Calendar.MONDAY == iazepW) {
+                                            dayR = pastvo[Calendar.DATE]
+                                        }
+                                    }
+                                }
+                                result = arrayList[i][2].substring(t1 + 8, t2) + "\n(" + dayR + " " + munName[Calendar.DECEMBER] + ")"
+                            }
+                            if (mun == 1) {
+                                val gc = Calendar.getInstance() as GregorianCalendar
+                                dayR = if (gc.isLeapYear(gc[Calendar.YEAR])) 29
+                                else 28
+                                result = arrayList[i][2].substring(t1 + 8, t2) + "\n(" + dayR + " " + munName[Calendar.FEBRUARY] + ")"
+                            }
+                        }
+                    }
+
+                }
+            } else return result
+        } else {
+            val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
+            if (!fileOpisanie.exists()) return result
+            val builder = fileOpisanie.readText()
+            val gson = Gson()
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
+            var res: String
+            val arrayList = ArrayList<String>()
+            if (builder.isNotEmpty()) {
+                arrayList.addAll(gson.fromJson(builder, type))
+                res = arrayList[day - 1]
+            } else return result
+            if (dzenNoch) res = res.replace("#d00505", "#f44336")
+            val title = ArrayList<String>()
+            val listRes = res.split("<strong>")
+            var sb = ""
+            for (i in listRes.size - 1 downTo 0) {
+                val text = listRes[i].replace("<!--image-->", "")
+                if (text.trim() != "") {
+                    if (text.contains("Трапар") || text.contains("Кандак")) {
+                        sb = "<strong>$text$sb"
+                        continue
+                    } else {
+                        sb = "<strong>$text$sb"
+                        title.add(0, sb)
+                        sb = ""
+                    }
                 }
             }
-        }
-        try {
-            val tit = title[count - 1]
-            val t1 = tit.indexOf("<strong>")
-            val t2 = tit.indexOf("</strong>")
-            result = tit.substring(t1 + 8, t2) + "\n(" + day + " " + munName[mun - 1] + ")"
-        } catch (_: Throwable) {
+            try {
+                val tit = title[count - 1]
+                val t1 = tit.indexOf("<strong>")
+                val t2 = tit.indexOf("</strong>")
+                result = tit.substring(t1 + 8, t2) + "\n(" + day + " " + munName[mun - 1] + ")"
+            } catch (_: Throwable) {
+            }
         }
         return result
     }
@@ -411,6 +458,10 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
             if (!sb.toString().contains(it)) {
                 val file = File("$filesDir/icons/$it")
                 if (file.exists()) file.delete()
+                val t3 = file.name.lastIndexOf(".")
+                val fileNameT = file.name.substring(0, t3) + ".txt"
+                val fileOpis = File("$filesDir/iconsApisanne/$fileNameT")
+                if (fileOpis.exists()) fileOpis.delete()
             }
 
         }

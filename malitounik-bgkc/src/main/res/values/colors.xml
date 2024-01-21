@@ -21,11 +21,13 @@
     <color name="colorbackground_material_dark_ligte">#424242</color>
     <color name="colorforeground_material_dark">#ffffff</color>
     <color name="colorforeground_material_light">#000000</color>
-    <color name="color_ten">#78000000</color>
+    <color name="color_ten">#80000000</color>
     <color name="colorPrimaryMaranAta">#4DD00505</color>
     <color name="colorPrimary_blackMaranAta">#4Df44336</color>
     <color name="colorPrimary_blackMaranAta2">#4Df4776e</color>
     <color name="radyjo_maryia">#006aa8</color>
     <color name="color_widget_mun">#606060</color>
+    <color name="colorProgress">#4D000000</color>
+    <color name="colorProgressNoch">#4DFFFFFF</color>
     <!--<color name="colorIconsDialog">#FCFFFFFF</color>-->
 </resources>

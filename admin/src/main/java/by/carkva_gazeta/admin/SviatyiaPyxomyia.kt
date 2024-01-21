@@ -2,15 +2,10 @@ package by.carkva_gazeta.admin
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.hardware.SensorEvent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
@@ -22,7 +17,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
@@ -44,25 +38,17 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-class SviatyiaPyxomyia : BaseActivity(), View.OnClickListener, DialogImageFileLoad.DialogFileExplorerListener {
+class SviatyiaPyxomyia : BaseActivity(), View.OnClickListener, DialogEditImage.DialogEditImageListener {
     private lateinit var binding: AdminSviatyBinding
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
     private val sviaty = ArrayList<SviatyData>()
     private val arrayList = ArrayList<ArrayList<String>>()
     private var edittext: AppCompatEditText? = null
-    private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == Activity.RESULT_OK) {
-            val imageUri = it.data?.data
-            imageUri?.let { image ->
-                val bitmap = if (Build.VERSION.SDK_INT >= 28) {
-                    val source = ImageDecoder.createSource(contentResolver, image)
-                    ImageDecoder.decodeBitmap(source)
-                } else {
-                    @Suppress("DEPRECATION") MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
-                }
-                fileUpload(bitmap)
-            }
+
+    override fun imageFileEdit(bitmap: Bitmap?, opisanie: String) {
+        bitmap?.let {
+            fileUpload(it, opisanie)
         }
     }
 
@@ -196,7 +182,7 @@ class SviatyiaPyxomyia : BaseActivity(), View.OnClickListener, DialogImageFileLo
         binding.titleToolbar.isSingleLine = true
     }
 
-    private fun fileUpload(bitmap: Bitmap) {
+    private fun fileUpload(bitmap: Bitmap, text: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
@@ -209,6 +195,22 @@ class SviatyiaPyxomyia : BaseActivity(), View.OnClickListener, DialogImageFileLo
                 }
                 val fileName = File("/chytanne/icons/s_" + sviaty[binding.spinnerSviaty.selectedItemPosition].data.toString() + "_" + sviaty[binding.spinnerSviaty.selectedItemPosition].mun.toString() + "_1.jpg")
                 Malitounik.referens.child("/chytanne/icons/" + fileName.name).putFile(Uri.fromFile(localFile)).await()
+                val t1 = fileName.name.lastIndexOf(".")
+                val fileNameT = fileName.name.substring(0, t1) + ".txt"
+                if (text != "") {
+                    localFile.writer().use {
+                        it.write(text)
+                    }
+                    Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").putFile(Uri.fromFile(localFile)).addOnSuccessListener {
+                        val file = File("$filesDir/iconsApisanne/$fileNameT")
+                        localFile.copyTo(file, true)
+                    }.await()
+                } else {
+                    try {
+                        Malitounik.referens.child("/chytanne/iconsApisanne/$fileNameT").delete().await()
+                    } catch (_: Throwable) {
+                    }
+                }
                 loadFilesMetaData()
                 binding.progressBar2.visibility = View.GONE
             }
@@ -227,11 +229,6 @@ class SviatyiaPyxomyia : BaseActivity(), View.OnClickListener, DialogImageFileLo
             it.write(sb.toString())
         }
         Malitounik.referens.child("/chytanne/iconsMataData.txt").putFile(Uri.fromFile(fileIcon)).await()
-    }
-
-    override fun onDialogFile(absolutePath: String) {
-        val bitmap = BitmapFactory.decodeFile(absolutePath)
-        fileUpload(bitmap)
     }
 
     override fun onClick(v: View?) {
@@ -318,11 +315,8 @@ class SviatyiaPyxomyia : BaseActivity(), View.OnClickListener, DialogImageFileLo
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_upload_image) {
-            val intent = Intent()
-            intent.type = "*/*"
-            intent.action = Intent.ACTION_GET_CONTENT
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-            mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
+            val dialog = DialogEditImage.getInstance("$filesDir/icons/s_" + sviaty[binding.spinnerSviaty.selectedItemPosition].data.toString() + "_" + sviaty[binding.spinnerSviaty.selectedItemPosition].mun.toString() + "_1.jpg")
+            dialog.show(supportFragmentManager, "DialogEditImage")
             return true
         }
         if (id == R.id.action_save) {

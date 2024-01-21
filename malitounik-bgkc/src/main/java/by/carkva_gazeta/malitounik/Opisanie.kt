@@ -62,6 +62,14 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         loadIconsJob?.cancel()
     }
 
+    private fun viewSviaryiaIIcon() {
+        if (svity) {
+            loadOpisanieSviat()
+        } else {
+            loadOpisanieSviatyia()
+        }
+    }
+
     /*private fun resizeImage(bitmap: Bitmap?): Bitmap? {
         bitmap?.let {
             var newHeight = it.height.toFloat()
@@ -80,6 +88,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }*/
 
     private fun loadOpisanieSviatyia() {
+        arrayList.clear()
         val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
         if (fileOpisanie.exists()) {
             val builder = fileOpisanie.readText()
@@ -188,6 +197,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     private fun loadOpisanieSviat() {
+        arrayList.clear()
         val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
         if (fileOpisanieSviat.exists()) {
             val builder = fileOpisanieSviat.readText()
@@ -240,7 +250,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         binding.listview.adapter = adapter
         binding.listview.divider = null
         binding.swipeRefreshLayout.setOnRefreshListener {
-            arrayList.clear()
+            viewSviaryiaIIcon()
             startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
             binding.swipeRefreshLayout.isRefreshing = false
         }
@@ -251,15 +261,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         } else {
             binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         }
-        if (savedInstanceState == null) {
-            startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
-        } else {
-            if (svity) {
-                loadOpisanieSviat()
-            } else {
-                loadOpisanieSviatyia()
-            }
-        }
+        viewSviaryiaIIcon()
+        if (savedInstanceState == null) startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
         setTollbarTheme()
     }
 
@@ -463,6 +466,10 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             if (!sb.toString().contains(it)) {
                 val file = File("$filesDir/icons/$it")
                 if (file.exists()) file.delete()
+                val t3 = file.name.lastIndexOf(".")
+                val fileNameT = file.name.substring(0, t3) + ".txt"
+                val fileOpis = File("$filesDir/iconsApisanne/$fileNameT")
+                if (fileOpis.exists()) fileOpis.delete()
             }
 
         }
@@ -594,7 +601,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         if (binding.imageViewFull.visibility == View.VISIBLE) {
             binding.imageViewFull.visibility = View.GONE
             binding.swipeRefreshLayout.visibility = View.VISIBLE
-            //viewSviaryiaIIcon()
+            viewSviaryiaIIcon()
             binding.titleToolbar.text = resources.getText(R.string.zmiest)
         } else {
             super.onBack()

@@ -83,8 +83,8 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.tabLayout.setTabTextColors(Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.colorSecondary_text))), Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.colorPrimary_black))))
-            bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, R.drawable.selector_grid_black)
-            bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, R.drawable.selector_grid_black)
+            bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
+            bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
         }
         binding.pager.offscreenPageLimit = 1
         piarlinyJob = CoroutineScope(Dispatchers.Main).launch {

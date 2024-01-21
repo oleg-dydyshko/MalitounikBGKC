@@ -118,7 +118,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 }
                 val spannedtitle = MainActivity.fromHtml(textTitle)
                 val spanned = MainActivity.fromHtml(fulText)
-                this.arrayList.add(OpisanieData(index, day, mun, spannedtitle, spanned, "", ""))
+                this.arrayList.add(OpisanieData(index + 1, day, mun, spannedtitle, spanned, "", ""))
             }
         }
         val fileOpisanie13 = File("$filesDir/sviatyja/opisanie13.json")
@@ -146,7 +146,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                 }
                                 val spannedtitle = MainActivity.fromHtml(textTitle)
                                 val spanned = MainActivity.fromHtml(fulText)
-                                this.arrayList.add(OpisanieData(this.arrayList.size, arrayList[e][0].toInt(), arrayList[e][1].toInt(), spannedtitle, spanned, "", ""))
+                                this.arrayList.add(OpisanieData(this.arrayList.size + 1, arrayList[e][0].toInt(), arrayList[e][1].toInt(), spannedtitle, spanned, "", ""))
                             }
                         } else {
                             if (arrayList[e][1].toInt() == 0 && mun - 1 == Calendar.DECEMBER && day == i && Calendar.MONDAY == iazepW) {
@@ -159,7 +159,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                                 }
                                 val spannedtitle = MainActivity.fromHtml(textTitle)
                                 val spanned = MainActivity.fromHtml(fulText)
-                                this.arrayList.add(OpisanieData(this.arrayList.size, arrayList[e][0].toInt(), arrayList[e][1].toInt(), spannedtitle, spanned, "", ""))
+                                this.arrayList.add(OpisanieData(this.arrayList.size + 1, arrayList[e][0].toInt(), arrayList[e][1].toInt(), spannedtitle, spanned, "", ""))
                             }
                         }
                     }
@@ -178,7 +178,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                         }
                         val spannedtitle = MainActivity.fromHtml(textTitle)
                         val spanned = MainActivity.fromHtml(fulText)
-                        this.arrayList.add(OpisanieData(this.arrayList.size, arrayList[e][0].toInt(), arrayList[e][1].toInt(), spannedtitle, spanned, "", ""))
+                        this.arrayList.add(OpisanieData(this.arrayList.size + 1, arrayList[e][0].toInt(), arrayList[e][1].toInt(), spannedtitle, spanned, "", ""))
                     }
                 }
             }
@@ -207,11 +207,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     }
                     val spannedtitle = MainActivity.fromHtml(textTitle)
                     val spanned = MainActivity.fromHtml(fulText)
-                    var check = false
-                    this.arrayList.forEach {
-                        if (it.index == 0) check = true
-                    }
-                    if (!check) this.arrayList.add(OpisanieData(0, day, mun, spannedtitle, spanned, "", ""))
+                    this.arrayList.add(OpisanieData(1, day, mun, spannedtitle, spanned, "", ""))
                     loadIconsOnImageView()
                     adapter.notifyDataSetChanged()
                 }
@@ -255,7 +251,15 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         } else {
             binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         }
-        if (savedInstanceState == null) startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
+        if (savedInstanceState == null) {
+            startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
+        } else {
+            if (svity) {
+                loadOpisanieSviat()
+            } else {
+                loadOpisanieSviatyia()
+            }
+        }
         setTollbarTheme()
     }
 
@@ -493,8 +497,10 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         else "s"
         val fileList = File("$filesDir/icons").list()
         for (i in 0 until arrayList.size) {
+            val indexImg = if (arrayList[i].date == -1) 1
+            else arrayList[i].index
             fileList?.forEach {
-                if (it.contains("${pref}_${arrayList[i].date}_${arrayList[i].mun}_")) {
+                if (it.contains("${pref}_${arrayList[i].date}_${arrayList[i].mun}_${indexImg}")) {
                     val t1 = it.lastIndexOf(".")
                     val fileNameT = it.substring(0, t1) + ".txt"
                     val file = File("$filesDir/iconsApisanne/$fileNameT")

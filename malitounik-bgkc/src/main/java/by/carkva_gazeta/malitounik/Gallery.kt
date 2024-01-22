@@ -237,7 +237,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
                             dayS = list[0]
                             munS = list[1]
                         }
-                        result = MainActivity.fromHtml(res.substring(t1 + 8, t2)).toString() + "\n(" + dayS + " " + munName[munS - 1] + ")"
+                        result = MainActivity.fromHtml(res.substring(t1 + 8, t2)).toString() + "\n(" + dayS + " " + munName[munS] + ")"
                     } catch (_: Throwable) {
                     }
                 }

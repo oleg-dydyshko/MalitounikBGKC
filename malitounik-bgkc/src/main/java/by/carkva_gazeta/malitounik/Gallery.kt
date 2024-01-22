@@ -122,6 +122,11 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
             gc.set(Calendar.DATE, day)
             gc.set(Calendar.MONTH, mun - 1)
             if (it.contains("s")) {
+                if (day == -1) {
+                    val list = svityiaRuchomyia(mun)
+                    gc.set(Calendar.DATE, list[0])
+                    gc.set(Calendar.MONTH, list[1])
+                }
                 gallery.add(GalleryData(gc[Calendar.DAY_OF_YEAR], loadOpisanieSviatyia(day, mun, it.substring(t3 + 1, t3 + 2).toInt()), "$filesDir/icons/$it", File("$filesDir/icons/$it").lastModified()))
             } else {
                 if (day == -1) {
@@ -134,6 +139,37 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
         }
         gallery.sort()
         if (this::adapter.isInitialized) adapter.updateList(gallery)
+    }
+
+    private fun svityiaRuchomyia(mun: Int): Array<Int> {
+        val pasha = Calendar.getInstance() as GregorianCalendar
+        var dayR = 1
+        var munR = 0
+        if (mun == 0) {
+            pasha.set(pasha[Calendar.YEAR], Calendar.DECEMBER, 25)
+            val pastvoW = pasha[Calendar.DAY_OF_WEEK]
+            for (e in 26..31) {
+                val pastvo = GregorianCalendar(pasha[Calendar.YEAR], Calendar.DECEMBER, e)
+                val iazepW = pastvo[Calendar.DAY_OF_WEEK]
+                if (pastvoW != Calendar.SUNDAY) {
+                    if (Calendar.SUNDAY == iazepW) {
+                        dayR = pastvo[Calendar.DATE]
+                        munR = Calendar.DECEMBER
+                    }
+                } else {
+                    if (Calendar.MONDAY == iazepW) {
+                        dayR = pastvo[Calendar.DATE]
+                        munR = Calendar.DECEMBER
+                    }
+                }
+            }
+        }
+        if (mun == 1) {
+            dayR = if (pasha.isLeapYear(pasha[Calendar.YEAR])) 29
+            else 28
+            munR = Calendar.FEBRUARY
+        }
+        return arrayOf(dayR, munR)
     }
 
     private fun svityRuchomyia(mun: Int): Array<Int> {
@@ -175,7 +211,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
                 }
             }
         }
-        return arrayOf(gc.get(Calendar.DATE), gc.get(Calendar.MONTH) + 1)
+        return arrayOf(gc.get(Calendar.DATE), gc.get(Calendar.MONTH))
     }
 
     private fun loadOpisanieSviat(day: Int, mun: Int): String {
@@ -223,36 +259,12 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener {
             if (builder.isNotEmpty()) {
                 arrayList.addAll(gson.fromJson(builder, type))
                 for (i in 0 until arrayList.size) {
-                    var dayR = 1
                     if (mun == arrayList[i][1].toInt()) {
                         val t1 = arrayList[i][2].indexOf("<strong>")
                         val t2 = arrayList[i][2].indexOf("</strong>")
                         if (t1 != -1 && t2 != -1) {
-                            if (mun == 0) {
-                                val pasha = Calendar.getInstance()
-                                pasha.set(pasha[Calendar.YEAR], Calendar.DECEMBER, 25)
-                                val pastvoW = pasha[Calendar.DAY_OF_WEEK]
-                                for (e in 26..31) {
-                                    val pastvo = GregorianCalendar(pasha[Calendar.YEAR], Calendar.DECEMBER, e)
-                                    val iazepW = pastvo[Calendar.DAY_OF_WEEK]
-                                    if (pastvoW != Calendar.SUNDAY) {
-                                        if (Calendar.SUNDAY == iazepW) {
-                                            dayR = pastvo[Calendar.DATE]
-                                        }
-                                    } else {
-                                        if (Calendar.MONDAY == iazepW) {
-                                            dayR = pastvo[Calendar.DATE]
-                                        }
-                                    }
-                                }
-                                result = arrayList[i][2].substring(t1 + 8, t2) + "\n(" + dayR + " " + munName[Calendar.DECEMBER] + ")"
-                            }
-                            if (mun == 1) {
-                                val gc = Calendar.getInstance() as GregorianCalendar
-                                dayR = if (gc.isLeapYear(gc[Calendar.YEAR])) 29
-                                else 28
-                                result = arrayList[i][2].substring(t1 + 8, t2) + "\n(" + dayR + " " + munName[Calendar.FEBRUARY] + ")"
-                            }
+                            val pyx = svityiaRuchomyia(mun)
+                            result = arrayList[i][2].substring(t1 + 8, t2) + "\n(" + pyx[0] + " " + munName[pyx[1]] + ")"
                         }
                     }
 

@@ -115,11 +115,8 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
             naidaunia.addAll(gson.fromJson(json, type))
         }
-        var title = pdfView.documentMeta.title
-        if (title == "" && filePath != "") {
-            val t1 = filePath.lastIndexOf("/")
-            title = filePath.substring(t1 + 1)
-        }
+        var title = pdfView.documentMeta?.title
+        if (title.isNullOrEmpty()) title = fileName
         if (filePath != "") {
             for (i in 0 until naidaunia.size) {
                 if (naidaunia[i][1].contains(filePath)) {
@@ -268,8 +265,8 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
 
     override fun onBack() {
         val intent = Intent()
-        var title = pdfView.documentMeta.title
-        if (title == "") title = fileName
+        var title = pdfView.documentMeta?.title
+        if (title.isNullOrEmpty()) title = fileName
         intent.putExtra("title", title)
         setResult(RESULT_OK, intent)
         super.onBack()

@@ -83,9 +83,9 @@ class DialogEditImage : DialogFragment() {
             _binding = DialogImageviewEditDisplayBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.admin_opisanne_icon)
-            bitmap = BitmapFactory.decodeFile(path)
-            if (bitmap == null) getImage()
-            binding.imageView2.setImageBitmap(bitmap)
+            val bitmapCreate = BitmapFactory.decodeFile(path)
+            if (bitmapCreate == null) getImage()
+            binding.imageView2.setImageBitmap(bitmapCreate)
             binding.imageView2.setOnClickListener {
                 getImage()
             }

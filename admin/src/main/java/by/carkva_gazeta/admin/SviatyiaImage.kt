@@ -14,6 +14,8 @@ import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +30,6 @@ import by.carkva_gazeta.admin.databinding.AdminSviatyiaImageBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
-import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.ListItemImageBinding
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.gson.Gson
@@ -137,7 +138,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
         }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.text = getString(R.string.admin_img_sviat)
+        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.admin_img_sviat)
     }
 
     private fun fullTextTollbar() {
@@ -238,7 +239,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
                 if (it.name.contains("s_${day}_${mun}_")) {
                     val fileIcon = File("$filesDir/icons/" + it.name)
                     it.getFile(fileIcon).addOnFailureListener {
-                        MainActivity.toastView(this, getString(R.string.error))
+                        MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
                     var iconApisanne = ""
                     try {
@@ -279,7 +280,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
         val time = fileOpisanie.lastModified()
         if (!fileOpisanie.exists() || time < update) {
             storageReference.getFile(fileOpisanie).addOnFailureListener {
-                MainActivity.toastView(this, getString(R.string.error))
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
             }.await()
         }
         val gson = Gson()
@@ -326,7 +327,21 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
             onBack()
             return true
         }
+        if (id == R.id.action_update_meta) {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.progressBar2.visibility = View.VISIBLE
+                withContext(Dispatchers.IO) {
+                    loadFilesMetaData()
+                }
+                binding.progressBar2.visibility = View.GONE
+            }
+        }
         return false
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.edit_sviaty_image, menu)
+        super.onCreateMenu(menu, menuInflater)
     }
 
     private fun launch() {
@@ -334,7 +349,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
         intent.type = "*/*"
         intent.action = Intent.ACTION_GET_CONTENT
         intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-        mActivityResultFile.launch(Intent.createChooser(intent, getString(R.string.vybrac_file)))
+        mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -397,7 +412,7 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
         launch()
     }
 
-    private class SviatyiaImageAdapter(activity: Activity, private val list: ArrayList<DataImages>) : ArrayAdapter<DataImages>(activity, R.layout.list_item_image, list) {
+    private class SviatyiaImageAdapter(activity: Activity, private val list: ArrayList<DataImages>) : ArrayAdapter<DataImages>(activity, by.carkva_gazeta.malitounik.R.layout.list_item_image, list) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val ea: ViewHolder

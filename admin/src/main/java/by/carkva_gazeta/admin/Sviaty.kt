@@ -47,9 +47,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogEditImage.DialogEditI
     private var edittext: AppCompatEditText? = null
 
     override fun imageFileEdit(bitmap: Bitmap?, opisanie: String) {
-        bitmap?.let {
-            fileUpload(it, opisanie)
-        }
+        fileUpload(bitmap, opisanie)
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -202,21 +200,23 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogEditImage.DialogEditI
         binding.titleToolbar.isSingleLine = true
     }
 
-    private fun fileUpload(bitmap: Bitmap, text: String) {
+    private fun fileUpload(bitmap: Bitmap?, text: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 val localFile = File("$filesDir/cache/cache.txt")
-                withContext(Dispatchers.IO) {
-                    val out = FileOutputStream(localFile)
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
-                    out.flush()
-                    out.close()
+                val fileName = "v_" + sviaty[binding.spinnerSviaty.selectedItemPosition].data.toString() + "_" + sviaty[binding.spinnerSviaty.selectedItemPosition].mun.toString() + "_1.jpg"
+                bitmap?.let {
+                    withContext(Dispatchers.IO) {
+                        val out = FileOutputStream(localFile)
+                        it.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                        out.flush()
+                        out.close()
+                    }
+                    Malitounik.referens.child("/chytanne/icons/$fileName").putFile(Uri.fromFile(localFile)).await()
                 }
-                val fileName = File("/chytanne/icons/v_" + sviaty[binding.spinnerSviaty.selectedItemPosition].data.toString() + "_" + sviaty[binding.spinnerSviaty.selectedItemPosition].mun.toString() + "_1.jpg")
-                Malitounik.referens.child("/chytanne/icons/" + fileName.name).putFile(Uri.fromFile(localFile)).await()
-                val t1 = fileName.name.lastIndexOf(".")
-                val fileNameT = fileName.name.substring(0, t1) + ".txt"
+                val t1 = fileName.lastIndexOf(".")
+                val fileNameT = fileName.substring(0, t1) + ".txt"
                 if (text != "") {
                     localFile.writer().use {
                         it.write(text)

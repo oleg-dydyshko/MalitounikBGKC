@@ -769,5 +769,6 @@
     <string name="admin_upload_log_contine">У логу няма зьмен. Усё роўна праверыць?</string>
     <string name="admin_update_log">Абнаўленьне лога</string>
     <string name="admin_sviatya_pyxomyia">Сьвятыя рухомыя</string>
+    <string name="admin_update_meta">Абнавіць метададзеныя</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

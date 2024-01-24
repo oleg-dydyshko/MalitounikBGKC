@@ -5,7 +5,6 @@ import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -297,7 +296,6 @@ class LogView : BaseActivity() {
             val t3 = checkList.indexOf("</meta>", t2)
             val fileLastUpdate = checkList.substring(t2 + 6, t3).toLong()
             if (fileLastUpdate < meta.updatedTimeMillis) {
-                Log.d("Oleg", "$fileLastUpdate < ${meta.updatedTimeMillis}")
                 log.add(path)
             }
         } else {

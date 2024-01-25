@@ -45,7 +45,7 @@ class MenuPesnyData {
         pesnyKal.add(Data("pesny_kal_6", "Звон зьвініць"))
         pesnyKal.add(Data("pesny_kal_7", "На шляху ў Бэтлеем"))
         pesnyKal.add(Data("pesny_kal_8", "Неба і зямля"))
-        pesnyKal.add(Data("pesny_kal_9", "Нова радасьць стала"))
+        pesnyKal.add(Data("piesni_kalady_nova_radasc_stala", "Нова радасьць стала"))
         pesnyKal.add(Data("pesny_kal_10", "Ночка цiхая, зарыста"))
         pesnyKal.add(Data("pesny_kal_11", "Ноччу сьвятой"))
         pesnyKal.add(Data("pesny_kal_12", "Паказалась з неба яснасьць"))
@@ -63,6 +63,9 @@ class MenuPesnyData {
         pesnyKal.add(Data("piesni_kalady_piesnia_pra_bozaje_naradzennie_boh_prychodzic", "Песьня пра Божае нараджэньне"))
         pesnyKal.add(Data("piesni_kalady_promien_zorki_z_nieba_liusia", "Промень зоркі з неба ліўся"))
         pesnyKal.add(Data("piesni_kalady_u_betlejem", "У Бэтлеем"))
+        pesnyKal.add(Data("piesni_kalady_o_zyvatvorny_tvorca_zor", "O, жыватворны Творца зор"))
+        pesnyKal.add(Data("piesni_kalady_u_horadzie_cara_davida", "У горадзе цара Давіда"))
+        pesnyKal.add(Data("piesni_kalady_zbauca_svietu", "Збаўца сьвету"))
 
         pesnyPrasl.add(Data("pesny_prasl_0", "Ён паўсюль"))
         pesnyPrasl.add(Data("pesny_prasl_1", "Ісус вызваліў мяне"))

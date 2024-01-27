@@ -196,10 +196,10 @@ class LogView : BaseActivity() {
             logJob?.cancel()
             logJob = CoroutineScope(Dispatchers.Main).launch {
                 val localFile = File("$filesDir/cache/cache.txt")
-                Malitounik.referens.child("/admin/log.txt").getFile(localFile)
+                Malitounik.referens.child("/admin/log.txt").getFile(localFile).await()
                 var log = ""
                 if (localFile.exists()) log = localFile.readText()
-                if (log != "") {
+                if (log.isNotEmpty()) {
                     getLogFile()
                 } else {
                     binding.textView.text = getString(by.carkva_gazeta.malitounik.R.string.admin_upload_log_contine)

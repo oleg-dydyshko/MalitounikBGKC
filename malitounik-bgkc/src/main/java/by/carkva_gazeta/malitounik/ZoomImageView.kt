@@ -26,6 +26,7 @@ class ZoomImageView : AppCompatImageView, View.OnTouchListener, GestureDetector.
     private var viewHeight = 0
     private var mLast = PointF()
     private var mStart = PointF()
+    private var mZoomImageViewListener: ZoomImageViewListener? = null
 
     constructor(context: Context) : super(context) {
         sharedConstructing(context)
@@ -37,6 +38,14 @@ class ZoomImageView : AppCompatImageView, View.OnTouchListener, GestureDetector.
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         sharedConstructing(context)
+    }
+
+    interface ZoomImageViewListener {
+        fun onZoomChanged(isZoom: Boolean)
+    }
+
+    fun setZoomImageViewListener(listener: ZoomImageViewListener) {
+        mZoomImageViewListener = listener
     }
 
     private fun sharedConstructing(context: Context) {
@@ -70,6 +79,7 @@ class ZoomImageView : AppCompatImageView, View.OnTouchListener, GestureDetector.
             } else {
                 mMatrix.postScale(mScaleFactor, mScaleFactor, detector.focusX, detector.focusY)
             }
+            mZoomImageViewListener?.onZoomChanged(mSaveScale > 1)
             fixTranslation()
             return true
         }
@@ -94,6 +104,7 @@ class ZoomImageView : AppCompatImageView, View.OnTouchListener, GestureDetector.
         origWidth = viewWidth - 2 * redundantXSpace
         origHeight = viewHeight - 2 * redundantYSpace
         imageMatrix = mMatrix
+        mZoomImageViewListener?.onZoomChanged(false)
     }
 
     private fun fixTranslation() {
@@ -147,6 +158,7 @@ class ZoomImageView : AppCompatImageView, View.OnTouchListener, GestureDetector.
                 mStart.set(mLast)
                 mode = DRAG
             }
+
             MotionEvent.ACTION_MOVE -> if (mode == DRAG) {
                 val dx = currentPoint.x - mLast.x
                 val dy = currentPoint.y - mLast.y
@@ -156,6 +168,7 @@ class ZoomImageView : AppCompatImageView, View.OnTouchListener, GestureDetector.
                 fixTranslation()
                 mLast[currentPoint.x] = currentPoint.y
             }
+
             MotionEvent.ACTION_POINTER_UP -> mode = NONE
         }
         imageMatrix = mMatrix

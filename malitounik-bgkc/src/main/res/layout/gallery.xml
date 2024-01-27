@@ -61,6 +61,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
+    <TextView
+        android:id="@+id/action_opisanie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/selector_red_maran_ata"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColor="@color/colorWhite"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
+
     <ImageView
         android:id="@+id/action_forward"
         android:layout_width="40sp"
@@ -76,4 +93,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/full_screen_forward" />
+
+    <ImageView
+        android:id="@+id/action_back"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10sp"
+        android:background="@drawable/selector_red_maran_ata"
+        android:contentDescription="@string/empty"
+        android:gravity="center"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/full_screen_back" />
 </androidx.constraintlayout.widget.ConstraintLayout>

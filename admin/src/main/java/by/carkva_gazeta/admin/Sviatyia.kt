@@ -46,17 +46,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.File
 import java.util.Calendar
-import java.util.GregorianCalendar
 
 class Sviatyia : BaseActivity(), View.OnClickListener {
     private lateinit var k: SharedPreferences
     private var setedit = false
     private lateinit var binding: AdminSviatyiaBinding
     private var resetTollbarJob: Job? = null
-    private var dayOfYear = 1
     private var urlJob: Job? = null
     private val sviatyiaNew1 = ArrayList<ArrayList<String>>()
-    private val c = Calendar.getInstance()
+    private lateinit var caliandarDayOfYearList: ArrayList<ArrayList<String>>
     private val array: Array<String>
         get() = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.admin_svity)
     private val arrayList = ArrayList<Tipicon>()
@@ -71,9 +69,8 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
             if (intent != null) {
                 val position = intent.getIntExtra("position", 0)
                 val arrayList = MenuCaliandar.getPositionCaliandar(position)
-                val cal = GregorianCalendar(VYSOCOSNYI_GOD, arrayList[2].toInt(), arrayList[1].toInt())
-                dayOfYear = cal[Calendar.DAY_OF_YEAR]
-                setDate(dayOfYear)
+                caliandarDayOfYearList = MenuCaliandar.getDataCalaindar(arrayList[24].toInt())
+                setDate()
             }
         }
     }
@@ -123,8 +120,9 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         binding = AdminSviatyiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        dayOfYear = intent.extras?.getInt("dayOfYear") ?: (c[Calendar.DAY_OF_YEAR])
-
+        val cal = Calendar.getInstance()
+        val dayOfYear = intent.extras?.getInt("dayOfYear") ?: cal[Calendar.DAY_OF_YEAR]
+        caliandarDayOfYearList = MenuCaliandar.getDataCalaindar(dayOfYear = dayOfYear, year = cal[Calendar.YEAR])
         arrayList.add(Tipicon(0, "Няма"))
         arrayList.add(Tipicon(by.carkva_gazeta.malitounik.R.drawable.znaki_krest, "З вялікай вячэрняй і вялікім услаўленьнем на ютрані"))
         arrayList.add(Tipicon(by.carkva_gazeta.malitounik.R.drawable.znaki_krest_v_kruge, "Двунадзясятыя і вялікія сьвяты"))
@@ -137,23 +135,21 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         binding.actionP.setOnClickListener(this)
         binding.imageViewLeft.setOnClickListener(this)
         binding.imageViewRight.setOnClickListener(this)
-        setDate(dayOfYear)
+        setDate()
         setTollbarTheme()
     }
 
-    private fun setDate(dayOfYear: Int, count: Int = 0) {
+    private fun setDate(count: Int = 0) {
         if (MainActivity.isNetworkAvailable()) {
             binding.progressBar2.visibility = View.VISIBLE
-            c.set(Calendar.YEAR, VYSOCOSNYI_GOD)
-            c.set(Calendar.DAY_OF_YEAR, dayOfYear)
             val munName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
-            binding.date.text = getString(by.carkva_gazeta.malitounik.R.string.admin_date, c[Calendar.DAY_OF_MONTH], munName[c[Calendar.MONTH]])
+            binding.date.text = getString(by.carkva_gazeta.malitounik.R.string.admin_date, caliandarDayOfYearList[0][1].toInt(), munName[caliandarDayOfYearList[0][2].toInt()])
             urlJob?.cancel()
             urlJob = CoroutineScope(Dispatchers.Main).launch {
                 try {
                     var builder = ""
                     val localFile = File("$filesDir/cache/cache.txt")
-                    referens.child("/chytanne/sviatyja/opisanie" + (c[Calendar.MONTH] + 1) + ".json").getFile(localFile).addOnCompleteListener {
+                    referens.child("/chytanne/sviatyja/opisanie" + (caliandarDayOfYearList[0][2].toInt() + 1) + ".json").getFile(localFile).addOnCompleteListener {
                         if (it.isSuccessful) builder = localFile.readText()
                         else MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }.await()
@@ -161,7 +157,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                     builder = if (builder != "") {
                         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
                         val arrayList: ArrayList<String> = gson.fromJson(builder, type)
-                        arrayList[c[Calendar.DAY_OF_MONTH] - 1]
+                        arrayList[caliandarDayOfYearList[0][1].toInt() - 1]
                     } else {
                         getString(by.carkva_gazeta.malitounik.R.string.error)
                     }
@@ -186,16 +182,16 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                         binding.chytanne.setSelection(0)
                         binding.spinnerStyle.adapter = SpinnerAdapter(this@Sviatyia, array)
                         binding.spinnerZnak.adapter = SpinnerAdapterTipicon(this@Sviatyia, arrayList)
-                        binding.sviaty.setText(sviatyiaNew1[c[Calendar.DAY_OF_YEAR] - 1][0])
-                        binding.chytanne.setText(sviatyiaNew1[c[Calendar.DAY_OF_YEAR] - 1][1])
+                        binding.sviaty.setText(sviatyiaNew1[caliandarDayOfYearList[0][24].toInt() - 1][0])
+                        binding.chytanne.setText(sviatyiaNew1[caliandarDayOfYearList[0][24].toInt() - 1][1])
                         var position = 0
-                        when (sviatyiaNew1[c[Calendar.DAY_OF_YEAR] - 1][2].toInt()) {
+                        when (sviatyiaNew1[caliandarDayOfYearList[0][24].toInt() - 1][2].toInt()) {
                             6 -> position = 0
                             7 -> position = 1
                             8 -> position = 2
                         }
                         binding.spinnerStyle.setSelection(position)
-                        val znaki = sviatyiaNew1[c[Calendar.DAY_OF_YEAR] - 1][3]
+                        val znaki = sviatyiaNew1[caliandarDayOfYearList[0][24].toInt() - 1][3]
                         val position2 = if (znaki == "") 0
                         else znaki.toInt()
                         binding.spinnerZnak.setSelection(position2)
@@ -207,7 +203,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                     MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                 }
                 if ((binding.apisanne.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error) || binding.sviaty.text.toString() == getString(by.carkva_gazeta.malitounik.R.string.error)) && count < 3) {
-                    setDate(dayOfYear, count + 1)
+                    setDate(count + 1)
                 } else {
                     binding.progressBar2.visibility = View.GONE
                 }
@@ -289,22 +285,17 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         }
         if (id == R.id.action_glava) {
             val i = Intent(this, CaliandarMun::class.java)
-            val cal = Calendar.getInstance()
-            cal.set(Calendar.DAY_OF_YEAR, dayOfYear)
-            i.putExtra("day", cal[Calendar.DATE])
-            i.putExtra("year", cal[Calendar.YEAR])
-            i.putExtra("mun", cal[Calendar.MONTH])
+            i.putExtra("day", caliandarDayOfYearList[0][1].toInt())
+            i.putExtra("year", caliandarDayOfYearList[0][3].toInt())
+            i.putExtra("mun", caliandarDayOfYearList[0][2].toInt())
             i.putExtra("getData", true)
             caliandarMunLauncher.launch(i)
             return true
         }
         if (id == R.id.action_upload_image) {
-            val cal = Calendar.getInstance()
-            cal.set(Calendar.YEAR, VYSOCOSNYI_GOD)
-            cal.set(Calendar.DAY_OF_YEAR, dayOfYear)
             val i = Intent(this, SviatyiaImage::class.java)
-            i.putExtra("day", cal[Calendar.DATE])
-            i.putExtra("mun", cal[Calendar.MONTH] + 1)
+            i.putExtra("day", caliandarDayOfYearList[0][1].toInt())
+            i.putExtra("mun", caliandarDayOfYearList[0][2].toInt() + 1)
             startActivity(i)
             return true
         }
@@ -342,12 +333,20 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         val id = v?.id ?: 0
         if (id == R.id.imageViewLeft) {
-            dayOfYear--
-            setDate(dayOfYear)
+            val cal = Calendar.getInstance()
+            var dayOfYear = caliandarDayOfYearList[0][24].toInt()
+            if (dayOfYear == 1) dayOfYear = 366
+            else dayOfYear--
+            caliandarDayOfYearList = MenuCaliandar.getDataCalaindar(dayOfYear = dayOfYear, year = cal[Calendar.YEAR])
+            setDate()
         }
         if (id == R.id.imageViewRight) {
-            dayOfYear++
-            setDate(dayOfYear)
+            val cal = Calendar.getInstance()
+            var dayOfYear = caliandarDayOfYearList[0][24].toInt()
+            if (dayOfYear == 366) dayOfYear = 1
+            else dayOfYear++
+            caliandarDayOfYearList = MenuCaliandar.getDataCalaindar(dayOfYear = dayOfYear, year = cal[Calendar.YEAR])
+            setDate()
         }
         if (id == R.id.action_bold) {
             val startSelect = binding.apisanne.selectionStart
@@ -426,8 +425,8 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
     private fun sendPostRequest(name: String, chtenie: String, bold: Int, tipicon: String, spaw: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
-                val data = c[Calendar.DAY_OF_MONTH]
-                val mun = c[Calendar.MONTH]
+                val data = caliandarDayOfYearList[0][1].toInt()
+                val mun = caliandarDayOfYearList[0][2].toInt()
                 if (!(name == getString(by.carkva_gazeta.malitounik.R.string.error) || name == "")) {
                     var style = 8
                     when (bold) {
@@ -449,10 +448,10 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                                 }
                                 sviatyiaNewList.add(list)
                             }
-                            sviatyiaNewList[dayOfYear - 1][0] = name
-                            sviatyiaNewList[dayOfYear - 1][1] = chtenie
-                            sviatyiaNewList[dayOfYear - 1][2] = style.toString()
-                            sviatyiaNewList[dayOfYear - 1][3] = tipicon
+                            sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][0] = name
+                            sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][1] = chtenie
+                            sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][2] = style.toString()
+                            sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][3] = tipicon
                         } else {
                             MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
@@ -589,8 +588,4 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
     private class ViewHolderImage(var image: ImageView, var text: TextView)
 
     private data class Tipicon(val imageResource: Int, val title: String)
-
-    companion object {
-        private const val VYSOCOSNYI_GOD = 2020
-    }
 }

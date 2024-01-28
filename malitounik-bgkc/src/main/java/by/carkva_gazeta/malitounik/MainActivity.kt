@@ -1814,7 +1814,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (fragment == null) {
             val ftrans = supportFragmentManager.beginTransaction()
             ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
-            val vybranoe = MenuBiblijateka.getInstance(rubNew, isload, fileName, filePath)
+            val vybranoe = MenuBiblijateka.getInstance(rub, isload, fileName, filePath)
             ftrans.replace(R.id.conteiner, vybranoe, "MenuBiblijateka$rubNew")
             if (start) {
                 ftrans.commit()

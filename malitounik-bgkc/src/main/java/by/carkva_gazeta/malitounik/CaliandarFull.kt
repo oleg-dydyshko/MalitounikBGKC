@@ -332,7 +332,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                 binding.textChytanneSviatyiaDop.text = MenuCaliandar.getPositionCaliandar(position)[11]
                 binding.textChytanneSviatyiaDop.visibility = View.VISIBLE
             }
-            if (MenuCaliandar.getPositionCaliandar(position)[12].toInt() == 2) {
+            if (MenuCaliandar.getPositionCaliandar(position)[5] == "1" || MenuCaliandar.getPositionCaliandar(position)[5] == "2") {
                 if (dzenNoch) binding.znakTipicona.setImageResource(R.drawable.znaki_krest_v_kruge_black)
                 else binding.znakTipicona.setImageResource(R.drawable.znaki_krest_v_kruge)
                 binding.znakTipicona.visibility = View.VISIBLE

@@ -130,10 +130,14 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             val t2 = filePath.lastIndexOf("/")
             val img = filePath.substring(t2 + 1)
             val t1 = img.lastIndexOf(".")
-            val image = img.substring(0, t1) + ".png"
-            val imageTemp = File("$filesDir/image_temp/$image")
-            if (imageTemp.exists()) temp.add("$filesDir/image_temp/$image")
-            else temp.add("")
+            if (t1 != -1) {
+                val image = img.substring(0, t1) + ".png"
+                val imageTemp = File("$filesDir/image_temp/$image")
+                if (imageTemp.exists()) temp.add("$filesDir/image_temp/$image")
+                else temp.add("")
+            } else {
+                temp.add("")
+            }
             naidaunia.add(temp)
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
             val prefEditor = k.edit()

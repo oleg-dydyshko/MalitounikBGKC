@@ -62,6 +62,11 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     private var bitmapJob: Job? = null
     private var binding: BiblijatekaBinding? = null
     private var munuBiblijatekaListener: MunuBiblijatekaListener? = null
+    private val mBiblijatekaPdfResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            loadNiadaunia()
+        }
+    }
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             activity?.let { activity ->
@@ -428,16 +433,6 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                         }
                     }
                 }
-                val gson = Gson()
-                val json = k.getString("bibliateka_naidaunia", "")
-                if (json == "") {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        withContext(Dispatchers.IO) {
-                            val dir = File("${it.filesDir}/Book")
-                            if (dir.exists()) dir.deleteRecursively()
-                        }
-                    }
-                }
                 if (savedInstanceState != null) {
                     filePath = savedInstanceState.getString("filePath") ?: ""
                     fileName = savedInstanceState.getString("fileName") ?: ""
@@ -445,19 +440,12 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     isLoad = savedInstanceState.getBoolean("isLoad")
                     nameRubrika = savedInstanceState.getString("nameRubrika") ?: ""
                     saveindep = false
-                    if (!json.equals("")) {
-                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                        naidaunia.addAll(gson.fromJson(json, type))
-                    }
                 } else {
-                    if (!json.equals("")) {
-                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                        naidaunia.addAll(gson.fromJson(json, type))
-                    }
                     fileName = arguments?.getString("fileName", "") ?: ""
                     filePath = arguments?.getString("filePath", "") ?: ""
                     isLoad = arguments?.getBoolean("isLoad", false) ?: false
                 }
+                loadNiadaunia()
                 munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
                 idSelect = arguments?.getInt("rub", MainActivity.MALITOUNIKI) ?: MainActivity.MALITOUNIKI
                 if (idSelect == MainActivity.NIADAUNIA || idSelect == MainActivity.SETFILE) {
@@ -482,6 +470,30 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 }
                 setTitleBibliateka(idSelect)
             }
+        }
+    }
+
+    private fun loadNiadaunia() {
+        activity?.let {
+            val gson = Gson()
+            val json = k.getString("bibliateka_naidaunia", "")
+            if (json == "") {
+                CoroutineScope(Dispatchers.Main).launch {
+                    withContext(Dispatchers.IO) {
+                        val dir = File("${it.filesDir}/Book")
+                        if (dir.exists()) dir.deleteRecursively()
+                    }
+                }
+            }
+            naidaunia.clear()
+            if (!json.equals("")) {
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                naidaunia.addAll(gson.fromJson(json, type))
+            }
+            arrayList.clear()
+            arrayList.addAll(naidaunia)
+            arrayList.reverse()
+            adapter.notifyDataSetChanged()
         }
     }
 
@@ -517,7 +529,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 intent.setClassName(activity, MainActivity.BIBLIJATEKAPDF)
                 intent.putExtra("filePath", filePath)
                 intent.putExtra("fileName", fileName)
-                startActivity(intent)
+                mBiblijatekaPdfResult.launch(intent)
             }
         }
     }
@@ -555,7 +567,6 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     arrayList.addAll(naidaunia)
                     arrayList.reverse()
                     adapter.notifyDataSetChanged()
-                    idSelect = MainActivity.NIADAUNIA
                     nameRubrika = it.getString(R.string.bibliateka_niadaunia)
                 }
             }
@@ -573,6 +584,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             mActivityResultFile.launch(Intent.createChooser(intent, activity?.getString(R.string.vybrac_file)))
             rubryka = if (naidaunia.size > 0) MainActivity.NIADAUNIA
             else MainActivity.MALITOUNIKI
+            idSelect = rubryka
         }
         val gson = Gson()
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type

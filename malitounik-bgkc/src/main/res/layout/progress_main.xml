@@ -4,39 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <by.carkva_gazeta.malitounik.TextViewCustom
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:gravity="center"
         android:paddingLeft="10sp"
         android:paddingRight="10sp"
-        android:visibility="gone"
+        android:textColor="@color/colorPrimaryMaranAta"
+        android:textIsSelectable="false"
+        android:textSize="70sp"
+        android:textStyle="bold"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <by.carkva_gazeta.malitounik.TextViewCustom
-            android:id="@+id/progressTitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/colorPrimary"
-            android:textIsSelectable="false"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <by.carkva_gazeta.malitounik.TextViewCustom
-            android:id="@+id/progressText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/colorPrimary"
-            android:textIsSelectable="false"
-            android:textSize="50sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <by.carkva_gazeta.malitounik.VerticalSeekBar
         android:id="@+id/seekBarBrighess"

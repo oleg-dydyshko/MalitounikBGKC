@@ -101,20 +101,20 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         if (dzenNoch) {
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            bindingprogress.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta))
             bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
             bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
         }
         bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                fontBiblia = SettingsActivity.getFontSize(progress)
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
-                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
-                val prefEditor = k.edit()
-                prefEditor.putFloat("font_biblia", fontBiblia)
-                prefEditor.apply()
-                onDialogFontSize(fontBiblia)
+                if (fontBiblia != SettingsActivity.getFontSize(progress)) {
+                    fontBiblia = SettingsActivity.getFontSize(progress)
+                    bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
+                    val prefEditor = k.edit()
+                    prefEditor.putFloat("font_biblia", fontBiblia)
+                    prefEditor.apply()
+                    onDialogFontSize(fontBiblia)
+                }
                 startProcent()
             }
 
@@ -126,13 +126,14 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         })
         bindingprogress.seekBarBrighess.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                MainActivity.brightness = progress
-                val lp = window.attributes
-                lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                window.attributes = lp
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
-                MainActivity.checkBrightness = false
+                if (MainActivity.brightness != progress) {
+                    MainActivity.brightness = progress
+                    val lp = window.attributes
+                    lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+                    window.attributes = lp
+                    bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                    MainActivity.checkBrightness = false
+                }
                 startProcent()
             }
 
@@ -352,8 +353,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
                 MotionEvent.ACTION_DOWN -> {
                     if (x < otstup) {
                         bindingprogress.seekBarBrighess.progress = MainActivity.brightness
-                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                        bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
+                        bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
                             bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
                             bindingprogress.seekBarBrighess.visibility = View.VISIBLE
@@ -362,8 +362,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
                     }
                     if (x > widthConstraintLayout - otstup) {
                         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
-                        bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
+                        bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                         if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
                             bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
                             bindingprogress.seekBarFontSize.visibility = View.VISIBLE
@@ -380,9 +379,8 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         procentJob?.cancel()
         bindingprogress.progress.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(1000)
-            bindingprogress.progress.visibility = View.GONE
             delay(4000)
+            bindingprogress.progress.visibility = View.GONE
             if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
                 bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@PasliaPrychascia, by.carkva_gazeta.malitounik.R.anim.slide_out_left)
                 bindingprogress.seekBarBrighess.visibility = View.GONE

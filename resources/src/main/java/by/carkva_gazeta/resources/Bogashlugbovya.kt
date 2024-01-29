@@ -406,8 +406,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            bindingprogress.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta))
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
@@ -418,13 +417,14 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         men = checkVybranoe(this, resurs)
         bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                fontBiblia = SettingsActivity.getFontSize(progress)
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
-                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
-                val prefEditor = k.edit()
-                prefEditor.putFloat("font_biblia", fontBiblia)
-                prefEditor.apply()
-                onDialogFontSize(fontBiblia)
+                if (fontBiblia != SettingsActivity.getFontSize(progress)) {
+                    fontBiblia = SettingsActivity.getFontSize(progress)
+                    bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
+                    val prefEditor = k.edit()
+                    prefEditor.putFloat("font_biblia", fontBiblia)
+                    prefEditor.apply()
+                    onDialogFontSize(fontBiblia)
+                }
                 startProcent()
             }
 
@@ -436,13 +436,14 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         })
         bindingprogress.seekBarBrighess.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                MainActivity.brightness = progress
-                val lp = window.attributes
-                lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                window.attributes = lp
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
-                MainActivity.checkBrightness = false
+                if (MainActivity.brightness != progress) {
+                    MainActivity.brightness = progress
+                    val lp = window.attributes
+                    lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+                    window.attributes = lp
+                    bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                    MainActivity.checkBrightness = false
+                }
                 startProcent()
             }
 
@@ -456,8 +457,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (spid in 20..235) {
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
-                bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
+                bindingprogress.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 startProcent()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
@@ -468,8 +468,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (spid in 10..225) {
                 spid += 5
                 val proc = 100 - (spid - 15) * 100 / 215
-                bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
+                bindingprogress.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 startProcent()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
@@ -1386,9 +1385,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         procentJob?.cancel()
         bindingprogress.progress.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(1000)
-            bindingprogress.progress.visibility = View.GONE
             delay(4000)
+            bindingprogress.progress.visibility = View.GONE
             if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
                 bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@Bogashlugbovya, by.carkva_gazeta.malitounik.R.anim.slide_out_left)
                 bindingprogress.seekBarBrighess.visibility = View.GONE
@@ -1507,8 +1505,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     val proc: Int
                     if (x < otstup) {
                         bindingprogress.seekBarBrighess.progress = MainActivity.brightness
-                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                        bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
+                        bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
                             bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
                             bindingprogress.seekBarBrighess.visibility = View.VISIBLE
@@ -1517,8 +1514,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     }
                     if (x > widthConstraintLayout - otstup && y < heightConstraintLayout - otstup2) {
                         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
-                        bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
+                        bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                         if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
                             bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
                             bindingprogress.seekBarFontSize.visibility = View.VISIBLE
@@ -1529,8 +1525,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         if (mAutoScroll && binding.find.visibility == View.GONE) {
                             spid = k.getInt("autoscrollSpid", 60)
                             proc = 100 - (spid - 15) * 100 / 215
-                            bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                            bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
+                            bindingprogress.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                             startProcent()
                             startAutoScroll()
                             invalidateOptionsMenu()

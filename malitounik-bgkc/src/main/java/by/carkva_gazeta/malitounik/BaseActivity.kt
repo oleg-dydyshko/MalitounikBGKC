@@ -270,6 +270,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         mLastClickTime = SystemClock.elapsedRealtime()
         autoDzenNoch = isDzenNoch
         startAutoDzenNoch = isDzenNoch
+        dzenNoch = isDzenNoch
         val prefEditor = k.edit()
         prefEditor.putBoolean("dzen_noch", isDzenNoch)
         prefEditor.apply()

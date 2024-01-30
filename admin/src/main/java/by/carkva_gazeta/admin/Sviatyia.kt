@@ -425,6 +425,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
     private fun sendPostRequest(name: String, chtenie: String, bold: Int, tipicon: String, spaw: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
+                var checkSviatyai = false
                 val data = caliandarDayOfYearList[0][1].toInt()
                 val mun = caliandarDayOfYearList[0][2].toInt()
                 if (!(name == getString(by.carkva_gazeta.malitounik.R.string.error) || name == "")) {
@@ -448,10 +449,13 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                                 }
                                 sviatyiaNewList.add(list)
                             }
-                            sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][0] = name
-                            sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][1] = chtenie
-                            sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][2] = style.toString()
-                            sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][3] = tipicon
+                            if (sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][0] != name || sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][1] != chtenie || sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][2] != style.toString() || sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][3] != tipicon) {
+                                sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][0] = name
+                                sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][1] = chtenie
+                                sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][2] = style.toString()
+                                sviatyiaNewList[caliandarDayOfYearList[0][24].toInt() - 1][3] = tipicon
+                                checkSviatyai = true
+                            }
                         } else {
                             MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
@@ -507,7 +511,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 } else {
                     MainActivity.toastView(this@Sviatyia, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
-                saveLogFile()
+                if (checkSviatyai) saveLogFile()
                 binding.progressBar2.visibility = View.GONE
             }
         }

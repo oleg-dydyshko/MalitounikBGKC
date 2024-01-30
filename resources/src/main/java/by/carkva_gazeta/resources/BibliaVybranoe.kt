@@ -674,8 +674,9 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         procentJob?.cancel()
         bindingprogress.progress.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(4000)
+            delay(2000)
             bindingprogress.progress.visibility = View.GONE
+            delay(3000)
             if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
                 bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@BibliaVybranoe, by.carkva_gazeta.malitounik.R.anim.slide_out_left)
                 bindingprogress.seekBarBrighess.visibility = View.GONE

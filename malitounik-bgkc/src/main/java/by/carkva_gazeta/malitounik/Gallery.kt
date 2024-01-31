@@ -45,6 +45,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
     private var loadIconsJob: Job? = null
     private lateinit var chin: SharedPreferences
     private var getOpisanieJob: Job? = null
+    private var isClosed: Boolean = false
 
     override fun onPause() {
         super.onPause()
@@ -66,6 +67,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             binding.imageViewFull.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.INVISIBLE
             binding.titleToolbar.text = savedInstanceState.getString("textFull")
+            isClosed = savedInstanceState.getBoolean("isClosed")
         } else {
             binding.titleToolbar.text = resources.getText(R.string.gallery)
         }
@@ -96,6 +98,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         binding.actionBack.setOnClickListener {
             fullImagePosition--
             if (fullImagePosition >= 0) {
+                isClosed = false
                 val file = File(gallery[fullImagePosition].iconPath)
                 Picasso.get().load(file).into(binding.imageViewFull)
                 fullImagePathVisable = file.absolutePath
@@ -120,6 +123,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         binding.actionForward.setOnClickListener {
             fullImagePosition++
             if (fullImagePosition < gallery.size) {
+                isClosed = false
                 val file = File(gallery[fullImagePosition].iconPath)
                 Picasso.get().load(file).into(binding.imageViewFull)
                 fullImagePathVisable = file.absolutePath
@@ -141,18 +145,25 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
                 }
             }
         }
+        binding.actionOpisanieClose.setOnClickListener {
+            isClosed = true
+            binding.actionOpisanie.visibility = View.GONE
+            binding.actionOpisanieClose.visibility = View.GONE
+        }
         startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
     }
 
     private suspend fun getOpisanieIcons(file: File) {
         binding.actionOpisanie.visibility = View.GONE
+        binding.actionOpisanieClose.visibility = View.GONE
         binding.actionOpisanie.text = ""
         val t3 = file.name.lastIndexOf(".")
         val fileNameT = file.name.substring(0, t3) + ".txt"
         val fileOpisanie = File("$filesDir/iconsApisanne/$fileNameT")
-        if (fileOpisanie.exists()) {
+        if (!isClosed && fileOpisanie.exists()) {
             binding.actionOpisanie.text = fileOpisanie.readText().trim()
             binding.actionOpisanie.visibility = View.VISIBLE
+            binding.actionOpisanieClose.visibility = View.VISIBLE
         }
         if (MainActivity.isNetworkAvailable()) {
             try {
@@ -162,12 +173,14 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             } catch (_: Throwable) {
             }
         }
-        if (fileOpisanie.exists()) {
+        if (!isClosed && fileOpisanie.exists()) {
             binding.actionOpisanie.text = fileOpisanie.readText().trim()
             binding.actionOpisanie.visibility = View.VISIBLE
+            binding.actionOpisanieClose.visibility = View.VISIBLE
         } else {
             binding.actionOpisanie.text = ""
             binding.actionOpisanie.visibility = View.GONE
+            binding.actionOpisanieClose.visibility = View.GONE
         }
     }
 
@@ -183,8 +196,9 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
                 binding.actionBack.visibility = View.GONE
                 binding.actionBack.animation = animation2
             }
-            if (binding.actionOpisanie.visibility == View.VISIBLE) {
+            if (!isClosed && binding.actionOpisanie.visibility == View.VISIBLE) {
                 binding.actionOpisanie.visibility = View.GONE
+                binding.actionOpisanieClose.visibility = View.GONE
             }
         } else {
             if (fullImagePosition > 0 && binding.actionBack.visibility == View.GONE) {
@@ -197,8 +211,9 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
                 binding.actionForward.visibility = View.VISIBLE
                 binding.actionForward.animation = animation2
             }
-            if (binding.actionOpisanie.text.isNotEmpty() && binding.actionOpisanie.visibility == View.GONE) {
+            if (!isClosed && binding.actionOpisanie.text.isNotEmpty() && binding.actionOpisanie.visibility == View.GONE) {
                 binding.actionOpisanie.visibility = View.VISIBLE
+                binding.actionOpisanieClose.visibility = View.VISIBLE
             }
         }
     }
@@ -422,6 +437,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             }
             if (binding.actionOpisanie.visibility == View.VISIBLE) {
                 binding.actionOpisanie.visibility = View.GONE
+                binding.actionOpisanieClose.visibility = View.GONE
             }
             invalidateOptionsMenu()
         } else {
@@ -719,6 +735,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         super.onSaveInstanceState(outState)
         outState.putBoolean("imageViewFullVisable", binding.imageViewFull.visibility == View.VISIBLE)
         outState.putString("textFull", binding.titleToolbar.text.toString())
+        outState.putBoolean("isClosed", isClosed)
     }
 
     private inner class GalleryAdapter(val binding: GalleryBinding, gallery: ArrayList<GalleryData>) : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {

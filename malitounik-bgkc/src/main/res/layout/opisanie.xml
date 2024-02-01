@@ -15,30 +15,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolbarLayout"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="enterAlways|enterAlwaysCollapsed">
+            app:contentInsetStartWithNavigation="0sp"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+            <TextView
+                android:id="@+id/title_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:contentInsetStartWithNavigation="0sp"
-                app:popupTheme="@style/AppTheme.PopupOverlay">
-
-                <TextView
-                    android:id="@+id/title_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:singleLine="true"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:singleLine="true"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <ProgressBar
@@ -47,32 +39,24 @@
         android:layout_width="0sp"
         android:layout_height="10sp"
         android:indeterminate="true"
+        android:indeterminateOnly="true"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
-        android:layout_width="0sp"
-        android:layout_height="0sp"
-        android:layout_marginStart="10sp"
-        android:layout_marginLeft="10sp"
-        android:layout_marginEnd="10sp"
-        android:layout_marginRight="10sp"
-        android:layout_marginBottom="10sp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar2">
-
-        <ListView
-            android:id="@+id/listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        app:layout_constraintTop_toBottomOf="@id/progressBar2" />
 
     <by.carkva_gazeta.malitounik.ZoomImageView
         android:id="@+id/imageViewFull"

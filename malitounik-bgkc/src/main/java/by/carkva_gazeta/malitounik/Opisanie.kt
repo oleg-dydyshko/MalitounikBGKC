@@ -241,7 +241,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             Picasso.get().load(file2).into(binding.imageViewFull)
             binding.imageViewFull.visibility = View.VISIBLE
             binding.progressBar2.visibility = View.INVISIBLE
-            binding.swipeRefreshLayout.visibility = View.GONE
             binding.titleToolbar.text = savedInstanceState.getString("tollbarText")
         } else {
             binding.titleToolbar.text = resources.getText(R.string.zmiest)
@@ -249,17 +248,9 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         adapter = OpisanieAdapter(this)
         binding.listview.adapter = adapter
         binding.listview.divider = null
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            viewSviaryiaIIcon()
-            startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
-            binding.swipeRefreshLayout.isRefreshing = false
-        }
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
-            binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary_black)
             binding.imageViewFull.background = ContextCompat.getDrawable(this, R.color.colorbackground_material_dark)
-        } else {
-            binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         }
         viewSviaryiaIIcon()
         if (savedInstanceState == null) startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
@@ -298,6 +289,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     getIcons(loadIcons)
                     getPiarliny()
                 } catch (_: Throwable) {
+                    binding.progressBar2.visibility = View.GONE
                 }
             }
         }
@@ -564,7 +556,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
 
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
-            val layoutParams = binding.collapsingToolbarLayout.layoutParams
+            val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
                 resetTollbarJob?.cancel()
                 resetTollbar(layoutParams)
@@ -600,7 +592,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun onBack() {
         if (binding.imageViewFull.visibility == View.VISIBLE) {
             binding.imageViewFull.visibility = View.GONE
-            binding.swipeRefreshLayout.visibility = View.VISIBLE
             viewSviaryiaIIcon()
             binding.titleToolbar.text = resources.getText(R.string.zmiest)
         } else {
@@ -766,7 +757,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                         binding.imageViewFull.visibility = View.VISIBLE
                         fullImagePathVisable = file2.absolutePath
                         binding.progressBar2.visibility = View.INVISIBLE
-                        binding.swipeRefreshLayout.visibility = View.GONE
                         binding.titleToolbar.text = arrayList[position].title.trim()
                     }
                 }

@@ -34,6 +34,7 @@ import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewCustom
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.google.android.play.core.splitcompat.SplitCompat
+import com.google.firebase.storage.StorageException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -49,6 +50,7 @@ class Chytanny : BaseActivity() {
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
     private val data = ArrayList<String>()
+    private var isError = false
 
     override fun onSensorChanged(event: SensorEvent?) {
     }
@@ -68,15 +70,23 @@ class Chytanny : BaseActivity() {
     }
 
     private fun loadChytanny(year: Int) {
+        urlJob?.cancel()
         urlJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             binding.linear.removeAllViewsInLayout()
             val localFile = File("$filesDir/cache/cache.txt")
             var text = ""
-            Malitounik.referens.child("/calendar-cytanne_$year.php").getFile(localFile).addOnCompleteListener {
-                if (it.isSuccessful && localFile.exists()) text = localFile.readText()
-                else MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
-            }.await()
+            try {
+                Malitounik.referens.child("/calendar-cytanne_$year.php").getFile(localFile).addOnSuccessListener {
+                    text = localFile.readText()
+                }.await()
+            } catch (_: StorageException) {
+                isError = true
+                MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
+                binding.progressBar2.visibility = View.GONE
+                return@launch
+            }
+            isError = false
             val a = year % 19
             val b = year % 4
             val cx = year % 7
@@ -153,6 +163,7 @@ class Chytanny : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = AdminChytannyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        isError = savedInstanceState?.getBoolean("isError", false) ?: false
         for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) data.add(i.toString())
         binding.spinnerYear.adapter = SpinnerAdapter(this, data)
         binding.spinnerYear.setSelection(2)
@@ -240,24 +251,28 @@ class Chytanny : BaseActivity() {
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_save) {
-            val sb = StringBuilder()
-            binding.linear.forEachIndexed { _, view ->
-                if (view is EditText) {
-                    when (view.tag as Int) {
-                        -1 -> {
-                            sb.append(view.text.toString() + "\n")
-                        }
-                        1 -> {
-                            sb.append("\$calendar[]=array(\"cviaty\"=>\"${view.text}\", \"cytanne\"=>\"\".\$ahref.\"")
-                        }
-                        2 -> {
-                            sb.append("${view.text}</a>\");\n")
+            if (!isError) {
+                val sb = StringBuilder()
+                binding.linear.forEachIndexed { _, view ->
+                    if (view is EditText) {
+                        when (view.tag as Int) {
+                            -1 -> {
+                                sb.append(view.text.toString() + "\n")
+                            }
+
+                            1 -> {
+                                sb.append("\$calendar[]=array(\"cviaty\"=>\"${view.text}\", \"cytanne\"=>\"\".\$ahref.\"")
+                            }
+
+                            2 -> {
+                                sb.append("${view.text}</a>\");\n")
+                            }
                         }
                     }
                 }
+                val year = data[binding.spinnerYear.selectedItemPosition].toInt()
+                sendPostRequest(sb.toString().trim(), year)
             }
-            val year = data[binding.spinnerYear.selectedItemPosition].toInt()
-            sendPostRequest(sb.toString().trim(), year)
             return true
         }
         return false
@@ -306,6 +321,11 @@ class Chytanny : BaseActivity() {
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.edit_chytanny, menu)
         super.onCreateMenu(menu, menuInflater)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("isError", isError)
     }
 
     private class SpinnerAdapter(activity: Activity, private val data: ArrayList<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {

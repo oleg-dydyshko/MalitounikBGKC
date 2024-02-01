@@ -252,7 +252,10 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         if (binding.scrollpreView.visibility == View.VISIBLE) {
             binding.scrollpreView.visibility = View.GONE
             binding.scrollView.visibility = View.VISIBLE
-        } else super.onBack()
+        } else {
+            setResult(700)
+            super.onBack()
+        }
     }
 
     override fun onPrepareMenu(menu: Menu) {

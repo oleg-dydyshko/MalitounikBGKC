@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.transition.TransitionManager
@@ -55,6 +56,12 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private val arrayList = ArrayList<OpisanieData>()
     private lateinit var adapter: OpisanieAdapter
     private var fullImagePathVisable = ""
+    private val carkvaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == 700) {
+            viewSviaryiaIIcon()
+            startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
+        }
+    }
 
     override fun onPause() {
         super.onPause()
@@ -669,7 +676,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     }
                     intent.putExtra("dayOfYear", dayofyear)
                 }
-                startActivity(intent)
+                carkvaLauncher.launch(intent)
             } else {
                 MainActivity.toastView(this, getString(R.string.error))
             }

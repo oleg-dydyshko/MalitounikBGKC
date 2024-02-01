@@ -55,7 +55,9 @@ class DialogSaveAsFileExplorer : DialogFragment() {
         override fun afterTextChanged(s: Editable?) {
             if (editch) {
                 var edit = s.toString()
-                edit = edit.replace("-", "_")
+                if (!edit.contains(".php", true)) {
+                    edit = edit.replace("-", "_")
+                }
                 edit = edit.replace(" ", "_").lowercase()
                 if (edit[0].isDigit()) edit = "mm_$edit"
                 if (check != 0) {
@@ -106,7 +108,9 @@ class DialogSaveAsFileExplorer : DialogFragment() {
 
     fun vypraulenneFilename() {
         var fileName = binding?.edittext?.text.toString()
-        fileName = fileName.replace("-", "_")
+        if (!fileName.contains(".php", true)) {
+            fileName = fileName.replace("-", "_")
+        }
         fileName = fileName.replace(" ", "_").lowercase()
         val mm = if (fileName[0].isDigit()) "mm_"
         else ""

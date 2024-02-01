@@ -319,6 +319,7 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogEditImage.DialogEditI
             binding.scrollpreView.visibility = View.GONE
             binding.scrollView.visibility = View.VISIBLE
         } else {
+            setResult(700)
             super.onBack()
         }
     }

@@ -634,7 +634,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                     val t3 = dirToFile.lastIndexOf("/")
                     var newFile = dirToFile.substring(t3 + 1)
                     val newDir = dirToFile.substring(0, t3 + 1)
-                    newFile = newFile.replace("-", "_")
+                    if (!newFile.contains(".php", true)) {
+                        newFile = newFile.replace("-", "_")
+                    }
                     newFile = newFile.replace(" ", "_").lowercase()
                     if (newFile[0].isDigit()) newFile = "mm_$newFile"
                     Malitounik.referens.child("/$newDir$newFile").putFile(Uri.fromFile(localFile)).await()

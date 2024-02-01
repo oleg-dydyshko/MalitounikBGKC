@@ -45,7 +45,9 @@ class DialogPasochnicaFileName : DialogFragment() {
     fun vypraulenneFilename() {
         var fileNameOld = binding.content.text.toString()
         var fileName = getResourceFileName(fileNameOld)
-        fileName = fileName.replace("-", "_")
+        if (!fileName.contains(".php", true)) {
+            fileName = fileName.replace("-", "_")
+        }
         fileName = fileName.replace(" ", "_").lowercase()
         val t1 = fileNameOld.indexOf(")")
         var t2 = fileNameOld.lastIndexOf("/")

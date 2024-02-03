@@ -247,6 +247,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             val file2 = File(fullImagePathVisable)
             Picasso.get().load(file2).into(binding.imageViewFull)
             binding.imageViewFull.visibility = View.VISIBLE
+            binding.listview.visibility = View.GONE
             binding.progressBar2.visibility = View.INVISIBLE
             binding.titleToolbar.text = savedInstanceState.getString("tollbarText")
         } else {
@@ -599,6 +600,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun onBack() {
         if (binding.imageViewFull.visibility == View.VISIBLE) {
             binding.imageViewFull.visibility = View.GONE
+            binding.listview.visibility = View.VISIBLE
             viewSviaryiaIIcon()
             binding.titleToolbar.text = resources.getText(R.string.zmiest)
         } else {
@@ -762,6 +764,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     if (file2.exists()) {
                         Picasso.get().load(file2).into(binding.imageViewFull)
                         binding.imageViewFull.visibility = View.VISIBLE
+                        binding.listview.visibility = View.GONE
                         fullImagePathVisable = file2.absolutePath
                         binding.progressBar2.visibility = View.INVISIBLE
                         binding.titleToolbar.text = arrayList[position].title.trim()

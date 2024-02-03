@@ -41,7 +41,6 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
     private lateinit var adapter: GalleryAdapter
     private val gallery = ArrayList<GalleryData>()
     private val dzenNoch get() = getBaseDzenNoch()
-    private val dirList = ArrayList<DirList>()
     private var loadIconsJob: Job? = null
     private lateinit var chin: SharedPreferences
     private var getOpisanieJob: Job? = null
@@ -220,6 +219,9 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
 
     private fun loadGallery() {
         gallery.clear()
+        val fileMataData = File("$filesDir/iconsMataData.txt")
+        var fileIconMataData = ""
+        if (fileMataData.exists()) fileIconMataData = fileMataData.readText()
         val dir = File("$filesDir/icons").list()
         dir?.forEach {
             val t1 = it.indexOf("_")
@@ -231,20 +233,28 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             val gc = GregorianCalendar()
             gc.set(Calendar.DATE, day)
             gc.set(Calendar.MONTH, mun - 1)
+            val t4 = fileIconMataData.indexOf(it)
+            var modified = File("$filesDir/icons/$it").lastModified()
+            if (t4 != -1) {
+                val t5 = fileIconMataData.indexOf("<-->", t4)
+                val t6 = fileIconMataData.indexOf("<-->", t5 + 4)
+                val t7 = fileIconMataData.indexOf("\n", t6)
+                modified = fileIconMataData.substring(t6 + 4, t7).toLong()
+            }
             if (it.contains("s")) {
                 if (day == -1) {
                     val list = svityiaRuchomyia(mun)
                     gc.set(Calendar.DATE, list[0])
                     gc.set(Calendar.MONTH, list[1])
                 }
-                gallery.add(GalleryData(gc[Calendar.DAY_OF_YEAR], loadOpisanieSviatyia(day, mun, it.substring(t3 + 1, t3 + 2).toInt()), "$filesDir/icons/$it", File("$filesDir/icons/$it").lastModified()))
+                gallery.add(GalleryData(gc[Calendar.DAY_OF_YEAR], loadOpisanieSviatyia(day, mun, it.substring(t3 + 1, t3 + 2).toInt()), "$filesDir/icons/$it", modified))
             } else {
                 if (day == -1) {
                     val list = svityRuchomyia(mun)
                     gc.set(Calendar.DATE, list[0])
                     gc.set(Calendar.MONTH, list[1])
                 }
-                gallery.add(GalleryData(gc[Calendar.DAY_OF_YEAR], loadOpisanieSviat(day, mun), "$filesDir/icons/$it", File("$filesDir/icons/$it").lastModified()))
+                gallery.add(GalleryData(gc[Calendar.DAY_OF_YEAR], loadOpisanieSviat(day, mun), "$filesDir/icons/$it", modified))
             }
         }
         gallery.sort()
@@ -551,7 +561,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             getIcons(loadIcons, count + 1)
             return
         }
-        dirList.clear()
+        val dirList = ArrayList<DirList>()
         var size = 0L
         val sb = StringBuilder()
         val fileIconMataData = File("$filesDir/iconsMataData.txt")

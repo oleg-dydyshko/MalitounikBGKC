@@ -276,7 +276,7 @@
         </activity>
         <activity
             android:name=".PesnyAll"
-            android:label="@string/piarliny"
+            android:label="@string/song"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data

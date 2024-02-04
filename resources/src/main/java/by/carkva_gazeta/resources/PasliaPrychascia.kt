@@ -254,7 +254,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             if (checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
-                val inputStream = resources.openRawResource(Bogashlugbovya.resursMap[malitvy[pasliaPrychascia].resurs] ?: R.raw.bogashlugbovya_error)
+                val inputStream = resources.openRawResource(Bogashlugbovya.resursMap[malitvy[pasliaPrychascia].resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error)
                 val text = inputStream.use {
                     it.reader().readText()
                 }
@@ -268,8 +268,8 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
-            val pesny = Bogashlugbovya.resursMap[malitvy[pasliaPrychascia].resurs] ?: R.raw.bogashlugbovya_error
-            if (pesny != R.raw.bogashlugbovya_error) {
+            val pesny = Bogashlugbovya.resursMap[malitvy[pasliaPrychascia].resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
+            if (pesny != by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error) {
                 val inputStream = resources.openRawResource(pesny)
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
@@ -436,6 +436,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
 
         override fun getItemCount() = malitvy.size
 
-        override fun createFragment(position: Int) = PasliaPrychasciaFragment.newInstance(Bogashlugbovya.resursMap[malitvy[position].resurs] ?: R.raw.bogashlugbovya_error)
+        override fun createFragment(position: Int) = PasliaPrychasciaFragment.newInstance(Bogashlugbovya.resursMap[malitvy[position].resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error)
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
@@ -163,7 +164,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""
         resurs = intent.extras?.getString("type", "pesny_prasl_0") ?: "pesny_prasl_0"
-        val pesny = resursMap[resurs] ?: R.raw.pesny_prasl_0
+        val pesny = resursMap[resurs] ?: R.raw.bogashlugbovya_error
         val builder = StringBuilder()
         if (pesny != -1) {
             val inputStream = resources.openRawResource(pesny)
@@ -180,6 +181,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         } else {
             builder.append(getString(R.string.error_ch))
         }
+        binding.textView.movementMethod = LinkMovementMethod()
         binding.textView.text = MainActivity.fromHtml(builder.toString())
         men = checkVybranoe(this, resurs)
         checkVybranoe = men
@@ -416,8 +418,8 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             return true
         }
         if (id == R.id.action_share) {
-            val pesny = resursMap[resurs] ?: -1
-            if (pesny != -1) {
+            val pesny = resursMap[resurs] ?: R.raw.bogashlugbovya_error
+            if (pesny != R.raw.bogashlugbovya_error) {
                 val inputStream = resources.openRawResource(pesny)
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
@@ -446,7 +448,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             if (checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
-                val inputStream = resources.openRawResource(resursMap[resurs] ?: R.raw.pesny_prasl_0)
+                val inputStream = resources.openRawResource(resursMap[resurs] ?: R.raw.bogashlugbovya_error)
                 val text = inputStream.use {
                     it.reader().readText()
                 }

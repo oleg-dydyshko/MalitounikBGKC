@@ -367,6 +367,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {
+            mAutoScroll = savedInstanceState.getBoolean("mAutoScroll")
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             orientation = savedInstanceState.getInt("orientation")
             MainActivity.dialogVisable = false
@@ -608,7 +609,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             zmenyiaChastki.setDzenNoch(dzenNoch)
             chechZmena = false
             val builder = StringBuilder()
-            val id = resursMap[resurs] ?: R.raw.bogashlugbovya_error
+            val id = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
             var nochenia = false
             val inputStream = resources.openRawResource(id)
             val dayOfWeek = c.get(Calendar.DAY_OF_WEEK)
@@ -628,7 +629,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, zmenyiaChastki.getYear()))) {
                 chechZmena = true
                 val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
-                val idZmenyiaChastki = resursMap[resours] ?: R.raw.bogashlugbovya_error
+                val idZmenyiaChastki = resursMap[resours] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
                 zmennyiaCastkiTitle = slugbovyiaTextu.getTitle(resours)
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
             }
@@ -1726,8 +1727,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
-            val pesny = resursMap[resurs] ?: R.raw.bogashlugbovya_error
-            if (pesny != R.raw.bogashlugbovya_error) {
+            val pesny = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
+            if (pesny != by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error) {
                 val inputStream = resources.openRawResource(pesny)
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
@@ -1756,7 +1757,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
-                val idres = resursMap[resurs] ?: R.raw.bogashlugbovya_error
+                val idres = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
                 val inputStream = resources.openRawResource(idres)
                 val text = inputStream.use {
                     it.reader().readText()
@@ -1892,6 +1893,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         outState.putInt("day_of_year", c[Calendar.DAY_OF_YEAR])
         outState.putInt("year", c[Calendar.YEAR])
         outState.putInt("vybranoePosition", vybranoePosition)
+        outState.putBoolean("mAutoScrol", mAutoScroll)
     }
 
     private data class SpanStr(val color: Int, val start: Int, val size: Int)

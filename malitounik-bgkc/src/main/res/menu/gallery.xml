@@ -2,6 +2,13 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/slaid_show"
+        android:icon="@drawable/scroll_icon_play"
+        android:orderInCategory="100"
+        android:title="@string/gallery_slayd_show"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/sorttime"
         android:checkable="true"
         android:orderInCategory="100"
@@ -17,6 +24,11 @@
         android:id="@+id/action_download_all"
         android:orderInCategory="100"
         android:title="@string/download_opisanie_all"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/settings_gallery"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_dzen_noch"

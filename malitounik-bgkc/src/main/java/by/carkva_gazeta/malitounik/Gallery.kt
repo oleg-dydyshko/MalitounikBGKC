@@ -3,6 +3,7 @@ package by.carkva_gazeta.malitounik
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.hardware.SensorEvent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -28,6 +29,8 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.File
@@ -35,7 +38,7 @@ import java.text.DecimalFormat
 import java.util.Calendar
 import java.util.GregorianCalendar
 
-class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, ZoomImageView.ZoomImageViewListener {
+class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, ZoomImageView.ZoomImageViewListener, DialogGallerySettings.DialogGallerySettingsListener {
 
     private lateinit var binding: GalleryBinding
     private lateinit var adapter: GalleryAdapter
@@ -45,14 +48,24 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
     private lateinit var chin: SharedPreferences
     private var getOpisanieJob: Job? = null
     private var isClosed: Boolean = false
+    private var isAuto: Boolean = false
+    private var autoIconsJob: Job? = null
+    private var speedGallery = 4
 
     override fun onPause() {
         super.onPause()
         loadIconsJob?.cancel()
+        autoIconsJob?.cancel()
+        isAuto = false
+        invalidateOptionsMenu()
         val layoutManager = binding.recyclerView.layoutManager as GridLayoutManager
         val prefEditor = chin.edit()
         prefEditor.putInt("galleryPosition", layoutManager.findFirstVisibleItemPosition())
         prefEditor.apply()
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (autoIconsJob?.isActive != true) super.onSensorChanged(event)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,8 +80,12 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             binding.recyclerView.visibility = View.INVISIBLE
             binding.titleToolbar.text = savedInstanceState.getString("textFull")
             isClosed = savedInstanceState.getBoolean("isClosed")
+            isAuto = savedInstanceState.getBoolean("isAuto")
+            speedGallery = savedInstanceState.getInt("speedGallery")
         } else {
             binding.titleToolbar.text = resources.getText(R.string.gallery)
+            val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            speedGallery = k.getInt("gallerySettingsTime", 4)
         }
         if (dzenNoch) {
             binding.actionForward.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
@@ -120,29 +137,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             }
         }
         binding.actionForward.setOnClickListener {
-            fullImagePosition++
-            if (fullImagePosition < gallery.size) {
-                isClosed = false
-                val file = File(gallery[fullImagePosition].iconPath)
-                Picasso.get().load(file).into(binding.imageViewFull)
-                fullImagePathVisable = file.absolutePath
-                getOpisanieJob?.cancel()
-                getOpisanieJob = CoroutineScope(Dispatchers.Main).launch {
-                    getOpisanieIcons(file)
-                }
-                binding.recyclerView.visibility = View.INVISIBLE
-                binding.titleToolbar.text = gallery[fullImagePosition].title.replace("\n", " ")
-                if (fullImagePosition > 0 && binding.actionBack.visibility == View.GONE) {
-                    val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
-                    binding.actionBack.visibility = View.VISIBLE
-                    binding.actionBack.animation = animation2
-                }
-                if (fullImagePosition == gallery.size - 1) {
-                    val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
-                    binding.actionForward.visibility = View.GONE
-                    binding.actionForward.animation = animation2
-                }
-            }
+            forwardGallery()
         }
         binding.actionOpisanieClose.setOnClickListener {
             isClosed = true
@@ -150,6 +145,39 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             binding.actionOpisanieClose.visibility = View.GONE
         }
         startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
+    }
+
+    private fun forwardGallery() {
+        fullImagePosition++
+        if (fullImagePosition < gallery.size) {
+            isClosed = false
+            val file = File(gallery[fullImagePosition].iconPath)
+            Picasso.get().load(file).into(binding.imageViewFull)
+            fullImagePathVisable = file.absolutePath
+            getOpisanieJob?.cancel()
+            val loadOpisanie = autoIconsJob?.isActive != true
+            if (loadOpisanie) {
+                getOpisanieJob = CoroutineScope(Dispatchers.Main).launch {
+                    getOpisanieIcons(file)
+                }
+            }
+            binding.recyclerView.visibility = View.INVISIBLE
+            binding.titleToolbar.text = gallery[fullImagePosition].title.replace("\n", " ")
+            if (loadOpisanie && fullImagePosition > 0 && binding.actionBack.visibility == View.GONE) {
+                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
+                binding.actionBack.visibility = View.VISIBLE
+                binding.actionBack.animation = animation2
+            }
+            if (loadOpisanie && fullImagePosition == gallery.size - 1) {
+                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+                binding.actionForward.visibility = View.GONE
+                binding.actionForward.animation = animation2
+            }
+        } else {
+            autoIconsJob?.cancel()
+            isAuto = false
+            invalidateOptionsMenu()
+        }
     }
 
     private suspend fun getOpisanieIcons(file: File) {
@@ -432,6 +460,8 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
 
     override fun onBack() {
         if (binding.recyclerView.visibility == View.INVISIBLE) {
+            autoIconsJob?.cancel()
+            isAuto = false
             binding.imageViewFull.visibility = View.GONE
             binding.recyclerView.visibility = View.VISIBLE
             binding.titleToolbar.text = resources.getText(R.string.gallery)
@@ -648,6 +678,12 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
     }
 
     override fun onPrepareMenu(menu: Menu) {
+        menu.findItem(R.id.slaid_show).isVisible = binding.imageViewFull.visibility == View.VISIBLE
+        if (isAuto) {
+            menu.findItem(R.id.slaid_show).icon = ContextCompat.getDrawable(this, R.drawable.scroll_icon_on)
+        } else {
+            menu.findItem(R.id.slaid_show).icon = ContextCompat.getDrawable(this, R.drawable.scroll_icon_play)
+        }
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         val spanString = if (chin.getBoolean("auto_dzen_noch", false)) {
             menu.findItem(R.id.action_dzen_noch).isCheckable = false
@@ -684,6 +720,55 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == R.id.action_settings) {
+            val dialod = DialogGallerySettings()
+            dialod.show(supportFragmentManager, "DialogGallerySettings")
+        }
+        if (id == R.id.slaid_show) {
+            if (isAuto) {
+                isAuto = false
+                autoIconsJob?.cancel()
+                getOpisanieJob?.cancel()
+                getOpisanieJob = CoroutineScope(Dispatchers.Main).launch {
+                    val file = File(gallery[fullImagePosition].iconPath)
+                    getOpisanieIcons(file)
+                }
+                if (fullImagePosition > 0 && binding.actionBack.visibility == View.GONE) {
+                    val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
+                    binding.actionBack.visibility = View.VISIBLE
+                    binding.actionBack.animation = animation2
+                }
+                if (fullImagePosition == gallery.size - 1) {
+                    val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+                    binding.actionForward.visibility = View.GONE
+                    binding.actionForward.animation = animation2
+                }
+            } else {
+                isAuto = true
+                loadIconsJob?.cancel()
+                binding.progressBar2.visibility = View.GONE
+                autoIconsJob = CoroutineScope(Dispatchers.Main).launch {
+                    while (isActive) {
+                        binding.actionOpisanie.visibility = View.GONE
+                        binding.actionOpisanieClose.visibility = View.GONE
+                        binding.actionOpisanie.text = ""
+                        val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+                        if (binding.actionForward.visibility != View.GONE) {
+                            binding.actionForward.visibility = View.GONE
+                            binding.actionForward.animation = animation2
+                        }
+                        if (binding.actionBack.visibility != View.GONE) {
+                            binding.actionBack.visibility = View.GONE
+                            binding.actionBack.animation = animation2
+                        }
+                        delay(speedGallery.toLong() * 1000)
+                        forwardGallery()
+                    }
+                }
+            }
+            invalidateOptionsMenu()
             return true
         }
         if (id == R.id.sortdate) {
@@ -741,11 +826,17 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         return false
     }
 
+    override fun setSpeedGallery(speed: Int) {
+        speedGallery = speed
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("imageViewFullVisable", binding.imageViewFull.visibility == View.VISIBLE)
         outState.putString("textFull", binding.titleToolbar.text.toString())
         outState.putBoolean("isClosed", isClosed)
+        outState.putBoolean("isAuto", isAuto)
+        outState.putInt("speedGallery", speedGallery)
     }
 
     private inner class GalleryAdapter(val binding: GalleryBinding, gallery: ArrayList<GalleryData>) : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {

@@ -770,9 +770,10 @@
     <string name="admin_update_log">Абнаўленьне лога</string>
     <string name="admin_sviatya_pyxomyia">Сьвятыя рухомыя</string>
     <string name="admin_update_meta">Абнавіць метададзеныя</string>
-    <string name="gallery_slayd_show">Аўтаматычны паказ</string>
+    <string name="gallery_slayd_show">Запусціць слайд-шоў</string>
     <string name="settings_gallery">Налады галерэі</string>
     <string name="settings_gallery_item_name">%1$d секунд(-ы)</string>
-    <string name="gallery_slayd_show_speed">Хуткасьць паказу</string>
+    <string name="gallery_slayd_show_speed">Інтэрвал:</string>
+    <string name="gallery_slayd_show_repit">Паўтараць бясконца</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

@@ -16,7 +16,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.databinding.DialogSpinnerDisplayBinding
+import by.carkva_gazeta.malitounik.databinding.DialogGallerySettingsBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 
 class DialogGallerySettings : DialogFragment() {
@@ -24,7 +24,7 @@ class DialogGallerySettings : DialogFragment() {
     private val arrayList = ArrayList<Int>()
     private var mListener: DialogGallerySettingsListener? = null
     private lateinit var alert: AlertDialog
-    private var _binding: DialogSpinnerDisplayBinding? = null
+    private var _binding: DialogGallerySettingsBinding? = null
     private val binding get() = _binding!!
     private lateinit var k: SharedPreferences
 
@@ -56,7 +56,7 @@ class DialogGallerySettings : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogSpinnerDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogGallerySettingsBinding.inflate(LayoutInflater.from(it))
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
@@ -64,7 +64,6 @@ class DialogGallerySettings : DialogFragment() {
             val builder = AlertDialog.Builder(it, style)
             if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
-            binding.title.text = resources.getString(R.string.gallery_slayd_show_speed)
             setid = savedInstanceState?.getInt("setid") ?: k.getInt("gallerySettingsTime", 4)
             for (i in 1..10) {
                 arrayList.add(i)

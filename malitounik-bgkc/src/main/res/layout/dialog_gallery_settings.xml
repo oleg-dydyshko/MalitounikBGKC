@@ -11,7 +11,8 @@
         android:background="@color/colorPrimary"
         android:padding="10sp"
         android:textColor="@color/colorWhite"
-        android:textSize="14sp"
+        android:text="@string/settings_gallery"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <ScrollView
@@ -25,17 +26,30 @@
             android:orientation="vertical">
 
             <by.carkva_gazeta.malitounik.TextViewCustom
+                android:id="@+id/titleContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10sp"
+                android:paddingRight="10sp"
+                android:text="@string/gallery_slayd_show_speed"
+                android:textSize="18sp" />
+
+            <Spinner
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10sp"
-                android:textSize="18sp" />
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp" />
 
             <CheckBox
                 android:id="@+id/checkbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:padding="10sp"
+                android:text="@string/gallery_slayd_show_repit"
                 android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>

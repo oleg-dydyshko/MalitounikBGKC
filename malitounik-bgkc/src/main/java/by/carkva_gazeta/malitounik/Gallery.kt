@@ -678,7 +678,13 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        menu.findItem(R.id.slaid_show).isVisible = binding.imageViewFull.visibility == View.VISIBLE
+        if (binding.imageViewFull.visibility == View.VISIBLE) {
+            menu.findItem(R.id.slaid_show).isVisible = true
+            menu.findItem(R.id.action_settings).isVisible = true
+        } else {
+            menu.findItem(R.id.slaid_show).isVisible = false
+            menu.findItem(R.id.action_settings).isVisible = false
+        }
         if (isAuto) {
             menu.findItem(R.id.slaid_show).icon = ContextCompat.getDrawable(this, R.drawable.scroll_icon_on)
         } else {

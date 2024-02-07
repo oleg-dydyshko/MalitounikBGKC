@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -234,7 +233,6 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
                 binding.actionBack.visibility = View.VISIBLE
                 binding.actionBack.animation = animation2
             }
-            Log.d("Oleg", fullImagePosition.toString() + "::" + gallery.size)
             if (fullImagePosition < gallery.size && binding.actionForward.visibility == View.GONE) {
                 val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
                 binding.actionForward.visibility = View.VISIBLE
@@ -249,7 +247,6 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
 
     private fun loadGallery() {
         gallery.clear()
-        Log.d("Oleg", "gallery.clear()")
         val fileMataData = File("$filesDir/iconsMataData.txt")
         var fileIconMataData = ""
         if (fileMataData.exists()) fileIconMataData = fileMataData.readText()

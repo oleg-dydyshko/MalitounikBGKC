@@ -56,7 +56,6 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         super.onPause()
         loadIconsJob?.cancel()
         autoIconsJob?.cancel()
-        isAuto = false
         invalidateOptionsMenu()
         val layoutManager = binding.recyclerView.layoutManager as GridLayoutManager
         val prefEditor = chin.edit()
@@ -81,6 +80,9 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             binding.titleToolbar.text = savedInstanceState.getString("textFull")
             isClosed = savedInstanceState.getBoolean("isClosed")
             isAuto = savedInstanceState.getBoolean("isAuto")
+            if (isAuto) {
+               startPlayIcons()
+            }
             speedGallery = savedInstanceState.getInt("speedGallery")
         } else {
             binding.titleToolbar.text = resources.getText(R.string.gallery)
@@ -144,7 +146,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             binding.actionOpisanie.visibility = View.GONE
             binding.actionOpisanieClose.visibility = View.GONE
         }
-        startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
+        savedInstanceState ?: startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
     }
 
     private fun forwardGallery() {
@@ -723,6 +725,30 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         }
     }
 
+    private fun startPlayIcons() {
+        isAuto = true
+        loadIconsJob?.cancel()
+        binding.progressBar2.visibility = View.GONE
+        autoIconsJob = CoroutineScope(Dispatchers.Main).launch {
+            while (isActive) {
+                binding.actionOpisanie.visibility = View.GONE
+                binding.actionOpisanieClose.visibility = View.GONE
+                binding.actionOpisanie.text = ""
+                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+                if (binding.actionForward.visibility != View.GONE) {
+                    binding.actionForward.visibility = View.GONE
+                    binding.actionForward.animation = animation2
+                }
+                if (binding.actionBack.visibility != View.GONE) {
+                    binding.actionBack.visibility = View.GONE
+                    binding.actionBack.animation = animation2
+                }
+                delay(speedGallery.toLong() * 1000)
+                forwardGallery()
+            }
+        }
+    }
+
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
@@ -735,6 +761,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         }
         if (id == R.id.slaid_show) {
             if (isAuto) {
+                loadGallery()
                 isAuto = false
                 autoIconsJob?.cancel()
                 getOpisanieJob?.cancel()
@@ -753,27 +780,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
                     binding.actionForward.animation = animation2
                 }
             } else {
-                isAuto = true
-                loadIconsJob?.cancel()
-                binding.progressBar2.visibility = View.GONE
-                autoIconsJob = CoroutineScope(Dispatchers.Main).launch {
-                    while (isActive) {
-                        binding.actionOpisanie.visibility = View.GONE
-                        binding.actionOpisanieClose.visibility = View.GONE
-                        binding.actionOpisanie.text = ""
-                        val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
-                        if (binding.actionForward.visibility != View.GONE) {
-                            binding.actionForward.visibility = View.GONE
-                            binding.actionForward.animation = animation2
-                        }
-                        if (binding.actionBack.visibility != View.GONE) {
-                            binding.actionBack.visibility = View.GONE
-                            binding.actionBack.animation = animation2
-                        }
-                        delay(speedGallery.toLong() * 1000)
-                        forwardGallery()
-                    }
-                }
+                startPlayIcons()
             }
             invalidateOptionsMenu()
             return true

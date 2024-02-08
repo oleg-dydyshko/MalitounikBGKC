@@ -775,5 +775,6 @@
     <string name="settings_gallery_item_name">%1$d секунд(-ы)</string>
     <string name="gallery_slayd_show_speed">Інтэрвал:</string>
     <string name="gallery_slayd_show_repit">Паўтараць бясконца</string>
+    <string name="gallery_slayd_show_on_start">З пачатку</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

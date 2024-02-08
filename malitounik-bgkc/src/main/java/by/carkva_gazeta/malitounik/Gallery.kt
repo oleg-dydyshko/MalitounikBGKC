@@ -162,6 +162,8 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
                 getOpisanieJob = CoroutineScope(Dispatchers.Main).launch {
                     getOpisanieIcons(file)
                 }
+            } else {
+                binding.actionOpisanie.text = ""
             }
             binding.recyclerView.visibility = View.INVISIBLE
             binding.titleToolbar.text = gallery[fullImagePosition].title.replace("\n", " ")
@@ -176,9 +178,17 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
                 binding.actionForward.animation = animation2
             }
         } else {
-            autoIconsJob?.cancel()
-            isAuto = false
-            invalidateOptionsMenu()
+            if (chin.getBoolean("gallerySettingsRepit", false)) {
+                fullImagePosition = -1
+                forwardGallery()
+                MainActivity.toastView(this, getString(R.string.gallery_slayd_show_on_start))
+            } else {
+                autoIconsJob?.cancel()
+                isAuto = false
+                invalidateOptionsMenu()
+                setButton()
+                fullImagePosition--
+            }
         }
     }
 
@@ -213,36 +223,46 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         }
     }
 
+    private fun removeButton() {
+        if (binding.actionForward.visibility == View.VISIBLE) {
+            val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+            binding.actionForward.visibility = View.GONE
+            binding.actionForward.animation = animation2
+        }
+        if (binding.actionBack.visibility == View.VISIBLE) {
+            val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+            binding.actionBack.visibility = View.GONE
+            binding.actionBack.animation = animation2
+        }
+        if (!isClosed && binding.actionOpisanie.visibility == View.VISIBLE) {
+            binding.actionOpisanie.visibility = View.GONE
+            binding.actionOpisanieClose.visibility = View.GONE
+        }
+    }
+
+    private fun setButton() {
+        if (fullImagePosition > 0 && binding.actionBack.visibility == View.GONE) {
+            val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
+            binding.actionBack.visibility = View.VISIBLE
+            binding.actionBack.animation = animation2
+        }
+        if (fullImagePosition < gallery.size && binding.actionForward.visibility == View.GONE) {
+            val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
+            binding.actionForward.visibility = View.VISIBLE
+            binding.actionForward.animation = animation2
+        }
+        if (!isClosed && binding.actionOpisanie.text.isNotEmpty() && binding.actionOpisanie.visibility == View.GONE) {
+            binding.actionOpisanie.visibility = View.VISIBLE
+            binding.actionOpisanieClose.visibility = View.VISIBLE
+        }
+    }
+
     override fun onZoomChanged(isZoom: Boolean) {
-        if (isZoom) {
-            if (binding.actionForward.visibility == View.VISIBLE) {
-                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
-                binding.actionForward.visibility = View.GONE
-                binding.actionForward.animation = animation2
-            }
-            if (binding.actionBack.visibility == View.VISIBLE) {
-                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
-                binding.actionBack.visibility = View.GONE
-                binding.actionBack.animation = animation2
-            }
-            if (!isClosed && binding.actionOpisanie.visibility == View.VISIBLE) {
-                binding.actionOpisanie.visibility = View.GONE
-                binding.actionOpisanieClose.visibility = View.GONE
-            }
-        } else {
-            if (fullImagePosition > 0 && binding.actionBack.visibility == View.GONE) {
-                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
-                binding.actionBack.visibility = View.VISIBLE
-                binding.actionBack.animation = animation2
-            }
-            if (fullImagePosition < gallery.size && binding.actionForward.visibility == View.GONE) {
-                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
-                binding.actionForward.visibility = View.VISIBLE
-                binding.actionForward.animation = animation2
-            }
-            if (!isClosed && binding.actionOpisanie.text.isNotEmpty() && binding.actionOpisanie.visibility == View.GONE) {
-                binding.actionOpisanie.visibility = View.VISIBLE
-                binding.actionOpisanieClose.visibility = View.VISIBLE
+        if (!isAuto) {
+            if (isZoom) {
+                removeButton()
+            } else {
+                setButton()
             }
         }
     }
@@ -289,7 +309,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         }
         gallery.sort()
         if (this::adapter.isInitialized) adapter.updateList(gallery)
-        if (binding.imageViewFull.visibility == View.VISIBLE) onZoomChanged(false)
+        if (binding.imageViewFull.visibility == View.VISIBLE && !isAuto) setButton()
     }
 
     private fun svityiaRuchomyia(mun: Int): Array<Int> {
@@ -468,20 +488,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             binding.imageViewFull.visibility = View.GONE
             binding.recyclerView.visibility = View.VISIBLE
             binding.titleToolbar.text = resources.getText(R.string.gallery)
-            if (binding.actionForward.visibility == View.VISIBLE) {
-                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
-                binding.actionForward.visibility = View.GONE
-                binding.actionForward.animation = animation2
-            }
-            if (binding.actionBack.visibility == View.VISIBLE) {
-                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
-                binding.actionBack.visibility = View.GONE
-                binding.actionBack.animation = animation2
-            }
-            if (binding.actionOpisanie.visibility == View.VISIBLE) {
-                binding.actionOpisanie.visibility = View.GONE
-                binding.actionOpisanieClose.visibility = View.GONE
-            }
+            removeButton()
             invalidateOptionsMenu()
         } else {
             super.onBack()
@@ -670,7 +677,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
                 }
             }
             binding.progressBar2.visibility = View.GONE
-            loadGallery()
+            removeButton()
         }
         binding.titleToolbar.text = resources.getText(R.string.gallery)
     }
@@ -731,18 +738,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         binding.progressBar2.visibility = View.GONE
         autoIconsJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive) {
-                binding.actionOpisanie.visibility = View.GONE
-                binding.actionOpisanieClose.visibility = View.GONE
-                binding.actionOpisanie.text = ""
-                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
-                if (binding.actionForward.visibility != View.GONE) {
-                    binding.actionForward.visibility = View.GONE
-                    binding.actionForward.animation = animation2
-                }
-                if (binding.actionBack.visibility != View.GONE) {
-                    binding.actionBack.visibility = View.GONE
-                    binding.actionBack.animation = animation2
-                }
+                removeButton()
                 delay(speedGallery.toLong() * 1000)
                 forwardGallery()
             }
@@ -761,23 +757,13 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         }
         if (id == R.id.slaid_show) {
             if (isAuto) {
-                loadGallery()
+                setButton()
                 isAuto = false
                 autoIconsJob?.cancel()
                 getOpisanieJob?.cancel()
                 getOpisanieJob = CoroutineScope(Dispatchers.Main).launch {
                     val file = File(gallery[fullImagePosition].iconPath)
                     getOpisanieIcons(file)
-                }
-                if (fullImagePosition > 0 && binding.actionBack.visibility == View.GONE) {
-                    val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
-                    binding.actionBack.visibility = View.VISIBLE
-                    binding.actionBack.animation = animation2
-                }
-                if (fullImagePosition == gallery.size - 1) {
-                    val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
-                    binding.actionForward.visibility = View.GONE
-                    binding.actionForward.animation = animation2
                 }
             } else {
                 startPlayIcons()

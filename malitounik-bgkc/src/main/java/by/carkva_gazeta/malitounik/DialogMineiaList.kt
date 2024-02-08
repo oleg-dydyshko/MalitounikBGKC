@@ -52,10 +52,11 @@ class DialogMineiaList : DialogFragment() {
             }
             val fileList = ArrayList<SlugbovyiaTextuData>()
             val dayOfYear = arguments?.getString("dayOfYear") ?: "1"
+            val pasxa = arguments?.getBoolean("pasxa") ?: false
             val slugba = SlugbovyiaTextu()
             val mineia = slugba.getMineiaMesiachnaia()
             mineia.forEach { data ->
-                if (data.day == dayOfYear.toInt()) {
+                if (data.day == dayOfYear.toInt() && data.pasxa == pasxa) {
                     fileList.add(data)
                 }
             }
@@ -117,9 +118,10 @@ class DialogMineiaList : DialogFragment() {
     private class ViewHolder(var text: TextView)
 
     companion object {
-        fun getInstance(dayOfYear: String): DialogMineiaList {
+        fun getInstance(dayOfYear: String, pasxa: Boolean): DialogMineiaList {
             val bundle = Bundle()
             bundle.putString("dayOfYear", dayOfYear)
+            bundle.putBoolean("pasxa", pasxa)
             val dialog = DialogMineiaList()
             dialog.arguments = bundle
             return dialog

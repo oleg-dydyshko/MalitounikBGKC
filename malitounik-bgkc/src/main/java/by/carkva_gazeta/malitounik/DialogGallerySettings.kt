@@ -78,6 +78,12 @@ class DialogGallerySettings : DialogFragment() {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
+            binding.checkbox.isChecked = k.getBoolean("gallerySettingsRepit", false)
+            binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
+                val edit = k.edit()
+                edit.putBoolean("gallerySettingsRepit", isChecked)
+                edit.apply()
+            }
             builder.setView(binding.root)
             builder.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->

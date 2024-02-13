@@ -553,7 +553,12 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                     if (constraint1.isNotEmpty()) {
                         val founded = ArrayList<MenuListData>()
                         for (item in dataSearch) {
-                            if (item.title.contains(constraint1, true)) {
+                            var title = item.title
+                            val t1 = title.indexOf("\n")
+                            if (t1 != -1) {
+                                title = title.substring(0, t1)
+                            }
+                            if (title.contains(constraint1, true)) {
                                 founded.add(item)
                             }
                         }

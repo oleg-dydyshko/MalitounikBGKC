@@ -39,6 +39,7 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogClearHishory
 import by.carkva_gazeta.malitounik.HistoryAdapter
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuBogashlugbovya
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.resources.databinding.SearchBogaslugBinding
 import com.google.gson.Gson
@@ -484,10 +485,12 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
                 }
             }
         }
-        for (i in 0 until Bogashlugbovya.resursMap.size) {
+        val bogaslugbovyiaList = MenuBogashlugbovya.getBogaslugbovyiaSearchText(false)
+        for (i in 0 until bogaslugbovyiaList.size) {
             if (searchJob?.isActive == false) break
             var nazva: String
-            val inputStream = resources.openRawResource(Bogashlugbovya.resursMap.valueAt(i))
+            val id = Bogashlugbovya.resursMap[bogaslugbovyiaList[i].resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
+            val inputStream = resources.openRawResource(id)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val bibleline = reader.readText()
@@ -495,9 +498,9 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             if (t1 != -1) {
                 val t2 = bibleline.indexOf("</strong>", t1 + 8)
                 nazva = bibleline.substring(t1 + 8, t2)
-                nazva = "<!--" + Bogashlugbovya.resursMap.keyAt(i) + "-->" + Jsoup.parse(nazva).text()
+                nazva = "<!--" + bogaslugbovyiaList[i].resurs + "-->" + Jsoup.parse(nazva).text()
             } else {
-                nazva = "<!--" + Bogashlugbovya.resursMap.keyAt(i) + "-->" + Bogashlugbovya.resursMap.keyAt(i)
+                nazva = "<!--" + bogaslugbovyiaList[i].resurs + "-->" + bogaslugbovyiaList[i].resurs
             }
             var prepinanie = Jsoup.parse(bibleline).text()
             prepinanie = prepinanie.replace(",", "")

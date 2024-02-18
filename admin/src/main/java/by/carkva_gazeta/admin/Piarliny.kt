@@ -144,6 +144,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
                     } else {
                         MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
+                    invalidateOptionsMenu()
                     binding.progressBar2.visibility = View.GONE
                     if (intent.extras != null) {
                         val time = intent.extras?.getLong("time") ?: Calendar.getInstance().timeInMillis
@@ -225,14 +226,16 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
         val plus = menu.findItem(R.id.action_plus)
         val save = menu.findItem(R.id.action_save)
         val glava = menu.findItem(R.id.action_glava)
-        if (binding.addPiarliny.visibility == View.VISIBLE) {
-            plus.isVisible = false
-            save.isVisible = true
-            glava.isVisible = true
-        } else {
-            plus.isVisible = true
-            save.isVisible = false
-            glava.isVisible = false
+        if (piarliny.isNotEmpty()) {
+            if (binding.addPiarliny.visibility == View.VISIBLE) {
+                plus.isVisible = false
+                save.isVisible = true
+                glava.isVisible = true
+            } else {
+                plus.isVisible = true
+                save.isVisible = false
+                glava.isVisible = false
+            }
         }
     }
 
@@ -291,7 +294,8 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
             binding.addPiarliny.visibility = View.VISIBLE
             binding.linearLayout2.visibility = View.VISIBLE
             binding.addPiarliny.setText("")
-            timeListCalendar.timeInMillis = Calendar.getInstance().timeInMillis
+            val c = Calendar.getInstance()
+            timeListCalendar.set(VYSOCOSNYI_GOD, c[Calendar.MONTH], c[Calendar.DATE], 0, 0, 0)
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, timeListCalendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[timeListCalendar.get(Calendar.MONTH)])
             invalidateOptionsMenu()
             return true

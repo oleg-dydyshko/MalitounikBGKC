@@ -186,6 +186,85 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.sort()
             return dataSearch
         }
+
+        fun getBogaslugbovyiaSearchText(isMenu: Boolean = true): ArrayList<MenuListData> {
+            val dataSearch = ArrayList<MenuListData>()
+            dataSearch.addAll(getTextBogaslugbovyiaList(isMenu))
+            dataSearch.addAll(getTextTrebnikList(isMenu))
+            dataSearch.addAll(getTextPasliaPrychascia(isMenu))
+            dataSearch.addAll(getTextSubBogaslugbovuiaVichernia(isMenu))
+            dataSearch.addAll(getTextAktoixList(isMenu))
+            dataSearch.addAll(getTextViacherniaList(isMenu))
+            dataSearch.addAll(getTextTonNaKoznyDzenList(isMenu))
+            var opisanie = if (isMenu) "\nТрапары і кандакі нядзельныя васьмі тонаў"
+            else ""
+            for (i in 1..8) {
+                dataSearch.add(MenuListData(Malitounik.applicationContext().getString(R.string.ton, i.toString() + opisanie), "ton$i"))
+            }
+            val sluzba = SlugbovyiaTextu()
+            var mesiach = sluzba.getMineiaMesiachnaia()
+            opisanie = if (isMenu) "\nМінэя месячная"
+            else ""
+            for (i in mesiach.indices) {
+                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
+            }
+            mesiach = sluzba.getVilikiTydzen()
+            opisanie = if (isMenu) "\nТрыёдзь -> Службы Вялікага тыдня"
+            else ""
+            for (i in mesiach.indices) {
+                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
+            }
+            mesiach = sluzba.getSvetlyTydzen()
+            opisanie = if (isMenu) "\nТрыёдзь -> Службы Сьветлага тыдня"
+            else ""
+            for (i in mesiach.indices) {
+                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
+            }
+            mesiach = sluzba.getMineiaSviatochnaia()
+            opisanie = if (isMenu) "\nТрыёдзь -> Трыёдзь сьвяточная"
+            else ""
+            for (i in mesiach.indices) {
+                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
+            }
+            mesiach = sluzba.getTydzen1()
+            opisanie = if (isMenu) "\nТрыёдзь -> Трыёдзь посная -> Службы 1-га тыдня Вялікага посту"
+            else ""
+            for (i in mesiach.indices) {
+                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
+            }
+            mesiach = sluzba.getTydzen2()
+            opisanie = if (isMenu) "\nТрыёдзь -> Трыёдзь посная -> Службы 2-га тыдня Вялікага посту"
+            else ""
+            for (i in mesiach.indices) {
+                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
+            }
+            mesiach = sluzba.getTydzen3()
+            opisanie = if (isMenu) "\nТрыёдзь -> Трыёдзь посная -> Службы 3-га тыдня Вялікага посту"
+            else ""
+            for (i in mesiach.indices) {
+                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
+            }
+            mesiach = sluzba.getTydzen4()
+            opisanie = if (isMenu) "\nТрыёдзь -> Трыёдзь посная -> Службы 4-га тыдня Вялікага посту"
+            else ""
+            for (i in mesiach.indices) {
+                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
+            }
+            mesiach = sluzba.getTydzen5()
+            opisanie = if (isMenu) "\nТрыёдзь -> Трыёдзь посная -> Службы 5-га тыдня Вялікага посту"
+            else ""
+            for (i in mesiach.indices) {
+                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
+            }
+            mesiach = sluzba.getTydzen6()
+            opisanie = if (isMenu) "\nТрыёдзь -> Трыёдзь посная -> Службы 6-га тыдня Вялікага посту"
+            else ""
+            for (i in mesiach.indices) {
+                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
+            }
+            dataSearch.sort()
+            return dataSearch
+        }
     }
 
     override fun onDestroyView() {
@@ -218,7 +297,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             }
             if (actionExpandOn) {
                 dataSearch.clear()
-                searchText()
+                dataSearch.addAll(getTextBogaslugbovyiaList())
                 data.clear()
                 data.addAll(dataSearch)
                 adapter.notifyDataSetChanged()
@@ -243,72 +322,6 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
     override fun onResume() {
         super.onResume()
         editText?.addTextChangedListener(textWatcher)
-    }
-
-    private fun searchText() {
-        dataSearch.addAll(getTextBogaslugbovyiaList(true))
-        dataSearch.addAll(getTextTrebnikList(true))
-        dataSearch.addAll(getTextPasliaPrychascia(true))
-        dataSearch.addAll(getTextSubBogaslugbovuiaVichernia(true))
-        dataSearch.addAll(getTextAktoixList(true))
-        dataSearch.addAll(getTextViacherniaList(true))
-        dataSearch.addAll(getTextTonNaKoznyDzenList(true))
-        var opisanie = "\nТрапары і кандакі нядзельныя васьмі тонаў"
-        for (i in 1..8) {
-            dataSearch.add(MenuListData(getString(R.string.ton, i.toString() + opisanie), "ton$i"))
-        }
-        val sluzba = SlugbovyiaTextu()
-        var mesiach = sluzba.getMineiaMesiachnaia()
-        opisanie = "\nМінэя месячная"
-        for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-        }
-        mesiach = sluzba.getVilikiTydzen()
-        opisanie = "\nТрыёдзь -> Службы Вялікага тыдня"
-        for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-        }
-        mesiach = sluzba.getSvetlyTydzen()
-        opisanie = "\nТрыёдзь -> Службы Сьветлага тыдня"
-        for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-        }
-        mesiach = sluzba.getMineiaSviatochnaia()
-        opisanie = "\nТрыёдзь -> Трыёдзь сьвяточная"
-        for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-        }
-        mesiach = sluzba.getTydzen1()
-        opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 1-га тыдня Вялікага посту"
-        for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-        }
-        mesiach = sluzba.getTydzen2()
-        opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 2-га тыдня Вялікага посту"
-        for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-        }
-        mesiach = sluzba.getTydzen3()
-        opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 3-га тыдня Вялікага посту"
-        for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-        }
-        mesiach = sluzba.getTydzen4()
-        opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 4-га тыдня Вялікага посту"
-        for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-        }
-        mesiach = sluzba.getTydzen5()
-        opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 5-га тыдня Вялікага посту"
-        for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-        }
-        mesiach = sluzba.getTydzen6()
-        opisanie = "\nТрыёдзь -> Трыёдзь посная -> Службы 6-га тыдня Вялікага посту"
-        for (i in mesiach.indices) {
-            dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-        }
-        dataSearch.sort()
     }
 
     private fun changeSearchViewElements(view: View?) {
@@ -384,7 +397,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 actionExpandOn = true
                 dataSearch.clear()
-                searchText()
+                dataSearch.addAll(getTextBogaslugbovyiaList())
                 data.clear()
                 data.addAll(dataSearch)
                 textViewCount?.text = getString(R.string.seash, dataSearch.size)

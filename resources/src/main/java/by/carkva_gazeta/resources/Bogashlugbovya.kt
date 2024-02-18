@@ -1135,6 +1135,56 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
+        if (resurs == "kanon_andreja_kryckaha_4_czastki") {
+            var string9 = "Аўторак ↓"
+            var strLig9 = string9.length
+            var t9 = text.indexOf(string9)
+            if (t9 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        binding.textView.layout?.let { layout ->
+                            val strPosition = text.indexOf("АЎТОРАК", t9 + strLig9, true)
+                            val line = layout.getLineForOffset(strPosition)
+                            val y = layout.getLineTop(line)
+                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            anim.setDuration(1500).start()
+                        }
+                    }
+                }, t9, t9 + strLig9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            string9 = "Серада ↓"
+            strLig9 = string9.length
+            t9 = text.indexOf(string9)
+            if (t9 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        binding.textView.layout?.let { layout ->
+                            val strPosition = text.indexOf("СЕРАДА", t9 + strLig9, true)
+                            val line = layout.getLineForOffset(strPosition)
+                            val y = layout.getLineTop(line)
+                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            anim.setDuration(1500).start()
+                        }
+                    }
+                }, t9, t9 + strLig9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            string9 = "Чацьвер ↓"
+            strLig9 = string9.length
+            t9 = text.indexOf(string9)
+            if (t9 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        binding.textView.layout?.let { layout ->
+                            val strPosition = text.indexOf("ЧАЦЬВЕР", t9 + strLig9, true)
+                            val line = layout.getLineForOffset(strPosition)
+                            val y = layout.getLineTop(line)
+                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            anim.setDuration(1500).start()
+                        }
+                    }
+                }, t9, t9 + strLig9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
         string = "Малітвы пасьля сьвятога прычасьця"
         strLig = string.length
         t1 = text.indexOf(string)

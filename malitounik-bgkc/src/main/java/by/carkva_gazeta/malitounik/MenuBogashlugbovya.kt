@@ -94,6 +94,16 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             return dataSearch
         }
 
+        fun getTextTrebnikList(isSearch: Boolean = false): ArrayList<MenuListData> {
+            var opisanie = ""
+            if (isSearch) opisanie = "\nТрэбнік"
+            val dataSearch = ArrayList<MenuListData>()
+            dataSearch.add(MenuListData("Служба аб вызваленьні бязьвінна зьняволеных$opisanie", "sluzba_vyzvalen_biazvinna_zniavolenych"))
+            dataSearch.add(MenuListData("Служба за памерлых — Малая паніхіда$opisanie", "panichida_malaja"))
+            dataSearch.add(MenuListData("Чын асьвячэньня транспартнага сродку$opisanie", "czyn_asviaczennia_transpartnaha_srodku"))
+            return dataSearch
+        }
+
         fun getTextTonNaKoznyDzenList(isSearch: Boolean = false): ArrayList<MenuListData> {
             var opisanie = ""
             if (isSearch) opisanie = "\nМінэя агульная -> Трапары і кандакі штодзённыя - на кожны дзень тыдня"
@@ -152,14 +162,13 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.add(MenuListData("Набажэнства ў гонар Маці Божай Нястомнай Дапамогі$opisanie", "nabazenstva_maci_bozaj_niast_dap"))
             dataSearch.add(MenuListData("Ютрань нядзельная (у скароце)$opisanie", "jutran_niadzelnaja"))
             dataSearch.add(MenuListData("Абедніца$opisanie", "abiednica"))
-            dataSearch.add(MenuListData("Служба за памерлых — Малая паніхіда$opisanie", "panichida_malaja"))
             dataSearch.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы$opisanie", "kanon_malebny_baharodzicy"))
             dataSearch.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага$opisanie", "kanon_andreja_kryckaha"))
             dataSearch.add(MenuListData("Малебен сьв. Кірылу і Мятоду, настаўнікам славянскім$opisanie", "malebien_kiryla_miatod"))
             dataSearch.add(MenuListData("Служба за памерлых на кожны дзень тыдня$opisanie", "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
             dataSearch.add(MenuListData("Служба Найсьвяцейшай Багародзіцы$opisanie", "sluzba_najsviaciejszaj_baharodzicy"))
-            dataSearch.add(MenuListData("Служба аб вызваленьні бязьвінна зьняволеных$opisanie", "sluzba_vyzvalen_biazvinna_zniavolenych"))
             dataSearch.add(MenuListData("Павячэрніца малая$opisanie", "paviaczernica_malaja"))
+            dataSearch.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага(у 4-х частках)$opisanie", "kanon_andreja_kryckaha_4_czastki"))
             dataSearch.sort()
             return dataSearch
         }
@@ -173,6 +182,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.add(MenuListData("ТРЫЁДЗЬ", "5"))
             dataSearch.add(MenuListData("МІНЭЯ АГУЛЬНАЯ", "6"))
             dataSearch.add(MenuListData("АКТОІХ", "7"))
+            dataSearch.add(MenuListData("ТРЭБНІК", "8"))
             dataSearch.sort()
             return dataSearch
         }
@@ -237,6 +247,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
 
     private fun searchText() {
         dataSearch.addAll(getTextBogaslugbovyiaList(true))
+        dataSearch.addAll(getTextTrebnikList(true))
         dataSearch.addAll(getTextPasliaPrychascia(true))
         dataSearch.addAll(getTextSubBogaslugbovuiaVichernia(true))
         dataSearch.addAll(getTextAktoixList(true))
@@ -435,6 +446,10 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                 }
                 "7" -> {
                     val intent = Intent(it, Aktoix::class.java)
+                    startActivity(intent)
+                }
+                "8" -> {
+                    val intent = Intent(it, Trebnik::class.java)
                     startActivity(intent)
                 }
                 else -> {

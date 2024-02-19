@@ -1,13 +1,18 @@
 package by.carkva_gazeta.malitounik
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.Spannable
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ImageSpan
 import android.util.TypedValue
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import androidx.core.text.toSpannable
 import androidx.transition.TransitionManager
-import by.carkva_gazeta.malitounik.databinding.PasxaBinding
+import by.carkva_gazeta.malitounik.databinding.OnasBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -16,8 +21,9 @@ import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
+
 class Onas : BaseActivity() {
-    private lateinit var binding: PasxaBinding
+    private lateinit var binding: OnasBinding
     private var resetTollbarJob: Job? = null
 
     override fun onPause() {
@@ -28,7 +34,7 @@ class Onas : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val dzenNoch = getBaseDzenNoch()
-        binding = PasxaBinding.inflate(layoutInflater)
+        binding = OnasBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -49,14 +55,11 @@ class Onas : BaseActivity() {
             }
             TransitionManager.beginDelayedTransition(binding.toolbar)
         }
-        if (dzenNoch) binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
         binding.titleToolbar.text = resources.getString(R.string.pra_nas)
         val inputStream = resources.openRawResource(R.raw.onas)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         val builder = StringBuilder()
-        if (dzenNoch) builder.append("<html><head><style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #303030;}</style></head><body>\n")
-        else builder.append("<html><head><style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}</style></head><body>\n")
         reader.use { bufferedReader ->
             bufferedReader.forEachLine {
                 var line = it
@@ -68,12 +71,20 @@ class Onas : BaseActivity() {
             }
         }
         val k = getSharedPreferences("biblia", MODE_PRIVATE)
-        val webSettings = binding.pasxa.settings
-        webSettings.standardFontFamily = "sans-serif-condensed"
-        webSettings.defaultFontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT).toInt()
-        webSettings.domStorageEnabled = true
-        binding.pasxa.webViewClient = MyWebViewClient()
-        binding.pasxa.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
+        binding.onas.textSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+        val textOnas = MainActivity.fromHtml(builder.toString()).toSpannable()
+        val t1 = textOnas.indexOf("QR-CODE")
+        val bitMap = BitmapFactory.decodeResource(resources, R.drawable.qr_code_google_play)
+        textOnas.setSpan(ImageSpan(this, bitMap), t1, t1 + 7, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        val t3 = textOnas.indexOf("Што новага?")
+        textOnas.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                val dialog = DialogChtoHovaha()
+                dialog.show(supportFragmentManager, "DialogChtoHovaha")
+            }
+        }, t3, t3 + 11, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        binding.onas.text = textOnas
+        binding.onas.movementMethod = LinkMovementMethod()
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
@@ -93,18 +104,5 @@ class Onas : BaseActivity() {
             return true
         }
         return false
-    }
-
-    private inner class MyWebViewClient : WebViewClient() {
-
-        @Deprecated("Deprecated in Java")
-        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            if (url.contains("https://carkva.chto.navaha.app")) {
-                val dialog = DialogChtoHovaha()
-                dialog.show(supportFragmentManager, "DialogChtoHovaha")
-                return true
-            }
-            return true
-        }
     }
 }

@@ -3,20 +3,21 @@ package by.carkva_gazeta.malitounik
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.ImageSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
-import android.webkit.WebSettings
+import androidx.core.text.toSpannable
 import androidx.transition.TransitionManager
-import androidx.webkit.WebSettingsCompat
-import androidx.webkit.WebViewFeature
-import by.carkva_gazeta.malitounik.databinding.PasxaBinding
+import by.carkva_gazeta.malitounik.databinding.OnasBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,7 +28,7 @@ import java.io.InputStreamReader
 
 
 class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
-    private lateinit var binding: PasxaBinding
+    private lateinit var binding: OnasBinding
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
 
@@ -37,20 +38,14 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
     }
 
     override fun onDialogFontSize(fontSize: Float) {
-        val webSettings = binding.pasxa.settings
-        webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
-        webSettings.blockNetworkImage = true
-        webSettings.loadsImagesAutomatically = true
-        webSettings.setGeolocationEnabled(false)
-        webSettings.setNeedInitialFocus(false)
-        webSettings.defaultFontSize = fontSize.toInt()
+        binding.onas.textSize = fontSize
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = getBaseDzenNoch()
-        binding = PasxaBinding.inflate(layoutInflater)
+        binding = OnasBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams
@@ -73,17 +68,12 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
-            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
-            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                @Suppress("DEPRECATION") WebSettingsCompat.setForceDark(binding.pasxa.settings, WebSettingsCompat.FORCE_DARK_ON)
-            }
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
         val inputStream = resources.openRawResource(R.raw.pasxa)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         val builder = StringBuilder()
-        if (dzenNoch) builder.append("<html><head><style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #303030;}</style></head><body>\n") else builder.append("<html><head><style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}</style></head><body>\n")
         reader.use { bufferedReader ->
             bufferedReader.forEachLine {
                 var line = it
@@ -91,12 +81,13 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
                 builder.append(line)
             }
         }
-        builder.append("</body></html>")
-        val webSettings = binding.pasxa.settings
-        webSettings.standardFontFamily = "sans-serif-condensed"
-        webSettings.defaultFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT.toInt()
-        webSettings.domStorageEnabled = true
-        binding.pasxa.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
+        binding.onas.textSize = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+        val textOnas = MainActivity.fromHtml(builder.toString()).toSpannable()
+        val t1 = textOnas.indexOf("IMAGE")
+        val bitMap = BitmapFactory.decodeResource(resources, R.drawable.uvaskras)
+        textOnas.setSpan(ImageSpan(this, bitMap), t1, t1 + 5, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        binding.onas.text = textOnas
+        binding.onas.movementMethod = LinkMovementMethod()
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
@@ -157,13 +148,6 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
             }
             return true
         }
-        /*if (id == R.id.action_share) {
-            val sendIntent = Intent(Intent.ACTION_SEND)
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=5")
-            sendIntent.type = "text/plain"
-            startActivity(Intent.createChooser(sendIntent, null))
-            return true
-        }*/
         return false
     }
 }

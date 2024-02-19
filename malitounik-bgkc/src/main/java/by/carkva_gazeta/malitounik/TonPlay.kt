@@ -70,7 +70,7 @@ class TonPlay : BaseActivity() {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
         }
         binding.titleToolbar.text = resources.getString(R.string.ton, ton.toString())
-        when(ton) {
+        when (ton) {
             1 -> binding.viewWeb.loadUrl("https://soundcloud.com/24dwbqqpu9sk/trapar-1?in=24dwbqqpu9sk/sets/trapary-bgkts&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing")
             2 -> binding.viewWeb.loadUrl("https://soundcloud.com/24dwbqqpu9sk/trapar-2?in=24dwbqqpu9sk/sets/trapary-bgkts&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing")
             3 -> binding.viewWeb.loadUrl("https://soundcloud.com/24dwbqqpu9sk/trapar-3?in=24dwbqqpu9sk/sets/trapary-bgkts&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing")
@@ -102,7 +102,7 @@ class TonPlay : BaseActivity() {
     }
 
     private inner class MyWebViewClient : WebViewClient() {
-         @Deprecated("Deprecated in Java")
+        @Deprecated("Deprecated in Java")
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             view.loadUrl(url)
             return false

@@ -9,10 +9,12 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.webkit.WebSettingsCompat
-import androidx.webkit.WebViewFeature
-import by.carkva_gazeta.malitounik.databinding.DialogWebviewDisplayBinding
-import kotlinx.coroutines.*
+import by.carkva_gazeta.malitounik.databinding.DialogProgramRadioMariaBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -20,7 +22,7 @@ import java.net.URL
 
 class DialogProgramRadoiMaryia : DialogFragment() {
     private lateinit var alert: AlertDialog
-    private var binding: DialogWebviewDisplayBinding? = null
+    private var binding: DialogProgramRadioMariaBinding? = null
     private var sendTitlePadioMaryiaJob: Job? = null
     private val dzenNoch: Boolean
         get() {
@@ -47,23 +49,16 @@ class DialogProgramRadoiMaryia : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { activity ->
-            binding = DialogWebviewDisplayBinding.inflate(LayoutInflater.from(activity))
+            binding = DialogProgramRadioMariaBinding.inflate(LayoutInflater.from(activity))
             binding?.let {
                 var style = R.style.AlertDialogTheme
                 if (dzenNoch) style = R.style.AlertDialogThemeBlack
                 val builder = AlertDialog.Builder(activity, style)
-                val webSettings = it.content.settings
-                if (dzenNoch) {
-                    it.title.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
-                    if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                        @Suppress("DEPRECATION") WebSettingsCompat.setForceDark(webSettings, WebSettingsCompat.FORCE_DARK_ON)
-                    }
-                } else it.title.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary))
+                if (dzenNoch) it.title.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
+                else it.title.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary))
                 it.title.text = getString(R.string.program_radio_maryia)
                 sendTitlePadioMaryia()
-                webSettings.standardFontFamily = "sans-serif-condensed"
-                webSettings.defaultFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT.toInt()
-                webSettings.domStorageEnabled = true
+                it.content.textSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
                 builder.setView(it.root)
                 builder.setPositiveButton(resources.getText(R.string.close)) { dialog: DialogInterface, _: Int ->
                     dialog.cancel()
@@ -139,10 +134,8 @@ class DialogProgramRadoiMaryia : DialogFragment() {
                                             text = text.substring(t1, t2)
                                         }
                                     }
-                                    val style = if (dzenNoch) "<style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #424242;}</style>\n"
-                                    else "<style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}</style>\n"
-                                    text = "<html><head>$style$builder</head><body>$efir$text</body></html>"
-                                    binding?.content?.loadDataWithBaseURL(null, text.trim(), "text/html", "utf-8", null)
+                                    text = "$efir$text"
+                                    binding?.content?.text = MainActivity.fromHtml(text.trim())
                                 }
                             }
                         } catch (_: Throwable) {

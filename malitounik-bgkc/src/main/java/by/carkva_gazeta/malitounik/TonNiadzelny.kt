@@ -2,6 +2,7 @@ package by.carkva_gazeta.malitounik
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -125,8 +126,8 @@ class TonNiadzelny : BaseActivity() {
             viewHolder.text.text = adapterList[position]
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             viewHolder.play.setOnClickListener {
-                val intent = Intent(mContext, TonPlay::class.java)
-                intent.putExtra("ton", position + 1)
+                val uri = Uri.parse("https://soundcloud.com/24dwbqqpu9sk/trapar-${position + 1}?in=24dwbqqpu9sk/sets/trapary-bgkts&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing")
+                val intent = Intent(Intent.ACTION_VIEW, uri)
                 mContext.startActivity(intent)
             }
             return rootView

@@ -113,20 +113,19 @@ class DialogProgramRadoiMaryia : DialogFragment() {
                                         inputLine = it.readLine()
                                     }
                                 }
-                                val builder = StringBuilder()
-                                val inputStream = resources.openRawResource(R.raw.radio_maria_style)
-                                val isr = InputStreamReader(inputStream)
-                                val reader = BufferedReader(isr)
-                                var line: String
-                                reader.use { bufferedReader ->
-                                    bufferedReader.forEachLine {
-                                        line = it
-                                        builder.append(line)
-                                    }
-                                }
                                 withContext(Dispatchers.Main) {
                                     var text = sb.toString()
                                     text = text.replace("<h1>Праграма</h1>", "")
+                                    text = text.replace("<div class=\"dayhdr\">", "<strong>")
+                                    text = text.replace("</div><ul>", "</strong><p>")
+                                    text = text.replace("</ul>", "")
+                                    text = text.replace("<li>", "")
+                                    text = text.replace("</div>", "")
+                                    text = text.replace("</li>", "<p>")
+                                    text = text.replace("<span class=\"pstarttime\">", "– ")
+                                    text = text.replace("</span>", "")
+                                    text = text.replace("<div class=\"programday\">", "")
+                                    text = text.replace("<span class=\"ptitle\">", " ")
                                     val t1 = text.indexOf("<div class=\"program\">", ignoreCase = true)
                                     if (t1 != -1) {
                                         val t2 = text.indexOf("<div id=\"sidebar-2\"", t1, ignoreCase = true)
@@ -134,6 +133,11 @@ class DialogProgramRadoiMaryia : DialogFragment() {
                                             text = text.substring(t1, t2)
                                         }
                                     }
+                                    val t2 = text.lastIndexOf("<div style=\"clear: both;\">")
+                                    if (t2 != -1) {
+                                        text = text.substring(0, t2)
+                                    }
+                                    text = text.replace("<div style=\"clear: both;\">", "")
                                     text = "$efir$text"
                                     binding?.content?.text = MainActivity.fromHtml(text.trim())
                                 }

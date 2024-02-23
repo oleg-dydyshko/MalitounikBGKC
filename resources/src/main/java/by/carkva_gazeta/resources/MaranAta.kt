@@ -76,6 +76,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
+        binding.conteiner.textSize = fontBiblia
         adapter.notifyDataSetChanged()
     }
 
@@ -117,6 +118,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         setContentView(binding.root)
         setTollbarTheme()
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+        binding.conteiner.textSize = fontBiblia
         binding.ListView.onItemClickListener = this
         binding.ListView.onItemLongClickListener = this
         binding.ListView.setOnTouchListener(this)
@@ -1024,11 +1026,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     }
 
     private fun startProcent() {
-        var parallel = false
-        if (!autoscroll) {
-            autoscroll = true
-            parallel = true
-        }
         procentJob?.cancel()
         bindingprogress.progress.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
@@ -1043,7 +1040,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@MaranAta, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
                 bindingprogress.seekBarFontSize.visibility = View.GONE
             }
-            if (parallel) autoscroll = false
         }
     }
 

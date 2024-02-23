@@ -113,6 +113,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         }
         title = intent.extras?.getString("title", "") ?: ""
         resurs = intent.extras?.getString("biblia", "1") ?: "1"
+        prodoljyt = intent?.extras?.getBoolean("prodoljyt", false) ?: false
         positionY = k.getInt(resurs + "BibleVybranoeScroll", 0)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         adapter = BibliaVybranoeListAdaprer(this)
@@ -199,7 +200,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         binding.actionBack.setOnClickListener {
             onBack()
         }
-        prodoljyt = intent?.extras?.getBoolean("prodoljyt", false) ?: false
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             private var checkDiff = false
 
@@ -570,7 +570,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             }
             titleBibliaData.setSpan(StyleSpan(Typeface.BOLD), 0, titleBibliaData.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, titleBibliaData))
-            //bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, SpannableString("")))
             if (title == vybranoeBibliaData.title) scrollToPosition = count
             count++
             if (file?.exists() == true) {

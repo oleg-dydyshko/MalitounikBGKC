@@ -1111,7 +1111,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         val id = view?.id ?: R.id.label1
         val idOld = if (id == R.id.label14a || id == R.id.label9a || id == R.id.label10a) idSelect
         else id
-        if (!(id == R.id.label9a || id == R.id.label10a || id == R.id.label14a || id == R.id.image5 || id == R.id.image6 || id == R.id.image7)) {
+        if (!(id == R.id.label9a || id == R.id.label10a || id == R.id.label14a || id == R.id.image5 || id == R.id.image6 || id == R.id.image7 || id == R.id.citata)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             if (dzenNoch) {
                 binding.citata.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))

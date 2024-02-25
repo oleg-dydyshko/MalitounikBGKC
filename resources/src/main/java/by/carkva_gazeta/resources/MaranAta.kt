@@ -125,7 +125,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         adapter = MaranAtaListAdaprer(this)
         binding.ListView.adapter = adapter
         binding.ListView.divider = null
-        binding.ListView.setSelection(maranAtaScrollPosition)
         cytanne = intent.extras?.getString("cytanneMaranaty") ?: ""
         setMaranata(cytanne)
         val c = Calendar.getInstance()
@@ -430,8 +429,37 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 }
             }
         })
-        binding.ListView.post {
-            binding.ListView.smoothScrollToPosition(maranAtaScrollPosition)
+        smoothScrollToPosition(binding.ListView, maranAtaScrollPosition)
+    }
+
+    private fun smoothScrollToPosition(view: AbsListView, position: Int) {
+        val child = getChildAtPosition(view, position)
+        if (child != null && (child.top == 0 || child.top > 0 && !view.canScrollVertically(1))) {
+            return
+        }
+        view.setOnScrollListener(object : AbsListView.OnScrollListener {
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    view.setOnScrollListener(null)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        view.setSelection(position)
+                    }
+                }
+            }
+
+            override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {}
+        })
+        CoroutineScope(Dispatchers.Main).launch {
+            view.smoothScrollToPositionFromTop(position, 0)
+        }
+    }
+
+    private fun getChildAtPosition(view: AdapterView<*>, position: Int): View? {
+        val index = position - view.firstVisiblePosition
+        return if (index >= 0 && index < view.childCount) {
+            view.getChildAt(index)
+        } else {
+            null
         }
     }
 
@@ -1096,13 +1124,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
         mPedakVisable = false
         binding.linearLayout4.visibility = View.GONE
-        val firstVisiblePosition = binding.ListView.firstVisiblePosition
-        if (firstVisiblePosition != 0) {
-            maranAtaScrollPosition = firstVisiblePosition
-            val prefEditors = k.edit()
-            prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
-            prefEditors.apply()
-        }
+        maranAtaScrollPosition = binding.ListView.firstVisiblePosition
+        val prefEditors = k.edit()
+        prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
+        prefEditors.apply()
         stopAutoStartScroll()
     }
 

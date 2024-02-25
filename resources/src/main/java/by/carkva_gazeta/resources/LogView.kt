@@ -17,6 +17,7 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.LogBinding
 import com.google.firebase.storage.ListResult
 import kotlinx.coroutines.CoroutineScope
@@ -68,8 +69,15 @@ class LogView : BaseActivity() {
         runPrefixes(list, oldCheckSB)
         val list2 = Malitounik.referens.child("/chytanne/Semucha").list(1000).await()
         runItems(list2, oldCheckSB)
-        val pathReference = Malitounik.referens.child("/calendarsviatyia.txt")
+        var pathReference = Malitounik.referens.child("/calendarsviatyia.txt")
         addItems(pathReference.path, pathReference.name, oldCheckSB)
+        for (year in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) {
+            try {
+                pathReference = Malitounik.referens.child("/calendar-cytanne_$year.php")
+                addItems(pathReference.path, pathReference.name, oldCheckSB)
+            } catch (_: Throwable) {
+            }
+        }
         checkResourcesCount()
         checkResources()
         if (log.isEmpty()) {

@@ -23,6 +23,7 @@ import android.view.*
 import android.view.View.OnTouchListener
 import android.view.animation.AnimationUtils
 import android.widget.AbsListView
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.TextView
@@ -46,6 +47,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.InputStreamReader
+
 
 class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
 
@@ -119,7 +121,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         adapter = BibliaVybranoeListAdaprer(this)
         binding.ListView.adapter = adapter
         binding.ListView.divider = null
-        binding.ListView.setSelection(positionY)
         binding.constraint.setOnTouchListener(this)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
@@ -611,9 +612,40 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         }
         adapter.notifyDataSetChanged()
         if (prodoljyt) {
-            binding.ListView.setSelection(positionY)
+            smoothScrollToPosition(binding.ListView, positionY)
         } else {
-            binding.ListView.setSelection(scrollToPosition)
+            smoothScrollToPosition(binding.ListView, scrollToPosition)
+        }
+    }
+
+    private fun smoothScrollToPosition(view: AbsListView, position: Int) {
+        val child = getChildAtPosition(view, position)
+        if (child != null && (child.top == 0 || child.top > 0 && !view.canScrollVertically(1))) {
+            return
+        }
+        view.setOnScrollListener(object : AbsListView.OnScrollListener {
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    view.setOnScrollListener(null)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        view.setSelection(position)
+                    }
+                }
+            }
+
+            override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {}
+        })
+        CoroutineScope(Dispatchers.Main).launch {
+            view.smoothScrollToPositionFromTop(position, 0)
+        }
+    }
+
+    private fun getChildAtPosition(view: AdapterView<*>, position: Int): View? {
+        val index = position - view.firstVisiblePosition
+        return if (index >= 0 && index < view.childCount) {
+            view.getChildAt(index)
+        } else {
+            null
         }
     }
 
@@ -733,7 +765,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             stopAutoStartScroll()
             autoScroll()
         } else {
-            binding.ListView.smoothScrollToPosition(0)
+            smoothScrollToPosition(binding.ListView, 0)
             scrolltosatrt = true
         }
     }
@@ -786,13 +818,10 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
 
     override fun onPause() {
         super.onPause()
-        val firstVisiblePosition = binding.ListView.firstVisiblePosition
-        if (firstVisiblePosition != 0) {
-            positionY = firstVisiblePosition
-            val prefEditor = k.edit()
-            prefEditor.putInt(resurs + "BibleVybranoeScroll", positionY)
-            prefEditor.apply()
-        }
+        positionY = binding.ListView.firstVisiblePosition
+        val prefEditor = k.edit()
+        prefEditor.putInt(resurs + "BibleVybranoeScroll", positionY)
+        prefEditor.apply()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         stopAutoStartScroll()
     }

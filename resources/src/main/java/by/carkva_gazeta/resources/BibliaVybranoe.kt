@@ -23,7 +23,6 @@ import android.view.*
 import android.view.View.OnTouchListener
 import android.view.animation.AnimationUtils
 import android.widget.AbsListView
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.TextView
@@ -78,6 +77,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private var prodoljyt = false
     private lateinit var adapter: BibliaVybranoeListAdaprer
     private val bibliaVybranoeList = ArrayList<BibliaVybranoeData>()
+    private var isSmoothScrollToPosition = false
     private val mActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         prodoljyt = true
         loadBible()
@@ -201,60 +201,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         binding.actionBack.setOnClickListener {
             onBack()
         }
-        binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
-            private var checkDiff = false
-
-            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                mActionDown = scrollState != 0
-            }
-
-            override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
-                if (list.adapter == null || list.getChildAt(0) == null) return
-                val position = list.firstVisiblePosition
-                val nazva = bibliaVybranoeList[list.firstVisiblePosition]
-                if (fullscreenPage) {
-                    if (position < positionY) {
-                        if (binding.textViewTitle.visibility == View.GONE) {
-                            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-                            binding.textViewTitle.visibility = View.VISIBLE
-                            binding.textViewTitle.animation = animation
-                        }
-                        if (resetTitleJob?.isActive == true) resetTitleJob?.cancel()
-                        if (resetTitleJob?.isActive != true) {
-                            resetTitleJob = CoroutineScope(Dispatchers.Main).launch {
-                                delay(3000L)
-                                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
-                                binding.textViewTitle.visibility = View.GONE
-                                binding.textViewTitle.animation = animation2
-                            }
-                        }
-                    }
-                    binding.textViewTitle.text = nazva.title
-                }
-                positionY = position
-                if (position == 0 && scrolltosatrt) {
-                    autoStartScroll()
-                    scrolltosatrt = false
-                    invalidateOptionsMenu()
-                }
-                diffScroll = if (list.lastVisiblePosition == list.adapter.count - 1) list.getChildAt(list.childCount - 1).bottom - list.height
-                else -1
-                if (checkDiff && diffScroll > 0) {
-                    checkDiff = false
-                    invalidateOptionsMenu()
-                }
-                if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
-                    checkDiff = true
-                    autoscroll = false
-                    stopAutoScroll()
-                    invalidateOptionsMenu()
-                }
-                val nazvaView = binding.subtitleToolbar.text.toString()
-                if (nazva.title != nazvaView || nazvaView == "") {
-                    binding.subtitleToolbar.text = nazva.title
-                }
-            }
-        })
     }
 
     private fun setTollbarTheme() {
@@ -365,8 +311,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
 
     private fun loadBible() {
         bibliaVybranoeList.clear()
-        var scrollToPosition = 0
-        var count = 0
         DialogVybranoeBibleList.arrayListVybranoe.forEachIndexed { index, vybranoeBibliaData ->
             var inputStream = resources.openRawResource(R.raw.biblias1)
             var file: File? = null
@@ -571,8 +515,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             }
             titleBibliaData.setSpan(StyleSpan(Typeface.BOLD), 0, titleBibliaData.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, titleBibliaData))
-            if (title == vybranoeBibliaData.title) scrollToPosition = count
-            count++
             if (file?.exists() == true) {
                 BibleGlobalList.vydelenie.clear()
                 val inputStream2 = FileReader(file)
@@ -598,7 +540,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                         position++
                         bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, ssb))
                     }
-                    count++
                 }
             } else {
                 val bibleline = split2[vybranoeBibliaData.glava].split("<br><br>")
@@ -606,44 +547,105 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                     if (!(bibleline[position] == "" && bibleline.size - 1 == position && DialogVybranoeBibleList.arrayListVybranoe.size - 1 == index)) {
                         bibliaVybranoeList.add(BibliaVybranoeData(vybranoeBibliaData.title, MainActivity.fromHtml(bibleline[position])))
                     }
-                    count++
                 }
             }
         }
         adapter.notifyDataSetChanged()
+        isSmoothScrollToPosition = true
         if (prodoljyt) {
-            smoothScrollToPosition(binding.ListView, positionY)
+            smoothScrollToPosition(positionY)
         } else {
-            smoothScrollToPosition(binding.ListView, scrollToPosition)
+            smoothScrollToPosition(findTitle())
         }
     }
 
-    private fun smoothScrollToPosition(view: AbsListView, position: Int) {
-        val child = getChildAtPosition(view, position)
-        if (child != null && (child.top == 0 || child.top > 0 && !view.canScrollVertically(1))) {
-            return
+    private fun findTitle(): Int {
+        for (i in 0 until adapter.count) {
+            if (title == adapter.getItem(i)?.title) {
+                return i
+            }
         }
-        view.setOnScrollListener(object : AbsListView.OnScrollListener {
+        return 0
+    }
+
+    private fun smoothScrollToPosition(position: Int) {
+        if (isSmoothScrollToPosition) {
+            val child = getChildAtPosition(position)
+            if (child != null && (child.top == 0 || child.top > 0 && !binding.ListView.canScrollVertically(1))) {
+                return
+            }
+        }
+        binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+             private var checkDiff = false
+
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                    view.setOnScrollListener(null)
+                mActionDown = scrollState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+                if (isSmoothScrollToPosition && scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    isSmoothScrollToPosition = false
                     CoroutineScope(Dispatchers.Main).launch {
                         view.setSelection(position)
                     }
                 }
             }
 
-            override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {}
+            override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+                if (list.adapter == null || list.getChildAt(0) == null) return
+                val firstPosition = list.firstVisiblePosition
+                val nazva = bibliaVybranoeList[list.firstVisiblePosition]
+                if (fullscreenPage) {
+                    if (firstPosition < positionY) {
+                        if (binding.textViewTitle.visibility == View.GONE) {
+                            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                            binding.textViewTitle.visibility = View.VISIBLE
+                            binding.textViewTitle.animation = animation
+                        }
+                        if (resetTitleJob?.isActive == true) resetTitleJob?.cancel()
+                        if (resetTitleJob?.isActive != true) {
+                            resetTitleJob = CoroutineScope(Dispatchers.Main).launch {
+                                delay(3000L)
+                                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+                                binding.textViewTitle.visibility = View.GONE
+                                binding.textViewTitle.animation = animation2
+                            }
+                        }
+                    }
+                    binding.textViewTitle.text = nazva.title
+                }
+                positionY = firstPosition
+                if (firstPosition == 0 && scrolltosatrt) {
+                    autoStartScroll()
+                    scrolltosatrt = false
+                    invalidateOptionsMenu()
+                }
+                diffScroll = if (list.lastVisiblePosition == list.adapter.count - 1) list.getChildAt(list.childCount - 1).bottom - list.height
+                else -1
+                if (checkDiff && diffScroll > 0) {
+                    checkDiff = false
+                    invalidateOptionsMenu()
+                }
+                if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
+                    checkDiff = true
+                    autoscroll = false
+                    stopAutoScroll()
+                    invalidateOptionsMenu()
+                }
+                val nazvaView = binding.subtitleToolbar.text.toString()
+                if (nazva.title != nazvaView || nazvaView == "") {
+                    binding.subtitleToolbar.text = nazva.title
+                }
+            }
         })
-        CoroutineScope(Dispatchers.Main).launch {
-            view.smoothScrollToPositionFromTop(position, 0)
+        if (isSmoothScrollToPosition) {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.ListView.smoothScrollToPositionFromTop(position, 0)
+            }
         }
     }
 
-    private fun getChildAtPosition(view: AdapterView<*>, position: Int): View? {
-        val index = position - view.firstVisiblePosition
-        return if (index >= 0 && index < view.childCount) {
-            view.getChildAt(index)
+    private fun getChildAtPosition(position: Int): View? {
+        val index = position - binding.ListView.firstVisiblePosition
+        return if (index >= 0 && index < binding.ListView.childCount) {
+            binding.ListView.getChildAt(index)
         } else {
             null
         }
@@ -765,7 +767,8 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             stopAutoStartScroll()
             autoScroll()
         } else {
-            smoothScrollToPosition(binding.ListView, 0)
+            isSmoothScrollToPosition = true
+            smoothScrollToPosition(0)
             scrolltosatrt = true
         }
     }

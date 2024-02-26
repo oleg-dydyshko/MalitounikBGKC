@@ -73,6 +73,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private var mun = 0
     private var day = 1
+    private var isSmoothScrollToPosition = false
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -375,19 +376,38 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
             vydelenie = gson.fromJson(file.readText(), type)
         }
+        binding.ListView.post {
+            isSmoothScrollToPosition = true
+            smoothScrollToPosition(maranAtaScrollPosition)
+        }
+    }
+
+    private fun smoothScrollToPosition(position: Int) {
+        if (isSmoothScrollToPosition) {
+            val child = getChildAtPosition(position)
+            if (child != null && (child.top == 0 || child.top > 0 && !binding.ListView.canScrollVertically(1))) {
+                return
+            }
+        }
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             private var checkDiff = false
 
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                mActionDown = scrollState != 0
+                mActionDown = scrollState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+                if (isSmoothScrollToPosition && scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    isSmoothScrollToPosition = false
+                    CoroutineScope(Dispatchers.Main).launch {
+                        view.setSelection(position)
+                    }
+                }
             }
 
             override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
                 if (list.adapter == null || list.getChildAt(0) == null) return
-                val position = list.firstVisiblePosition
+                val firstPosition = list.firstVisiblePosition
                 val nazva = maranAta[list.firstVisiblePosition].title
                 if (fullscreenPage) {
-                    if (position < maranAtaScrollPosition) {
+                    if (firstPosition < maranAtaScrollPosition) {
                         if (binding.textViewTitle.visibility == View.GONE) {
                             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
                             binding.textViewTitle.visibility = View.VISIBLE
@@ -405,8 +425,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     }
                     binding.textViewTitle.text = nazva
                 }
-                maranAtaScrollPosition = position
-                if (position == 0 && scrolltosatrt) {
+                maranAtaScrollPosition = firstPosition
+                if (firstPosition == 0 && scrolltosatrt) {
                     autoStartScroll()
                     scrolltosatrt = false
                     invalidateOptionsMenu()
@@ -429,35 +449,17 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 }
             }
         })
-        smoothScrollToPosition(binding.ListView, maranAtaScrollPosition)
-    }
-
-    private fun smoothScrollToPosition(view: AbsListView, position: Int) {
-        val child = getChildAtPosition(view, position)
-        if (child != null && (child.top == 0 || child.top > 0 && !view.canScrollVertically(1))) {
-            return
-        }
-        view.setOnScrollListener(object : AbsListView.OnScrollListener {
-            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                    view.setOnScrollListener(null)
-                    CoroutineScope(Dispatchers.Main).launch {
-                        view.setSelection(position)
-                    }
-                }
+        if (isSmoothScrollToPosition) {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.ListView.smoothScrollToPositionFromTop(position, 0)
             }
-
-            override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {}
-        })
-        CoroutineScope(Dispatchers.Main).launch {
-            view.smoothScrollToPositionFromTop(position, 0)
         }
     }
 
-    private fun getChildAtPosition(view: AdapterView<*>, position: Int): View? {
-        val index = position - view.firstVisiblePosition
-        return if (index >= 0 && index < view.childCount) {
-            view.getChildAt(index)
+    private fun getChildAtPosition(position: Int): View? {
+        val index = position - binding.ListView.firstVisiblePosition
+        return if (index >= 0 && index < binding.ListView.childCount) {
+            binding.ListView.getChildAt(index)
         } else {
             null
         }
@@ -996,7 +998,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             stopAutoStartScroll()
             autoScroll()
         } else {
-            binding.ListView.smoothScrollToPosition(0)
+            isSmoothScrollToPosition = true
+            smoothScrollToPosition(0)
             scrolltosatrt = true
         }
     }

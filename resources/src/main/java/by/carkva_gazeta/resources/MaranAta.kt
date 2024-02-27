@@ -383,17 +383,14 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     }
 
     private fun smoothScrollToPosition(position: Int) {
-        if (isSmoothScrollToPosition) {
-            val child = getChildAtPosition(position)
-            if (child != null && (child.top == 0 || child.top > 0 && !binding.ListView.canScrollVertically(1))) {
-                return
-            }
-        }
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             private var checkDiff = false
 
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
                 mActionDown = scrollState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+                if (view.firstVisiblePosition != position) {
+                    isSmoothScrollToPosition = false
+                }
                 if (isSmoothScrollToPosition && scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                     isSmoothScrollToPosition = false
                     CoroutineScope(Dispatchers.Main).launch {
@@ -407,7 +404,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val firstPosition = list.firstVisiblePosition
                 val nazva = maranAta[list.firstVisiblePosition].title
                 if (fullscreenPage) {
-                    if (firstPosition < maranAtaScrollPosition) {
+                    if (firstPosition <= maranAtaScrollPosition) {
                         if (binding.textViewTitle.visibility == View.GONE) {
                             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
                             binding.textViewTitle.visibility = View.VISIBLE
@@ -453,15 +450,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             CoroutineScope(Dispatchers.Main).launch {
                 binding.ListView.smoothScrollToPositionFromTop(position, 0)
             }
-        }
-    }
-
-    private fun getChildAtPosition(position: Int): View? {
-        val index = position - binding.ListView.firstVisiblePosition
-        return if (index >= 0 && index < binding.ListView.childCount) {
-            binding.ListView.getChildAt(index)
-        } else {
-            null
         }
     }
 

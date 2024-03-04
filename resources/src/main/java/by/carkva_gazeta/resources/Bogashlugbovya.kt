@@ -4,7 +4,11 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
@@ -13,9 +17,19 @@ import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextWatcher
-import android.text.style.*
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.BackgroundColorSpan
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
@@ -30,16 +44,38 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.transition.TransitionManager
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.CaliandarMun
+import by.carkva_gazeta.malitounik.DialogBrightness
+import by.carkva_gazeta.malitounik.DialogFontSize
+import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
+import by.carkva_gazeta.malitounik.DialogHelpShare
+import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.EditTextCustom
+import by.carkva_gazeta.malitounik.InteractiveScrollView
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MalitvyPasliaPrychascia
+import by.carkva_gazeta.malitounik.MenuCaliandar
+import by.carkva_gazeta.malitounik.MenuVybranoe
+import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.SlugbovyiaTextu
+import by.carkva_gazeta.malitounik.VybranoeData
 import by.carkva_gazeta.resources.databinding.BogasluzbovyaBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 
 class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogVybranoeBibleList.DialogVybranoeBibleListListener {
@@ -182,15 +218,14 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private fun findAllAsanc(noNext: Boolean = true) {
         CoroutineScope(Dispatchers.Main).launch {
             findRemoveSpan()
-            findAll()
+            findAll(binding.textSearch.text.toString().trim())
             findCheckPosition()
             if (noNext) findNext(false)
         }
     }
 
-    private fun findAll() {
+    private fun findAll(search: String, count: Int = 0) {
         var position = 0
-        val search = binding.textSearch.text.toString()
         if (search.length >= 3) {
             val text = binding.textView.text as SpannableString
             val searchLig = search.length
@@ -204,6 +239,28 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     position = strPosition + 1
                 } else {
                     run = false
+                }
+            }
+            var t1 = search.indexOf(" ")
+            if (t1 != -1) {
+                val charList = arrayOf(",", "(", ")", ".", ";", ":", "[", "]", "?", "\"", " --")
+                var charTest = false
+                if (count == 0) {
+                    for (element in charList) {
+                        val t2 = search.indexOf(element)
+                        if (t2 != -1) {
+                            charTest = true
+                            break
+                        }
+                    }
+                }
+                if (!charTest && findListSpans.isEmpty() && count < charList.size) {
+                    var newSearch = search
+                    if (count > 0) {
+                        newSearch = newSearch.replace(charList[count - 1], "")
+                        t1 = newSearch.indexOf(" ")
+                    }
+                    findAll(newSearch.substring(0, t1) + charList[count] + " " + newSearch.substring(t1 + 1), count + 1)
                 }
             }
         }

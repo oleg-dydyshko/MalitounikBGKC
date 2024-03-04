@@ -15,7 +15,6 @@ import android.text.TextWatcher
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -42,7 +41,6 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogClearHishory
 import by.carkva_gazeta.malitounik.HistoryAdapter
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
@@ -688,13 +686,13 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         searchViewItem.expandActionView()
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = title
-        val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView
-        searcheTextView.typeface = MainActivity.createFont(Typeface.NORMAL)
+        val searcheTextView = searchView?.findViewById<TextView>(androidx.appcompat.R.id.search_src_text)
+        searcheTextView?.typeface = MainActivity.createFont(Typeface.NORMAL)
         textViewCount = menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextView
         textViewCount?.typeface = MainActivity.createFont(Typeface.NORMAL)
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
-        val closeButton = searchView?.findViewById(androidx.appcompat.R.id.search_close_btn) as ImageView
-        closeButton.setOnClickListener {
+        val closeButton = searchView?.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+        closeButton?.setOnClickListener {
             prefEditors.putString("search_string", "")
             prefEditors.apply()
             searchJob?.cancel()
@@ -857,8 +855,8 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         val json = gson.toJson(arrayList, type)
         prefEditors.putString("search_array", json)
         prefEditors.apply()
-        val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView
-        val search = searcheTextView.text.toString()
+        val searcheTextView = searchView?.findViewById<TextView>(androidx.appcompat.R.id.search_src_text)
+        val search = searcheTextView?.text.toString()
         if (search != "" && result.size != 0) {
             binding.ListView.visibility = View.VISIBLE
             addHistory(search)

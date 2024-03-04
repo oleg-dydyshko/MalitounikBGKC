@@ -384,8 +384,8 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         searchView = searchViewItem.actionView as SearchView
         textViewCount = menu.findItem(R.id.count).actionView as TextView
         activity?.let {
-            val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView
-            searcheTextView.typeface = MainActivity.createFont(Typeface.NORMAL)
+            val searcheTextView = searchView?.findViewById<TextView>(androidx.appcompat.R.id.search_src_text)
+            searcheTextView?.typeface = MainActivity.createFont(Typeface.NORMAL)
             textViewCount?.typeface = MainActivity.createFont(Typeface.NORMAL)
         }
         if (actionExpandOn) {

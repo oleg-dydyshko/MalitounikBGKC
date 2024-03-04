@@ -1,7 +1,9 @@
 package by.carkva_gazeta.malitounik
 
 import android.annotation.SuppressLint
-import android.content.*
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
@@ -9,7 +11,12 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
@@ -24,10 +31,13 @@ import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.databinding.CytatyActivityBinding
 import by.carkva_gazeta.malitounik.databinding.ProgressMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.*
 import kotlin.math.ceil
 
 

@@ -5,7 +5,6 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import androidx.core.text.toSpannable
-import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.Malitounik
 import java.io.BufferedReader
 import java.io.InputStream

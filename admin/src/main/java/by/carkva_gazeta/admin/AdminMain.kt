@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.hardware.SensorEvent
-import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.MenuItem
@@ -13,19 +12,14 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminMainBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.Malitounik
 import com.google.android.play.core.splitcompat.SplitCompat
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import java.io.File
 
-class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
+class AdminMain : BaseActivity() {
     private lateinit var binding: AdminMainBinding
     private var resetTollbarJob: Job? = null
 
@@ -38,43 +32,6 @@ class AdminMain : BaseActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
     }
 
     override fun setMyTheme() {
-    }
-
-    override fun setViersionApp(releaseCode: String, release: Boolean) {
-        if (MainActivity.isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.Main).launch {
-                try {
-                    val localFile = File("$filesDir/cache/cache.txt")
-                    Malitounik.referens.child("/updateMalitounikBGKC.json").getFile(localFile).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val jsonFile = localFile.readText()
-                            val gson = Gson()
-                            val type = TypeToken.getParameterized(MutableMap::class.java, TypeToken.getParameterized(String::class.java).type, TypeToken.getParameterized(String::class.java).type).type
-                            val updeteArrayText = gson.fromJson<MutableMap<String, String>>(jsonFile, type)
-                            if (release) {
-                                updeteArrayText["release"] = releaseCode
-                            } else {
-                                updeteArrayText["devel"] = releaseCode
-                            }
-                            localFile.writer().use {
-                                it.write(gson.toJson(updeteArrayText, type))
-                            }
-                        } else {
-                            MainActivity.toastView(this@AdminMain, getString(by.carkva_gazeta.malitounik.R.string.error))
-                        }
-                    }.await()
-                    Malitounik.referens.child("/updateMalitounikBGKC.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            MainActivity.toastView(this@AdminMain, getString(by.carkva_gazeta.malitounik.R.string.save))
-                        } else {
-                            MainActivity.toastView(this@AdminMain, getString(by.carkva_gazeta.malitounik.R.string.error))
-                        }
-                    }.await()
-                } catch (e: Throwable) {
-                    MainActivity.toastView(this@AdminMain, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                }
-            }
-        }
     }
 
     override fun onResume() {

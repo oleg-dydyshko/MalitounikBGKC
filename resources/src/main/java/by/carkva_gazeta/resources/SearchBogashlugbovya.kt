@@ -310,13 +310,13 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         searchViewItem.expandActionView()
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = title
-        val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView
-        searcheTextView.typeface = MainActivity.createFont(Typeface.NORMAL)
+        val searcheTextView = searchView?.findViewById<TextView>(androidx.appcompat.R.id.search_src_text)
+        searcheTextView?.typeface = MainActivity.createFont(Typeface.NORMAL)
         textViewCount = menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextView
         textViewCount?.typeface = MainActivity.createFont(Typeface.NORMAL)
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
-        val closeButton = searchView?.findViewById(androidx.appcompat.R.id.search_close_btn) as ImageView
-        closeButton.setOnClickListener {
+        val closeButton = searchView?.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+        closeButton?.setOnClickListener {
             prefEditors.putString("search_bogashugbovya_string", "")
             prefEditors.apply()
             searchJob?.cancel()
@@ -463,8 +463,8 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         val json = gson.toJson(arrayList, type)
         prefEditors.putString("search_bogashugbovya_array", json)
         prefEditors.apply()
-        val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView
-        val search = searcheTextView.text.toString()
+        val searcheTextView = searchView?.findViewById<TextView>(androidx.appcompat.R.id.search_src_text)
+        val search = searcheTextView?.text.toString()
         if (search != "" && result.size != 0) {
             binding.ListView.visibility = View.VISIBLE
             addHistory(search)

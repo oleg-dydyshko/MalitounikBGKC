@@ -229,8 +229,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (search.length >= 3) {
             val text = binding.textView.text as SpannableString
             val searchLig = search.length
-            var run = true
-            while (run) {
+            while (true) {
                 val strPosition = text.indexOf(search, position, true)
                 if (strPosition != -1) {
                     findListSpans.add(SpanStr(getColorSpans(text.getSpans(strPosition, strPosition + searchLig, ForegroundColorSpan::class.java)), strPosition, strPosition + searchLig))
@@ -238,7 +237,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     position = strPosition + 1
                 } else {
-                    run = false
+                    break
                 }
             }
             var t1 = search.indexOf(" ")
@@ -260,7 +259,34 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         newSearch = newSearch.replace(charList[count - 1], "")
                         t1 = newSearch.indexOf(" ")
                     }
-                    findAll(newSearch.substring(0, t1) + charList[count] + " " + newSearch.substring(t1 + 1), count + 1)
+                    if (count > 1) {
+                        var pos = 0
+                        val sub1 = newSearch.substring(0, t1 + 1)
+                        val sub2 = newSearch.substring(t1 + 1)
+                        while (true) {
+                            val strSub1Pos = text.indexOf(sub1, pos, true)
+                            if (strSub1Pos != -1) {
+                                val strSub2Pos = text.indexOf(sub2, strSub1Pos + sub1.length, true)
+                                if (strSub2Pos == -1) {
+                                    pos = strSub1Pos + 1
+                                    continue
+                                }
+                                val subTest = strSub2Pos - strSub1Pos - sub1.length
+                                pos = strSub2Pos + 1
+                                if (subTest < 10) {
+                                    val subResult = text.substring(strSub1Pos + sub1.length - 1, strSub2Pos)
+                                    val subSearch = text.substring(strSub1Pos, strSub1Pos + sub1.length - 1) + subResult + text.substring(strSub2Pos, strSub2Pos + sub2.length)
+                                    findAll(subSearch, count + 1)
+                                    //Log.d("Oleg", subTest.toString() + "===" + subSearch + "===" + text.substring(strSub1Pos, strSub1Pos + sub1.length - 1) + "===" + subResult + "===" + text.substring(strSub2Pos, strSub2Pos + sub2.length))
+                                    break
+                                }
+                            } else {
+                                break
+                            }
+                        }
+                    } else {
+                        findAll(newSearch.substring(0, t1) + charList[count] + " " + newSearch.substring(t1 + 1), count + 1)
+                    }
                 }
             }
         }

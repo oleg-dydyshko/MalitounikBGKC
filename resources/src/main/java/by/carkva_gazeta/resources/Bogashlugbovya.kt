@@ -261,24 +261,32 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     }
                     if (count > 1) {
                         var pos = 0
-                        val sub1 = newSearch.substring(0, t1 + 1)
-                        val sub2 = newSearch.substring(t1 + 1)
+                        val sub1 = newSearch.substring(0, t1)
+                        val sub2 = newSearch.substring(t1).trim()
                         while (true) {
                             val strSub1Pos = text.indexOf(sub1, pos, true)
                             if (strSub1Pos != -1) {
+                                pos = strSub1Pos + 1
                                 val strSub2Pos = text.indexOf(sub2, strSub1Pos + sub1.length, true)
                                 if (strSub2Pos == -1) {
-                                    pos = strSub1Pos + 1
                                     continue
                                 }
                                 val subTest = strSub2Pos - strSub1Pos - sub1.length
-                                pos = strSub2Pos + 1
                                 if (subTest < 10) {
-                                    val subResult = text.substring(strSub1Pos + sub1.length - 1, strSub2Pos)
-                                    val subSearch = text.substring(strSub1Pos, strSub1Pos + sub1.length - 1) + subResult + text.substring(strSub2Pos, strSub2Pos + sub2.length)
-                                    findAll(subSearch, count + 1)
-                                    //Log.d("Oleg", subTest.toString() + "===" + subSearch + "===" + text.substring(strSub1Pos, strSub1Pos + sub1.length - 1) + "===" + subResult + "===" + text.substring(strSub2Pos, strSub2Pos + sub2.length))
-                                    break
+                                    val subResult = text.substring(strSub1Pos + sub1.length, strSub2Pos)
+                                    if (isZnakPrepinanie(subResult)) {
+                                        val srchars = StringBuilder()
+                                        for (e in subResult.indices) {
+                                            if (isWhiteSpaceAndZnakPrepinanie(subResult[e])) {
+                                                srchars.append(subResult[e])
+                                            } else {
+                                                break
+                                            }
+                                        }
+                                        val subSearch = text.substring(strSub1Pos, strSub1Pos + sub1.length) + srchars.toString() + text.substring(strSub2Pos, strSub2Pos + sub2.length)
+                                        findAll(subSearch, count + 1)
+                                        break
+                                    }
                                 }
                             } else {
                                 break
@@ -290,6 +298,22 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }
             }
         }
+    }
+
+    private fun isZnakPrepinanie(znaki: String): Boolean {
+        val charList = arrayOf('(', ')', '.', ';', ':', '«', '»', '–', '!', '[', ']', '?', '\"')
+        for (i in charList) {
+            if (znaki.contains(i)) return true
+        }
+        return false
+    }
+
+    private fun isWhiteSpaceAndZnakPrepinanie(char: Char): Boolean {
+        val charList = arrayOf(' ', '\n', '\t', '\r', '(', ')', '.', ';', '«', '»', '–', '!', ':', '[', ']', '?', '\"', '\u00A0')
+        for (i in charList) {
+            if (char == i) return true
+        }
+        return false
     }
 
     private fun findCheckPosition() {

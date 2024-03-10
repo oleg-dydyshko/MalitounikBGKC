@@ -242,7 +242,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
             var t1 = search.indexOf(" ")
             if (t1 != -1) {
-                val charList = arrayOf(",", "(", ")", ".", ";", ":", "[", "]", "?", "\"", " --")
+                val charList = arrayOf(",", "*", "†", "(", ")", ".", ";", ":", "[", "]", "?")
                 var charTest = false
                 if (count == 0) {
                     for (element in charList) {
@@ -301,7 +301,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun isZnakPrepinanie(znaki: String): Boolean {
-        val charList = arrayOf('(', ')', '.', ';', ':', '«', '»', '–', '!', '[', ']', '?', '\"')
+        val charList = arrayOf(',', '*', '†', '(', ')', '.', ';', ':', '«', '»', '–', '!', '[', ']', '?')
         for (i in charList) {
             if (znaki.contains(i)) return true
         }
@@ -309,7 +309,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun isWhiteSpaceAndZnakPrepinanie(char: Char): Boolean {
-        val charList = arrayOf(' ', '\n', '\t', '\r', '(', ')', '.', ';', '«', '»', '–', '!', ':', '[', ']', '?', '\"', '\u00A0')
+        val charList = arrayOf(' ', ',', '\n', '\t', '\r', '*', '†', '(', ')', '.', ';', '«', '»', '–', '!', ':', '[', ']', '?')
         for (i in charList) {
             if (char == i) return true
         }

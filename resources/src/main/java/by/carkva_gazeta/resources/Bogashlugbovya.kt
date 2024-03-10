@@ -105,7 +105,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private var aliert9 = ""
     private var findPosition = 0
     private var firstTextPosition = ""
-    private val findListSpans = ArrayList<SpanStr>()
+    private val findListSpans = ArrayList<ArrayList<SpanStr>>()
     private var animatopRun = false
     private var chechZmena = false
     private var checkLiturgia = 0
@@ -224,94 +224,77 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
     }
 
-    private fun findAll(search: String, count: Int = 0) {
+    private fun findAll(search: String) {
         var position = 0
+        val arraySearsh = ArrayList<String>()
         if (search.length >= 3) {
             val text = binding.textView.text as SpannableString
-            val searchLig = search.length
-            while (true) {
-                val strPosition = text.indexOf(search, position, true)
-                if (strPosition != -1) {
-                    findListSpans.add(SpanStr(getColorSpans(text.getSpans(strPosition, strPosition + searchLig, ForegroundColorSpan::class.java)), strPosition, strPosition + searchLig))
-                    text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    position = strPosition + 1
-                } else {
-                    break
-                }
-            }
-            var t1 = search.indexOf(" ")
+            val t1 = search.indexOf(" ")
             if (t1 != -1) {
-                val charList = arrayOf(",", "*", "†", "(", ")", ".", ";", ":", "[", "]", "?")
+                val charList = arrayOf(",", "*", "(", ")", ".", ";", ":", "[", "]", "?")
                 var charTest = false
-                if (count == 0) {
-                    for (element in charList) {
-                        val t2 = search.indexOf(element)
-                        if (t2 != -1) {
-                            charTest = true
+                for (element in charList) {
+                    val t2 = search.indexOf(element)
+                    if (t2 != -1) {
+                        charTest = true
+                        break
+                    }
+                }
+                if (!charTest) {
+                    var pos = 0
+                    val sub1 = search.substring(0, t1)
+                    val sub2 = search.substring(t1).trim()
+                    while (true) {
+                        val strSub1Pos = text.indexOf(sub1, pos, true)
+                        if (strSub1Pos != -1) {
+                            pos = strSub1Pos + 1
+                            val strSub2Pos = text.indexOf(sub2, strSub1Pos + sub1.length, true)
+                            if (strSub2Pos == -1) {
+                                continue
+                            }
+                            val subTest = strSub2Pos - strSub1Pos - sub1.length
+                            if (subTest < 10) {
+                                val subResult = text.substring(strSub1Pos + sub1.length, strSub2Pos)
+                                if (!isLetterOrDigit(subResult.toCharArray())) {
+                                    val subSearch = text.substring(strSub1Pos, strSub1Pos + sub1.length) + subResult + text.substring(strSub2Pos, strSub2Pos + sub2.length)
+                                    arraySearsh.add(subSearch)
+                                    break
+                                }
+                            }
+                        } else {
                             break
                         }
                     }
+                } else {
+                    arraySearsh.add(search)
                 }
-                if (!charTest && findListSpans.isEmpty() && count < charList.size) {
-                    var newSearch = search
-                    if (count > 0) {
-                        newSearch = newSearch.replace(charList[count - 1], "")
-                        t1 = newSearch.indexOf(" ")
-                    }
-                    if (count > 1) {
-                        var pos = 0
-                        val sub1 = newSearch.substring(0, t1)
-                        val sub2 = newSearch.substring(t1).trim()
-                        while (true) {
-                            val strSub1Pos = text.indexOf(sub1, pos, true)
-                            if (strSub1Pos != -1) {
-                                pos = strSub1Pos + 1
-                                val strSub2Pos = text.indexOf(sub2, strSub1Pos + sub1.length, true)
-                                if (strSub2Pos == -1) {
-                                    continue
-                                }
-                                val subTest = strSub2Pos - strSub1Pos - sub1.length
-                                if (subTest < 10) {
-                                    val subResult = text.substring(strSub1Pos + sub1.length, strSub2Pos)
-                                    if (isZnakPrepinanie(subResult)) {
-                                        val srchars = StringBuilder()
-                                        for (e in subResult.indices) {
-                                            if (isWhiteSpaceAndZnakPrepinanie(subResult[e])) {
-                                                srchars.append(subResult[e])
-                                            } else {
-                                                break
-                                            }
-                                        }
-                                        val subSearch = text.substring(strSub1Pos, strSub1Pos + sub1.length) + srchars.toString() + text.substring(strSub2Pos, strSub2Pos + sub2.length)
-                                        findAll(subSearch, count + 1)
-                                        break
-                                    }
-                                }
-                            } else {
-                                break
-                            }
+            } else {
+                arraySearsh.add(search)
+            }
+            for (i in 0 until arraySearsh.size) {
+                val searchLig = arraySearsh[i].length
+                while (true) {
+                    val strPosition = text.indexOf(arraySearsh[i], position, true)
+                    if (strPosition != -1) {
+                        val list = ArrayList<SpanStr>()
+                        for (e in strPosition..strPosition + searchLig) {
+                            list.add(SpanStr(getColorSpans(text.getSpans(e, e + 1, ForegroundColorSpan::class.java)), e))
                         }
+                        findListSpans.add(list)
+                        text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        position = strPosition + 1
                     } else {
-                        findAll(newSearch.substring(0, t1) + charList[count] + " " + newSearch.substring(t1 + 1), count + 1)
+                        break
                     }
                 }
             }
         }
     }
 
-    private fun isZnakPrepinanie(znaki: String): Boolean {
-        val charList = arrayOf(',', '*', '†', '(', ')', '.', ';', ':', '«', '»', '–', '!', '[', ']', '?')
-        for (i in charList) {
-            if (znaki.contains(i)) return true
-        }
-        return false
-    }
-
-    private fun isWhiteSpaceAndZnakPrepinanie(char: Char): Boolean {
-        val charList = arrayOf(' ', ',', '\n', '\t', '\r', '*', '†', '(', ')', '.', ';', '«', '»', '–', '!', ':', '[', ']', '?')
-        for (i in charList) {
-            if (char == i) return true
+    private fun isLetterOrDigit(znaki: CharArray): Boolean {
+        for (i in znaki) {
+            if (i.isLetterOrDigit()) return true
         }
         return false
     }
@@ -321,7 +304,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             binding.textView.layout?.let { layout ->
                 val lineForVertical = layout.getLineForVertical(positionY)
                 for (i in 0 until findListSpans.size) {
-                    if (lineForVertical <= layout.getLineForOffset(findListSpans[i].start)) {
+                    if (lineForVertical <= layout.getLineForOffset(findListSpans[i][0].start)) {
                         findPosition = i
                         break
                     }
@@ -336,8 +319,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private fun findRemoveSpan() {
         val text = binding.textView.text as SpannableString
         if (findListSpans.isNotEmpty()) {
-            findListSpans.forEach {
-                text.setSpan(ForegroundColorSpan(it.color), it.start, it.size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            findListSpans.forEach { findListSpans ->
+                findListSpans.forEach {
+                    text.setSpan(ForegroundColorSpan(it.color), it.start, it.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
             }
             if (findListSpans.size >= findPosition) findPosition = 0
             findListSpans.clear()
@@ -362,11 +347,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 findPosition = 0
             }
             val text = binding.textView.text as SpannableString
-            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld].start, findListSpans[findPositionOld].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld][0].start, findListSpans[findPositionOld][findListSpans[findPositionOld].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, findPosition + 1, findListSpans.size)
-            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), findListSpans[findPosition].start, findListSpans[findPosition].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), findListSpans[findPosition][0].start, findListSpans[findPosition][findListSpans[findPositionOld].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.textView.layout?.let { layout ->
-                val line = layout.getLineForOffset(findListSpans[findPosition].start)
+                val line = layout.getLineForOffset(findListSpans[findPosition][0].start)
                 val y = layout.getLineTop(line)
                 val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
                 anim.addListener(object : Animator.AnimatorListener {
@@ -427,7 +412,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 if (findListSpans.isNotEmpty()) {
                     val text = binding.textView.text as SpannableString
                     for (i in 0 until findListSpans.size) {
-                        if (layout.getLineForOffset(findListSpans[i].start) == layout.getLineForVertical(positionY)) {
+                        if (layout.getLineForOffset(findListSpans[i][0].start) == layout.getLineForVertical(positionY)) {
                             var ii = i + 1
                             if (i == 0) ii = 1
                             findPosition = i
@@ -435,9 +420,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             else i + 1
                             if (findPositionOld == -1) findPositionOld = findListSpans.size - 1
                             if (findPositionOld == findListSpans.size) findPositionOld = 0
-                            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld].start, findListSpans[findPositionOld].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld][0].start, findListSpans[findPositionOld][findListSpans[findPositionOld].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             if (findPosition != ii) binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, ii, findListSpans.size)
-                            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), findListSpans[i].start, findListSpans[i].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), findListSpans[i][0].start, findListSpans[i][findListSpans[findPositionOld].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             break
                         }
                     }
@@ -2053,5 +2038,5 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         outState.putBoolean("mAutoScrol", mAutoScroll)
     }
 
-    private data class SpanStr(val color: Int, val start: Int, val size: Int)
+    private data class SpanStr(val color: Int, val start: Int)
 }

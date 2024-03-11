@@ -254,7 +254,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             }
                             val subTest = strSub2Pos - strSub1Pos - sub1.length
                             if (subTest < 10) {
-                                val subResult = text.substring(strSub1Pos + sub1.length, strSub2Pos)
+                                var subResult = text.substring(strSub1Pos + sub1.length, strSub2Pos)
+                                if (subResult == "") subResult = " "
                                 if (!isLetterOrDigit(subResult.toCharArray())) {
                                     val subSearch = text.substring(strSub1Pos, strSub1Pos + sub1.length) + subResult + text.substring(strSub2Pos, strSub2Pos + sub2.length)
                                     arraySearsh.add(subSearch)
@@ -1431,10 +1432,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
             override fun afterTextChanged(s: Editable?) {
                 var edit = s.toString()
-                edit = edit.replace("и", "і")
-                edit = edit.replace("щ", "ў")
-                edit = edit.replace("ъ", "'")
-                edit = edit.replace("И", "І")
+                val editarig = edit.length
+                edit = MainActivity.zamena(edit)
+                editPosition += edit.length - editarig
                 if (editch) {
                     if (check != 0) {
                         binding.textSearch.removeTextChangedListener(this)

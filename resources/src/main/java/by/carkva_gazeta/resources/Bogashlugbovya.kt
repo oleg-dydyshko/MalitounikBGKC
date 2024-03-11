@@ -259,7 +259,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                                 if (!isLetterOrDigit(subResult.toCharArray())) {
                                     val subSearch = text.substring(strSub1Pos, strSub1Pos + sub1.length) + subResult + text.substring(strSub2Pos, strSub2Pos + sub2.length)
                                     arraySearsh.add(subSearch)
-                                    break
                                 }
                             }
                         } else {
@@ -350,7 +349,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val text = binding.textView.text as SpannableString
             text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld][0].start, findListSpans[findPositionOld][findListSpans[findPositionOld].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, findPosition + 1, findListSpans.size)
-            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), findListSpans[findPosition][0].start, findListSpans[findPosition][findListSpans[findPositionOld].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), findListSpans[findPosition][0].start, findListSpans[findPosition][findListSpans[findPosition].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.textView.layout?.let { layout ->
                 val line = layout.getLineForOffset(findListSpans[findPosition][0].start)
                 val y = layout.getLineTop(line)
@@ -1420,6 +1419,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 binding.textSearch.requestFocus()
                 EditTextCustom.focusAndShowKeyboard(binding.textSearch)
                 findAllAsanc()
+                intent.extras?.remove("search")
             }
 
         }

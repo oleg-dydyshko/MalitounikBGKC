@@ -11,8 +11,8 @@ android {
         applicationId =  "by.carkva_gazeta.malitounik"
         minSdk = 19
         targetSdk = 34
-        versionCode = 442228
-        versionName = "4.4.2.5"
+        versionCode = 442229
+        versionName = "4.4.2.6"
 
         //multiDexEnabled true
 
@@ -69,13 +69,13 @@ dependencies {
     //api ("androidx.webkit:webkit:1.10.0")
     api ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     api ("com.github.woxthebox:draglistview:1.7.3")
-    api (platform("com.google.firebase:firebase-bom:32.7.3"))
+    api (platform("com.google.firebase:firebase-bom:32.7.4"))
     //api ("com.google.firebase:firebase-core:21.1.1")
     api ("com.google.firebase:firebase-storage-ktx")
     api ("com.google.firebase:firebase-appcheck-playintegrity")
     implementation ("com.squareup.picasso:picasso:2.71828")
-    implementation ("androidx.media3:media3-exoplayer:1.2.1")
-    implementation ("androidx.media3:media3-exoplayer-smoothstreaming:1.2.1")
+    implementation ("androidx.media3:media3-exoplayer:1.3.0")
+    implementation ("androidx.media3:media3-exoplayer-smoothstreaming:1.3.0")
     implementation ("androidx.media:media:1.7.0")
     implementation ("androidx.core:core-ktx:1.12.0")
     //implementation ("androidx.multidex:multidex:2.0.1")

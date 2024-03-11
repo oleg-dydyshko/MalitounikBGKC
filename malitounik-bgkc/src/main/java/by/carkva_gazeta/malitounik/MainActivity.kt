@@ -2192,7 +2192,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             var replase1 = replase
             replase1 = replase1.replace("и", "і", ignoreCase)
             replase1 = replase1.replace("щ", "ў", ignoreCase)
-            replase1 = replase1.replace("ъ", "'", ignoreCase)
+            replase1 = replase1.replace("ъ", "’", ignoreCase)
+            replase1 = replase1.replace("'", "’", ignoreCase)
             replase1 = replase1.replace("све", "сьве", ignoreCase)
             replase1 = replase1.replace("сві", "сьві", ignoreCase)
             replase1 = replase1.replace("свя", "сьвя", ignoreCase)

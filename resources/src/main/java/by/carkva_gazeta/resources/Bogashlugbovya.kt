@@ -422,7 +422,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             if (findPositionOld == findListSpans.size) findPositionOld = 0
                             text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld][0].start, findListSpans[findPositionOld][findListSpans[findPositionOld].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             if (findPosition != ii) binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, ii, findListSpans.size)
-                            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), findListSpans[i][0].start, findListSpans[i][findListSpans[findPositionOld].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), findListSpans[i][0].start, findListSpans[i][findListSpans[findPosition].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             break
                         }
                     }

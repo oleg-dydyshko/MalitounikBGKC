@@ -502,11 +502,13 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             } else {
                 nazva = "<!--" + bogaslugbovyiaList[i].resurs + "-->" + bogaslugbovyiaList[i].resurs
             }
+            val isDigit = poshuk1.contains("[0-9]".toRegex())
             var prepinanie = Jsoup.parse(bibleline).text()
             prepinanie = prepinanie.replace(",", "")
-            prepinanie = prepinanie.replace(".", "")
+            prepinanie = if (isDigit) prepinanie.replace(".", " ")
+            else prepinanie.replace(".", "")
             prepinanie = prepinanie.replace(";", "")
-            prepinanie = if (poshuk1.contains("[0-9]".toRegex())) prepinanie.replace(":", " ")
+            prepinanie = if (isDigit) prepinanie.replace(":", " ")
             else prepinanie.replace(":", "")
             prepinanie = prepinanie.replace("[", "")
             prepinanie = prepinanie.replace("]", "")

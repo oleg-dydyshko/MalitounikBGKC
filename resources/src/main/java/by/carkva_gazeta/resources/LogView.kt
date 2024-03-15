@@ -375,20 +375,20 @@ class LogView : BaseActivity() {
                     out.closeEntry()
                     out.close()
                 }
-                clearLogFile(zip)
+                sendAndClearLogFile(zip)
             }
         } else {
-            clearLogFile(zip)
+            sendAndClearLogFile(zip)
         }
     }
 
-    private fun clearLogFile(zip: File) {
+    private fun sendAndClearLogFile(zip: File, isClearLogFile: Boolean = true) {
         val sendIntent = Intent(Intent.ACTION_SEND)
         sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@LogView, "by.carkva_gazeta.malitounik.fileprovider", zip))
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(by.carkva_gazeta.malitounik.R.string.set_log_file))
         sendIntent.type = "application/zip"
         startActivity(Intent.createChooser(sendIntent, getString(by.carkva_gazeta.malitounik.R.string.set_log_file)))
-        if (MainActivity.isNetworkAvailable() && sb.toString().isNotEmpty()) {
+        if (isClearLogFile && MainActivity.isNetworkAvailable() && sb.toString().isNotEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
                 val logFile = File("$filesDir/cache/log.txt")
                 logFile.writer().use {
@@ -425,6 +425,9 @@ class LogView : BaseActivity() {
         if (id == by.carkva_gazeta.malitounik.R.id.action_sent_log) {
             if (logJob?.isActive != true) {
                 createAndSentFile()
+            } else {
+                val zip = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "MalitounikResource.zip")
+                if (zip.exists()) sendAndClearLogFile(zip, false)
             }
             return true
         }

@@ -231,62 +231,49 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val text = binding.textView.text as SpannableString
             val t1 = search.indexOf(" ")
             if (t1 != -1) {
-                val charList = arrayOf(",", "*", "(", ")", ".", ";", ":", "[", "]", "?")
-                var charTest = false
-                for (element in charList) {
-                    val t2 = search.indexOf(element)
-                    if (t2 != -1) {
-                        charTest = true
-                        break
-                    }
-                }
-                if (!charTest) {
-                    var pos = 0
-                    val t2 = search.indexOf(" ", t1 + 1)
-                    val sub1 = search.substring(0, t1)
-                    val sub2 = if (t2 != -1) search.substring(t1 + 1, t2).trim()
-                    else search.substring(t1).trim()
-                    val sub3 = if (t2 != -1) search.substring(t2).trim()
-                    else ""
-                    while (true) {
-                        val strSub1Pos = text.indexOf(sub1, pos, true)
-                        if (strSub1Pos != -1) {
-                            pos = strSub1Pos + 1
-                            val strSub2Pos = text.indexOf(sub2, strSub1Pos + sub1.length, true)
-                            if (strSub2Pos == -1) {
-                                continue
-                            }
-                            val subTest = strSub2Pos - strSub1Pos - sub1.length
-                            if (subTest < 10) {
-                                var subResult = text.substring(strSub1Pos + sub1.length, strSub2Pos)
-                                if (subResult == "") subResult = " "
-                                if (!isLetterOrDigit(subResult.toCharArray())) {
-                                    val subSearch = text.substring(strSub1Pos, strSub1Pos + sub1.length) + subResult + text.substring(strSub2Pos, strSub2Pos + sub2.length)
-                                    if (t2 != -1) {
-                                        val strSub3Pos = text.indexOf(sub3, strSub2Pos + sub2.length, true)
-                                        if (strSub3Pos == -1) {
-                                            continue
-                                        }
-                                        val sub2Test = strSub3Pos - strSub2Pos - sub3.length
-                                        if (sub2Test < 10) {
-                                            var sub2Result = text.substring(strSub2Pos + sub2.length, strSub3Pos)
-                                            if (sub2Result == "") sub2Result = " "
-                                            if (!isLetterOrDigit(sub2Result.toCharArray())) {
-                                                val sub2Search = text.substring(strSub1Pos, strSub1Pos + sub1.length) + subResult + text.substring(strSub2Pos, strSub2Pos + sub2.length) + sub2Result + text.substring(strSub3Pos, strSub3Pos + sub3.length)
-                                                arraySearsh.add(sub2Search)
-                                            }
-                                        }
-                                    } else {
-                                        arraySearsh.add(subSearch)
+                var pos = 0
+                val t2 = search.indexOf(" ", t1 + 1)
+                val sub1 = search.substring(0, t1)
+                val sub2 = if (t2 != -1) search.substring(t1 + 1, t2).trim()
+                else search.substring(t1).trim()
+                val sub3 = if (t2 != -1) search.substring(t2).trim()
+                else ""
+                while (true) {
+                    val strSub1Pos = text.indexOf(sub1, pos, true)
+                    if (strSub1Pos != -1) {
+                        pos = strSub1Pos + 1
+                        val strSub2Pos = text.indexOf(sub2, strSub1Pos + sub1.length, true)
+                        if (strSub2Pos == -1) {
+                            continue
+                        }
+                        val subTest = strSub2Pos - strSub1Pos - sub1.length
+                        if (subTest < 10) {
+                            var subResult = text.substring(strSub1Pos + sub1.length, strSub2Pos)
+                            if (subResult == "") subResult = " "
+                            if (!isLetterOrDigit(subResult.toCharArray())) {
+                                val subSearch = text.substring(strSub1Pos, strSub1Pos + sub1.length) + subResult + text.substring(strSub2Pos, strSub2Pos + sub2.length)
+                                if (t2 != -1) {
+                                    val strSub3Pos = text.indexOf(sub3, strSub2Pos + sub2.length, true)
+                                    if (strSub3Pos == -1) {
+                                        continue
                                     }
+                                    val sub2Test = strSub3Pos - strSub2Pos - sub3.length
+                                    if (sub2Test < 10) {
+                                        var sub2Result = text.substring(strSub2Pos + sub2.length, strSub3Pos)
+                                        if (sub2Result == "") sub2Result = " "
+                                        if (!isLetterOrDigit(sub2Result.toCharArray())) {
+                                            val sub2Search = text.substring(strSub1Pos, strSub1Pos + sub1.length) + subResult + text.substring(strSub2Pos, strSub2Pos + sub2.length) + sub2Result + text.substring(strSub3Pos, strSub3Pos + sub3.length)
+                                            arraySearsh.add(sub2Search)
+                                        }
+                                    }
+                                } else {
+                                    arraySearsh.add(subSearch)
                                 }
                             }
-                        } else {
-                            break
                         }
+                    } else {
+                        break
                     }
-                } else {
-                    arraySearsh.add(search)
                 }
             } else {
                 arraySearsh.add(search)

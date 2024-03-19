@@ -224,9 +224,31 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
     }
 
+    /*private fun findChars(search: String, strSub1Pos: Int, subResult: String = "", count: Int = 1) {
+        val text = binding.textView.text as SpannableString
+        val list = search.split(" ")
+        if (count < list.size) {
+            val sub1 = list[0]
+            val sub2 = list[count]
+            val strSub2Pos = text.indexOf(sub2, strSub1Pos + sub1.length, true)
+            if (strSub2Pos != -1) {
+                val subTest = strSub2Pos - strSub1Pos - sub1.length
+                if (subTest < 10) {
+                    var subResultR = text.substring(strSub1Pos + sub1.length, strSub2Pos)
+                    if (subResultR == "") subResultR = " "
+                    if (!isLetterOrDigit(subResultR.toCharArray())) {
+                        val subSearch = subResult + text.substring(strSub1Pos, strSub1Pos + sub1.length) + subResultR + text.substring(strSub2Pos, strSub2Pos + sub2.length)
+                        findChars(search, strSub1Pos, subSearch, count + 1)
+                    }
+                }
+            }
+        }
+        if (count == list.size && subResult != "") arraySearsh.add(subResult)
+    }*/
+
     private fun findAll(search: String) {
-        var position = 0
         val arraySearsh = ArrayList<String>()
+        var position = 0
         if (search.length >= 3) {
             val text = binding.textView.text as SpannableString
             val t1 = search.indexOf(" ")
@@ -242,6 +264,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     val strSub1Pos = text.indexOf(sub1, pos, true)
                     if (strSub1Pos != -1) {
                         pos = strSub1Pos + 1
+                        //findChars(search, strSub1Pos)
                         val strSub2Pos = text.indexOf(sub2, strSub1Pos + sub1.length, true)
                         if (strSub2Pos == -1) {
                             continue

@@ -224,27 +224,35 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
     }
 
-    /*private fun findChars(search: String, strSub1Pos: Int, subResult: String = "", count: Int = 1) {
+    private fun findChars(search: String, strSub1Pos: Int): String {
         val text = binding.textView.text as SpannableString
-        val list = search.split(" ")
-        if (count < list.size) {
-            val sub1 = list[0]
-            val sub2 = list[count]
-            val strSub2Pos = text.indexOf(sub2, strSub1Pos + sub1.length, true)
-            if (strSub2Pos != -1) {
-                val subTest = strSub2Pos - strSub1Pos - sub1.length
-                if (subTest < 10) {
-                    var subResultR = text.substring(strSub1Pos + sub1.length, strSub2Pos)
-                    if (subResultR == "") subResultR = " "
-                    if (!isLetterOrDigit(subResultR.toCharArray())) {
-                        val subSearch = subResult + text.substring(strSub1Pos, strSub1Pos + sub1.length) + subResultR + text.substring(strSub2Pos, strSub2Pos + sub2.length)
-                        findChars(search, strSub1Pos, subSearch, count + 1)
+        val t1 = search.indexOf(" ")
+        val sub1 = search.substring(0, t1)
+        val list = search.substring(t1).toCharArray()
+        var strSub = strSub1Pos + sub1.length
+        val result = StringBuilder(text.substring(strSub1Pos, strSub))
+        for (char in list) {
+            if (char.isLetterOrDigit()) {
+                val subChar = text.substring(strSub, strSub + 1)
+                val strSub2Pos = subChar.indexOf(char, ignoreCase = true)
+                if (strSub2Pos != -1) {
+                    result.append(char)
+                }
+                strSub++
+            } else {
+                while (true) {
+                    val subChar = text.substring(strSub, strSub + 1).toCharArray()
+                    if (!subChar[0].isLetterOrDigit()) {
+                        result.append(subChar)
+                        strSub++
+                    } else {
+                        break
                     }
                 }
             }
         }
-        if (count == list.size && subResult != "") arraySearsh.add(subResult)
-    }*/
+        return result.toString()
+    }
 
     private fun findAll(search: String) {
         val arraySearsh = ArrayList<String>()
@@ -254,46 +262,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val t1 = search.indexOf(" ")
             if (t1 != -1) {
                 var pos = 0
-                val t2 = search.indexOf(" ", t1 + 1)
                 val sub1 = search.substring(0, t1)
-                val sub2 = if (t2 != -1) search.substring(t1 + 1, t2).trim()
-                else search.substring(t1).trim()
-                val sub3 = if (t2 != -1) search.substring(t2).trim()
-                else ""
                 while (true) {
                     val strSub1Pos = text.indexOf(sub1, pos, true)
                     if (strSub1Pos != -1) {
                         pos = strSub1Pos + 1
-                        //findChars(search, strSub1Pos)
-                        val strSub2Pos = text.indexOf(sub2, strSub1Pos + sub1.length, true)
-                        if (strSub2Pos == -1) {
-                            continue
-                        }
-                        val subTest = strSub2Pos - strSub1Pos - sub1.length
-                        if (subTest < 10) {
-                            var subResult = text.substring(strSub1Pos + sub1.length, strSub2Pos)
-                            if (subResult == "") subResult = " "
-                            if (!isLetterOrDigit(subResult.toCharArray())) {
-                                val subSearch = text.substring(strSub1Pos, strSub1Pos + sub1.length) + subResult + text.substring(strSub2Pos, strSub2Pos + sub2.length)
-                                if (t2 != -1) {
-                                    val strSub3Pos = text.indexOf(sub3, strSub2Pos + sub2.length, true)
-                                    if (strSub3Pos == -1) {
-                                        continue
-                                    }
-                                    val sub2Test = strSub3Pos - strSub2Pos - sub3.length
-                                    if (sub2Test < 10) {
-                                        var sub2Result = text.substring(strSub2Pos + sub2.length, strSub3Pos)
-                                        if (sub2Result == "") sub2Result = " "
-                                        if (!isLetterOrDigit(sub2Result.toCharArray())) {
-                                            val sub2Search = subSearch + sub2Result + text.substring(strSub3Pos, strSub3Pos + sub3.length)
-                                            arraySearsh.add(sub2Search)
-                                        }
-                                    }
-                                } else {
-                                    arraySearsh.add(subSearch)
-                                }
-                            }
-                        }
+                        arraySearsh.add(findChars(search, strSub1Pos))
                     } else {
                         break
                     }
@@ -320,13 +294,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }
             }
         }
-    }
-
-    private fun isLetterOrDigit(znaki: CharArray): Boolean {
-        for (i in znaki) {
-            if (i.isLetterOrDigit()) return true
-        }
-        return false
     }
 
     private fun findCheckPosition() {

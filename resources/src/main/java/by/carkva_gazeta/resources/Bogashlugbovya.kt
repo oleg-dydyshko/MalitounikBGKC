@@ -231,21 +231,25 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         val list = search.substring(t1).toCharArray()
         var strSub = strSub1Pos + sub1.length
         val result = StringBuilder()
+        val subChar2 = StringBuilder()
         for (char in list) {
             if (char.isLetterOrDigit()) {
                 val subChar = text.substring(strSub, strSub + 1)
                 val strSub2Pos = subChar.indexOf(char, ignoreCase = true)
                 if (strSub2Pos != -1) {
-                    if (result.isEmpty()) result.append(text.substring(strSub1Pos, strSub))
+                    if (result.isEmpty()) result.append(text.substring(strSub1Pos, strSub1Pos + sub1.length))
+                    if (subChar2.isNotEmpty()) result.append(subChar2.toString())
                     result.append(char)
+                    subChar2.clear()
+                    strSub++
+                } else {
+                    break
                 }
-                strSub++
             } else {
                 while (true) {
                     val subChar = text.substring(strSub, strSub + 1).toCharArray()
                     if (!subChar[0].isLetterOrDigit()) {
-                        if (result.isEmpty()) result.append(text.substring(strSub1Pos, strSub))
-                        result.append(subChar)
+                        subChar2.append(subChar[0])
                         strSub++
                     } else {
                         break

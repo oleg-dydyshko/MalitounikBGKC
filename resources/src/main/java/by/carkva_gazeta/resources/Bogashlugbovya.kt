@@ -243,6 +243,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     subChar2.clear()
                     strSub++
                 } else {
+                    result.clear()
                     break
                 }
             } else {
@@ -269,8 +270,15 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (t1 != -1) {
                 var pos = 0
                 val sub1 = search.substring(0, t1)
+                val charSearchArray = sub1.toCharArray()
+                val sbSearch = StringBuilder()
+                for (i in charSearchArray.indices) {
+                    if (charSearchArray[i].isLetterOrDigit()) {
+                        sbSearch.append(charSearchArray[i])
+                    }
+                }
                 while (true) {
-                    val strSub1Pos = text.indexOf(sub1, pos, true)
+                    val strSub1Pos = text.indexOf(sbSearch.toString(), pos, true)
                     if (strSub1Pos != -1) {
                         pos = strSub1Pos + 1
                         val findString = findChars(search, strSub1Pos)

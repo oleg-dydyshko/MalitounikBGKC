@@ -78,7 +78,12 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogVybranoeBibleList.DialogVybranoeBibleListListener {
+class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener,
+    InteractiveScrollView.OnInteractiveScrollChangedCallback,
+    LinkMovementMethodCheck.LinkMovementMethodCheckListener,
+    DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreen.DialogFullScreenHelpListener,
+    DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener,
+    DialogVybranoeBibleList.DialogVybranoeBibleListListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -120,17 +125,18 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private val zmenyiaChastki = ZmenyiaChastki()
     private val c = Calendar.getInstance()
-    private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val intent = result.data
-            if (intent != null) {
-                val position = intent.getIntExtra("position", 0)
-                val arrayList = MenuCaliandar.getPositionCaliandar(position)
-                c.set(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0, 0)
-                setDatacalendar(null)
+    private val caliandarMunLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                if (intent != null) {
+                    val position = intent.getIntExtra("position", 0)
+                    val arrayList = MenuCaliandar.getPositionCaliandar(position)
+                    c.set(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0, 0)
+                    setDatacalendar(null)
+                }
             }
         }
-    }
 
     companion object {
         val resursMap = ArrayMap<String, Int>()
@@ -159,7 +165,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             try {
                 val gson = Gson()
                 if (file.exists() && MenuVybranoe.vybranoe.isEmpty()) {
-                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
+                    val type = TypeToken.getParameterized(
+                        java.util.ArrayList::class.java,
+                        VybranoeData::class.java
+                    ).type
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
@@ -172,7 +181,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 if (check) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(vybranoeIndex(), resurs, title))
                 }
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
+                val type = TypeToken.getParameterized(
+                    java.util.ArrayList::class.java,
+                    VybranoeData::class.java
+                ).type
                 file.writer().use {
                     it.write(gson.toJson(MenuVybranoe.vybranoe, type))
                 }
@@ -201,7 +213,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             try {
                 if (MenuVybranoe.vybranoe.isEmpty()) {
                     val gson = Gson()
-                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
+                    val type = TypeToken.getParameterized(
+                        java.util.ArrayList::class.java,
+                        VybranoeData::class.java
+                    ).type
                     MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
                 }
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
@@ -234,10 +249,20 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         val subChar2 = StringBuilder()
         for (char in list) {
             if (char.isLetterOrDigit()) {
-                val subChar = text.substring(strSub, strSub + 1)
+                var subChar = text.substring(strSub, strSub + 1)
+                if (subChar == "́") {
+                    result.append(subChar)
+                    strSub++
+                    subChar = text.substring(strSub, strSub + 1)
+                }
                 val strSub2Pos = subChar.indexOf(char, ignoreCase = true)
                 if (strSub2Pos != -1) {
-                    if (result.isEmpty()) result.append(text.substring(strSub1Pos, strSub1Pos + sub1.length))
+                    if (result.isEmpty()) result.append(
+                        text.substring(
+                            strSub1Pos,
+                            strSub1Pos + sub1.length
+                        )
+                    )
                     if (subChar2.isNotEmpty()) result.append(subChar2.toString())
                     result.append(char)
                     subChar2.clear()
@@ -248,10 +273,14 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }
             } else {
                 while (true) {
-                    val subChar = text.substring(strSub, strSub + 1).toCharArray()
-                    if (!subChar[0].isLetterOrDigit()) {
-                        subChar2.append(subChar[0])
-                        strSub++
+                    if (text.length >= strSub + 1) {
+                        val subChar = text.substring(strSub, strSub + 1).toCharArray()
+                        if (!subChar[0].isLetterOrDigit()) {
+                            subChar2.append(subChar[0])
+                            strSub++
+                        } else {
+                            break
+                        }
                     } else {
                         break
                     }
@@ -297,11 +326,41 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     if (strPosition != -1) {
                         val list = ArrayList<SpanStr>()
                         for (e in strPosition..strPosition + searchLig) {
-                            list.add(SpanStr(getColorSpans(text.getSpans(e, e + 1, ForegroundColorSpan::class.java)), e))
+                            list.add(
+                                SpanStr(
+                                    getColorSpans(
+                                        text.getSpans(
+                                            e,
+                                            e + 1,
+                                            ForegroundColorSpan::class.java
+                                        )
+                                    ), e
+                                )
+                            )
                         }
                         findListSpans.add(list)
-                        text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        text.setSpan(
+                            BackgroundColorSpan(
+                                ContextCompat.getColor(
+                                    this,
+                                    by.carkva_gazeta.malitounik.R.color.colorBezPosta
+                                )
+                            ),
+                            strPosition,
+                            strPosition + searchLig,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                        text.setSpan(
+                            ForegroundColorSpan(
+                                ContextCompat.getColor(
+                                    this,
+                                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
+                                )
+                            ),
+                            strPosition,
+                            strPosition + searchLig,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
                         position = strPosition + 1
                     } else {
                         break
@@ -333,7 +392,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (findListSpans.isNotEmpty()) {
             findListSpans.forEach { findListSpans ->
                 findListSpans.forEach {
-                    text.setSpan(ForegroundColorSpan(it.color), it.start, it.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    text.setSpan(
+                        ForegroundColorSpan(it.color),
+                        it.start,
+                        it.start + 1,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                 }
             }
             if (findListSpans.size >= findPosition) findPosition = 0
@@ -359,13 +423,42 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 findPosition = 0
             }
             val text = binding.textView.text as SpannableString
-            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld][0].start, findListSpans[findPositionOld][findListSpans[findPositionOld].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, findPosition + 1, findListSpans.size)
-            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), findListSpans[findPosition][0].start, findListSpans[findPosition][findListSpans[findPosition].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            text.setSpan(
+                BackgroundColorSpan(
+                    ContextCompat.getColor(
+                        this,
+                        by.carkva_gazeta.malitounik.R.color.colorBezPosta
+                    )
+                ),
+                findListSpans[findPositionOld][0].start,
+                findListSpans[findPositionOld][findListSpans[findPositionOld].size - 1].start,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            binding.textCount.text = getString(
+                by.carkva_gazeta.malitounik.R.string.fing_count,
+                findPosition + 1,
+                findListSpans.size
+            )
+            text.setSpan(
+                BackgroundColorSpan(
+                    ContextCompat.getColor(
+                        this,
+                        by.carkva_gazeta.malitounik.R.color.colorPrimary_black
+                    )
+                ),
+                findListSpans[findPosition][0].start,
+                findListSpans[findPosition][findListSpans[findPosition].size - 1].start,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
             binding.textView.layout?.let { layout ->
                 val line = layout.getLineForOffset(findListSpans[findPosition][0].start)
                 val y = layout.getLineTop(line)
-                val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                val anim = ObjectAnimator.ofInt(
+                    binding.scrollView2,
+                    "scrollY",
+                    binding.scrollView2.scrollY,
+                    y
+                )
                 anim.addListener(object : Animator.AnimatorListener {
                     override fun onAnimationStart(animation: Animator) {
                         animatopRun = true
@@ -387,8 +480,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun getColorSpans(colorSpan: Array<out ForegroundColorSpan>): Int {
-        var color = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-        if (dzenNoch) color = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite)
+        var color =
+            ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
+        if (dzenNoch) color =
+            ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite)
         if (colorSpan.isNotEmpty()) {
             color = colorSpan[colorSpan.size - 1].foregroundColor
         }
@@ -399,10 +494,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         fontBiblia = fontSize
         binding.textView.layout?.let { layout ->
             var lineForVertical = layout.getLineForVertical(positionY)
-            var textForVertical = binding.textView.text.substring(layout.getLineStart(lineForVertical), layout.getLineEnd(lineForVertical)).trim()
+            var textForVertical = binding.textView.text.substring(
+                layout.getLineStart(lineForVertical),
+                layout.getLineEnd(lineForVertical)
+            ).trim()
             if (textForVertical == "" && lineForVertical != 0) {
                 lineForVertical--
-                textForVertical = binding.textView.text.substring(layout.getLineStart(lineForVertical), layout.getLineEnd(lineForVertical)).trim()
+                textForVertical = binding.textView.text.substring(
+                    layout.getLineStart(lineForVertical),
+                    layout.getLineEnd(lineForVertical)
+                ).trim()
             }
             binding.textView.textSize = fontBiblia
             binding.textView.post {
@@ -418,13 +519,20 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         positionY = t
         setMovementMethodscrollY()
         binding.textView.layout?.let { layout ->
-            val textForVertical = binding.textView.text.substring(layout.getLineStart(layout.getLineForVertical(positionY)), layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
+            val textForVertical = binding.textView.text.substring(
+                layout.getLineStart(
+                    layout.getLineForVertical(positionY)
+                ), layout.getLineEnd(layout.getLineForVertical(positionY))
+            ).trim()
             if (textForVertical != "") firstTextPosition = textForVertical
             if (binding.find.visibility == View.VISIBLE && !animatopRun) {
                 if (findListSpans.isNotEmpty()) {
                     val text = binding.textView.text as SpannableString
                     for (i in 0 until findListSpans.size) {
-                        if (layout.getLineForOffset(findListSpans[i][0].start) == layout.getLineForVertical(positionY)) {
+                        if (layout.getLineForOffset(findListSpans[i][0].start) == layout.getLineForVertical(
+                                positionY
+                            )
+                        ) {
                             var ii = i + 1
                             if (i == 0) ii = 1
                             findPosition = i
@@ -432,9 +540,33 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             else i + 1
                             if (findPositionOld == -1) findPositionOld = findListSpans.size - 1
                             if (findPositionOld == findListSpans.size) findPositionOld = 0
-                            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld][0].start, findListSpans[findPositionOld][findListSpans[findPositionOld].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            if (findPosition != ii) binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, ii, findListSpans.size)
-                            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), findListSpans[i][0].start, findListSpans[i][findListSpans[findPosition].size - 1].start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            text.setSpan(
+                                BackgroundColorSpan(
+                                    ContextCompat.getColor(
+                                        this,
+                                        by.carkva_gazeta.malitounik.R.color.colorBezPosta
+                                    )
+                                ),
+                                findListSpans[findPositionOld][0].start,
+                                findListSpans[findPositionOld][findListSpans[findPositionOld].size - 1].start,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            if (findPosition != ii) binding.textCount.text = getString(
+                                by.carkva_gazeta.malitounik.R.string.fing_count,
+                                ii,
+                                findListSpans.size
+                            )
+                            text.setSpan(
+                                BackgroundColorSpan(
+                                    ContextCompat.getColor(
+                                        this,
+                                        by.carkva_gazeta.malitounik.R.color.colorPrimary_black
+                                    )
+                                ),
+                                findListSpans[i][0].start,
+                                findListSpans[i][findListSpans[findPosition].size - 1].start,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
                             break
                         }
                     }
@@ -444,13 +576,25 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun setDatacalendar(savedInstanceState: Bundle?) {
-        zmenyiaChastki.setArrayData(MenuCaliandar.getDataCalaindar(c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR]))
+        zmenyiaChastki.setArrayData(
+            MenuCaliandar.getDataCalaindar(
+                c[Calendar.DATE],
+                c[Calendar.MONTH],
+                c[Calendar.YEAR]
+            )
+        )
         loadData(savedInstanceState)
         val c2 = Calendar.getInstance()
         if (c[Calendar.DAY_OF_YEAR] == c2[Calendar.DAY_OF_YEAR] && c[Calendar.YEAR] == c2[Calendar.YEAR]) {
             binding.titleToolbar.text = title
         } else {
-            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bogaslujbovyia_data, title, c[Calendar.DATE], resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[c[Calendar.MONTH]], c[Calendar.YEAR])
+            binding.titleToolbar.text = getString(
+                by.carkva_gazeta.malitounik.R.string.bogaslujbovyia_data,
+                title,
+                c[Calendar.DATE],
+                resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[c[Calendar.MONTH]],
+                c[Calendar.YEAR]
+            )
         }
     }
 
@@ -506,25 +650,61 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.textSize = fontBiblia
-        DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+        DrawableCompat.setTint(
+            binding.textSearch.background,
+            ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)
+        )
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            bindingprogress.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta))
-            binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
-            bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
+            DrawableCompat.setTint(
+                binding.textSearch.background,
+                ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)
+            )
+            binding.progress.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorPrimary_black
+                )
+            )
+            bindingprogress.progress.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta
+                )
+            )
+            binding.actionPlus.background = ContextCompat.getDrawable(
+                this,
+                by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom
+            )
+            binding.actionMinus.background = ContextCompat.getDrawable(
+                this,
+                by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom
+            )
+            binding.actionFullscreen.background = ContextCompat.getDrawable(
+                this,
+                by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom
+            )
+            binding.actionBack.background = ContextCompat.getDrawable(
+                this,
+                by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom
+            )
+            bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(
+                this,
+                by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch
+            )
+            bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(
+                this,
+                by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch
+            )
         }
         men = checkVybranoe(this, resurs)
-        bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fontBiblia != SettingsActivity.getFontSize(progress)) {
                     fontBiblia = SettingsActivity.getFontSize(progress)
-                    bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
+                    bindingprogress.progress.text =
+                        getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                     val prefEditor = k.edit()
                     prefEditor.putFloat("font_biblia", fontBiblia)
                     prefEditor.apply()
@@ -539,14 +719,18 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
-        bindingprogress.seekBarBrighess.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        bindingprogress.seekBarBrighess.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (MainActivity.brightness != progress) {
                     MainActivity.brightness = progress
                     val lp = window.attributes
                     lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                     window.attributes = lp
-                    bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                    bindingprogress.progress.text = getString(
+                        by.carkva_gazeta.malitounik.R.string.procent,
+                        MainActivity.brightness
+                    )
                     MainActivity.checkBrightness = false
                 }
                 startProcent()
@@ -562,7 +746,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (spid in 20..235) {
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
-                bindingprogress.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                bindingprogress.progress.text =
+                    resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 startProcent()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
@@ -573,7 +758,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (spid in 10..225) {
                 spid += 5
                 val proc = 100 - (spid - 15) * 100 / 215
-                bindingprogress.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                bindingprogress.progress.text =
+                    resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 startProcent()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
@@ -586,7 +772,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding.actionBack.setOnClickListener {
             onBack()
         }
-        binding.scrollView2.setOnBottomReachedListener(object : InteractiveScrollView.OnBottomReachedListener {
+        binding.scrollView2.setOnBottomReachedListener(object :
+            InteractiveScrollView.OnBottomReachedListener {
             override fun onBottomReached(checkDiff: Boolean) {
                 diffScroll = checkDiff
                 if (diffScroll) {
@@ -700,7 +887,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
         val tv = TypedValue()
         if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            val actionBarHeight =
+                TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
             layoutParams.height = actionBarHeight
         }
         binding.titleToolbar.isSelected = false
@@ -708,7 +896,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
-        val liturgia = resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica"
+        val liturgia =
+            resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica"
         val res = withContext(Dispatchers.IO) {
             zmenyiaChastki.setDzenNoch(dzenNoch)
             chechZmena = false
@@ -728,17 +917,43 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val cal = GregorianCalendar()
             val dayOfYar = if (cal.isLeapYear(cal[Calendar.YEAR])) 0
             else 1
-            checkDayOfYear = if (liturgia) slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt(), zmenyiaChastki.getYear())
-            else slugbovyiaTextu.checkViachernia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt(), zmenyiaChastki.getYear())
-            if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, zmenyiaChastki.getYear()))) {
+            checkDayOfYear = if (liturgia) slugbovyiaTextu.checkLiturgia(
+                MenuCaliandar.getPositionCaliandar(
+                    c[Calendar.DAY_OF_YEAR] + dayOfYar,
+                    c[Calendar.YEAR]
+                )[22].toInt(), dayOfYear.toInt(), zmenyiaChastki.getYear()
+            )
+            else slugbovyiaTextu.checkViachernia(
+                MenuCaliandar.getPositionCaliandar(
+                    c[Calendar.DAY_OF_YEAR] + dayOfYar,
+                    c[Calendar.YEAR]
+                )[22].toInt(), dayOfYear.toInt(), zmenyiaChastki.getYear()
+            )
+            if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(
+                    raznica,
+                    c[Calendar.DAY_OF_YEAR] + dayOfYar,
+                    zmenyiaChastki.getYear()
+                ))
+            ) {
                 chechZmena = true
-                val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
-                val idZmenyiaChastki = resursMap[resours] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
+                val resours = slugbovyiaTextu.getResource(
+                    raznica,
+                    dayOfYear.toInt(),
+                    SlugbovyiaTextu.LITURHIJA
+                )
+                val idZmenyiaChastki =
+                    resursMap[resours] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
                 zmennyiaCastkiTitle = slugbovyiaTextu.getTitle(resours)
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
             }
-            val viachernia = resurs == "lit_raniej_asviaczanych_darou" || resurs == "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara" || resurs == "viaczernia_niadzelnaja" || resurs == "viaczernia_liccia_i_blaslavenne_chliabou" || resurs == "viaczernia_na_kozny_dzen" || resurs == "viaczernia_u_vialikim_poscie"
-            if (viachernia && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, zmenyiaChastki.getYear()))) {
+            val viachernia =
+                resurs == "lit_raniej_asviaczanych_darou" || resurs == "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara" || resurs == "viaczernia_niadzelnaja" || resurs == "viaczernia_liccia_i_blaslavenne_chliabou" || resurs == "viaczernia_na_kozny_dzen" || resurs == "viaczernia_u_vialikim_poscie"
+            if (viachernia && (checkDayOfYear || slugbovyiaTextu.checkViachernia(
+                    raznica,
+                    c[Calendar.DAY_OF_YEAR] + dayOfYar,
+                    zmenyiaChastki.getYear()
+                ))
+            ) {
                 chechZmena = true
                 checkLiturgia = 1
             }
@@ -765,71 +980,120 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             line = line.replace("KANDAK", "")
                             builder.append(line)
                             if (chechZmena) {
-                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
+                                builder.append(
+                                    getString(
+                                        by.carkva_gazeta.malitounik.R.string.gl_tyt,
+                                        zmennyiaCastkiTitle
+                                    )
+                                ).append("<br><br>\n")
                             }
                             try {
                                 if (dayOfWeek == 1) {
                                     builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(1))
                                 } else {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 1))
+                                    builder.append(
+                                        zmenyiaChastki.traparyIKandakiNaKognyDzen(
+                                            dayOfWeek,
+                                            1
+                                        )
+                                    )
                                 }
                             } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch))
+                                    .append("<br>\n")
                             }
                         }
                         if (line.contains("PRAKIMEN")) {
                             line = line.replace("PRAKIMEN", "")
                             builder.append(line)
                             if (chechZmena) {
-                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
+                                builder.append(
+                                    getString(
+                                        by.carkva_gazeta.malitounik.R.string.gl_tyt,
+                                        zmennyiaCastkiTitle
+                                    )
+                                ).append("<br><br>\n")
                             }
                             try {
                                 if (dayOfWeek == 1) {
                                     builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(2))
                                 } else {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 2))
+                                    builder.append(
+                                        zmenyiaChastki.traparyIKandakiNaKognyDzen(
+                                            dayOfWeek,
+                                            2
+                                        )
+                                    )
                                 }
                             } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch))
+                                    .append("<br>\n")
                             }
                         }
                         if (line.contains("ALILUIA")) {
                             line = line.replace("ALILUIA", "")
                             builder.append(line)
                             if (chechZmena) {
-                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
+                                builder.append(
+                                    getString(
+                                        by.carkva_gazeta.malitounik.R.string.gl_tyt,
+                                        zmennyiaCastkiTitle
+                                    )
+                                ).append("<br><br>\n")
                             }
                             try {
                                 if (dayOfWeek == 1) {
                                     builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(3))
                                 } else {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 3))
+                                    builder.append(
+                                        zmenyiaChastki.traparyIKandakiNaKognyDzen(
+                                            dayOfWeek,
+                                            3
+                                        )
+                                    )
                                 }
                             } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch))
+                                    .append("<br>\n")
                             }
                         }
                         if (line.contains("PRICHASNIK")) {
                             line = line.replace("PRICHASNIK", "")
                             builder.append(line)
                             if (chechZmena) {
-                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
+                                builder.append(
+                                    getString(
+                                        by.carkva_gazeta.malitounik.R.string.gl_tyt,
+                                        zmennyiaCastkiTitle
+                                    )
+                                ).append("<br><br>\n")
                             }
                             try {
                                 if (dayOfWeek == 1) {
                                     builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(4))
                                 } else {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 4))
+                                    builder.append(
+                                        zmenyiaChastki.traparyIKandakiNaKognyDzen(
+                                            dayOfWeek,
+                                            4
+                                        )
+                                    )
                                 }
                             } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br><br>\n")
+                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch))
+                                    .append("<br><br>\n")
                             }
                         }
                         when {
                             line.contains("APCH") -> {
                                 line = line.replace("APCH", "")
                                 if (chechZmena && !nochenia) {
-                                    builder.append("<br>").append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
+                                    builder.append("<br>").append(
+                                        getString(
+                                            by.carkva_gazeta.malitounik.R.string.gl_tyt,
+                                            zmennyiaCastkiTitle
+                                        )
+                                    ).append("<br><br>\n")
                                 }
                                 var sv = zmenyiaChastki.sviatyia()
                                 if (sv != "") {
@@ -838,19 +1102,26 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                                     sv = if (s1[0].contains("На ютрані")) s2[1]
                                     else s1[0] + ":" + s2[0]
                                     aliert8 = sv.trim()
-                                    builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
+                                    builder.append(color).append("<br>").append(sv)
+                                        .append("</font>").append("<br><br>\n")
                                 } else builder.append(line)
                                 try {
                                     builder.append(zmenyiaChastki.zmenya(1))
                                 } catch (t: Throwable) {
-                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br><br>\n")
+                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch))
+                                        .append("<br><br>\n")
                                 }
                             }
 
                             line.contains("EVCH") -> {
                                 line = line.replace("EVCH", "")
                                 if (chechZmena && !nochenia) {
-                                    builder.append("<br>").append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
+                                    builder.append("<br>").append(
+                                        getString(
+                                            by.carkva_gazeta.malitounik.R.string.gl_tyt,
+                                            zmennyiaCastkiTitle
+                                        )
+                                    ).append("<br><br>\n")
                                 }
                                 var sv = zmenyiaChastki.sviatyia()
                                 if (sv != "") {
@@ -859,12 +1130,14 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                                     sv = if (s1[0].contains("На ютрані")) s2[2]
                                     else s1[0] + ":" + s2[1]
                                     aliert9 = sv.trim()
-                                    builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
+                                    builder.append(color).append("<br>").append(sv)
+                                        .append("</font>").append("<br><br>\n")
                                 } else builder.append(line)
                                 try {
                                     builder.append(zmenyiaChastki.zmenya(0))
                                 } catch (t: Throwable) {
-                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch))
+                                        .append("<br>\n")
                                 }
                             }
 
@@ -897,7 +1170,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (t1 != -1) {
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val dialogLiturgia = DialogLiturgia.getInstance(8, c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR])
+                    val dialogLiturgia = DialogLiturgia.getInstance(
+                        8,
+                        c[Calendar.DATE],
+                        c[Calendar.MONTH],
+                        c[Calendar.YEAR]
+                    )
                     dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                 }
             }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -908,7 +1186,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (t1 != -1) {
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val dialogLiturgia = DialogLiturgia.getInstance(9, c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR])
+                    val dialogLiturgia = DialogLiturgia.getInstance(
+                        9,
+                        c[Calendar.DATE],
+                        c[Calendar.MONTH],
+                        c[Calendar.YEAR]
+                    )
                     dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                 }
             }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -919,7 +1202,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (t1 != -1) {
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, 0)
+                    val anim = ObjectAnimator.ofInt(
+                        binding.scrollView2,
+                        "scrollY",
+                        binding.scrollView2.scrollY,
+                        0
+                    )
                     anim.setDuration(1500).start()
                 }
             }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -932,10 +1220,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         binding.textView.layout?.let { layout ->
-                            val strPosition = text.indexOf("Заканчэньне абедніцы", bsat1 + strLigBSA, true)
+                            val strPosition =
+                                text.indexOf("Заканчэньне абедніцы", bsat1 + strLigBSA, true)
                             val line = layout.getLineForOffset(strPosition)
                             val y = layout.getLineTop(line)
-                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            val anim = ObjectAnimator.ofInt(
+                                binding.scrollView2,
+                                "scrollY",
+                                binding.scrollView2.scrollY,
+                                y
+                            )
                             anim.setDuration(1500).start()
                         }
                     }
@@ -966,10 +1260,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         binding.textView.layout?.let { layout ->
-                            val strPosition = text.indexOf("Калі ёсьць 10 песьняў", vbt1 + strLigVB, true)
+                            val strPosition =
+                                text.indexOf("Калі ёсьць 10 песьняў", vbt1 + strLigVB, true)
                             val line = layout.getLineForOffset(strPosition)
                             val y = layout.getLineTop(line)
-                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            val anim = ObjectAnimator.ofInt(
+                                binding.scrollView2,
+                                "scrollY",
+                                binding.scrollView2.scrollY,
+                                y
+                            )
                             anim.setDuration(1500).start()
                         }
                     }
@@ -995,10 +1295,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         binding.textView.layout?.let { layout ->
-                            val strPosition = text.indexOf("Вызваль з вязьніцы душу маю", vbt1 + strLigVB, true)
+                            val strPosition =
+                                text.indexOf("Вызваль з вязьніцы душу маю", vbt1 + strLigVB, true)
                             val line = layout.getLineForOffset(strPosition)
                             val y = layout.getLineTop(line)
-                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            val anim = ObjectAnimator.ofInt(
+                                binding.scrollView2,
+                                "scrollY",
+                                binding.scrollView2.scrollY,
+                                y
+                            )
                             anim.setDuration(1500).start()
                         }
                     }
@@ -1025,7 +1331,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             val strPosition = text.indexOf("Псалом 140", vbt1 + strLigVB, true)
                             val line = layout.getLineForOffset(strPosition)
                             val y = layout.getLineTop(line)
-                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            val anim = ObjectAnimator.ofInt(
+                                binding.scrollView2,
+                                "scrollY",
+                                binding.scrollView2.scrollY,
+                                y
+                            )
                             anim.setDuration(1500).start()
                         }
                     }
@@ -1038,10 +1349,19 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         binding.textView.layout?.let { layout ->
-                            val strPosition = text.indexOf("ЗАКАНЧЭНЬНЕ ВЯЧЭРНІ Ў ВЯЛІКІ ПОСТ", vbt2 + strLigVB2, true)
+                            val strPosition = text.indexOf(
+                                "ЗАКАНЧЭНЬНЕ ВЯЧЭРНІ Ў ВЯЛІКІ ПОСТ",
+                                vbt2 + strLigVB2,
+                                true
+                            )
                             val line = layout.getLineForOffset(strPosition)
                             val y = layout.getLineTop(line)
-                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            val anim = ObjectAnimator.ofInt(
+                                binding.scrollView2,
+                                "scrollY",
+                                binding.scrollView2.scrollY,
+                                y
+                            )
                             anim.setDuration(1500).start()
                         }
                     }
@@ -1155,10 +1475,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         binding.textView.layout?.let { layout ->
-                            val strPosition = text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
+                            val strPosition =
+                                text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
                             val line = layout.getLineForOffset(strPosition)
                             val y = layout.getLineTop(line)
-                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            val anim = ObjectAnimator.ofInt(
+                                binding.scrollView2,
+                                "scrollY",
+                                binding.scrollView2.scrollY,
+                                y
+                            )
                             anim.setDuration(1500).start()
                         }
                     }
@@ -1174,10 +1500,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         binding.textView.layout?.let { layout ->
-                            val strPosition = text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
+                            val strPosition =
+                                text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
                             val line = layout.getLineForOffset(strPosition)
                             val y = layout.getLineTop(line)
-                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            val anim = ObjectAnimator.ofInt(
+                                binding.scrollView2,
+                                "scrollY",
+                                binding.scrollView2.scrollY,
+                                y
+                            )
                             anim.setDuration(1500).start()
                         }
                     }
@@ -1250,7 +1582,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             val strPosition = text.indexOf("АЎТОРАК", t9 + strLig9, true)
                             val line = layout.getLineForOffset(strPosition)
                             val y = layout.getLineTop(line)
-                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            val anim = ObjectAnimator.ofInt(
+                                binding.scrollView2,
+                                "scrollY",
+                                binding.scrollView2.scrollY,
+                                y
+                            )
                             anim.setDuration(1500).start()
                         }
                     }
@@ -1266,7 +1603,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             val strPosition = text.indexOf("СЕРАДА", t9 + strLig9, true)
                             val line = layout.getLineForOffset(strPosition)
                             val y = layout.getLineTop(line)
-                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            val anim = ObjectAnimator.ofInt(
+                                binding.scrollView2,
+                                "scrollY",
+                                binding.scrollView2.scrollY,
+                                y
+                            )
                             anim.setDuration(1500).start()
                         }
                     }
@@ -1282,7 +1624,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             val strPosition = text.indexOf("ЧАЦЬВЕР", t9 + strLig9, true)
                             val line = layout.getLineForOffset(strPosition)
                             val y = layout.getLineTop(line)
-                            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                            val anim = ObjectAnimator.ofInt(
+                                binding.scrollView2,
+                                "scrollY",
+                                binding.scrollView2.scrollY,
+                                y
+                            )
                             anim.setDuration(1500).start()
                         }
                     }
@@ -1311,7 +1658,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         val strPosition = text.indexOf("ПЕРШАЯ ГАДЗІНА", t11 + strLig11, true)
                         val line = layout.getLineForOffset(strPosition)
                         val y = layout.getLineTop(line)
-                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        val anim = ObjectAnimator.ofInt(
+                            binding.scrollView2,
+                            "scrollY",
+                            binding.scrollView2.scrollY,
+                            y
+                        )
                         anim.setDuration(1500).start()
                     }
                 }
@@ -1327,7 +1679,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         val strPosition = text.indexOf("ТРЭЦЯЯ ГАДЗІНА", t3 + strLig3, true)
                         val line = layout.getLineForOffset(strPosition)
                         val y = layout.getLineTop(line)
-                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        val anim = ObjectAnimator.ofInt(
+                            binding.scrollView2,
+                            "scrollY",
+                            binding.scrollView2.scrollY,
+                            y
+                        )
                         anim.setDuration(1500).start()
                     }
                 }
@@ -1343,7 +1700,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         val strPosition = text.indexOf("ШОСТАЯ ГАДЗІНА", t6 + strLig6, true)
                         val line = layout.getLineForOffset(strPosition)
                         val y = layout.getLineTop(line)
-                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        val anim = ObjectAnimator.ofInt(
+                            binding.scrollView2,
+                            "scrollY",
+                            binding.scrollView2.scrollY,
+                            y
+                        )
                         anim.setDuration(1500).start()
                     }
                 }
@@ -1359,7 +1721,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         val strPosition = text.indexOf("ДЗЕВЯТАЯ ГАДЗІНА", t9 + strLig9, true)
                         val line = layout.getLineForOffset(strPosition)
                         val y = layout.getLineTop(line)
-                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        val anim = ObjectAnimator.ofInt(
+                            binding.scrollView2,
+                            "scrollY",
+                            binding.scrollView2.scrollY,
+                            y
+                        )
                         anim.setDuration(1500).start()
                     }
                 }
@@ -1393,7 +1760,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             } else {
                 if (resurs.contains("viachernia_ton")) {
                     binding.textView.layout?.let { layout ->
-                        val dzenNedeliname = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.dni_nedeli)
+                        val dzenNedeliname =
+                            resources.getStringArray(by.carkva_gazeta.malitounik.R.array.dni_nedeli)
                         val textline = dzenNedeliname[c[Calendar.DAY_OF_WEEK]]
                         val index = binding.textView.text.indexOf(textline, ignoreCase = true)
                         val line = layout.getLineForOffset(index)
@@ -1416,7 +1784,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     }
                     invalidateOptionsMenu()
                     binding.scrollView2.scrollBy(0, positionY)
-                    if (((k.getBoolean("autoscrollAutostart", false) && mAutoScroll) || autoscroll) && !diffScroll) {
+                    if (((k.getBoolean(
+                            "autoscrollAutostart",
+                            false
+                        ) && mAutoScroll) || autoscroll) && !diffScroll
+                    ) {
                         autoStartScroll()
                     }
                 }
@@ -1481,15 +1853,38 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (bsatGTA1 != -1) {
             val t1 = text.lastIndexOf("\n", bsatGTA1)
             if (t1 != -1) {
-                if (dzenNoch) text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t1, bsatGTA1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                else text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t1, bsatGTA1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                text.setSpan(StyleSpan(Typeface.BOLD), t1, bsatGTA1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (dzenNoch) text.setSpan(
+                    ForegroundColorSpan(
+                        ContextCompat.getColor(
+                            this,
+                            by.carkva_gazeta.malitounik.R.color.colorPrimary_black
+                        )
+                    ), t1, bsatGTA1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                else text.setSpan(
+                    ForegroundColorSpan(
+                        ContextCompat.getColor(
+                            this,
+                            by.carkva_gazeta.malitounik.R.color.colorPrimary
+                        )
+                    ), t1, bsatGTA1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                text.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    t1,
+                    bsatGTA1,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
             }
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
                     val slugbovyiaTextu = SlugbovyiaTextu()
                     val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
-                    val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
+                    val resours = slugbovyiaTextu.getResource(
+                        raznica,
+                        dayOfYear.toInt(),
+                        SlugbovyiaTextu.LITURHIJA
+                    )
                     intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
@@ -1543,11 +1938,17 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             bindingprogress.progress.visibility = View.GONE
             delay(3000)
             if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
-                bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@Bogashlugbovya, by.carkva_gazeta.malitounik.R.anim.slide_out_left)
+                bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(
+                    this@Bogashlugbovya,
+                    by.carkva_gazeta.malitounik.R.anim.slide_out_left
+                )
                 bindingprogress.seekBarBrighess.visibility = View.GONE
             }
             if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
-                bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@Bogashlugbovya, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
+                bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(
+                    this@Bogashlugbovya,
+                    by.carkva_gazeta.malitounik.R.anim.slide_out_right
+                )
                 bindingprogress.seekBarFontSize.visibility = View.GONE
             }
         }
@@ -1563,11 +1964,17 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             spid = k.getInt("autoscrollSpid", 60)
             binding.actionMinus.visibility = View.GONE
             binding.actionPlus.visibility = View.GONE
-            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+            val animation = AnimationUtils.loadAnimation(
+                baseContext,
+                by.carkva_gazeta.malitounik.R.anim.alphaout
+            )
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
             if (fullscreenPage && binding.actionBack.visibility == View.GONE) {
-                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                val animation2 = AnimationUtils.loadAnimation(
+                    baseContext,
+                    by.carkva_gazeta.malitounik.R.anim.alphain
+                )
                 binding.actionBack.visibility = View.VISIBLE
                 binding.actionBack.animation = animation2
             }
@@ -1590,10 +1997,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (binding.actionMinus.visibility == View.GONE) {
                 binding.actionMinus.visibility = View.VISIBLE
                 binding.actionPlus.visibility = View.VISIBLE
-                val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                val animation = AnimationUtils.loadAnimation(
+                    baseContext,
+                    by.carkva_gazeta.malitounik.R.anim.alphain
+                )
                 binding.actionMinus.animation = animation
                 binding.actionPlus.animation = animation
-                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+                val animation2 = AnimationUtils.loadAnimation(
+                    baseContext,
+                    by.carkva_gazeta.malitounik.R.anim.alphaout
+                )
                 binding.actionBack.visibility = View.GONE
                 binding.actionBack.animation = animation2
             }
@@ -1652,7 +2065,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         val id = v?.id ?: 0
         if (id == R.id.constraint) {
             if (MainActivity.checkBrightness) {
-                MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
+                MainActivity.brightness = Settings.System.getInt(
+                    contentResolver,
+                    Settings.System.SCREEN_BRIGHTNESS
+                ) * 100 / 255
             }
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
@@ -1660,18 +2076,33 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     val proc: Int
                     if (x < otstup) {
                         bindingprogress.seekBarBrighess.progress = MainActivity.brightness
-                        bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                        bindingprogress.progress.text = getString(
+                            by.carkva_gazeta.malitounik.R.string.procent,
+                            MainActivity.brightness
+                        )
                         if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
-                            bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
+                            bindingprogress.seekBarBrighess.animation =
+                                AnimationUtils.loadAnimation(
+                                    this,
+                                    by.carkva_gazeta.malitounik.R.anim.slide_in_right
+                                )
                             bindingprogress.seekBarBrighess.visibility = View.VISIBLE
                         }
                         startProcent()
                     }
                     if (x > widthConstraintLayout - otstup && y < heightConstraintLayout - otstup2) {
-                        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
+                        bindingprogress.seekBarFontSize.progress =
+                            SettingsActivity.setProgressFontSize(fontBiblia.toInt())
+                        bindingprogress.progress.text = getString(
+                            by.carkva_gazeta.malitounik.R.string.get_font,
+                            fontBiblia.toInt()
+                        )
                         if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
-                            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
+                            bindingprogress.seekBarFontSize.animation =
+                                AnimationUtils.loadAnimation(
+                                    this,
+                                    by.carkva_gazeta.malitounik.R.anim.slide_in_left
+                                )
                             bindingprogress.seekBarFontSize.visibility = View.VISIBLE
                         }
                         startProcent()
@@ -1680,7 +2111,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         if (mAutoScroll && binding.find.visibility == View.GONE) {
                             spid = k.getInt("autoscrollSpid", 60)
                             proc = 100 - (spid - 15) * 100 / 215
-                            bindingprogress.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                            bindingprogress.progress.text = resources.getString(
+                                by.carkva_gazeta.malitounik.R.string.procent,
+                                proc
+                            )
                             startProcent()
                             startAutoScroll()
                             invalidateOptionsMenu()
@@ -1709,17 +2143,31 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         var spanString = SpannableString(itemAuto.title.toString())
         var end = spanString.length
         var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
-        if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
-        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize =
+            SettingsActivity.GET_FONT_SIZE_DEFAULT
+        spanString.setSpan(
+            AbsoluteSizeSpan(itemFontSize.toInt(), true),
+            0,
+            end,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         itemAuto.title = spanString
         if (!(resurs == "1" || resurs == "2" || resurs == "3")) {
             itemVybranoe.isVisible = true
             if (men) {
-                itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
-                itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
+                itemVybranoe.icon = ContextCompat.getDrawable(
+                    this,
+                    by.carkva_gazeta.malitounik.R.drawable.star_big_on
+                )
+                itemVybranoe.title =
+                    resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
             } else {
-                itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
-                itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
+                itemVybranoe.icon = ContextCompat.getDrawable(
+                    this,
+                    by.carkva_gazeta.malitounik.R.drawable.star_big_off
+                )
+                itemVybranoe.title =
+                    resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
             }
         } else {
             itemVybranoe.isVisible = false
@@ -1733,15 +2181,27 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             SpannableString(getString(by.carkva_gazeta.malitounik.R.string.widget_day_d_n))
         }
         val end2 = spanString2.length
-        spanString2.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spanString2.setSpan(
+            AbsoluteSizeSpan(itemFontSize.toInt(), true),
+            0,
+            end2,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).title = spanString2
         spanString = SpannableString(itemVybranoe.title.toString())
         end = spanString.length
-        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spanString.setSpan(
+            AbsoluteSizeSpan(itemFontSize.toInt(), true),
+            0,
+            end,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         itemVybranoe.title = spanString
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible =
+            k.getBoolean("admin", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_zmena).isVisible = chechZmena
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_mun).isVisible = k.getBoolean("admin", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_mun).isVisible =
+            k.getBoolean("admin", false)
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
@@ -1790,7 +2250,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }
 
                 checkDayOfYear -> {
-                    val resours = if (checkLiturgia == 0) slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
+                    val resours = if (checkLiturgia == 0) slugba.getResource(
+                        raznica,
+                        dayOfYear.toInt(),
+                        SlugbovyiaTextu.LITURHIJA
+                    )
                     else slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.VIACZERNIA)
                     intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
@@ -1799,7 +2263,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }
 
                 else -> {
-                    val resours = slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
+                    val resours =
+                        slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
                     intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
@@ -1846,7 +2311,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             men = setVybranoe(this, resurs, title)
             if (men) {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+                MainActivity.toastView(
+                    this,
+                    getString(by.carkva_gazeta.malitounik.R.string.addVybranoe)
+                )
             }
             invalidateOptionsMenu()
             return true
@@ -1891,9 +2359,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 }
                 val sent = MainActivity.fromHtml(text).toString()
                 val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText(getString(by.carkva_gazeta.malitounik.R.string.copy_text), sent)
+                val clip = ClipData.newPlainText(
+                    getString(by.carkva_gazeta.malitounik.R.string.copy_text),
+                    sent
+                )
                 clipboard.setPrimaryClip(clip)
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.copy_text), Toast.LENGTH_LONG)
+                MainActivity.toastView(
+                    this,
+                    getString(by.carkva_gazeta.malitounik.R.string.copy_text),
+                    Toast.LENGTH_LONG
+                )
                 if (k.getBoolean("dialogHelpShare", true)) {
                     val dialog = DialogHelpShare.getInstance(sent)
                     dialog.show(supportFragmentManager, "DialogHelpShare")
@@ -1901,7 +2376,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     sentShareText(sent)
                 }
             } else {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error_ch))
+                MainActivity.toastView(
+                    this,
+                    getString(by.carkva_gazeta.malitounik.R.string.error_ch)
+                )
             }
             return true
         }
@@ -1910,7 +2388,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
-                val idres = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
+                val idres =
+                    resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
                 val inputStream = resources.openRawResource(idres)
                 val text = inputStream.use {
                     it.reader().readText()
@@ -1987,16 +2466,41 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     override fun onDialogFullScreenHelpClose() {
-        if (dzenNoch) binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-        else binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
+        if (dzenNoch) binding.constraint.setBackgroundColor(
+            ContextCompat.getColor(
+                this,
+                by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+            )
+        )
+        else binding.constraint.setBackgroundColor(
+            ContextCompat.getColor(
+                this,
+                by.carkva_gazeta.malitounik.R.color.colorWhite
+            )
+        )
         hide()
     }
 
     private fun hideHelp() {
         if (k.getBoolean("help_fullscreen", true)) {
-            binding.constraint.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost2))
-            if (dzenNoch) binding.scrollView2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            else binding.scrollView2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
+            binding.constraint.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorPost2
+                )
+            )
+            if (dzenNoch) binding.scrollView2.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            else binding.scrollView2.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorWhite
+                )
+            )
             val dialogHelpListView = DialogHelpFullScreen()
             dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
             val prefEditors = k.edit()
@@ -2012,9 +2516,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
-        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         controller.hide(WindowInsetsCompat.Type.systemBars())
-        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+        val animation =
+            AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
         if (binding.actionMinus.visibility == View.GONE) {
@@ -2029,7 +2535,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.show(WindowInsetsCompat.Type.systemBars())
-        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        val animation =
+            AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation
         binding.actionBack.visibility = View.GONE

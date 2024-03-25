@@ -136,6 +136,8 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak_liturhija_raniej_asviacz_darou", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak_hadzina_6", HADZINA6, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-5, "Вялікі аўторак", "vialiki_autorak", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-5, "Вялікі аўторак", "vialiki_autorak_liturhija_raniej_asviaczanych_darou", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-5, "Вялікі аўторак", "vialiki_autorak_hadzina_6", HADZINA6, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-4, "Вялікая серада", "vialikaja_sierada", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-4, "Вялікая серада", "vialikaja_sierada_liturhija_raniej_asviacz_darou", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-3, "Вялікі чацьвер", "vialiki_czacvier", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))

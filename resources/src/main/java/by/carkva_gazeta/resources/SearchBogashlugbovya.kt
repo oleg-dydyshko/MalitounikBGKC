@@ -9,11 +9,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Editable
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.TextWatcher
-import android.text.style.BackgroundColorSpan
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -126,20 +122,8 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
                 val json = chin.getString("search_bogashugbovya_array", "")
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
                 val arrayList = ArrayList<String>()
-                val arraySpan = ArrayList<Spannable>()
                 arrayList.addAll(gson.fromJson(json, type))
-                arrayList.forEach {
-                    val p = it
-                    val t2 = p.indexOf("<p")
-                    val t3 = p.indexOf(">", t2)
-                    val subP = p.substring(t2, t3 + 1)
-                    var str = p.replace(subP, "")
-                    str = str.replace("</p>", "<br>")
-                    val t1 = str.lastIndexOf("<br>")
-                    val span = MainActivity.fromHtml(str.substring(0, t1)) as Spannable
-                    arraySpan.add(span)
-                }
-                adapter.addAll(arraySpan)
+                adapter.addAll(arrayList)
             }
         }
         binding.editText2.setText(chin.getString("search_string_filter", ""))
@@ -437,7 +421,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         }
     }
 
-    private fun doInBackground(searche: String): ArrayList<Spannable> {
+    private fun doInBackground(searche: String): ArrayList<String> {
         var list = bogashlugbovya(searche)
         if (list.isEmpty() && chin.getInt("slovocalkam", 0) == 0) {
             list = bogashlugbovya(searche, true)
@@ -445,7 +429,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         return list
     }
 
-    private fun onPostExecute(result: ArrayList<Spannable>) {
+    private fun onPostExecute(result: ArrayList<String>) {
         adapter.clear()
         adapter.addAll(result)
         adapter.filter.filter(binding.editText2.text.toString())
@@ -456,7 +440,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         binding.progressBar.visibility = View.GONE
         val arrayList = ArrayList<String>()
         result.forEach {
-            arrayList.add(MainActivity.toHtml(it))
+            arrayList.add(it)
         }
         val gson = Gson()
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
@@ -471,9 +455,88 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         }
     }
 
-    private fun bogashlugbovya(poshuk: String, secondRun: Boolean = false): ArrayList<Spannable> {
+    private fun findChars(search: String, text: String): Boolean {
+        val stringBuilder = StringBuilder()
+        val t1 = search.indexOf(" ")
+        val search1 = if (chin.getInt("slovocalkam", 0) == 1) " $search "
+        else search
+        if (t1 != -1) {
+            var strSub = 0
+            val sub1 = search1.substring(0, t1)
+            val charSearchArray = sub1.toCharArray()
+            val sbSearch = StringBuilder()
+            for (i in charSearchArray.indices) {
+                if (chin.getInt("slovocalkam", 0) == 0) {
+                    if (charSearchArray[i].isLetterOrDigit()) {
+                        sbSearch.append(charSearchArray[i])
+                    }
+                } else {
+                    sbSearch.append(charSearchArray[i])
+                }
+            }
+            val list = search1.substring(t1).toCharArray()
+            while (true) {
+                val strSub1Pos = text.indexOf(sbSearch.toString(), strSub, true)
+                if (strSub1Pos != -1) {
+                    strSub = strSub1Pos + sub1.length
+                    val subChar2 = StringBuilder()
+                    for (i in list.indices) {
+                        if (list[i].isLetterOrDigit()) {
+                            var subChar = text.substring(strSub, strSub + 1)
+                            if (subChar == "́") {
+                                stringBuilder.append(list[i])
+                                strSub++
+                                subChar = text.substring(strSub, strSub + 1)
+                            }
+                            val strSub2Pos = subChar.indexOf(list[i], ignoreCase = true)
+                            if (strSub2Pos != -1) {
+                                if (stringBuilder.isEmpty()) stringBuilder.append(text.substring(strSub1Pos, strSub1Pos + sub1.length))
+                                if (subChar2.isNotEmpty()) stringBuilder.append(subChar2.toString())
+                                stringBuilder.append(list[i])
+                                subChar2.clear()
+                                strSub++
+                            } else {
+                                stringBuilder.clear()
+                                break
+                            }
+                        } else {
+                            while (true) {
+                                if (text.length >= strSub + 1) {
+                                    val subChar = text.substring(strSub, strSub + 1).toCharArray()
+                                    if (!subChar[0].isLetterOrDigit()) {
+                                        subChar2.append(subChar[0])
+                                        strSub++
+                                    } else {
+                                        if (list.size - 1 == i) {
+                                            stringBuilder.append(list[i])
+                                        }
+                                        break
+                                    }
+                                } else {
+                                    break
+                                }
+                            }
+                            if (subChar2.isEmpty()) {
+                                stringBuilder.clear()
+                                break
+                            }
+                        }
+                    }
+                    if (stringBuilder.toString() != "") break
+                } else {
+                    break
+                }
+            }
+        } else {
+            val t2 = text.indexOf(search1, 0, true)
+            if (t2 != -1) stringBuilder.append(search1)
+        }
+        return stringBuilder.toString() != ""
+    }
+
+    private fun bogashlugbovya(poshuk: String, secondRun: Boolean = false): ArrayList<String> {
         var poshuk1 = poshuk
-        val seashpost = ArrayList<Spannable>()
+        val seashpost = ArrayList<String>()
         val registr = chin.getBoolean("pegistrbukv", true)
         poshuk1 = MainActivity.zamena(poshuk1, registr)
         if (secondRun) {
@@ -502,59 +565,10 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             } else {
                 nazva = "<!--" + bogaslugbovyiaList[i].resurs + "-->" + bogaslugbovyiaList[i].resurs
             }
-            val isDigit = poshuk1.contains("[0-9]".toRegex())
-            var prepinanie = Jsoup.parse(bibleline).text()
-            prepinanie = prepinanie.replace(",", "")
-            prepinanie = if (isDigit) prepinanie.replace(".", " ")
-            else prepinanie.replace(".", "")
-            prepinanie = prepinanie.replace(";", "")
-            prepinanie = if (isDigit) prepinanie.replace(":", " ")
-            else prepinanie.replace(":", "")
-            prepinanie = prepinanie.replace("[", "")
-            prepinanie = prepinanie.replace("]", "")
-            prepinanie = prepinanie.replace("(", "")
-            prepinanie = prepinanie.replace(")", "")
-            prepinanie = prepinanie.replace("«", "")
-            prepinanie = prepinanie.replace("»", "")
-            prepinanie = prepinanie.replace("–", "")
-            prepinanie = prepinanie.replace("!", "")
-            prepinanie = prepinanie.replace(" --", "")
-
-            val t5 = prepinanie.indexOf(" -")
-            if (t5 != -1) {
-                prepinanie = if (prepinanie[t5 - 1].toString() == " ") prepinanie.replace(" -", "")
-                else prepinanie.replace("-", " ")
-            }
-            prepinanie = prepinanie.replace("\"", "")
-            prepinanie = prepinanie.replace("?", "")
-            if (chin.getInt("slovocalkam", 0) == 0) {
-                if (prepinanie.contains(poshuk1, registr)) {
-                    seashpost.add(SpannableString(nazva))
-                }
-            } else {
-                if (prepinanie.contains(poshuk1, registr)) {
-                    var slovocalkam = false
-                    val t2 = poshuk1.length
-                    val t4 = prepinanie.indexOf(poshuk1, ignoreCase = registr)
-                    if (t4 != -1) {
-                        val charN = prepinanie[t4 - 1].toString()
-                        if (charN == " ") {
-                            val aSvL = prepinanie.length
-                            if (aSvL == t4 + t2) {
-                                slovocalkam = true
-                            } else {
-                                val charK = prepinanie[t4 + t2].toString()
-                                if (charK == " ") {
-                                    slovocalkam = true
-                                }
-                            }
-                        }
-                    }
-                    if (slovocalkam) {
-                        seashpost.add(SpannableString(nazva))
-                    }
-                }
-            }
+            val prepinanie = Jsoup.parse(bibleline).text()
+            val poshuk2 = findChars(poshuk1, prepinanie)
+            if (!poshuk2) continue
+            seashpost.add(nazva)
         }
         return seashpost
     }
@@ -608,9 +622,9 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
 
     }
 
-    private inner class SearchBibliaListAdaprer(context: Activity, private val arrayList: ArrayList<Spannable>) : ArrayAdapter<Spannable>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, arrayList) {
-        private val origData = ArrayList<Spannable>(arrayList)
-        override fun addAll(collection: Collection<Spannable>) {
+    private inner class SearchBibliaListAdaprer(context: Activity, private val arrayList: ArrayList<String>) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, arrayList) {
+        private val origData = ArrayList<String>(arrayList)
+        override fun addAll(collection: Collection<String>) {
             super.addAll(collection)
             origData.clear()
             origData.addAll(collection)
@@ -639,7 +653,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
                 override fun performFiltering(constraint: CharSequence): FilterResults {
                     val result = FilterResults()
                     if (constraint.toString().isNotEmpty()) {
-                        val founded = ArrayList<Spannable>()
+                        val founded = ArrayList<String>()
                         for (item in origData) {
                             if (item.contains(constraint, true)) {
                                 founded.add(item)
@@ -657,19 +671,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
                 override fun publishResults(constraint: CharSequence, results: FilterResults) {
                     clear()
                     for (item in results.values as ArrayList<*>) {
-                        var t1 = (item as Spannable).indexOf("-->")
-                        if (t1 == -1) t1 = 0
-                        else t1 += 3
-                        val itm = item.indexOf(constraint.toString(), t1, true)
-                        val itmcount = constraint.toString().length
-                        if (itm != -1) {
-                            val span = SpannableString(item)
-                            span.setSpan(BackgroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), itm, itm + itmcount, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), itm, itm + itmcount, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            add(span)
-                        } else {
-                            add(item)
-                        }
+                        add(item as String)
                     }
                     textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, results.count)
                 }

@@ -297,7 +297,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             }
             if (actionExpandOn) {
                 dataSearch.clear()
-                dataSearch.addAll(getTextBogaslugbovyiaList())
+                dataSearch.addAll(getBogaslugbovyiaSearchText())
                 data.clear()
                 data.addAll(dataSearch)
                 adapter.notifyDataSetChanged()
@@ -397,7 +397,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 actionExpandOn = true
                 dataSearch.clear()
-                dataSearch.addAll(getTextBogaslugbovyiaList())
+                dataSearch.addAll(getBogaslugbovyiaSearchText())
                 data.clear()
                 data.addAll(dataSearch)
                 textViewCount?.text = getString(R.string.seash, dataSearch.size)

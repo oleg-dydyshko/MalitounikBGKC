@@ -615,7 +615,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
         if (k.getInt("fontInterface", 1) > 0) {
             binding.citata.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOOLBAR)
-            binding.description.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOOLBAR)
         }
         var scroll = false
         when (idSelect) {

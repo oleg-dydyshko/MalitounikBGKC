@@ -17,8 +17,14 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
 import android.view.View.OnTouchListener
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatDelegate
@@ -28,12 +34,23 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.transition.TransitionManager
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.DialogBrightness
+import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
+import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
+import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.AkafistChytanneBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -279,6 +296,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             var knigaN: String
             var knigaK = "0"
             var zaglnum = 0
+            var zaglnumEnd = 0
             val ssbTitle = SpannableStringBuilder()
             var title = SpannableString("")
             for (i in split.indices) {
@@ -327,6 +345,9 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             knigaK = knigaN
                         } else {
                             knigaN = zaglav.substring(zag1 + 1, zag2)
+                        }
+                        if (zag2 != -1 && zag3 != -1) {
+                            zaglnumEnd = zaglav.substring(zag2 + 1, zag3).toInt()
                         }
                         if (glav) {
                             knigaK = zaglav.substring(zag1 + 1)
@@ -812,16 +833,21 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                 }
                                 if (zag3 != -1 || glav) {
                                     val spl1 = split2[zaglnum].trim()
-                                    val spl2 = split2[zaglnum + 1].trim()
                                     val des1 = spl1.length
                                     desN = spl1.indexOf("$knigaN.")
-                                    desK1 = spl2.indexOf("$knigaK.")
-                                    var desN1 = spl2.indexOf((knigaK.toInt() + 1).toString().plus("."), desK1)
-                                    if (desN1 == -1) {
-                                        desN1 = spl1.length
+                                    if (zaglnumEnd - zaglnum == 2) {
+                                        val spl3 = split2[zaglnum + 2].trim()
+                                        val spl2 = split2[zaglnum + 1].trim()
+                                        val des2 = spl2.length
+                                        desK1 = spl3.indexOf("$knigaK.")
+                                        desK1 += des1 + des2 + 2
+                                        spl = spl1 + "\n" + spl2 + "\n" + spl3
+                                    } else {
+                                        val spl2 = split2[zaglnum + 1].trim()
+                                        desK1 = spl2.indexOf("$knigaK.")
+                                        desK1 += des1 + 1
+                                        spl = spl1 + "\n" + spl2
                                     }
-                                    desK1 = desN1 + des1
-                                    spl = spl1 + "\n" + spl2
                                     zaglnum += 1
                                 }
                             }

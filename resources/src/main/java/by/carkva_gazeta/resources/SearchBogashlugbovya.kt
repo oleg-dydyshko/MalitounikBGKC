@@ -50,7 +50,8 @@ import org.jsoup.Jsoup
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHistoryListener, DialogBibleSearshSettings.DiallogBibleSearshListiner {
+class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHistoryListener,
+    DialogBibleSearshSettings.DiallogBibleSearshListiner {
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
     private lateinit var chin: SharedPreferences
@@ -88,22 +89,31 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         binding.buttonx2.setOnClickListener {
             binding.editText2.setText("")
         }
-        DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+        DrawableCompat.setTint(
+            binding.editText2.background,
+            ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)
+        )
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            DrawableCompat.setTint(
+                binding.editText2.background,
+                ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)
+            )
             binding.buttonx2.setImageResource(by.carkva_gazeta.malitounik.R.drawable.cancel)
         }
         if (chin.getString("history_bible_bogaslug", "") != "") {
             val gson = Gson()
             val json = chin.getString("history_bible_bogaslug", "")
-            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
+            val type =
+                TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
             history.addAll(gson.fromJson(json, type))
         }
         adapter = SearchBibliaListAdaprer(this, ArrayList())
         binding.ListView.adapter = adapter
-        if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-        else binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+        if (dzenNoch) binding.ListView.selector =
+            ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else binding.ListView.selector =
+            ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                 fierstPosition = absListView.firstVisiblePosition
@@ -120,7 +130,10 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             if (chin.getString("search_bogashugbovya_array", "") != "") {
                 val gson = Gson()
                 val json = chin.getString("search_bogashugbovya_array", "")
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
+                val type = TypeToken.getParameterized(
+                    java.util.ArrayList::class.java,
+                    String::class.java
+                ).type
                 val arrayList = ArrayList<String>()
                 arrayList.addAll(gson.fromJson(json, type))
                 adapter.addAll(arrayList)
@@ -150,8 +163,10 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             startActivity(intent)
         }
         historyAdapter = HistoryAdapter(this, history)
-        if (dzenNoch) binding.History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-        else binding.History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+        if (dzenNoch) binding.History.selector =
+            ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else binding.History.selector =
+            ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
         binding.History.adapter = historyAdapter
         binding.History.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -242,7 +257,8 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             autoCompleteTextView?.imeOptions = EditorInfo.IME_ACTION_DONE
             autoCompleteTextView?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
             autoCompleteTextView?.addTextChangedListener(MyTextWatcher(autoCompleteTextView))
-            autoCompleteTextView?.setText(chin.getString("search_bogashugbovya_string", "")) ?: history[0]
+            autoCompleteTextView?.setText(chin.getString("search_bogashugbovya_string", ""))
+                ?: history[0]
             autoCompleteTextView?.setSelection(autoCompleteTextView?.text?.length ?: 0)
             autoCompleteTextView?.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -294,12 +310,14 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         searchViewItem.expandActionView()
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = title
-        val searcheTextView = searchView?.findViewById<TextView>(androidx.appcompat.R.id.search_src_text)
+        val searcheTextView =
+            searchView?.findViewById<TextView>(androidx.appcompat.R.id.search_src_text)
         searcheTextView?.typeface = MainActivity.createFont(Typeface.NORMAL)
         textViewCount = menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextView
         textViewCount?.typeface = MainActivity.createFont(Typeface.NORMAL)
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
-        val closeButton = searchView?.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+        val closeButton =
+            searchView?.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
         closeButton?.setOnClickListener {
             prefEditors.putString("search_bogashugbovya_string", "")
             prefEditors.apply()
@@ -358,7 +376,8 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
 
     private fun saveHistory() {
         val gson = Gson()
-        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
+        val type =
+            TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
         val json = gson.toJson(history, type)
         prefEditors.putString("history_bible_bogaslug", json)
         prefEditors.apply()
@@ -399,7 +418,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
                 searchJob = CoroutineScope(Dispatchers.Main).launch {
                     onPreExecute()
                     val result = withContext(Dispatchers.IO) {
-                        return@withContext doInBackground(searcheString)
+                        return@withContext doInBackground(searcheString.trim())
                     }
                     onPostExecute(result)
                 }
@@ -435,7 +454,14 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         adapter.filter.filter(binding.editText2.text.toString())
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
         if (chin.getString("search_bogashugbovya_string", "") != "") {
-            binding.ListView.post { binding.ListView.setSelection(chin.getInt("search_position", 0)) }
+            binding.ListView.post {
+                binding.ListView.setSelection(
+                    chin.getInt(
+                        "search_position",
+                        0
+                    )
+                )
+            }
         }
         binding.progressBar.visibility = View.GONE
         val arrayList = ArrayList<String>()
@@ -443,11 +469,13 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             arrayList.add(it)
         }
         val gson = Gson()
-        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
+        val type =
+            TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
         val json = gson.toJson(arrayList, type)
         prefEditors.putString("search_bogashugbovya_array", json)
         prefEditors.apply()
-        val searcheTextView = searchView?.findViewById<TextView>(androidx.appcompat.R.id.search_src_text)
+        val searcheTextView =
+            searchView?.findViewById<TextView>(androidx.appcompat.R.id.search_src_text)
         val search = searcheTextView?.text.toString()
         if (search != "" && result.size != 0) {
             binding.ListView.visibility = View.VISIBLE
@@ -456,6 +484,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
     }
 
     private fun findChars(search: String, text: String): Boolean {
+        val registr = chin.getBoolean("pegistrbukv", true)
         val stringBuilder = StringBuilder()
         val t1 = search.indexOf(" ")
         val search1 = if (chin.getInt("slovocalkam", 0) == 1) " $search "
@@ -476,50 +505,64 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             }
             val list = search1.substring(t1).toCharArray()
             while (true) {
-                val strSub1Pos = text.indexOf(sbSearch.toString(), strSub, true)
+                val strSub1Pos = text.indexOf(sbSearch.toString(), strSub, registr)
                 if (strSub1Pos != -1) {
                     strSub = strSub1Pos + sub1.length
                     val subChar2 = StringBuilder()
                     for (i in list.indices) {
-                        if (list[i].isLetterOrDigit()) {
-                            var subChar = text.substring(strSub, strSub + 1)
-                            if (subChar == "́") {
-                                stringBuilder.append(list[i])
-                                strSub++
-                                subChar = text.substring(strSub, strSub + 1)
-                            }
-                            val strSub2Pos = subChar.indexOf(list[i], ignoreCase = true)
-                            if (strSub2Pos != -1) {
-                                if (stringBuilder.isEmpty()) stringBuilder.append(text.substring(strSub1Pos, strSub1Pos + sub1.length))
-                                if (subChar2.isNotEmpty()) stringBuilder.append(subChar2.toString())
-                                stringBuilder.append(list[i])
-                                subChar2.clear()
-                                strSub++
+                        if (text.length >= strSub + 1) {
+                            if (list[i].isLetterOrDigit()) {
+                                var subChar = text.substring(strSub, strSub + 1)
+                                if (subChar == "́") {
+                                    stringBuilder.append(list[i])
+                                    strSub++
+                                    if (text.length >= strSub + 1) {
+                                        subChar = text.substring(strSub, strSub + 1)
+                                    }
+                                }
+                                val strSub2Pos = subChar.indexOf(list[i], ignoreCase = registr)
+                                if (strSub2Pos != -1) {
+                                    if (stringBuilder.isEmpty()) stringBuilder.append(
+                                        text.substring(
+                                            strSub1Pos,
+                                            strSub1Pos + sub1.length
+                                        )
+                                    )
+                                    if (subChar2.isNotEmpty()) stringBuilder.append(subChar2.toString())
+                                    stringBuilder.append(list[i])
+                                    subChar2.clear()
+                                    strSub++
+                                } else {
+                                    stringBuilder.clear()
+                                    break
+                                }
                             } else {
-                                stringBuilder.clear()
-                                break
-                            }
-                        } else {
-                            while (true) {
-                                if (text.length >= strSub + 1) {
-                                    val subChar = text.substring(strSub, strSub + 1).toCharArray()
-                                    if (!subChar[0].isLetterOrDigit()) {
-                                        subChar2.append(subChar[0])
-                                        strSub++
-                                    } else {
-                                        if (list.size - 1 == i) {
-                                            stringBuilder.append(list[i])
+                                while (true) {
+                                    if (text.length >= strSub + 1) {
+                                        val subChar =
+                                            text.substring(strSub, strSub + 1).toCharArray()
+                                        if (!subChar[0].isLetterOrDigit()) {
+                                            subChar2.append(subChar[0])
+                                            strSub++
+                                        } else {
+                                            if (list.size - 1 == i) {
+                                                stringBuilder.append(list[i])
+                                            }
+                                            break
                                         }
+                                    } else {
                                         break
                                     }
-                                } else {
+                                }
+                                if (subChar2.isEmpty()) {
+                                    strSub++
+                                    stringBuilder.clear()
                                     break
                                 }
                             }
-                            if (subChar2.isEmpty()) {
-                                stringBuilder.clear()
-                                break
-                            }
+                        } else {
+                            stringBuilder.clear()
+                            break
                         }
                     }
                     if (stringBuilder.toString() != "") break
@@ -528,7 +571,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
                 }
             }
         } else {
-            val t2 = text.indexOf(search1, 0, true)
+            val t2 = text.indexOf(search1, 0, registr)
             if (t2 != -1) stringBuilder.append(search1)
         }
         return stringBuilder.toString() != ""
@@ -552,7 +595,8 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         for (i in 0 until bogaslugbovyiaList.size) {
             if (searchJob?.isActive == false) break
             var nazva: String
-            val id = Bogashlugbovya.resursMap[bogaslugbovyiaList[i].resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
+            val id = Bogashlugbovya.resursMap[bogaslugbovyiaList[i].resurs]
+                ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
             val inputStream = resources.openRawResource(id)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
@@ -573,7 +617,10 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         return seashpost
     }
 
-    private inner class MyTextWatcher(private val editText: EditText?, private val filtep: Boolean = false) : TextWatcher {
+    private inner class MyTextWatcher(
+        private val editText: EditText?,
+        private val filtep: Boolean = false
+    ) : TextWatcher {
         private var editPosition = 0
         private var check = 0
         private var editch = true
@@ -622,7 +669,15 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
 
     }
 
-    private inner class SearchBibliaListAdaprer(context: Activity, private val arrayList: ArrayList<String>) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, arrayList) {
+    private inner class SearchBibliaListAdaprer(
+        context: Activity,
+        private val arrayList: ArrayList<String>
+    ) : ArrayAdapter<String>(
+        context,
+        by.carkva_gazeta.malitounik.R.layout.simple_list_item_2,
+        by.carkva_gazeta.malitounik.R.id.label,
+        arrayList
+    ) {
         private val origData = ArrayList<String>(arrayList)
         override fun addAll(collection: Collection<String>) {
             super.addAll(collection)
@@ -634,7 +689,8 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding =
+                    SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder
@@ -644,7 +700,12 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             }
             val t1 = arrayList[position].indexOf("-->")
             viewHolder.text.text = arrayList[position].substring(t1 + 3)
-            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(
+                by.carkva_gazeta.malitounik.R.drawable.stiker_black,
+                0,
+                0,
+                0
+            )
             return rootView
         }
 
@@ -673,7 +734,8 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
                     for (item in results.values as ArrayList<*>) {
                         add(item as String)
                     }
-                    textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, results.count)
+                    textViewCount?.text =
+                        getString(by.carkva_gazeta.malitounik.R.string.seash, results.count)
                 }
             }
         }

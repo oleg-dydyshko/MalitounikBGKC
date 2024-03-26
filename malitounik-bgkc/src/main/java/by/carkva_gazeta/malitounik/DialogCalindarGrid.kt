@@ -71,7 +71,7 @@ class DialogCalindarGrid : DialogFragment() {
         }
         if (id == 2) {
             if (imageWhite) return R.drawable.moon_white
-            if (imageSecondary) return R.drawable.moon_secondary
+            if (imageSecondary) return 0
             return R.drawable.moon_black
         }
         if (id == 3) {
@@ -245,11 +245,6 @@ class DialogCalindarGrid : DialogFragment() {
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
 
-                mItemList[position] == 2 && !(slugba.checkPavichrrnica(raznicia, dayOfYear.toInt())) -> {
-                    holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
-                    holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
-                }
-
                 mItemList[position] == 5 && !slugba.checkVialikiaGadziny(raznicia, dayOfYear.toInt(), year) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
@@ -356,6 +351,15 @@ class DialogCalindarGrid : DialogFragment() {
                                 intent.putExtra("resurs", resours)
                                 intent.putExtra("zmena_chastki", true)
                                 intent.putExtra("title", slugba.getTitle(resours))
+                                startActivity(intent)
+                            }
+
+                            else -> {
+                                val intent = Intent()
+                                intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("resurs", "paviaczernica_malaja")
+                                intent.putExtra("zmena_chastki", true)
+                                intent.putExtra("title", "Павячэрніца малая")
                                 startActivity(intent)
                             }
                         }

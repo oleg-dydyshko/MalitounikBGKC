@@ -24,6 +24,7 @@ class MenuPesnyData {
         pesnyBag.add(Data("pesny_bag_13", "Радуйся, Марыя!"))
         pesnyBag.add(Data("pesny_bag_14", "Табе, Марыя, давяраю я"))
         pesnyBag.add(Data("pesny_bag_15", "Ціхая, пакорная"))
+        pesnyBag.add(Data("piesni_baharodz_zastupnica_duchounaja", "Заступніца духоўная"))
 
         pesnyBel.add(Data("pesny_bel_0", "Ave Maria"))
         pesnyBel.add(Data("pesny_bel_1", "Божа, што калісь народы"))
@@ -145,6 +146,7 @@ class MenuPesnyData {
         pesnyPrasl.add(Data("pesny_prasl_75", "Радуйся і слаў Яго"))
         pesnyPrasl.add(Data("piesni_prasl_aliluja", "Алілуя"))
         pesnyPrasl.add(Data("piesni_prasl_bo_lublu", "Бо люблю"))
+        pesnyPrasl.add(Data("piesni_prasl_prad_taboju_moj_boh", "Прад табою, мой Бог"))
 
         pesnyTaize.add(Data("pesny_taize_0", "Magnifikat"))
         pesnyTaize.add(Data("pesny_taize_1", "Ostende nobis"))

@@ -1266,7 +1266,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (t9 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        binding.textView.layout?.let { layout ->
+                        binding.textView.layout?.let {
                             val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
                             intent.putExtra("autoscrollOFF", autoscroll)
                             intent.putExtra("title", "Дабравешчаньне Найсьвяцейшай Багародзіцы")

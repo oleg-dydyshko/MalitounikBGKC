@@ -145,6 +145,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(-3, "Вялікі чацьвер", "vialiki_czacvier_viaczernia_z_liturhijaj", VIACZERNIA_Z_LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_jutran_12jevanhellau", JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_vialikija_hadziny", VIALHADZINY, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_mal_paviaczernica", PAVIACHERNICA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_viaczernia_biez_sviatara", VIACZERNIA_BEZ_SVIATARA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_paunocznica", PAUNOCHNICA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))

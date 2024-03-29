@@ -406,7 +406,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                         if (zagl == "Ёіл") kniga = 32
                         if (zagl == "Саф") kniga = 33
                         if (zagl == "Іс") kniga = 34
-                        if (zagl == "Ер") kniga = 35
+                        if (zagl == "Ер" || zagl == "Ярэм") kniga = 35
                         if (zagl == "Дан") kniga = 36
                         if (zagl == "Лікі") kniga = 37
                         if (zagl == "Міх") kniga = 38

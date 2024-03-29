@@ -1346,7 +1346,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
                     binding.textView.layout?.let { layout ->
-                        val strPosition = text.indexOf("ПЕРШАЯ ГАДЗІНА", t11 + strLig11, true)
+                        val strPosition = text.indexOf("ПЕРШАЯ ГАДЗІНА", t11 + strLig11)
                         val line = layout.getLineForOffset(strPosition)
                         val y = layout.getLineTop(line)
                         val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
@@ -1362,7 +1362,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
                     binding.textView.layout?.let { layout ->
-                        val strPosition = text.indexOf("ТРЭЦЯЯ ГАДЗІНА", t3 + strLig3, true)
+                        val strPosition = text.indexOf("ТРЭЦЯЯ ГАДЗІНА", t3 + strLig3)
                         val line = layout.getLineForOffset(strPosition)
                         val y = layout.getLineTop(line)
                         val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
@@ -1378,7 +1378,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
                     binding.textView.layout?.let { layout ->
-                        val strPosition = text.indexOf("ШОСТАЯ ГАДЗІНА", t6 + strLig6, true)
+                        val strPosition = text.indexOf("ШОСТАЯ ГАДЗІНА", t6 + strLig6)
                         val line = layout.getLineForOffset(strPosition)
                         val y = layout.getLineTop(line)
                         val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
@@ -1394,7 +1394,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
                     binding.textView.layout?.let { layout ->
-                        val strPosition = text.indexOf("ДЗЕВЯТАЯ ГАДЗІНА", t9 + strLig9, true)
+                        val strPosition = text.indexOf("ДЗЯВЯТАЯ ГАДЗІНА", t9 + strLig9)
                         val line = layout.getLineForOffset(strPosition)
                         val y = layout.getLineTop(line)
                         val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)

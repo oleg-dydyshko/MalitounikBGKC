@@ -543,6 +543,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             val t2 = text.indexOf(search1, 0, registr)
             if (t2 != -1) stringBuilder.append(search1)
         }
+        R.raw.vialikaja_piatnica_viaczernia_biez_sviatara
         return stringBuilder.toString() != ""
     }
 

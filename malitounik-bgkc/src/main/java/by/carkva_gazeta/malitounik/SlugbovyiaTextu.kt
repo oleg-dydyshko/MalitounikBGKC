@@ -32,6 +32,7 @@ class SlugbovyiaTextu {
         const val VIACZERNIA_SUNDAY_2412 = 11
         const val LITURHIJA_SUNDAY_2412 = 12
         const val JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX = 13
+        const val VIACZERNIA_BEZ_SVIATARA = 14
         const val AICOU_VII_SUSVETNAGA_SABORY = 1000
         const val NIADZELIA_PRA_AICOU = 1001
         const val NIADZELIA_AICOU_VI_SABORY = 1002
@@ -132,18 +133,20 @@ class SlugbovyiaTextu {
 
         datMinALL.add(SlugbovyiaTextuData(-7, "Уваход у Ерусалім Госпада, Бога і Збаўцы нашага Ісуса Хрыста (Вербніца)", "vierbnica_jutran", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-7, "Уваход у Ерусалім Госпада, Бога і Збаўцы нашага Ісуса Хрыста (Вербніца)", "vierbnica_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak_jutran", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak_liturhija_raniej_asviacz_darou", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak_hadzina_6", HADZINA6, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(-5, "Вялікі аўторак", "vialiki_autorak", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-5, "Вялікі аўторак", "vialiki_autorak_jutran", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-5, "Вялікі аўторак", "vialiki_autorak_liturhija_raniej_asviaczanych_darou", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-5, "Вялікі аўторак", "vialiki_autorak_hadzina_6", HADZINA6, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(-4, "Вялікая серада", "vialikaja_sierada", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-4, "Вялікая серада", "vialikaja_sierada_jutran", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-4, "Вялікая серада", "vialikaja_sierada_liturhija_raniej_asviacz_darou", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(-3, "Вялікі чацьвер", "vialiki_czacvier", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-3, "Вялікі чацьвер", "vialiki_czacvier_jutran", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-3, "Вялікі чацьвер", "vialiki_czacvier_viaczernia_z_liturhijaj", VIACZERNIA_Z_LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_jutran_12jevanhellau", JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_mal_paviaczernica", PAVIACHERNICA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_viaczernia_biez_sviatara", VIACZERNIA_BEZ_SVIATARA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_paunocznica", PAUNOCHNICA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_jutran", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_viaczernia_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
@@ -417,6 +420,7 @@ class SlugbovyiaTextu {
             VIACZERNIA_SUNDAY_2412 -> "Вячэрня"
             LITURHIJA_SUNDAY_2412 -> "Літургія"
             JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX -> "Ютрань (12 Евангельляў Мукаў Хрыстовых)"
+            VIACZERNIA_BEZ_SVIATARA -> "Вячэрня (без сьвятара)"
             else -> "Іншае"
         }
     }
@@ -505,6 +509,11 @@ class SlugbovyiaTextu {
                         return it.resource
                     }
                 }
+                if (sluzba == VIACZERNIA) {
+                    if (checkDay == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
+                        return it.resource
+                    }
+                }
                 if (checkDay == it.day && it.sluzba == sluzba) {
                     return it.resource
                 }
@@ -516,6 +525,11 @@ class SlugbovyiaTextu {
                 }
                 if (sluzba == JUTRAN) {
                     if (dayOfYear == it.day && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
+                        return it.resource
+                    }
+                }
+                if (sluzba == VIACZERNIA) {
+                    if (dayOfYear == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
                         return it.resource
                     }
                 }
@@ -551,6 +565,11 @@ class SlugbovyiaTextu {
             }
             if (sluzba == JUTRAN) {
                 if (checkDay == it.day && pasxa == it.pasxa && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
+                    return it.resource
+                }
+            }
+            if (sluzba == VIACZERNIA) {
+                if (checkDay == it.day && pasxa == it.pasxa && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
                     return it.resource
                 }
             }
@@ -670,14 +689,14 @@ class SlugbovyiaTextu {
         }
         datMinALL.forEach {
             if (it.pasxa) {
-                if (day == it.day && it.sluzba == VIACZERNIA) {
+                if (day == it.day && it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA) {
                     return true
                 }
             } else {
                 if (checkSunDay && getFictionalDay(dayOfYear) == it.day && it.sluzba == VIACZERNIA_SUNDAY_2412) {
                     return true
                 }
-                if (getFictionalDay(dayOfYear) == it.day && it.sluzba == VIACZERNIA) {
+                if (getFictionalDay(dayOfYear) == it.day && it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA) {
                     return true
                 }
             }

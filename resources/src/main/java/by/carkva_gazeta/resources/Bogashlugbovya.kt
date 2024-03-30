@@ -22,6 +22,7 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -150,7 +151,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 val name = element.name
                 resursMap[name] = element.getInt(name)
             }
-            R.raw.mm_21_01_paczesnaha_maksima_vyznaucy_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -224,61 +224,70 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
     }
 
-    private fun findChars(search: String, strSub1Pos: Int): String {
+    private fun findChars(search: String): ArrayList<String> {
         val text = binding.textView.text as SpannableString
-        val t1 = search.indexOf(" ")
-        val sub1 = search.substring(0, t1)
-        val list = search.substring(t1).toCharArray()
-        var strSub = strSub1Pos + sub1.length
-        val result = StringBuilder()
-        val subChar2 = StringBuilder()
-        for (char in list) {
-            if (text.length >= strSub + 1) {
-                if (char.isLetterOrDigit()) {
-                    var subChar = text.substring(strSub, strSub + 1)
-                    if (subChar == "́") {
-                        result.append(subChar)
-                        strSub++
-                        if (text.length >= strSub + 1) {
-                            subChar = text.substring(strSub, strSub + 1)
-                        }
-                    }
-                    val strSub2Pos = subChar.indexOf(char, ignoreCase = true)
-                    if (strSub2Pos != -1) {
-                        if (result.isEmpty()) result.append(text.substring(strSub1Pos, strSub1Pos + sub1.length))
-                        if (subChar2.isNotEmpty()) result.append(subChar2.toString())
-                        result.append(char)
-                        subChar2.clear()
-                        strSub++
-                    } else {
-                        result.clear()
-                        break
-                    }
-                } else {
-                    while (true) {
-                        if (text.length >= strSub + 1) {
-                            val subChar = text.substring(strSub, strSub + 1).toCharArray()
-                            if (!subChar[0].isLetterOrDigit()) {
-                                subChar2.append(subChar[0])
+        var strSub = 0
+        val list = search.toCharArray()
+        val stringBuilder = StringBuilder()
+        val result = ArrayList<String>()
+        while (true) {
+            val strSub1Pos = text.indexOf(list[0].toString(), strSub, true)
+            if (strSub1Pos != -1) {
+                strSub = strSub1Pos + 1
+                val subChar2 = StringBuilder()
+                for (i in 1 until list.size) {
+                    if (text.length >= strSub + 1) {
+                        if (list[i].isLetterOrDigit()) {
+                            var subChar = text.substring(strSub, strSub + 1)
+                            if (subChar == "́") {
+                                stringBuilder.append(subChar)
+                                strSub++
+                                if (text.length >= strSub + 1) {
+                                    subChar = text.substring(strSub, strSub + 1)
+                                }
+                            }
+                            val strSub2Pos = subChar.indexOf(list[i], ignoreCase = true)
+                            if (strSub2Pos != -1) {
+                                if (stringBuilder.isEmpty()) stringBuilder.append(text.substring(strSub1Pos, strSub1Pos + 1))
+                                if (subChar2.isNotEmpty()) stringBuilder.append(subChar2.toString())
+                                stringBuilder.append(list[i].toString())
+                                Log.d("Oleg", list[i].toString())
+                                subChar2.clear()
                                 strSub++
                             } else {
+                                stringBuilder.clear()
                                 break
                             }
                         } else {
-                            break
+                            while (true) {
+                                if (text.length >= strSub + 1) {
+                                    val subChar = text.substring(strSub, strSub + 1).toCharArray()
+                                    if (!subChar[0].isLetterOrDigit()) {
+                                        subChar2.append(subChar[0])
+                                        strSub++
+                                    } else {
+                                        break
+                                    }
+                                } else {
+                                    break
+                                }
+                            }
+                            if (subChar2.isEmpty()) {
+                                stringBuilder.clear()
+                                break
+                            }
                         }
-                    }
-                    if (subChar2.isEmpty()) {
-                        result.clear()
+                    } else {
+                        stringBuilder.clear()
                         break
                     }
                 }
+                if (stringBuilder.toString().isNotEmpty()) result.add(stringBuilder.toString())
             } else {
-                result.clear()
                 break
             }
         }
-        return result.toString()
+        return result
     }
 
     private fun findAll(search: String) {
@@ -286,30 +295,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         var position = 0
         if (search.length >= 3) {
             val text = binding.textView.text as SpannableString
-            val t1 = search.indexOf(" ")
-            if (t1 != -1) {
-                var pos = 0
-                val sub1 = search.substring(0, t1)
-                val charSearchArray = sub1.toCharArray()
-                val sbSearch = StringBuilder()
-                for (i in charSearchArray.indices) {
-                    if (charSearchArray[i].isLetterOrDigit()) {
-                        sbSearch.append(charSearchArray[i])
-                    }
-                }
-                while (true) {
-                    val strSub1Pos = text.indexOf(sbSearch.toString(), pos, true)
-                    if (strSub1Pos != -1) {
-                        pos = strSub1Pos + 1
-                        val findString = findChars(search, strSub1Pos)
-                        if (findString.isNotEmpty()) arraySearsh.add(findString)
-                    } else {
-                        break
-                    }
-                }
-            } else {
-                arraySearsh.add(search)
-            }
+            val findString = findChars(search)
+            if (findString.isNotEmpty()) arraySearsh.addAll(findString)
             for (i in 0 until arraySearsh.size) {
                 val searchLig = arraySearsh[i].length
                 while (true) {
@@ -753,8 +740,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, zmenyiaChastki.getYear()))) {
                 chechZmena = true
                 val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
-                val idZmenyiaChastki = resursMap[resours]
-                        ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
+                val idZmenyiaChastki = resursMap[resours] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
                 zmennyiaCastkiTitle = slugbovyiaTextu.getTitle(resours)
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
             }
@@ -1948,8 +1934,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
-                val idres = resursMap[resurs]
-                        ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
+                val idres = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
                 val inputStream = resources.openRawResource(idres)
                 val text = inputStream.use {
                     it.reader().readText()

@@ -242,8 +242,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             autoCompleteTextView?.imeOptions = EditorInfo.IME_ACTION_DONE
             autoCompleteTextView?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
             autoCompleteTextView?.addTextChangedListener(MyTextWatcher(autoCompleteTextView))
-            autoCompleteTextView?.setText(chin.getString("search_bogashugbovya_string", ""))
-                    ?: history[0]
+            autoCompleteTextView?.setText(chin.getString("search_bogashugbovya_string", "")) ?: history[0]
             autoCompleteTextView?.setSelection(autoCompleteTextView?.text?.length ?: 0)
             autoCompleteTextView?.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -461,89 +460,77 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
     private fun findChars(search: String, text: String): Boolean {
         val registr = chin.getBoolean("pegistrbukv", true)
         val stringBuilder = StringBuilder()
-        val t1 = search.indexOf(" ")
-        val search1 = if (chin.getInt("slovocalkam", 0) == 1) " $search "
-        else search
-        if (t1 != -1) {
-            var strSub = 0
-            val sub1 = search1.substring(0, t1)
-            val charSearchArray = sub1.toCharArray()
-            val sbSearch = StringBuilder()
-            for (i in charSearchArray.indices) {
-                if (chin.getInt("slovocalkam", 0) == 0) {
-                    if (charSearchArray[i].isLetterOrDigit()) {
-                        sbSearch.append(charSearchArray[i])
-                    }
-                } else {
-                    sbSearch.append(charSearchArray[i])
-                }
-            }
-            val list = search1.substring(t1).toCharArray()
-            while (true) {
-                val strSub1Pos = text.indexOf(sbSearch.toString(), strSub, registr)
-                if (strSub1Pos != -1) {
-                    strSub = strSub1Pos + sub1.length
-                    val subChar2 = StringBuilder()
-                    for (i in list.indices) {
-                        if (text.length >= strSub + 1) {
-                            if (list[i].isLetterOrDigit()) {
-                                var subChar = text.substring(strSub, strSub + 1)
-                                if (subChar == "́") {
-                                    stringBuilder.append(list[i])
-                                    strSub++
-                                    if (text.length >= strSub + 1) {
-                                        subChar = text.substring(strSub, strSub + 1)
-                                    }
+        var strSub = 0
+        val list = search.toCharArray()
+        var strStart = 0
+        while (true) {
+            val strSub1Pos = text.indexOf(list[0], strSub, registr)
+            if (strSub1Pos != -1) {
+                strStart = strSub1Pos
+                strSub = strSub1Pos + 1
+                val subChar2 = StringBuilder()
+                for (i in 1 until list.size) {
+                    if (text.length >= strSub + 1) {
+                        if (list[i].isLetterOrDigit()) {
+                            var subChar = text.substring(strSub, strSub + 1)
+                            if (subChar == "́") {
+                                stringBuilder.append(list[i])
+                                strSub++
+                                if (text.length >= strSub + 1) {
+                                    subChar = text.substring(strSub, strSub + 1)
                                 }
-                                val strSub2Pos = subChar.indexOf(list[i], ignoreCase = registr)
-                                if (strSub2Pos != -1) {
-                                    if (stringBuilder.isEmpty()) stringBuilder.append(text.substring(strSub1Pos, strSub1Pos + sub1.length))
-                                    if (subChar2.isNotEmpty()) stringBuilder.append(subChar2.toString())
-                                    stringBuilder.append(list[i])
-                                    subChar2.clear()
-                                    strSub++
-                                } else {
-                                    stringBuilder.clear()
-                                    break
-                                }
+                            }
+                            val strSub2Pos = subChar.indexOf(list[i], ignoreCase = registr)
+                            if (strSub2Pos != -1) {
+                                if (stringBuilder.isEmpty()) stringBuilder.append(text.substring(strSub1Pos, strSub1Pos + 1))
+                                if (subChar2.isNotEmpty()) stringBuilder.append(subChar2.toString())
+                                stringBuilder.append(list[i])
+                                subChar2.clear()
+                                strSub++
                             } else {
-                                while (true) {
-                                    if (text.length >= strSub + 1) {
-                                        val subChar = text.substring(strSub, strSub + 1).toCharArray()
-                                        if (!subChar[0].isLetterOrDigit()) {
-                                            subChar2.append(subChar[0])
-                                            strSub++
-                                        } else {
-                                            if (list.size - 1 == i) {
-                                                stringBuilder.append(list[i])
-                                            }
-                                            break
-                                        }
+                                stringBuilder.clear()
+                                break
+                            }
+                        } else {
+                            while (true) {
+                                if (text.length >= strSub + 1) {
+                                    val subChar = text.substring(strSub, strSub + 1).toCharArray()
+                                    if (!subChar[0].isLetterOrDigit()) {
+                                        subChar2.append(subChar[0])
+                                        strSub++
                                     } else {
+                                        if (list.size - 1 == i) {
+                                            stringBuilder.append(list[i])
+                                        }
                                         break
                                     }
-                                }
-                                if (subChar2.isEmpty()) {
-                                    strSub++
-                                    stringBuilder.clear()
+                                } else {
                                     break
                                 }
                             }
-                        } else {
-                            stringBuilder.clear()
-                            break
+                            if (subChar2.isEmpty()) {
+                                strSub++
+                                stringBuilder.clear()
+                                break
+                            }
                         }
+                    } else {
+                        stringBuilder.clear()
+                        break
                     }
-                    if (stringBuilder.toString() != "") break
-                } else {
-                    break
                 }
+                if (stringBuilder.toString() != "") break
+            } else {
+                break
             }
-        } else {
-            val t2 = text.indexOf(search1, 0, registr)
-            if (t2 != -1) stringBuilder.append(search1)
         }
-        R.raw.vialikaja_piatnica_viaczernia_biez_sviatara
+        if (chin.getInt("slovocalkam", 0) == 1 && stringBuilder.toString() != "") {
+            val startString = if (strStart > 0) text.substring(strStart - 1, strStart)
+            else " "
+            val endString = if (strStart + list.size + 1 <= text.length) text.substring(strStart + list.size, strStart + list.size + 1)
+            else " "
+            if (!(!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit())) stringBuilder.clear()
+        }
         return stringBuilder.toString() != ""
     }
 
@@ -565,8 +552,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         for (i in 0 until bogaslugbovyiaList.size) {
             if (searchJob?.isActive == false) break
             var nazva: String
-            val id = Bogashlugbovya.resursMap[bogaslugbovyiaList[i].resurs]
-                    ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
+            val id = Bogashlugbovya.resursMap[bogaslugbovyiaList[i].resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
             val inputStream = resources.openRawResource(id)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)

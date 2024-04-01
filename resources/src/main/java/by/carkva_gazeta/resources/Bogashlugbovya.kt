@@ -223,17 +223,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
     }
 
-    private fun findChars(search: String, registr: Boolean): ArrayList<String> {
+    private fun findChars(search: String, registr: Boolean): ArrayList<FindString> {
         val text = binding.textView.text as SpannableString
         var strSub = 0
         val list = search.toCharArray()
         val stringBuilder = StringBuilder()
-        val result = ArrayList<String>()
-        var strStart = 0
+        val result = ArrayList<FindString>()
         while (true) {
             val strSub1Pos = text.indexOf(list[0].toString(), strSub, registr)
             if (strSub1Pos != -1) {
-                strStart = strSub1Pos
+                stringBuilder.clear()
                 strSub = strSub1Pos + 1
                 val subChar2 = StringBuilder()
                 for (i in 1 until list.size) {
@@ -282,46 +281,43 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         break
                     }
                 }
-                if (stringBuilder.toString().isNotEmpty()) result.add(stringBuilder.toString())
+                if (stringBuilder.toString().isNotEmpty()) {
+                    if (intent.extras?.getBoolean("isSearch", false) == true && k.getInt("slovocalkam", 0) == 1) {
+                        val startString = if (strSub1Pos > 0) text.substring(strSub1Pos - 1, strSub1Pos)
+                        else " "
+                        val endString = if (strSub1Pos + list.size + 1 <= text.length) text.substring(strSub1Pos + list.size, strSub1Pos + list.size + 1)
+                        else " "
+                        if (!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit()) result.add(FindString(stringBuilder.toString(), strSub))
+                    } else {
+                        result.add(FindString(stringBuilder.toString(), strSub))
+                    }
+                }
             } else {
                 break
             }
-        }
-        if (intent.extras?.getBoolean("isSearch", false) == true && k.getInt("slovocalkam", 0) == 1 && stringBuilder.toString() != "") {
-            val startString = if (strStart > 0) text.substring(strStart - 1, strStart)
-            else " "
-            val endString = if (strStart + list.size + 1 <= text.length) text.substring(strStart + list.size, strStart + list.size + 1)
-            else " "
-            if (!(!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit())) result.clear()
         }
         return result
     }
 
     private fun findAll(search: String) {
-        val registr = if(intent.extras?.getBoolean("isSearch", false) == true) k.getBoolean("pegistrbukv", true)
+        val registr = if (intent.extras?.getBoolean("isSearch", false) == true) k.getBoolean("pegistrbukv", true)
         else true
-        val arraySearsh = ArrayList<String>()
-        var position = 0
+        val arraySearsh = ArrayList<FindString>() //var position = 0
         if (search.length >= 3) {
             val text = binding.textView.text as SpannableString
             val findString = findChars(search, registr)
             if (findString.isNotEmpty()) arraySearsh.addAll(findString)
             for (i in 0 until arraySearsh.size) {
-                val searchLig = arraySearsh[i].length
-                while (true) {
-                    val strPosition = text.indexOf(arraySearsh[i], position, registr)
-                    if (strPosition != -1) {
-                        val list = ArrayList<SpanStr>()
-                        for (e in strPosition..strPosition + searchLig) {
-                            list.add(SpanStr(getColorSpans(text.getSpans(e, e + 1, ForegroundColorSpan::class.java)), e))
-                        }
-                        findListSpans.add(list)
-                        text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        position = strPosition + 1
-                    } else {
-                        break
+                val searchLig = arraySearsh[i].str.length
+                val strPosition = arraySearsh[i].position - searchLig
+                if (strPosition != -1) {
+                    val list = ArrayList<SpanStr>()
+                    for (e in strPosition..strPosition + searchLig) {
+                        list.add(SpanStr(getColorSpans(text.getSpans(e, e + 1, ForegroundColorSpan::class.java)), e))
                     }
+                    findListSpans.add(list)
+                    text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
         }
@@ -1488,6 +1484,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     }
                 }
                 if (edit.length >= 3) {
+                    intent.removeExtra("isSearch")
                     findAllAsanc()
                 } else {
                     findRemoveSpan()
@@ -1975,7 +1972,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     override fun onBack() {
         when {
             intent.extras?.getBoolean("isSearch", false) == true -> {
-                onNavigateUp()
+                super.onBack()
             }
 
             binding.find.visibility == View.VISIBLE -> {
@@ -2087,4 +2084,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private data class SpanStr(val color: Int, val start: Int)
+
+    private data class FindString(val str: String, val position: Int)
 }

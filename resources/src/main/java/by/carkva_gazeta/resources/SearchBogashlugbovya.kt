@@ -78,6 +78,11 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         prefEditors.apply()
     }
 
+    override fun onResume() {
+        super.onResume()
+        adapter.filter.filter(binding.editText2.text.toString())
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)

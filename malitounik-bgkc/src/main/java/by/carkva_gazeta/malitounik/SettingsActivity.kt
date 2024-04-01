@@ -1325,6 +1325,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 }
                 prefEditor.apply()
                 if (check != k.getBoolean("dzen_noch", false)) {
+                    editFull = true
                     recreate()
                 }
             }

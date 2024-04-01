@@ -22,7 +22,6 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -224,15 +223,17 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
     }
 
-    private fun findChars(search: String): ArrayList<String> {
+    private fun findChars(search: String, registr: Boolean): ArrayList<String> {
         val text = binding.textView.text as SpannableString
         var strSub = 0
         val list = search.toCharArray()
         val stringBuilder = StringBuilder()
         val result = ArrayList<String>()
+        var strStart = 0
         while (true) {
-            val strSub1Pos = text.indexOf(list[0].toString(), strSub, true)
+            val strSub1Pos = text.indexOf(list[0].toString(), strSub, registr)
             if (strSub1Pos != -1) {
+                strStart = strSub1Pos
                 strSub = strSub1Pos + 1
                 val subChar2 = StringBuilder()
                 for (i in 1 until list.size) {
@@ -246,12 +247,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                                     subChar = text.substring(strSub, strSub + 1)
                                 }
                             }
-                            val strSub2Pos = subChar.indexOf(list[i], ignoreCase = true)
+                            val strSub2Pos = subChar.indexOf(list[i], ignoreCase = registr)
                             if (strSub2Pos != -1) {
                                 if (stringBuilder.isEmpty()) stringBuilder.append(text.substring(strSub1Pos, strSub1Pos + 1))
                                 if (subChar2.isNotEmpty()) stringBuilder.append(subChar2.toString())
                                 stringBuilder.append(list[i].toString())
-                                Log.d("Oleg", list[i].toString())
                                 subChar2.clear()
                                 strSub++
                             } else {
@@ -287,20 +287,29 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 break
             }
         }
+        if (intent.extras?.getBoolean("isSearch", false) == true && k.getInt("slovocalkam", 0) == 1 && stringBuilder.toString() != "") {
+            val startString = if (strStart > 0) text.substring(strStart - 1, strStart)
+            else " "
+            val endString = if (strStart + list.size + 1 <= text.length) text.substring(strStart + list.size, strStart + list.size + 1)
+            else " "
+            if (!(!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit())) result.clear()
+        }
         return result
     }
 
     private fun findAll(search: String) {
+        val registr = if(intent.extras?.getBoolean("isSearch", false) == true) k.getBoolean("pegistrbukv", true)
+        else true
         val arraySearsh = ArrayList<String>()
         var position = 0
         if (search.length >= 3) {
             val text = binding.textView.text as SpannableString
-            val findString = findChars(search)
+            val findString = findChars(search, registr)
             if (findString.isNotEmpty()) arraySearsh.addAll(findString)
             for (i in 0 until arraySearsh.size) {
                 val searchLig = arraySearsh[i].length
                 while (true) {
-                    val strPosition = text.indexOf(arraySearsh[i], position, true)
+                    val strPosition = text.indexOf(arraySearsh[i], position, registr)
                     if (strPosition != -1) {
                         val list = ArrayList<SpanStr>()
                         for (e in strPosition..strPosition + searchLig) {
@@ -1965,6 +1974,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
     override fun onBack() {
         when {
+            intent.extras?.getBoolean("isSearch", false) == true -> {
+                onNavigateUp()
+            }
+
             binding.find.visibility == View.VISIBLE -> {
                 binding.find.visibility = View.GONE
                 binding.textSearch.setText("")

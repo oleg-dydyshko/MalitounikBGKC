@@ -138,15 +138,18 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             val t1 = title.indexOf("-->")
             intent.putExtra("title", title.substring(t1 + 3))
             intent.putExtra("resurs", title.substring(4, t1))
-            val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
             var poshuk1 = autoCompleteTextView?.text.toString()
-            for (aM in m) {
-                val r = poshuk1.length - 1
-                if (poshuk1[r] == aM && r >= 3) {
-                    poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), true)
+            if (chin.getInt("slovocalkam", 0) == 0) {
+                val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
+                for (aM in m) {
+                    val r = poshuk1.length - 1
+                    if (poshuk1[r] == aM && r >= 3) {
+                        poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), true)
+                    }
                 }
             }
             intent.putExtra("search", poshuk1)
+            intent.putExtra("isSearch", true)
             startActivity(intent)
         }
         historyAdapter = HistoryAdapter(this, history)

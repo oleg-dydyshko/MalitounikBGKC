@@ -120,6 +120,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private val zmenyiaChastki = ZmenyiaChastki()
     private val c = Calendar.getInstance()
+    private var startSearchString = ""
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
@@ -497,7 +498,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 resurs = MenuVybranoe.vybranoe[vybranoePosition].resurs
                 title = MenuVybranoe.vybranoe[vybranoePosition].data
             }
+            startSearchString = savedInstanceState.getString("startSearchString", "")
         } else {
+            startSearchString = intent.extras?.getString("search", "") ?: ""
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             vybranoePosition = intent.extras?.getInt("vybranaePos", -1) ?: -1
         }
@@ -1450,12 +1453,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     }
                 }
             }
-            val searchString = intent.extras?.getString("search", "") ?: ""
-            if (searchString != "") {
+            if (startSearchString != "") {
                 stopAutoStartScroll()
                 stopAutoScroll()
                 invalidateOptionsMenu()
-                binding.textSearch.setText(searchString)
+                binding.textSearch.setText(startSearchString)
                 binding.find.visibility = View.VISIBLE
                 binding.textSearch.requestFocus()
                 EditTextCustom.focusAndShowKeyboard(binding.textSearch)
@@ -1484,7 +1486,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     }
                 }
                 if (edit.length >= 3) {
-                    intent.removeExtra("isSearch")
+                    if (startSearchString != edit) intent.removeExtra("isSearch")
                     findAllAsanc()
                 } else {
                     findRemoveSpan()
@@ -2081,6 +2083,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         outState.putInt("year", c[Calendar.YEAR])
         outState.putInt("vybranoePosition", vybranoePosition)
         outState.putBoolean("mAutoScrol", mAutoScroll)
+        outState.putString("startSearchString", startSearchString)
     }
 
     private data class SpanStr(val color: Int, val start: Int)

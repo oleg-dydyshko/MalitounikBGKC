@@ -333,18 +333,20 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             view.layoutParams = p
         } else if (view.id == androidx.appcompat.R.id.search_src_text) {
             editText = view as AutoCompleteTextView
-            editText?.setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    activity?.let {
-                        val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
+            editText?.let { autoCompleteTextView ->
+                autoCompleteTextView.setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        activity?.let {
+                            val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            imm1.hideSoftInputFromWindow(autoCompleteTextView.windowToken, 0)
+                        }
                     }
+                    true
                 }
-                true
+                autoCompleteTextView.imeOptions = EditorInfo.IME_ACTION_DONE
+                autoCompleteTextView.addTextChangedListener(textWatcher)
+                autoCompleteTextView.setBackgroundResource(R.drawable.underline_white)
             }
-            editText?.imeOptions = EditorInfo.IME_ACTION_DONE
-            editText?.addTextChangedListener(textWatcher)
-            editText?.setBackgroundResource(R.drawable.underline_white)
         }
         if (view is ViewGroup) {
             for (i in 0 until view.childCount) {
@@ -504,7 +506,9 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("SearchViewQwery", editText?.text.toString())
+        editText?.let {
+            outState.putString("SearchViewQwery", it.text.toString())
+        }
         outState.putBoolean("actionExpandOn", actionExpandOn)
     }
 
@@ -536,10 +540,12 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                     editPosition = edit.length
                 }
                 if (check != 0) {
-                    editText?.removeTextChangedListener(this)
-                    editText?.setText(edit)
-                    editText?.setSelection(editPosition)
-                    editText?.addTextChangedListener(this)
+                    editText?.let {
+                        it.removeTextChangedListener(this)
+                        it.setText(edit)
+                        it.setSelection(editPosition)
+                        it.addTextChangedListener(this)
+                    }
                 }
             }
             adapter.filter.filter(edit)

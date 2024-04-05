@@ -212,7 +212,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        menu.findItem(R.id.count).isVisible = isSearch()
+        menu.findItem(R.id.count).isVisible = search
         menu.findItem(R.id.action_clean_histopy).isVisible = isHistory()
     }
 
@@ -232,8 +232,6 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
     }
 
     private fun isHistory() = history.size != 0
-
-    private fun isSearch() = search
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.pesny, menu)

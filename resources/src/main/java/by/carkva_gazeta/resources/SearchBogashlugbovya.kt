@@ -631,7 +631,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
     }
 
     private inner class SearchBibliaListAdaprer(context: Activity, private val arrayList: ArrayList<String>) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, arrayList) {
-        private val origData = ArrayList<String>(arrayList)
+        private val origData = ArrayList<String>()
         override fun addAll(collection: Collection<String>) {
             super.addAll(collection)
             origData.clear()

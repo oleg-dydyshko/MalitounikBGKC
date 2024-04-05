@@ -70,7 +70,7 @@ import java.util.Calendar
 import java.util.Random
 
 
-class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener, MenuBiblijateka.MunuBiblijatekaListener {
+class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener, MenuBiblijateka.MunuBiblijatekaListener {
 
     private val c = Calendar.getInstance()
     private lateinit var k: SharedPreferences
@@ -890,11 +890,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
     }
 
-    override fun setPasxa(year: Int) {
-        val menuPashalii = supportFragmentManager.findFragmentByTag("MenuPashalii") as? MenuPashalii
-        menuPashalii?.setPasha(year)
-    }
-
     override fun setPrazdnik(year: Int) {
         val menuCviaty = supportFragmentManager.findFragmentByTag("MenuCviaty") as? MenuSviaty
         menuCviaty?.setCviatyYear(year)
@@ -930,16 +925,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (id == R.id.help) {
             val i = Intent(this, Help::class.java)
             startActivity(i)
-            return true
-        }
-        if (id == R.id.pasxa_opis) {
-            val intent = Intent(this, Pasxa::class.java)
-            startActivity(intent)
-            return true
-        }
-        if (id == R.id.pasxa) {
-            val pasxa = DialogPasxa()
-            pasxa.show(supportFragmentManager, "pasxa")
             return true
         }
         if (id == R.id.prazdnik) {
@@ -999,8 +984,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         menu.findItem(R.id.action_mun).isVisible = false
         menu.findItem(R.id.action_glava).isVisible = false
         menu.findItem(R.id.tipicon).isVisible = false
-        menu.findItem(R.id.pasxa_opis).isVisible = false
-        menu.findItem(R.id.pasxa).isVisible = false
         menu.findItem(R.id.trash).isVisible = false
         menu.findItem(R.id.sabytie).isVisible = false
         menu.findItem(R.id.prazdnik).isVisible = false
@@ -1056,10 +1039,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             menu.findItem(R.id.action_dzen_noch).title = spanString
         }
         if (idSelect == R.id.label103) menu.findItem(R.id.prazdnik).isVisible = true
-        if (idSelect == R.id.label104) {
-            menu.findItem(R.id.pasxa_opis).isVisible = true
-            menu.findItem(R.id.pasxa).isVisible = true
-        }
         if (idSelect == R.id.label7) {
             menu.findItem(R.id.action_add).isVisible = true
             menu.findItem(R.id.sortdate).isVisible = true

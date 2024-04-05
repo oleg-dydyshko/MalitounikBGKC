@@ -65,9 +65,11 @@
     <string name="zmiest">Сьвятыя і сьвяты</string>
     <string name="sviatyia">Сьвятыя</string>
     <string name="pascha_kaliandar_bel">ГРЫГАРЫЯНСКІ КАЛЯНДАР У БЕЛАРУСІ. ПАСХАЛІЯ</string>
+    <string name="paschalia">Пасхалія</string>
     <string name="fullscreen">Тэксты на ўвесь экран</string>
     <string name="song">ПЕСЬНІ</string>
     <string name="data_search2">УВЯДЗІЦЕ ГОД\nЗ 1583 ПА 2093:</string>
+    <string name="data_search3">Увядзіце год</string>
     <string name="ruzanec">РУЖАНЕЦ</string>
     <string name="malitvy1">Малітвы ранішнія</string>
     <string name="malitvy2">Малітвы вячэрнія</string>

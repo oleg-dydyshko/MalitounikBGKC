@@ -58,6 +58,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gri" />
 
+    <by.carkva_gazeta.malitounik.TextViewCustom
+        android:id="@+id/searshResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:paddingEnd="10sp"
+        android:paddingBottom="5sp"
+        android:textColor="@color/colorSecondary_text"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ula" />
+
     <ListView
         android:id="@+id/pasha"
         android:layout_width="0dp"
@@ -68,6 +81,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ula" />
+        app:layout_constraintTop_toBottomOf="@+id/searshResult" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

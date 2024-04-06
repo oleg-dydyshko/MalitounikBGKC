@@ -303,7 +303,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private fun findAll(search: String) {
         val registr = if (intent.extras?.getBoolean("isSearch", false) == true) k.getBoolean("pegistrbukv", true)
         else true
-        val arraySearsh = ArrayList<FindString>() //var position = 0
+        val arraySearsh = ArrayList<FindString>()
         if (search.length >= 3) {
             val text = binding.textView.text as SpannableString
             val findString = findChars(search, registr)

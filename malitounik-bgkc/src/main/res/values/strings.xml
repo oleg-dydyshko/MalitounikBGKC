@@ -779,5 +779,13 @@
     <string name="gallery_slayd_show_repit">Паўтараць бясконца</string>
     <string name="gallery_slayd_show_on_start">З пачатку</string>
     <string name="trebnik">Трэбнік</string>
+    <string-array name="vek">
+        <item>XVI стагоддзе</item>
+        <item>XVII стагоддзе</item>
+        <item>XVIII стагоддзе</item>
+        <item>XIX стагоддзе</item>
+        <item>XX стагоддзе</item>
+        <item>XXI стагоддзе</item>
+    </string-array>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

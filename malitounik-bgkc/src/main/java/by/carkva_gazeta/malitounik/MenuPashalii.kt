@@ -165,6 +165,8 @@ class MenuPashalii : BaseFragment() {
             binding.spinnerVek.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     setArrayPasha(position)
+                    if (position == XXI) binding.pasha.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2000)
+                    else binding.pasha.setSelection(0)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -201,6 +203,8 @@ class MenuPashalii : BaseFragment() {
         val year = yearS.toInt()
         var dataP: Int
         val monthP: Int
+        val dataPrav: Int
+        val monthPrav: Int
         val monthName = resources.getStringArray(R.array.meciac_smoll)
         val a = year % 19
         val b = year % 4
@@ -221,8 +225,37 @@ class MenuPashalii : BaseFragment() {
             if (d == 28 && ex == 6) dataP = 18
             monthP = 4
         }
+        val a2 = (19 * (year % 19) + 15) % 30
+        val b2 = (2 * (year % 4) + 4 * (year % 7) + 6 * a2 + 6) % 7
+        if (a2 + b2 > 9) {
+            dataPrav = a2 + b2 - 9
+            monthPrav = 4
+        } else {
+            dataPrav = 22 + a2 + b2
+            monthPrav = 3
+        }
+        val pravas = GregorianCalendar(year, monthPrav - 1, dataPrav)
+        val katolic = GregorianCalendar(year, monthP - 1, dataP)
+        var sovpadenie = false
+        if (katolic[Calendar.DAY_OF_YEAR] == pravas[Calendar.DAY_OF_YEAR]) sovpadenie = true
+        var color = R.color.colorPrimary_text
+        if ((requireActivity() as BaseActivity).getBaseDzenNoch()) {
+            color = R.color.colorWhite
+            binding.searshResult.setTextColor(ContextCompat.getColor(requireActivity(), color))
+        }
+        val pasxa = SpannableStringBuilder(dataP.toString() + " " + monthName[monthP - 1] + " " + year)
+        if (year <= 1582) {
+            pasxa.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireActivity(), R.color.colorSecondary_text)), 0, (dataP.toString() + " " + monthName[monthP - 1] + " " + year).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        } else {
+            if (!sovpadenie) {
+                pasxa.append("\n${pravas[Calendar.DATE].toString() + " " + monthName[pravas[Calendar.MONTH]]}")
+                pasxa.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireActivity(), R.color.colorSecondary_text)), (dataP.toString() + " " + monthName[monthP - 1] + " " + year).length, pasxa.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            pasxa.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireActivity(), color)), 0, (dataP.toString() + " " + monthName[monthP - 1] + " " + year).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
         binding.searshResult.visibility = View.VISIBLE
-        binding.searshResult.text = getString(R.string.tydzen_name2, dataP.toString(), monthName[monthP - 1], year.toString())
+        binding.searshResult.text = pasxa
     }
 
     private fun setArrayPasha(vekPashi: Int) {
@@ -308,11 +341,16 @@ class MenuPashalii : BaseFragment() {
             val pravas = GregorianCalendar(year, monthPrav - 1, dataPrav)
             val katolic = GregorianCalendar(year, monthP - 1, dataP)
             val vek = yearG.toString().substring(0, 2)
-            if ((vek == "15" && year > 1582) || vek == "16") pravas.add(Calendar.DATE, 10)
-            else pravas.timeInMillis = katolic.timeInMillis
-            if (vek == "17") pravas.add(Calendar.DATE, 11)
-            if (vek == "18") pravas.add(Calendar.DATE, 12)
-            if (vek == "19" || vek == "20") pravas.add(Calendar.DATE, 13)
+            when {
+                year <= 1582 -> pravas.timeInMillis = katolic.timeInMillis
+                vek == "15" || vek == "16" -> pravas.add(Calendar.DATE, 10)
+                vek == "17" -> pravas.add(Calendar.DATE, 11)
+                vek == "18" -> pravas.add(Calendar.DATE, 12)
+                vek == "19" || vek == "20" -> pravas.add(Calendar.DATE, 13)
+                vek == "21" -> pravas.add(Calendar.DATE, 14)
+                vek == "22" -> pravas.add(Calendar.DATE, 15)
+                vek == "23" || vek == "24" -> pravas.add(Calendar.DATE, 16)
+            }
             var sovpadenie = false
             if (katolic[Calendar.DAY_OF_YEAR] == pravas[Calendar.DAY_OF_YEAR]) sovpadenie = true
             pasxi.add(Pashalii(dataP.toString() + " " + monthName[monthP - 1] + " " + year, pravas[Calendar.DATE].toString() + " " + monthName[pravas[Calendar.MONTH]], year, sovpadenie))
@@ -346,8 +384,11 @@ class MenuPashalii : BaseFragment() {
                     editText?.setSelection(editPosition)
                     editText?.addTextChangedListener(this)
                 }
-                if (edit.isNotEmpty() && edit.toInt() < 1500 && edit.toInt() > 0) setArrayPasha(edit)
-                else binding.searshResult.visibility = View.GONE
+                if (edit.isNotEmpty()) {
+                    val year = edit.toInt()
+                    if (year in 1..1499 || year in 2100..2499) setArrayPasha(edit)
+                    else binding.searshResult.visibility = View.GONE
+                } else binding.searshResult.visibility = View.GONE
                 myArrayAdapter.filter.filter(edit)
             }
         }

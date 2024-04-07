@@ -984,19 +984,19 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                     var stix = 0
                     for (r in 1 until bibleline.size) {
                         stix++
-                        val prepinanie = bibleline[r]
-                        val poshuk2 = findChars(poshuk1, prepinanie)
-                        if (poshuk2.isEmpty()) continue
                         val aSviatyia = MainActivity.fromHtml(bibleline[r])
-                        val t2 = poshuk2[0].str.length
-                        val title = "$nazva Гл. $glava".length
+                        val title = "$nazva Гл. $glava\n".length
                         val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                        val t3 = span.indexOf("-->")
-                        val title2 = "<!--stix.$stix::glava.$glava-->".length
-                        val t1 = poshuk2[0].position
-                        span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1 + title + title2 + 1 - t2, t1 + title + title2 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1 + title + title2 + 1 - t2, t1 + title + title2 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        val poshuk2 = findChars(poshuk1, span)
+                        if (poshuk2.isEmpty()) continue
+                        for (w in 0 until poshuk2.size) {
+                            val t2 = poshuk2[w].str.length
+                            val t3 = span.indexOf("-->")
+                            val t1 = poshuk2[w].position
+                            span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
                         seashpost.add(span)
                     }
                 }
@@ -1121,19 +1121,19 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                     var stix = 0
                     for (r in 1 until bibleline.size) {
                         stix++
-                        val prepinanie = bibleline[r]
-                        val poshuk2 = findChars(poshuk1, prepinanie)
-                        if (poshuk2.isEmpty()) continue
                         val aSviatyia = MainActivity.fromHtml(bibleline[r])
-                        val t2 = poshuk2[0].str.length
-                        val title = "$nazva Гл. $glava".length
+                        val title = "$nazva Гл. $glava\n".length
                         val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                        val t3 = span.indexOf("-->")
-                        val title2 = "<!--stix.$stix::glava.$glava-->".length
-                        val t1 = poshuk2[0].position
-                        span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1 + title + title2 + 1 - t2, t1 + title + title2 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1 + title + title2 + 1 - t2, t1 + title + title2 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        val poshuk2 = findChars(poshuk1, span)
+                        if (poshuk2.isEmpty()) continue
+                        for (w in 0 until poshuk2.size) {
+                            val t2 = poshuk2[w].str.length
+                            val t3 = span.indexOf("-->")
+                            val t1 = poshuk2[w].position
+                            span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
                         seashpost.add(span)
                     }
                 }
@@ -1172,26 +1172,26 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             var stix = 0
             for (r in 1 until bibleline.size) {
                 stix++
-                val prepinanie = bibleline[r]
-                val poshuk2 = findChars(poshuk1, prepinanie)
-                if (poshuk2.isEmpty()) continue
                 val aSviatyia = MainActivity.fromHtml(bibleline[r])
-                val t2 = poshuk2[0].str.length
-                val title = "$nazva Гл. $glava".length
+                val title = "$nazva Гл. $glava\n".length
                 val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                val t3 = span.indexOf("-->")
-                val title2 = "<!--stix.$stix::glava.$glava-->".length
-                val t1 = poshuk2[0].position
-                span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1 + title + title2 + 1 - t2, t1 + title + title2 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1 + title + title2 + 1 - t2, t1 + title + title2 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                val poshuk2 = findChars(poshuk1, span)
+                if (poshuk2.isEmpty()) continue
+                for (w in 0 until poshuk2.size) {
+                    val t2 = poshuk2[w].str.length
+                    val t3 = span.indexOf("-->")
+                    val t1 = poshuk2[w].position
+                    span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
                 seashpost.add(span)
             }
         }
         return seashpost
     }
 
-    private fun findChars(search: String, text: String): ArrayList<FindString> {
+    private fun findChars(search: String, text: SpannableString): ArrayList<FindString> {
         val registr = chin.getBoolean("pegistrbukv", true)
         val stringBuilder = StringBuilder()
         var strSub = 0
@@ -1255,7 +1255,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                     }
                 }
                 if (stringBuilder.toString().isNotEmpty()) {
-                    if (intent.extras?.getBoolean("isSearch", false) == true && chin.getInt("slovocalkam", 0) == 1) {
+                    if (chin.getInt("slovocalkam", 0) == 1) {
                         val startString = if (strSub1Pos > 0) text.substring(strSub1Pos - 1, strSub1Pos)
                         else " "
                         val endString = if (strSub1Pos + list.size + 1 <= text.length) text.substring(strSub1Pos + list.size, strSub1Pos + list.size + 1)

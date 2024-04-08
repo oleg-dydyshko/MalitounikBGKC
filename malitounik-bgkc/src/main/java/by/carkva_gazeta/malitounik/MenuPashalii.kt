@@ -37,8 +37,7 @@ import java.util.GregorianCalendar
 
 class MenuPashalii : BaseFragment() {
     private lateinit var myArrayAdapter: MyArrayAdapter
-    private var _binding: PashaliiBinding? = null
-    private val binding get() = _binding!!
+    private var binding: PashaliiBinding? = null
     private var editText: AutoCompleteTextView? = null
     private var searchView: SearchView? = null
     private var search = false
@@ -55,11 +54,6 @@ class MenuPashalii : BaseFragment() {
         private const val ALL = 7
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     override fun onResume() {
         super.onResume()
         editText?.addTextChangedListener(textWatcher)
@@ -67,8 +61,8 @@ class MenuPashalii : BaseFragment() {
             setArrayPasha(ALL)
         } else {
             setArrayPasha(XXI)
-            binding.pasha.post {
-                binding.pasha.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2000)
+            binding?.pasha?.post {
+                binding?.pasha?.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2000)
             }
         }
     }
@@ -97,8 +91,8 @@ class MenuPashalii : BaseFragment() {
             override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
                 searchView?.setOnQueryTextListener(null)
                 search = false
-                setArrayPasha(binding.spinnerVek.selectedItemPosition)
-                binding.searshResult.visibility = View.GONE
+                setArrayPasha(binding?.spinnerVek?.selectedItemPosition ?: XXI)
+                binding?.searshResult?.visibility = View.GONE
                 return true
             }
         })
@@ -156,63 +150,65 @@ class MenuPashalii : BaseFragment() {
         outState.putBoolean("search", search)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = PashaliiBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = PashaliiBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
-            myArrayAdapter = MyArrayAdapter(activity, ArrayList())
-            if (savedInstanceState != null) {
-                searchViewQwery = savedInstanceState.getString("SearchViewQwery") ?: ""
-                search = savedInstanceState.getBoolean("search", false)
-            }
-            val listVek = resources.getStringArray(R.array.vek)
-            binding.spinnerVek.adapter = VekAdapter(activity, listVek)
-            binding.spinnerVek.setSelection(XXI)
-            binding.spinnerVek.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    if (position != 0) {
-                        setArrayPasha(position)
-                        if (position == XXI) binding.pasha.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2000)
-                        else binding.pasha.setSelection(0)
-                    }
+            binding?.let { binding ->
+                myArrayAdapter = MyArrayAdapter(activity, ArrayList())
+                if (savedInstanceState != null) {
+                    searchViewQwery = savedInstanceState.getString("SearchViewQwery") ?: ""
+                    search = savedInstanceState.getBoolean("search", false)
                 }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
-            binding.pasha.adapter = myArrayAdapter
-            binding.pasha.selector = ContextCompat.getDrawable(activity, android.R.color.transparent)
-            binding.pasha.isClickable = false
-            val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
-            if (dzenNoch) {
-                binding.gri.setBackgroundResource(R.color.colorbackground_material_dark)
-                binding.ula.setBackgroundResource(R.color.colorbackground_material_dark)
-                binding.pasha.setBackgroundResource(R.color.colorbackground_material_dark)
-                binding.pasha.selector = ContextCompat.getDrawable(activity, R.drawable.selector_dark)
-            }
-            binding.textView.setOnClickListener {
-                val intent = Intent(activity, Pasxa::class.java)
-                startActivity(intent)
-            }
-            binding.pasha.setOnScrollListener(object : AbsListView.OnScrollListener {
-                override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
-                    if (i == 1) {
-                        val imm1 = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
-                        searchView?.clearFocus()
+                val listVek = resources.getStringArray(R.array.vek)
+                binding.spinnerVek.adapter = VekAdapter(activity, listVek)
+                binding.spinnerVek.setSelection(XXI)
+                binding.spinnerVek.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        if (position != 0) {
+                            setArrayPasha(position)
+                            if (position == XXI) binding.pasha.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2000)
+                            else binding.pasha.setSelection(0)
+                        }
                     }
-                }
 
-                override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
-            })
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                }
+                binding.pasha.adapter = myArrayAdapter
+                binding.pasha.selector = ContextCompat.getDrawable(activity, android.R.color.transparent)
+                binding.pasha.isClickable = false
+                val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
+                if (dzenNoch) {
+                    binding.gri.setBackgroundResource(R.color.colorbackground_material_dark)
+                    binding.ula.setBackgroundResource(R.color.colorbackground_material_dark)
+                    binding.pasha.setBackgroundResource(R.color.colorbackground_material_dark)
+                    binding.pasha.selector = ContextCompat.getDrawable(activity, R.drawable.selector_dark)
+                }
+                binding.textView.setOnClickListener {
+                    val intent = Intent(activity, Pasxa::class.java)
+                    startActivity(intent)
+                }
+                binding.pasha.setOnScrollListener(object : AbsListView.OnScrollListener {
+                    override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
+                        if (i == 1) {
+                            val imm1 = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
+                            searchView?.clearFocus()
+                        }
+                    }
+
+                    override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
+                })
+            }
         }
     }
 
     fun setDataPashi(day: Int, month: Int) {
-        binding.spinnerVek.setSelection(0)
+        binding?.spinnerVek?.setSelection(0)
         setArrayPasha(day, month)
     }
 
@@ -324,7 +320,7 @@ class MenuPashalii : BaseFragment() {
         var color = R.color.colorPrimary_text
         if ((requireActivity() as BaseActivity).getBaseDzenNoch()) {
             color = R.color.colorWhite
-            binding.searshResult.setTextColor(ContextCompat.getColor(requireActivity(), color))
+            binding?.searshResult?.setTextColor(ContextCompat.getColor(requireActivity(), color))
         }
         val pasxa = SpannableStringBuilder(dataP.toString() + " " + monthName[monthP - 1] + " " + year)
         if (year <= 1582) {
@@ -336,8 +332,8 @@ class MenuPashalii : BaseFragment() {
             }
             pasxa.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireActivity(), color)), 0, (dataP.toString() + " " + monthName[monthP - 1] + " " + year).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
-        binding.searshResult.visibility = View.VISIBLE
-        binding.searshResult.text = pasxa
+        binding?.searshResult?.visibility = View.VISIBLE
+        binding?.searshResult?.text = pasxa
     }
 
     private fun setArrayPasha(vekPashi: Int) {
@@ -469,8 +465,8 @@ class MenuPashalii : BaseFragment() {
                 if (edit.isNotEmpty()) {
                     val year = edit.toInt()
                     if (year in 1..1499 || year in 2100..2499) setArrayPasha(edit)
-                    else binding.searshResult.visibility = View.GONE
-                } else binding.searshResult.visibility = View.GONE
+                    else binding?.searshResult?.visibility = View.GONE
+                } else binding?.searshResult?.visibility = View.GONE
                 myArrayAdapter.filter.filter(edit)
             }
         }

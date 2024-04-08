@@ -286,7 +286,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                     if (intent.extras?.getBoolean("isSearch", false) == true && k.getInt("slovocalkam", 0) == 1) {
                         val startString = if (strSub1Pos > 0) text.substring(strSub1Pos - 1, strSub1Pos)
                         else " "
-                        val endString = if (strSub1Pos + list.size + 1 <= text.length) text.substring(strSub1Pos + list.size, strSub1Pos + list.size + 1)
+                        val endString = if (strSub1Pos + stringBuilder.length + 1 <= text.length) text.substring(strSub1Pos + stringBuilder.length, strSub1Pos + stringBuilder.length + 1)
                         else " "
                         if (!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit()) result.add(FindString(stringBuilder.toString(), strSub))
                     } else {

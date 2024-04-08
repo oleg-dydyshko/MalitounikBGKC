@@ -46,13 +46,13 @@ class MenuPashalii : BaseFragment() {
     private val textWatcher = MyTextWatcher()
 
     companion object {
-        private const val XVI = 0
-        private const val XVII = 1
-        private const val XVIII = 2
-        private const val XIX = 3
-        private const val XX = 4
-        private const val XXI = 5
-        private const val ALL = 6
+        private const val XVI = 1
+        private const val XVII = 2
+        private const val XVIII = 3
+        private const val XIX = 4
+        private const val XX = 5
+        private const val XXI = 6
+        private const val ALL = 7
     }
 
     override fun onDestroyView() {
@@ -110,6 +110,16 @@ class MenuPashalii : BaseFragment() {
         }
     }
 
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.action_find) {
+            val dialog = DialogPashaliiDay()
+            dialog.show(childFragmentManager, "DialogPashaliiDay")
+            return true
+        }
+        return false
+    }
+
     private fun changeSearchViewElements(view: View?) {
         if (view == null) return
         if (view.id == androidx.appcompat.R.id.search_edit_frame || view.id == androidx.appcompat.R.id.search_mag_icon) {
@@ -164,9 +174,11 @@ class MenuPashalii : BaseFragment() {
             binding.spinnerVek.setSelection(XXI)
             binding.spinnerVek.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    setArrayPasha(position)
-                    if (position == XXI) binding.pasha.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2000)
-                    else binding.pasha.setSelection(0)
+                    if (position != 0) {
+                        setArrayPasha(position)
+                        if (position == XXI) binding.pasha.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2000)
+                        else binding.pasha.setSelection(0)
+                    }
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -197,6 +209,71 @@ class MenuPashalii : BaseFragment() {
                 override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
             })
         }
+    }
+
+    fun setDataPashi(day: Int, month: Int) {
+        binding.spinnerVek.setSelection(0)
+        setArrayPasha(day, month)
+    }
+
+    private fun setArrayPasha(day: Int, month: Int) {
+        myArrayAdapter.clear()
+        var dataP: Int
+        var monthP: Int
+        var dataPrav: Int
+        var monthPrav: Int
+        val monthName = resources.getStringArray(R.array.meciac_smoll)
+        val pasxi = ArrayList<Pashalii>()
+        for (year in 1..2499) {
+            val a = year % 19
+            val b = year % 4
+            val cx = year % 7
+            val k = year / 100
+            val p = (13 + 8 * k) / 25
+            val q = k / 4
+            val m = (15 - p + k - q) % 30
+            val n = (4 + k - q) % 7
+            val d = (19 * a + m) % 30
+            val ex = (2 * b + 4 * cx + 6 * d + n) % 7
+            if (d + ex <= 9) {
+                dataP = d + ex + 22
+                monthP = 3
+            } else {
+                dataP = d + ex - 9
+                if (d == 29 && ex == 6) dataP = 19
+                if (d == 28 && ex == 6) dataP = 18
+                monthP = 4
+            }
+            val a2 = (19 * (year % 19) + 15) % 30
+            val b2 = (2 * (year % 4) + 4 * (year % 7) + 6 * a2 + 6) % 7
+            if (a2 + b2 > 9) {
+                dataPrav = a2 + b2 - 9
+                monthPrav = 4
+            } else {
+                dataPrav = 22 + a2 + b2
+                monthPrav = 3
+            }
+            val pravas = GregorianCalendar(year, monthPrav - 1, dataPrav)
+            val katolic = GregorianCalendar(year, monthP - 1, dataP)
+            val vek = if (year > 1582) year.toString().substring(0, 2)
+            else ""
+            when {
+                year <= 1582 -> pravas.timeInMillis = katolic.timeInMillis
+                vek == "15" || vek == "16" -> pravas.add(Calendar.DATE, 10)
+                vek == "17" -> pravas.add(Calendar.DATE, 11)
+                vek == "18" -> pravas.add(Calendar.DATE, 12)
+                vek == "19" || vek == "20" -> pravas.add(Calendar.DATE, 13)
+                vek == "21" -> pravas.add(Calendar.DATE, 14)
+                vek == "22" -> pravas.add(Calendar.DATE, 15)
+                vek == "23" || vek == "24" -> pravas.add(Calendar.DATE, 16)
+            }
+            var sovpadenie = false
+            if (katolic[Calendar.DAY_OF_YEAR] == pravas[Calendar.DAY_OF_YEAR]) sovpadenie = true
+            if (day == dataP && month == monthP) {
+                pasxi.add(Pashalii(dataP.toString() + " " + monthName[monthP - 1] + " " + year, pravas[Calendar.DATE].toString() + " " + monthName[pravas[Calendar.MONTH]], year, sovpadenie))
+            }
+        }
+        myArrayAdapter.addAll(pasxi)
     }
 
     private fun setArrayPasha(yearS: String) {

@@ -199,7 +199,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         }
         if (!chin.getBoolean("pegistrbukv", true)) binding.checkBox.isChecked = true
         binding.checkBox.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            prefEditors.putBoolean("pegistrbukv", isChecked)
+            prefEditors.putBoolean("pegistrbukv", !isChecked)
             prefEditors.apply()
             val edit = autoCompleteTextView?.text.toString().trim()
             execute(edit, true)
@@ -531,7 +531,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         if (chin.getInt("slovocalkam", 0) == 1 && stringBuilder.toString() != "") {
             val startString = if (strStart > 0) text.substring(strStart - 1, strStart)
             else " "
-            val endString = if (strStart + list.size + 1 <= text.length) text.substring(strStart + list.size, strStart + list.size + 1)
+            val endString = if (strStart + stringBuilder.length + 1 <= text.length) text.substring(strStart + stringBuilder.length, strStart + stringBuilder.length + 1)
             else " "
             if (!(!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit())) stringBuilder.clear()
         }

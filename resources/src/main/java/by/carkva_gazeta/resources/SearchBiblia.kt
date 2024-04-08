@@ -580,7 +580,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         }
         if (!chin.getBoolean("pegistrbukv", true)) binding.checkBox.isChecked = true
         binding.checkBox.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            prefEditors.putBoolean("pegistrbukv", isChecked)
+            prefEditors.putBoolean("pegistrbukv", !isChecked)
             prefEditors.apply()
             autoCompleteTextView?.let {
                 val edit = it.text.toString()
@@ -1190,12 +1190,10 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         val stringBuilder = StringBuilder()
         var strSub = 0
         val list = search.toCharArray()
-        var strStart = 0
         val result = ArrayList<FindString>()
         while (true) {
             val strSub1Pos = text.indexOf(list[0], strSub, registr)
             if (strSub1Pos != -1) {
-                strStart = strSub1Pos
                 strSub = strSub1Pos + 1
                 val subChar2 = StringBuilder()
                 for (i in 1 until list.size) {
@@ -1252,7 +1250,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                     if (chin.getInt("slovocalkam", 0) == 1) {
                         val startString = if (strSub1Pos > 0) text.substring(strSub1Pos - 1, strSub1Pos)
                         else " "
-                        val endString = if (strSub1Pos + list.size + 1 <= text.length) text.substring(strSub1Pos + list.size, strSub1Pos + list.size + 1)
+                        val endString = if (strSub1Pos + stringBuilder.length + 1 <= text.length) text.substring(strSub1Pos + stringBuilder.length, strSub1Pos + stringBuilder.length + 1)
                         else " "
                         if (!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit()) result.add(FindString(stringBuilder.toString(), strSub))
                     } else {
@@ -1262,13 +1260,6 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             } else {
                 break
             }
-        }
-        if (chin.getInt("slovocalkam", 0) == 1 && stringBuilder.toString() != "") {
-            val startString = if (strStart > 0) text.substring(strStart - 1, strStart)
-            else " "
-            val endString = if (strStart + list.size + 1 <= text.length) text.substring(strStart + list.size, strStart + list.size + 1)
-            else " "
-            if (!(!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit())) result.clear()
         }
         return result
     }

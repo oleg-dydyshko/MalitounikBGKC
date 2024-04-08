@@ -236,6 +236,12 @@ class MenuPashalii : BaseFragment() {
         }
         val pravas = GregorianCalendar(year, monthPrav - 1, dataPrav)
         val katolic = GregorianCalendar(year, monthP - 1, dataP)
+        val vek = year.toString().substring(0, 2)
+        when (vek) {
+            "21" -> pravas.add(Calendar.DATE, 14)
+            "22" -> pravas.add(Calendar.DATE, 15)
+            "23", "24" -> pravas.add(Calendar.DATE, 16)
+        }
         var sovpadenie = false
         if (katolic[Calendar.DAY_OF_YEAR] == pravas[Calendar.DAY_OF_YEAR]) sovpadenie = true
         var color = R.color.colorPrimary_text
@@ -253,7 +259,6 @@ class MenuPashalii : BaseFragment() {
             }
             pasxa.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireActivity(), color)), 0, (dataP.toString() + " " + monthName[monthP - 1] + " " + year).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
-
         binding.searshResult.visibility = View.VISIBLE
         binding.searshResult.text = pasxa
     }

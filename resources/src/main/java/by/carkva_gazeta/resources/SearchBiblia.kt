@@ -580,11 +580,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         }
         if (!chin.getBoolean("pegistrbukv", true)) binding.checkBox.isChecked = true
         binding.checkBox.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            if (isChecked) {
-                prefEditors.putBoolean("pegistrbukv", false)
-            } else {
-                prefEditors.putBoolean("pegistrbukv", true)
-            }
+            prefEditors.putBoolean("pegistrbukv", isChecked)
             prefEditors.apply()
             autoCompleteTextView?.let {
                 val edit = it.text.toString()
@@ -879,7 +875,6 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
     private fun semuxa(poshuk: String, secondRun: Boolean = false): ArrayList<Spannable> {
         var poshuk1 = poshuk
         val seashpost = ArrayList<Spannable>()
-        poshuk1 = MainActivity.zamena(poshuk1, chin.getBoolean("pegistrbukv", true))
         val registr = chin.getBoolean("pegistrbukv", true)
         if (secondRun) {
             val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
@@ -1145,7 +1140,6 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
     private fun nadsan(poshuk: String, secondRun: Boolean = false): ArrayList<Spannable> {
         var poshuk1 = poshuk
         val seashpost = ArrayList<Spannable>()
-        poshuk1 = MainActivity.zamena(poshuk1)
         val registr = chin.getBoolean("pegistrbukv", true)
         if (secondRun) {
             val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
@@ -1274,7 +1268,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             else " "
             val endString = if (strStart + list.size + 1 <= text.length) text.substring(strStart + list.size, strStart + list.size + 1)
             else " "
-            if (!(!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit())) stringBuilder.clear()
+            if (!(!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit())) result.clear()
         }
         return result
     }

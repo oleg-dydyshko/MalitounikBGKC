@@ -8,4 +8,10 @@
         android:icon="@drawable/search"
         android:orderInCategory="100"
         android:title="@string/poshuk" />
+
+    <item
+        android:id="@+id/action_find"
+        android:orderInCategory="100"
+        android:title="@string/searche_on_data"
+        app:showAsAction="never" />
 </menu>

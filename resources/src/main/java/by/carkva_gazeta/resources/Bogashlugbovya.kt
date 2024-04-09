@@ -723,7 +723,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
-        val liturgia = resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica"
+        val liturgia = resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica" || resurs == "vialikdzien_liturhija"
         val res = withContext(Dispatchers.IO) {
             zmenyiaChastki.setDzenNoch(dzenNoch)
             chechZmena = false

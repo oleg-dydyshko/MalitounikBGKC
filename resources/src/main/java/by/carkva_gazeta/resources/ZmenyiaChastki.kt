@@ -389,6 +389,7 @@ internal class ZmenyiaChastki {
 
     fun traparyIKandakiNaKognyDzen(dayOfWeek: Int, chast: Int): String {
         var result = ""
+        if (raznica() in 0..41) return result
         if (dayOfWeek == 2) {
             val res = readFile(R.raw.ton1_budni)
             if (chast == 1) {

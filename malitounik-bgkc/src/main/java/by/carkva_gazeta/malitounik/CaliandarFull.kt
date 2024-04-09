@@ -438,7 +438,13 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                         daysv = -1
                         munsv = 4
                     }
-                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, MenuCaliandar.getPositionCaliandar(position)[20].toInt(), MenuCaliandar.getPositionCaliandar(position)[0].toInt(), daysv, munsv, MenuCaliandar.getPositionCaliandar(position)[22].toInt(), MenuCaliandar.getPositionCaliandar(position)[4], MenuCaliandar.getPositionCaliandar(position)[3].toInt(), MenuCaliandar.getPositionCaliandar(position)[1].toInt(), MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1, MenuCaliandar.getPositionCaliandar(position)[24])
+                    var ton = MenuCaliandar.getPositionCaliandar(position)[20].toInt()
+                    var denNedzeli = MenuCaliandar.getPositionCaliandar(position)[0].toInt()
+                    if (MenuCaliandar.getPositionCaliandar(position)[22].toInt() in 0..41) {
+                        ton = 0
+                        denNedzeli = Calendar.SUNDAY
+                    }
+                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, ton, denNedzeli, daysv, munsv, MenuCaliandar.getPositionCaliandar(position)[22].toInt(), MenuCaliandar.getPositionCaliandar(position)[4], MenuCaliandar.getPositionCaliandar(position)[3].toInt(), MenuCaliandar.getPositionCaliandar(position)[1].toInt(), MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1, MenuCaliandar.getPositionCaliandar(position)[24])
                     dialogCalindarGrid.show(childFragmentManager, "grid")
                 }
 

@@ -31,6 +31,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.PashaliiBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem3Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemPaschaliiBinding
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -43,6 +44,8 @@ class MenuPashalii : BaseFragment() {
     private var search = false
     private var searchViewQwery = ""
     private val textWatcher = MyTextWatcher()
+    private var day = 0
+    private var month = 0
 
     companion object {
         private const val XVI = 1
@@ -60,9 +63,17 @@ class MenuPashalii : BaseFragment() {
         if (search) {
             setArrayPasha(ALL)
         } else {
-            setArrayPasha(XXI)
-            binding?.pasha?.post {
-                binding?.pasha?.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2000)
+            binding?.let { binding ->
+                if (binding.spinnerVek.selectedItemPosition == 0) {
+                    setArrayPasha(binding.day.selectedItemPosition + 1, binding.month.selectedItemPosition + 3)
+                } else {
+                    setArrayPasha(binding.spinnerVek.selectedItemPosition)
+                }
+                if (binding.spinnerVek.selectedItemPosition == XXI) {
+                    binding.pasha.post {
+                        binding.pasha.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2000 - 3)
+                    }
+                }
             }
         }
     }
@@ -104,16 +115,6 @@ class MenuPashalii : BaseFragment() {
         }
     }
 
-    override fun onMenuItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.action_find) {
-            val dialog = DialogPashaliiDay()
-            dialog.show(childFragmentManager, "DialogPashaliiDay")
-            return true
-        }
-        return false
-    }
-
     private fun changeSearchViewElements(view: View?) {
         if (view == null) return
         if (view.id == androidx.appcompat.R.id.search_edit_frame || view.id == androidx.appcompat.R.id.search_mag_icon) {
@@ -148,6 +149,8 @@ class MenuPashalii : BaseFragment() {
         super.onSaveInstanceState(outState)
         outState.putString("SearchViewQwery", searchView?.query.toString())
         outState.putBoolean("search", search)
+        outState.putInt("day", day)
+        outState.putInt("month", month)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -163,6 +166,8 @@ class MenuPashalii : BaseFragment() {
                 if (savedInstanceState != null) {
                     searchViewQwery = savedInstanceState.getString("SearchViewQwery") ?: ""
                     search = savedInstanceState.getBoolean("search", false)
+                    day = savedInstanceState.getInt("day", 0)
+                    month = savedInstanceState.getInt("month", 0)
                 }
                 val listVek = resources.getStringArray(R.array.vek)
                 binding.spinnerVek.adapter = VekAdapter(activity, listVek)
@@ -170,10 +175,46 @@ class MenuPashalii : BaseFragment() {
                 binding.spinnerVek.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         if (position != 0) {
+                            day = 0
+                            month = 0
+                            binding.day.visibility = View.GONE
+                            binding.month.visibility = View.GONE
+                            binding.help.visibility = View.GONE
                             setArrayPasha(position)
-                            if (position == XXI) binding.pasha.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2000)
-                            else binding.pasha.setSelection(0)
+                            if (position == XXI) binding.pasha.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2000 - 3)
+                            else binding.pasha.setSelection(binding.month.selectedItemPosition)
+                        } else {
+                            binding.day.visibility = View.VISIBLE
+                            binding.month.visibility = View.VISIBLE
+                            binding.help.visibility = View.VISIBLE
+                            day = binding.day.selectedItemPosition + 1
+                            month = binding.month.selectedItemPosition + 3
+                            setArrayPasha(day, month)
                         }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                }
+                val dayList = ArrayList<String>()
+                for (i in 1..31)
+                    dayList.add(i.toString())
+                binding.day.adapter = ListAdapterDay(activity, dayList)
+                val monthList = ArrayList<String>()
+                monthList.add("Сакавіка")
+                monthList.add("Красавіка")
+                binding.month.adapter = ListAdapterDay(activity, monthList)
+                binding.day.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        day = position + 1
+                        if (binding.spinnerVek.selectedItemPosition == 0) setArrayPasha(day, month)
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                }
+                binding.month.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        month = position + 3
+                        if (binding.spinnerVek.selectedItemPosition == 0) setArrayPasha(day, month)
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -205,11 +246,6 @@ class MenuPashalii : BaseFragment() {
                 })
             }
         }
-    }
-
-    fun setDataPashi(day: Int, month: Int) {
-        binding?.spinnerVek?.setSelection(0)
-        setArrayPasha(day, month)
     }
 
     private fun setArrayPasha(day: Int, month: Int) {
@@ -581,6 +617,37 @@ class MenuPashalii : BaseFragment() {
             if (dzenNoch) viewHolder.textView.setBackgroundResource(R.drawable.selector_dark)
             else viewHolder.textView.setBackgroundResource(R.drawable.selector_default)
             return rootView
+        }
+    }
+
+    private class ListAdapterDay(private val mContext: Activity, private val arrayList: ArrayList<String>) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_1, arrayList) {
+        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (mView == null) {
+                val binding = SimpleListItem3Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.text1)
+                rootView.tag = viewHolder
+            } else {
+                rootView = mView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
+            viewHolder.textView.text = arrayList[position]
+            if (dzenNoch) viewHolder.textView.setBackgroundResource(R.drawable.selector_dialog_font_dark)
+            else viewHolder.textView.setBackgroundResource(R.drawable.selector_default)
+            return rootView
+        }
+
+        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val v = super.getDropDownView(position, convertView, parent)
+            val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
+            val text = v as TextView
+            text.text = arrayList[position]
+            if (dzenNoch) text.setBackgroundResource(R.drawable.selector_dialog_font_dark)
+            else text.setBackgroundResource(R.drawable.selector_default)
+            return v
         }
     }
 

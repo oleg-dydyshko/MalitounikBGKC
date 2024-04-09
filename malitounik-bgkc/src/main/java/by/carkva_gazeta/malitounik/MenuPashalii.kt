@@ -95,6 +95,11 @@ class MenuPashalii : BaseFragment() {
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
                 search = true
+                day = 0
+                month = 0
+                binding?.day?.visibility = View.GONE
+                binding?.month?.visibility = View.GONE
+                binding?.help?.visibility = View.GONE
                 setArrayPasha(ALL)
                 return true
             }
@@ -102,6 +107,7 @@ class MenuPashalii : BaseFragment() {
             override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
                 searchView?.setOnQueryTextListener(null)
                 search = false
+                if (binding?.spinnerVek?.selectedItemPosition == 0) binding?.spinnerVek?.setSelection(XXI)
                 setArrayPasha(binding?.spinnerVek?.selectedItemPosition ?: XXI)
                 binding?.searshResult?.visibility = View.GONE
                 return true
@@ -345,7 +351,8 @@ class MenuPashalii : BaseFragment() {
         }
         val pravas = GregorianCalendar(year, monthPrav - 1, dataPrav)
         val katolic = GregorianCalendar(year, monthP - 1, dataP)
-        val vek = year.toString().substring(0, 2)
+        val vek = if (year > 1582) year.toString().substring(0, 2)
+        else ""
         when (vek) {
             "21" -> pravas.add(Calendar.DATE, 14)
             "22" -> pravas.add(Calendar.DATE, 15)

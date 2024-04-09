@@ -112,7 +112,6 @@
         android:layout_marginBottom="10dp"
         android:gravity="center"
         android:text="@string/pashalii_help"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

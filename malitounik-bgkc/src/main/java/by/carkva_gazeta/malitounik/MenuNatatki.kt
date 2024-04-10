@@ -29,12 +29,11 @@ class MenuNatatki : BaseFragment() {
     private lateinit var adapter: ItemAdapter
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
-    private var _binding: MenuVybranoeBinding? = null
-    private val binding get() = _binding!!
+    private var binding: MenuVybranoeBinding? = null
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,110 +41,112 @@ class MenuNatatki : BaseFragment() {
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = MenuVybranoeBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = MenuVybranoeBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
-            k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val file = File(activity.filesDir.toString() + "/Natatki.json")
-            val gson = Gson()
-            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, MyNatatkiFiles::class.java).type
-            var isNatatkiError = false
-            if (file.exists()) {
-                try {
-                    myNatatkiFiles = gson.fromJson(file.readText(), type)
-                    myNatatkiFiles.forEach {
-                        if (it.title == null) isNatatkiError = true
-                    }
-                    activity.invalidateOptionsMenu()
-                } catch (_: Throwable) {
-                    isNatatkiError = true
-                }
-            }
-            if (isNatatkiError) {
-                myNatatkiFiles.clear()
-                File(activity.filesDir.toString().plus("/Malitva")).walk().forEach {
-                    if (it.isFile) {
-                        val name = it.name
-                        val t1 = name.lastIndexOf("_")
-                        val index = name.substring(t1 + 1).toLong()
-                        val inputStream = FileReader(it)
-                        val reader = BufferedReader(inputStream)
-                        val res = reader.readText().split("<MEMA></MEMA>")
-                        inputStream.close()
-                        var lRTE: Long = 1
-                        if (res[1].contains("<RTE></RTE>")) {
-                            val start = res[1].indexOf("<RTE></RTE>")
-                            val end = res[1].length
-                            lRTE = res[1].substring(start + 11, end).toLong()
+            binding?.let { binding ->
+                k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+                val file = File(activity.filesDir.toString() + "/Natatki.json")
+                val gson = Gson()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, MyNatatkiFiles::class.java).type
+                var isNatatkiError = false
+                if (file.exists()) {
+                    try {
+                        myNatatkiFiles = gson.fromJson(file.readText(), type)
+                        myNatatkiFiles.forEach {
+                            if (it.title == null) isNatatkiError = true
                         }
-                        if (lRTE <= 1) {
-                            lRTE = it.lastModified()
-                        }
-                        myNatatkiFiles.add(MyNatatkiFiles(index, lRTE, res[0]))
+                        activity.invalidateOptionsMenu()
+                    } catch (_: Throwable) {
+                        isNatatkiError = true
                     }
                 }
-                file.writer().use {
-                    it.write(gson.toJson(myNatatkiFiles, type))
-                }
-            }
-            myNatatkiFiles.sort()
-            activity.invalidateOptionsMenu()
-            adapter = ItemAdapter(activity, R.id.image, false)
-            binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
-            binding.dragListView.setLayoutManager(LinearLayoutManager(activity))
-            binding.dragListView.setAdapter(adapter, true)
-            binding.dragListView.setCanDragHorizontally(false)
-            binding.dragListView.setCanDragVertically(true)
-            binding.dragListView.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
-                override fun onItemSwipeStarted(item: ListSwipeItem) {
-                }
-
-                override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
-                    val adapterItem = item.tag as MyNatatkiFiles
-                    val pos = binding.dragListView.adapter.getPositionForItem(adapterItem)
-                    if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
-                        onDialogDeliteClick(pos, adapter.itemList[pos].title ?: "")
-                    }
-                    if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
-                        myNatatkiEdit(pos)
-                    }
-                }
-            })
-            binding.dragListView.setDragListListener(object : DragListView.DragListListener {
-                override fun onItemDragStarted(position: Int) {
+                if (isNatatkiError) {
                     myNatatkiFiles.clear()
-                    myNatatkiFiles.addAll(gson.fromJson(file.readText(), type))
-                }
-
-                override fun onItemDragging(itemPosition: Int, x: Float, y: Float) {
-                }
-
-                override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
-                    if (fromPosition != toPosition) {
-                        file.writer().use {
-                            it.write(gson.toJson(adapter.itemList, type))
+                    File(activity.filesDir.toString().plus("/Malitva")).walk().forEach {
+                        if (it.isFile) {
+                            val name = it.name
+                            val t1 = name.lastIndexOf("_")
+                            val index = name.substring(t1 + 1).toLong()
+                            val inputStream = FileReader(it)
+                            val reader = BufferedReader(inputStream)
+                            val res = reader.readText().split("<MEMA></MEMA>")
+                            inputStream.close()
+                            var lRTE: Long = 1
+                            if (res[1].contains("<RTE></RTE>")) {
+                                val start = res[1].indexOf("<RTE></RTE>")
+                                val end = res[1].length
+                                lRTE = res[1].substring(start + 11, end).toLong()
+                            }
+                            if (lRTE <= 1) {
+                                lRTE = it.lastModified()
+                            }
+                            myNatatkiFiles.add(MyNatatkiFiles(index, lRTE, res[0]))
                         }
                     }
-                    val edit = k.edit()
-                    edit.putInt("natatki_sort", 0)
-                    edit.apply()
-                    activity.invalidateOptionsMenu()
+                    file.writer().use {
+                        it.write(gson.toJson(myNatatkiFiles, type))
+                    }
                 }
-            })
+                myNatatkiFiles.sort()
+                activity.invalidateOptionsMenu()
+                adapter = ItemAdapter(activity, R.id.image, false)
+                binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
+                binding.dragListView.setLayoutManager(LinearLayoutManager(activity))
+                binding.dragListView.setAdapter(adapter, true)
+                binding.dragListView.setCanDragHorizontally(false)
+                binding.dragListView.setCanDragVertically(true)
+                binding.dragListView.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
+                    override fun onItemSwipeStarted(item: ListSwipeItem) {
+                    }
+
+                    override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
+                        val adapterItem = item.tag as MyNatatkiFiles
+                        val pos = binding.dragListView.adapter.getPositionForItem(adapterItem)
+                        if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
+                            onDialogDeliteClick(pos, adapter.itemList[pos].title ?: "")
+                        }
+                        if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
+                            myNatatkiEdit(pos)
+                        }
+                    }
+                })
+                binding.dragListView.setDragListListener(object : DragListView.DragListListener {
+                    override fun onItemDragStarted(position: Int) {
+                        myNatatkiFiles.clear()
+                        myNatatkiFiles.addAll(gson.fromJson(file.readText(), type))
+                    }
+
+                    override fun onItemDragging(itemPosition: Int, x: Float, y: Float) {
+                    }
+
+                    override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
+                        if (fromPosition != toPosition) {
+                            file.writer().use {
+                                it.write(gson.toJson(adapter.itemList, type))
+                            }
+                        }
+                        val edit = k.edit()
+                        edit.putInt("natatki_sort", 0)
+                        edit.apply()
+                        activity.invalidateOptionsMenu()
+                    }
+                })
+            }
         }
     }
 
     fun fileDeliteCancel() {
-        binding.dragListView.resetSwipedViews(null)
+        binding?.dragListView?.resetSwipedViews(null)
     }
 
     fun myNatatkiEdit(position: Int) {
-        binding.dragListView.resetSwipedViews(null)
+        binding?.dragListView?.resetSwipedViews(null)
         val f = adapter.itemList[position]
         activity?.let {
             if (File("${it.filesDir}/Malitva/Mae_malitvy_${f.id}").exists()) {
@@ -207,7 +208,7 @@ class MenuNatatki : BaseFragment() {
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_add) {
-            binding.dragListView.resetSwipedViews(null)
+            binding?.dragListView?.resetSwipedViews(null)
             val myNatatki = MyNatatki.getInstance("", 1, 0)
             myNatatki.show(childFragmentManager, "myNatatki")
             return true
@@ -306,7 +307,7 @@ class MenuNatatki : BaseFragment() {
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                binding.dragListView.resetSwipedViews(null)
+                binding?.dragListView?.resetSwipedViews(null)
                 val f = itemList[bindingAdapterPosition]
                 if (File("${activity.filesDir}/Malitva/Mae_malitvy_${f.id}").exists()) {
                     val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 3, bindingAdapterPosition)

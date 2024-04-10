@@ -26,8 +26,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
     private lateinit var adapter: ItemAdapter
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
-    private var _binding: MenuVybranoeBinding? = null
-    private val binding get() = _binding!!
+    private var binding: MenuVybranoeBinding? = null
     private val menuVybranoeLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 200) {
             adapter.updateList(vybranoe)
@@ -40,11 +39,11 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 
     fun fileDeliteCancel() {
-        binding.dragListView.resetSwipedViews(null)
+        binding?.dragListView?.resetSwipedViews(null)
     }
 
     fun fileDelite(position: Int) {
@@ -204,68 +203,70 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = MenuVybranoeBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = MenuVybranoeBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let { fragmentActivity ->
-            k = fragmentActivity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val gson = Gson()
-            val file = File(fragmentActivity.filesDir.toString() + "/Vybranoe.json")
-            if (file.exists() && vybranoe.isEmpty()) {
-                try {
-                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
-                    vybranoe.addAll(gson.fromJson(file.readText(), type))
-                } catch (_: Throwable) {
-                    MainActivity.toastView(fragmentActivity, getString(R.string.error_ch2))
-                }
-            }
-            checkBibleVybranoe()
-            vybranoeSort = k.getInt("vybranoe_sort", 1)
-            vybranoe.sort()
-            adapter = ItemAdapter(fragmentActivity as BaseActivity, R.id.image, false)
-            binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
-            binding.dragListView.setLayoutManager(LinearLayoutManager(fragmentActivity))
-            binding.dragListView.setAdapter(adapter, false)
-            binding.dragListView.setCanDragHorizontally(false)
-            binding.dragListView.setCanDragVertically(true)
-            binding.dragListView.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
-                override fun onItemSwipeStarted(item: ListSwipeItem) {
-                }
-
-                override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
-                    if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
-                        val adapterItem = item.tag as VybranoeData
-                        val pos = binding.dragListView.adapter.getPositionForItem(adapterItem)
-                        val dd = DialogDelite.getInstance(pos, "", "з выбранага", adapter.itemList[pos].data)
-                        dd.show(childFragmentManager, "dialog_dilite")
-                    }
-                }
-            })
-            binding.dragListView.setDragListListener(object : DragListView.DragListListener {
-                override fun onItemDragStarted(position: Int) {
-                }
-
-                override fun onItemDragging(itemPosition: Int, x: Float, y: Float) {
-                }
-
-                override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
-                    if (fromPosition != toPosition) {
+            binding?.let { binding ->
+                k = fragmentActivity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+                val gson = Gson()
+                val file = File(fragmentActivity.filesDir.toString() + "/Vybranoe.json")
+                if (file.exists() && vybranoe.isEmpty()) {
+                    try {
                         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
-                        file.writer().use {
-                            it.write(gson.toJson(adapter.itemList, type))
-                        }
-                        val edit = k.edit()
-                        edit.putInt("vybranoe_sort", 0)
-                        edit.apply()
-                        vybranoeSort = 0
-                        fragmentActivity.invalidateOptionsMenu()
+                        vybranoe.addAll(gson.fromJson(file.readText(), type))
+                    } catch (_: Throwable) {
+                        MainActivity.toastView(fragmentActivity, getString(R.string.error_ch2))
                     }
                 }
-            })
+                checkBibleVybranoe()
+                vybranoeSort = k.getInt("vybranoe_sort", 1)
+                vybranoe.sort()
+                adapter = ItemAdapter(fragmentActivity as BaseActivity, R.id.image, false)
+                binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
+                binding.dragListView.setLayoutManager(LinearLayoutManager(fragmentActivity))
+                binding.dragListView.setAdapter(adapter, false)
+                binding.dragListView.setCanDragHorizontally(false)
+                binding.dragListView.setCanDragVertically(true)
+                binding.dragListView.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
+                    override fun onItemSwipeStarted(item: ListSwipeItem) {
+                    }
+
+                    override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
+                        if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
+                            val adapterItem = item.tag as VybranoeData
+                            val pos = binding.dragListView.adapter.getPositionForItem(adapterItem)
+                            val dd = DialogDelite.getInstance(pos, "", "з выбранага", adapter.itemList[pos].data)
+                            dd.show(childFragmentManager, "dialog_dilite")
+                        }
+                    }
+                })
+                binding.dragListView.setDragListListener(object : DragListView.DragListListener {
+                    override fun onItemDragStarted(position: Int) {
+                    }
+
+                    override fun onItemDragging(itemPosition: Int, x: Float, y: Float) {
+                    }
+
+                    override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
+                        if (fromPosition != toPosition) {
+                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
+                            file.writer().use {
+                                it.write(gson.toJson(adapter.itemList, type))
+                            }
+                            val edit = k.edit()
+                            edit.putInt("vybranoe_sort", 0)
+                            edit.apply()
+                            vybranoeSort = 0
+                            fragmentActivity.invalidateOptionsMenu()
+                        }
+                    }
+                })
+            }
         }
     }
 

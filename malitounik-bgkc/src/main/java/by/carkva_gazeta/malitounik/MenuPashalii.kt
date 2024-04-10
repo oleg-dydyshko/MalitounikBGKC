@@ -57,6 +57,11 @@ class MenuPashalii : BaseFragment() {
         private const val ALL = 7
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
     override fun onResume() {
         super.onResume()
         editText?.addTextChangedListener(textWatcher)

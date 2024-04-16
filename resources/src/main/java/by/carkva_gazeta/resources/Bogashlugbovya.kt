@@ -607,8 +607,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 if (diffScroll) {
                     autoscroll = false
                     stopAutoScroll()
+                    invalidateOptionsMenu()
                 }
-                invalidateOptionsMenu()
             }
 
             override fun onTouch(action: Boolean) {
@@ -2082,7 +2082,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         outState.putInt("day_of_year", c[Calendar.DAY_OF_YEAR])
         outState.putInt("year", c[Calendar.YEAR])
         outState.putInt("vybranoePosition", vybranoePosition)
-        outState.putBoolean("mAutoScrol", mAutoScroll)
+        outState.putBoolean("mAutoScroll", mAutoScroll)
         outState.putString("startSearchString", startSearchString)
     }
 

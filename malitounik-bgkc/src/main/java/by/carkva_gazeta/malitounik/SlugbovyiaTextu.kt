@@ -693,14 +693,14 @@ class SlugbovyiaTextu {
         }
         datMinALL.forEach {
             if (it.pasxa) {
-                if (day == it.day && it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA) {
+                if (day == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
                     return true
                 }
             } else {
                 if (checkSunDay && getFictionalDay(dayOfYear) == it.day && it.sluzba == VIACZERNIA_SUNDAY_2412) {
                     return true
                 }
-                if (getFictionalDay(dayOfYear) == it.day && it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA) {
+                if (getFictionalDay(dayOfYear) == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
                     return true
                 }
             }

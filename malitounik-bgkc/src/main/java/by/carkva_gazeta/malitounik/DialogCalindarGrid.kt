@@ -25,11 +25,12 @@ import java.util.GregorianCalendar
 class DialogCalindarGrid : DialogFragment() {
 
     companion object {
-        fun getInstance(post: Int, ton: Int, denNedzeli: Int, data: Int, mun: Int, raznicia: Int, svityiaName: String, year: Int, datareal: Int, munreal: Int, dayOfYear: String): DialogCalindarGrid {
+        fun getInstance(post: Int, ton: Int, denNedzeliUtran: Int, denNedzeli: Int, data: Int, mun: Int, raznicia: Int, svityiaName: String, year: Int, datareal: Int, munreal: Int, dayOfYear: String): DialogCalindarGrid {
             val bundle = Bundle()
             bundle.putInt("post", post)
             bundle.putInt("ton", ton)
             bundle.putInt("denNedzeli", denNedzeli)
+            bundle.putInt("denNedzeliUtran", denNedzeliUtran)
             bundle.putInt("data", data)
             bundle.putInt("mun", mun)
             bundle.putInt("year", year)
@@ -51,6 +52,7 @@ class DialogCalindarGrid : DialogFragment() {
     private var post = 0
     private var ton = 0
     private var denNedzeli = Calendar.SUNDAY
+    private var denNedzeliUtran = Calendar.SUNDAY
     private var data = 1
     private var mun = 1
     private var datareal = 1
@@ -144,6 +146,7 @@ class DialogCalindarGrid : DialogFragment() {
             post = arguments?.getInt("post") ?: 0
             ton = arguments?.getInt("ton") ?: 0
             denNedzeli = arguments?.getInt("denNedzeli") ?: Calendar.SUNDAY
+            denNedzeliUtran = arguments?.getInt("denNedzeliUtran") ?: Calendar.SUNDAY
             data = arguments?.getInt("data") ?: 1
             mun = arguments?.getInt("mun") ?: 1
             datareal = arguments?.getInt("datareal") ?: 1
@@ -230,7 +233,7 @@ class DialogCalindarGrid : DialogFragment() {
             holder.mText.text = text
             holder.itemView.tag = mItemList[position]
             when {
-                mItemList[position] == 4 && !(slugba.checkUtran(raznicia, dayOfYear.toInt()) || denNedzeli == Calendar.SUNDAY) -> {
+                mItemList[position] == 4 && !(slugba.checkUtran(raznicia, dayOfYear.toInt()) || denNedzeliUtran == Calendar.SUNDAY) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
@@ -482,7 +485,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 }
                             }
 
-                            denNedzeli == Calendar.SUNDAY -> {
+                            denNedzeliUtran == Calendar.SUNDAY -> {
                                 val intent = Intent()
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("title", "Ютрань нядзельная (у скароце)")

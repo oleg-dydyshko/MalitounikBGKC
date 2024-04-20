@@ -1184,7 +1184,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val stringBS2 = "«Адзінародны Сыне» (↓ гл. тут)"
             val strLigBS2 = stringBS2.length
             val bst2 = text.indexOf(stringBS2)
-            if (bst2 != -1) { //text.setSpan(ImageSpan(this@Bogashlugbovya, by.carkva_gazeta.malitounik.R.drawable.maria), bst2 + 21, bst2 + 22, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            if (bst2 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         binding.textView.layout?.let { layout ->

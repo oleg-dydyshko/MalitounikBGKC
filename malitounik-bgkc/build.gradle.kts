@@ -11,8 +11,8 @@ android {
         applicationId =  "by.carkva_gazeta.malitounik"
         minSdk = 19
         targetSdk = 34
-        versionCode = 442261
-        versionName = "4.4.4.5"
+        versionCode = 442262
+        versionName = "4.4.4.6"
 
         //multiDexEnabled = true
 
@@ -77,7 +77,7 @@ dependencies {
     implementation ("androidx.media3:media3-exoplayer:1.3.1")
     implementation ("androidx.media3:media3-exoplayer-smoothstreaming:1.3.1")
     implementation ("androidx.media:media:1.7.0")
-    implementation ("androidx.core:core-ktx:1.12.0")
+    implementation ("androidx.core:core-ktx:1.13.0")
     //implementation ("androidx.multidex:multidex:2.0.1")
     testImplementation ("junit:junit:4.13.2")
     androidTestImplementation ("androidx.test.ext:junit:1.1.5")

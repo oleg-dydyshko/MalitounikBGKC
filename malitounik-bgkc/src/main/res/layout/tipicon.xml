@@ -51,8 +51,8 @@
 
                 <ImageView
                     android:id="@+id/image1"
-                    android:layout_width="20sp"
-                    android:layout_height="20sp"
+                    android:layout_width="25sp"
+                    android:layout_height="25sp"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/Vial_Dvun"
                     android:src="@drawable/znaki_krest_v_kruge" />
@@ -80,8 +80,8 @@
 
                 <ImageView
                     android:id="@+id/image2"
-                    android:layout_width="20sp"
-                    android:layout_height="20sp"
+                    android:layout_width="25sp"
+                    android:layout_height="25sp"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/Z_Lic_na_ve"
                     android:src="@drawable/znaki_krest_v_polukruge" />
@@ -109,8 +109,8 @@
 
                 <ImageView
                     android:id="@+id/image3"
-                    android:layout_width="20sp"
-                    android:layout_height="20sp"
+                    android:layout_width="25sp"
+                    android:layout_height="25sp"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/Z_v_v_v_u_n_u"
                     android:src="@drawable/znaki_krest" />
@@ -138,8 +138,8 @@
 
                 <ImageView
                     android:id="@+id/image4"
-                    android:layout_width="20sp"
-                    android:layout_height="20sp"
+                    android:layout_width="25sp"
+                    android:layout_height="25sp"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/Z_sh_v_v_u_u"
                     android:src="@drawable/znaki_ttk" />
@@ -167,8 +167,8 @@
 
                 <ImageView
                     android:id="@+id/imageView14"
-                    android:layout_width="20sp"
-                    android:layout_height="20sp"
+                    android:layout_width="25sp"
+                    android:layout_height="25sp"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/Z_sh_v_m_u_u"
                     android:src="@drawable/znaki_ttk_black" />

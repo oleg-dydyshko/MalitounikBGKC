@@ -47,7 +47,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
-    private var autoDzenNoch = false
+    //private var autoDzenNoch = false
     private var checkDzenNoch = false
     private var mLastClickTime: Long = 0
     private var startTimeJob1: Job? = null
@@ -102,7 +102,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putLong("mLastClickTime", mLastClickTime)
-        outState.putBoolean("autoDzenNoch", autoDzenNoch)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,12 +121,11 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (savedInstanceState != null) {
             mLastClickTime = savedInstanceState.getLong("mLastClickTime")
-            autoDzenNoch = savedInstanceState.getBoolean("autoDzenNoch")
-        }
-        if (k.getBoolean("auto_dzen_noch", false)) {
-            autoDzenNoch = startAutoDzenNoch
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
+        if (k.getBoolean("auto_dzen_noch", false)) {
+            dzenNoch = startAutoDzenNoch
+        }
         checkDzenNoch = getBaseDzenNoch()
         setMyTheme()
         if (checkmodulesBiblijateka()) {
@@ -163,19 +161,12 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     }
 
     open fun setMyTheme() {
-        if (k.getBoolean("auto_dzen_noch", false)) {
-            if (autoDzenNoch) setTheme(R.style.AppCompatDark)
-        } else {
-            if (dzenNoch) setTheme(R.style.AppCompatDark)
-        }
+        if (dzenNoch) setTheme(R.style.AppCompatDark)
     }
 
     fun getCheckDzenNoch() = checkDzenNoch
 
-    fun getBaseDzenNoch(): Boolean {
-        return if (k.getBoolean("auto_dzen_noch", false)) autoDzenNoch
-        else dzenNoch
-    }
+    fun getBaseDzenNoch() = dzenNoch
 
     fun setFontInterface(textSizePixel: Float, isTextSizeSp: Boolean = false): Float {
         var sp = if (isTextSizeSp) textSizePixel
@@ -226,7 +217,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         }
         when {
             sensorValue <= 4f -> {
-                if (!autoDzenNoch) {
+                if (!dzenNoch) {
                     startTimeJob2?.cancel()
                     startTimeJob4?.cancel()
                     if (startTimeJob1?.isActive != true) {
@@ -239,7 +230,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
             }
 
             sensorValue >= 21f -> {
-                if (autoDzenNoch) {
+                if (dzenNoch) {
                     startTimeJob1?.cancel()
                     startTimeJob4?.cancel()
                     if (startTimeJob2?.isActive != true) {
@@ -252,12 +243,12 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
             }
 
             else -> {
-                if (autoDzenNoch != startAutoDzenNoch) {
+                if (dzenNoch != startAutoDzenNoch) {
                     startTimeJob2?.cancel()
                     startTimeJob1?.cancel()
                     if (startTimeJob4?.isActive != true) {
                         startTimeJob4 = CoroutineScope(Dispatchers.Main).launch {
-                            timeJob(!autoDzenNoch)
+                            timeJob(!dzenNoch)
                         }
                     }
                 }
@@ -268,7 +259,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     private fun timeJob(isDzenNoch: Boolean) {
         startTimeDelay = 5000
         mLastClickTime = SystemClock.elapsedRealtime()
-        autoDzenNoch = isDzenNoch
         startAutoDzenNoch = isDzenNoch
         dzenNoch = isDzenNoch
         recreate()

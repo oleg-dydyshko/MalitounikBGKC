@@ -101,8 +101,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private var resetTollbarJob: Job? = null
     private var resetScreenJob: Job? = null
     private var diffScroll = false
-    private var aliert8 = ""
-    private var aliert9 = ""
     private var findPosition = 0
     private var firstTextPosition = ""
     private val findListSpans = ArrayList<ArrayList<SpanStr>>()
@@ -607,8 +605,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 if (diffScroll) {
                     autoscroll = false
                     stopAutoScroll()
-                    invalidateOptionsMenu()
                 }
+                invalidateOptionsMenu()
             }
 
             override fun onTouch(action: Boolean) {
@@ -724,6 +722,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
         val liturgia = resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica" || resurs == "vialikdzien_liturhija"
+        var aliert8 = ""
+        var aliert9 = ""
         val res = withContext(Dispatchers.IO) {
             zmenyiaChastki.setDzenNoch(dzenNoch)
             chechZmena = false
@@ -906,31 +906,31 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val ch5 = runZmennyiaChastki(text, ch4)
             runZmennyiaChastki(text, ch5)
         }
-        var string = aliert8
+        if (aliert8.isNotEmpty()) {
+            val t1 = text.indexOf(aliert8)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia = DialogLiturgia.getInstance(8, c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR])
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, t1, t1 + aliert8.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
+        if (aliert9.isNotEmpty()) {
+            val t1 = text.indexOf(aliert9)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia = DialogLiturgia.getInstance(9, c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR])
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, t1, t1 + aliert9.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
+        var string = "Пасьля чытаецца ікас 1 і кандак 1."
         var strLig = string.length
         var t1 = text.indexOf(string)
-        if (t1 != -1) {
-            text.setSpan(object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    val dialogLiturgia = DialogLiturgia.getInstance(8, c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR])
-                    dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
-                }
-            }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-        string = aliert9
-        strLig = string.length
-        t1 = text.indexOf(string)
-        if (t1 != -1) {
-            text.setSpan(object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    val dialogLiturgia = DialogLiturgia.getInstance(9, c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR])
-                    dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
-                }
-            }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-        string = "Пасьля чытаецца ікас 1 і кандак 1."
-        strLig = string.length
-        t1 = text.indexOf(string)
         if (t1 != -1) {
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {

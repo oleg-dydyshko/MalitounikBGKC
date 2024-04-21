@@ -1315,7 +1315,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 setlightSensor()
                 if (getCheckDzenNoch() != dzenNoch) recreate()
             } else {
-                val check = getBaseDzenNoch()
+                val check = k.getBoolean("dzen_noch", false)
                 prefEditor.putBoolean("auto_dzen_noch", false)
                 removelightSensor()
                 if (checkedId == R.id.day) {

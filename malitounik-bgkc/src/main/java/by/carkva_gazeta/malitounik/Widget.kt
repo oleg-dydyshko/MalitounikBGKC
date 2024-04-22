@@ -269,7 +269,7 @@ class Widget : AppWidgetProvider() {
                 dataSviatyia = dataSviatyia + "<br><strong>" + context.getString(R.string.pamerlyia) + "</strong>"
             }
             if (dataSviatyia != "") {
-                if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
+                if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#ff6666")
                 updateViews.setTextViewText(R.id.textSviatyia, MainActivity.fromHtml(dataSviatyia))
                 updateViews.setViewVisibility(R.id.textSviatyia, View.VISIBLE)
             }

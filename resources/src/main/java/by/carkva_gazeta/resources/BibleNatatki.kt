@@ -296,7 +296,7 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
             view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
                 BibleArrayAdapterParallel.colors[0] = "#FFFFFF"
-                BibleArrayAdapterParallel.colors[1] = "#f44336"
+                BibleArrayAdapterParallel.colors[1] = "#ff6666"
                 view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)

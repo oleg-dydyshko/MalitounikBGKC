@@ -120,12 +120,6 @@ class PageFragmentMonth : BaseFragment() {
         activity?.let { activity ->
             if (dzenNoch) {
                 binding.textView2.setBackgroundResource(R.drawable.calendar_red_black)
-                binding.button1.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
-                binding.button8.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
-                binding.button15.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
-                binding.button22.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
-                binding.button29.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
-                binding.button36.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
             }
             val c = Calendar.getInstance()
             var munTudey = false

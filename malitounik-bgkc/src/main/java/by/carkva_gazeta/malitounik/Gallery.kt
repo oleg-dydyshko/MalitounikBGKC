@@ -400,7 +400,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
                 if (day == strings[0].toInt() && mun == strings[1].toInt()) {
                     try {
                         var res = strings[2]
-                        if (dzenNoch) res = res.replace("#d00505", "#f44336")
+                        if (dzenNoch) res = res.replace("#d00505", "#ff6666")
                         val t1 = res.indexOf("<strong>")
                         val t2 = res.indexOf("</strong>")
                         if (day == -1) {
@@ -453,7 +453,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
                 arrayList.addAll(gson.fromJson(builder, type))
                 res = arrayList[day - 1]
             } else return result
-            if (dzenNoch) res = res.replace("#d00505", "#f44336")
+            if (dzenNoch) res = res.replace("#d00505", "#ff6666")
             val title = ArrayList<String>()
             val listRes = res.split("<strong>")
             var sb = ""

@@ -18,7 +18,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             app:contentInsetStartWithNavigation="0sp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -170,8 +170,8 @@
 
     <ImageView
         android:id="@+id/action_back"
-        android:layout_width="40sp"
-        android:layout_height="40sp"
+        android:layout_width="48sp"
+        android:layout_height="48sp"
         android:layout_marginEnd="10sp"
         android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
@@ -186,8 +186,8 @@
 
     <ImageView
         android:id="@+id/action_fullscreen"
-        android:layout_width="40sp"
-        android:layout_height="40sp"
+        android:layout_width="48sp"
+        android:layout_height="48sp"
         android:layout_marginEnd="10sp"
         android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
@@ -202,8 +202,8 @@
 
     <ImageView
         android:id="@+id/action_minus"
-        android:layout_width="40sp"
-        android:layout_height="40sp"
+        android:layout_width="48sp"
+        android:layout_height="48sp"
         android:layout_marginEnd="10sp"
         android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
@@ -218,8 +218,8 @@
 
     <ImageView
         android:id="@+id/action_plus"
-        android:layout_width="40sp"
-        android:layout_height="40sp"
+        android:layout_width="48sp"
+        android:layout_height="48sp"
         android:layout_marginEnd="10sp"
         android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"

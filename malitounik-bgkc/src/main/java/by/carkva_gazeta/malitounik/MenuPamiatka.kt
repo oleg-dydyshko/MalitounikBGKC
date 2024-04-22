@@ -74,7 +74,7 @@ class MenuPamiatka : BaseListFragment() {
             reader.use { bufferedReader ->
                 bufferedReader.forEachLine {
                     line = it
-                    if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                    if (dzenNoch) line = line.replace("#d00505", "#ff6666")
                     data.add(line)
                 }
             }

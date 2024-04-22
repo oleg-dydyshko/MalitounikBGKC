@@ -47,7 +47,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
-    //private var autoDzenNoch = false
     private var checkDzenNoch = false
     private var mLastClickTime: Long = 0
     private var startTimeJob1: Job? = null
@@ -123,9 +122,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
             mLastClickTime = savedInstanceState.getLong("mLastClickTime")
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
-        if (k.getBoolean("auto_dzen_noch", false)) {
-            dzenNoch = startAutoDzenNoch
-        }
         checkDzenNoch = getBaseDzenNoch()
         setMyTheme()
         if (checkmodulesBiblijateka()) {
@@ -164,7 +160,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         if (dzenNoch) setTheme(R.style.AppCompatDark)
     }
 
-    fun getCheckDzenNoch() = checkDzenNoch
+   fun getCheckDzenNoch() = checkDzenNoch
 
     fun getBaseDzenNoch() = dzenNoch
 
@@ -261,6 +257,11 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         mLastClickTime = SystemClock.elapsedRealtime()
         startAutoDzenNoch = isDzenNoch
         dzenNoch = isDzenNoch
+        if (k.getBoolean("auto_dzen_noch", false)) {
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("dzen_noch", getCheckDzenNoch())
+            prefEditor.apply()
+        }
         recreate()
     }
 
@@ -277,6 +278,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         val mySensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
         mySensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_UI)
+        startAutoDzenNoch = dzenNoch
     }
 
     fun removelightSensor() {

@@ -63,7 +63,7 @@ class Onas : BaseActivity() {
         reader.use { bufferedReader ->
             bufferedReader.forEachLine {
                 var line = it
-                if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                if (dzenNoch) line = line.replace("#d00505", "#ff6666")
                 if (line.contains("<!--<VERSION></VERSION>-->")) {
                     line = line.replace("<!--<VERSION></VERSION>-->", "<em>Версія праграмы: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})</em><br><br>")
                 }

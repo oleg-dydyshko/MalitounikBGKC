@@ -2613,7 +2613,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
 
         fun getColors(dzenNoch: Boolean, color: Int): String {
             if (dzenNoch) {
-                colors[0] = "#f44336"
+                colors[0] = "#ff6666"
             } else {
                 colors[0] = "#D00505"
             }

@@ -547,7 +547,7 @@ internal class ZmenyiaChastki {
         var result: String
         reader.forEachLine {
             result = it
-            if (dzenNoch) result = result.replace("#d00505", "#f44336")
+            if (dzenNoch) result = result.replace("#d00505", "#ff6666")
             builder.append(result)
         }
         isr.close()

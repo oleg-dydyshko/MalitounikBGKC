@@ -108,7 +108,7 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
             else viewHolder.textCalendar.text = mContext.getString(R.string.tydzen_name2, nedelName[niadzelia[position][0].toInt()], niadzelia[position][1], munName[niadzelia[position][2].toInt()])
             var sviatyia = niadzelia[position][4]
             if (dzenNoch) {
-                sviatyia = sviatyia.replace("#d00505", "#f44336")
+                sviatyia = sviatyia.replace("#d00505", "#ff6666")
             }
             viewHolder.textSviat.text = MainActivity.fromHtml(sviatyia)
             if (niadzelia[position][4].contains("no_sviatyia")) viewHolder.textSviat.visibility = View.GONE

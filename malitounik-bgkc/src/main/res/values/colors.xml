@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#D00505</color>
-    <color name="colorPrimary_black">#f44336</color>
-    <color name="colorPrimary_black2">#f4776e</color>
+    <color name="colorPrimary_black">#ff6666</color>
+    <color name="colorPrimary_black2">#ff9999</color>
     <color name="colorPrimaryDark">#660000</color>
     <color name="colorPrimary_text">#000000</color>
     <color name="colorSecondary_text">#999999</color>
@@ -23,8 +23,8 @@
     <color name="colorforeground_material_light">#000000</color>
     <color name="color_ten">#80000000</color>
     <color name="colorPrimaryMaranAta">#4DD00505</color>
-    <color name="colorPrimary_blackMaranAta">#4Df44336</color>
-    <color name="colorPrimary_blackMaranAta2">#4Df4776e</color>
+    <color name="colorPrimary_blackMaranAta">#4Dff6666</color>
+    <color name="colorPrimary_blackMaranAta2">#4Dff9999</color>
     <color name="radyjo_maryia">#006aa8</color>
     <color name="color_widget_mun">#606060</color>
     <!--<color name="colorIconsDialog">#FCFFFFFF</color>-->

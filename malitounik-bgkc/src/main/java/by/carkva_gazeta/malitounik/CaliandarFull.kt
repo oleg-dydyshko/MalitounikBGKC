@@ -175,7 +175,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     else -> null
                 }
                 var dataSviatyia = MenuCaliandar.getPositionCaliandar(position)[4]
-                if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
+                if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#ff6666")
                 val sviatyia = MainActivity.fromHtml(dataSviatyia).toSpannable()
                 if (drawer != null) {
                     binding.znakTipicona2.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {

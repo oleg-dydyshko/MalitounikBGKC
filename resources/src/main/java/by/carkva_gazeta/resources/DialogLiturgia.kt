@@ -124,7 +124,7 @@ class DialogLiturgia : DialogFragment() {
                 var line: String
                 reader.forEachLine {
                     line = it
-                    if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                    if (dzenNoch) line = line.replace("#d00505", "#ff6666")
                     builder.append(line).append("\n")
                 }
                 inputStream.close()

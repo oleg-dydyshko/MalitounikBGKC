@@ -77,7 +77,7 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
         reader.use { bufferedReader ->
             bufferedReader.forEachLine {
                 var line = it
-                if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                if (dzenNoch) line = line.replace("#d00505", "#ff6666")
                 builder.append(line)
             }
         }

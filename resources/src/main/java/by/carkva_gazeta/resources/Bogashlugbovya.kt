@@ -734,7 +734,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val dayOfWeek = c.get(Calendar.DAY_OF_WEEK)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
-            val color = if (dzenNoch) "<font color=\"#f44336\">"
+            val color = if (dzenNoch) "<font color=\"#ff6666\">"
             else "<font color=\"#d00505\">"
             val slugbovyiaTextu = SlugbovyiaTextu()
             raznica = zmenyiaChastki.raznica()
@@ -760,7 +760,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             invalidateOptionsMenu()
             reader.forEachLine {
                 var line = it
-                if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                if (dzenNoch) line = line.replace("#d00505", "#ff6666")
                 line = line.replace("NOCH", "")
                 when {
                     resurs.contains("ton") -> {

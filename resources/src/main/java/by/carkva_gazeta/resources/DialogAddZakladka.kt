@@ -67,7 +67,7 @@ class DialogAddZakladka : DialogFragment() {
             val builder = AlertDialog.Builder(it, style)
             if (dzenNoch) {
                 BibleArrayAdapterParallel.colors[0] = "#FFFFFF"
-                BibleArrayAdapterParallel.colors[1] = "#f44336"
+                BibleArrayAdapterParallel.colors[1] = "#ff6666"
                 binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             } else {
                 BibleArrayAdapterParallel.colors[0] = "#000000"

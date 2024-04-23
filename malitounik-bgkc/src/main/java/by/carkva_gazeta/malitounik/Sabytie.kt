@@ -2307,7 +2307,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 holder.mText.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
             holder.mText.text = getString(R.string.sabytie_data_name, padzeia.dat, padzeia.padz)
-            holder.color.setBackgroundColor(Color.parseColor(getColors(dzenNoch, padzeia.color)))
+            holder.color.setBackgroundColor(Color.parseColor(getColors(padzeia.color)))
             holder.buttonPopup.setOnClickListener {
                 showPopupMenu(it, position)
             }
@@ -2454,7 +2454,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolderColor
             }
-            viewHolder.text.setBackgroundColor(Color.parseColor(getColors(dzenNoch, position)))
+            viewHolder.text.setBackgroundColor(Color.parseColor(getColors(position)))
             viewHolder.text.text = nazvaPadzei
             viewHolder.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             viewHolder.text.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
@@ -2464,7 +2464,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = super.getDropDownView(position, convertView, parent)
             val text = view.findViewById<TextView>(R.id.label)
-            text.setBackgroundColor(Color.parseColor(getColors(dzenNoch, position)))
+            text.setBackgroundColor(Color.parseColor(getColors(position)))
             text.text = nazvaPadzei
             text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             text.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
@@ -2611,13 +2611,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         private val colors = Malitounik.applicationContext().resources.getStringArray(R.array.colors)
         var editCaliandar = false
 
-        fun getColors(dzenNoch: Boolean, color: Int): String {
-            if (dzenNoch) {
-                colors[0] = "#ff6666"
-            } else {
-                colors[0] = "#D00505"
-            }
-            return colors[color]
-        }
+        fun getColors(color: Int): String = colors[color]
     }
 }

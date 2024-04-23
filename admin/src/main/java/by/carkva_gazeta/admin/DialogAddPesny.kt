@@ -13,7 +13,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.DialogAddpesnyBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
@@ -56,7 +55,6 @@ class DialogAddPesny : DialogFragment() {
         activity?.let {
             _binding = DialogAddpesnyBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            binding.title.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.add_pesny_title)
             binding.content.requestFocus()
             binding.content.setOnEditorActionListener { editText, actionId, _ ->

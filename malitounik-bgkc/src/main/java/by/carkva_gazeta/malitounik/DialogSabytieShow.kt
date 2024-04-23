@@ -54,7 +54,7 @@ class DialogSabytieShow : DialogFragment() {
             _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             binding.title.text = title
-            binding.title.setBackgroundColor(Color.parseColor(Sabytie.getColors(dzenNoch, color)))
+            binding.title.setBackgroundColor(Color.parseColor(Sabytie.getColors(color)))
             val textR = if (konecSabytie) {
                 SpannableString(getString(R.string.sabytie_kali, data, time, res))
             } else {
@@ -63,13 +63,11 @@ class DialogSabytieShow : DialogFragment() {
             val t1 = textR.indexOf(res)
             if (dzenNoch) {
                 binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                if (paz)
-                    textR.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary_black)), t1, textR.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             } else {
                 binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                if (paz)
-                    textR.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary)), t1, textR.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
+            if (paz)
+                textR.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary)), t1, textR.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val am = it.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 if (!am.canScheduleExactAlarms() && res != getString(R.string.sabytie_no_pavedam)) {

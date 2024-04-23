@@ -54,8 +54,6 @@ class DialogDeliteAllZakladkiINatatki : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             builder = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = resources.getString(R.string.Trash).uppercase()
             binding.content.text = getString(R.string.delite_all_natatki_i_zakladki, zakladkaAlboNatatka)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))

@@ -14,7 +14,6 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogGallerySettingsBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
@@ -62,8 +61,6 @@ class DialogGallerySettings : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             setid = savedInstanceState?.getInt("setid") ?: k.getInt("gallerySettingsTime", 4)
             for (i in 1..10) {
                 arrayList.add(i)

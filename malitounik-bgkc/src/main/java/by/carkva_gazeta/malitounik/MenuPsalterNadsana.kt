@@ -42,9 +42,6 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
             binding.malitvaPosle.setOnClickListener(this)
             binding.pesni.setOnClickListener(this)
             binding.pravila.setOnClickListener(this)
-            if (dzenNoch) {
-                binding.psalter.setBackgroundResource(R.drawable.knopka_red_black)
-            }
             binding.textView1.setOnClickListener(this)
             binding.textView2.setOnClickListener(this)
             binding.textView3.setOnClickListener(this)

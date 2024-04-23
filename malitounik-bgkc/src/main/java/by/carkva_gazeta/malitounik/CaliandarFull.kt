@@ -49,7 +49,6 @@ import java.util.GregorianCalendar
 class CaliandarFull : BaseFragment(), View.OnClickListener {
     private val dzenNoch: Boolean
         get() = (requireActivity() as BaseActivity).getBaseDzenNoch()
-    private var rColorColorprimary = R.drawable.selector_red
     private var sabytieTitle = ""
     private var position = 0
     private var mLastClickTime: Long = 0
@@ -84,7 +83,6 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
             val monthName = it.resources.getStringArray(R.array.meciac)
             val c = Calendar.getInstance()
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            if (dzenNoch) rColorColorprimary = R.drawable.selector_red_dark
             val tileMe = BitmapDrawable(it.resources, BitmapFactory.decodeResource(resources, R.drawable.calendar_fon))
             tileMe.tileModeX = Shader.TileMode.REPEAT
             if (MenuCaliandar.getPositionCaliandar(position)[20].toInt() != 0) {
@@ -286,23 +284,23 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                 }
             }
             if (MenuCaliandar.getPositionCaliandar(position)[5].contains("1") || MenuCaliandar.getPositionCaliandar(position)[5].contains("2") || MenuCaliandar.getPositionCaliandar(position)[5].contains("3")) {
-                binding.textChisloCalendara.setBackgroundResource(rColorColorprimary)
+                binding.textChisloCalendara.setBackgroundResource(R.drawable.selector_red)
                 if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_red_black)
                 else binding.kniga.setImageResource(R.drawable.book_red)
                 binding.textChisloCalendara.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 if (MenuCaliandar.getPositionCaliandar(position)[7].toInt() != 3) {
                     binding.chytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    binding.chytanne.setBackgroundResource(rColorColorprimary)
+                    binding.chytanne.setBackgroundResource(R.drawable.selector_red)
                     binding.textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    binding.textChytanne.setBackgroundResource(rColorColorprimary)
+                    binding.textChytanne.setBackgroundResource(R.drawable.selector_red)
                     binding.textChytanneSviatyiaDop.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    binding.textChytanneSviatyiaDop.setBackgroundResource(rColorColorprimary)
+                    binding.textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_red)
                     binding.textChytanneSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    binding.textChytanneSviatyia.setBackgroundResource(rColorColorprimary)
+                    binding.textChytanneSviatyia.setBackgroundResource(R.drawable.selector_red)
                     binding.textPamerlyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    binding.textPamerlyia.setBackgroundResource(rColorColorprimary)
+                    binding.textPamerlyia.setBackgroundResource(R.drawable.selector_red)
                     binding.textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    binding.textBlaslavenne.setBackgroundResource(rColorColorprimary)
+                    binding.textBlaslavenne.setBackgroundResource(R.drawable.selector_red)
                 }
             }
             if (MenuCaliandar.getPositionCaliandar(position)[5].contains("2")) {
@@ -587,7 +585,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                         textViewT.typeface = MainActivity.createFont(Typeface.BOLD)
 
                         textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
-                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(dzenNoch, p.color)))
+                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(p.color)))
                         sabytieList.add(textViewT)
                         val textView = TextViewCustom(activity)
                         textView.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_text))

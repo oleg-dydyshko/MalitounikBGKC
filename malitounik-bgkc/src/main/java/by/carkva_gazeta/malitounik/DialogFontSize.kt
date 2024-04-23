@@ -68,7 +68,6 @@ class DialogFontSize : DialogFragment() {
             builder.setView(binding.root)
             val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             if (dzenNoch) {
-                binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 binding.textSize.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             }
             binding.textSize.text = getString(R.string.get_font, fontBiblia.toInt())

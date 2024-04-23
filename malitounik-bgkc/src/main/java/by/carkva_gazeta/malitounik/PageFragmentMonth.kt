@@ -19,8 +19,6 @@ class PageFragmentMonth : BaseFragment() {
     private var mun = 0
     private var year = 0
     private var pageNumberFull = 0
-    private val dzenNoch: Boolean
-        get() = (requireActivity() as BaseActivity).getBaseDzenNoch()
     private val data = ArrayList<ArrayList<String>>()
     private val padzei = ArrayList<Padzeia>()
     private var _binding: CalendarMunBinding? = null
@@ -220,21 +218,11 @@ class PageFragmentMonth : BaseFragment() {
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
-                                    if (dzenNoch) {
-                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_today_sabytie_black)
-                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red_today_black)
-                                    } else {
-                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_today)
-                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red_today)
-                                    }
+                                    if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_today)
+                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_red_today)
                                 } else {
-                                    if (dzenNoch) {
-                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_black)
-                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red_black)
-                                    } else {
-                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie)
-                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red)
-                                    }
+                                    if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie)
+                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_red)
                                 }
                                 getTextView(e).setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                                 getTextView(e).typeface = MainActivity.createFont(Typeface.BOLD)
@@ -242,21 +230,11 @@ class PageFragmentMonth : BaseFragment() {
 
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
-                                    if (dzenNoch) {
-                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_today_sabytie_black)
-                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red_today_black)
-                                    } else {
-                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_today)
-                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red_today)
-                                    }
+                                    if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_today)
+                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_red_today)
                                 } else {
-                                    if (dzenNoch) {
-                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_black)
-                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red_black)
-                                    } else {
-                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie)
-                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red)
-                                    }
+                                    if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie)
+                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_red)
                                 }
                                 getTextView(e).setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                                 getTextView(e).typeface = MainActivity.createFont(Typeface.NORMAL)

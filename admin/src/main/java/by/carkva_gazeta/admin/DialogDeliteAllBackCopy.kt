@@ -42,7 +42,6 @@ class DialogDeliteAllBackCopy : DialogFragment() {
         activity?.let {
             _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it, R.style.AlertDialogTheme)
-            binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = resources.getString(R.string.remove)
             binding.content.text = getString(R.string.del_all_back_copy)
             binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))

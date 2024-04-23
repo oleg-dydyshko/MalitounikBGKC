@@ -42,7 +42,6 @@ class DialogFileNameError : DialogFragment() {
         activity?.let {
             _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it, R.style.AlertDialogTheme)
-            binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = getString(R.string.error_up)
             binding.content.setText(R.string.file_name_error)
             binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))

@@ -14,11 +14,10 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogSpinnerDisplayBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
-import java.util.*
+import java.util.Calendar
 
 class DialogPrazdnik : DialogFragment() {
     private var setid = 10
@@ -62,8 +61,6 @@ class DialogPrazdnik : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = resources.getString(R.string.carkva_sviaty)
             val c = Calendar.getInstance()
             if (savedInstanceState != null) {

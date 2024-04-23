@@ -62,8 +62,6 @@ class DialogBibleRazdel : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             builder = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = resources.getString(R.string.data_search, fullGlav)
             binding.content.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(3) }
             if (savedInstanceState != null) {

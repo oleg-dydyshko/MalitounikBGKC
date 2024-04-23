@@ -34,8 +34,6 @@ class DialogTipicon : DialogFragment() {
             binding.textView8.text = dvunaIVial
             if (dzenNoch) {
                 binding.imageView14.setImageResource(R.drawable.znaki_ttk_whate)
-                binding.textView5.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                binding.textView13.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 binding.textView1.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 binding.textView7.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 binding.textView8.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))

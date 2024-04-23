@@ -45,8 +45,6 @@ class DialogClearHishory : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = resources.getString(R.string.clean_histopy_title)
             if ((arguments?.getString("itemName") ?: "") == "")
                 binding.content.text = getString(R.string.all_clean_histopy)

@@ -87,9 +87,6 @@ class MyNatatki : DialogFragment() {
                 redak = arguments?.getInt("redak", 3) ?: 3
                 position = arguments?.getInt("position", 0) ?: 0
             }
-            if (dzenNoch) {
-                binding.file.setBackgroundResource(R.color.colorPrimary_black)
-            }
             binding.EditText.tag = binding.EditText.keyListener
             binding.file.tag = binding.file.keyListener
             when (redak) {

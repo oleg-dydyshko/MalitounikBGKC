@@ -46,10 +46,8 @@ class DialogTraparyAndKandaki : DialogFragment() {
             val builder = AlertDialog.Builder(activity, style)
             builder.setView(binding.root)
             if (dzenNoch) {
-                binding.title.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
                 binding.listView.selector = ContextCompat.getDrawable(activity, R.drawable.selector_dark)
             } else {
-                binding.title.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary))
                 binding.listView.selector = ContextCompat.getDrawable(activity, R.drawable.selector_default)
             }
             val title = arguments?.getStringArrayList("title") ?: ArrayList<String>()

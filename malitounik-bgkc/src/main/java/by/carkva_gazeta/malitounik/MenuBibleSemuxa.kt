@@ -138,10 +138,6 @@ class MenuBibleSemuxa : BaseFragment() {
                 val semukha = DialogAlesyaSemukha()
                 semukha.show(childFragmentManager, "Alesya_Semukha")
             }
-            if (dzenNoch) {
-                binding.novyZavet.setBackgroundResource(R.drawable.knopka_red_black)
-                binding.staryZavet.setBackgroundResource(R.drawable.knopka_red_black)
-            }
         }
     }
 }

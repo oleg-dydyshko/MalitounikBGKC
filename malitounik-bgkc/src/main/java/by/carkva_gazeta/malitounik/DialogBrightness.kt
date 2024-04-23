@@ -52,7 +52,6 @@ class DialogBrightness : DialogFragment() {
             val builder = AlertDialog.Builder(it, style)
             builder.setView(binding.root)
             if (dzenNoch) {
-                binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 binding.textSize.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             }
             binding.title.text = resources.getString(R.string.Bright3)

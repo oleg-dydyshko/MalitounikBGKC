@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogListviewDisplayBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
-import java.util.*
+import java.util.Calendar
 
 class DialogCaliandarMunDate : DialogFragment() {
     private var mListener: DialogCaliandarMunDateListener? = null
@@ -58,8 +58,6 @@ class DialogCaliandarMunDate : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             if (dzenNoch) binding.content.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
             else binding.content.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
             val arrayList = ArrayList<String>()

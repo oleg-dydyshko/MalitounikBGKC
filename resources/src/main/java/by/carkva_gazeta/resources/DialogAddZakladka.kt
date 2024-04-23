@@ -13,7 +13,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.R
@@ -68,11 +67,9 @@ class DialogAddZakladka : DialogFragment() {
             if (dzenNoch) {
                 BibleArrayAdapterParallel.colors[0] = "#FFFFFF"
                 BibleArrayAdapterParallel.colors[1] = "#ff6666"
-                binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             } else {
                 BibleArrayAdapterParallel.colors[0] = "#000000"
                 BibleArrayAdapterParallel.colors[1] = "#D00505"
-                binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             }
             binding.title.text = resources.getString(R.string.add_color_zakladka)
             binding.content.adapter = ColorAdapter(it)

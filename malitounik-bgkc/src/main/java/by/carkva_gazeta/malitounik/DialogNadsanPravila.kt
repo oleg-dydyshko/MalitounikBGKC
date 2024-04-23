@@ -28,8 +28,6 @@ class DialogNadsanPravila : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) 
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = resources.getString(R.string.peryiady).uppercase()
             val inputStream = resources.openRawResource(R.raw.nadsan_periody)
             val isr = InputStreamReader(inputStream)

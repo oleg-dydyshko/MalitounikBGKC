@@ -67,8 +67,6 @@ class DialogBibliateka : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             builder = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), listPosition)
             if (file.exists()) {
                 binding.title.text = getString(R.string.opisanie).uppercase()

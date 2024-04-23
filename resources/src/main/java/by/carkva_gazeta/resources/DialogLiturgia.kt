@@ -50,8 +50,6 @@ class DialogLiturgia : DialogFragment() {
             if (dzenNoch) style = by.carkva_gazeta.malitounik.R.style.AlertDialogThemeBlack
             ab = AlertDialog.Builder(activity, style)
             val builder = StringBuilder()
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary))
             val r = activity.resources
             var inputStream: InputStream = r.openRawResource(R.raw.bogashlugbovya1_1)
             when (chast) {

@@ -47,9 +47,6 @@ class DialogMineiaList : DialogFragment() {
             val builder = AlertDialog.Builder(it, style)
             binding = DialogListviewDisplayBinding.inflate(LayoutInflater.from(it))
             builder.setView(binding.root)
-            if (dzenNoch) {
-                binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            }
             val fileList = ArrayList<SlugbovyiaTextuData>()
             val dayOfYear = arguments?.getString("dayOfYear") ?: "1"
             val pasxa = arguments?.getBoolean("pasxa") ?: false

@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
@@ -64,8 +63,6 @@ class DialogBibleNatatkaEdit : DialogFragment() {
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             ad = AlertDialog.Builder(it, style)
             var editText = ""
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.setText(R.string.natatka_bersha_biblii)
             if (semuxa == 1) {
                 editText = BibleGlobalList.natatkiSemuxa[position].list[5]

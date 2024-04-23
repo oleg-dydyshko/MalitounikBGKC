@@ -48,8 +48,6 @@ class DialogOpisanieWIFI : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             builder = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.setText(R.string.wifi_error)
             size = arguments?.getFloat("size", 0f) ?: 0f
             val sizeImage = if (size == 0f) {

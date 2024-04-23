@@ -44,7 +44,6 @@ class CheckLogin : DialogFragment() {
             alert = builder.create()
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) {
-                binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 binding.username.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 binding.password.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 binding.ok.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))

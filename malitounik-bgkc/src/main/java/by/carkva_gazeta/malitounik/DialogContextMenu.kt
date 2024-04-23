@@ -50,8 +50,6 @@ class DialogContextMenu : DialogFragment() {
             _binding = DialogContextDisplayBinding.inflate(LayoutInflater.from(it))
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             val builder = AlertDialog.Builder(it)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = name
             binding.content.text = getString(R.string.redagaktirovat)
             if (dzenNoch) {

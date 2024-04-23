@@ -5,7 +5,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogUpdateMalitounikBinding
 import java.text.DecimalFormat
@@ -46,7 +45,6 @@ class DialogUpdateMalitounik : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             val title = arguments?.getString("title", getString(R.string.update_title)) ?: getString(R.string.update_title)
             binding.title.text = title
             builder.setView(binding.root)

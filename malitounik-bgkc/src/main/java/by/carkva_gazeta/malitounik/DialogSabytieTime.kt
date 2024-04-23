@@ -8,10 +8,9 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogSettimeDisplayBinding
-import java.util.*
+import java.util.Calendar
 
 class DialogSabytieTime : DialogFragment() {
 
@@ -49,8 +48,6 @@ class DialogSabytieTime : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val ad = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = getString(R.string.set_time_sabytie)
             binding.content.setIs24HourView(true)
             val settime = arguments?.getString("time")?.split(":")

@@ -114,7 +114,7 @@ class DialogSabytieShowInMun : DialogFragment() {
                         textViewT.setPadding(10 * density, 5 * density, 5 * density, 5 * density)
                         textViewT.typeface = MainActivity.createFont(Typeface.BOLD)
                         textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(dzenNoch, p.color)))
+                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(p.color)))
                         sabytieList.add(textViewT)
                         val textView = TextViewCustom(it)
                         textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))

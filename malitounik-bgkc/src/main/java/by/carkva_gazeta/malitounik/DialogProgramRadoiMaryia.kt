@@ -54,8 +54,7 @@ class DialogProgramRadoiMaryia : DialogFragment() {
                 var style = R.style.AlertDialogTheme
                 if (dzenNoch) style = R.style.AlertDialogThemeBlack
                 val builder = AlertDialog.Builder(activity, style)
-                if (dzenNoch) it.title.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
-                else it.title.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary))
+                it.title.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary))
                 it.title.text = getString(R.string.program_radio_maryia)
                 sendTitlePadioMaryia()
                 it.content.textSize = SettingsActivity.GET_FONT_SIZE_DEFAULT

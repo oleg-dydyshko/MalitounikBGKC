@@ -66,8 +66,6 @@ class DialogBibleNatatka : DialogFragment() {
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             ad = AlertDialog.Builder(fragmentActivity, style)
             var editText = ""
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary))
             binding.title.setText(R.string.natatka_bersha_biblii)
             if (novyzavet)
                 nov = "1"

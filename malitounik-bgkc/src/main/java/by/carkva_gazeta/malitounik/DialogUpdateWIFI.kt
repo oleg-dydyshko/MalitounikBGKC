@@ -48,8 +48,6 @@ class DialogUpdateWIFI : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             builder = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.setText(R.string.update_title2)
             size = arguments?.getFloat("size", 0f) ?: 0f
             val sizeProgram = if (size == 0f) {

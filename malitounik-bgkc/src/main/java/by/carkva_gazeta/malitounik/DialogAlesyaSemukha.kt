@@ -29,8 +29,6 @@ class DialogAlesyaSemukha : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             ad = AlertDialog.Builder(it, style)
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.setText(R.string.alesyaSemukha)
             val inputStream = resources.openRawResource(R.raw.all_rights_reserved)
             val isr = InputStreamReader(inputStream)

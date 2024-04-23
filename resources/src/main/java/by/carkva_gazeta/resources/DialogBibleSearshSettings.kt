@@ -16,7 +16,6 @@ import android.widget.ArrayAdapter
 import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.R
@@ -73,8 +72,6 @@ class DialogBibleSearshSettings : DialogFragment() {
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             builder = AlertDialog.Builder(it, style)
             val textViewZaglavie = binding.title
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             textViewZaglavie.text = resources.getString(R.string.settings_poshuk)
             val checkBox = binding.checkBox
             if (savedInstanceState == null) {

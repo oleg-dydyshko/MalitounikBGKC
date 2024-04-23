@@ -118,9 +118,6 @@ class PageFragmentMonth : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let { activity ->
-            if (dzenNoch) {
-                binding.textView2.setBackgroundResource(R.drawable.calendar_red_black)
-            }
             val c = Calendar.getInstance()
             var munTudey = false
             if (mun == c[Calendar.MONTH] && year == c[Calendar.YEAR]) munTudey = true

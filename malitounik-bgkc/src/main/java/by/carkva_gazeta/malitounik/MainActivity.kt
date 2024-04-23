@@ -2232,9 +2232,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         fun toastView(context: Context, message: String, toastLength: Int = Toast.LENGTH_SHORT) {
             val layout = ToastBinding.inflate(LayoutInflater.from(context))
             layout.textView.text = message
-            val dzenNoch = (context as? BaseActivity)?.getBaseDzenNoch() ?: false
-            if (dzenNoch) layout.toastRoot.setBackgroundResource(R.color.colorPrimary_black)
-            else layout.toastRoot.setBackgroundResource(R.color.colorPrimary)
+            layout.toastRoot.setBackgroundResource(R.color.colorPrimary)
             val mes = Toast(context)
             mes.duration = toastLength
             mes.view = layout.root

@@ -15,7 +15,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.CalaindarNedelBinding
 import by.carkva_gazeta.malitounik.databinding.CaliandarNedzeliaBinding
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
     private var year = 0
@@ -141,7 +142,7 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
             }
             if (niadzelia[position][5].contains("1") || niadzelia[position][5].contains("2") || niadzelia[position][5].contains("3")) {
                 viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
-                if (dzenNoch) viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black)) else viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+                viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
             }
             if (niadzelia[position][5].contains("2")) {
                 viewHolder.textPraz.typeface = MainActivity.createFont(Typeface.NORMAL)

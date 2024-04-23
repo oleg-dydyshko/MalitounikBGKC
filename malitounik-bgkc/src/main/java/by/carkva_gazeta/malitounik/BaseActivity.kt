@@ -47,7 +47,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
-    private var checkDzenNoch = false
     private var mLastClickTime: Long = 0
     private var startTimeJob1: Job? = null
     private var startTimeJob2: Job? = null
@@ -188,10 +187,9 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     override fun onResume() {
         super.onResume()
+        dzenNoch = k.getBoolean("dzen_noch", false)
         if (k.getBoolean("auto_dzen_noch", false)) {
             setlightSensor()
-        } else {
-            dzenNoch = k.getBoolean("dzen_noch", false)
         }
         if (checkDzenNoch != getBaseDzenNoch()) recreate()
         if (Build.VERSION.SDK_INT >= 34) {
@@ -239,7 +237,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
             }
 
             else -> {
-                if (dzenNoch != startAutoDzenNoch) {
+                if (dzenNoch != checkDzenNoch) {
                     startTimeJob2?.cancel()
                     startTimeJob1?.cancel()
                     if (startTimeJob4?.isActive != true) {
@@ -255,11 +253,10 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     private fun timeJob(isDzenNoch: Boolean) {
         startTimeDelay = 5000
         mLastClickTime = SystemClock.elapsedRealtime()
-        startAutoDzenNoch = isDzenNoch
         dzenNoch = isDzenNoch
         if (k.getBoolean("auto_dzen_noch", false)) {
             val prefEditor = k.edit()
-            prefEditor.putBoolean("dzen_noch", getCheckDzenNoch())
+            prefEditor.putBoolean("dzen_noch", isDzenNoch)
             prefEditor.apply()
         }
         recreate()
@@ -278,7 +275,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         val mySensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
         mySensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_UI)
-        startAutoDzenNoch = dzenNoch
     }
 
     fun removelightSensor() {
@@ -392,6 +388,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     companion object {
         private var sessionId = 0
-        private var startAutoDzenNoch = false
+        private var checkDzenNoch = false
     }
 }

@@ -35,9 +35,6 @@
         <item name="buttonBarPositiveButtonStyle">@style/ButtonStyleBlack</item>
         <item name="buttonBarNegativeButtonStyle">@style/ButtonStyleBlack</item>
         <item name="buttonBarNeutralButtonStyle">@style/ButtonStyleBlack</item>
-    </style>
-
-    <style name="AlertDialogThemeBlackVybranoe" parent="AlertDialogThemeBlack">
         <item name="android:windowBackground">@color/colorbackground_material_dark</item>
     </style>
 

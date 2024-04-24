@@ -18,7 +18,6 @@
     <color name="colorprimary_material_dark">#212121</color>
     <color name="colorprimary_material_dark2">#585858</color>
     <color name="colorbackground_material_dark">#303030</color>
-    <color name="colorbackground_material_dark_ligte">#424242</color>
     <color name="colorforeground_material_dark">#ffffff</color>
     <color name="colorforeground_material_light">#000000</color>
     <color name="color_ten">#80000000</color>

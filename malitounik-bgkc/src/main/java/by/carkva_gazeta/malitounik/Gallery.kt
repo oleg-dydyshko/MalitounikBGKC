@@ -89,9 +89,6 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
             speedGallery = k.getInt("gallerySettingsTime", 4)
         }
-        if (dzenNoch) {
-            binding.actionForward.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
-        }
         binding.recyclerView.post {
             val width = binding.recyclerView.width
             val spancount = when {

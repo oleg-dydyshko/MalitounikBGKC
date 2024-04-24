@@ -110,7 +110,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             _binding = DialogVybranoeBibleListBinding.inflate(LayoutInflater.from(activity))
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             var style = R.style.AlertDialogTheme
-            if (dzenNoch) style = R.style.AlertDialogThemeBlackVybranoe
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(activity, style)
             builder.setView(binding.root)
             binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false

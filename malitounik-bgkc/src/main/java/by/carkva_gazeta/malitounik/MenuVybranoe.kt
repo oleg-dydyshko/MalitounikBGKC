@@ -318,11 +318,11 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
             view.root.supportedSwipeDirection = ListSwipeItem.SwipeDirection.LEFT
             val dzenNoch = activity.getBaseDzenNoch()
             if (dzenNoch) {
-                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
-                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
+                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
-                view.root.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
                 view.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+                view.root.setBackgroundResource(R.color.colorprimary_material_dark2)
             } else {
                 view.itemLayout.setBackgroundResource(R.drawable.selector_default_list)
                 view.root.setBackgroundResource(R.color.colorDivider)

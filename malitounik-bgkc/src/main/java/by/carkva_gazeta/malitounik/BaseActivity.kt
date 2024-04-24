@@ -47,6 +47,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
+    private var checkDzenNoch = false
     private var mLastClickTime: Long = 0
     private var startTimeJob1: Job? = null
     private var startTimeJob2: Job? = null
@@ -388,6 +389,5 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     companion object {
         private var sessionId = 0
-        private var checkDzenNoch = false
     }
 }

@@ -790,5 +790,13 @@
         <item>XXI стагоддзе</item>
     </string-array>
     <string name="pashalii_help">22.03 – 25.04</string>
+    <string name="play_ton">Прайграць трапар %1$d</string>
+    <string name="play">Прайграць Радыё Марыя</string>
+    <string name="stop">Спыніць Радыё Марыя</string>
+    <string name="pause">Паўза Радыё Марыя</string>
+    <string name="open_bibl">Раскрыць Бібліятэку Царквы</string>
+    <string name="open_pesny">Раскрыць Песьні</string>
+    <string name="open_under">Раскрыць ІНШАЕ</string>
+    <string name="go_back">Вернуцца назад</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

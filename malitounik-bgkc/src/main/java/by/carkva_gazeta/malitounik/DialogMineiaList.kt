@@ -43,7 +43,7 @@ class DialogMineiaList : DialogFragment() {
         (activity as? BaseActivity)?.let {
             val dzenNoch = it.getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
-            if (dzenNoch) style = R.style.AlertDialogThemeBlackVybranoe
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
             binding = DialogListviewDisplayBinding.inflate(LayoutInflater.from(it))
             builder.setView(binding.root)

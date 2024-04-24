@@ -2285,10 +2285,10 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             val view = ListItemSabytieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
-                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
-                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
+                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
-                view.root.setBackgroundResource(R.color.colorprimary_material_dark)
+                view.root.setBackgroundResource(R.color.colorprimary_material_dark2)
             } else {
                 view.itemLayout.setBackgroundResource(R.drawable.selector_default_list)
                 view.root.setBackgroundResource(R.color.colorDivider)

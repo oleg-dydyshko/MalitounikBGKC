@@ -1071,7 +1071,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         if (adminDayInYear) {
             binding.checkBox8.isChecked = true
         }
-        if (dzenNoch) binding.reset.setBackgroundResource(R.drawable.knopka_red_black)
         binding.reset.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener

@@ -8,15 +8,13 @@
         android:id="@+id/play"
         android:layout_width="40sp"
         android:layout_height="40sp"
-        android:layout_marginBottom="4sp"
         android:contentDescription="@string/empty"
         android:foregroundGravity="center"
         android:paddingTop="10sp"
         android:paddingBottom="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/item"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text"
         app:srcCompat="@drawable/play" />
 
     <by.carkva_gazeta.malitounik.TextViewCustom

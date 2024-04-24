@@ -16,7 +16,7 @@
         android:gravity="start|center_vertical"
         android:padding="5sp"
         android:text="@string/redagaktirovat"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorPrimary_text"
         android:textSize="14sp" />
 
     <by.carkva_gazeta.malitounik.TextViewCustom
@@ -28,7 +28,7 @@
         android:gravity="end|center_vertical"
         android:padding="5sp"
         android:text="@string/delite"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorPrimary_text"
         android:textSize="14sp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -125,6 +125,7 @@ class TonNiadzelny : BaseActivity() {
             val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             viewHolder.text.text = adapterList[position]
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            viewHolder.play.contentDescription = mContext.getString(R.string.play_ton, position + 1)
             viewHolder.play.setOnClickListener {
                 val uri = Uri.parse("https://soundcloud.com/24dwbqqpu9sk/trapar-${position + 1}?in=24dwbqqpu9sk/sets/trapary-bgkts&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing")
                 val intent = Intent(Intent.ACTION_VIEW, uri)

@@ -1672,14 +1672,20 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                             startService(intent)
                             bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
                             binding.image5.setImageResource(R.drawable.pause2)
+                            binding.image5.contentDescription = getString(R.string.pause)
                         } else {
                             mRadyjoMaryiaService?.apply {
                                 if (k.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
                                     sendBroadcast(Intent(this, WidgetRadyjoMaryia::class.java))
                                 }
                                 playOrPause()
-                                if (isPlayingRadioMaria()) binding.image5.setImageResource(R.drawable.pause2)
-                                else binding.image5.setImageResource(R.drawable.play2)
+                                if (isPlayingRadioMaria()) {
+                                    binding.image5.setImageResource(R.drawable.pause2)
+                                    binding.image5.contentDescription = getString(R.string.pause)
+                                } else {
+                                    binding.image5.setImageResource(R.drawable.play2)
+                                    binding.image5.contentDescription = getString(R.string.play)
+                                }
                             }
                         }
                     }
@@ -1698,6 +1704,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     mRadyjoMaryiaService?.stopServiceRadioMaria()
                     binding.label15b.visibility = View.GONE
                     binding.image5.setImageResource(R.drawable.play2)
+                    binding.image5.contentDescription = getString(R.string.play)
                 }
             }
 
@@ -1749,12 +1756,18 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.image5.visibility = View.VISIBLE
         binding.progressbar.visibility = View.GONE
         binding.image5.setImageResource(R.drawable.play2)
+        binding.image5.contentDescription = getString(R.string.play)
         isConnectServise = false
     }
 
     override fun playingRadioMaria(isPlayingRadioMaria: Boolean) {
-        if (isPlayingRadioMaria) binding.image5.setImageResource(R.drawable.pause2)
-        else binding.image5.setImageResource(R.drawable.play2)
+        if (isPlayingRadioMaria) {
+            binding.image5.setImageResource(R.drawable.pause2)
+            binding.image5.contentDescription = getString(R.string.pause)
+        } else {
+            binding.image5.setImageResource(R.drawable.play2)
+            binding.image5.contentDescription = getString(R.string.play)
+        }
     }
 
     override fun playingRadioMariaStateReady() {

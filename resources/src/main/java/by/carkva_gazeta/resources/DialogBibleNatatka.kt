@@ -92,7 +92,7 @@ class DialogBibleNatatka : DialogFragment() {
             binding.content.requestFocus()
             if (dzenNoch) {
                 binding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorWhite))
-                binding.content.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
+                binding.content.setBackgroundResource(R.color.colorbackground_material_dark)
             } else {
                 binding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_text))
                 binding.content.setBackgroundResource(R.color.colorWhite)

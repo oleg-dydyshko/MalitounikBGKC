@@ -121,7 +121,7 @@ class DialogSabytieShowInMun : DialogFragment() {
                         textView.setPadding(10 * density, 0, 10 * density, 10 * density)
                         if (dzenNoch) {
                             textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                            textView.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
+                            textView.setBackgroundResource(R.color.colorbackground_material_dark)
                         }
                         val textR = if (!konecSabytie) {
                             getString(R.string.sabytieKali, data, time, res)

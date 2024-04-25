@@ -790,6 +790,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             if (text.isNotEmpty()) {
                 viewHolder.text.textSize = fontBiblia
                 viewHolder.text.text = text
+                viewHolder.text.visibility = View.VISIBLE
             } else {
                 viewHolder.text.visibility = View.GONE
             }

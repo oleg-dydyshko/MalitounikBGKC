@@ -69,7 +69,8 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
             if (intent != null) {
                 val position = intent.getIntExtra("position", 0)
                 val arrayList = MenuCaliandar.getPositionCaliandar(position)
-                caliandarDayOfYearList = MenuCaliandar.getDataCalaindar(arrayList[24].toInt())
+                caliandarDayOfYearList.clear()
+                caliandarDayOfYearList.add(arrayList)
                 setDate()
             }
         }

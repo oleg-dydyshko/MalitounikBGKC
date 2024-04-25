@@ -231,6 +231,7 @@ class DialogCalindarGrid : DialogFragment() {
             super.onBindViewHolder(holder, position)
             val text = getTitle(mItemList[position])
             holder.mText.text = text
+            holder.mImage.contentDescription = text
             holder.itemView.tag = mItemList[position]
             when {
                 mItemList[position] == 4 && !(slugba.checkUtran(raznicia, dayOfYear.toInt()) || denNedzeliUtran == Calendar.SUNDAY) -> {

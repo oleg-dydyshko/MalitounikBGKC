@@ -1,6 +1,6 @@
 <resources>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Адкрыць навігацыйнае меню</string>
+    <string name="navigation_drawer_close">Закрыць навігацыйнае меню</string>
     <string name="app_name">Малітоўнік</string>
     <string name="kaliandar">Каляндар БГКЦ</string>
     <string name="kaliandar2">КАЛЯНДАР БГКЦ</string>
@@ -233,7 +233,7 @@
     <string name="uriRingtone">Гук званка: %1$s</string>
     <string name="uriPicker">Іншая мелодыя: %1$s</string>
     <string name="uriPicker2">Іншая мелодыя</string>
-    <string name="content_open_popup">Адчыніць Popup Menu</string>
+    <string name="content_open_popup">Адчыніць Меню</string>
     <string name="redagaktirovat">Рэдагаваць</string>
     <string name="delite">Выдаліць</string>
     <string name="widget_settings">НАЛАДЫ ВІДЖЭТУ</string>
@@ -791,12 +791,17 @@
     </string-array>
     <string name="pashalii_help">22.03 – 25.04</string>
     <string name="play_ton">Прайграць трапар %1$d</string>
-    <string name="play">Прайграць Радыё Марыя</string>
-    <string name="stop">Спыніць Радыё Марыя</string>
-    <string name="pause">Паўза Радыё Марыя</string>
+    <string name="play">Прайграць</string>
+    <string name="stop">Спыніць</string>
+    <string name="pause">Паўза</string>
     <string name="open_bibl">Раскрыць Бібліятэку Царквы</string>
     <string name="open_pesny">Раскрыць Песьні</string>
     <string name="open_under">Раскрыць ІНШАЕ</string>
     <string name="go_back">Вернуцца назад</string>
+    <string name="go_forward">Ісці наперад</string>
+    <string name="action_plus">Павялічыць хуткасць аўтапракруткі</string>
+    <string name="action_minus">Паменшыць хуткасць аўтапракруткі</string>
+    <string name="find_up">Шукаць уверх</string>
+    <string name="find_niz">Шукаць уніз</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

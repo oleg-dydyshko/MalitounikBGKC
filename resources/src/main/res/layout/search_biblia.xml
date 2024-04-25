@@ -93,7 +93,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/editText2"
         app:layout_constraintEnd_toStartOf="@+id/spinner6"
         app:layout_constraintTop_toTopOf="@+id/editText2"
-        tools:ignore="ContentDescription" />
+        android:contentDescription="@string/close" />
 
     <Spinner
         android:id="@+id/spinner6"

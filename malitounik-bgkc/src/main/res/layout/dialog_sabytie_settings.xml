@@ -69,7 +69,7 @@
             android:layout_height="24sp"
             android:layout_margin="10sp"
             android:layout_weight="1"
-            android:contentDescription="@string/empty"
+            android:contentDescription="@string/play"
             app:srcCompat="@drawable/play" />
 
         <ImageView
@@ -78,7 +78,7 @@
             android:layout_height="24sp"
             android:layout_margin="10sp"
             android:layout_weight="1"
-            android:contentDescription="@string/empty"
+            android:contentDescription="@string/stop"
             app:srcCompat="@drawable/stop" />
     </LinearLayout>
 

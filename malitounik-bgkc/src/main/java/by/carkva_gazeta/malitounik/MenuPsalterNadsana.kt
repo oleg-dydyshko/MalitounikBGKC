@@ -129,9 +129,9 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
             if (id == R.id.malitva_pered) {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
-                    intent.setClassName(activity, MainActivity.NADSANMALITVYIPESNI)
-                    intent.putExtra("malitva", 0)
-                    intent.putExtra("malitva_title", binding.malitvaPered.text.toString())
+                    intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
+                    intent.putExtra("title", binding.malitvaPered.text.toString())
+                    intent.putExtra("resurs", "nadsan_pered")
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()
@@ -140,9 +140,9 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
             if (id == R.id.malitva_posle) {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
-                    intent.setClassName(activity, MainActivity.NADSANMALITVYIPESNI)
-                    intent.putExtra("malitva", 1)
-                    intent.putExtra("malitva_title", binding.malitvaPosle.text.toString())
+                    intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
+                    intent.putExtra("title", binding.malitvaPosle.text.toString())
+                    intent.putExtra("resurs", "nadsan_posle")
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()

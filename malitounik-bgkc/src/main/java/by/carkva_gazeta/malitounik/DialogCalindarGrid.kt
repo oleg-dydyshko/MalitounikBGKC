@@ -207,7 +207,6 @@ class DialogCalindarGrid : DialogFragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             when (post) {
                 1 -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_bez_posta)
                 2 -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_post)
@@ -217,8 +216,7 @@ class DialogCalindarGrid : DialogFragment() {
                 }
 
                 4 -> {
-                    if (dzenNoch) view.itemLayout.setBackgroundResource(R.drawable.selector_grid_red_dark)
-                    else view.itemLayout.setBackgroundResource(R.drawable.selector_grid_red)
+                    view.itemLayout.setBackgroundResource(R.drawable.selector_grid_red)
                     view.text.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
                 }
 

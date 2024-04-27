@@ -12,6 +12,7 @@ import android.widget.AdapterView.OnItemClickListener
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuListAdaprer
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
@@ -74,9 +75,10 @@ class NadsanMalitvyIPesniList : BaseActivity() {
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             if (checkmoduleResources()) {
-                val intent = Intent(this, NadsanMalitvyIPesni::class.java)
-                intent.putExtra("malitva", 2)
-                intent.putExtra("pesnia", position + 1)
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
+                intent.putExtra("title", data[position])
+                intent.putExtra("resurs", "nadsan_pesni_${position + 1}")
                 startActivity(intent)
             } else {
                 installFullMalitounik()

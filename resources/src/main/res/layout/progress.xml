@@ -5,21 +5,58 @@
     android:layout_height="match_parent">
 
     <by.carkva_gazeta.malitounik.TextViewCustom
-        android:id="@+id/progress"
+        android:id="@+id/progressAuto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/selector_progress_red"
         android:gravity="center"
         android:paddingLeft="10sp"
         android:paddingRight="10sp"
-        android:textColor="@color/colorPrimaryMaranAta"
+        android:textColor="@color/colorWhite"
         android:textIsSelectable="false"
-        android:textSize="70sp"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <by.carkva_gazeta.malitounik.TextViewCustom
+        android:id="@+id/progressBrighess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/selector_progress_red"
+        android:gravity="center"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp"
+        android:textColor="@color/colorWhite"
+        android:textIsSelectable="false"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/seekBarBrighess"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <by.carkva_gazeta.malitounik.TextViewCustom
+        android:id="@+id/progressFont"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/selector_progress_red"
+        android:gravity="center"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp"
+        android:textColor="@color/colorWhite"
+        android:textIsSelectable="false"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/seekBarFontSize"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <by.carkva_gazeta.malitounik.VerticalSeekBar
         android:id="@+id/seekBarBrighess"

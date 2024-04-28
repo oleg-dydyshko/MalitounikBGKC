@@ -1,7 +1,11 @@
 package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
-import android.content.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
@@ -9,7 +13,12 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.SeekBar
 import android.widget.Toast
@@ -22,15 +31,26 @@ import androidx.transition.TransitionManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
 import androidx.viewpager2.widget.ViewPager2
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.DialogBrightness
+import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
+import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
+import by.carkva_gazeta.malitounik.DialogHelpShare
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuBogashlugbovya
+import by.carkva_gazeta.malitounik.MenuListData
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.AkafistActivityPasliaPrichBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.*
 
 
 class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
@@ -101,7 +121,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         if (dzenNoch) {
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta))
             bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
             bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
         }
@@ -109,13 +128,13 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fontBiblia != SettingsActivity.getFontSize(progress)) {
                     fontBiblia = SettingsActivity.getFontSize(progress)
-                    bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
+                    bindingprogress.progressFont.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                     val prefEditor = k.edit()
                     prefEditor.putFloat("font_biblia", fontBiblia)
                     prefEditor.apply()
                     onDialogFontSize(fontBiblia)
                 }
-                startProcent()
+                startProcent(MainActivity.PROGRESSACTIONFONT)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -131,10 +150,10 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
                     val lp = window.attributes
                     lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                     window.attributes = lp
-                    bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                    bindingprogress.progressBrighess.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                     MainActivity.checkBrightness = false
                 }
-                startProcent()
+                startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -353,21 +372,21 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
                 MotionEvent.ACTION_DOWN -> {
                     if (x < otstup) {
                         bindingprogress.seekBarBrighess.progress = MainActivity.brightness
-                        bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                        bindingprogress.progressBrighess.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
                             bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
                             bindingprogress.seekBarBrighess.visibility = View.VISIBLE
                         }
-                        startProcent()
+                        startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
                     }
                     if (x > widthConstraintLayout - otstup) {
                         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
+                        bindingprogress.progressFont.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                         if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
                             bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
                             bindingprogress.seekBarFontSize.visibility = View.VISIBLE
                         }
-                        startProcent()
+                        startProcent(MainActivity.PROGRESSACTIONFONT)
                     }
                 }
             }
@@ -375,12 +394,14 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         return true
     }
 
-    private fun startProcent() {
+    private fun startProcent(progressAction: Int) {
         procentJob?.cancel()
-        bindingprogress.progress.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) bindingprogress.progressBrighess.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONFONT) bindingprogress.progressFont.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
             delay(2000)
-            bindingprogress.progress.visibility = View.GONE
+            bindingprogress.progressBrighess.visibility = View.GONE
+            bindingprogress.progressFont.visibility = View.GONE
             delay(3000)
             if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
                 bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@PasliaPrychascia, by.carkva_gazeta.malitounik.R.anim.slide_out_left)

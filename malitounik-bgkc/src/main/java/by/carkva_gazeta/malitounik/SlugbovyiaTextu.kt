@@ -72,6 +72,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(24, "Серада Паловы сьвята Пяцідзясятніцы ўвечары", "palova_sviata_piacidziasiatnicy_viaczernia_u_sieradu", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(25, "Чацьвер Паловы сьвята Пяцідзясятніцы ўвечары", "palova_sviata_piacidziasiatnicy_viaczernia_u_czacvier", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(28, "Нядзеля самаранкі", "ndz_samaranki_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
+        datMinALL.add(SlugbovyiaTextuData(29, "Панядзелак пасьля Нядзелі самаранкі ўвечары", "ndz_samaranki_paniadzielak_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(35, "Нядзеля сьлепанароджанага", "ndz_slepanarodz_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(38, "Адданьне Вялікадня", "ndz_slepanarodz_addannie_vialikadnia_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста", "uzniasienne_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))

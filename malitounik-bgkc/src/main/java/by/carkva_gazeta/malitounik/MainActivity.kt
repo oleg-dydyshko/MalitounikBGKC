@@ -1986,6 +1986,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val RELLITARATURA = 4
         const val PDF = 5
         const val SETFILE = 6
+        const val PROGRESSACTIONBRIGHESS = 1
+        const val PROGRESSACTIONFONT = 2
+        const val PROGRESSACTIONAUTO = 3
         private const val TRANSPORT_ALL = 100
         const val TRANSPORT_WIFI = 101
         const val TRANSPORT_CELLULAR = 102

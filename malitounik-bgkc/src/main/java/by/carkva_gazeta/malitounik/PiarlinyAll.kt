@@ -1,7 +1,9 @@
 package by.carkva_gazeta.malitounik
 
 import android.annotation.SuppressLint
-import android.content.*
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
@@ -9,7 +11,12 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.SeekBar
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,10 +33,15 @@ import by.carkva_gazeta.malitounik.databinding.ProgressMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.File
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 
 class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
@@ -85,7 +97,6 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
             binding.tabLayout.setTabTextColors(Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.colorSecondary_text))), Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.colorPrimary_black))))
             bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
             bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
-            bindingprogress.progress.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_blackMaranAta))
         }
         binding.pager.offscreenPageLimit = 1
         piarlinyJob = CoroutineScope(Dispatchers.Main).launch {
@@ -95,13 +106,13 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fontBiblia != SettingsActivity.getFontSize(progress)) {
                     fontBiblia = SettingsActivity.getFontSize(progress)
-                    bindingprogress.progress.text = getString(R.string.get_font, fontBiblia.toInt())
+                    bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
                     val prefEditor = k.edit()
                     prefEditor.putFloat("font_biblia", fontBiblia)
                     prefEditor.apply()
                     onDialogFontSize(fontBiblia)
                 }
-                startProcent()
+                startProcent(MainActivity.PROGRESSACTIONFONT)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -117,10 +128,10 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
                     val lp = window.attributes
                     lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                     window.attributes = lp
-                    bindingprogress.progress.text = getString(R.string.procent, MainActivity.brightness)
+                    bindingprogress.progressBrighess.text = getString(R.string.procent, MainActivity.brightness)
                     MainActivity.checkBrightness = false
                 }
-                startProcent()
+                startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -336,21 +347,21 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
                 MotionEvent.ACTION_DOWN -> {
                     if (x < otstup) {
                         bindingprogress.seekBarBrighess.progress = MainActivity.brightness
-                        bindingprogress.progress.text = getString(R.string.procent, MainActivity.brightness)
+                        bindingprogress.progressBrighess.text = getString(R.string.procent, MainActivity.brightness)
                         if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
                             bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
                             bindingprogress.seekBarBrighess.visibility = View.VISIBLE
                         }
-                        startProcent()
+                        startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
                     }
                     if (x > widthConstraintLayout - otstup) {
                         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progress.text = getString(R.string.get_font, fontBiblia.toInt())
+                        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
                         if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
                             bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
                             bindingprogress.seekBarFontSize.visibility = View.VISIBLE
                         }
-                        startProcent()
+                        startProcent(MainActivity.PROGRESSACTIONFONT)
                     }
                 }
             }
@@ -358,12 +369,16 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
         return true
     }
 
-    private fun startProcent() {
+    private fun startProcent(progressAction: Int) {
         procentJob?.cancel()
-        bindingprogress.progress.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) bindingprogress.progressBrighess.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONFONT) bindingprogress.progressFont.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONAUTO) bindingprogress.progressAuto.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
             delay(2000)
-            bindingprogress.progress.visibility = View.GONE
+            bindingprogress.progressBrighess.visibility = View.GONE
+            bindingprogress.progressFont.visibility = View.GONE
+            bindingprogress.progressAuto.visibility = View.GONE
             delay(3000)
             if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
                 bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@PiarlinyAll, R.anim.slide_out_left)

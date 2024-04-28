@@ -168,7 +168,6 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
-            bindingprogress.progress.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_blackMaranAta))
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
             bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
@@ -202,13 +201,13 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fontBiblia != SettingsActivity.getFontSize(progress)) {
                     fontBiblia = SettingsActivity.getFontSize(progress)
-                    bindingprogress.progress.text = getString(R.string.get_font, fontBiblia.toInt())
+                    bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
                     val prefEditor = k.edit()
                     prefEditor.putFloat("font_biblia", fontBiblia)
                     prefEditor.apply()
                     onDialogFontSize(fontBiblia)
                 }
-                startProcent()
+                startProcent(MainActivity.PROGRESSACTIONFONT)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -224,10 +223,10 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                     val lp = window.attributes
                     lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                     window.attributes = lp
-                    bindingprogress.progress.text = getString(R.string.procent, MainActivity.brightness)
+                    bindingprogress.progressBrighess.text = getString(R.string.procent, MainActivity.brightness)
                     MainActivity.checkBrightness = false
                 }
-                startProcent()
+                startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -281,12 +280,16 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         binding.titleToolbar.isSingleLine = true
     }
 
-    private fun startProcent() {
+    private fun startProcent(progressAction: Int) {
         procentJob?.cancel()
-        bindingprogress.progress.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) bindingprogress.progressBrighess.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONFONT) bindingprogress.progressFont.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONAUTO) bindingprogress.progressAuto.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
             delay(2000)
-            bindingprogress.progress.visibility = View.GONE
+            bindingprogress.progressBrighess.visibility = View.GONE
+            bindingprogress.progressFont.visibility = View.GONE
+            bindingprogress.progressAuto.visibility = View.GONE
             delay(3000)
             if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
                 bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@PesnyAll, R.anim.slide_out_left)
@@ -314,21 +317,21 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                     n = event?.y?.toInt() ?: 0
                     if (x < otstup) {
                         bindingprogress.seekBarBrighess.progress = MainActivity.brightness
-                        bindingprogress.progress.text = getString(R.string.procent, MainActivity.brightness)
+                        bindingprogress.progressBrighess.text = getString(R.string.procent, MainActivity.brightness)
                         if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
                             bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
                             bindingprogress.seekBarBrighess.visibility = View.VISIBLE
                         }
-                        startProcent()
+                        startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
                     }
                     if (x > widthConstraintLayout - otstup) {
                         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progress.text = getString(R.string.get_font, fontBiblia.toInt())
+                        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
                         if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
                             bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
                             bindingprogress.seekBarFontSize.visibility = View.VISIBLE
                         }
-                        startProcent()
+                        startProcent(MainActivity.PROGRESSACTIONFONT)
                     }
                 }
             }

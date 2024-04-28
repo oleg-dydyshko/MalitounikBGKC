@@ -113,7 +113,6 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
             binding.tabLayout.setTabTextColors(Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.colorSecondary_text))), Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.colorPrimary_black))))
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.progress.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_blackMaranAta))
             bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
             bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
         }
@@ -121,13 +120,13 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fontBiblia != SettingsActivity.getFontSize(progress)) {
                     fontBiblia = SettingsActivity.getFontSize(progress)
-                    bindingprogress.progress.text = getString(R.string.get_font, fontBiblia.toInt())
+                    bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
                     val prefEditor = k.edit()
                     prefEditor.putFloat("font_biblia", fontBiblia)
                     prefEditor.apply()
                     onDialogFontSize(fontBiblia)
                 }
-                startProcent()
+                startProcent(MainActivity.PROGRESSACTIONFONT)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -143,10 +142,10 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
                     val lp = window.attributes
                     lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                     window.attributes = lp
-                    bindingprogress.progress.text = getString(R.string.procent, MainActivity.brightness)
+                    bindingprogress.progressBrighess.text = getString(R.string.procent, MainActivity.brightness)
                     MainActivity.checkBrightness = false
                 }
-                startProcent()
+                startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -315,21 +314,21 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
                 MotionEvent.ACTION_DOWN -> {
                     if (x < otstup) {
                         bindingprogress.seekBarBrighess.progress = MainActivity.brightness
-                        bindingprogress.progress.text = getString(R.string.procent, MainActivity.brightness)
+                        bindingprogress.progressBrighess.text = getString(R.string.procent, MainActivity.brightness)
                         if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
                             bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
                             bindingprogress.seekBarBrighess.visibility = View.VISIBLE
                         }
-                        startProcent()
+                        startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
                     }
                     if (x > widthConstraintLayout - otstup) {
                         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progress.text = getString(R.string.get_font, fontBiblia.toInt())
+                        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
                         if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
                             bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
                             bindingprogress.seekBarFontSize.visibility = View.VISIBLE
                         }
-                        startProcent()
+                        startProcent(MainActivity.PROGRESSACTIONFONT)
                     }
                 }
             }
@@ -337,12 +336,16 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         return true
     }
 
-    private fun startProcent() {
+    private fun startProcent(progressAction: Int) {
         procentJob?.cancel()
-        bindingprogress.progress.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) bindingprogress.progressBrighess.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONFONT) bindingprogress.progressFont.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONAUTO) bindingprogress.progressAuto.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
             delay(2000)
-            bindingprogress.progress.visibility = View.GONE
+            bindingprogress.progressBrighess.visibility = View.GONE
+            bindingprogress.progressFont.visibility = View.GONE
+            bindingprogress.progressAuto.visibility = View.GONE
             delay(3000)
             if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
                 bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@Cytaty, R.anim.slide_out_left)

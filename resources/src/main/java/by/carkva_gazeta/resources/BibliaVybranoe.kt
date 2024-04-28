@@ -142,7 +142,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         binding.constraint.setOnTouchListener(this)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            bindingprogress.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta))
             bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
             bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
         }
@@ -153,13 +152,13 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fontBiblia != SettingsActivity.getFontSize(progress)) {
                     fontBiblia = SettingsActivity.getFontSize(progress)
-                    bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
+                    bindingprogress.progressFont.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                     val prefEditor = k.edit()
                     prefEditor.putFloat("font_biblia", fontBiblia)
                     prefEditor.apply()
                     onDialogFontSize(fontBiblia)
                 }
-                startProcent()
+                startProcent(MainActivity.PROGRESSACTIONFONT)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -175,10 +174,10 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                     val lp = window.attributes
                     lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                     window.attributes = lp
-                    bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                    bindingprogress.progressBrighess.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                     MainActivity.checkBrightness = false
                 }
-                startProcent()
+                startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -191,8 +190,8 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             if (spid in 20..235) {
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
-                bindingprogress.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                startProcent()
+                bindingprogress.progressAuto.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                startProcent(MainActivity.PROGRESSACTIONAUTO)
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
@@ -202,8 +201,8 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             if (spid in 10..225) {
                 spid += 5
                 val proc = 100 - (spid - 15) * 100 / 215
-                bindingprogress.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                startProcent()
+                bindingprogress.progressAuto.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                startProcent(MainActivity.PROGRESSACTIONAUTO)
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
@@ -291,28 +290,28 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                     val proc: Int
                     if (x < otstup) {
                         bindingprogress.seekBarBrighess.progress = MainActivity.brightness
-                        bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                        bindingprogress.progressBrighess.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
                             bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
                             bindingprogress.seekBarBrighess.visibility = View.VISIBLE
                         }
-                        startProcent()
+                        startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
                     }
                     if (x > widthConstraintLayout - otstup && y < heightConstraintLayout - otstup2) {
                         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progress.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
+                        bindingprogress.progressFont.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                         if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
                             bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
                             bindingprogress.seekBarFontSize.visibility = View.VISIBLE
                         }
-                        startProcent()
+                        startProcent(MainActivity.PROGRESSACTIONFONT)
                     }
                     if (y > heightConstraintLayout - otstup && x < widthConstraintLayout - otstup3) {
                         if (mAutoScroll) {
                             spid = k.getInt("autoscrollSpid", 60)
                             proc = 100 - (spid - 15) * 100 / 215
-                            bindingprogress.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                            startProcent()
+                            bindingprogress.progressAuto.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                            startProcent(MainActivity.PROGRESSACTIONAUTO)
                             startAutoScroll()
                             invalidateOptionsMenu()
                         }
@@ -705,12 +704,16 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         autoStartScrollJob?.cancel()
     }
 
-    private fun startProcent() {
+    private fun startProcent(progressAction: Int) {
         procentJob?.cancel()
-        bindingprogress.progress.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) bindingprogress.progressBrighess.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONFONT) bindingprogress.progressFont.visibility = View.VISIBLE
+        if (progressAction == MainActivity.PROGRESSACTIONAUTO) bindingprogress.progressAuto.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
             delay(2000)
-            bindingprogress.progress.visibility = View.GONE
+            bindingprogress.progressBrighess.visibility = View.GONE
+            bindingprogress.progressFont.visibility = View.GONE
+            bindingprogress.progressAuto.visibility = View.GONE
             delay(3000)
             if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
                 bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@BibliaVybranoe, by.carkva_gazeta.malitounik.R.anim.slide_out_left)

@@ -52,7 +52,8 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
     private lateinit var binding: CytatyActivityBinding
     private lateinit var bindingprogress: ProgressMainBinding
     private lateinit var adapterViewPager: MyPagerAdapter
-    private var procentJob: Job? = null
+    private var procentJobBrightness: Job? = null
+    private var procentJobFont: Job? = null
     private var resetTollbarJob: Job? = null
 
     override fun onPause() {
@@ -337,23 +338,30 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
     }
 
     private fun startProcent(progressAction: Int) {
-        procentJob?.cancel()
-        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) bindingprogress.progressBrighess.visibility = View.VISIBLE
-        if (progressAction == MainActivity.PROGRESSACTIONFONT) bindingprogress.progressFont.visibility = View.VISIBLE
-        if (progressAction == MainActivity.PROGRESSACTIONAUTO) bindingprogress.progressAuto.visibility = View.VISIBLE
-        procentJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(2000)
-            bindingprogress.progressBrighess.visibility = View.GONE
-            bindingprogress.progressFont.visibility = View.GONE
-            bindingprogress.progressAuto.visibility = View.GONE
-            delay(3000)
-            if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
-                bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@Cytaty, R.anim.slide_out_left)
-                bindingprogress.seekBarBrighess.visibility = View.GONE
+        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) {
+            procentJobBrightness?.cancel()
+            bindingprogress.progressBrighess.visibility = View.VISIBLE
+            procentJobBrightness = CoroutineScope(Dispatchers.Main).launch {
+                delay(2000)
+                bindingprogress.progressBrighess.visibility = View.GONE
+                delay(3000)
+                if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
+                    bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@Cytaty, R.anim.slide_out_left)
+                    bindingprogress.seekBarBrighess.visibility = View.GONE
+                }
             }
-            if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
-                bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@Cytaty, R.anim.slide_out_right)
-                bindingprogress.seekBarFontSize.visibility = View.GONE
+        }
+        if (progressAction == MainActivity.PROGRESSACTIONFONT) {
+            procentJobFont?.cancel()
+            bindingprogress.progressFont.visibility = View.VISIBLE
+            procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+                delay(2000)
+                bindingprogress.progressFont.visibility = View.GONE
+                delay(3000)
+                if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
+                    bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@Cytaty, R.anim.slide_out_right)
+                    bindingprogress.seekBarFontSize.visibility = View.GONE
+                }
             }
         }
     }

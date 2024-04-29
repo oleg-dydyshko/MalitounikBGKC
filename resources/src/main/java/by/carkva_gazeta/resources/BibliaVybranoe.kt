@@ -81,7 +81,9 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private lateinit var bindingprogress: ProgressBinding
     private var autoScrollJob: Job? = null
     private var autoStartScrollJob: Job? = null
-    private var procentJob: Job? = null
+    private var procentJobBrightness: Job? = null
+    private var procentJobFont: Job? = null
+    private var procentJobAuto: Job? = null
     private var resetTollbarJob: Job? = null
     private var resetScreenJob: Job? = null
     private var resetTitleJob: Job? = null
@@ -191,7 +193,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
                 bindingprogress.progressAuto.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                startProcent(MainActivity.PROGRESSACTIONAUTO)
+                startProcent(MainActivity.PROGRESSACTIONAUTORIGHT)
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
@@ -202,7 +204,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 spid += 5
                 val proc = 100 - (spid - 15) * 100 / 215
                 bindingprogress.progressAuto.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                startProcent(MainActivity.PROGRESSACTIONAUTO)
+                startProcent(MainActivity.PROGRESSACTIONAUTOLEFT)
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
@@ -311,7 +313,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                             spid = k.getInt("autoscrollSpid", 60)
                             proc = 100 - (spid - 15) * 100 / 215
                             bindingprogress.progressAuto.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                            startProcent(MainActivity.PROGRESSACTIONAUTO)
+                            startProcent(MainActivity.PROGRESSACTIONAUTORIGHT)
                             startAutoScroll()
                             invalidateOptionsMenu()
                         }
@@ -705,23 +707,45 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     }
 
     private fun startProcent(progressAction: Int) {
-        procentJob?.cancel()
-        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) bindingprogress.progressBrighess.visibility = View.VISIBLE
-        if (progressAction == MainActivity.PROGRESSACTIONFONT) bindingprogress.progressFont.visibility = View.VISIBLE
-        if (progressAction == MainActivity.PROGRESSACTIONAUTO) bindingprogress.progressAuto.visibility = View.VISIBLE
-        procentJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(2000)
-            bindingprogress.progressBrighess.visibility = View.GONE
-            bindingprogress.progressFont.visibility = View.GONE
-            bindingprogress.progressAuto.visibility = View.GONE
-            delay(3000)
-            if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
-                bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@BibliaVybranoe, by.carkva_gazeta.malitounik.R.anim.slide_out_left)
-                bindingprogress.seekBarBrighess.visibility = View.GONE
+        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) {
+            procentJobBrightness?.cancel()
+            bindingprogress.progressBrighess.visibility = View.VISIBLE
+            procentJobBrightness = CoroutineScope(Dispatchers.Main).launch {
+                delay(2000)
+                bindingprogress.progressBrighess.visibility = View.GONE
+                delay(3000)
+                if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
+                    bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@BibliaVybranoe, by.carkva_gazeta.malitounik.R.anim.slide_out_left)
+                    bindingprogress.seekBarBrighess.visibility = View.GONE
+                }
             }
-            if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
-                bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@BibliaVybranoe, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
-                bindingprogress.seekBarFontSize.visibility = View.GONE
+        }
+        if (progressAction == MainActivity.PROGRESSACTIONFONT) {
+            procentJobFont?.cancel()
+            bindingprogress.progressFont.visibility = View.VISIBLE
+            procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+                delay(2000)
+                bindingprogress.progressFont.visibility = View.GONE
+                delay(3000)
+                if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
+                    bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@BibliaVybranoe, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
+                    bindingprogress.seekBarFontSize.visibility = View.GONE
+                }
+            }
+        }
+        if (progressAction == MainActivity.PROGRESSACTIONAUTOLEFT || progressAction == MainActivity.PROGRESSACTIONAUTORIGHT) {
+            procentJobAuto?.cancel()
+            bindingprogress.progressAuto.visibility = View.VISIBLE
+            if (progressAction == MainActivity.PROGRESSACTIONAUTOLEFT) {
+                bindingprogress.progressAuto.background = ContextCompat.getDrawable(this@BibliaVybranoe, by.carkva_gazeta.malitounik.R.drawable.selector_progress_auto_left)
+                bindingprogress.progressAuto.setTextColor(ContextCompat.getColor(this@BibliaVybranoe, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+            } else {
+                bindingprogress.progressAuto.background = ContextCompat.getDrawable(this@BibliaVybranoe, by.carkva_gazeta.malitounik.R.drawable.selector_progress_red)
+                bindingprogress.progressAuto.setTextColor(ContextCompat.getColor(this@BibliaVybranoe, by.carkva_gazeta.malitounik.R.color.colorWhite))
+            }
+            procentJobAuto = CoroutineScope(Dispatchers.Main).launch {
+                delay(2000)
+                bindingprogress.progressAuto.visibility = View.GONE
             }
         }
     }

@@ -458,6 +458,15 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
     private fun setDatacalendar(savedInstanceState: Bundle?) {
         zmenyiaChastki.setArrayData(MenuCaliandar.getDataCalaindar(c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR]))
+        val cal = Calendar.getInstance()
+        val mun = cal[Calendar.MONTH]
+        val day = cal[Calendar.DATE]
+        if (!(mun == c[Calendar.MONTH] && day == c[Calendar.DATE])) {
+            binding.appBarLayout.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_strogi_post)
+        } else {
+            if (dzenNoch) binding.appBarLayout.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+            else binding.appBarLayout.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)
+        }
         loadData(savedInstanceState)
         val c2 = Calendar.getInstance()
         if (c[Calendar.DAY_OF_YEAR] == c2[Calendar.DAY_OF_YEAR] && c[Calendar.YEAR] == c2[Calendar.YEAR]) {

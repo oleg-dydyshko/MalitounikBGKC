@@ -36,6 +36,7 @@
     <string name="akafist7">сьвятым апосталам Пятру і Паўлу</string>
     <string name="other">ІНШАЕ</string>
     <string name="czytanne">Чытаньне</string>
+    <string name="czytanne3">Чытаньне, за %1$d %2$s</string>
     <string name="czytanne2">Чытаньні</string>
     <string name="carkva_sviaty">Царкоўныя сьвяты</string>
     <string name="kaliandar_bel">Даты Вялікадня</string>

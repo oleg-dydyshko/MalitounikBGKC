@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.util.Calendar
 
 class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
 
@@ -79,6 +80,8 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     private var firstTextPosition = ""
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
+    private var mun = 0
+    private var day = 1
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -92,12 +95,17 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         binding = AkafistChytanneBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
+        val c = Calendar.getInstance()
+        mun = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
+        day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             orientation = savedInstanceState.getInt("orientation")
+            binding.titleToolbar.text = savedInstanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.czytanne3, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])) ?: getString(by.carkva_gazeta.malitounik.R.string.czytanne3, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
         } else {
             fullscreenPage = k.getBoolean("fullscreenPage", false)
+            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne3, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
@@ -123,6 +131,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         }
         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
         bindingprogress.seekBarBrighess.progress = MainActivity.brightness
+        checkDay()
         setChtenia(savedInstanceState)
         bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -213,7 +222,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.text = getText(by.carkva_gazeta.malitounik.R.string.czytanne)
         if (dzenNoch) {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
@@ -227,6 +235,13 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
+    }
+
+    private fun checkDay() {
+        val c = Calendar.getInstance()
+        if (!(mun == c[Calendar.MONTH] && day == c[Calendar.DATE])) {
+            binding.appBarLayout.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_strogi_post)
+        }
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {

@@ -491,6 +491,8 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[10])
+                    intent.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt())
+                    intent.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
                     startActivity(intent)
                 } else {
                     it.installFullMalitounik()
@@ -500,6 +502,8 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[9])
+                    intent.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt())
+                    intent.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
                     startActivity(intent)
                 } else {
                     it.installFullMalitounik()
@@ -509,6 +513,8 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[11])
+                    intent.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt())
+                    intent.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
                     startActivity(intent)
                 } else {
                     it.installFullMalitounik()

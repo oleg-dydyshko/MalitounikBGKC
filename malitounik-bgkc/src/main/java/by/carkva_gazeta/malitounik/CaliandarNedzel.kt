@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.databinding.CalaindarNedelBinding
+import by.carkva_gazeta.malitounik.databinding.CaliandarNedelBinding
 import by.carkva_gazeta.malitounik.databinding.CaliandarNedzeliaBinding
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -69,7 +69,7 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
         }
     }
 
-    private class CaliandarNedzelListAdapter(private val mContext: Context, private val niadzelia: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.calaindar_nedel, niadzelia) {
+    private class CaliandarNedzelListAdapter(private val mContext: Context, private val niadzelia: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.caliandar_nedel, niadzelia) {
         private val c = Calendar.getInstance()
         private val munName = mContext.resources.getStringArray(R.array.meciac_smoll)
         private val nedelName = mContext.resources.getStringArray(R.array.dni_nedeli)
@@ -78,9 +78,9 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
             val view: View
             val viewHolder: ViewHolder
             if (rootView == null) {
-                val binding = CalaindarNedelBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = CaliandarNedelBinding.inflate(LayoutInflater.from(context), parent, false)
                 view = binding.root
-                viewHolder = ViewHolder(binding.textCalendar, binding.textCviatyGlavnyia, binding.textSviatyia, binding.textPost, binding.linearView)
+                viewHolder = ViewHolder(binding.textCalendar, binding.textCviatyGlavnyia, binding.textSviatyia, binding.textPost, binding.linearView, binding.textCviatyGosud)
                 view.tag = viewHolder
             } else {
                 view = rootView
@@ -94,9 +94,16 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
             viewHolder.textPostS.visibility = View.GONE
             viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
             viewHolder.textPraz.typeface = MainActivity.createFont(Typeface.BOLD)
+            viewHolder.textSviatyGosud.visibility = View.GONE
             if (dzenNoch) {
                 viewHolder.textSviat.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
                 viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
+                viewHolder.textSviatyGosud.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
+            }
+            val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            if (k.getInt("gosud", 0) == 1 && niadzelia[position][15].isNotEmpty()) {
+                viewHolder.textSviatyGosud.text = niadzelia[position][15]
+                viewHolder.textSviatyGosud.visibility = View.VISIBLE
             }
             if (c[Calendar.YEAR] == niadzelia[position][3].toInt() && c[Calendar.DATE] == niadzelia[position][1].toInt() && c[Calendar.MONTH] == niadzelia[position][2].toInt()) {
                 if (dzenNoch) viewHolder.linearLayout.setBackgroundResource(R.drawable.calendar_nedel_today_black)
@@ -159,7 +166,7 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
         }
     }
 
-    private class ViewHolder(var textCalendar: TextView, var textPraz: TextView, var textSviat: TextView, var textPostS: TextView, var linearLayout: LinearLayout)
+    private class ViewHolder(var textCalendar: TextView, var textPraz: TextView, var textSviat: TextView, var textPostS: TextView, var linearLayout: LinearLayout, var textSviatyGosud: TextView)
 
     companion object {
         fun newInstance(year: Int, mun: Int, date: Int): CaliandarNedzel {

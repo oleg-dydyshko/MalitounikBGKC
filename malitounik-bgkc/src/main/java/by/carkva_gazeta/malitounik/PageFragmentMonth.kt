@@ -1,6 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -52,6 +53,13 @@ class PageFragmentMonth : BaseFragment() {
             }
         }
         return sabytie
+    }
+
+    private fun gosSviataCheck(day: Int): Boolean {
+        if (day == 0) return false
+        val svita = data[day - 1][15]
+        val k = requireActivity().getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        return k.getInt("gosud", 0) == 1 && svita.isNotEmpty()
     }
 
     override fun onDestroyView() {
@@ -160,6 +168,7 @@ class PageFragmentMonth : BaseFragment() {
                 }
                 val calendarPost = GregorianCalendar(year, mun, i)
                 val sab = sabytieCheck(i)
+                val gosSvita = gosSviataCheck(i)
                 when (day) {
                     "start" -> {
                         getTextView(e).text = oldDay.toString()
@@ -218,11 +227,21 @@ class PageFragmentMonth : BaseFragment() {
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
-                                    if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_today)
-                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_red_today)
+                                    if (gosSvita) {
+                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_sabytie_today)
+                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_today)
+                                    } else {
+                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_today)
+                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red_today)
+                                    }
                                 } else {
-                                    if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie)
-                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_red)
+                                    if (gosSvita) {
+                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_sabytie)
+                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata)
+                                    } else {
+                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie)
+                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red)
+                                    }
                                 }
                                 getTextView(e).setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                                 getTextView(e).typeface = MainActivity.createFont(Typeface.BOLD)
@@ -230,11 +249,21 @@ class PageFragmentMonth : BaseFragment() {
 
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
-                                    if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_today)
-                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_red_today)
+                                    if (gosSvita) {
+                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_sabytie_today)
+                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_today)
+                                    } else {
+                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_today)
+                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red_today)
+                                    }
                                 } else {
-                                    if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie)
-                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_red)
+                                    if (gosSvita) {
+                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_sabytie)
+                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata)
+                                    } else {
+                                        if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie)
+                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_red)
+                                    }
                                 }
                                 getTextView(e).setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                                 getTextView(e).typeface = MainActivity.createFont(Typeface.NORMAL)
@@ -242,35 +271,101 @@ class PageFragmentMonth : BaseFragment() {
 
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today)
-                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_today)
-                                    else if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie)
-                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
+                                        if (gosSvita) {
+                                            if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_sabytie_today)
+                                            else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_today)
+                                        } else {
+                                            if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today)
+                                            else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_today)
+                                        }
+                                    } else {
+                                        if (gosSvita) {
+                                            if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_sabytie)
+                                            else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata)
+                                        } else {
+                                            if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie)
+                                            else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        }
+                                    }
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_post_sabytie_today)
-                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_post_today)
-                                    else if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_post_sabytie)
-                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
+                                        if (gosSvita) {
+                                            if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_post_gos_sviata_sabytie_today)
+                                            else getTextView(e).setBackgroundResource(R.drawable.calendar_post_gos_sviata_today)
+                                        } else {
+                                            if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_post_sabytie_today)
+                                            else getTextView(e).setBackgroundResource(R.drawable.calendar_post_today)
+                                        }
+                                    } else {
+                                        if (gosSvita) {
+                                            if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_post_gos_sviata_sabytie)
+                                            else getTextView(e).setBackgroundResource(R.drawable.calendar_post_gos_sviata)
+                                        } else {
+                                            if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_post_sabytie)
+                                            else getTextView(e).setBackgroundResource(R.drawable.calendar_post)
+                                        }
+                                    }
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_today)
-                                    else if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_sabytie)
-                                    else getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
+                                        if (gosSvita) {
+                                            if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_gos_sviata_sabytie_today)
+                                            else getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_gos_sviata_today)
+                                        } else {
+                                            if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today)
+                                            else getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_today)
+                                        }
+                                    } else {
+                                        if (gosSvita) {
+                                            if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_gos_sviata_sabytie)
+                                            else getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_gos_sviata)
+                                        } else {
+                                            if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_sabytie)
+                                            else getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        }
+                                    }
                                     getTextView(e).setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == Calendar.SUNDAY) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today)
-                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_today)
-                                        else if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie)
-                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
+                                            if (gosSvita) {
+                                                if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_sabytie_today)
+                                                else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_today)
+                                            } else {
+                                                if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today)
+                                                else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_today)
+                                            }
+                                        } else {
+                                            if (gosSvita) {
+                                                if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_sabytie)
+                                                else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata)
+                                            } else {
+                                                if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie)
+                                                else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            }
+                                        }
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_day_sabytie_today)
-                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_day_today)
-                                        else if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_day_sabytie)
-                                        else getTextView(e).setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
+                                            if (gosSvita) {
+                                                if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_day_gos_sviata_sabytie_today)
+                                                else getTextView(e).setBackgroundResource(R.drawable.calendar_day_gos_sviata_today)
+                                            } else {
+                                                if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_day_sabytie_today)
+                                                else getTextView(e).setBackgroundResource(R.drawable.calendar_day_today)
+                                            }
+                                        } else {
+                                            if (gosSvita) {
+                                                if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_day_gos_sviata_sabytie)
+                                                else getTextView(e).setBackgroundResource(R.drawable.calendar_day_gos_sviata)
+                                            } else {
+                                                if (sab) getTextView(e).setBackgroundResource(R.drawable.calendar_day_sabytie)
+                                                else getTextView(e).setBackgroundResource(R.drawable.calendar_day)
+                                            }
+                                        }
                                     }
                                 }
                             }

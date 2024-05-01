@@ -869,6 +869,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 prefEditors.remove("search_bogashugbovya_array")
                 prefEditors.remove("search_bible_fierstPosition")
                 prefEditors.remove("search_position")
+                prefEditors.putBoolean("BibliotekaUpdate", false)
                 prefEditors.putBoolean("autoscroll", false)
                 prefEditors.putBoolean("setAlarm", true)
                 prefEditors.apply()

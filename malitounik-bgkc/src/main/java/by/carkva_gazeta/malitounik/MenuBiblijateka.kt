@@ -60,7 +60,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     private var sqlJob: Job? = null
     private var setRubrikaJob: Job? = null
     private var bitmapJob: Job? = null
-    private var binding: BiblijatekaBinding? = null
+    private lateinit var binding: BiblijatekaBinding
     private var munuBiblijatekaListener: MunuBiblijatekaListener? = null
     private val mBiblijatekaPdfResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
@@ -194,7 +194,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
         prefEditor.apply()
         munuBiblijatekaListener?.munuBiblijatekaUpdate(false)
-        binding?.progressBar2?.visibility = View.VISIBLE
+        binding.progressBar2.visibility = View.VISIBLE
         activity?.let {
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
@@ -207,7 +207,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                         dir2.deleteRecursively()
                     }
                 }
-                binding?.progressBar2?.visibility = View.GONE
+                binding.progressBar2.visibility = View.GONE
             }
         }
     }
@@ -284,7 +284,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     }
 
     private fun writeFile(url: String) {
-        binding?.progressBar2?.visibility = View.VISIBLE
+        binding.progressBar2.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.Main).launch {
             var error = false
             try {
@@ -303,12 +303,11 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             }
             if (!error) {
                 adapter.notifyDataSetChanged()
-                binding?.progressBar2?.visibility = View.GONE
                 loadComplete()
             } else {
-                binding?.progressBar2?.visibility = View.GONE
                 DialogNoInternet().show(childFragmentManager, "no_internet")
             }
+            binding.progressBar2.visibility = View.GONE
         }
     }
 
@@ -339,141 +338,134 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         loadComplete()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = BiblijatekaBinding.inflate(inflater, container, false)
-        return binding!!.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            binding?.let { binding ->
-                width = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    val display = it.windowManager.currentWindowMetrics
-                    val bounds = display.bounds
-                    bounds.width()
-                } else {
-                    @Suppress("DEPRECATION") val display = it.windowManager.defaultDisplay
-                    val size = Point()
-                    @Suppress("DEPRECATION") display.getSize(size)
-                    size.x
-                }
-                k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-
-                adapter = BibliotekaAdapter(it)
-                binding.listView.adapter = adapter
-                if (dzenNoch) {
-                    binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
-                    binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary_black)
-                } else {
-                    binding.listView.background = ContextCompat.getDrawable(it, R.color.colorDivider)
-                    binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default_bibliateka)
-                    binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
-                }
-                binding.swipeRefreshLayout.setOnRefreshListener {
-                    if (setRubrikaJob?.isActive == true) return@setOnRefreshListener
-                    if (!MainActivity.isNetworkAvailable()) {
-                        val dialogNoInternet = DialogNoInternet()
-                        dialogNoInternet.show(childFragmentManager, "no_internet")
-                    } else {
-                        setRubrikaJob = CoroutineScope(Dispatchers.Main).launch {
-                            if (setRubrika(idSelect) == 0) MainActivity.toastView(it, it.getString(R.string.update_no_biblijateka))
-                            if (setRubrika(idSelect) == 1) MainActivity.toastView(it, it.getString(R.string.error))
-                        }
-                    }
-                    binding.swipeRefreshLayout.isRefreshing = false
-                }
-                binding.listView.setOnItemLongClickListener { _, _, position, _ ->
-                    val dd = DialogDeliteNiadaunia.getInstance(position, arrayList[position][1], arrayList[position][0])
-                    dd.show(childFragmentManager, "dialog_delite_niadaunia")
-                    return@setOnItemLongClickListener true
-                }
-                binding.listView.setOnItemClickListener { _, _, position, _ ->
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                        return@setOnItemClickListener
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime()
-                    val file: File
-                    if (arrayList[position].size == 3) {
-                        file = File(arrayList[position][1])
-                        if (file.exists()) {
-                            filePath = file.absolutePath
-                            fileName = file.name
-                            loadComplete()
-                        } else {
-                            arrayList.removeAt(position)
-                            naidaunia.clear()
-                            naidaunia.addAll(arrayList)
-                            adapter.notifyDataSetChanged()
-                            val gson = Gson()
-                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                            val prefEditor = k.edit()
-                            prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
-                            prefEditor.apply()
-                            munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
-                            MainActivity.toastView(it, it.getString(R.string.no_file))
-                        }
-                    } else {
-                        file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
-                        if (file.exists()) {
-                            filePath = file.absolutePath
-                            fileName = file.name
-                            loadComplete()
-                        } else {
-                            var opisanie = arrayList[position][1]
-                            val t1 = opisanie.indexOf("</span><br>")
-                            if (t1 != -1) opisanie = opisanie.substring(t1 + 11)
-                            val dialogBibliateka = DialogBibliateka.getInstance(arrayList[position][2], opisanie, arrayList[position][0], arrayList[position][3])
-                            dialogBibliateka.show(childFragmentManager, "dialog_bibliateka")
-                        }
-                    }
-                }
-                if (savedInstanceState != null) {
-                    filePath = savedInstanceState.getString("filePath") ?: ""
-                    fileName = savedInstanceState.getString("fileName") ?: ""
-                    idSelect = savedInstanceState.getInt("idSelect")
-                    isLoad = savedInstanceState.getBoolean("isLoad")
-                    nameRubrika = savedInstanceState.getString("nameRubrika") ?: ""
-                    saveindep = false
-                } else {
-                    fileName = arguments?.getString("fileName", "") ?: ""
-                    filePath = arguments?.getString("filePath", "") ?: ""
-                    isLoad = arguments?.getBoolean("isLoad", false) ?: false
-                }
-                loadNiadaunia()
-                munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
-                idSelect = arguments?.getInt("rub", MainActivity.MALITOUNIKI) ?: MainActivity.MALITOUNIKI
-                if (idSelect == MainActivity.NIADAUNIA || idSelect == MainActivity.SETFILE) {
-                    binding.swipeRefreshLayout.isEnabled = false
-                    binding.swipeRefreshLayout.isRefreshing = false
-                }
-                val dir = File("${it.filesDir}/image_temp")
-                if (!dir.exists()) dir.mkdir()
-                setRubrikaJob = CoroutineScope(Dispatchers.Main).launch {
-                    when (idSelect) {
-                        MainActivity.NIADAUNIA -> setRubrika(MainActivity.NIADAUNIA)
-                        MainActivity.GISTORYIACARKVY -> setRubrika(MainActivity.GISTORYIACARKVY)
-                        MainActivity.MALITOUNIKI -> setRubrika(MainActivity.MALITOUNIKI)
-                        MainActivity.SPEUNIKI -> setRubrika(MainActivity.SPEUNIKI)
-                        MainActivity.RELLITARATURA -> setRubrika(MainActivity.RELLITARATURA)
-                        MainActivity.PDF -> setRubrika(MainActivity.PDF)
-                        MainActivity.SETFILE -> setRubrika(MainActivity.SETFILE)
-                    }
-                }
-                if (fileName != "" && filePath != "") {
-                    loadComplete()
-                }
-                setTitleBibliateka(idSelect)
+            width = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val display = it.windowManager.currentWindowMetrics
+                val bounds = display.bounds
+                bounds.width()
+            } else {
+                @Suppress("DEPRECATION") val display = it.windowManager.defaultDisplay
+                val size = Point()
+                @Suppress("DEPRECATION") display.getSize(size)
+                size.x
             }
+            k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+
+            adapter = BibliotekaAdapter(it)
+            binding.listView.adapter = adapter
+            if (dzenNoch) {
+                binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
+                binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary_black)
+            } else {
+                binding.listView.background = ContextCompat.getDrawable(it, R.color.colorDivider)
+                binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default_bibliateka)
+                binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
+            }
+            binding.swipeRefreshLayout.setOnRefreshListener {
+                if (setRubrikaJob?.isActive == true) return@setOnRefreshListener
+                if (!MainActivity.isNetworkAvailable()) {
+                    val dialogNoInternet = DialogNoInternet()
+                    dialogNoInternet.show(childFragmentManager, "no_internet")
+                } else {
+                    setRubrikaJob = CoroutineScope(Dispatchers.Main).launch {
+                        if (setRubrika(idSelect) == 0) MainActivity.toastView(it, it.getString(R.string.update_no_biblijateka))
+                        if (setRubrika(idSelect) == 1) MainActivity.toastView(it, it.getString(R.string.error))
+                    }
+                }
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
+            binding.listView.setOnItemLongClickListener { _, _, position, _ ->
+                val dd = DialogDeliteNiadaunia.getInstance(position, arrayList[position][1], arrayList[position][0])
+                dd.show(childFragmentManager, "dialog_delite_niadaunia")
+                return@setOnItemLongClickListener true
+            }
+            binding.listView.setOnItemClickListener { _, _, position, _ ->
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return@setOnItemClickListener
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                val file: File
+                if (arrayList[position].size == 3) {
+                    file = File(arrayList[position][1])
+                    if (file.exists()) {
+                        filePath = file.absolutePath
+                        fileName = file.name
+                        loadComplete()
+                    } else {
+                        arrayList.removeAt(position)
+                        naidaunia.clear()
+                        naidaunia.addAll(arrayList)
+                        adapter.notifyDataSetChanged()
+                        val gson = Gson()
+                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                        val prefEditor = k.edit()
+                        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
+                        prefEditor.apply()
+                        munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
+                        MainActivity.toastView(it, it.getString(R.string.no_file))
+                    }
+                } else {
+                    file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
+                    if (file.exists()) {
+                        filePath = file.absolutePath
+                        fileName = file.name
+                        loadComplete()
+                    } else {
+                        var opisanie = arrayList[position][1]
+                        val t1 = opisanie.indexOf("</span><br>")
+                        if (t1 != -1) opisanie = opisanie.substring(t1 + 11)
+                        val dialogBibliateka = DialogBibliateka.getInstance(arrayList[position][2], opisanie, arrayList[position][0], arrayList[position][3])
+                        dialogBibliateka.show(childFragmentManager, "dialog_bibliateka")
+                    }
+                }
+            }
+            if (savedInstanceState != null) {
+                filePath = savedInstanceState.getString("filePath") ?: ""
+                fileName = savedInstanceState.getString("fileName") ?: ""
+                idSelect = savedInstanceState.getInt("idSelect")
+                isLoad = savedInstanceState.getBoolean("isLoad")
+                nameRubrika = savedInstanceState.getString("nameRubrika") ?: ""
+                saveindep = false
+            } else {
+                fileName = arguments?.getString("fileName", "") ?: ""
+                filePath = arguments?.getString("filePath", "") ?: ""
+                isLoad = arguments?.getBoolean("isLoad", false) ?: false
+            }
+            loadNiadaunia(false)
+            munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
+            idSelect = arguments?.getInt("rub", MainActivity.MALITOUNIKI) ?: MainActivity.MALITOUNIKI
+            if (idSelect == MainActivity.NIADAUNIA || idSelect == MainActivity.SETFILE) {
+                binding.swipeRefreshLayout.isEnabled = false
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
+            val dir = File("${it.filesDir}/image_temp")
+            if (!dir.exists()) dir.mkdir()
+            setRubrikaJob = CoroutineScope(Dispatchers.Main).launch {
+                when (idSelect) {
+                    MainActivity.NIADAUNIA -> setRubrika(MainActivity.NIADAUNIA)
+                    MainActivity.GISTORYIACARKVY -> setRubrika(MainActivity.GISTORYIACARKVY)
+                    MainActivity.MALITOUNIKI -> setRubrika(MainActivity.MALITOUNIKI)
+                    MainActivity.SPEUNIKI -> setRubrika(MainActivity.SPEUNIKI)
+                    MainActivity.RELLITARATURA -> setRubrika(MainActivity.RELLITARATURA)
+                    MainActivity.PDF -> setRubrika(MainActivity.PDF)
+                    MainActivity.SETFILE -> setRubrika(MainActivity.SETFILE)
+                }
+            }
+            if (fileName != "" && filePath != "") {
+                loadComplete()
+            }
+            setTitleBibliateka(idSelect)
         }
     }
 
-    private fun loadNiadaunia() {
+    private fun loadNiadaunia(isUpdate: Boolean = true) {
         activity?.let {
             val gson = Gson()
             val json = k.getString("bibliateka_naidaunia", "")
@@ -490,10 +482,12 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
                 naidaunia.addAll(gson.fromJson(json, type))
             }
-            arrayList.clear()
-            arrayList.addAll(naidaunia)
-            arrayList.reverse()
-            adapter.notifyDataSetChanged()
+            if (isUpdate) {
+                arrayList.clear()
+                arrayList.addAll(naidaunia)
+                arrayList.reverse()
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 
@@ -563,10 +557,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 }
 
                 else -> {
-                    arrayList.clear()
-                    arrayList.addAll(naidaunia)
-                    arrayList.reverse()
-                    adapter.notifyDataSetChanged()
+                    loadNiadaunia()
                     nameRubrika = it.getString(R.string.bibliateka_niadaunia)
                 }
             }
@@ -574,6 +565,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     }
 
     suspend fun setRubrika(rub: Int): Int {
+        binding.progressBar2.visibility = View.VISIBLE
         var isUbdate = 0
         var rubryka = rub
         if (rubryka == MainActivity.SETFILE) {
@@ -623,12 +615,12 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         }
         setTitleBibliateka(rubryka)
         saveindep = true
-        if (sqlJob?.isActive != true) binding?.progressBar2?.visibility = View.GONE
+        if (sqlJob?.isActive != true) binding.progressBar2.visibility = View.GONE
         return isUbdate
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        menu.findItem(R.id.action_trash).isVisible = binding?.swipeRefreshLayout?.visibility == View.VISIBLE && idSelect == MainActivity.NIADAUNIA && naidaunia.size > 0
+        menu.findItem(R.id.action_trash).isVisible = binding.swipeRefreshLayout.visibility == View.VISIBLE && idSelect == MainActivity.NIADAUNIA && naidaunia.size > 0
         menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
     }
 
@@ -667,7 +659,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 withContext(Dispatchers.Main) {
                     arrayList.clear()
                     adapter.notifyDataSetChanged()
-                    binding?.progressBar2?.visibility = View.VISIBLE
+                    binding.progressBar2.visibility = View.VISIBLE
                 }
                 try {
                     sqlJob = CoroutineScope(Dispatchers.Main).launch {
@@ -718,7 +710,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                             }
                         }
                         withContext(Dispatchers.Main) {
-                            binding?.progressBar2?.visibility = View.GONE
+                            binding.progressBar2.visibility = View.GONE
                         }
                     }
                 } catch (_: Throwable) {

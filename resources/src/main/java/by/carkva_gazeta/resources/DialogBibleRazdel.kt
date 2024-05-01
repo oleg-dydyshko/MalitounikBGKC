@@ -63,6 +63,7 @@ class DialogBibleRazdel : DialogFragment() {
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             builder = AlertDialog.Builder(it, style)
             binding.title.text = resources.getString(R.string.data_search, fullGlav)
+            binding.content.contentDescription = resources.getString(R.string.data_search, fullGlav)
             binding.content.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(3) }
             if (savedInstanceState != null) {
                 binding.content.setText(savedInstanceState.getString("glava"))

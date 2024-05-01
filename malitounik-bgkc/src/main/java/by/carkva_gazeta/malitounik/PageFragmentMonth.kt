@@ -172,6 +172,7 @@ class PageFragmentMonth : BaseFragment() {
                 when (day) {
                     "start" -> {
                         getTextView(e).text = oldDay.toString()
+                        getTextView(e).contentDescription = oldDay.toString()
                         if (e == 1) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta)
                         else getTextView(e).setBackgroundResource(R.drawable.calendar_day)
                         getTextView(e).setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
@@ -191,6 +192,7 @@ class PageFragmentMonth : BaseFragment() {
 
                     "end" -> {
                         getTextView(e).text = newDay.toString()
+                        getTextView(e).contentDescription = newDay.toString()
                         getTextView(e).setBackgroundResource(R.drawable.calendar_day)
                         getTextView(e).setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                         getTextView(e).setOnClickListener {
@@ -223,6 +225,7 @@ class PageFragmentMonth : BaseFragment() {
                             }
                         }
                         getTextView(e).text = day
+                        getTextView(e).contentDescription = day
                         if (data[i - 1][4].contains("<font color=#d00505><strong>")) getTextView(e).typeface = MainActivity.createFont(Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {

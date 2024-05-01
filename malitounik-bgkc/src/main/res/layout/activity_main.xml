@@ -81,6 +81,7 @@
                     android:gravity="center_vertical"
                     android:padding="10sp"
                     android:text="@string/kaliandar2"
+                    android:contentDescription="@string/kaliandar2"
                     android:textSize="14sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewCustom
@@ -91,6 +92,7 @@
                     android:gravity="center_vertical"
                     android:padding="10sp"
                     android:text="@string/liturgikon"
+                    android:contentDescription="@string/liturgikon"
                     android:textSize="14sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewCustom
@@ -101,6 +103,7 @@
                     android:gravity="center_vertical"
                     android:padding="10sp"
                     android:text="@string/malitvy"
+                    android:contentDescription="@string/malitvy"
                     android:textSize="14sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewCustom
@@ -111,6 +114,7 @@
                     android:gravity="center_vertical"
                     android:padding="10sp"
                     android:text="@string/akafisty"
+                    android:contentDescription="@string/akafisty"
                     android:textSize="14sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewCustom
@@ -122,6 +126,7 @@
                     android:padding="10sp"
                     android:paddingBottom="10sp"
                     android:text="@string/ruzanec"
+                    android:contentDescription="@string/ruzanec"
                     android:textSize="14sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewCustom
@@ -132,6 +137,7 @@
                     android:gravity="center_vertical"
                     android:padding="10sp"
                     android:text="@string/maje_natatki"
+                    android:contentDescription="@string/maje_natatki"
                     android:textSize="14sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewCustom
@@ -143,6 +149,7 @@
                     android:padding="10sp"
                     android:paddingBottom="10sp"
                     android:text="@string/MenuVybranoe"
+                    android:contentDescription="@string/MenuVybranoe"
                     android:textSize="14sp" />
 
                 <View
@@ -161,6 +168,7 @@
                     android:padding="10sp"
                     android:paddingBottom="10sp"
                     android:text="@string/title_biblia"
+                    android:contentDescription="@string/title_biblia"
                     android:textSize="14sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewCustom
@@ -171,6 +179,7 @@
                     android:gravity="center_vertical"
                     android:padding="10sp"
                     android:text="@string/title_psalter"
+                    android:contentDescription="@string/title_psalter"
                     android:textSize="14sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewCustom
@@ -181,6 +190,7 @@
                     android:gravity="center_vertical"
                     android:padding="10sp"
                     android:text="@string/bsinaidal"
+                    android:contentDescription="@string/bsinaidal"
                     android:textSize="14sp"
                     android:visibility="gone" />
 
@@ -281,6 +291,7 @@
                         android:gravity="center_vertical"
                         android:padding="10sp"
                         android:text="@string/bibliateka_carkvy"
+                        android:contentDescription="@string/bibliateka_carkvy"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/image4"
@@ -317,6 +328,7 @@
                         android:paddingEnd="10sp"
                         android:paddingBottom="10sp"
                         android:text="@string/bibliateka_niadaunia"
+                        android:contentDescription="@string/bibliateka_niadaunia"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -332,6 +344,7 @@
                         android:paddingEnd="10sp"
                         android:paddingBottom="10sp"
                         android:text="@string/bibliateka_gistoryia_carkvy"
+                        android:contentDescription="@string/bibliateka_gistoryia_carkvy"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -347,6 +360,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/bibliateka_malitouniki"
+                        android:contentDescription="@string/bibliateka_malitouniki"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -362,6 +376,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/bibliateka_speuniki"
+                        android:contentDescription="@string/bibliateka_speuniki"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -377,6 +392,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/bibliateka_rel_litaratura"
+                        android:contentDescription="@string/bibliateka_rel_litaratura"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -392,6 +408,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/arx_num_gaz"
+                        android:contentDescription="@string/arx_num_gaz"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -407,6 +424,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/bibliateka_file"
+                        android:contentDescription="@string/bibliateka_file"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -426,6 +444,7 @@
                         android:gravity="center_vertical"
                         android:padding="10dp"
                         android:text="@string/song"
+                        android:contentDescription="@string/song"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/image2"
@@ -462,6 +481,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny1"
+                        android:contentDescription="@string/pesny1"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -477,6 +497,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny2"
+                        android:contentDescription="@string/pesny2"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -492,6 +513,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny3"
+                        android:contentDescription="@string/pesny3"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -507,6 +529,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny4"
+                        android:contentDescription="@string/pesny4"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -522,6 +545,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny5"
+                        android:contentDescription="@string/pesny5"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -541,6 +565,7 @@
                         android:gravity="center_vertical"
                         android:padding="10dp"
                         android:text="@string/other"
+                        android:contentDescription="@string/other"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/image3"
@@ -577,6 +602,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/spovedz"
+                        android:contentDescription="@string/spovedz"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -592,6 +618,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pamiatka"
+                        android:contentDescription="@string/pamiatka"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -607,6 +634,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/sviaty"
+                        android:contentDescription="@string/sviaty"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -622,6 +650,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/parafii"
+                        android:contentDescription="@string/parafii"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />
@@ -637,6 +666,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pascha"
+                        android:contentDescription="@string/pascha"
                         android:textSize="14sp"
                         app:drawableLeftCompat="@drawable/stiker"
                         app:drawableStartCompat="@drawable/stiker" />

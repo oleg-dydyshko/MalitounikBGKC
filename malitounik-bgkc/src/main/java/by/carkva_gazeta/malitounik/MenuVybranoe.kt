@@ -334,6 +334,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
             super.onBindViewHolder(holder, position)
             val text = mItemList[position].data
             holder.mText.text = text
+            holder.mText.contentDescription = text
             holder.itemView.tag = mItemList[position]
         }
 

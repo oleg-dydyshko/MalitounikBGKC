@@ -293,6 +293,7 @@ class MenuNatatki : BaseFragment() {
             super.onBindViewHolder(holder, position)
             val text = mItemList[position].title
             holder.mText.text = text
+            holder.mText.contentDescription = text
             holder.itemView.tag = mItemList[position]
         }
 

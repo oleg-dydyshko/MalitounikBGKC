@@ -56,6 +56,7 @@ class DialogBrightness : DialogFragment() {
             }
             binding.title.text = resources.getString(R.string.Bright3)
             binding.seekBar.max = 100
+            binding.seekBar.contentDescription = resources.getString(R.string.Bright3)
             binding.seekBar.progress = MainActivity.brightness
             binding.textSize.text = resources.getString(R.string.procent, MainActivity.brightness)
             binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {

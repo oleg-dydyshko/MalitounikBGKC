@@ -591,21 +591,19 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             }
             arrayList.removeAll(temp.toSet())
             adapter.notifyDataSetChanged()
+            binding.progressBar2.visibility = View.GONE
         }
-        if (!k.getBoolean("BibliotekaUpdate", false)) {
+        if (!k.getBoolean("BibliotekaUpdate", false) && rubryka != MainActivity.NIADAUNIA) {
             var sb = ""
             if (MainActivity.isNetworkAvailable()) {
                 for (i in 0..2) {
                     sb = getBibliatekaJson()
-                    if (sb != "") break
+                    if (sb.isNotEmpty()) break
                 }
             }
             val biblioteka = ArrayList<ArrayList<String>>()
             if (sb.isNotEmpty()) {
-                try {
-                    biblioteka.addAll(gson.fromJson(sb, type))
-                } catch (_: Throwable) {
-                }
+                biblioteka.addAll(gson.fromJson(sb, type))
             } else {
                 isUbdate = ERROR
             }
@@ -683,7 +681,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         super.onPause()
         sqlJob?.cancel()
         setRubrikaJob?.cancel()
-        bitmapJob = null
+        bitmapJob?.cancel()
     }
 
     private suspend fun getSql() {

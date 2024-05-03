@@ -334,8 +334,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", MODE_PRIVATE)
-        prefEditors = k.edit()
-        // Удаление "фантомных" виджетов
+        prefEditors = k.edit() // Удаление "фантомных" виджетов
         /*val appWidgetManager = AppWidgetManager.getInstance(this)
         val thisAppWidget = ComponentName(packageName, Widget::class.java.name)
         val host = AppWidgetHost(this, 0)
@@ -347,11 +346,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain
         bindingcontent = binding.appBarMain.contentMain
-        setContentView(binding.root)
-        // Удаление кеша интернета
+        setContentView(binding.root) // Удаление кеша интернета
         val fileSite = File("$filesDir/Site")
-        if (fileSite.exists()) fileSite.deleteRecursively()
-        // Создание нового формата нататок
+        if (fileSite.exists()) fileSite.deleteRecursively() // Создание нового формата нататок
         val fileNatatki = File("$filesDir/Natatki.json")
         if (!fileNatatki.exists()) {
             File(filesDir.toString().plus("/Malitva")).walk().forEach { file ->
@@ -446,9 +443,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
         if (k.getInt("sinoidal", 0) == 1) {
             binding.label11.visibility = View.VISIBLE
-        }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            binding.label15a.visibility = View.GONE
         }
         binding.title9.setOnClickListener(this)
         binding.title10.setOnClickListener(this)
@@ -1665,28 +1659,26 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
             R.id.image5 -> {
                 if (isNetworkAvailable()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        if (!ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
-                            binding.image5.visibility = View.INVISIBLE
-                            binding.progressbar.visibility = View.VISIBLE
-                            val intent = Intent(this, ServiceRadyjoMaryia::class.java)
-                            startService(intent)
-                            bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
-                            binding.image5.setImageResource(R.drawable.pause2)
-                            binding.image5.contentDescription = getString(R.string.pause)
-                        } else {
-                            mRadyjoMaryiaService?.apply {
-                                if (k.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
-                                    sendBroadcast(Intent(this, WidgetRadyjoMaryia::class.java))
-                                }
-                                playOrPause()
-                                if (isPlayingRadioMaria()) {
-                                    binding.image5.setImageResource(R.drawable.pause2)
-                                    binding.image5.contentDescription = getString(R.string.pause)
-                                } else {
-                                    binding.image5.setImageResource(R.drawable.play2)
-                                    binding.image5.contentDescription = getString(R.string.play)
-                                }
+                    if (!ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
+                        binding.image5.visibility = View.INVISIBLE
+                        binding.progressbar.visibility = View.VISIBLE
+                        val intent = Intent(this, ServiceRadyjoMaryia::class.java)
+                        startService(intent)
+                        bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+                        binding.image5.setImageResource(R.drawable.pause2)
+                        binding.image5.contentDescription = getString(R.string.pause)
+                    } else {
+                        mRadyjoMaryiaService?.apply {
+                            if (k.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
+                                sendBroadcast(Intent(this, WidgetRadyjoMaryia::class.java))
+                            }
+                            playOrPause()
+                            if (isPlayingRadioMaria()) {
+                                binding.image5.setImageResource(R.drawable.pause2)
+                                binding.image5.contentDescription = getString(R.string.pause)
+                            } else {
+                                binding.image5.setImageResource(R.drawable.play2)
+                                binding.image5.contentDescription = getString(R.string.play)
                             }
                         }
                     }
@@ -1697,7 +1689,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
 
             R.id.image6 -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
+                if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun) {
                     if (isConnectServise) {
                         unbindService(mConnection)
                     }

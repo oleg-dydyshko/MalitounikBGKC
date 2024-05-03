@@ -1,7 +1,11 @@
 package by.carkva_gazeta.malitounik
 
 import android.Manifest
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -12,7 +16,6 @@ import android.os.Binder
 import android.os.Build
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -28,7 +31,8 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 
 
 class ServiceRadyjoMaryia : Service() {
@@ -84,17 +88,15 @@ class ServiceRadyjoMaryia : Service() {
 
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     if (playbackState == Player.STATE_READY) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            setRadioNotification()
-                            listener?.playingRadioMariaStateReady()
-                            val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-                            if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
-                                val intent = Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java)
-                                intent.putExtra("action", PLAYING_RADIO_MARIA_STATE_READY)
-                                sendBroadcast(intent)
-                            }
-                            isPlaybackStateReady = true
+                        setRadioNotification()
+                        listener?.playingRadioMariaStateReady()
+                        val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+                        if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
+                            val intent = Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java)
+                            intent.putExtra("action", PLAYING_RADIO_MARIA_STATE_READY)
+                            sendBroadcast(intent)
                         }
+                        isPlaybackStateReady = true
                     }
                 }
             })
@@ -130,9 +132,7 @@ class ServiceRadyjoMaryia : Service() {
         } else {
             player?.play()
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setRadioNotification()
-        }
+        setRadioNotification()
     }
 
     fun isPlayingRadioMaria() = isPlaying
@@ -208,17 +208,15 @@ class ServiceRadyjoMaryia : Service() {
                                 if (t2 != -1) {
                                     text = text.substring(t2 + 1)
                                 }
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    if (titleRadyjoMaryia != text.trim()) {
-                                        titleRadyjoMaryia = text.trim()
-                                        withContext(Dispatchers.Main) {
-                                            setRadioNotification()
-                                            val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-                                            if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
-                                                sendBroadcast(Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java))
-                                            }
-                                            listener?.setTitleRadioMaryia(titleRadyjoMaryia)
+                                if (titleRadyjoMaryia != text.trim()) {
+                                    titleRadyjoMaryia = text.trim()
+                                    withContext(Dispatchers.Main) {
+                                        setRadioNotification()
+                                        val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+                                        if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
+                                            sendBroadcast(Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java))
                                         }
+                                        listener?.setTitleRadioMaryia(titleRadyjoMaryia)
                                     }
                                 }
                             }
@@ -230,7 +228,6 @@ class ServiceRadyjoMaryia : Service() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setRadioNotification() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             val mediaSession = MediaSessionCompat(this, "Radyjo Maryia session")

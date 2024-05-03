@@ -9,10 +9,10 @@ android {
 
     defaultConfig {
         applicationId =  "by.carkva_gazeta.malitounik"
-        minSdk = 19
+        minSdk = 21
         targetSdk = 34
-        versionCode = 442273
-        versionName = "4.4.4.17"
+        versionCode = 442274
+        versionName = "4.4.5"
 
         //multiDexEnabled = true
 
@@ -58,7 +58,7 @@ android {
 dependencies {
     //implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation ("com.google.android.material:material:1.11.0")
+    implementation ("com.google.android.material:material:1.12.0")
     api ("androidx.appcompat:appcompat:1.6.1")
     api ("androidx.gridlayout:gridlayout:1.0.0")
     api ("com.google.android.play:feature-delivery:2.1.0")
@@ -69,7 +69,7 @@ dependencies {
     //api ("androidx.webkit:webkit:1.10.0")
     api ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     api ("com.github.woxthebox:draglistview:1.7.3")
-    api (platform("com.google.firebase:firebase-bom:32.8.1"))
+    api (platform("com.google.firebase:firebase-bom:33.0.0"))
     //api ("com.google.firebase:firebase-core:21.1.1")
     api ("com.google.firebase:firebase-storage-ktx")
     api ("com.google.firebase:firebase-appcheck-playintegrity")

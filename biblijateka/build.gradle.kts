@@ -8,7 +8,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 19
+        minSdk = 21
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -31,7 +31,7 @@ dependencies {
     //implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation(project(":malitounik-bgkc"))
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation ("com.google.android.material:material:1.11.0")
+    implementation ("com.google.android.material:material:1.12.0")
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation ("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
     implementation ("androidx.core:core-ktx:1.13.1")

@@ -249,8 +249,6 @@
     <string name="pdf_error">Файл не ў фармаце %1$s або пашкоджаны</string>
     <string name="str_short_label1">Выбранае</string>
     <string name="str_disable_message">Выключана</string>
-    <string name="sabytie_enable_mun">Рэжым прагляду Падзеяў уключаны</string>
-    <string name="sabytie_disable_mun">Рэжым прагляду Падзеяў выключаны</string>
     <string name="sabytie_check_mun">Больш не паказваць</string>
     <string name="bible_time">Працягнуць чытаньне</string>
     <string name="paralel">Паралельныя месцы</string>
@@ -804,5 +802,6 @@
     <string name="action_minus">Паменшыць хуткасць аўтапракруткі</string>
     <string name="find_up">Шукаць уверх</string>
     <string name="find_niz">Шукаць уніз</string>
+    <string name="padzei_i_sviaty">Падзеі і сьвяты за %1$d %2$s</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

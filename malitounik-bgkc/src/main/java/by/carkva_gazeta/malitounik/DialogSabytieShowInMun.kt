@@ -14,6 +14,7 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -25,7 +26,12 @@ import java.util.GregorianCalendar
 
 class DialogSabytieShowInMun : DialogFragment() {
     private var dayYear = 1
+    private var date = 1
+    private var mun = 0
     private var year = 0
+    private var gosSviata = ""
+    private var svity = ""
+    private var svityRKC = ""
     private lateinit var alert: AlertDialog
     private var _binding: DialogSabytieShowInMunBinding? = null
     private val binding get() = _binding!!
@@ -44,8 +50,13 @@ class DialogSabytieShowInMun : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dayYear = arguments?.getInt("dayYear") ?: 1
-        year = arguments?.getInt("year") ?: 0
+        dayYear = arguments?.getInt("dayYear", 1) ?: 1
+        date = arguments?.getInt("date", 1) ?: 1
+        mun = arguments?.getInt("mun", 0) ?: 0
+        year = arguments?.getInt("year", 0) ?: 0
+        svity = arguments?.getString("svity", "") ?: ""
+        svityRKC = arguments?.getString("svityRKC", "") ?: ""
+        gosSviata = arguments?.getString("gosSviata", "") ?: ""
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -53,6 +64,23 @@ class DialogSabytieShowInMun : DialogFragment() {
             _binding = DialogSabytieShowInMunBinding.inflate(LayoutInflater.from(it))
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            if (gosSviata.isNotEmpty()) {
+                binding.textViewGosSvity.text = gosSviata
+                binding.textViewGosSvity.visibility = View.VISIBLE
+            }
+            if (svity.isNotEmpty()) {
+                binding.textViewSvity.text = svity
+                binding.textViewSvity.visibility = View.VISIBLE
+            }
+            if (svityRKC.isNotEmpty()) {
+                binding.textViewSvityRKC.text = svityRKC
+                binding.textViewSvityRKC.visibility = View.VISIBLE
+            }
+            if (dzenNoch) {
+                binding.textViewSvity.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                binding.textViewGosSvity.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+            }
+            binding.title.text = getString(R.string.padzei_i_sviaty, date, it.resources.getStringArray(R.array.meciac_smoll)[mun])
             sabytieView(dayYear)
             val ad = AlertDialog.Builder(it, style)
             ad.setView(binding.root)
@@ -64,7 +92,6 @@ class DialogSabytieShowInMun : DialogFragment() {
 
     private fun sabytieView(dayYear: Int) {
         activity?.let {
-            binding.linearLayout.removeAllViewsInLayout()
             val density = (resources.displayMetrics.density).toInt()
             val gc = Calendar.getInstance() as GregorianCalendar
             var title: String
@@ -145,10 +172,10 @@ class DialogSabytieShowInMun : DialogFragment() {
                         val font = MainActivity.createFont(Typeface.NORMAL)
                         spannable.setSpan(CustomTypefaceSpan("", font), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
                         textView.text = spannable
-                        sabytieList.add(textView)
-                        val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+                        val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                         llp.setMargins(0, 0, 0, 5 * density)
                         textView.layoutParams = llp
+                        sabytieList.add(textView)
                     }
                     gc.add(Calendar.DATE, 1)
                 }
@@ -162,11 +189,16 @@ class DialogSabytieShowInMun : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(dayYear: Int, year: Int): DialogSabytieShowInMun {
+        fun getInstance(dayYear: Int, date: Int, mun: Int, year: Int, svity: String, svityRKC: String, gosSviata: String): DialogSabytieShowInMun {
             val dialogShowSabytie = DialogSabytieShowInMun()
             val bundle = Bundle()
             bundle.putInt("dayYear", dayYear)
+            bundle.putInt("date", date)
+            bundle.putInt("mun", mun)
             bundle.putInt("year", year)
+            bundle.putString("svity", svity)
+            bundle.putString("svityRKC", svityRKC)
+            bundle.putString("gosSviata", gosSviata)
             dialogShowSabytie.arguments = bundle
             return dialogShowSabytie
         }

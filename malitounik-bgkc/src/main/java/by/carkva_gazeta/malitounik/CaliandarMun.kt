@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -92,11 +90,6 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
         resetTollbarJob?.cancel()
     }
 
-    override fun onBack() {
-        super.onBack()
-        SabytieOnView = false
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -176,23 +169,6 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
         transaction.commit()
     }
 
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.caliandar_mun, menu)
-        super.onCreateMenu(menu, menuInflater)
-    }
-
-    override fun onPrepareMenu(menu: Menu) {
-        val pos = chin.getInt("nedelia", 0)
-        if (MainActivity.padzeia.size > 0 && pos == 0 && !getData) {
-            menu.findItem(R.id.action_padzeia).isVisible = true
-            if (SabytieOnView) {
-                if (dzenNoch) menu.findItem(R.id.action_padzeia).setIcon(R.drawable.calendar_padzea_black_on) else menu.findItem(R.id.action_padzeia).setIcon(R.drawable.calendar_padzea_on)
-            } else {
-                if (dzenNoch) menu.findItem(R.id.action_padzeia).setIcon(R.drawable.calendar_padzea_black_off) else menu.findItem(R.id.action_padzeia).setIcon(R.drawable.calendar_padzea_off)
-            }
-        }
-    }
-
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
@@ -210,9 +186,5 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
         outState.putInt("day2", day2)
         outState.putInt("mun2", posMun2)
         outState.putInt("year2", yearG1)
-    }
-
-    companion object {
-        var SabytieOnView = false
     }
 }

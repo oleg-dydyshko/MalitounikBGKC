@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
@@ -135,23 +134,6 @@ class CaliandarMunTab1 : BaseFragment() {
                 }
             })
         }
-    }
-
-    override fun onMenuItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_padzeia) {
-            activity?.let {
-                CaliandarMun.SabytieOnView = !CaliandarMun.SabytieOnView
-                val messege = if (!CaliandarMun.SabytieOnView) {
-                    resources.getString(R.string.sabytie_disable_mun)
-                } else {
-                    resources.getString(R.string.sabytie_enable_mun)
-                }
-                MainActivity.toastView(it, messege)
-                it.invalidateOptionsMenu()
-            }
-            return true
-        }
-        return false
     }
 
     private class MyPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {

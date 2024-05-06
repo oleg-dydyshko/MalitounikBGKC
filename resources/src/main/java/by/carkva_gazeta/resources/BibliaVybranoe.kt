@@ -99,7 +99,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private var isSmoothScrollToPosition = false
     private val mActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         prodoljyt = true
-        loadBible()
+        loadBible(null)
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -149,7 +149,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         }
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
-        loadBible()
+        loadBible(savedInstanceState)
         bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fontBiblia != SettingsActivity.getFontSize(progress)) {
@@ -331,7 +331,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         return true
     }
 
-    private fun loadBible() {
+    private fun loadBible(savedInstanceState: Bundle?) {
         bibliaVybranoeList.clear()
         DialogVybranoeBibleList.arrayListVybranoe.forEachIndexed { index, vybranoeBibliaData ->
             var inputStream = resources.openRawResource(R.raw.biblias1)
@@ -574,7 +574,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         }
         adapter.notifyDataSetChanged()
         isSmoothScrollToPosition = true
-        if (prodoljyt) {
+        if (prodoljyt || savedInstanceState != null) {
             smoothScrollToPosition(positionY)
         } else {
             smoothScrollToPosition(findTitle())
@@ -892,7 +892,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            item.isChecked = !item.isChecked
             if (item.isCheckable) {
                 item.isChecked = !item.isChecked
                 if (item.isChecked) {

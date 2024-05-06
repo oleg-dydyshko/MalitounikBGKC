@@ -851,7 +851,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         }
                     }
                 }
-            } catch (t: Throwable) {
+            } catch (_: Throwable) {
                 val t1 = fit.lastIndexOf(" ")
                 val title: String
                 if (belarus) {

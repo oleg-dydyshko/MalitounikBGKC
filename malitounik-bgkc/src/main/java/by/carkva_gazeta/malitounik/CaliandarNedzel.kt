@@ -80,7 +80,7 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
             if (rootView == null) {
                 val binding = CaliandarNedelBinding.inflate(LayoutInflater.from(context), parent, false)
                 view = binding.root
-                viewHolder = ViewHolder(binding.textCalendar, binding.textCviatyGlavnyia, binding.textSviatyia, binding.textPost, binding.linearView, binding.textCviatyGosud)
+                viewHolder = ViewHolder(binding.textCalendar, binding.textCviatyGlavnyia, binding.textSviatyia, binding.textPost, binding.linearView, binding.textCviatyGosud, binding.textCviatyRKC)
                 view.tag = viewHolder
             } else {
                 view = rootView
@@ -95,12 +95,17 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
             viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
             viewHolder.textPraz.typeface = MainActivity.createFont(Typeface.BOLD)
             viewHolder.textSviatyGosud.visibility = View.GONE
+            viewHolder.textSviatyRKC.visibility = View.GONE
             if (dzenNoch) {
                 viewHolder.textSviat.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
                 viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
                 viewHolder.textSviatyGosud.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
             }
             val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            if (k.getInt("pkc", 0) == 1 && niadzelia[position][19].isNotEmpty()) {
+                viewHolder.textSviatyRKC.text = niadzelia[position][19]
+                viewHolder.textSviatyRKC.visibility = View.VISIBLE
+            }
             if (k.getInt("gosud", 0) == 1 && niadzelia[position][15].isNotEmpty()) {
                 viewHolder.textSviatyGosud.text = niadzelia[position][15]
                 viewHolder.textSviatyGosud.visibility = View.VISIBLE
@@ -166,7 +171,7 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
         }
     }
 
-    private class ViewHolder(var textCalendar: TextView, var textPraz: TextView, var textSviat: TextView, var textPostS: TextView, var linearLayout: LinearLayout, var textSviatyGosud: TextView)
+    private class ViewHolder(var textCalendar: TextView, var textPraz: TextView, var textSviat: TextView, var textPostS: TextView, var linearLayout: LinearLayout, var textSviatyGosud: TextView, var textSviatyRKC: TextView)
 
     companion object {
         fun newInstance(year: Int, mun: Int, date: Int): CaliandarNedzel {

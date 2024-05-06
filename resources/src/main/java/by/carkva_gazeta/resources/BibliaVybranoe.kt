@@ -66,7 +66,7 @@ import java.io.FileReader
 import java.io.InputStreamReader
 
 
-class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
+class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -93,7 +93,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private var positionY = 0
     private var resurs = "0"
-    private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
     private var prodoljyt = false
     private lateinit var adapter: BibliaVybranoeListAdaprer
     private val bibliaVybranoeList = ArrayList<BibliaVybranoeData>()
@@ -141,6 +140,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         adapter = BibliaVybranoeListAdaprer(this)
         binding.ListView.adapter = adapter
         binding.ListView.divider = null
+        binding.ListView.setOnTouchListener(this)
         binding.constraint.setOnTouchListener(this)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
@@ -282,6 +282,13 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         val y = event?.y?.toInt() ?: 0
         val x = event?.x?.toInt() ?: 0
         val id = v?.id ?: 0
+        if (id == R.id.ListView) {
+            when (event?.action ?: MotionEvent.ACTION_CANCEL) {
+                MotionEvent.ACTION_DOWN -> mActionDown = true
+                MotionEvent.ACTION_UP -> mActionDown = false
+            }
+            return false
+        }
         if (id == R.id.constraint) {
             if (MainActivity.checkBrightness) {
                 MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
@@ -829,6 +836,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 diffScroll == 0 -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_up)
                 else -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
             }
+            mActionDown = false
         } else {
             itemAuto.isVisible = false
             stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
@@ -996,16 +1004,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         binding.actionBack.animation = animation
     }
 
-    override fun linkMovementMethodCheckOnTouch(onTouch: Boolean) {
-        mActionDown = onTouch
-    }
-
-    private fun setLinkMovementMethodCheck(): LinkMovementMethodCheck? {
-        linkMovementMethodCheck = LinkMovementMethodCheck()
-        linkMovementMethodCheck?.setLinkMovementMethodCheckListener(this)
-        return linkMovementMethodCheck
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt("orientation", orientation)
@@ -1027,7 +1025,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text.movementMethod = setLinkMovementMethodCheck()
             val textView = bibliaVybranoeList[position].text
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (dzenNoch) viewHolder.text.setLinkTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))

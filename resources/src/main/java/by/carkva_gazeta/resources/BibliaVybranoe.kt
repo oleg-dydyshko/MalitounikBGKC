@@ -12,6 +12,7 @@ import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ClickableSpan
@@ -1024,6 +1025,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
+            viewHolder.text.movementMethod = LinkMovementMethod()
             val textView = bibliaVybranoeList[position].text
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (dzenNoch) viewHolder.text.setLinkTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))

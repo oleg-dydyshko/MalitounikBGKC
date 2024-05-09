@@ -120,9 +120,8 @@ class LogView : BaseActivity() {
     }
 
     private fun checkResources() {
-        val fields = R.raw::class.java.fields
+        val list = sb.toString().split("\n")/*val fields = R.raw::class.java.fields
         val fields2 = by.carkva_gazeta.malitounik.R.raw::class.java.fields
-        val list = sb.toString().split("\n")
         for (element in fields) {
             val name = element.name
             var testR = false
@@ -164,7 +163,7 @@ class LogView : BaseActivity() {
             if (!testR) {
                 checkSB.append("firebase: няма malitounik.R.raw.$name\n")
             }
-        }
+        }*/
         val oldList = oldCheckSB.split("\n")
         for (element in oldList.indices) {
             val t11 = oldList[element].indexOf("<name>")

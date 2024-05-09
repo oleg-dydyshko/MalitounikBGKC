@@ -77,7 +77,9 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(24, "Серада Паловы сьвята Пяцідзясятніцы ўвечары", "palova_sviata_piacidziasiatnicy_viaczernia_u_sieradu", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(25, "Чацьвер Паловы сьвята Пяцідзясятніцы ўвечары", "palova_sviata_piacidziasiatnicy_viaczernia_u_czacvier", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(28, "Нядзеля самаранкі", "ndz_samaranki_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
-        datMinALL.add(SlugbovyiaTextuData(29, "Панядзелак пасьля Нядзелі самаранкі ўвечары", "ndz_samaranki_paniadzielak_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
+        datMinALL.add(SlugbovyiaTextuData(29, "Панядзелак пасьля Нядзелі самаранкі ўвечары", "ndz_samaranki_01paniadzielak_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
+        datMinALL.add(SlugbovyiaTextuData(32, "Чацьвер пасьля Нядзелі самаранкі ўвечары", "ndz_samaranki_04czacvier_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
+        datMinALL.add(SlugbovyiaTextuData(33, "Пятніца пасьля Нядзелі самаранкі ўвечары", "ndz_samaranki_05piatnica_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(35, "Нядзеля сьлепанароджанага", "ndz_slepanarodz_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(38, "Адданьне Вялікадня", "ndz_slepanarodz_addannie_vialikadnia_viaczernia_autorak_uvieczary", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(38, "Адданьне Вялікадня", "ndz_slepanarodz_addannie_vialikadnia_jutran", JUTRAN, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
@@ -418,6 +420,10 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(39, "Пасьвяцьце Сустрэчы Госпада; сьвятога вялікамучаніка Тодара Страцілата і прарока Захара", "mm_08_02_pasviaccie_sustreczy_vialikamucz_todara_praroka_zachara_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(34, "Пасьвяцьце Сустрэчы Госпада, Сымона Богапрыемцы і Ганны прарочыцы", "mm_03_02_pasviaccie_sustreczy_symona_hanny_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(41, "Сьвятамучаніка Харалампа", "mm_10_02_sviatamuczanika_charlampa_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(129, "Cьвятога апостала і евангеліста Яна Багаслова", "mm_08_05_apostala_jevanhielista_jana_bahaslova_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(129, "Cьвятога апостала і евангеліста Яна Багаслова", "mm_08_05_apostala_jevanhielista_jana_bahaslova_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(130, "Перанясеньне мошчаў сьвятога Мікалая Цудатворцы ў Бары", "mm_09_05_pieraniasiennie_moszczau_mikalaja_cudatvorcy_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(130, "Перанясеньне мошчаў сьвятога Мікалая Цудатворцы ў Бары", "mm_09_05_pieraniasiennie_moszczau_mikalaja_cudatvorcy_viaczernia", VIACZERNIA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

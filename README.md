@@ -11,9 +11,11 @@
 
 Як выкарыстоўваць:
 
-git clone https://github.com/oleg-dydyshko/MalitounikBGKC.git
+Усталяваць Android Studio:
 
-Далей Android Studio -> Import project
+https://developer.android.com/studio
+
+Далей Android Studio -> File -> New -> Project from Version Control...
 
 Файл бягучай версіі: https://play.google.com/store/apps/details?id=by.carkva_gazeta.malitounik
 

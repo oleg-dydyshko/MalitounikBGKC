@@ -95,20 +95,15 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                             val fileNew = StringBuilder()
                             for ((count, element) in file2.withIndex()) {
                                 val fil = element.trim()
-                                var srtn = "\n"
                                 var stringraz = ""
                                 if (fil != "") {
                                     if (count != 0) {
-                                        srtn = "\n\n"
                                         stringraz = "===\n"
                                     }
-                                    if (file2.size == count + 1) {
-                                        srtn = "\n"
-                                    }
                                     if (count == sv) {
-                                        fileNew.append(stringraz + "//" + zag + " " + sv + "\n" + spaw.trim() + srtn)
+                                        fileNew.append(stringraz + spaw.trim() + "\n\n// " + zag + " " + (sv + 1) + "\n")
                                     } else {
-                                        fileNew.append(stringraz + fil + srtn)
+                                        fileNew.append(stringraz + fil + "\n")
                                     }
                                 }
                             }

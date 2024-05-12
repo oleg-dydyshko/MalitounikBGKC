@@ -331,7 +331,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 binding.linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
-                invalidateOptionsMenu()
                 adapter.notifyDataSetChanged()
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
@@ -358,7 +357,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 binding.linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
-                invalidateOptionsMenu()
                 adapter.notifyDataSetChanged()
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
@@ -385,7 +383,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 binding.linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
-                invalidateOptionsMenu()
                 adapter.notifyDataSetChanged()
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))

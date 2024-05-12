@@ -14,7 +14,11 @@ import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.widget.TooltipCompat
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.BaseFragment
+import by.carkva_gazeta.malitounik.BibleGlobalList
+import by.carkva_gazeta.malitounik.BibleZakladkiData
+import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.resources.databinding.ActivityBiblePageFragmentBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -654,7 +658,7 @@ class StaryZapavietSemuxaFragment : BaseFragment(), OnItemLongClickListener, Ada
                             BibleGlobalList.vydelenie[i][2] = 0
                         }
                     } else {
-                        val setVydelenie = java.util.ArrayList<Int>()
+                        val setVydelenie = ArrayList<Int>()
                         setVydelenie.add(BibleGlobalList.mListGlava)
                         setVydelenie.add(BibleGlobalList.bibleCopyList[0])
                         setVydelenie.add(1)
@@ -682,7 +686,7 @@ class StaryZapavietSemuxaFragment : BaseFragment(), OnItemLongClickListener, Ada
                             BibleGlobalList.vydelenie[i][3] = 0
                         }
                     } else {
-                        val setVydelenie = java.util.ArrayList<Int>()
+                        val setVydelenie = ArrayList<Int>()
                         setVydelenie.add(BibleGlobalList.mListGlava)
                         setVydelenie.add(BibleGlobalList.bibleCopyList[0])
                         setVydelenie.add(0)
@@ -710,7 +714,7 @@ class StaryZapavietSemuxaFragment : BaseFragment(), OnItemLongClickListener, Ada
                             BibleGlobalList.vydelenie[i][4] = 0
                         }
                     } else {
-                        val setVydelenie = java.util.ArrayList<Int>()
+                        val setVydelenie = ArrayList<Int>()
                         setVydelenie.add(BibleGlobalList.mListGlava)
                         setVydelenie.add(BibleGlobalList.bibleCopyList[0])
                         setVydelenie.add(0)

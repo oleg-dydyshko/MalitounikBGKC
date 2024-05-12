@@ -57,7 +57,6 @@ class DialogProgramRadoiMaryia : DialogFragment() {
                 it.title.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary))
                 it.title.text = getString(R.string.program_radio_maryia)
                 sendTitlePadioMaryia()
-                it.content.textSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
                 builder.setView(it.root)
                 builder.setPositiveButton(resources.getText(R.string.close)) { dialog: DialogInterface, _: Int ->
                     dialog.cancel()

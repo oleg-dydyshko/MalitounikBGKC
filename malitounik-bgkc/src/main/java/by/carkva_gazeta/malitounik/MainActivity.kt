@@ -346,9 +346,16 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain
         bindingcontent = binding.appBarMain.contentMain
-        setContentView(binding.root) // Удаление кеша интернета
+        setContentView(binding.root)
+        // Удаление старого выделения
+        val dirMaranAtaBel = File("$filesDir/MaranAtaBel")
+        if (dirMaranAtaBel.exists()) dirMaranAtaBel.deleteRecursively()
+        val dirMaranAta = File("$filesDir/MaranAta")
+        if (dirMaranAta.exists()) dirMaranAta.deleteRecursively()
+        // Удаление кеша интернета
         val fileSite = File("$filesDir/Site")
-        if (fileSite.exists()) fileSite.deleteRecursively() // Создание нового формата нататок
+        if (fileSite.exists()) fileSite.deleteRecursively()
+        // Создание нового формата нататок
         val fileNatatki = File("$filesDir/Natatki.json")
         if (!fileNatatki.exists()) {
             File(filesDir.toString().plus("/Malitva")).walk().forEach { file ->
@@ -793,15 +800,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     private fun mkDir() {
-        var dir = File("$filesDir/MaranAtaBel")
-        if (!dir.exists()) {
-            dir.mkdir()
-        }
-        dir = File("$filesDir/MaranAta")
-        if (!dir.exists()) {
-            dir.mkdir()
-        }
-        dir = File("$filesDir/Malitva")
+        var dir = File("$filesDir/Malitva")
         if (!dir.exists()) {
             dir.mkdir()
         }

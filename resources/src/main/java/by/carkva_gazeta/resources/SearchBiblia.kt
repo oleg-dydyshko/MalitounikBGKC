@@ -1252,9 +1252,13 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                         else " "
                         val endString = if (strSub1Pos + stringBuilder.length + 1 <= text.length) text.substring(strSub1Pos + stringBuilder.length, strSub1Pos + stringBuilder.length + 1)
                         else " "
-                        if (!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit()) result.add(FindString(stringBuilder.toString(), strSub))
+                       if (!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit()) {
+                           result.add(FindString(stringBuilder.toString(), strSub))
+                           stringBuilder.clear()
+                       }
                     } else {
                         result.add(FindString(stringBuilder.toString(), strSub))
+                        stringBuilder.clear()
                     }
                 }
             } else {

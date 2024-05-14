@@ -66,6 +66,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileReader
 import java.io.FileWriter
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -113,9 +114,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         adapter.notifyDataSetChanged()
     }
 
-    private fun checkPosition(position: Int): Int {
+    private fun checkPosition(glava: Int, position: Int): Int {
         for (i in vydelenie.indices) {
-            if (vydelenie[i][0] == position) {
+            if (vydelenie[i][0] == glava && vydelenie[i][1] == position) {
                 return i
             }
         }
@@ -312,20 +313,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
         binding.underline.setOnClickListener {
             if (bibleCopyList.size > 0) {
-                val i = checkPosition(bibleCopyList[0])
-                if (i != -1) {
-                    if (vydelenie[i][2] == 0) {
-                        vydelenie[i][2] = 1
-                    } else {
-                        vydelenie[i][2] = 0
-                    }
+                if (maranAta[bibleCopyList[0]].underline == 0) {
+                    maranAta[bibleCopyList[0]].underline = 1
                 } else {
-                    val setVydelenie = ArrayList<Int>()
-                    setVydelenie.add(bibleCopyList[0])
-                    setVydelenie.add(0)
-                    setVydelenie.add(1)
-                    setVydelenie.add(0)
-                    vydelenie.add(setVydelenie)
+                    maranAta[bibleCopyList[0]].underline = 0
                 }
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 binding.linearLayout4.visibility = View.GONE
@@ -338,20 +329,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
         binding.bold.setOnClickListener {
             if (bibleCopyList.size > 0) {
-                val i = checkPosition(bibleCopyList[0])
-                if (i != -1) {
-                    if (vydelenie[i][3] == 0) {
-                        vydelenie[i][3] = 1
-                    } else {
-                        vydelenie[i][3] = 0
-                    }
+                if (maranAta[bibleCopyList[0]].bold == 0) {
+                    maranAta[bibleCopyList[0]].bold = 1
                 } else {
-                    val setVydelenie = ArrayList<Int>()
-                    setVydelenie.add(bibleCopyList[0])
-                    setVydelenie.add(0)
-                    setVydelenie.add(0)
-                    setVydelenie.add(1)
-                    vydelenie.add(setVydelenie)
+                    maranAta[bibleCopyList[0]].bold = 0
                 }
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 binding.linearLayout4.visibility = View.GONE
@@ -364,20 +345,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
         binding.yelloy.setOnClickListener {
             if (bibleCopyList.size > 0) {
-                val i = checkPosition(bibleCopyList[0])
-                if (i != -1) {
-                    if (vydelenie[i][1] == 0) {
-                        vydelenie[i][1] = 1
-                    } else {
-                        vydelenie[i][1] = 0
-                    }
+                if (maranAta[bibleCopyList[0]].color == 0) {
+                    maranAta[bibleCopyList[0]].color = 1
                 } else {
-                    val setVydelenie = ArrayList<Int>()
-                    setVydelenie.add(bibleCopyList[0])
-                    setVydelenie.add(1)
-                    setVydelenie.add(0)
-                    setVydelenie.add(0)
-                    vydelenie.add(setVydelenie)
+                    maranAta[bibleCopyList[0]].color = 0
                 }
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 binding.linearLayout4.visibility = View.GONE
@@ -390,13 +361,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
         if (dzenNoch) {
             binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta)
-        }
-        val file = if (belarus) File("$filesDir/MaranAtaBel/$cytanne.json")
-        else File("$filesDir/MaranAta/$cytanne.json")
-        if (file.exists()) {
-            val gson = Gson()
-            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
-            vydelenie = gson.fromJson(file.readText(), type)
         }
         binding.ListView.post {
             isSmoothScrollToPosition = true
@@ -721,8 +685,26 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 } else {
                     inputStream = getSinoidalResource(nomer)
                 }
+                val file = if (!belarus || replace) {
+                    if (nomer > 50) {
+                        File("$filesDir/BibliaSinodalNovyZavet/${getNumarGlavy(nomer)}.json")
+                    } else {
+                        File("$filesDir/BibliaSinodalStaryZavet/${getNumarGlavy(nomer)}.json")
+                    }
+                } else {
+                    if (nomer > 50) {
+                        File("$filesDir/BibliaSemuxaNovyZavet/${getNumarGlavy(nomer)}.json")
+                    } else {
+                        File("$filesDir/BibliaSemuxaStaryZavet/${getNumarGlavy(nomer)}.json")
+                    }
+                }
+                vydelenie.clear()
+                vydelenie.addAll(readFileGson(file))
+                var bold: Int
+                var underline: Int
+                var color: Int
                 if (replace) {
-                    maranAta.add(MaranAtaData("", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>"))
+                    maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>", 0, 0, 0))
                 }
                 val builder = StringBuilder()
                 var line: String
@@ -742,9 +724,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 }
                 if (chten.size == 6 && i == 3) {
                     if (belarus) {
-                        maranAta.add(MaranAtaData("", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n"))
+                        maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n", 0, 0, 0))
                     } else {
-                        maranAta.add(MaranAtaData("", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n"))
+                        maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n", 0, 0, 0))
                     }
                 }
                 val split2Pre = builder.toString().split("===")
@@ -792,24 +774,34 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         }
                     } else {
                         if (belarus) {
-                            if (addGlava == e) maranAta.add(MaranAtaData("", "$nazvaBel $e", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>"))
-                            maranAta.add(MaranAtaData("", "$nazvaBel $e", "<br><strong>$nazvaFullBel $e</strong><br>\n"))
+                            if (addGlava == e) maranAta.add(MaranAtaData(true, nomer > 50, getNumarGlavy(nomer), 0, 0, "", "$nazvaBel $e", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>", 0, 0, 0))
+                            maranAta.add(MaranAtaData(true, nomer > 50, getNumarGlavy(nomer), 0, 0, "", "$nazvaBel $e", "<br><strong>$nazvaFullBel $e</strong><br>\n", 0, 0, 0))
                         } else {
-                            maranAta.add(MaranAtaData("", "$nazva $e", "<br><strong>$nazvaFull $e</strong><br>\n"))
+                            maranAta.add(MaranAtaData(true, nomer > 50, getNumarGlavy(nomer), 0, 0, "", "$nazva $e", "<br><strong>$nazvaFull $e</strong><br>\n", 0, 0, 0))
                         }
                         val splitline = split2[e].trim().split("\n")
                         for (i2 in splitline.indices) {
-                            if (belarus) maranAta.add(MaranAtaData(kniga + "." + e + "." + (i2 + 1), "$nazvaBel $e", splitline[i2] + getParallel(nomer, e, i2) + "\n"))
-                            else maranAta.add(MaranAtaData(kniga + "." + e + "." + (i2 + 1), "$nazva $e", splitline[i2] + getParallel(nomer, e, i2) + "\n"))
+                            val pos = checkPosition(e - 1, i2)
+                            if (pos != -1) {
+                                color = vydelenie[pos][2]
+                                underline = vydelenie[pos][3]
+                                bold = vydelenie[pos][4]
+                            } else {
+                                color = 0
+                                underline = 0
+                                bold = 0
+                            }
+                            if (belarus) maranAta.add(MaranAtaData(replace, nomer > 50, getNumarGlavy(nomer), e - 1, i2 + 1, kniga + "." + e + "." + (i2 + 1), "$nazvaBel $e", splitline[i2] + getParallel(nomer, e, i2) + "\n", bold, underline, color))
+                            else maranAta.add(MaranAtaData(true, nomer > 50, getNumarGlavy(nomer), e - 1, i2 + 1, kniga + "." + e + "." + (i2 + 1), "$nazva $e", splitline[i2] + getParallel(nomer, e, i2) + "\n", bold, underline, color))
                         }
                     }
                 }
                 if (stixn != -1) {
                     val t1 = fit.indexOf(".")
                     if (belarus) {
-                        maranAta.add(MaranAtaData("", "$nazvaBel " + fit.substring(s2 + 1, t1), "<br><strong>" + nazvaFullBel + " " + fit.substring(s2 + 1) + "</strong><br>\n"))
+                        maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazvaBel " + fit.substring(s2 + 1, t1), "<br><strong>" + nazvaFullBel + " " + fit.substring(s2 + 1) + "</strong><br>\n", 0, 0, 0))
                     } else {
-                        maranAta.add(MaranAtaData("", "$nazva " + fit.substring(s2 + 1, t1), "<br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n"))
+                        maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazva " + fit.substring(s2 + 1, t1), "<br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n", 0, 0, 0))
                     }
                     val res1 = r1.toString().trim().split("\n")
                     var i3 = stixn
@@ -836,15 +828,35 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             glava = resbib.substring(t2 + 1, t3).toInt()
                             resbib = resbib.substring(t3 + 1)
                         }
-                        if (belarus) maranAta.add(MaranAtaData("$kniga.$glava.$i3", "$nazvaBel $glava", resbib + getParallel(nomer, glava, i3 - 1) + "\n"))
-                        else maranAta.add(MaranAtaData("$kniga.$glava.$i3", "$nazva $glava", resbib + getParallel(nomer, glava, i3 - 1) + "\n"))
+                        val pos = checkPosition(glava - 1, i3 - 1)
+                        if (pos != -1) {
+                            color = vydelenie[pos][2]
+                            underline = vydelenie[pos][3]
+                            bold = vydelenie[pos][4]
+                        } else {
+                            color = 0
+                            underline = 0
+                            bold = 0
+                        }
+                        if (belarus) maranAta.add(MaranAtaData(replace, nomer > 50, getNumarGlavy(nomer), glava - 1, i3, "$kniga.$glava.$i3", "$nazvaBel $glava", resbib + getParallel(nomer, glava, i3 - 1) + "\n", bold, underline, color))
+                        else maranAta.add(MaranAtaData(true, nomer > 50, getNumarGlavy(nomer), glava - 1, i3, "$kniga.$glava.$i3", "$nazva $glava", resbib + getParallel(nomer, glava, i3 - 1) + "\n", bold, underline, color))
                         i3++
                     }
                     if (konec - nachalo != 0) {
                         val res2 = r2.trim().split("\n")
                         for (i21 in res2.indices) {
-                            if (belarus) maranAta.add(MaranAtaData(kniga + "." + konec + "." + (i21 + 1), "$nazvaBel $konec", res2[i21] + getParallel(nomer, konec, i21) + "\n"))
-                            else maranAta.add(MaranAtaData(kniga + "." + konec + "." + (i21 + 1), "$nazva $konec", res2[i21] + getParallel(nomer, konec, i21) + "\n"))
+                            val pos = checkPosition(konec - 1, i21)
+                            if (pos != -1) {
+                                color = vydelenie[pos][2]
+                                underline = vydelenie[pos][3]
+                                bold = vydelenie[pos][4]
+                            } else {
+                                color = 0
+                                underline = 0
+                                bold = 0
+                            }
+                            if (belarus) maranAta.add(MaranAtaData(replace, nomer > 50, getNumarGlavy(nomer), konec - 1, i21 + 1, kniga + "." + konec + "." + (i21 + 1), "$nazvaBel $konec", res2[i21] + getParallel(nomer, konec, i21) + "\n", bold, underline, color))
+                            else maranAta.add(MaranAtaData(true, nomer > 50, getNumarGlavy(nomer), konec - 1, i21 + 1, kniga + "." + konec + "." + (i21 + 1), "$nazva $konec", res2[i21] + getParallel(nomer, konec, i21) + "\n", bold, underline, color))
                         }
                     }
                 }
@@ -853,15 +865,63 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val title: String
                 if (belarus) {
                     title = "$nazvaFullBel ${fit.substring(t1 + 1)}"
-                    maranAta.add(MaranAtaData("", title, "<br><strong>$nazvaFullBel ${fit.substring(t1 + 1)}</strong><br>\n"))
+                    maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", title, "<br><strong>$nazvaFullBel ${fit.substring(t1 + 1)}</strong><br>\n", 0, 0, 0))
                 } else {
                     title = "$nazvaFull ${fit.substring(t1 + 1)}"
-                    maranAta.add(MaranAtaData("", title, "<br><strong>$nazvaFull ${fit.substring(t1 + 1)}</strong><br>\n"))
+                    maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", title, "<br><strong>$nazvaFull ${fit.substring(t1 + 1)}</strong><br>\n", 0, 0, 0))
                 }
-                maranAta.add(MaranAtaData("", title, resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n"))
+                maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", title, resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n", 0, 0, 0))
             }
         }
         adapter.notifyDataSetChanged()
+    }
+
+    private fun getNumarGlavy(nomer: Int): Int {
+        var result = nomer
+        when (nomer) {
+            51 -> result = 0
+            52 -> result = 1
+            53 -> result = 2
+            54 -> result = 3
+            55 -> result = 4
+            56 -> result = 5
+            57 -> result = 6
+            58 -> result = 7
+            59 -> result = 8
+            60 -> result = 9
+            61 -> result = 10
+            62 -> result = 11
+            63 -> result = 12
+            64 -> result = 13
+            65 -> result = 14
+            66 -> result = 15
+            67 -> result = 16
+            68 -> result = 17
+            69 -> result = 18
+            70 -> result = 19
+            71 -> result = 20
+            72 -> result = 21
+            73 -> result = 22
+            74 -> result = 23
+            75 -> result = 24
+            76 -> result = 25
+            77 -> result = 26
+            else -> result -= 1
+        }
+        return result
+    }
+
+    private fun readFileGson(file: File): ArrayList<ArrayList<Int>> {
+        val result = ArrayList<ArrayList<Int>>()
+        if (file.exists()) {
+            val inputStream2 = FileReader(file)
+            val reader = BufferedReader(inputStream2)
+            val gson = Gson()
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
+            result.addAll(gson.fromJson(reader.readText(), type))
+            inputStream2.close()
+        }
+        return result
     }
 
     private fun getSinoidalGlavas(nomer: Int, konec: Int): String {
@@ -1143,21 +1203,83 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         super.onPause()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         clearEmptyPosition()
-        val file = if (belarus) {
-            File("$filesDir/MaranAtaBel/$cytanne.json")
-        } else {
-            File("$filesDir/MaranAta/$cytanne.json")
-        }
-        if (vydelenie.size == 0) {
-            if (file.exists()) {
-                file.delete()
+        val listSinoidalNovyZapavet = ArrayList<ArrayList<Int>>()
+        val listSinoidalStaryZapavet = ArrayList<ArrayList<Int>>()
+        val listSemuxaNovyZapavet = ArrayList<ArrayList<Int>>()
+        val listSemuxaStaryZapavet = ArrayList<ArrayList<Int>>()
+        val listSinoidalNovyZapavetKnigi = ArrayList<Int>()
+        val listSinoidalStaryZapavetKnigi = ArrayList<Int>()
+        val listSemuxaNovyZapavetKnigi = ArrayList<Int>()
+        val listSemuxaStaryZapavetKnigi = ArrayList<Int>()
+        var kniga = -1
+        maranAta.forEach {
+            if (it.kniga != -1 && (it.color != 0 || it.underline != 0 || it.bold != 0)) {
+                if (it.sinoidal) {
+                    if (it.novyZapavet) {
+                        val setVydelenie = ArrayList<Int>()
+                        setVydelenie.add(it.glava)
+                        setVydelenie.add(it.styx - 1)
+                        setVydelenie.add(it.color)
+                        setVydelenie.add(it.underline)
+                        setVydelenie.add(it.bold)
+                        listSinoidalNovyZapavet.add(setVydelenie)
+                        if (kniga != it.kniga) listSinoidalNovyZapavetKnigi.add(it.kniga)
+                        kniga = it.kniga
+                    } else {
+                        val setVydelenie = ArrayList<Int>()
+                        setVydelenie.add(it.glava)
+                        setVydelenie.add(it.styx - 1)
+                        setVydelenie.add(it.color)
+                        setVydelenie.add(it.underline)
+                        setVydelenie.add(it.bold)
+                        listSinoidalStaryZapavet.add(setVydelenie)
+                        if (kniga != it.kniga) listSinoidalStaryZapavetKnigi.add(it.kniga)
+                        kniga = it.kniga
+                    }
+                } else {
+                    if (it.novyZapavet) {
+                        val setVydelenie = ArrayList<Int>()
+                        setVydelenie.add(it.glava)
+                        setVydelenie.add(it.styx - 1)
+                        setVydelenie.add(it.color)
+                        setVydelenie.add(it.underline)
+                        setVydelenie.add(it.bold)
+                        listSemuxaNovyZapavet.add(setVydelenie)
+                        if (kniga != it.kniga) listSemuxaNovyZapavetKnigi.add(it.kniga)
+                        kniga = it.kniga
+                    } else {
+                        val setVydelenie = ArrayList<Int>()
+                        setVydelenie.add(it.glava)
+                        setVydelenie.add(it.styx - 1)
+                        setVydelenie.add(it.color)
+                        setVydelenie.add(it.underline)
+                        setVydelenie.add(it.bold)
+                        listSemuxaStaryZapavet.add(setVydelenie)
+                        if (kniga != it.kniga) listSemuxaStaryZapavetKnigi.add(it.kniga)
+                        kniga = it.kniga
+                    }
+                }
             }
-        } else {
-            val gson = Gson()
-            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
-            val outputStream = FileWriter(file)
-            outputStream.write(gson.toJson(vydelenie, type))
-            outputStream.close()
+        }
+        if (listSinoidalNovyZapavet.isNotEmpty()) {
+            listSinoidalNovyZapavetKnigi.forEach {
+                saveGsonFile(File("$filesDir/BibliaSinodalNovyZavet/$it.json"), listSinoidalNovyZapavet)
+            }
+        }
+        if (listSinoidalStaryZapavet.isNotEmpty()) {
+            listSinoidalStaryZapavetKnigi.forEach {
+                saveGsonFile(File("$filesDir/BibliaSinodalStaryZavet/$it.json"), listSinoidalStaryZapavet)
+            }
+        }
+        if (listSemuxaNovyZapavet.isNotEmpty()) {
+            listSemuxaNovyZapavetKnigi.forEach {
+                saveGsonFile(File("$filesDir/BibliaSemuxaNovyZavet/$it.json"), listSemuxaNovyZapavet)
+            }
+        }
+        if (listSemuxaStaryZapavet.isNotEmpty()) {
+            listSemuxaStaryZapavetKnigi.forEach {
+                saveGsonFile(File("$filesDir/BibliaSemuxaStaryZavet/$it.json"), listSemuxaStaryZapavet)
+            }
         }
         mPedakVisable = false
         binding.linearLayout4.visibility = View.GONE
@@ -1166,6 +1288,14 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
         prefEditors.apply()
         stopAutoStartScroll()
+    }
+
+    private fun saveGsonFile(file: File, list: ArrayList<ArrayList<Int>>) {
+        val gson = Gson()
+        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
+        val outputStream = FileWriter(file)
+        outputStream.write(gson.toJson(list, type))
+        outputStream.close()
     }
 
     override fun onResume() {
@@ -1470,7 +1600,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     bibleCopyList.add(position)
                 }
                 adapter.notifyDataSetChanged()
-                invalidateOptionsMenu()
             }
         }
         if (mPedakVisable) {
@@ -1754,47 +1883,34 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             var textView = maranAta[position].bible
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             textView = textView.replace("+-+", "")
-            var t1 = textView.indexOf("$")
+            val t1 = textView.indexOf("$")
             val ssb: SpannableStringBuilder
             var end: Int
             if (t1 != -1) {
-                t1 = textView.indexOf("$")
                 val paralelLeg = textView.substring(t1 + 1).length
                 textView = textView.replace("$", "<br>")
                 val spanned = MainActivity.fromHtml(textView.trim())
                 end = spanned.length
-                t1 = end - paralelLeg
+                val t2 = end - paralelLeg
                 ssb = SpannableStringBuilder(spanned)
                 if (k.getBoolean("paralel_maranata", true)) {
-                    ssb.setSpan(RelativeSizeSpan(0.7f), t1, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorSecondary_text)), t1, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ssb.setSpan(RelativeSizeSpan(0.7f), t2, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorSecondary_text)), t2, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 } else {
                     ssb.delete(t1, end)
                     end = t1
-                }
-                val pos = checkPosition(position)
-                if (pos != -1) {
-                    if (vydelenie[pos][1] == 1) {
-                        ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }
-                    if (vydelenie[pos][2] == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    if (vydelenie[pos][3] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             } else {
                 val spanned = MainActivity.fromHtml(textView)
                 end = spanned.length
                 ssb = SpannableStringBuilder(spanned)
-                val pos = checkPosition(position)
-                if (pos != -1) {
-                    if (vydelenie[pos][1] == 1) {
-                        ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }
-                    if (vydelenie[pos][2] == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    if (vydelenie[pos][3] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                }
             }
+            if (maranAta[position].color == 1) {
+                ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            if (maranAta[position].underline == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            if (maranAta[position].bold == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             viewHolder.text.text = ssb
             if (bibleCopyList.size > 0 && bibleCopyList.contains(position) && mPedakVisable) {
                 if (dzenNoch) {
@@ -1819,7 +1935,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     private class ViewHolder(var text: TextView)
 
-    private data class MaranAtaData(val paralel: String, val title: String, val bible: String)
+    private data class MaranAtaData(val sinoidal: Boolean, val novyZapavet: Boolean, val kniga: Int, val glava: Int, val styx: Int, val paralel: String, val title: String, val bible: String, var bold: Int, var underline: Int, var color: Int)
 
     companion object {
         private var mPedakVisable = false

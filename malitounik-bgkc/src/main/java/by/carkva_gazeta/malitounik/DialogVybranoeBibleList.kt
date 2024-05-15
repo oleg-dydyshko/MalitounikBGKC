@@ -223,6 +223,101 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
         binding.subtitleToolbar.isSingleLine = true
     }
 
+    private fun biblia(): String {
+        var result = ""
+        val sb = StringBuilder()
+        arrayListVybranoe.forEachIndexed { index, vybranoeBibliaData ->
+            if (vybranoeBibliaData.novyZavet) {
+                when (vybranoeBibliaData.kniga + 1) {
+                    1 -> result = "Мц"
+                    2 -> result = "Мк"
+                    3 -> result = "Лк"
+                    4 -> result = "Ян"
+                    5 -> result = "Дз"
+                    6 -> result = "Як"
+                    7 -> result = "1 Пт"
+                    8 -> result = "2 Пт"
+                    9 -> result = "1 Ян"
+                    10 -> result = "2 Ян"
+                    11 -> result = "3 Ян"
+                    12 -> result = "Юды"
+                    13 -> result = "Рым"
+                    14 -> result = "1 Кар"
+                    15 -> result = "2 Кар"
+                    16 -> result = "Гал"
+                    17 -> result = "Эф"
+                    18 -> result = "Плп"
+                    19 -> result = "Клс"
+                    20 -> result = "1 Фес"
+                    21 -> result = "2 Фес"
+                    22 -> result = "1 Цім"
+                    23 -> result = "2 Цім"
+                    24 -> result = "Ціт"
+                    25 -> result = "Флм"
+                    26 -> result = "Гбр"
+                    27 -> result = "Адкр"
+                }
+            } else {
+                when (vybranoeBibliaData.kniga + 1) {
+                    1 -> result = "Быц"
+                    2 -> result = "Вых"
+                    3 -> result = "Ляв"
+                    4 -> result = "Лікі"
+                    5 -> result = "Дрг"
+                    6 -> result = "Нав"
+                    7 -> result = "Суд"
+                    8 -> result = "Рут"
+                    9 -> result = "1 Цар"
+                    10 -> result = "2 Цар"
+                    11 -> result = "3 Цар"
+                    12 -> result = "4 Цар"
+                    13 -> result = "1 Лет"
+                    14 -> result = "2 Лет"
+                    15 -> result = "1 Эзд"
+                    16 -> result = "Нээм"
+                    17 -> result = "2 Эзд"
+                    18 -> result = "Тав"
+                    19 -> result = "Юдт"
+                    20 -> result = "Эст"
+                    21 -> result = "Ёва"
+                    22 -> result = "Пс"
+                    23 -> result = "Высл"
+                    24 -> result = "Экл"
+                    25 -> result = "Псн"
+                    26 -> result = "Мдр"
+                    27 -> result = "Сір"
+                    28 -> result = "Іс"
+                    29 -> result = "Ер"
+                    30 -> result = "Плач"
+                    31 -> result = "Пасл Ер"
+                    32 -> result = "Бар"
+                    33 -> result = "Езк"
+                    34 -> result = "Дан"
+                    35 -> result = "Ас"
+                    36 -> result = "Ёіл"
+                    37 -> result = "Ам"
+                    38 -> result = "Аўдз"
+                    39 -> result = "Ёны"
+                    40 -> result = "Міх"
+                    41 -> result = "Нвм"
+                    42 -> result = "Абк"
+                    43 -> result = "Саф"
+                    44 -> result = "Аг"
+                    45 -> result = "Зах"
+                    46 -> result = "Мал"
+                    47 -> result = "1 Мак"
+                    48 -> result = "2 Мак"
+                    49 -> result = "3 Мак"
+                    50 -> result = "3 Эзд"
+                }
+            }
+            val delimiter = if (arrayListVybranoe.size == index + 1) ""
+            else "; "
+            sb.append(result).append(" ").append(vybranoeBibliaData.glava).append(delimiter)
+        }
+        return sb.toString()
+    }
+
     private inner class ItemAdapter(list: ArrayList<VybranoeBibliaData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<VybranoeBibliaData, ItemAdapter.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -260,6 +355,12 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 mLastClickTime = SystemClock.elapsedRealtime()
                 (activity as? BaseActivity)?.let {
                     if (it.checkmoduleResources()) {
+                        /*val intent = Intent()
+                        intent.setClassName(it, MainActivity.MARANATA)
+                        intent.putExtra("cytanneMaranaty", MenuCaliandar.getPositionCaliandar(position)[13])
+                        intent.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt())
+                        intent.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
+                        startActivity(intent)*/
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.BIBLIAVYBRANOE)
                         intent.putExtra("biblia", biblia)

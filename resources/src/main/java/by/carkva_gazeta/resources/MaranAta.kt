@@ -879,6 +879,29 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private fun getNumarGlavy(nomer: Int): Int {
         var result = nomer
         when (nomer) {
+            20 -> if (belarus) result = 16
+            21 -> if (belarus) result = 17
+            22 -> if (belarus) result = 18
+            23 -> if (belarus) result = 19
+            24 -> if (belarus) result = 20
+            25 -> if (belarus) result = 21
+            28 -> if (belarus) result = 22
+            29 -> if (belarus) result = 23
+            30 -> if (belarus) result = 24
+            33 -> if (belarus) result = 25
+            34 -> if (belarus) result = 26
+            35 -> if (belarus) result = 27
+            36 -> if (belarus) result = 28
+            37 -> if (belarus) result = 29
+            38 -> if (belarus) result = 30
+            39 -> if (belarus) result = 31
+            40 -> if (belarus) result = 32
+            41 -> if (belarus) result = 33
+            42 -> if (belarus) result = 34
+            43 -> if (belarus) result = 35
+            44 -> if (belarus) result = 36
+            45 -> if (belarus) result = 37
+            46 -> if (belarus) result = 38
             51 -> result = 0
             52 -> result = 1
             53 -> result = 2
@@ -1213,51 +1236,68 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         val listSemuxaStaryZapavetKnigi = ArrayList<Int>()
         var kniga = -1
         maranAta.forEach {
-            if (it.kniga != -1 && (it.color != 0 || it.underline != 0 || it.bold != 0)) {
-                if (it.sinoidal) {
-                    if (it.novyZapavet) {
-                        val setVydelenie = ArrayList<Int>()
-                        setVydelenie.add(it.glava)
-                        setVydelenie.add(it.styx - 1)
-                        setVydelenie.add(it.color)
-                        setVydelenie.add(it.underline)
-                        setVydelenie.add(it.bold)
-                        listSinoidalNovyZapavet.add(setVydelenie)
-                        if (kniga != it.kniga) listSinoidalNovyZapavetKnigi.add(it.kniga)
-                        kniga = it.kniga
+            if (it.kniga != -1) {
+                if (it.color != 0 || it.underline != 0 || it.bold != 0) {
+                    if (it.sinoidal) {
+                        if (it.novyZapavet) {
+                            val setVydelenie = ArrayList<Int>()
+                            setVydelenie.add(it.glava)
+                            setVydelenie.add(it.styx - 1)
+                            setVydelenie.add(it.color)
+                            setVydelenie.add(it.underline)
+                            setVydelenie.add(it.bold)
+                            listSinoidalNovyZapavet.add(setVydelenie)
+                            if (kniga != it.kniga) listSinoidalNovyZapavetKnigi.add(it.kniga)
+                            kniga = it.kniga
+                        } else {
+                            val setVydelenie = ArrayList<Int>()
+                            setVydelenie.add(it.glava)
+                            setVydelenie.add(it.styx - 1)
+                            setVydelenie.add(it.color)
+                            setVydelenie.add(it.underline)
+                            setVydelenie.add(it.bold)
+                            listSinoidalStaryZapavet.add(setVydelenie)
+                            if (kniga != it.kniga) listSinoidalStaryZapavetKnigi.add(it.kniga)
+                            kniga = it.kniga
+                        }
                     } else {
-                        val setVydelenie = ArrayList<Int>()
-                        setVydelenie.add(it.glava)
-                        setVydelenie.add(it.styx - 1)
-                        setVydelenie.add(it.color)
-                        setVydelenie.add(it.underline)
-                        setVydelenie.add(it.bold)
-                        listSinoidalStaryZapavet.add(setVydelenie)
-                        if (kniga != it.kniga) listSinoidalStaryZapavetKnigi.add(it.kniga)
-                        kniga = it.kniga
+                        if (it.novyZapavet) {
+                            val setVydelenie = ArrayList<Int>()
+                            setVydelenie.add(it.glava)
+                            setVydelenie.add(it.styx - 1)
+                            setVydelenie.add(it.color)
+                            setVydelenie.add(it.underline)
+                            setVydelenie.add(it.bold)
+                            listSemuxaNovyZapavet.add(setVydelenie)
+                            if (kniga != it.kniga) listSemuxaNovyZapavetKnigi.add(it.kniga)
+                            kniga = it.kniga
+                        } else {
+                            val setVydelenie = ArrayList<Int>()
+                            setVydelenie.add(it.glava)
+                            setVydelenie.add(it.styx - 1)
+                            setVydelenie.add(it.color)
+                            setVydelenie.add(it.underline)
+                            setVydelenie.add(it.bold)
+                            listSemuxaStaryZapavet.add(setVydelenie)
+                            if (kniga != it.kniga) listSemuxaStaryZapavetKnigi.add(it.kniga)
+                            kniga = it.kniga
+                        }
                     }
                 } else {
-                    if (it.novyZapavet) {
-                        val setVydelenie = ArrayList<Int>()
-                        setVydelenie.add(it.glava)
-                        setVydelenie.add(it.styx - 1)
-                        setVydelenie.add(it.color)
-                        setVydelenie.add(it.underline)
-                        setVydelenie.add(it.bold)
-                        listSemuxaNovyZapavet.add(setVydelenie)
-                        if (kniga != it.kniga) listSemuxaNovyZapavetKnigi.add(it.kniga)
-                        kniga = it.kniga
+                    val file = if (it.sinoidal) {
+                        if (it.novyZapavet) {
+                            File("$filesDir/BibliaSinodalNovyZavet/${it.kniga}.json")
+                        } else {
+                            File("$filesDir/BibliaSinodalStaryZavet/${it.kniga}.json")
+                        }
                     } else {
-                        val setVydelenie = ArrayList<Int>()
-                        setVydelenie.add(it.glava)
-                        setVydelenie.add(it.styx - 1)
-                        setVydelenie.add(it.color)
-                        setVydelenie.add(it.underline)
-                        setVydelenie.add(it.bold)
-                        listSemuxaStaryZapavet.add(setVydelenie)
-                        if (kniga != it.kniga) listSemuxaStaryZapavetKnigi.add(it.kniga)
-                        kniga = it.kniga
+                        if (it.novyZapavet) {
+                            File("$filesDir/BibliaSemuxaNovyZavet/${it.kniga}.json")
+                        } else {
+                            File("$filesDir/BibliaSemuxaStaryZavet/${it.kniga}.json")
+                        }
                     }
+                    if (file.exists()) file.delete()
                 }
             }
         }

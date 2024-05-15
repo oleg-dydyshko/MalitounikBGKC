@@ -1968,7 +1968,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val STARYZAPAVIETSEMUXA = "by.carkva_gazeta.resources.StaryZapavietSemuxa"
         const val NOVYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.NovyZapavietSinaidal"
         const val STARYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.StaryZapavietSinaidal"
-        const val BIBLIAVYBRANOE = "by.carkva_gazeta.resources.BibliaVybranoe"
         const val SEARCHBOGASHLUGBOVYA = "by.carkva_gazeta.resources.SearchBogashlugbovya"
         const val LOGVIEW = "by.carkva_gazeta.resources.LogView"
         const val NIADAUNIA = 0

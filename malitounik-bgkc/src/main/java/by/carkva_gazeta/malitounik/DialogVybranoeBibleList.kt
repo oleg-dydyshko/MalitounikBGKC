@@ -172,10 +172,10 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if ((activity as? BaseActivity)?.checkmoduleResources() == true) {
                     val intent = Intent()
-                    intent.setClassName(activity, MainActivity.BIBLIAVYBRANOE)
-                    intent.putExtra("biblia", biblia)
-                    intent.putExtra("title", binding.subtitleToolbar.text.toString())
+                    intent.setClassName(activity, MainActivity.MARANATA)
+                    intent.putExtra("cytanneMaranaty", biblia())
                     intent.putExtra("prodoljyt", true)
+                    intent.putExtra("vybranae", true)
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()
@@ -258,57 +258,105 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                     27 -> result = "Адкр"
                 }
             } else {
-                when (vybranoeBibliaData.kniga + 1) {
-                    1 -> result = "Быц"
-                    2 -> result = "Вых"
-                    3 -> result = "Ляв"
-                    4 -> result = "Лікі"
-                    5 -> result = "Дрг"
-                    6 -> result = "Нав"
-                    7 -> result = "Суд"
-                    8 -> result = "Рут"
-                    9 -> result = "1 Цар"
-                    10 -> result = "2 Цар"
-                    11 -> result = "3 Цар"
-                    12 -> result = "4 Цар"
-                    13 -> result = "1 Лет"
-                    14 -> result = "2 Лет"
-                    15 -> result = "1 Эзд"
-                    16 -> result = "Нээм"
-                    17 -> result = "2 Эзд"
-                    18 -> result = "Тав"
-                    19 -> result = "Юдт"
-                    20 -> result = "Эст"
-                    21 -> result = "Ёва"
-                    22 -> result = "Пс"
-                    23 -> result = "Высл"
-                    24 -> result = "Экл"
-                    25 -> result = "Псн"
-                    26 -> result = "Мдр"
-                    27 -> result = "Сір"
-                    28 -> result = "Іс"
-                    29 -> result = "Ер"
-                    30 -> result = "Плач"
-                    31 -> result = "Пасл Ер"
-                    32 -> result = "Бар"
-                    33 -> result = "Езк"
-                    34 -> result = "Дан"
-                    35 -> result = "Ас"
-                    36 -> result = "Ёіл"
-                    37 -> result = "Ам"
-                    38 -> result = "Аўдз"
-                    39 -> result = "Ёны"
-                    40 -> result = "Міх"
-                    41 -> result = "Нвм"
-                    42 -> result = "Абк"
-                    43 -> result = "Саф"
-                    44 -> result = "Аг"
-                    45 -> result = "Зах"
-                    46 -> result = "Мал"
-                    47 -> result = "1 Мак"
-                    48 -> result = "2 Мак"
-                    49 -> result = "3 Мак"
-                    50 -> result = "3 Эзд"
+                if (biblia == "1") {
+                    when (vybranoeBibliaData.kniga + 1) {
+                        1 -> result = "Быц"
+                        2 -> result = "Вых"
+                        3 -> result = "Ляв"
+                        4 -> result = "Лікі"
+                        5 -> result = "Дрг"
+                        6 -> result = "Нав"
+                        7 -> result = "Суд"
+                        8 -> result = "Рут"
+                        9 -> result = "1 Цар"
+                        10 -> result = "2 Цар"
+                        11 -> result = "3 Цар"
+                        12 -> result = "4 Цар"
+                        13 -> result = "1 Лет"
+                        14 -> result = "2 Лет"
+                        15 -> result = "1 Эзд"
+                        16 -> result = "Нээм"
+                        17 -> result = "Эст"
+                        18 -> result = "Ёва"
+                        19 -> result = "Пс"
+                        20 -> result = "Высл"
+                        21 -> result = "Экл"
+                        22 -> result = "Псн"
+                        23 -> result = "Іс"
+                        24 -> result = "Ер"
+                        25 -> result = "Плач"
+                        26 -> result = "Езк"
+                        27 -> result = "Дан"
+                        28 -> result = "Ас"
+                        29 -> result = "Ёіл"
+                        30 -> result = "Ам"
+                        31 -> result = "Аўдз"
+                        32 -> result = "Ёны"
+                        33 -> result = "Міх"
+                        34 -> result = "Нвм"
+                        35 -> result = "Абк"
+                        36 -> result = "Саф"
+                        37 -> result = "Аг"
+                        38 -> result = "Зах"
+                        39 -> result = "Мал"
+                    }
+                }
+                if (biblia == "2") {
+                    when (vybranoeBibliaData.kniga + 1) {
+                        1 -> result = "Быц"
+                        2 -> result = "Вых"
+                        3 -> result = "Ляв"
+                        4 -> result = "Лікі"
+                        5 -> result = "Дрг"
+                        6 -> result = "Нав"
+                        7 -> result = "Суд"
+                        8 -> result = "Рут"
+                        9 -> result = "1 Цар"
+                        10 -> result = "2 Цар"
+                        11 -> result = "3 Цар"
+                        12 -> result = "4 Цар"
+                        13 -> result = "1 Лет"
+                        14 -> result = "2 Лет"
+                        15 -> result = "1 Эзд"
+                        16 -> result = "Нээм"
+                        17 -> result = "2 Эзд"
+                        18 -> result = "Тав"
+                        19 -> result = "Юдт"
+                        20 -> result = "Эст"
+                        21 -> result = "Ёва"
+                        22 -> result = "Пс"
+                        23 -> result = "Высл"
+                        24 -> result = "Экл"
+                        25 -> result = "Псн"
+                        26 -> result = "Мдр"
+                        27 -> result = "Сір"
+                        28 -> result = "Іс"
+                        29 -> result = "Ер"
+                        30 -> result = "Плач"
+                        31 -> result = "Пасл Ер"
+                        32 -> result = "Бар"
+                        33 -> result = "Езк"
+                        34 -> result = "Дан"
+                        35 -> result = "Ас"
+                        36 -> result = "Ёіл"
+                        37 -> result = "Ам"
+                        38 -> result = "Аўдз"
+                        39 -> result = "Ёны"
+                        40 -> result = "Міх"
+                        41 -> result = "Нвм"
+                        42 -> result = "Абк"
+                        43 -> result = "Саф"
+                        44 -> result = "Аг"
+                        45 -> result = "Зах"
+                        46 -> result = "Мал"
+                        47 -> result = "1 Мак"
+                        48 -> result = "2 Мак"
+                        49 -> result = "3 Мак"
+                        50 -> result = "3 Эзд"
+                    }
+                }
+                if (biblia == "3") {
+                    result = "Пс"
                 }
             }
             val delimiter = if (arrayListVybranoe.size == index + 1) ""
@@ -355,15 +403,10 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 mLastClickTime = SystemClock.elapsedRealtime()
                 (activity as? BaseActivity)?.let {
                     if (it.checkmoduleResources()) {
-                        /*val intent = Intent()
-                        intent.setClassName(it, MainActivity.MARANATA)
-                        intent.putExtra("cytanneMaranaty", MenuCaliandar.getPositionCaliandar(position)[13])
-                        intent.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt())
-                        intent.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
-                        startActivity(intent)*/
                         val intent = Intent()
-                        intent.setClassName(it, MainActivity.BIBLIAVYBRANOE)
-                        intent.putExtra("biblia", biblia)
+                        intent.setClassName(it, MainActivity.MARANATA)
+                        intent.putExtra("cytanneMaranaty", biblia())
+                        intent.putExtra("vybranae", true)
                         intent.putExtra("title", mItemList[bindingAdapterPosition].title)
                         startActivity(intent)
                     } else {

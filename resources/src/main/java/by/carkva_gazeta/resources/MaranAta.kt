@@ -51,6 +51,7 @@ import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.DialogSemuxaNoKnigi
+import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
@@ -107,6 +108,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private var mun = 0
     private var day = 1
     private var isSmoothScrollToPosition = false
+    private var vybranae = false
+    private var prodoljyt = false
+    private var title = ""
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -144,7 +148,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        belarus = k.getBoolean("belarus", true)
         spid = k.getInt("autoscrollSpid", 60)
         maranAtaScrollPosition = k.getInt("maranAtaScrollPasition", 0)
         binding = AkafistMaranAtaBinding.inflate(layoutInflater)
@@ -160,14 +163,30 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         binding.ListView.adapter = adapter
         binding.ListView.divider = null
         cytanne = intent.extras?.getString("cytanneMaranaty") ?: ""
-        setMaranata(cytanne)
         val c = Calendar.getInstance()
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
+        vybranae = intent.extras?.getBoolean("vybranae", false) ?: false
+        prodoljyt = intent.extras?.getBoolean("prodoljyt", false) ?: false
+        title = intent.extras?.getString("title", "") ?: ""
+        belarus = if (vybranae) {
+            DialogVybranoeBibleList.biblia == "1" || DialogVybranoeBibleList.biblia == "3"
+        } else {
+            k.getBoolean("belarus", true)
+        }
+        setMaranata(savedInstanceState)
         if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            binding.titleToolbar.text = savedInstanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])) ?: getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
+            if (vybranae) {
+                when (DialogVybranoeBibleList.biblia) {
+                    "1" -> binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_biblia)
+                    "2" -> binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bsinaidal)
+                    "3" -> binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_psalter)
+                }
+            } else {
+                binding.titleToolbar.text = savedInstanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])) ?: getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
+            }
             binding.subtitleToolbar.text = savedInstanceState.getString("subTollBarText", "") ?: ""
             paralel = savedInstanceState.getBoolean("paralel", paralel)
             orientation = savedInstanceState.getInt("orientation")
@@ -176,7 +195,15 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 parralelMestaView(paralelPosition)
             }
         } else {
-            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
+            if (vybranae) {
+                when (DialogVybranoeBibleList.biblia) {
+                    "1" -> binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_biblia)
+                    "2" -> binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bsinaidal)
+                    "3" -> binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_psalter)
+                }
+            } else {
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
+            }
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             if (k.getBoolean("autoscrollAutostart", false)) {
                 autoStartScroll()
@@ -361,10 +388,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
         if (dzenNoch) {
             binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta)
-        }
-        binding.ListView.post {
-            isSmoothScrollToPosition = true
-            smoothScrollToPosition(maranAtaScrollPosition)
         }
     }
 
@@ -555,7 +578,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         return true
     }
 
-    private fun setMaranata(cytanne: String) {
+    private fun setMaranata(savedInstanceState: Bundle?) {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         val chten = cytanne.split(";")
         for (i in chten.indices) {
@@ -610,76 +633,80 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 var inputStream: InputStream
                 var replace = false
                 if (belarus) {
-                    when (nomer) {
-                        1 -> inputStream = resources.openRawResource(R.raw.biblias1)
-                        2 -> inputStream = resources.openRawResource(R.raw.biblias2)
-                        3 -> inputStream = resources.openRawResource(R.raw.biblias3)
-                        4 -> inputStream = resources.openRawResource(R.raw.biblias4)
-                        5 -> inputStream = resources.openRawResource(R.raw.biblias5)
-                        6 -> inputStream = resources.openRawResource(R.raw.biblias6)
-                        7 -> inputStream = resources.openRawResource(R.raw.biblias7)
-                        8 -> inputStream = resources.openRawResource(R.raw.biblias8)
-                        9 -> inputStream = resources.openRawResource(R.raw.biblias9)
-                        10 -> inputStream = resources.openRawResource(R.raw.biblias10)
-                        11 -> inputStream = resources.openRawResource(R.raw.biblias11)
-                        12 -> inputStream = resources.openRawResource(R.raw.biblias12)
-                        13 -> inputStream = resources.openRawResource(R.raw.biblias13)
-                        14 -> inputStream = resources.openRawResource(R.raw.biblias14)
-                        15 -> inputStream = resources.openRawResource(R.raw.biblias15)
-                        16 -> inputStream = resources.openRawResource(R.raw.biblias16)
-                        20 -> inputStream = resources.openRawResource(R.raw.biblias17)
-                        21 -> inputStream = resources.openRawResource(R.raw.biblias18)
-                        22 -> inputStream = resources.openRawResource(R.raw.biblias19)
-                        23 -> inputStream = resources.openRawResource(R.raw.biblias20)
-                        24 -> inputStream = resources.openRawResource(R.raw.biblias21)
-                        25 -> inputStream = resources.openRawResource(R.raw.biblias22)
-                        28 -> inputStream = resources.openRawResource(R.raw.biblias23)
-                        29 -> inputStream = resources.openRawResource(R.raw.biblias24)
-                        30 -> inputStream = resources.openRawResource(R.raw.biblias25)
-                        33 -> inputStream = resources.openRawResource(R.raw.biblias26)
-                        34 -> inputStream = resources.openRawResource(R.raw.biblias27)
-                        35 -> inputStream = resources.openRawResource(R.raw.biblias28)
-                        36 -> inputStream = resources.openRawResource(R.raw.biblias29)
-                        37 -> inputStream = resources.openRawResource(R.raw.biblias30)
-                        38 -> inputStream = resources.openRawResource(R.raw.biblias31)
-                        39 -> inputStream = resources.openRawResource(R.raw.biblias32)
-                        40 -> inputStream = resources.openRawResource(R.raw.biblias33)
-                        41 -> inputStream = resources.openRawResource(R.raw.biblias34)
-                        42 -> inputStream = resources.openRawResource(R.raw.biblias35)
-                        43 -> inputStream = resources.openRawResource(R.raw.biblias36)
-                        44 -> inputStream = resources.openRawResource(R.raw.biblias37)
-                        45 -> inputStream = resources.openRawResource(R.raw.biblias38)
-                        46 -> inputStream = resources.openRawResource(R.raw.biblias39)
-                        51 -> inputStream = resources.openRawResource(R.raw.biblian1)
-                        52 -> inputStream = resources.openRawResource(R.raw.biblian2)
-                        53 -> inputStream = resources.openRawResource(R.raw.biblian3)
-                        54 -> inputStream = resources.openRawResource(R.raw.biblian4)
-                        55 -> inputStream = resources.openRawResource(R.raw.biblian5)
-                        56 -> inputStream = resources.openRawResource(R.raw.biblian6)
-                        57 -> inputStream = resources.openRawResource(R.raw.biblian7)
-                        58 -> inputStream = resources.openRawResource(R.raw.biblian8)
-                        59 -> inputStream = resources.openRawResource(R.raw.biblian9)
-                        60 -> inputStream = resources.openRawResource(R.raw.biblian10)
-                        61 -> inputStream = resources.openRawResource(R.raw.biblian11)
-                        62 -> inputStream = resources.openRawResource(R.raw.biblian12)
-                        63 -> inputStream = resources.openRawResource(R.raw.biblian13)
-                        64 -> inputStream = resources.openRawResource(R.raw.biblian14)
-                        65 -> inputStream = resources.openRawResource(R.raw.biblian15)
-                        66 -> inputStream = resources.openRawResource(R.raw.biblian16)
-                        67 -> inputStream = resources.openRawResource(R.raw.biblian17)
-                        68 -> inputStream = resources.openRawResource(R.raw.biblian18)
-                        69 -> inputStream = resources.openRawResource(R.raw.biblian19)
-                        70 -> inputStream = resources.openRawResource(R.raw.biblian20)
-                        71 -> inputStream = resources.openRawResource(R.raw.biblian21)
-                        72 -> inputStream = resources.openRawResource(R.raw.biblian22)
-                        73 -> inputStream = resources.openRawResource(R.raw.biblian23)
-                        74 -> inputStream = resources.openRawResource(R.raw.biblian24)
-                        75 -> inputStream = resources.openRawResource(R.raw.biblian25)
-                        76 -> inputStream = resources.openRawResource(R.raw.biblian26)
-                        77 -> inputStream = resources.openRawResource(R.raw.biblian27)
-                        else -> {
-                            inputStream = getSinoidalResource(nomer)
-                            replace = true
+                    if (vybranae && DialogVybranoeBibleList.biblia == "3") {
+                        inputStream = resources.openRawResource(R.raw.psaltyr_nadsan)
+                    } else {
+                        when (nomer) {
+                            1 -> inputStream = resources.openRawResource(R.raw.biblias1)
+                            2 -> inputStream = resources.openRawResource(R.raw.biblias2)
+                            3 -> inputStream = resources.openRawResource(R.raw.biblias3)
+                            4 -> inputStream = resources.openRawResource(R.raw.biblias4)
+                            5 -> inputStream = resources.openRawResource(R.raw.biblias5)
+                            6 -> inputStream = resources.openRawResource(R.raw.biblias6)
+                            7 -> inputStream = resources.openRawResource(R.raw.biblias7)
+                            8 -> inputStream = resources.openRawResource(R.raw.biblias8)
+                            9 -> inputStream = resources.openRawResource(R.raw.biblias9)
+                            10 -> inputStream = resources.openRawResource(R.raw.biblias10)
+                            11 -> inputStream = resources.openRawResource(R.raw.biblias11)
+                            12 -> inputStream = resources.openRawResource(R.raw.biblias12)
+                            13 -> inputStream = resources.openRawResource(R.raw.biblias13)
+                            14 -> inputStream = resources.openRawResource(R.raw.biblias14)
+                            15 -> inputStream = resources.openRawResource(R.raw.biblias15)
+                            16 -> inputStream = resources.openRawResource(R.raw.biblias16)
+                            20 -> inputStream = resources.openRawResource(R.raw.biblias17)
+                            21 -> inputStream = resources.openRawResource(R.raw.biblias18)
+                            22 -> inputStream = resources.openRawResource(R.raw.biblias19)
+                            23 -> inputStream = resources.openRawResource(R.raw.biblias20)
+                            24 -> inputStream = resources.openRawResource(R.raw.biblias21)
+                            25 -> inputStream = resources.openRawResource(R.raw.biblias22)
+                            28 -> inputStream = resources.openRawResource(R.raw.biblias23)
+                            29 -> inputStream = resources.openRawResource(R.raw.biblias24)
+                            30 -> inputStream = resources.openRawResource(R.raw.biblias25)
+                            33 -> inputStream = resources.openRawResource(R.raw.biblias26)
+                            34 -> inputStream = resources.openRawResource(R.raw.biblias27)
+                            35 -> inputStream = resources.openRawResource(R.raw.biblias28)
+                            36 -> inputStream = resources.openRawResource(R.raw.biblias29)
+                            37 -> inputStream = resources.openRawResource(R.raw.biblias30)
+                            38 -> inputStream = resources.openRawResource(R.raw.biblias31)
+                            39 -> inputStream = resources.openRawResource(R.raw.biblias32)
+                            40 -> inputStream = resources.openRawResource(R.raw.biblias33)
+                            41 -> inputStream = resources.openRawResource(R.raw.biblias34)
+                            42 -> inputStream = resources.openRawResource(R.raw.biblias35)
+                            43 -> inputStream = resources.openRawResource(R.raw.biblias36)
+                            44 -> inputStream = resources.openRawResource(R.raw.biblias37)
+                            45 -> inputStream = resources.openRawResource(R.raw.biblias38)
+                            46 -> inputStream = resources.openRawResource(R.raw.biblias39)
+                            51 -> inputStream = resources.openRawResource(R.raw.biblian1)
+                            52 -> inputStream = resources.openRawResource(R.raw.biblian2)
+                            53 -> inputStream = resources.openRawResource(R.raw.biblian3)
+                            54 -> inputStream = resources.openRawResource(R.raw.biblian4)
+                            55 -> inputStream = resources.openRawResource(R.raw.biblian5)
+                            56 -> inputStream = resources.openRawResource(R.raw.biblian6)
+                            57 -> inputStream = resources.openRawResource(R.raw.biblian7)
+                            58 -> inputStream = resources.openRawResource(R.raw.biblian8)
+                            59 -> inputStream = resources.openRawResource(R.raw.biblian9)
+                            60 -> inputStream = resources.openRawResource(R.raw.biblian10)
+                            61 -> inputStream = resources.openRawResource(R.raw.biblian11)
+                            62 -> inputStream = resources.openRawResource(R.raw.biblian12)
+                            63 -> inputStream = resources.openRawResource(R.raw.biblian13)
+                            64 -> inputStream = resources.openRawResource(R.raw.biblian14)
+                            65 -> inputStream = resources.openRawResource(R.raw.biblian15)
+                            66 -> inputStream = resources.openRawResource(R.raw.biblian16)
+                            67 -> inputStream = resources.openRawResource(R.raw.biblian17)
+                            68 -> inputStream = resources.openRawResource(R.raw.biblian18)
+                            69 -> inputStream = resources.openRawResource(R.raw.biblian19)
+                            70 -> inputStream = resources.openRawResource(R.raw.biblian20)
+                            71 -> inputStream = resources.openRawResource(R.raw.biblian21)
+                            72 -> inputStream = resources.openRawResource(R.raw.biblian22)
+                            73 -> inputStream = resources.openRawResource(R.raw.biblian23)
+                            74 -> inputStream = resources.openRawResource(R.raw.biblian24)
+                            75 -> inputStream = resources.openRawResource(R.raw.biblian25)
+                            76 -> inputStream = resources.openRawResource(R.raw.biblian26)
+                            77 -> inputStream = resources.openRawResource(R.raw.biblian27)
+                            else -> {
+                                inputStream = getSinoidalResource(nomer)
+                                replace = true
+                            }
                         }
                     }
                 } else {
@@ -874,6 +901,21 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
         }
         adapter.notifyDataSetChanged()
+        isSmoothScrollToPosition = true
+        if (vybranae && !prodoljyt && savedInstanceState == null) {
+            smoothScrollToPosition(findTitle())
+        } else {
+            smoothScrollToPosition(maranAtaScrollPosition)
+        }
+    }
+
+    private fun findTitle(): Int {
+        for (i in 0 until adapter.count) {
+            if (title == adapter.getItem(i)?.title) {
+                return i
+            }
+        }
+        return 0
     }
 
     private fun getNumarGlavy(nomer: Int): Int {
@@ -1386,7 +1428,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         itemAuto.title = spanString
 
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isChecked = k.getBoolean("paralel_maranata", true)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isVisible = true
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isVisible = !vybranae
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
 
         val spanString2 = if (k.getBoolean("auto_dzen_noch", false)) {
@@ -1399,7 +1441,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         val end2 = spanString2.length
         spanString2.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).title = spanString2
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).isVisible = true
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).isVisible = !vybranae
         val actionSemuxaTitle = if (!k.getBoolean("belarus", true)) SpannableString(getString(by.carkva_gazeta.malitounik.R.string.title_biblia))
         else SpannableString(getString(by.carkva_gazeta.malitounik.R.string.bsinaidal))
         val endSem = actionSemuxaTitle.length
@@ -1589,22 +1631,29 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             paralelPosition = position
         }
         if (mPedakVisable) {
-            if (bibleCopyList.size > 1) {
+            if (vybranae && DialogVybranoeBibleList.biblia == "3") {
                 binding.view.visibility = View.GONE
                 binding.yelloy.visibility = View.GONE
                 binding.underline.visibility = View.GONE
                 binding.bold.visibility = View.GONE
             } else {
-                binding.view.visibility = View.VISIBLE
-                binding.yelloy.visibility = View.VISIBLE
-                binding.underline.visibility = View.VISIBLE
-                binding.bold.visibility = View.VISIBLE
+                if (bibleCopyList.size > 1) {
+                    binding.view.visibility = View.GONE
+                    binding.yelloy.visibility = View.GONE
+                    binding.underline.visibility = View.GONE
+                    binding.bold.visibility = View.GONE
+                } else {
+                    binding.view.visibility = View.VISIBLE
+                    binding.yelloy.visibility = View.VISIBLE
+                    binding.underline.visibility = View.VISIBLE
+                    binding.bold.visibility = View.VISIBLE
+                }
             }
         }
     }
 
     private fun parralelMestaView(position: Int) {
-        if (k.getBoolean("paralel_maranata", true)) {
+        if (k.getBoolean("paralel_maranata", true) && !vybranae) {
             if (!autoscroll) {
                 val t1 = maranAta[position].bible.indexOf("$")
                 if (t1 != -1) {
@@ -1643,16 +1692,23 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
         }
         if (mPedakVisable) {
-            if (bibleCopyList.size > 1) {
+            if (vybranae && DialogVybranoeBibleList.biblia == "3") {
                 binding.view.visibility = View.GONE
                 binding.yelloy.visibility = View.GONE
                 binding.underline.visibility = View.GONE
                 binding.bold.visibility = View.GONE
             } else {
-                binding.view.visibility = View.VISIBLE
-                binding.yelloy.visibility = View.VISIBLE
-                binding.underline.visibility = View.VISIBLE
-                binding.bold.visibility = View.VISIBLE
+                if (bibleCopyList.size > 1) {
+                    binding.view.visibility = View.GONE
+                    binding.yelloy.visibility = View.GONE
+                    binding.underline.visibility = View.GONE
+                    binding.bold.visibility = View.GONE
+                } else {
+                    binding.view.visibility = View.VISIBLE
+                    binding.yelloy.visibility = View.VISIBLE
+                    binding.underline.visibility = View.VISIBLE
+                    binding.bold.visibility = View.VISIBLE
+                }
             }
         }
         return true
@@ -1923,27 +1979,21 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             var textView = maranAta[position].bible
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             textView = textView.replace("+-+", "")
-            val t1 = textView.indexOf("$")
-            val ssb: SpannableStringBuilder
-            var end: Int
+            val spanned = MainActivity.fromHtml(textView.trim())
+            val ssb = SpannableStringBuilder(spanned)
+            val t1 = ssb.indexOf("$")
+            var end = ssb.length
             if (t1 != -1) {
-                val paralelLeg = textView.substring(t1 + 1).length
-                textView = textView.replace("$", "<br>")
-                val spanned = MainActivity.fromHtml(textView.trim())
-                end = spanned.length
-                val t2 = end - paralelLeg
-                ssb = SpannableStringBuilder(spanned)
-                if (k.getBoolean("paralel_maranata", true)) {
+                ssb.replace(t1, t1 + 1, "\n")
+                if (k.getBoolean("paralel_maranata", true) && !vybranae) {
+                    val paralelLeg = ssb.substring(t1 + 1).length
+                    val t2 = end - paralelLeg
                     ssb.setSpan(RelativeSizeSpan(0.7f), t2, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorSecondary_text)), t2, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 } else {
                     ssb.delete(t1, end)
                     end = t1
                 }
-            } else {
-                val spanned = MainActivity.fromHtml(textView)
-                end = spanned.length
-                ssb = SpannableStringBuilder(spanned)
             }
             if (maranAta[position].color == 1) {
                 ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

@@ -46,6 +46,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.BibleGlobalList
+import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
@@ -73,7 +75,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.Calendar
 
-class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
+class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
 
     private var fullscreenPage = false
     private var cytanne = ""
@@ -102,8 +104,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private var resetTitleJob: Job? = null
     private var diffScroll = -1
     private var scrolltosatrt = false
-    private var vydelenie = ArrayList<ArrayList<Int>>()
-    private var bibleCopyList = ArrayList<Int>()
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private var mun = 0
     private var day = 1
@@ -118,30 +118,21 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         adapter.notifyDataSetChanged()
     }
 
-    private fun checkPosition(glava: Int, position: Int): Int {
-        for (i in vydelenie.indices) {
-            if (vydelenie[i][0] == glava && vydelenie[i][1] == position) {
-                return i
-            }
-        }
-        return -1
-    }
-
     private fun clearEmptyPosition() {
         val remove = ArrayList<ArrayList<Int>>()
-        for (i in vydelenie.indices) {
+        for (i in BibleGlobalList.vydelenie.indices) {
             var posrem = true
-            for (e in 1 until vydelenie[i].size) {
-                if (vydelenie[i][e] == 1) {
+            for (e in 1 until BibleGlobalList.vydelenie[i].size) {
+                if (BibleGlobalList.vydelenie[i][e] == 1) {
                     posrem = false
                     break
                 }
             }
             if (posrem) {
-                remove.add(vydelenie[i])
+                remove.add(BibleGlobalList.vydelenie[i])
             }
         }
-        vydelenie.removeAll(remove.toSet())
+        BibleGlobalList.vydelenie.removeAll(remove.toSet())
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -291,8 +282,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         binding.copyBig.setOnClickListener {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val copyString = StringBuilder()
-            bibleCopyList.sort()
-            bibleCopyList.forEach {
+            BibleGlobalList.bibleCopyList.sort()
+            BibleGlobalList.bibleCopyList.forEach {
                 var textView = maranAta[it].bible
                 textView = textView.replace("+-+", "")
                 val t1 = textView.indexOf("$")
@@ -304,17 +295,17 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.copy))
             binding.linearLayout4.visibility = View.GONE
             binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-            mPedakVisable = false
-            bibleCopyList.clear()
+            BibleGlobalList.mPedakVisable = false
+            BibleGlobalList.bibleCopyList.clear()
             invalidateOptionsMenu()
             adapter.notifyDataSetChanged()
         }
         binding.adpravit.setOnClickListener {
-            if (bibleCopyList.size > 0) {
+            if (BibleGlobalList.bibleCopyList.size > 0) {
                 val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val copyString = StringBuilder()
-                bibleCopyList.sort()
-                bibleCopyList.forEach {
+                BibleGlobalList.bibleCopyList.sort()
+                BibleGlobalList.bibleCopyList.forEach {
                     var textView = maranAta[it].bible
                     textView = textView.replace("+-+", "")
                     val t1 = textView.indexOf("$")
@@ -326,8 +317,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 clipboard.setPrimaryClip(clip)
                 binding.linearLayout4.visibility = View.GONE
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                mPedakVisable = false
-                bibleCopyList.clear()
+                BibleGlobalList.mPedakVisable = false
+                BibleGlobalList.bibleCopyList.clear()
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
                 sendIntent.putExtra(Intent.EXTRA_TEXT, share)
@@ -339,49 +330,98 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
         }
         binding.underline.setOnClickListener {
-            if (bibleCopyList.size > 0) {
-                if (maranAta[bibleCopyList[0]].underline == 0) {
-                    maranAta[bibleCopyList[0]].underline = 1
+            if (BibleGlobalList.bibleCopyList.size > 0) {
+                if (maranAta[BibleGlobalList.bibleCopyList[0]].underline == 0) {
+                    maranAta[BibleGlobalList.bibleCopyList[0]].underline = 1
                 } else {
-                    maranAta[bibleCopyList[0]].underline = 0
+                    maranAta[BibleGlobalList.bibleCopyList[0]].underline = 0
                 }
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 binding.linearLayout4.visibility = View.GONE
-                mPedakVisable = false
-                bibleCopyList.clear()
+                BibleGlobalList.mPedakVisable = false
+                BibleGlobalList.bibleCopyList.clear()
                 adapter.notifyDataSetChanged()
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
         binding.bold.setOnClickListener {
-            if (bibleCopyList.size > 0) {
-                if (maranAta[bibleCopyList[0]].bold == 0) {
-                    maranAta[bibleCopyList[0]].bold = 1
+            if (BibleGlobalList.bibleCopyList.size > 0) {
+                if (maranAta[BibleGlobalList.bibleCopyList[0]].bold == 0) {
+                    maranAta[BibleGlobalList.bibleCopyList[0]].bold = 1
                 } else {
-                    maranAta[bibleCopyList[0]].bold = 0
+                    maranAta[BibleGlobalList.bibleCopyList[0]].bold = 0
                 }
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 binding.linearLayout4.visibility = View.GONE
-                mPedakVisable = false
-                bibleCopyList.clear()
+                BibleGlobalList.mPedakVisable = false
+                BibleGlobalList.bibleCopyList.clear()
                 adapter.notifyDataSetChanged()
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
         binding.yelloy.setOnClickListener {
-            if (bibleCopyList.size > 0) {
-                if (maranAta[bibleCopyList[0]].color == 0) {
-                    maranAta[bibleCopyList[0]].color = 1
+            if (BibleGlobalList.bibleCopyList.size > 0) {
+                if (maranAta[BibleGlobalList.bibleCopyList[0]].color == 0) {
+                    maranAta[BibleGlobalList.bibleCopyList[0]].color = 1
                 } else {
-                    maranAta[bibleCopyList[0]].color = 0
+                    maranAta[BibleGlobalList.bibleCopyList[0]].color = 0
                 }
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 binding.linearLayout4.visibility = View.GONE
-                mPedakVisable = false
-                bibleCopyList.clear()
+                BibleGlobalList.mPedakVisable = false
+                BibleGlobalList.bibleCopyList.clear()
                 adapter.notifyDataSetChanged()
+            } else {
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+            }
+        }
+        binding.copyBigFull.setOnClickListener {
+            BibleGlobalList.bibleCopyList.clear()
+            maranAta.forEachIndexed { index, _ ->
+                BibleGlobalList.bibleCopyList.add(index)
+            }
+            binding.view.visibility = View.GONE
+            binding.yelloy.visibility = View.GONE
+            binding.underline.visibility = View.GONE
+            binding.bold.visibility = View.GONE
+            binding.zakladka.visibility = View.GONE
+            binding.zametka.visibility = View.GONE
+            adapter.notifyDataSetChanged()
+        }
+        binding.zakladka.setOnClickListener {
+            if (BibleGlobalList.bibleCopyList.size > 0) {
+                var index = -1
+                for (i in BibleGlobalList.zakladkiSemuxa.indices) {
+                    if (BibleGlobalList.zakladkiSemuxa[i].data.contains(MainActivity.fromHtml(maranAta[BibleGlobalList.bibleCopyList[0]].bible).toString())) {
+                        index = i
+                        break
+                    }
+                }
+                if (index == -1) {
+                    val dialog = DialogAddZakladka()
+                    dialog.show(supportFragmentManager, "DialogAddZakladka")
+                } else {
+                    BibleGlobalList.zakladkiSemuxa.removeAt(index)
+                    BibleGlobalList.mPedakVisable = false
+                    BibleGlobalList.bibleCopyList.clear()
+                }
+                binding.linearLayout4.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                binding.linearLayout4.visibility = View.GONE
+                adapter.notifyDataSetChanged()
+            } else {
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+            }
+        }
+        binding.zametka.setOnClickListener {
+            if (BibleGlobalList.bibleCopyList.size > 0) {
+                val knigaName = maranAta[BibleGlobalList.bibleCopyList[0]].title + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1)
+                val zametka = DialogBibleNatatka.getInstance(semuxa = true, novyzavet = false, kniga = getNumarGlavy(maranAta[BibleGlobalList.bibleCopyList[0]].kniga), bibletext = knigaName)
+                zametka.show(supportFragmentManager, "bible_zametka")
+                binding.linearLayout4.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                binding.linearLayout4.visibility = View.GONE
+                BibleGlobalList.mPedakVisable = false
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
@@ -389,6 +429,27 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         if (dzenNoch) {
             binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta)
         }
+    }
+
+    override fun addZakladka(color: Int) {
+        if (color != -1) {
+            var maxIndex: Long = 0
+            BibleGlobalList.zakladkiSemuxa.forEach {
+                if (maxIndex < it.id) maxIndex = it.id
+            }
+            maxIndex++
+            BibleGlobalList.zakladkiSemuxa.add(0, BibleZakladkiData(maxIndex, maranAta[BibleGlobalList.bibleCopyList[0]].title + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(maranAta[BibleGlobalList.bibleCopyList[0]].bible).toString() + "<!--" + color))
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
+        }
+        BibleGlobalList.mPedakVisable = false
+        BibleGlobalList.bibleCopyList.clear()
+        adapter.notifyDataSetChanged()
+    }
+
+
+    override fun addNatatka() {
+        BibleGlobalList.bibleCopyList.clear()
+        adapter.notifyDataSetChanged()
     }
 
     private fun smoothScrollToPosition(position: Int) {
@@ -725,8 +786,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         File("$filesDir/BibliaSemuxaStaryZavet/${getNumarGlavy(nomer)}.json")
                     }
                 }
-                vydelenie.clear()
-                vydelenie.addAll(readFileGson(file))
+                BibleGlobalList.vydelenie.clear()
+                BibleGlobalList.vydelenie.addAll(readFileGson(file))
                 var bold: Int
                 var underline: Int
                 var color: Int
@@ -808,11 +869,11 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         }
                         val splitline = split2[e].trim().split("\n")
                         for (i2 in splitline.indices) {
-                            val pos = checkPosition(e - 1, i2)
+                            val pos = BibleGlobalList.checkPosition(e - 1, i2)
                             if (pos != -1) {
-                                color = vydelenie[pos][2]
-                                underline = vydelenie[pos][3]
-                                bold = vydelenie[pos][4]
+                                color = BibleGlobalList.vydelenie[pos][2]
+                                underline = BibleGlobalList.vydelenie[pos][3]
+                                bold = BibleGlobalList.vydelenie[pos][4]
                             } else {
                                 color = 0
                                 underline = 0
@@ -855,11 +916,11 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             glava = resbib.substring(t2 + 1, t3).toInt()
                             resbib = resbib.substring(t3 + 1)
                         }
-                        val pos = checkPosition(glava - 1, i3 - 1)
+                        val pos = BibleGlobalList.checkPosition(glava - 1, i3 - 1)
                         if (pos != -1) {
-                            color = vydelenie[pos][2]
-                            underline = vydelenie[pos][3]
-                            bold = vydelenie[pos][4]
+                            color = BibleGlobalList.vydelenie[pos][2]
+                            underline = BibleGlobalList.vydelenie[pos][3]
+                            bold = BibleGlobalList.vydelenie[pos][4]
                         } else {
                             color = 0
                             underline = 0
@@ -872,11 +933,11 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     if (konec - nachalo != 0) {
                         val res2 = r2.trim().split("\n")
                         for (i21 in res2.indices) {
-                            val pos = checkPosition(konec - 1, i21)
+                            val pos = BibleGlobalList.checkPosition(konec - 1, i21)
                             if (pos != -1) {
-                                color = vydelenie[pos][2]
-                                underline = vydelenie[pos][3]
-                                bold = vydelenie[pos][4]
+                                color = BibleGlobalList.vydelenie[pos][2]
+                                underline = BibleGlobalList.vydelenie[pos][3]
+                                bold = BibleGlobalList.vydelenie[pos][4]
                             } else {
                                 color = 0
                                 underline = 0
@@ -1249,9 +1310,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 invalidateOptionsMenu()
             }
 
-            mPedakVisable -> {
-                mPedakVisable = false
-                bibleCopyList.clear()
+            BibleGlobalList.mPedakVisable -> {
+                BibleGlobalList.mPedakVisable = false
+                BibleGlobalList.bibleCopyList.clear()
                 adapter.notifyDataSetChanged()
                 if (binding.linearLayout4.visibility == View.VISIBLE) {
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
@@ -1363,7 +1424,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 saveGsonFile(File("$filesDir/BibliaSemuxaStaryZavet/$it.json"), listSemuxaStaryZapavet)
             }
         }
-        mPedakVisable = false
+        BibleGlobalList.mPedakVisable = false
         binding.linearLayout4.visibility = View.GONE
         maranAtaScrollPosition = binding.ListView.firstVisiblePosition
         val prefEditors = k.edit()
@@ -1614,39 +1675,45 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (mPedakVisable) {
+        if (BibleGlobalList.mPedakVisable) {
             var find = false
-            bibleCopyList.forEach {
+            BibleGlobalList.bibleCopyList.forEach {
                 if (it == position) find = true
             }
             if (find) {
-                bibleCopyList.remove(position)
+                BibleGlobalList.bibleCopyList.remove(position)
             } else {
-                bibleCopyList.add(position)
+                BibleGlobalList.bibleCopyList.add(position)
             }
             adapter.notifyDataSetChanged()
         } else {
-            bibleCopyList.clear()
+            BibleGlobalList.bibleCopyList.clear()
             parralelMestaView(position)
             paralelPosition = position
         }
-        if (mPedakVisable) {
+        if (BibleGlobalList.mPedakVisable) {
             if (vybranae && DialogVybranoeBibleList.biblia == "3") {
                 binding.view.visibility = View.GONE
                 binding.yelloy.visibility = View.GONE
                 binding.underline.visibility = View.GONE
                 binding.bold.visibility = View.GONE
+                binding.zakladka.visibility = View.GONE
+                binding.zametka.visibility = View.GONE
             } else {
-                if (bibleCopyList.size > 1) {
+                if (BibleGlobalList.bibleCopyList.size > 1) {
                     binding.view.visibility = View.GONE
                     binding.yelloy.visibility = View.GONE
                     binding.underline.visibility = View.GONE
                     binding.bold.visibility = View.GONE
+                    binding.zakladka.visibility = View.GONE
+                    binding.zametka.visibility = View.GONE
                 } else {
                     binding.view.visibility = View.VISIBLE
                     binding.yelloy.visibility = View.VISIBLE
                     binding.underline.visibility = View.VISIBLE
                     binding.bold.visibility = View.VISIBLE
+                    binding.zakladka.visibility = View.VISIBLE
+                    binding.zametka.visibility = View.VISIBLE
                 }
             }
         }
@@ -1674,40 +1741,46 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
         if (!autoscroll) {
             if (maranAta[position].paralel != "") {
-                mPedakVisable = true
+                BibleGlobalList.mPedakVisable = true
                 if (binding.linearLayout4.visibility == View.GONE) {
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_top)
                     binding.linearLayout4.visibility = View.VISIBLE
                 }
                 var find = false
-                bibleCopyList.forEach {
+                BibleGlobalList.bibleCopyList.forEach {
                     if (it == position) find = true
                 }
                 if (find) {
-                    bibleCopyList.remove(position)
+                    BibleGlobalList.bibleCopyList.remove(position)
                 } else {
-                    bibleCopyList.add(position)
+                    BibleGlobalList.bibleCopyList.add(position)
                 }
                 adapter.notifyDataSetChanged()
             }
         }
-        if (mPedakVisable) {
+        if (BibleGlobalList.mPedakVisable) {
             if (vybranae && DialogVybranoeBibleList.biblia == "3") {
                 binding.view.visibility = View.GONE
                 binding.yelloy.visibility = View.GONE
                 binding.underline.visibility = View.GONE
                 binding.bold.visibility = View.GONE
+                binding.zakladka.visibility = View.GONE
+                binding.zametka.visibility = View.GONE
             } else {
-                if (bibleCopyList.size > 1) {
+                if (BibleGlobalList.bibleCopyList.size > 1) {
                     binding.view.visibility = View.GONE
                     binding.yelloy.visibility = View.GONE
                     binding.underline.visibility = View.GONE
                     binding.bold.visibility = View.GONE
+                    binding.zakladka.visibility = View.GONE
+                    binding.zametka.visibility = View.GONE
                 } else {
                     binding.view.visibility = View.VISIBLE
                     binding.yelloy.visibility = View.VISIBLE
                     binding.underline.visibility = View.VISIBLE
                     binding.bold.visibility = View.VISIBLE
+                    binding.zakladka.visibility = View.VISIBLE
+                    binding.zametka.visibility = View.VISIBLE
                 }
             }
         }
@@ -2002,7 +2075,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             if (maranAta[position].underline == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             if (maranAta[position].bold == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             viewHolder.text.text = ssb
-            if (bibleCopyList.size > 0 && bibleCopyList.contains(position) && mPedakVisable) {
+            if (BibleGlobalList.bibleCopyList.size > 0 && BibleGlobalList.bibleCopyList.contains(position) && BibleGlobalList.mPedakVisable) {
                 if (dzenNoch) {
                     viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark2)
                     viewHolder.text.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
@@ -2026,8 +2099,4 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private class ViewHolder(var text: TextView)
 
     private data class MaranAtaData(val sinoidal: Boolean, val novyZapavet: Boolean, val kniga: Int, val glava: Int, val styx: Int, val paralel: String, val title: String, val bible: String, var bold: Int, var underline: Int, var color: Int)
-
-    companion object {
-        private var mPedakVisable = false
-    }
 }

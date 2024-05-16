@@ -47,7 +47,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
-import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
@@ -75,7 +74,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.Calendar
 
-class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
+class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
 
     private var fullscreenPage = false
     private var cytanne = ""
@@ -377,79 +376,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
-        binding.copyBigFull.setOnClickListener {
-            BibleGlobalList.bibleCopyList.clear()
-            maranAta.forEachIndexed { index, _ ->
-                BibleGlobalList.bibleCopyList.add(index)
-            }
-            binding.view.visibility = View.GONE
-            binding.yelloy.visibility = View.GONE
-            binding.underline.visibility = View.GONE
-            binding.bold.visibility = View.GONE
-            binding.zakladka.visibility = View.GONE
-            binding.zametka.visibility = View.GONE
-            adapter.notifyDataSetChanged()
-        }
-        binding.zakladka.setOnClickListener {
-            if (BibleGlobalList.bibleCopyList.size > 0) {
-                var index = -1
-                for (i in BibleGlobalList.zakladkiSemuxa.indices) {
-                    if (BibleGlobalList.zakladkiSemuxa[i].data.contains(MainActivity.fromHtml(maranAta[BibleGlobalList.bibleCopyList[0]].bible).toString())) {
-                        index = i
-                        break
-                    }
-                }
-                if (index == -1) {
-                    val dialog = DialogAddZakladka()
-                    dialog.show(supportFragmentManager, "DialogAddZakladka")
-                } else {
-                    BibleGlobalList.zakladkiSemuxa.removeAt(index)
-                    BibleGlobalList.mPedakVisable = false
-                    BibleGlobalList.bibleCopyList.clear()
-                }
-                binding.linearLayout4.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                binding.linearLayout4.visibility = View.GONE
-                adapter.notifyDataSetChanged()
-            } else {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
-            }
-        }
-        binding.zametka.setOnClickListener {
-            if (BibleGlobalList.bibleCopyList.size > 0) {
-                val knigaName = maranAta[BibleGlobalList.bibleCopyList[0]].title + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1)
-                val zametka = DialogBibleNatatka.getInstance(semuxa = true, novyzavet = false, kniga = getNumarGlavy(maranAta[BibleGlobalList.bibleCopyList[0]].kniga), bibletext = knigaName)
-                zametka.show(supportFragmentManager, "bible_zametka")
-                binding.linearLayout4.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                binding.linearLayout4.visibility = View.GONE
-                BibleGlobalList.mPedakVisable = false
-            } else {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
-            }
-        }
         if (dzenNoch) {
             binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta)
         }
-    }
-
-    override fun addZakladka(color: Int) {
-        if (color != -1) {
-            var maxIndex: Long = 0
-            BibleGlobalList.zakladkiSemuxa.forEach {
-                if (maxIndex < it.id) maxIndex = it.id
-            }
-            maxIndex++
-            BibleGlobalList.zakladkiSemuxa.add(0, BibleZakladkiData(maxIndex, maranAta[BibleGlobalList.bibleCopyList[0]].title + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(maranAta[BibleGlobalList.bibleCopyList[0]].bible).toString() + "<!--" + color))
-            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
-        }
-        BibleGlobalList.mPedakVisable = false
-        BibleGlobalList.bibleCopyList.clear()
-        adapter.notifyDataSetChanged()
-    }
-
-
-    override fun addNatatka() {
-        BibleGlobalList.bibleCopyList.clear()
-        adapter.notifyDataSetChanged()
     }
 
     private fun smoothScrollToPosition(position: Int) {
@@ -1697,23 +1626,17 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 binding.yelloy.visibility = View.GONE
                 binding.underline.visibility = View.GONE
                 binding.bold.visibility = View.GONE
-                binding.zakladka.visibility = View.GONE
-                binding.zametka.visibility = View.GONE
             } else {
                 if (BibleGlobalList.bibleCopyList.size > 1) {
                     binding.view.visibility = View.GONE
                     binding.yelloy.visibility = View.GONE
                     binding.underline.visibility = View.GONE
                     binding.bold.visibility = View.GONE
-                    binding.zakladka.visibility = View.GONE
-                    binding.zametka.visibility = View.GONE
                 } else {
                     binding.view.visibility = View.VISIBLE
                     binding.yelloy.visibility = View.VISIBLE
                     binding.underline.visibility = View.VISIBLE
                     binding.bold.visibility = View.VISIBLE
-                    binding.zakladka.visibility = View.VISIBLE
-                    binding.zametka.visibility = View.VISIBLE
                 }
             }
         }
@@ -1764,23 +1687,17 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 binding.yelloy.visibility = View.GONE
                 binding.underline.visibility = View.GONE
                 binding.bold.visibility = View.GONE
-                binding.zakladka.visibility = View.GONE
-                binding.zametka.visibility = View.GONE
             } else {
                 if (BibleGlobalList.bibleCopyList.size > 1) {
                     binding.view.visibility = View.GONE
                     binding.yelloy.visibility = View.GONE
                     binding.underline.visibility = View.GONE
                     binding.bold.visibility = View.GONE
-                    binding.zakladka.visibility = View.GONE
-                    binding.zametka.visibility = View.GONE
                 } else {
                     binding.view.visibility = View.VISIBLE
                     binding.yelloy.visibility = View.VISIBLE
                     binding.underline.visibility = View.VISIBLE
                     binding.bold.visibility = View.VISIBLE
-                    binding.zakladka.visibility = View.VISIBLE
-                    binding.zametka.visibility = View.VISIBLE
                 }
             }
         }

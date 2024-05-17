@@ -371,9 +371,9 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             view.root.supportedSwipeDirection = SwipeDirection.LEFT
             if (dzenNoch) {
-                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
-                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
+                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
+                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
                 view.root.setBackgroundResource(R.color.colorprimary_material_dark2)
                 view.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             } else {

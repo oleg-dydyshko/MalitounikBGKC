@@ -55,6 +55,8 @@ class DialogBibleNatatka : DialogFragment() {
         semuxa = arguments?.getBoolean("semuxa") ?: true
         novyzavet = arguments?.getBoolean("novyzavet") ?: false
         kniga = arguments?.getInt("kniga") ?: 0
+        glava = arguments?.getInt("glava") ?: BibleGlobalList.mListGlava
+        stix = arguments?.getInt("stix") ?: BibleGlobalList.bibleCopyList[0]
         bibletext = arguments?.getString("bibletext") ?: ""
     }
 
@@ -149,7 +151,7 @@ class DialogBibleNatatka : DialogFragment() {
                 dialogBibleNatatkaListiner?.addNatatka()
                 dialog.cancel()
             }
-            ad.setNeutralButton(getString(R.string.bible_natatka)) { dialog: DialogInterface, _: Int ->
+            ad.setNeutralButton(getString(R.string.delite)) { dialog: DialogInterface, _: Int ->
                 if (semuxa && BibleGlobalList.natatkiSemuxa.size > 0) BibleGlobalList.natatkiSemuxa.removeAt(position)
                 if (!semuxa && BibleGlobalList.natatkiSinodal.size > 0) BibleGlobalList.natatkiSinodal.removeAt(position)
                 val imm12 = fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -167,12 +169,14 @@ class DialogBibleNatatka : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(semuxa: Boolean, novyzavet: Boolean, kniga: Int, bibletext: String): DialogBibleNatatka {
+        fun getInstance(semuxa: Boolean, novyzavet: Boolean, kniga: Int, glava: Int, stix: Int, bibletext: String): DialogBibleNatatka {
             val zametka = DialogBibleNatatka()
             val bundle = Bundle()
             bundle.putBoolean("semuxa", semuxa)
             bundle.putBoolean("novyzavet", novyzavet)
             bundle.putInt("kniga", kniga)
+            bundle.putInt("glava", glava)
+            bundle.putInt("stix", stix)
             bundle.putString("bibletext", bibletext)
             zametka.arguments = bundle
             return zametka

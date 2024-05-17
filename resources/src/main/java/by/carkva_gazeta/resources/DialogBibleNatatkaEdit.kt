@@ -83,7 +83,7 @@ class DialogBibleNatatkaEdit : DialogFragment() {
                 it.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
                 edit?.setEdit()
             }
-            ad.setNeutralButton(getString(R.string.bible_natatka)) { _: DialogInterface, _: Int ->
+            ad.setNeutralButton(getString(R.string.delite)) { _: DialogInterface, _: Int ->
                 if (semuxa == 1 && BibleGlobalList.natatkiSemuxa.size > 0) BibleGlobalList.natatkiSemuxa.removeAt(position)
                 if (semuxa == 2 && BibleGlobalList.natatkiSinodal.size > 0) BibleGlobalList.natatkiSinodal.removeAt(position)
                 it.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)

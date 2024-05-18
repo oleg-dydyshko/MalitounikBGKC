@@ -288,19 +288,20 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         } else {
             ea.textView.text = stix
         }
+        val zakladka = SpannableStringBuilder()
+        var space = 1
+        if (mPerevod == 1) {
+            res = MainActivity.translateToBelarus(res)
+            zakladka.append(setZakladkiSemuxa(position))
+            if (zakladka.isNotEmpty()) space = 2
+        }
+        if (mPerevod == 2) {
+            zakladka.append(setZakladkiSinoidal(position))
+            if (zakladka.isNotEmpty()) space = 2
+        }
+        val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka)
         if (!res.contains("+-+")) {
-            val zakladka = SpannableStringBuilder()
-            var space = 1
-            if (mPerevod == 1) {
-                res = MainActivity.translateToBelarus(res)
-                zakladka.append(setZakladkiSemuxa(position))
-                if (zakladka.isNotEmpty()) space = 2
-            }
-            if (mPerevod == 2) {
-                zakladka.append(setZakladkiSinoidal(position))
-                if (zakladka.isNotEmpty()) space = 2
-            }
-            val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka).append("\n").append(res)
+            ssb.append("\n").append(res)
             val start = ea.textView.text.length
             val end = start + space + res.length
             ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorSecondary_text)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -316,14 +317,6 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             }
             ea.textView.text = ssb
         } else {
-            val zakladka = SpannableStringBuilder()
-            if (mPerevod == 1) {
-                zakladka.append(setZakladkiSemuxa(position))
-            }
-            if (mPerevod == 2) {
-                zakladka.append(setZakladkiSinoidal(position))
-            }
-            val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka)
             val end = ea.textView.text.length
             val pos = BibleGlobalList.checkPosition(glava, position)
             if (pos != -1) {
@@ -359,11 +352,11 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             if (BibleGlobalList.natatkiSemuxa.size > 0) {
                 for (i in BibleGlobalList.natatkiSemuxa.indices) {
                     if (BibleGlobalList.natatkiSemuxa[i].list[0].contains(zav) && BibleGlobalList.natatkiSemuxa[i].list[1].toInt() == kniga && BibleGlobalList.natatkiSemuxa[i].list[2].toInt() == glava && BibleGlobalList.natatkiSemuxa[i].list[3].toInt() == position) {
-                        val ssb = SpannableStringBuilder(ea.textView.text)
-                        val nachalo = ssb.length
-                        ssb.append("\nНататка:\n").append(BibleGlobalList.natatkiSemuxa[i].list[5]).append("\n")
-                        ssb.setSpan(StyleSpan(Typeface.ITALIC), nachalo, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        ea.textView.text = ssb
+                        val ssb1 = SpannableStringBuilder(ea.textView.text)
+                        val nachalo = ssb1.length
+                        ssb1.append("\nНататка:\n").append(BibleGlobalList.natatkiSemuxa[i].list[5]).append("\n")
+                        ssb1.setSpan(StyleSpan(Typeface.ITALIC), nachalo, ssb1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        ea.textView.text = ssb1
                         break
                     }
                 }
@@ -375,11 +368,11 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             if (BibleGlobalList.natatkiSinodal.size > 0) {
                 for (i in BibleGlobalList.natatkiSinodal.indices) {
                     if (BibleGlobalList.natatkiSinodal[i].list[0].contains(zav) && BibleGlobalList.natatkiSinodal[i].list[1].toInt() == kniga && BibleGlobalList.natatkiSinodal[i].list[2].toInt() == glava && BibleGlobalList.natatkiSinodal[i].list[3].toInt() == position) {
-                        val ssb = SpannableStringBuilder(ea.textView.text)
-                        val nachalo = ssb.length
-                        ssb.append("\nНататка:\n").append(BibleGlobalList.natatkiSinodal[i].list[5]).append("\n")
-                        ssb.setSpan(StyleSpan(Typeface.ITALIC), nachalo, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        ea.textView.text = ssb
+                        val ssb1 = SpannableStringBuilder(ea.textView.text)
+                        val nachalo = ssb1.length
+                        ssb1.append("\nНататка:\n").append(BibleGlobalList.natatkiSinodal[i].list[5]).append("\n")
+                        ssb1.setSpan(StyleSpan(Typeface.ITALIC), nachalo, ssb1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        ea.textView.text = ssb1
                         break
                     }
                 }

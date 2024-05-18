@@ -16,7 +16,9 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
+import android.text.style.DynamicDrawableSpan
 import android.text.style.ForegroundColorSpan
+import android.text.style.ImageSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
@@ -305,8 +307,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val copyString = StringBuilder()
                 BibleGlobalList.bibleCopyList.sort()
                 BibleGlobalList.bibleCopyList.forEach {
-                    var textView = maranAta[it].bible
-                    textView = textView.replace("+-+", "")
+                    var textView = maranAta[it].bible.toString()
                     val t1 = textView.indexOf("$")
                     if (t1 != -1) textView = textView.substring(0, t1)
                     copyString.append("$textView<br>")
@@ -327,8 +328,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val copyString = StringBuilder()
                 BibleGlobalList.bibleCopyList.sort()
                 BibleGlobalList.bibleCopyList.forEach {
-                    var textView = maranAta[it].bible
-                    textView = textView.replace("+-+", "")
+                    var textView = maranAta[it].bible.toString()
                     val t1 = textView.indexOf("$")
                     if (t1 != -1) textView = textView.substring(0, t1)
                     copyString.append("$textView<br>")
@@ -606,7 +606,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val bible = paralelnyeMesta.biblia(fit)
                 val kniga = bible[0]
                 val nazva = bible[1]
-                val nazvaBel = bible[2]
+                val nazvaBel = if (DialogVybranoeBibleList.biblia == "3") getString(by.carkva_gazeta.malitounik.R.string.psalom2)
+                else bible[2]
                 val nomer = bible[3].toInt()
                 nazvaFull = bible[4]
                 nazvaFullBel = bible[5]
@@ -743,7 +744,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 var underline: Int
                 var color: Int
                 if (replace) {
-                    maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>", 0, 0, 0))
+                    maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", "", SpannableString("<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>"), 0, 0, 0))
                 }
                 val builder = StringBuilder()
                 var line: String
@@ -763,9 +764,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 }
                 if (chten.size == 6 && i == 3) {
                     if (belarus) {
-                        maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n", 0, 0, 0))
+                        maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", "", SpannableString("<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n"), 0, 0, 0))
                     } else {
-                        maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n", 0, 0, 0))
+                        maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", "", SpannableString("<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n"), 0, 0, 0))
                     }
                 }
                 val split2Pre = builder.toString().split("===")
@@ -813,10 +814,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         }
                     } else {
                         if (belarus) {
-                            if (addGlava == e) maranAta.add(MaranAtaData(true, nomer > 50, getNumarKnigi(nomer), 0, 0, "", "$nazvaBel $e", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>", 0, 0, 0))
-                            maranAta.add(MaranAtaData(true, nomer > 50, getNumarKnigi(nomer), 0, 0, "", "$nazvaBel $e", "<br><strong>$nazvaFullBel $e</strong><br>\n", 0, 0, 0))
+                            if (addGlava == e) maranAta.add(MaranAtaData(true, nomer > 50, getNumarKnigi(nomer), 0, 0, "", "$nazvaBel $e", SpannableString(SpannableString("<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>")), 0, 0, 0))
+                            maranAta.add(MaranAtaData(true, nomer > 50, getNumarKnigi(nomer), 0, 0, "", "$nazvaBel $e", SpannableString(MainActivity.fromHtml("<br><strong>$nazvaFullBel $e</strong><br>\n")), 0, 0, 0))
                         } else {
-                            maranAta.add(MaranAtaData(true, nomer > 50, getNumarKnigi(nomer), 0, 0, "", "$nazva $e", "<br><strong>$nazvaFull $e</strong><br>\n", 0, 0, 0))
+                            maranAta.add(MaranAtaData(true, nomer > 50, getNumarKnigi(nomer), 0, 0, "", "$nazva $e", SpannableString(MainActivity.fromHtml("<br><strong>$nazvaFull $e</strong><br>\n")), 0, 0, 0))
                         }
                         val splitline = split2[e].trim().split("\n")
                         for (i2 in splitline.indices) {
@@ -830,17 +831,28 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 underline = 0
                                 bold = 0
                             }
-                            if (belarus) maranAta.add(MaranAtaData(replace, nomer > 50, getNumarKnigi(nomer), e - 1, i2 + 1, kniga + "." + e + "." + (i2 + 1), "$nazvaBel $e", splitline[i2] + getParallel(nomer, e, i2) + "\n", bold, underline, color))
-                            else maranAta.add(MaranAtaData(true, nomer > 50, getNumarKnigi(nomer), e - 1, i2 + 1, kniga + "." + e + "." + (i2 + 1), "$nazva $e", splitline[i2] + getParallel(nomer, e, i2) + "\n", bold, underline, color))
+                            val zakladka = SpannableStringBuilder()
+                            if (DialogVybranoeBibleList.biblia == "1") {
+                                zakladka.append(setZakladkiSemuxa(nomer > 50, nomer - 1, e - 1, i2 + 1))
+                            }
+                            if (DialogVybranoeBibleList.biblia == "2") {
+                                zakladka.append(setZakladkiSinoidal(nomer > 50, nomer - 1, e - 1, i2 + 1))
+                            }
+                            val ssb = SpannableStringBuilder()
+                            ssb.append(MainActivity.fromHtml(splitline[i2]))
+                            ssb.append(zakladka)
+                            ssb.append(getParallel(nomer, e, i2))
+                            if (belarus) maranAta.add(MaranAtaData(replace, nomer > 50, getNumarKnigi(nomer), e - 1, i2 + 1, kniga + "." + e + "." + (i2 + 1), "$nazvaBel $e", ssb, bold, underline, color))
+                            else maranAta.add(MaranAtaData(true, nomer > 50, getNumarKnigi(nomer), e - 1, i2 + 1, kniga + "." + e + "." + (i2 + 1), "$nazva $e", ssb, bold, underline, color))
                         }
                     }
                 }
                 if (stixn != -1) {
                     val t1 = fit.indexOf(".")
                     if (belarus) {
-                        maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazvaBel " + fit.substring(s2 + 1, t1), "<br><strong>" + nazvaFullBel + " " + fit.substring(s2 + 1) + "</strong><br>\n", 0, 0, 0))
+                        maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazvaBel " + fit.substring(s2 + 1, t1), SpannableString(MainActivity.fromHtml("<br><strong>" + nazvaFullBel + " " + fit.substring(s2 + 1) + "</strong><br>\n")), 0, 0, 0))
                     } else {
-                        maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazva " + fit.substring(s2 + 1, t1), "<br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n", 0, 0, 0))
+                        maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazva " + fit.substring(s2 + 1, t1), SpannableString(MainActivity.fromHtml("<br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n")), 0, 0, 0))
                     }
                     val res1 = r1.toString().trim().split("\n")
                     var i3 = stixn
@@ -877,8 +889,19 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             underline = 0
                             bold = 0
                         }
-                        if (belarus) maranAta.add(MaranAtaData(replace, nomer > 50, getNumarKnigi(nomer), glava - 1, i3, "$kniga.$glava.$i3", "$nazvaBel $glava", resbib + getParallel(nomer, glava, i3 - 1) + "\n", bold, underline, color))
-                        else maranAta.add(MaranAtaData(true, nomer > 50, getNumarKnigi(nomer), glava - 1, i3, "$kniga.$glava.$i3", "$nazva $glava", resbib + getParallel(nomer, glava, i3 - 1) + "\n", bold, underline, color))
+                        val zakladka = SpannableStringBuilder()
+                        if (DialogVybranoeBibleList.biblia == "1") {
+                            zakladka.append(setZakladkiSemuxa(nomer > 50, nomer - 1, glava - 1, i3 - 1))
+                        }
+                        if (DialogVybranoeBibleList.biblia == "2") {
+                            zakladka.append(setZakladkiSinoidal(nomer > 50, nomer - 1, glava - 1, i3 - 1))
+                        }
+                        val ssb = SpannableStringBuilder()
+                        ssb.append(MainActivity.fromHtml(resbib))
+                        ssb.append(zakladka)
+                        ssb.append(getParallel(nomer, glava, i3 - 1))
+                        if (belarus) maranAta.add(MaranAtaData(replace, nomer > 50, getNumarKnigi(nomer), glava - 1, i3, "$kniga.$glava.$i3", "$nazvaBel $glava", ssb, bold, underline, color))
+                        else maranAta.add(MaranAtaData(true, nomer > 50, getNumarKnigi(nomer), glava - 1, i3, "$kniga.$glava.$i3", "$nazva $glava", ssb, bold, underline, color))
                         i3++
                     }
                     if (konec - nachalo != 0) {
@@ -894,8 +917,19 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 underline = 0
                                 bold = 0
                             }
-                            if (belarus) maranAta.add(MaranAtaData(replace, nomer > 50, getNumarKnigi(nomer), konec - 1, i21 + 1, kniga + "." + konec + "." + (i21 + 1), "$nazvaBel $konec", res2[i21] + getParallel(nomer, konec, i21) + "\n", bold, underline, color))
-                            else maranAta.add(MaranAtaData(true, nomer > 50, getNumarKnigi(nomer), konec - 1, i21 + 1, kniga + "." + konec + "." + (i21 + 1), "$nazva $konec", res2[i21] + getParallel(nomer, konec, i21) + "\n", bold, underline, color))
+                            val zakladka = SpannableStringBuilder()
+                            if (DialogVybranoeBibleList.biblia == "1") {
+                                zakladka.append(setZakladkiSemuxa(nomer > 50, nomer - 1, konec - 1, i21 + 1))
+                            }
+                            if (DialogVybranoeBibleList.biblia == "2") {
+                                zakladka.append(setZakladkiSinoidal(nomer > 50, nomer - 1, konec - 1, i21 + 1))
+                            }
+                            val ssb = SpannableStringBuilder()
+                            ssb.append(MainActivity.fromHtml(res2[i21]))
+                            ssb.append(zakladka)
+                            ssb.append(getParallel(nomer, konec, i21))
+                            if (belarus) maranAta.add(MaranAtaData(replace, nomer > 50, getNumarKnigi(nomer), konec - 1, i21 + 1, kniga + "." + konec + "." + (i21 + 1), "$nazvaBel $konec", ssb, bold, underline, color))
+                            else maranAta.add(MaranAtaData(true, nomer > 50, getNumarKnigi(nomer), konec - 1, i21 + 1, kniga + "." + konec + "." + (i21 + 1), "$nazva $konec", ssb, bold, underline, color))
                         }
                     }
                 }
@@ -904,12 +938,12 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val title: String
                 if (belarus) {
                     title = "$nazvaFullBel ${fit.substring(t1 + 1)}"
-                    maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", title, "<br><strong>$nazvaFullBel ${fit.substring(t1 + 1)}</strong><br>\n", 0, 0, 0))
+                    maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", title, SpannableString(MainActivity.fromHtml("<br><strong>$nazvaFullBel ${fit.substring(t1 + 1)}</strong><br>\n")), 0, 0, 0))
                 } else {
                     title = "$nazvaFull ${fit.substring(t1 + 1)}"
-                    maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", title, "<br><strong>$nazvaFull ${fit.substring(t1 + 1)}</strong><br>\n", 0, 0, 0))
+                    maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", title, SpannableString(MainActivity.fromHtml("<br><strong>$nazvaFull ${fit.substring(t1 + 1)}</strong><br>\n")), 0, 0, 0))
                 }
-                maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", title, resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n", 0, 0, 0))
+                maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", title, SpannableString(MainActivity.fromHtml(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n")), 0, 0, 0))
             }
         }
         adapter.notifyDataSetChanged()
@@ -2022,7 +2056,275 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             if (belarus) res = MainActivity.translateToBelarus(res)
             res = "$$res"
         }
+        res = res.replace("+-+", "")
         return res
+    }
+
+    private fun setZakladkiSemuxa(zavet: Boolean, kniga: Int, glava: Int, styx: Int): SpannableStringBuilder {
+        val ssb = SpannableStringBuilder()
+        if (BibleGlobalList.zakladkiSemuxa.size > 0) {
+            for (i in BibleGlobalList.zakladkiSemuxa.indices) {
+                var knigaN = -1
+                var knigaS = -1
+                var t1: Int
+                var t2: Int
+                var t3: Int
+                var glava1: Int
+                val knigaName = BibleGlobalList.zakladkiSemuxa[i].data
+                if (knigaName.contains("Паводле Мацьвея")) knigaN = 0
+                if (knigaName.contains("Паводле Марка")) knigaN = 1
+                if (knigaName.contains("Паводле Лукаша")) knigaN = 2
+                if (knigaName.contains("Паводле Яна")) knigaN = 3
+                if (knigaName.contains("Дзеі Апосталаў")) knigaN = 4
+                if (knigaName.contains("Якава")) knigaN = 5
+                if (knigaName.contains("1-е Пятра")) knigaN = 6
+                if (knigaName.contains("2-е Пятра")) knigaN = 7
+                if (knigaName.contains("1-е Яна Багаслова")) knigaN = 8
+                if (knigaName.contains("2-е Яна Багаслова")) knigaN = 9
+                if (knigaName.contains("3-е Яна Багаслова")) knigaN = 10
+                if (knigaName.contains("Юды")) knigaN = 11
+                if (knigaName.contains("Да Рымлянаў")) knigaN = 12
+                if (knigaName.contains("1-е да Карынфянаў")) knigaN = 13
+                if (knigaName.contains("2-е да Карынфянаў")) knigaN = 14
+                if (knigaName.contains("Да Галятаў")) knigaN = 15
+                if (knigaName.contains("Да Эфэсянаў")) knigaN = 16
+                if (knigaName.contains("Да Піліпянаў")) knigaN = 17
+                if (knigaName.contains("Да Каласянаў")) knigaN = 18
+                if (knigaName.contains("1-е да Фесаланікійцаў")) knigaN = 19
+                if (knigaName.contains("2-е да Фесаланікійцаў")) knigaN = 20
+                if (knigaName.contains("1-е да Цімафея")) knigaN = 21
+                if (knigaName.contains("2-е да Цімафея")) knigaN = 22
+                if (knigaName.contains("Да Ціта")) knigaN = 23
+                if (knigaName.contains("Да Філімона")) knigaN = 24
+                if (knigaName.contains("Да Габрэяў")) knigaN = 25
+                if (knigaName.contains("Адкрыцьцё (Апакаліпсіс)")) knigaN = 26
+                if (knigaName.contains("Быцьцё")) knigaS = 0
+                if (knigaName.contains("Выхад")) knigaS = 1
+                if (knigaName.contains("Лявіт")) knigaS = 2
+                if (knigaName.contains("Лікі")) knigaS = 3
+                if (knigaName.contains("Другі Закон")) knigaS = 4
+                if (knigaName.contains("Ісуса сына Нава")) knigaS = 5
+                if (knigaName.contains("Судзьдзяў")) knigaS = 6
+                if (knigaName.contains("Рут")) knigaS = 7
+                if (knigaName.contains("1-я Царстваў")) knigaS = 8
+                if (knigaName.contains("2-я Царстваў")) knigaS = 9
+                if (knigaName.contains("3-я Царстваў")) knigaS = 10
+                if (knigaName.contains("4-я Царстваў")) knigaS = 11
+                if (knigaName.contains("1-я Летапісаў")) knigaS = 12
+                if (knigaName.contains("2-я Летапісаў")) knigaS = 13
+                if (knigaName.contains("Эздры")) knigaS = 14
+                if (knigaName.contains("Нээміі")) knigaS = 15
+                if (knigaName.contains("Эстэр")) knigaS = 19
+                if (knigaName.contains("Ёва")) knigaS = 20
+                if (knigaName.contains("Псалтыр")) knigaS = 21
+                if (knigaName.contains("Выслоўяў Саламонавых")) knigaS = 22
+                if (knigaName.contains("Эклезіяста")) knigaS = 23
+                if (knigaName.contains("Найвышэйшая Песьня Саламонава")) knigaS = 24
+                if (knigaName.contains("Ісаі")) knigaS = 27
+                if (knigaName.contains("Ераміі")) knigaS = 28
+                if (knigaName.contains("Ераміін Плач")) knigaS = 29
+                if (knigaName.contains("Езэкііля")) knigaS = 32
+                if (knigaName.contains("Данііла")) knigaS = 33
+                if (knigaName.contains("Асіі")) knigaS = 34
+                if (knigaName.contains("Ёіля")) knigaS = 35
+                if (knigaName.contains("Амоса")) knigaS = 36
+                if (knigaName.contains("Аўдзея")) knigaS = 37
+                if (knigaName.contains("Ёны")) knigaS = 38
+                if (knigaName.contains("Міхея")) knigaS = 39
+                if (knigaName.contains("Навума")) knigaS = 40
+                if (knigaName.contains("Абакума")) knigaS = 41
+                if (knigaName.contains("Сафона")) knigaS = 42
+                if (knigaName.contains("Агея")) knigaS = 43
+                if (knigaName.contains("Захарыі")) knigaS = 44
+                if (knigaName.contains("Малахіі")) knigaS = 45
+                t1 = knigaName.indexOf("Разьдзел ")
+                t2 = knigaName.indexOf("/", t1)
+                t3 = knigaName.indexOf("\n\n")
+                glava1 = knigaName.substring(t1 + 9, t2).toInt() - 1
+                val stix1 = knigaName.substring(t2 + 6, t3).toInt() - 1
+                var zavetLocal = true
+                if (knigaS != -1) {
+                    zavetLocal = false
+                    knigaN = knigaS
+                }
+                if (zavet == zavetLocal && knigaN == kniga && glava1 == glava && stix1 == styx - 1) {
+                    ssb.append(".")
+                    val t5 = knigaName.lastIndexOf("<!--")
+                    val color = if (t5 != -1) knigaName.substring(t5 + 4).toInt()
+                    else 0
+                    val d = when (color) {
+                        0 -> {
+                            if (dzenNoch) ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark)
+                            else ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark_black)
+                        }
+                        1 -> {
+                            if (dzenNoch) ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark1_black)
+                            else ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark1)
+                        }
+                        2 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark2)
+                        3 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark3)
+                        4 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark4)
+                        5 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark5)
+                        6 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark6)
+                        7 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark7)
+                        8 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark8)
+                        9 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark9)
+                        10 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark10)
+                        11 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark11)
+                        12 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark12)
+                        else -> null
+                    }
+                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                    val realpadding = (fontSize * resources.displayMetrics.density).toInt()
+                    d?.setBounds(0, 0, realpadding, realpadding)
+                    d?.let {
+                        val span = ImageSpan(it, DynamicDrawableSpan.ALIGN_BASELINE)
+                        ssb.setSpan(span, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                    break
+                }
+            }
+        }
+        return ssb
+    }
+
+    private fun setZakladkiSinoidal(zavet: Boolean, kniga: Int, glava: Int, styx: Int): SpannableStringBuilder {
+        val ssb = SpannableStringBuilder()
+        if (BibleGlobalList.zakladkiSinodal.size > 0) {
+            for (i in BibleGlobalList.zakladkiSinodal.indices) {
+                var knigaN = -1
+                var knigaS = -1
+                var t1: Int
+                var t2: Int
+                var t3: Int
+                var glava1: Int
+                val knigaName = BibleGlobalList.zakladkiSinodal[i].data
+                if (knigaName.contains("От Матфея")) knigaN = 0
+                if (knigaName.contains("От Марка")) knigaN = 1
+                if (knigaName.contains("От Луки")) knigaN = 2
+                if (knigaName.contains("От Иоанна")) knigaN = 3
+                if (knigaName.contains("Деяния святых апостолов")) knigaN = 4
+                if (knigaName.contains("Иакова")) knigaN = 5
+                if (knigaName.contains("1-е Петра")) knigaN = 6
+                if (knigaName.contains("2-е Петра")) knigaN = 7
+                if (knigaName.contains("1-е Иоанна")) knigaN = 8
+                if (knigaName.contains("2-е Иоанна")) knigaN = 9
+                if (knigaName.contains("3-е Иоанна")) knigaN = 10
+                if (knigaName.contains("Иуды")) knigaN = 11
+                if (knigaName.contains("Римлянам")) knigaN = 12
+                if (knigaName.contains("1-е Коринфянам")) knigaN = 13
+                if (knigaName.contains("2-е Коринфянам")) knigaN = 14
+                if (knigaName.contains("Галатам")) knigaN = 15
+                if (knigaName.contains("Ефесянам")) knigaN = 16
+                if (knigaName.contains("Филиппийцам")) knigaN = 17
+                if (knigaName.contains("Колоссянам")) knigaN = 18
+                if (knigaName.contains("1-е Фессалоникийцам (Солунянам)")) knigaN = 19
+                if (knigaName.contains("2-е Фессалоникийцам (Солунянам)")) knigaN = 20
+                if (knigaName.contains("1-е Тимофею")) knigaN = 21
+                if (knigaName.contains("2-е Тимофею")) knigaN = 22
+                if (knigaName.contains("Титу")) knigaN = 23
+                if (knigaName.contains("Филимону")) knigaN = 24
+                if (knigaName.contains("Евреям")) knigaN = 25
+                if (knigaName.contains("Откровение (Апокалипсис)")) knigaN = 26
+                if (knigaName.contains("Бытие")) knigaS = 0
+                if (knigaName.contains("Исход")) knigaS = 1
+                if (knigaName.contains("Левит")) knigaS = 2
+                if (knigaName.contains("Числа")) knigaS = 3
+                if (knigaName.contains("Второзаконие")) knigaS = 4
+                if (knigaName.contains("Иисуса Навина")) knigaS = 5
+                if (knigaName.contains("Судей израилевых")) knigaS = 6
+                if (knigaName.contains("Руфи")) knigaS = 7
+                if (knigaName.contains("1-я Царств")) knigaS = 8
+                if (knigaName.contains("2-я Царств")) knigaS = 9
+                if (knigaName.contains("3-я Царств")) knigaS = 10
+                if (knigaName.contains("4-я Царств")) knigaS = 11
+                if (knigaName.contains("1-я Паралипоменон")) knigaS = 12
+                if (knigaName.contains("2-я Паралипоменон")) knigaS = 13
+                if (knigaName.contains("1-я Ездры")) knigaS = 14
+                if (knigaName.contains("Неемии")) knigaS = 15
+                if (knigaName.contains("2-я Ездры")) knigaS = 16
+                if (knigaName.contains("Товита")) knigaS = 17
+                if (knigaName.contains("Иудифи")) knigaS = 18
+                if (knigaName.contains("Есфири")) knigaS = 19
+                if (knigaName.contains("Иова")) knigaS = 20
+                if (knigaName.contains("Псалтирь")) knigaS = 21
+                if (knigaName.contains("Притчи Соломона")) knigaS = 22
+                if (knigaName.contains("Екклезиаста")) knigaS = 23
+                if (knigaName.contains("Песнь песней Соломона")) knigaS = 24
+                if (knigaName.contains("Премудрости Соломона")) knigaS = 25
+                if (knigaName.contains("Премудрости Иисуса, сына Сирахова")) knigaS = 26
+                if (knigaName.contains("Исаии")) knigaS = 27
+                if (knigaName.contains("Иеремии")) knigaS = 28
+                if (knigaName.contains("Плач Иеремии")) knigaS = 29
+                if (knigaName.contains("Послание Иеремии")) knigaS = 30
+                if (knigaName.contains("Варуха")) knigaS = 31
+                if (knigaName.contains("Иезекииля")) knigaS = 32
+                if (knigaName.contains("Даниила")) knigaS = 33
+                if (knigaName.contains("Осии")) knigaS = 34
+                if (knigaName.contains("Иоиля")) knigaS = 35
+                if (knigaName.contains("Амоса")) knigaS = 36
+                if (knigaName.contains("Авдия")) knigaS = 37
+                if (knigaName.contains("Ионы")) knigaS = 38
+                if (knigaName.contains("Михея")) knigaS = 39
+                if (knigaName.contains("Наума")) knigaS = 40
+                if (knigaName.contains("Аввакума")) knigaS = 41
+                if (knigaName.contains("Сафонии")) knigaS = 42
+                if (knigaName.contains("Аггея")) knigaS = 43
+                if (knigaName.contains("Захарии")) knigaS = 44
+                if (knigaName.contains("Малахии")) knigaS = 45
+                if (knigaName.contains("1-я Маккавейская")) knigaS = 46
+                if (knigaName.contains("2-я Маккавейская")) knigaS = 47
+                if (knigaName.contains("3-я Маккавейская")) knigaS = 48
+                if (knigaName.contains("3-я Ездры")) knigaS = 49
+                t1 = knigaName.indexOf("Глава ")
+                t2 = knigaName.indexOf("/", t1)
+                t3 = knigaName.indexOf("\n\n")
+                glava1 = knigaName.substring(t1 + 6, t2).toInt() - 1
+                val stix1 = knigaName.substring(t2 + 6, t3).toInt() - 1
+                var zavetLocal = true
+                if (knigaS != -1) {
+                    zavetLocal = false
+                    knigaN = knigaS
+                }
+                if (zavet == zavetLocal && knigaN == kniga && glava1 == glava && stix1 == styx - 1) {
+                    ssb.append(".")
+                    val t5 = knigaName.lastIndexOf("<!--")
+                    val color = if (t5 != -1) knigaName.substring(t5 + 4).toInt()
+                    else 0
+                    val d = when (color) {
+                        0 -> {
+                            if (dzenNoch) ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark)
+                            else ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark_black)
+                        }
+                        1 -> {
+                            if (dzenNoch) ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark1_black)
+                            else ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark1)
+                        }
+                        2 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark2)
+                        3 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark3)
+                        4 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark4)
+                        5 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark5)
+                        6 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark6)
+                        7 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark7)
+                        8 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark8)
+                        9 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark9)
+                        10 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark10)
+                        11 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark11)
+                        12 -> ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.bookmark12)
+                        else -> null
+                    }
+                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                    val realpadding = (fontSize * resources.displayMetrics.density).toInt()
+                    d?.setBounds(0, 0, realpadding, realpadding)
+                    d?.let {
+                        val span = ImageSpan(it, DynamicDrawableSpan.ALIGN_BASELINE)
+                        ssb.setSpan(span, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                    break
+                }
+            }
+        }
+        return ssb
     }
 
     private inner class MaranAtaListAdaprer(private val activity: Activity) : ArrayAdapter<MaranAtaData>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_maranata, maranAta) {
@@ -2046,13 +2348,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            var textView = maranAta[position].bible
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-            textView = textView.replace("+-+", "")
-            val spanned = MainActivity.fromHtml(textView.trim())
-            val ssb = SpannableStringBuilder(spanned)
-            val t1 = ssb.indexOf("$")
+            val ssb = SpannableStringBuilder(maranAta[position].bible)
             var end = ssb.length
+            val t1 = ssb.indexOf("$")
             if (t1 != -1) {
                 ssb.replace(t1, t1 + 1, "\n")
                 if (k.getBoolean("paralel_maranata", true) && !vybranae) {
@@ -2082,10 +2381,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             } else {
                 if (dzenNoch) {
                     viewHolder.text.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
-                    if (maranAta[position].bible != "") viewHolder.text.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+                    if (maranAta[position].bible.isNotEmpty()) viewHolder.text.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
                     else viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
                 } else {
-                    if (maranAta[position].bible != "") viewHolder.text.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                    if (maranAta[position].bible.isNotEmpty()) viewHolder.text.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
                     else viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
                 }
             }
@@ -2128,5 +2427,5 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     private class ViewHolder(var text: TextView)
 
-    private data class MaranAtaData(val sinoidal: Boolean, val novyZapavet: Boolean, val kniga: Int, val glava: Int, val styx: Int, val paralel: String, val title: String, val bible: String, var bold: Int, var underline: Int, var color: Int)
+    private data class MaranAtaData(val sinoidal: Boolean, val novyZapavet: Boolean, val kniga: Int, val glava: Int, val styx: Int, val paralel: String, val title: String, val bible: Spannable, var bold: Int, var underline: Int, var color: Int)
 }

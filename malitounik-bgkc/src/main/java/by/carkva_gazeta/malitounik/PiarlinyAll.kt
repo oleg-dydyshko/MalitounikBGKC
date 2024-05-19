@@ -281,8 +281,8 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
             return true
         }
         if (id == R.id.action_dzen_noch) {
+            val prefEditor = k.edit()
             if (item.isCheckable) {
-                val prefEditor = k.edit()
                 item.isChecked = !item.isChecked
                 if (item.isChecked) {
                     prefEditor.putBoolean("dzen_noch", true)
@@ -292,7 +292,11 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
                 prefEditor.apply()
                 recreate()
             } else {
-                startActivity(Intent(this, SettingsActivity::class.java))
+                prefEditor.putBoolean("dzen_noch", !dzenNoch)
+                prefEditor.putBoolean("auto_dzen_noch", false)
+                prefEditor.apply()
+                removelightSensor()
+                recreate()
             }
             return true
         }

@@ -223,7 +223,11 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
                 prefEditor.apply()
                 recreate()
             } else {
-                startActivity(Intent(this, SettingsActivity::class.java))
+                prefEditor.putBoolean("dzen_noch", !dzenNoch)
+                prefEditor.putBoolean("auto_dzen_noch", false)
+                prefEditor.apply()
+                removelightSensor()
+                recreate()
             }
             return true
         }

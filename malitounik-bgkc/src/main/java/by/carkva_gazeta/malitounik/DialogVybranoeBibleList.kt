@@ -372,8 +372,6 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             view.root.supportedSwipeDirection = SwipeDirection.LEFT
             if (dzenNoch) {
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
-                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
-                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
                 view.root.setBackgroundResource(R.color.colorprimary_material_dark2)
                 view.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             } else {

@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.hardware.SensorEvent
 import android.os.Bundle
@@ -816,7 +815,11 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
                 prefEditor.apply()
                 recreate()
             } else {
-                startActivity(Intent(this, SettingsActivity::class.java))
+                prefEditor.putBoolean("dzen_noch", !dzenNoch)
+                prefEditor.putBoolean("auto_dzen_noch", false)
+                prefEditor.apply()
+                removelightSensor()
+                recreate()
             }
             return true
         }

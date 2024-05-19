@@ -149,6 +149,21 @@
                 android:layout_marginBottom="20sp"
                 android:contentDescription="@string/set_bold"
                 app:srcCompat="@drawable/bold" />
+
+            <ImageView
+                android:id="@+id/zakladka"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginBottom="20sp"
+                android:contentDescription="@string/set_bookmark"
+                app:srcCompat="@drawable/bookmark" />
+
+            <ImageView
+                android:id="@+id/zametka"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:contentDescription="@string/natatka_add"
+                app:srcCompat="@drawable/sketch" />
         </LinearLayout>
     </by.carkva_gazeta.malitounik.InteractiveScrollView>
 

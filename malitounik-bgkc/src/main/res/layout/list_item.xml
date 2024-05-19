@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:layout_alignTop="@+id/item_layout"
         android:layout_alignBottom="@+id/item_layout"
+        android:background="@drawable/drag_list_view_item_action_edit"
         android:gravity="start|center_vertical"
         android:padding="5sp"
         android:text="@string/redagaktirovat"
@@ -25,10 +26,11 @@
         android:layout_height="match_parent"
         android:layout_alignTop="@+id/item_layout"
         android:layout_alignBottom="@+id/item_layout"
+        android:background="@drawable/drag_list_view_item_action_delite"
         android:gravity="end|center_vertical"
         android:padding="5sp"
         android:text="@string/delite"
-        android:textColor="@color/colorPrimary_text"
+        android:textColor="@color/colorWhite"
         android:textSize="14sp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

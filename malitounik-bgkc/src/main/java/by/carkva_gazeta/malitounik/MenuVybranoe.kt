@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.malitounik.databinding.MenuVybranoeBinding
@@ -318,8 +317,6 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
             view.root.supportedSwipeDirection = ListSwipeItem.SwipeDirection.LEFT
             val dzenNoch = activity.getBaseDzenNoch()
             if (dzenNoch) {
-                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
-                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
                 view.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
                 view.root.setBackgroundResource(R.color.colorprimary_material_dark2)

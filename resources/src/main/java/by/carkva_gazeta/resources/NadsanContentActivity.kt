@@ -1,14 +1,17 @@
 package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -20,16 +23,29 @@ import androidx.transition.TransitionManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
 import androidx.viewpager2.widget.ViewPager2
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.BibleGlobalList
+import by.carkva_gazeta.malitounik.DialogBrightness
+import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
+import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
+import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuVybranoe
 import by.carkva_gazeta.malitounik.R
+import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.VybranoeData
 import by.carkva_gazeta.resources.DialogBibleRazdel.Companion.getInstance
 import by.carkva_gazeta.resources.DialogBibleRazdel.DialogBibleRazdelListener
 import by.carkva_gazeta.resources.databinding.ActivityBibleBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 
 class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibleRazdelListener, BibleListiner, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
@@ -281,8 +297,8 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
             return true
         }
         if (id == R.id.action_dzen_noch) {
+            val prefEditor = k.edit()
             if (item.isCheckable) {
-                val prefEditor = k.edit()
                 item.isChecked = !item.isChecked
                 if (item.isChecked) {
                     prefEditor.putBoolean("dzen_noch", true)
@@ -292,7 +308,11 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
                 prefEditor.apply()
                 recreate()
             } else {
-                startActivity(Intent(this, SettingsActivity::class.java))
+                prefEditor.putBoolean("dzen_noch", !dzenNoch)
+                prefEditor.putBoolean("auto_dzen_noch", false)
+                prefEditor.apply()
+                removelightSensor()
+                recreate()
             }
             return true
         }

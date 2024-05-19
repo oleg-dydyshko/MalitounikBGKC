@@ -36,6 +36,11 @@ class DialogBibleNatatka : DialogFragment() {
         _binding = null
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        dialogBibleNatatkaListiner?.addNatatka()
+    }
+
     interface DialogBibleNatatkaListiner {
         fun addNatatka()
     }
@@ -148,7 +153,6 @@ class DialogBibleNatatka : DialogFragment() {
                 }
                 val imm12 = fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)
-                dialogBibleNatatkaListiner?.addNatatka()
                 dialog.cancel()
             }
             ad.setNeutralButton(getString(R.string.delite)) { dialog: DialogInterface, _: Int ->
@@ -156,7 +160,6 @@ class DialogBibleNatatka : DialogFragment() {
                 if (!semuxa && BibleGlobalList.natatkiSinodal.size > 0) BibleGlobalList.natatkiSinodal.removeAt(position)
                 val imm12 = fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)
-                dialogBibleNatatkaListiner?.addNatatka()
                 dialog.cancel()
             }
             ad.setNegativeButton(R.string.cansel) { dialog: DialogInterface, _: Int ->

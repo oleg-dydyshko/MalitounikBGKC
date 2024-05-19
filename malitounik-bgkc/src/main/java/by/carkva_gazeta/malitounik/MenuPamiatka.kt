@@ -2,7 +2,6 @@ package by.carkva_gazeta.malitounik
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
@@ -50,7 +49,12 @@ class MenuPamiatka : BaseListFragment() {
                     prefEditor.apply()
                     it.recreate()
                 } else {
-                    startActivity(Intent(it, SettingsActivity::class.java))
+                    val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
+                    prefEditor.putBoolean("dzen_noch", !dzenNoch)
+                    prefEditor.putBoolean("auto_dzen_noch", false)
+                    prefEditor.apply()
+                    it.removelightSensor()
+                    it.recreate()
                 }
                 activity?.recreate()
             }

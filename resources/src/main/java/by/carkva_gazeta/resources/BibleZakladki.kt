@@ -16,7 +16,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
@@ -280,8 +279,6 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
             if (dzenNoch) {
                 BibleArrayAdapterParallel.colors[0] = "#FFFFFF"
                 BibleArrayAdapterParallel.colors[1] = "#ff6666"
-                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
-                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
                 view.root.setBackgroundResource(R.color.colorprimary_material_dark)
                 view.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)

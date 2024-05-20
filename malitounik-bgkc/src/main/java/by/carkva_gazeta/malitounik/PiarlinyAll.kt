@@ -7,9 +7,6 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -253,18 +250,7 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
     override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_share).isVisible = false
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
-        val spanString = if (k.getBoolean("auto_dzen_noch", false)) {
-            menu.findItem(R.id.action_dzen_noch).isCheckable = false
-            SpannableString(getString(R.string.auto_widget_day_d_n))
-        } else {
-            menu.findItem(R.id.action_dzen_noch).isCheckable = true
-            SpannableString(getString(R.string.widget_day_d_n))
-        }
-        val end = spanString.length
-        var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
-        if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
-        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        menu.findItem(R.id.action_dzen_noch).title = spanString
+        menu.findItem(R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
         menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
     }
 
@@ -281,21 +267,31 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
             return true
         }
         if (id == R.id.action_dzen_noch) {
+            item.isChecked = !item.isChecked
             val prefEditor = k.edit()
-            if (item.isCheckable) {
-                item.isChecked = !item.isChecked
-                if (item.isChecked) {
-                    prefEditor.putBoolean("dzen_noch", true)
-                } else {
-                    prefEditor.putBoolean("dzen_noch", false)
-                }
-                prefEditor.apply()
-                recreate()
+            if (item.isChecked) {
+                prefEditor.putBoolean("dzen_noch", true)
             } else {
-                prefEditor.putBoolean("dzen_noch", !dzenNoch)
+                prefEditor.putBoolean("dzen_noch", false)
+            }
+            prefEditor.putBoolean("auto_dzen_noch", false)
+            prefEditor.apply()
+            removelightSensor()
+            recreate()
+            return true
+        }
+        if (id == R.id.action_auto_dzen_noch) {
+            item.isChecked = !item.isChecked
+            val prefEditor = k.edit()
+            if (item.isChecked) {
+                prefEditor.putBoolean("auto_dzen_noch", true)
+                setlightSensor()
+            } else {
                 prefEditor.putBoolean("auto_dzen_noch", false)
-                prefEditor.apply()
                 removelightSensor()
+            }
+            prefEditor.apply()
+            if (getCheckDzenNoch() != dzenNoch) {
                 recreate()
             }
             return true

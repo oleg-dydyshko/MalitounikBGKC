@@ -5,9 +5,7 @@ import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Spannable
-import android.text.SpannableString
 import android.text.method.LinkMovementMethod
-import android.text.style.AbsoluteSizeSpan
 import android.text.style.ImageSpan
 import android.util.TypedValue
 import android.view.Menu
@@ -106,18 +104,7 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
 
     override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_dzen_noch).isChecked = getBaseDzenNoch()
-        val spanString = if (chin.getBoolean("auto_dzen_noch", false)) {
-            menu.findItem(R.id.action_dzen_noch).isCheckable = false
-            SpannableString(getString(R.string.auto_widget_day_d_n))
-        } else {
-            menu.findItem(R.id.action_dzen_noch).isCheckable = true
-            SpannableString(getString(R.string.widget_day_d_n))
-        }
-        val end = spanString.length
-        var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
-        if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
-        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        menu.findItem(R.id.action_dzen_noch).title = spanString
+        menu.findItem(R.id.action_auto_dzen_noch).isChecked = chin.getBoolean("auto_dzen_noch", false)
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
@@ -132,22 +119,31 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
             return true
         }
         if (id == R.id.action_dzen_noch) {
+            item.isChecked = !item.isChecked
             val prefEditor = chin.edit()
-            if (item.isCheckable) {
-                item.isChecked = !item.isChecked
-                if (item.isChecked) {
-                    prefEditor.putBoolean("dzen_noch", true)
-                } else {
-                    prefEditor.putBoolean("dzen_noch", false)
-                }
-                prefEditor.apply()
-                recreate()
+            if (item.isChecked) {
+                prefEditor.putBoolean("dzen_noch", true)
             } else {
-                val dzenNoch = getBaseDzenNoch()
-                prefEditor.putBoolean("dzen_noch", !dzenNoch)
+                prefEditor.putBoolean("dzen_noch", false)
+            }
+            prefEditor.putBoolean("auto_dzen_noch", false)
+            prefEditor.apply()
+            removelightSensor()
+            recreate()
+            return true
+        }
+        if (id == R.id.action_auto_dzen_noch) {
+            item.isChecked = !item.isChecked
+            val prefEditor = chin.edit()
+            if (item.isChecked) {
+                prefEditor.putBoolean("auto_dzen_noch", true)
+                setlightSensor()
+            } else {
                 prefEditor.putBoolean("auto_dzen_noch", false)
-                prefEditor.apply()
                 removelightSensor()
+            }
+            prefEditor.apply()
+            if (getCheckDzenNoch() != getBaseDzenNoch()) {
                 recreate()
             }
             return true

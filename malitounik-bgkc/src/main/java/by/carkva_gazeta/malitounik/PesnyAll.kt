@@ -358,18 +358,9 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             menu.findItem(R.id.action_vybranoe).title = resources.getString(R.string.vybranoe)
         }
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
-        val spanString2 = if (k.getBoolean("auto_dzen_noch", false)) {
-            menu.findItem(R.id.action_dzen_noch).isCheckable = false
-            SpannableString(getString(R.string.auto_widget_day_d_n))
-        } else {
-            menu.findItem(R.id.action_dzen_noch).isCheckable = true
-            SpannableString(getString(R.string.widget_day_d_n))
-        }
-        val end2 = spanString2.length
+        menu.findItem(R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
         var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
         if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
-        spanString2.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        menu.findItem(R.id.action_dzen_noch).title = spanString2
         val item = menu.findItem(R.id.action_vybranoe)
         val spanString = SpannableString(menu.findItem(R.id.action_vybranoe).title.toString())
         val end = spanString.length
@@ -391,20 +382,29 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             return true
         }
         if (id == R.id.action_dzen_noch) {
-            if (item.isCheckable) {
-                item.isChecked = !item.isChecked
-                if (item.isChecked) {
-                    prefEditor.putBoolean("dzen_noch", true)
-                } else {
-                    prefEditor.putBoolean("dzen_noch", false)
-                }
-                prefEditor.apply()
-                recreate()
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                prefEditor.putBoolean("dzen_noch", true)
             } else {
-                prefEditor.putBoolean("dzen_noch", !dzenNoch)
+                prefEditor.putBoolean("dzen_noch", false)
+            }
+            prefEditor.putBoolean("auto_dzen_noch", false)
+            prefEditor.apply()
+            removelightSensor()
+            recreate()
+            return true
+        }
+        if (id == R.id.action_auto_dzen_noch) {
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                prefEditor.putBoolean("auto_dzen_noch", true)
+                setlightSensor()
+            } else {
                 prefEditor.putBoolean("auto_dzen_noch", false)
-                prefEditor.apply()
                 removelightSensor()
+            }
+            prefEditor.apply()
+            if (getCheckDzenNoch() != dzenNoch) {
                 recreate()
             }
             return true

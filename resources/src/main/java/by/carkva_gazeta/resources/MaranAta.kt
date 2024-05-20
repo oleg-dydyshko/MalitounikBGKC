@@ -297,7 +297,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 if (glava == -1) {
                     kniga = maranAta[i].kniga
                     glava = maranAta[i].glava
+                    break
                 }
+            }
+            for (i in 0 until maranAta.size) {
                 if (glava == maranAta[i].glava && kniga == maranAta[i].kniga) BibleGlobalList.bibleCopyList.add(i)
             }
             binding.view.visibility = View.GONE
@@ -1437,8 +1440,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             setVydelenie.add(maranata.underline)
                             setVydelenie.add(maranata.bold)
                             listSinoidalNovyZapavet.add(setVydelenie)
-                            if (kniga != maranata.kniga) listSinoidalNovyZapavetKnigi.add(maranata.kniga)
-                            kniga = maranata.kniga
+                            if (kniga != getNumarKnigi(maranata.kniga)) listSinoidalNovyZapavetKnigi.add(getNumarKnigi(maranata.kniga))
+                            kniga = getNumarKnigi(maranata.kniga)
                         } else {
                             val setVydelenie = ArrayList<Int>()
                             setVydelenie.add(maranata.glava)
@@ -1447,8 +1450,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             setVydelenie.add(maranata.underline)
                             setVydelenie.add(maranata.bold)
                             listSinoidalStaryZapavet.add(setVydelenie)
-                            if (kniga != maranata.kniga) listSinoidalStaryZapavetKnigi.add(maranata.kniga)
-                            kniga = maranata.kniga
+                            if (kniga != getNumarKnigi(maranata.kniga)) listSinoidalStaryZapavetKnigi.add(getNumarKnigi(maranata.kniga))
+                            kniga = getNumarKnigi(maranata.kniga)
                         }
                     } else {
                         if (maranata.novyZapavet) {
@@ -1459,8 +1462,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             setVydelenie.add(maranata.underline)
                             setVydelenie.add(maranata.bold)
                             listSemuxaNovyZapavet.add(setVydelenie)
-                            if (kniga != maranata.kniga) listSemuxaNovyZapavetKnigi.add(maranata.kniga)
-                            kniga = maranata.kniga
+                            if (kniga != getNumarKnigi(maranata.kniga)) listSemuxaNovyZapavetKnigi.add(getNumarKnigi(maranata.kniga))
+                            kniga = getNumarKnigi(maranata.kniga)
                         } else {
                             val setVydelenie = ArrayList<Int>()
                             setVydelenie.add(maranata.glava)
@@ -1469,22 +1472,22 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             setVydelenie.add(maranata.underline)
                             setVydelenie.add(maranata.bold)
                             listSemuxaStaryZapavet.add(setVydelenie)
-                            if (kniga != maranata.kniga) listSemuxaStaryZapavetKnigi.add(maranata.kniga)
-                            kniga = maranata.kniga
+                            if (kniga != getNumarKnigi(maranata.kniga)) listSemuxaStaryZapavetKnigi.add(getNumarKnigi(maranata.kniga))
+                            kniga = getNumarKnigi(maranata.kniga)
                         }
                     }
                 } else {
                     val file = if (maranata.sinoidal) {
                         if (maranata.novyZapavet) {
-                            File("$filesDir/BibliaSinodalNovyZavet/${maranata.kniga}.json")
+                            File("$filesDir/BibliaSinodalNovyZavet/${getNumarKnigi(maranata.kniga)}.json")
                         } else {
-                            File("$filesDir/BibliaSinodalStaryZavet/${maranata.kniga}.json")
+                            File("$filesDir/BibliaSinodalStaryZavet/${getNumarKnigi(maranata.kniga)}.json")
                         }
                     } else {
                         if (maranata.novyZapavet) {
-                            File("$filesDir/BibliaSemuxaNovyZavet/${maranata.kniga}.json")
+                            File("$filesDir/BibliaSemuxaNovyZavet/${getNumarKnigi(maranata.kniga)}.json")
                         } else {
-                            File("$filesDir/BibliaSemuxaStaryZavet/${maranata.kniga}.json")
+                            File("$filesDir/BibliaSemuxaStaryZavet/${getNumarKnigi(maranata.kniga)}.json")
                         }
                     }
                     if (file.exists()) file.delete()
@@ -1605,21 +1608,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
         spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         itemAuto.title = spanString
-
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isChecked = k.getBoolean("paralel_maranata", true)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isVisible = !vybranae
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
-
-        val spanString2 = if (k.getBoolean("auto_dzen_noch", false)) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isCheckable = false
-            SpannableString(getString(by.carkva_gazeta.malitounik.R.string.auto_widget_day_d_n))
-        } else {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isCheckable = true
-            SpannableString(getString(by.carkva_gazeta.malitounik.R.string.widget_day_d_n))
-        }
-        val end2 = spanString2.length
-        spanString2.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).title = spanString2
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).isVisible = !vybranae
         val actionSemuxaTitle = if (!k.getBoolean("belarus", true)) SpannableString(getString(by.carkva_gazeta.malitounik.R.string.title_biblia))
         else SpannableString(getString(by.carkva_gazeta.malitounik.R.string.bsinaidal))
@@ -1664,20 +1656,29 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            if (item.isCheckable) {
-                item.isChecked = !item.isChecked
-                if (item.isChecked) {
-                    prefEditor.putBoolean("dzen_noch", true)
-                } else {
-                    prefEditor.putBoolean("dzen_noch", false)
-                }
-                prefEditor.apply()
-                recreate()
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                prefEditor.putBoolean("dzen_noch", true)
             } else {
-                prefEditor.putBoolean("dzen_noch", !dzenNoch)
+                prefEditor.putBoolean("dzen_noch", false)
+            }
+            prefEditor.putBoolean("auto_dzen_noch", false)
+            prefEditor.apply()
+            removelightSensor()
+            recreate()
+            return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch) {
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                prefEditor.putBoolean("auto_dzen_noch", true)
+                setlightSensor()
+            } else {
                 prefEditor.putBoolean("auto_dzen_noch", false)
-                prefEditor.apply()
                 removelightSensor()
+            }
+            prefEditor.apply()
+            if (getCheckDzenNoch() != dzenNoch) {
                 recreate()
             }
             return true

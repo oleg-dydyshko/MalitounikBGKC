@@ -3,7 +3,6 @@ package by.carkva_gazeta.resources
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.content.res.Configuration
@@ -13,7 +12,6 @@ import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.style.AbsoluteSizeSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
@@ -1130,18 +1128,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             else -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
-        val spanString = if (k.getBoolean("auto_dzen_noch", false)) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isCheckable = false
-            SpannableString(getString(by.carkva_gazeta.malitounik.R.string.auto_widget_day_d_n))
-        } else {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isCheckable = true
-            SpannableString(getString(by.carkva_gazeta.malitounik.R.string.widget_day_d_n))
-        }
-        val end = spanString.length
-        var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
-        if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
-        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).title = spanString
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_utran).isChecked = k.getBoolean("utran", true)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_utran).isVisible = true
     }
@@ -1178,20 +1165,29 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            if (item.isCheckable) {
-                item.isChecked = !item.isChecked
-                if (item.isChecked) {
-                    prefEditor.putBoolean("dzen_noch", true)
-                } else {
-                    prefEditor.putBoolean("dzen_noch", false)
-                }
-                prefEditor.apply()
-                recreate()
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                prefEditor.putBoolean("dzen_noch", true)
             } else {
-                prefEditor.putBoolean("dzen_noch", !dzenNoch)
+                prefEditor.putBoolean("dzen_noch", false)
+            }
+            prefEditor.putBoolean("auto_dzen_noch", false)
+            prefEditor.apply()
+            removelightSensor()
+            recreate()
+            return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch) {
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                prefEditor.putBoolean("auto_dzen_noch", true)
+                setlightSensor()
+            } else {
                 prefEditor.putBoolean("auto_dzen_noch", false)
-                prefEditor.apply()
                 removelightSensor()
+            }
+            prefEditor.apply()
+            if (getCheckDzenNoch() != dzenNoch) {
                 recreate()
             }
             return true

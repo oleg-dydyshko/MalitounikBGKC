@@ -37,23 +37,34 @@ class MenuPadryxtoukaDaSpovedzi : BaseListFragment() {
             return true
         }
         if (id == R.id.action_dzen_noch) {
-            activity?.let {
+            (activity as BaseActivity).let {
+                item.isChecked = !item.isChecked
                 val prefEditor = k.edit()
-                if (item.isCheckable) {
-                    item.isChecked = !item.isChecked
-                    if (item.isChecked) {
-                        prefEditor.putBoolean("dzen_noch", true)
-                    } else {
-                        prefEditor.putBoolean("dzen_noch", false)
-                    }
-                    prefEditor.apply()
-                    it.recreate()
+                if (item.isChecked) {
+                    prefEditor.putBoolean("dzen_noch", true)
                 } else {
-                    val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
-                    prefEditor.putBoolean("dzen_noch", !dzenNoch)
+                    prefEditor.putBoolean("dzen_noch", false)
+                }
+                prefEditor.putBoolean("auto_dzen_noch", false)
+                prefEditor.apply()
+                it.removelightSensor()
+                it.recreate()
+            }
+            return true
+        }
+        if (id == R.id.action_auto_dzen_noch) {
+            (activity as BaseActivity).let {
+                item.isChecked = !item.isChecked
+                val prefEditor = k.edit()
+                if (item.isChecked) {
+                    prefEditor.putBoolean("auto_dzen_noch", true)
+                    it.setlightSensor()
+                } else {
                     prefEditor.putBoolean("auto_dzen_noch", false)
-                    prefEditor.apply()
                     it.removelightSensor()
+                }
+                prefEditor.apply()
+                if (it.getCheckDzenNoch() != it.getBaseDzenNoch()) {
                     it.recreate()
                 }
             }

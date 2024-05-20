@@ -981,8 +981,8 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                         stix++
                         val aSviatyia = MainActivity.fromHtml(bibleline[r])
                         val title = "$nazva Гл. $glava\n".length
-                        val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                        val poshuk2 = findChars(poshuk1, span)
+                        val span = SpannableString(aSviatyia)
+                        val poshuk2 = findChars(poshuk1, span, "<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n")
                         if (poshuk2.isEmpty()) continue
                         for (w in 0 until poshuk2.size) {
                             val t2 = poshuk2[w].str.length
@@ -1118,8 +1118,8 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                         stix++
                         val aSviatyia = MainActivity.fromHtml(bibleline[r])
                         val title = "$nazva Гл. $glava\n".length
-                        val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                        val poshuk2 = findChars(poshuk1, span)
+                        val span = SpannableString(aSviatyia)
+                        val poshuk2 = findChars(poshuk1, span, "<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n")
                         if (poshuk2.isEmpty()) continue
                         for (w in 0 until poshuk2.size) {
                             val t2 = poshuk2[w].str.length
@@ -1168,8 +1168,8 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 stix++
                 val aSviatyia = MainActivity.fromHtml(bibleline[r])
                 val title = "$nazva Гл. $glava\n".length
-                val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                val poshuk2 = findChars(poshuk1, span)
+                val span = SpannableString(aSviatyia)
+                val poshuk2 = findChars(poshuk1, span, "<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n")
                 if (poshuk2.isEmpty()) continue
                 for (w in 0 until poshuk2.size) {
                     val t2 = poshuk2[w].str.length
@@ -1185,31 +1185,31 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         return seashpost
     }
 
-    private fun findChars(search: String, text: SpannableString): ArrayList<FindString> {
+    private fun findChars(search: String, textSearch: SpannableString, title: String): ArrayList<FindString> {
         val registr = chin.getBoolean("pegistrbukv", true)
         val stringBuilder = StringBuilder()
         var strSub = 0
         val list = search.toCharArray()
         val result = ArrayList<FindString>()
         while (true) {
-            val strSub1Pos = text.indexOf(list[0], strSub, registr)
+            val strSub1Pos = textSearch.indexOf(list[0], strSub, registr)
             if (strSub1Pos != -1) {
                 strSub = strSub1Pos + 1
                 val subChar2 = StringBuilder()
                 for (i in 1 until list.size) {
-                    if (text.length >= strSub + 1) {
+                    if (textSearch.length >= strSub + 1) {
                         if (list[i].isLetterOrDigit()) {
-                            var subChar = text.substring(strSub, strSub + 1)
+                            var subChar = textSearch.substring(strSub, strSub + 1)
                             if (subChar == "́") {
                                 stringBuilder.append(list[i])
                                 strSub++
-                                if (text.length >= strSub + 1) {
-                                    subChar = text.substring(strSub, strSub + 1)
+                                if (textSearch.length >= strSub + 1) {
+                                    subChar = textSearch.substring(strSub, strSub + 1)
                                 }
                             }
                             val strSub2Pos = subChar.indexOf(list[i], ignoreCase = registr)
                             if (strSub2Pos != -1) {
-                                if (stringBuilder.isEmpty()) stringBuilder.append(text.substring(strSub1Pos, strSub1Pos + 1))
+                                if (stringBuilder.isEmpty()) stringBuilder.append(textSearch.substring(strSub1Pos, strSub1Pos + 1))
                                 if (subChar2.isNotEmpty()) stringBuilder.append(subChar2.toString())
                                 stringBuilder.append(list[i])
                                 subChar2.clear()
@@ -1220,8 +1220,8 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                             }
                         } else {
                             while (true) {
-                                if (text.length >= strSub + 1) {
-                                    val subChar = text.substring(strSub, strSub + 1).toCharArray()
+                                if (textSearch.length >= strSub + 1) {
+                                    val subChar = textSearch.substring(strSub, strSub + 1).toCharArray()
                                     if (!subChar[0].isLetterOrDigit()) {
                                         subChar2.append(subChar[0])
                                         strSub++
@@ -1248,15 +1248,17 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 }
                 if (stringBuilder.toString().isNotEmpty()) {
                     if (chin.getInt("slovocalkam", 0) == 1) {
-                        val startString = if (strSub1Pos > 0) text.substring(strSub1Pos - 1, strSub1Pos)
+                        val startString = if (strSub1Pos > 0) textSearch.substring(strSub1Pos - 1, strSub1Pos)
                         else " "
-                        val endString = if (strSub1Pos + stringBuilder.length + 1 <= text.length) text.substring(strSub1Pos + stringBuilder.length, strSub1Pos + stringBuilder.length + 1)
+                        val endString = if (strSub1Pos + stringBuilder.length + 1 <= textSearch.length) textSearch.substring(strSub1Pos + stringBuilder.length, strSub1Pos + stringBuilder.length + 1)
                         else " "
                        if (!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit()) {
+                           stringBuilder.append(title)
                            result.add(FindString(stringBuilder.toString(), strSub))
                            stringBuilder.clear()
                        }
                     } else {
+                        stringBuilder.append(title)
                         result.add(FindString(stringBuilder.toString(), strSub))
                         stringBuilder.clear()
                     }

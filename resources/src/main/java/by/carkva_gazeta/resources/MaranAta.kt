@@ -286,23 +286,27 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         TooltipCompat.setTooltipText(binding.underline, getString(by.carkva_gazeta.malitounik.R.string.set_underline))
         TooltipCompat.setTooltipText(binding.bold, getString(by.carkva_gazeta.malitounik.R.string.set_bold))
         binding.copyBigFull.setOnClickListener {
-            if (BibleGlobalList.bibleCopyList.size > 0) {
-                BibleGlobalList.bibleCopyList.sort()
-                val glava = maranAta[BibleGlobalList.bibleCopyList[0]].glava
-                BibleGlobalList.bibleCopyList.clear()
-                maranAta.forEachIndexed { index, maranata ->
-                    if (glava == maranata.glava) BibleGlobalList.bibleCopyList.add(index)
+            var glava = if (BibleGlobalList.bibleCopyList.size > 0) maranAta[BibleGlobalList.bibleCopyList[0]].glava
+            else -1
+            var kniga = if (BibleGlobalList.bibleCopyList.size > 0) maranAta[BibleGlobalList.bibleCopyList[0]].kniga
+            else -1
+            BibleGlobalList.bibleCopyList.clear()
+            val firstVisiblePosition = binding.ListView.firstVisiblePosition
+            for (i in firstVisiblePosition until maranAta.size) {
+                if (maranAta[i].kniga == -1) continue
+                if (glava == -1) {
+                    kniga = maranAta[i].kniga
+                    glava = maranAta[i].glava
                 }
-                binding.view.visibility = View.GONE
-                binding.yelloy.visibility = View.GONE
-                binding.underline.visibility = View.GONE
-                binding.bold.visibility = View.GONE
-                binding.zakladka.visibility = View.GONE
-                binding.zametka.visibility = View.GONE
-                adapter.notifyDataSetChanged()
-            } else {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                if (glava == maranAta[i].glava && kniga == maranAta[i].kniga) BibleGlobalList.bibleCopyList.add(i)
             }
+            binding.view.visibility = View.GONE
+            binding.yelloy.visibility = View.GONE
+            binding.underline.visibility = View.GONE
+            binding.bold.visibility = View.GONE
+            binding.zakladka.visibility = View.GONE
+            binding.zametka.visibility = View.GONE
+            adapter.notifyDataSetChanged()
         }
         binding.copyBig.setOnClickListener {
             if (BibleGlobalList.bibleCopyList.size > 0) {
@@ -888,10 +892,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         }
                     } else {
                         if (belarus) {
-                            if (addGlava == e) maranAta.add(MaranAtaData(true, nomer > 50, nomer, 0, 0, "", "$nazvaBel $e", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>", 0, 0, 0))
-                            maranAta.add(MaranAtaData(true, nomer > 50, nomer, 0, 0, "", "$nazvaBel $e", "<br><strong>$nazvaFullBel $e</strong><br>\n", 0, 0, 0))
+                            if (addGlava == e) maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazvaBel $e", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>", 0, 0, 0))
+                            maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazvaBel $e", "<br><strong>$nazvaFullBel $e</strong><br>\n", 0, 0, 0))
                         } else {
-                            maranAta.add(MaranAtaData(true, nomer > 50, nomer, 0, 0, "", "$nazva $e", "<br><strong>$nazvaFull $e</strong><br>\n", 0, 0, 0))
+                            maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazva $e", "<br><strong>$nazvaFull $e</strong><br>\n", 0, 0, 0))
                         }
                         val splitline = split2[e].trim().split("\n")
                         for (i2 in splitline.indices) {
@@ -1815,17 +1819,23 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 binding.yelloy.visibility = View.GONE
                 binding.underline.visibility = View.GONE
                 binding.bold.visibility = View.GONE
+                binding.zakladka.visibility = View.GONE
+                binding.zametka.visibility = View.GONE
             } else {
                 if (BibleGlobalList.bibleCopyList.size > 1) {
                     binding.view.visibility = View.GONE
                     binding.yelloy.visibility = View.GONE
                     binding.underline.visibility = View.GONE
                     binding.bold.visibility = View.GONE
+                    binding.zakladka.visibility = View.GONE
+                    binding.zametka.visibility = View.GONE
                 } else {
                     binding.view.visibility = View.VISIBLE
                     binding.yelloy.visibility = View.VISIBLE
                     binding.underline.visibility = View.VISIBLE
                     binding.bold.visibility = View.VISIBLE
+                    binding.zakladka.visibility = View.VISIBLE
+                    binding.zametka.visibility = View.VISIBLE
                 }
             }
         }
@@ -1876,17 +1886,23 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 binding.yelloy.visibility = View.GONE
                 binding.underline.visibility = View.GONE
                 binding.bold.visibility = View.GONE
+                binding.zakladka.visibility = View.GONE
+                binding.zametka.visibility = View.GONE
             } else {
                 if (BibleGlobalList.bibleCopyList.size > 1) {
                     binding.view.visibility = View.GONE
                     binding.yelloy.visibility = View.GONE
                     binding.underline.visibility = View.GONE
                     binding.bold.visibility = View.GONE
+                    binding.zakladka.visibility = View.GONE
+                    binding.zametka.visibility = View.GONE
                 } else {
                     binding.view.visibility = View.VISIBLE
                     binding.yelloy.visibility = View.VISIBLE
                     binding.underline.visibility = View.VISIBLE
                     binding.bold.visibility = View.VISIBLE
+                    binding.zakladka.visibility = View.VISIBLE
+                    binding.zametka.visibility = View.VISIBLE
                 }
             }
         }

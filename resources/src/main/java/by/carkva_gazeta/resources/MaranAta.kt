@@ -442,7 +442,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val vershName = if (maranAta[BibleGlobalList.bibleCopyList[0]].sinoidal) getString(by.carkva_gazeta.malitounik.R.string.stix_ru)
                 else getString(by.carkva_gazeta.malitounik.R.string.stix_by)
                 val knigaName = knigaBible + "/" + razdelName + " " + (maranAta[BibleGlobalList.bibleCopyList[0]].glava + 1) + vershName + " " + (maranAta[BibleGlobalList.bibleCopyList[0]].styx)
-                val zametka = DialogBibleNatatka.getInstance(semuxa = !maranAta[BibleGlobalList.bibleCopyList[0]].sinoidal, novyzavet = maranAta[BibleGlobalList.bibleCopyList[0]].novyZapavet, kniga = getNumarKnigi(maranAta[BibleGlobalList.bibleCopyList[0]].kniga), glava = maranAta[BibleGlobalList.bibleCopyList[0]].glava, stix = maranAta[BibleGlobalList.bibleCopyList[0]].styx - 1, bibletext = knigaName)
+                val kniga = if (maranAta[BibleGlobalList.bibleCopyList[0]].sinoidal) getNumarKnigi(maranAta[BibleGlobalList.bibleCopyList[0]].kniga)
+                else getNumarKnigiSemuxi(getNumarKnigi(maranAta[BibleGlobalList.bibleCopyList[0]].kniga))
+                val zametka = DialogBibleNatatka.getInstance(semuxa = !maranAta[BibleGlobalList.bibleCopyList[0]].sinoidal, novyzavet = maranAta[BibleGlobalList.bibleCopyList[0]].novyZapavet, kniga = kniga, glava = maranAta[BibleGlobalList.bibleCopyList[0]].glava, stix = maranAta[BibleGlobalList.bibleCopyList[0]].styx - 1, bibletext = knigaName)
                 zametka.show(supportFragmentManager, "bible_zametka")
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 binding.linearLayout4.visibility = View.GONE
@@ -470,7 +472,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             else resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel)
             val vershName = if (maranAta[BibleGlobalList.bibleCopyList[0]].sinoidal) getString(by.carkva_gazeta.malitounik.R.string.stix_ru)
             else getString(by.carkva_gazeta.malitounik.R.string.stix_by)
-            BibleGlobalList.zakladkiSinodal.add(0, BibleZakladkiData(maxIndex, knigaBible + "/" + razdelName + " " + (maranAta[BibleGlobalList.bibleCopyList[0]].glava + 1) + vershName + " " + maranAta[BibleGlobalList.bibleCopyList[0]].styx + "\n\n" + maranAta[BibleGlobalList.bibleCopyList[0]].bible + "<!--" + color))
+            val data = BibleZakladkiData(maxIndex, knigaBible + "/" + razdelName + " " + (maranAta[BibleGlobalList.bibleCopyList[0]].glava + 1) + vershName + " " + maranAta[BibleGlobalList.bibleCopyList[0]].styx + "\n\n" + maranAta[BibleGlobalList.bibleCopyList[0]].bible + "<!--" + color)
+            if (maranAta[BibleGlobalList.bibleCopyList[0]].sinoidal) BibleGlobalList.zakladkiSinodal.add(0, data)
+            else BibleGlobalList.zakladkiSemuxa.add(0, data)
             MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
         }
         BibleGlobalList.mPedakVisable = false
@@ -1934,7 +1938,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             val zakladka = SpannableStringBuilder()
             if (DialogVybranoeBibleList.biblia == "1") {
-                zakladka.append(setZakladkiSemuxa(maranAta[position].novyZapavet, getNumarKnigi(maranAta[position].kniga), maranAta[position].glava, maranAta[position].styx))
+                zakladka.append(setZakladkiSemuxa(maranAta[position].novyZapavet, getNumarKnigiSemuxi(getNumarKnigi(maranAta[position].kniga)), maranAta[position].glava, maranAta[position].styx))
             }
             if (DialogVybranoeBibleList.biblia == "2") {
                 zakladka.append(setZakladkiSinoidal(maranAta[position].novyZapavet, getNumarKnigi(maranAta[position].kniga), maranAta[position].glava, maranAta[position].styx))

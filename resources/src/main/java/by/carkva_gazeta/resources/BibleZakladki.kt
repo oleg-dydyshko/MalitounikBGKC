@@ -28,7 +28,7 @@ import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
 import by.carkva_gazeta.resources.DialogZakladkaDelite.ZakladkaDeliteListiner
-import by.carkva_gazeta.resources.databinding.BibleZakladkiBinding
+import by.carkva_gazeta.resources.databinding.BibleZakladkiNatatkiBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
@@ -48,11 +48,17 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
     private var semuxa = 1
     private val dzenNoch get() = getBaseDzenNoch()
     private var mLastClickTime: Long = 0
-    private lateinit var binding: BibleZakladkiBinding
+    private lateinit var binding: BibleZakladkiNatatkiBinding
     private var resetTollbarJob: Job? = null
-    private val novyZapavietSemuxaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val zapavietLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            adapter.updateList(data)
+            if (semuxa == 1) data = BibleGlobalList.zakladkiSemuxa
+            if (semuxa == 2) data = BibleGlobalList.zakladkiSinodal
+            if (data.size == 0) {
+                onBack()
+            } else {
+                adapter.updateList(data)
+            }
         }
     }
 
@@ -73,22 +79,16 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 fileZakladki.delete()
             }
         }
-        binding.help.visibility = View.VISIBLE
-        binding.dragListView.visibility = View.GONE
-        invalidateOptionsMenu()
+        onBack()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = BibleZakladkiBinding.inflate(layoutInflater)
+        binding = BibleZakladkiNatatkiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         semuxa = intent.getIntExtra("semuxa", 1)
-        if (semuxa == 1) {
-            data = BibleGlobalList.zakladkiSemuxa
-        }
-        if (semuxa == 2) {
-            data = BibleGlobalList.zakladkiSinodal
-        }
+        if (semuxa == 1) data = BibleGlobalList.zakladkiSemuxa
+        if (semuxa == 2) data = BibleGlobalList.zakladkiSinodal
         adapter = ItemAdapter(data, R.id.image, false)
         binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
         binding.dragListView.setLayoutManager(LinearLayoutManager(this))
@@ -149,10 +149,6 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 }
             }
         })
-        if (data.size == 0) {
-            binding.help.visibility = View.VISIBLE
-            binding.dragListView.visibility = View.GONE
-        }
     }
 
     private fun setTollbarTheme() {
@@ -240,8 +236,7 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 if (fileZakladki.exists()) {
                     fileZakladki.delete()
                 }
-                binding.help.visibility = View.VISIBLE
-                binding.dragListView.visibility = View.GONE
+                onBack()
             } else {
                 val gson = Gson()
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
@@ -258,8 +253,7 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 if (fileZakladki.exists()) {
                     fileZakladki.delete()
                 }
-                binding.help.visibility = View.VISIBLE
-                binding.dragListView.visibility = View.GONE
+                onBack()
             } else {
                 val gson = Gson()
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
@@ -503,7 +497,7 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 }
                 intent.putExtra("glava", glava - 1)
                 intent.putExtra("stix", stix - 1)
-                novyZapavietSemuxaLauncher.launch(intent)
+                zapavietLauncher.launch(intent)
             }
 
             override fun onItemLongClicked(view: View): Boolean {

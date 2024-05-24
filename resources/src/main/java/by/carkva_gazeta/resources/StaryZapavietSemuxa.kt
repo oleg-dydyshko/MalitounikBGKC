@@ -1,6 +1,7 @@
 package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -505,13 +506,14 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
                 paralel = false
                 invalidateOptionsMenu()
             }
-
             BibleGlobalList.mPedakVisable -> {
                 val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as StaryZapavietSemuxaFragment
                 fragment.onBackPressedFragment()
             }
-
-            else -> super.onBack()
+            else -> {
+                setResult(Activity.RESULT_OK)
+                super.onBack()
+            }
         }
     }
 

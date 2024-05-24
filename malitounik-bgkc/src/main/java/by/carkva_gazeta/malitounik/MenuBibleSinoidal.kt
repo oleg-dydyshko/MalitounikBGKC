@@ -116,7 +116,7 @@ class MenuBibleSinoidal : Fragment() {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (activity.checkmoduleResources()) {
-                    if (BibleGlobalList.natatkiSemuxa.size > 0) {
+                    if (BibleGlobalList.natatkiSinodal.size > 0) {
                         val intent = Intent()
                         intent.setClassName(activity, MainActivity.BIBLENATATKI)
                         intent.putExtra("semuxa", 2)

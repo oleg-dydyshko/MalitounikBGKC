@@ -1,6 +1,7 @@
 package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -423,7 +424,10 @@ class NovyZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleRa
                 val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as NovyZapavietSemuxaFragment
                 fragment.onBackPressedFragment()
             }
-            else -> super.onBack()
+            else -> {
+                setResult(Activity.RESULT_OK)
+                super.onBack()
+            }
         }
     }
 

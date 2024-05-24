@@ -25,7 +25,7 @@ import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.resources.DialogBibleNatatkaEdit.BibleNatatkaEditlistiner
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
 import by.carkva_gazeta.resources.DialogZakladkaDelite.ZakladkaDeliteListiner
-import by.carkva_gazeta.resources.databinding.BibleZakladkiBinding
+import by.carkva_gazeta.resources.databinding.BibleZakladkiNatatkiBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
@@ -46,15 +46,17 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
     private var semuxa = 1
     private val dzenNoch get() = getBaseDzenNoch()
     private var mLastClickTime: Long = 0
-    private lateinit var binding: BibleZakladkiBinding
+    private lateinit var binding: BibleZakladkiNatatkiBinding
     private var resetTollbarJob: Job? = null
-    private val staryZapavietSemuxaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val zapavietLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
+            if (semuxa == 1) data = BibleGlobalList.natatkiSemuxa
+            if (semuxa == 2) data = BibleGlobalList.natatkiSinodal
             if (data.size == 0) {
-                binding.help.visibility = View.VISIBLE
-                binding.dragListView.visibility = View.GONE
+                onBack()
+            } else {
+                adapter.updateList(data)
             }
-            adapter.updateList(data)
         }
     }
 
@@ -93,14 +95,12 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 fileNatatki.delete()
             }
         }
-        binding.help.visibility = View.VISIBLE
-        binding.dragListView.visibility = View.GONE
-        invalidateOptionsMenu()
+        onBack()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = BibleZakladkiBinding.inflate(layoutInflater)
+        binding = BibleZakladkiNatatkiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         semuxa = intent.getIntExtra("semuxa", 1)
         if (semuxa == 1) data = BibleGlobalList.natatkiSemuxa
@@ -167,10 +167,6 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 }
             }
         })
-        if (data.size == 0) {
-            binding.help.visibility = View.VISIBLE
-            binding.dragListView.visibility = View.GONE
-        }
     }
 
     private fun setTollbarTheme() {
@@ -258,8 +254,7 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 if (fileNatatki.exists()) {
                     fileNatatki.delete()
                 }
-                binding.help.visibility = View.VISIBLE
-                binding.dragListView.visibility = View.GONE
+                onBack()
             } else {
                 val gson = Gson()
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
@@ -276,8 +271,7 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 if (fileNatatki.exists()) {
                     fileNatatki.delete()
                 }
-                binding.help.visibility = View.VISIBLE
-                binding.dragListView.visibility = View.GONE
+                onBack()
             } else {
                 val gson = Gson()
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
@@ -374,7 +368,7 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 }
                 intent.putExtra("glava", Integer.valueOf(data[bindingAdapterPosition].list[2]))
                 intent.putExtra("stix", Integer.valueOf(data[bindingAdapterPosition].list[3]))
-                staryZapavietSemuxaLauncher.launch(intent)
+                zapavietLauncher.launch(intent)
             }
 
             override fun onItemLongClicked(view: View): Boolean {

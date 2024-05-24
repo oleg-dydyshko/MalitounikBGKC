@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.FileOutputStream
 
@@ -60,39 +58,6 @@ class SplashActivity : BaseActivity() {
                     inputStream?.close()
                 } catch (_: Throwable) {
                 }
-            }
-        }
-        val gson = Gson()
-        val file = File("$filesDir/BibliaSemuxaNatatki.json")
-        if (file.exists() && BibleGlobalList.natatkiSemuxa.size == 0) {
-            try {
-                val type = TypeToken.getParameterized(ArrayList::class.java, BibleNatatkiData::class.java).type
-                BibleGlobalList.natatkiSemuxa.addAll(gson.fromJson(file.readText(), type))
-            } catch (_: Throwable) {
-            }
-        }
-        val file2 = File("$filesDir/BibliaSemuxaZakladki.json")
-        if (file2.exists() && BibleGlobalList.zakladkiSemuxa.size == 0) {
-            try {
-                val type = TypeToken.getParameterized(ArrayList::class.java, BibleZakladkiData::class.java).type
-                BibleGlobalList.zakladkiSemuxa.addAll(gson.fromJson(file2.readText(), type))
-            } catch (_: Throwable) {
-            }
-        }
-        val file3 = File("$filesDir/BibliaSinodalNatatki.json")
-        if (file3.exists() && BibleGlobalList.natatkiSinodal.size == 0) {
-            try {
-                val type = TypeToken.getParameterized(ArrayList::class.java, BibleNatatkiData::class.java).type
-                BibleGlobalList.natatkiSinodal.addAll(gson.fromJson(file3.readText(), type))
-            } catch (_: Throwable) {
-            }
-        }
-        val file4 = File("$filesDir/BibliaSinodalZakladki.json")
-        if (file4.exists() && BibleGlobalList.zakladkiSinodal.size == 0) {
-            try {
-                val type = TypeToken.getParameterized(ArrayList::class.java, BibleZakladkiData::class.java).type
-                BibleGlobalList.zakladkiSinodal.addAll(gson.fromJson(file4.readText(), type))
-            } catch (_: Throwable) {
             }
         }
         startActivity(intent1)

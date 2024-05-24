@@ -65,7 +65,7 @@ dependencies {
     implementation ("com.google.android.play:app-update-ktx:2.1.0")
     implementation ("com.google.android.play:review-ktx:2.0.1")
     implementation ("com.google.android.gms:play-services-instantapps:18.0.1")
-    api ("com.google.code.gson:gson:2.10.1")
+    api ("com.google.code.gson:gson:2.11.0")
     //api ("androidx.webkit:webkit:1.10.0")
     api ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     api ("com.github.woxthebox:draglistview:1.7.3")

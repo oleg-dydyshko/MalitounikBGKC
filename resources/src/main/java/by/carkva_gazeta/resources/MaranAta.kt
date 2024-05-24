@@ -58,6 +58,8 @@ import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.DialogSemuxaNoKnigi
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuBibleSemuxa
+import by.carkva_gazeta.malitounik.MenuBibleSinoidal
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
 import by.carkva_gazeta.resources.databinding.AkafistMaranAtaBinding
@@ -141,6 +143,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MenuBibleSemuxa.loadNatatkiZakladkiSemuxa(this)
+        MenuBibleSinoidal.loadNatatkiZakladkiSinodal(this)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         spid = k.getInt("autoscrollSpid", 60)
         binding = AkafistMaranAtaBinding.inflate(layoutInflater)
@@ -1568,6 +1572,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     override fun onResume() {
         super.onResume()
+        MenuBibleSemuxa.loadNatatkiZakladkiSemuxa(this)
+        MenuBibleSinoidal.loadNatatkiZakladkiSinodal(this)
         if (fullscreenPage) {
             binding.constraint.post {
                 hideHelp()

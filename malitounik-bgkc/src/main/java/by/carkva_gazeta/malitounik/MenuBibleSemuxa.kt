@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import by.carkva_gazeta.malitounik.databinding.MenuBibleBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.File
 
 class MenuBibleSemuxa : BaseFragment() {
     private var mLastClickTime: Long = 0
@@ -22,6 +23,9 @@ class MenuBibleSemuxa : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        activity?.let {
+            loadNatatkiZakladkiSemuxa(it)
+        }
         _binding = MenuBibleBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -30,7 +34,6 @@ class MenuBibleSemuxa : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as? BaseActivity)?.let { activity ->
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = activity.getBaseDzenNoch()
             binding.myBible.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
@@ -94,10 +97,15 @@ class MenuBibleSemuxa : BaseFragment() {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (activity.checkmoduleResources()) {
-                    val intent = Intent()
-                    intent.setClassName(activity, MainActivity.BIBLEZAKLADKI)
-                    intent.putExtra("semuxa", 1)
-                    startActivity(intent)
+                    if (BibleGlobalList.zakladkiSemuxa.size > 0) {
+                        val intent = Intent()
+                        intent.setClassName(activity, MainActivity.BIBLEZAKLADKI)
+                        intent.putExtra("semuxa", 1)
+                        startActivity(intent)
+                    } else {
+                        val dialog = DialogHelpZakladkiNatatki()
+                        dialog.show(childFragmentManager, "DialogHelpZakladkiNatatki")
+                    }
                 } else {
                     activity.installFullMalitounik()
                 }
@@ -108,10 +116,15 @@ class MenuBibleSemuxa : BaseFragment() {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (activity.checkmoduleResources()) {
-                    val intent = Intent()
-                    intent.setClassName(activity, MainActivity.BIBLENATATKI)
-                    intent.putExtra("semuxa", 1)
-                    startActivity(intent)
+                    if (BibleGlobalList.natatkiSemuxa.size > 0) {
+                        val intent = Intent()
+                        intent.setClassName(activity, MainActivity.BIBLENATATKI)
+                        intent.putExtra("semuxa", 1)
+                        startActivity(intent)
+                    } else {
+                        val dialog = DialogHelpZakladkiNatatki()
+                        dialog.show(childFragmentManager, "DialogHelpZakladkiNatatki")
+                    }
                 } else {
                     activity.installFullMalitounik()
                 }
@@ -137,6 +150,28 @@ class MenuBibleSemuxa : BaseFragment() {
                 mLastClickTime = SystemClock.elapsedRealtime()
                 val semukha = DialogAlesyaSemukha()
                 semukha.show(childFragmentManager, "Alesya_Semukha")
+            }
+        }
+    }
+
+    companion object {
+        fun loadNatatkiZakladkiSemuxa(context: Context) {
+            val gson = Gson()
+            val file = File("${context.filesDir}/BibliaSemuxaNatatki.json")
+            if (file.exists() && BibleGlobalList.natatkiSemuxa.size == 0) {
+                try {
+                    val type = TypeToken.getParameterized(ArrayList::class.java, BibleNatatkiData::class.java).type
+                    BibleGlobalList.natatkiSemuxa.addAll(gson.fromJson(file.readText(), type))
+                } catch (_: Throwable) {
+                }
+            }
+            val file2 = File("${context.filesDir}/BibliaSemuxaZakladki.json")
+            if (file2.exists() && BibleGlobalList.zakladkiSemuxa.size == 0) {
+                try {
+                    val type = TypeToken.getParameterized(ArrayList::class.java, BibleZakladkiData::class.java).type
+                    BibleGlobalList.zakladkiSemuxa.addAll(gson.fromJson(file2.readText(), type))
+                } catch (_: Throwable) {
+                }
             }
         }
     }

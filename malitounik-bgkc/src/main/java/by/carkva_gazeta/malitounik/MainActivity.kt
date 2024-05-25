@@ -987,6 +987,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         menu.findItem(R.id.action_font).isVisible = false
         menu.findItem(R.id.action_bright).isVisible = false
         menu.findItem(R.id.action_dzen_noch).isVisible = false
+        menu.findItem(R.id.action_auto_dzen_noch).isVisible = false
         menu.findItem(R.id.action_carkva).isVisible = false
         if (updateAvailable) {
             val item = menu.findItem(R.id.action_update)
@@ -1019,6 +1020,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             menu.findItem(R.id.action_bright).isVisible = true
             menu.findItem(R.id.action_dzen_noch).isVisible = true
             menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
+            menu.findItem(R.id.action_auto_dzen_noch).isVisible = true
+            menu.findItem(R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
         }
         if (idSelect == R.id.label103) menu.findItem(R.id.prazdnik).isVisible = true
         if (idSelect == R.id.label7) {

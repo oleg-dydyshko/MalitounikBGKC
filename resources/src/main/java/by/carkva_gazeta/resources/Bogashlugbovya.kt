@@ -1790,6 +1790,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
         spanString = SpannableString(itemVybranoe.title.toString())
         end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

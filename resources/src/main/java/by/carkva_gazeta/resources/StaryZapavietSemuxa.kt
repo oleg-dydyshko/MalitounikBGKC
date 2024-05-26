@@ -34,6 +34,8 @@ import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuVybranoe
+import by.carkva_gazeta.malitounik.R
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.VybranoeData
 import by.carkva_gazeta.resources.DialogBibleRazdel.Companion.getInstance
 import by.carkva_gazeta.resources.DialogBibleRazdel.DialogBibleRazdelListener
@@ -391,8 +393,8 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
         BibleGlobalList.mListGlava = 0
         binding.pager.adapter = MyPagerAdapter(this)
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
-            tab.text = if (kniga == 18) getString(by.carkva_gazeta.malitounik.R.string.psalom) + " " + (position + 1)
-            else getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
+            tab.text = if (kniga == 18) getString(R.string.psalom) + " " + (position + 1)
+            else getString(R.string.razdzel) + " " + (position + 1)
         }.attach()
         binding.pager.offscreenPageLimit = 1
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -433,7 +435,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
         binding.actionBack.setOnClickListener {
             onBack()
         }
-        binding.titleToolbar.text = savedInstanceState?.getString("title") ?: getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
+        binding.titleToolbar.text = savedInstanceState?.getString("title") ?: getString(R.string.stary_zapaviet)
     }
 
     private fun setTollbarTheme() {
@@ -447,10 +449,10 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.subtitleToolbar.text = title
         if (dzenNoch) {
-            binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            binding.linealLayoutTitle.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.actionFullscreen.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
+            binding.actionBack.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
+            binding.linealLayoutTitle.setBackgroundResource(R.color.colorbackground_material_dark)
+            binding.toolbar.popupTheme = R.style.AppCompatDark
         }
     }
 
@@ -501,7 +503,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
                 binding.pager.visibility = View.VISIBLE
                 binding.tabLayout.visibility = View.VISIBLE
                 binding.subtitleToolbar.visibility = View.VISIBLE
-                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
+                binding.titleToolbar.text = getString(R.string.stary_zapaviet)
                 binding.subtitleToolbar.text = title
                 paralel = false
                 invalidateOptionsMenu()
@@ -518,32 +520,33 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_glava).isVisible = !paralel
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).isVisible = !paralel
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_font).isVisible = !paralel
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_bright).isVisible = !paralel
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = !paralel
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
-        val itemVybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
+        menu.findItem(R.id.action_glava).isVisible = !paralel
+        menu.findItem(R.id.action_vybranoe).isVisible = !paralel
+        menu.findItem(R.id.action_font).isVisible = !paralel
+        menu.findItem(R.id.action_bright).isVisible = !paralel
+        menu.findItem(R.id.action_dzen_noch).isVisible = !paralel
+        menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
+        menu.findItem(R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
+        menu.findItem(R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
+        val itemVybranoe = menu.findItem(R.id.action_vybranoe)
         if (men) {
-            itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
-            itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
+            itemVybranoe.icon = ContextCompat.getDrawable(this, R.drawable.star_big_on)
+            itemVybranoe.title = resources.getString(R.string.vybranoe_del)
         } else {
-            itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
-            itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
+            itemVybranoe.icon = ContextCompat.getDrawable(this, R.drawable.star_big_off)
+            itemVybranoe.title = resources.getString(R.string.vybranoe)
         }
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
+        menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
+        if (id == R.id.action_vybranoe) {
             men = DialogVybranoeBibleList.setVybranoe(title, kniga, BibleGlobalList.mListGlava)
             if (men) {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+                MainActivity.toastView(this, getString(R.string.addVybranoe))
                 if (!DialogVybranoeBibleList.checkVybranoe("1")) {
-                    MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "1", getString(by.carkva_gazeta.malitounik.R.string.title_biblia)))
+                    MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "1", getString(R.string.title_biblia)))
                     val gson = Gson()
                     val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                     val file = File("$filesDir/Vybranoe.json")
@@ -555,7 +558,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
             invalidateOptionsMenu()
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
+        if (id == R.id.action_dzen_noch) {
             item.isChecked = !item.isChecked
             val prefEditor = k.edit()
             if (item.isChecked) {
@@ -569,7 +572,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
             recreate()
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch) {
+        if (id == R.id.action_auto_dzen_noch) {
             item.isChecked = !item.isChecked
             val prefEditor = k.edit()
             if (item.isChecked) {
@@ -589,22 +592,22 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
             onBack()
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_glava) {
+        if (id == R.id.action_glava) {
             val dialogBibleRazdel = getInstance(fullglav)
             dialogBibleRazdel.show(supportFragmentManager, "full_glav")
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
+        if (id == R.id.action_font) {
             val dialogFontSize = DialogFontSize()
             dialogFontSize.show(supportFragmentManager, "font")
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_bright) {
+        if (id == R.id.action_bright) {
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
+        if (id == R.id.action_carkva) {
             val intent = Intent()
             intent.setClassName(this, MainActivity.ADMINSTARYZAPAVIETSEMUXA)
             intent.putExtra("kniga", kniga)
@@ -612,7 +615,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
             startActivity(intent)
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
+        if (id == R.id.action_fullscreen) {
             if (!k.getBoolean("fullscreenPage", false)) {
                 var fullscreenCount = k.getInt("fullscreenCount", 0)
                 if (fullscreenCount > 3) {
@@ -649,7 +652,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.biblia, menu)
+        menuInflater.inflate(R.menu.biblia, menu)
         super.onCreateMenu(menu, menuInflater)
     }
 
@@ -662,7 +665,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
         binding.scroll.visibility = View.VISIBLE
         binding.pager.visibility = View.GONE
         binding.tabLayout.visibility = View.GONE
-        binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
+        binding.titleToolbar.text = resources.getString(R.string.paralel_smoll, cytanneSours)
         binding.subtitleToolbar.visibility = View.GONE
         invalidateOptionsMenu()
     }
@@ -674,7 +677,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
         val controller = WindowCompat.getInsetsController(window, binding.linealLayoutTitle)
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         controller.hide(WindowInsetsCompat.Type.systemBars())
-        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+        val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
         binding.actionBack.visibility = View.VISIBLE
@@ -687,7 +690,7 @@ class StaryZapavietSemuxa : BaseActivity(), DialogFontSizeListener, DialogBibleR
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = WindowCompat.getInsetsController(window, binding.linealLayoutTitle)
         controller.show(WindowInsetsCompat.Type.systemBars())
-        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation
         binding.actionBack.visibility = View.GONE

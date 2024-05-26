@@ -747,6 +747,12 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             notificationManager.deleteNotificationChannel("3002")
             notificationManager.deleteNotificationChannel("2002")
         }
+
+        fun isLightSensorExist(): Boolean {
+            val mySensorManager = Malitounik.applicationContext().getSystemService(SENSOR_SERVICE) as SensorManager
+            val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+            return lightSensor != null
+        }
     }
 
     override fun onPause() {
@@ -1030,9 +1036,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
         }
         val autoDzenNochSettings = k.getBoolean("auto_dzen_noch", false)
-        val mySensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
-        if (lightSensor != null) {
+        if (isLightSensorExist()) {
             if (autoDzenNochSettings) {
                 binding.day.isChecked = false
                 binding.night.isChecked = false

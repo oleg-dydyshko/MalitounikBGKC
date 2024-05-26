@@ -105,6 +105,7 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
     override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_dzen_noch).isChecked = getBaseDzenNoch()
         menu.findItem(R.id.action_auto_dzen_noch).isChecked = chin.getBoolean("auto_dzen_noch", false)
+        menu.findItem(R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {

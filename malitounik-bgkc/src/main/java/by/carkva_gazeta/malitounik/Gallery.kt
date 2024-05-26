@@ -695,6 +695,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         }
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         menu.findItem(R.id.action_auto_dzen_noch).isChecked = chin.getBoolean("auto_dzen_noch", false)
+        menu.findItem(R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
         menu.findItem(R.id.action_download_all).isVisible = binding.recyclerView.visibility != View.INVISIBLE
         when (chin.getInt("gallery_sort", 0)) {
             1 -> {

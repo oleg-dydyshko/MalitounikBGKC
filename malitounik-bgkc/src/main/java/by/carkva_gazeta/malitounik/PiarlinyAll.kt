@@ -251,6 +251,7 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
         menu.findItem(R.id.action_share).isVisible = false
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         menu.findItem(R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
+        menu.findItem(R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
         menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
     }
 

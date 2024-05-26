@@ -30,6 +30,7 @@ import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuVybranoe
 import by.carkva_gazeta.malitounik.R
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.VybranoeData
 import by.carkva_gazeta.resources.DialogBibleRazdel.Companion.getInstance
 import by.carkva_gazeta.resources.DialogBibleRazdel.DialogBibleRazdelListener
@@ -251,6 +252,7 @@ class NadsanContentActivity : BaseActivity(), DialogFontSizeListener, DialogBibl
         menu.findItem(R.id.action_glava).isVisible = true
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         menu.findItem(R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
+        menu.findItem(R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
         val itemVybranoe: MenuItem = menu.findItem(R.id.action_vybranoe)
         if (men) {
             itemVybranoe.icon = ContextCompat.getDrawable(this, R.drawable.star_big_on)

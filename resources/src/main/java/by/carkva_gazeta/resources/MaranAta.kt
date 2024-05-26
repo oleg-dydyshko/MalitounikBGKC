@@ -1622,6 +1622,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isVisible = !vybranae
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).isVisible = !vybranae
         val actionSemuxaTitle = if (!k.getBoolean("belarus", true)) SpannableString(getString(by.carkva_gazeta.malitounik.R.string.title_biblia))
         else SpannableString(getString(by.carkva_gazeta.malitounik.R.string.bsinaidal))

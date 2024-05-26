@@ -213,7 +213,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
 
     override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.count).isVisible = search
-        menu.findItem(R.id.action_clean_histopy).isVisible = isHistory()
+        menu.findItem(R.id.action_clean_histopy).isVisible = history.size != 0
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
@@ -230,8 +230,6 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
         outState.putString("SearchViewQwery", searchView?.query.toString())
         outState.putBoolean("search", search)
     }
-
-    private fun isHistory() = history.size != 0
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.pesny, menu)

@@ -616,6 +616,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         menu.findItem(R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         menu.findItem(R.id.action_auto_dzen_noch).isChecked = chin.getBoolean("auto_dzen_noch", false)
+        menu.findItem(R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

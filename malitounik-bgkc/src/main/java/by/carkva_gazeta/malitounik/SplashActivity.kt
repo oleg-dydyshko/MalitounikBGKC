@@ -14,7 +14,7 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (k.getBoolean("auto_dzen_noch", false)) {
+        if (SettingsActivity.isLightSensorExist() && k.getBoolean("auto_dzen_noch", false)) {
             setlightSensor()
         }
         val data = intent.data

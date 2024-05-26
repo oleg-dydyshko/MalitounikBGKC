@@ -359,6 +359,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         }
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         menu.findItem(R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
+        menu.findItem(R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
         var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
         if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
         val item = menu.findItem(R.id.action_vybranoe)

@@ -41,20 +41,6 @@ class PageFragmentMonth : BaseFragment() {
         }
     }
 
-    private fun sabytieCheck(day: Int): Boolean {
-        var sabytie = false
-        if (day == 0) return false
-        for (p in padzei) {
-            val r1 = p.dat.split(".")
-            val date = r1[0].toInt()
-            if (date == day) {
-                sabytie = true
-                break
-            }
-        }
-        return sabytie
-    }
-
     private fun isGosSviataCheck(day: Int): Boolean {
         if (day == 0) return false
         val svita = data[day - 1][15]
@@ -174,7 +160,6 @@ class PageFragmentMonth : BaseFragment() {
                     i = 0
                 }
                 val calendarPost = GregorianCalendar(year, mun, i)
-                val sab = sabytieCheck(i)
                 val isGosSvita = isGosSviataCheck(i)
                 val isSviatyRKC = isSvityRKC(i)
                 when (day) {
@@ -219,7 +204,7 @@ class PageFragmentMonth : BaseFragment() {
                         }
                         getTextView(e).setOnLongClickListener {
                             val text = (it as TextView).text.toString().toInt()
-                            if (sab || isGosSvita || data[text - 1][5].toInt() == 1 || data[text - 1][5].toInt() == 2 || isSviatyRKC) {
+                            if (isGosSvita || data[text - 1][5].toInt() == 1 || data[text - 1][5].toInt() == 2 || isSviatyRKC) {
                                 val sviaty = if (data[text - 1][5].toInt() == 1 || data[text - 1][5].toInt() == 2) data[text - 1][6]
                                 else ""
                                 val sviatyRKC = if (isSviatyRKC) data[text - 1][19]
@@ -238,18 +223,18 @@ class PageFragmentMonth : BaseFragment() {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (isGosSvita) {
-                                        if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_sabytie_today)
+                                        if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_sabytie_today)
                                         else getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_today)
                                     } else {
-                                        if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_today)
+                                        if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_today)
                                         else getTextView(e).setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (isGosSvita) {
-                                        if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_sabytie)
+                                        if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_sabytie)
                                         else getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata)
                                     } else {
-                                        if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie)
+                                        if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie)
                                         else getTextView(e).setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
@@ -260,18 +245,18 @@ class PageFragmentMonth : BaseFragment() {
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (isGosSvita) {
-                                        if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_sabytie_today)
+                                        if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_sabytie_today)
                                         else getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_today)
                                     } else {
-                                        if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_today)
+                                        if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie_today)
                                         else getTextView(e).setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (isGosSvita) {
-                                        if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_sabytie)
+                                        if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata_sabytie)
                                         else getTextView(e).setBackgroundResource(R.drawable.calendar_red_gos_sviata)
                                     } else {
-                                        if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie)
+                                        if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_red_sabytie)
                                         else getTextView(e).setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
@@ -283,18 +268,18 @@ class PageFragmentMonth : BaseFragment() {
                                 if (nopost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (isGosSvita) {
-                                            if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_sabytie_today)
+                                            if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_sabytie_today)
                                             else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_today)
                                         } else {
-                                            if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today)
+                                            if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today)
                                             else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_today)
                                         }
                                     } else {
                                         if (isGosSvita) {
-                                            if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_sabytie)
+                                            if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_sabytie)
                                             else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata)
                                         } else {
-                                            if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie)
+                                            if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie)
                                             else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta)
                                         }
                                     }
@@ -302,18 +287,18 @@ class PageFragmentMonth : BaseFragment() {
                                 if (post) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (isGosSvita) {
-                                            if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_post_gos_sviata_sabytie_today)
+                                            if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_post_gos_sviata_sabytie_today)
                                             else getTextView(e).setBackgroundResource(R.drawable.calendar_post_gos_sviata_today)
                                         } else {
-                                            if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_post_sabytie_today)
+                                            if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_post_sabytie_today)
                                             else getTextView(e).setBackgroundResource(R.drawable.calendar_post_today)
                                         }
                                     } else {
                                         if (isGosSvita) {
-                                            if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_post_gos_sviata_sabytie)
+                                            if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_post_gos_sviata_sabytie)
                                             else getTextView(e).setBackgroundResource(R.drawable.calendar_post_gos_sviata)
                                         } else {
-                                            if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_post_sabytie)
+                                            if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_post_sabytie)
                                             else getTextView(e).setBackgroundResource(R.drawable.calendar_post)
                                         }
                                     }
@@ -321,18 +306,18 @@ class PageFragmentMonth : BaseFragment() {
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (isGosSvita) {
-                                            if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_gos_sviata_sabytie_today)
+                                            if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_gos_sviata_sabytie_today)
                                             else getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_gos_sviata_today)
                                         } else {
-                                            if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today)
+                                            if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today)
                                             else getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_today)
                                         }
                                     } else {
                                         if (isGosSvita) {
-                                            if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_gos_sviata_sabytie)
+                                            if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_gos_sviata_sabytie)
                                             else getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_gos_sviata)
                                         } else {
-                                            if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_sabytie)
+                                            if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post_sabytie)
                                             else getTextView(e).setBackgroundResource(R.drawable.calendar_strogi_post)
                                         }
                                     }
@@ -343,36 +328,36 @@ class PageFragmentMonth : BaseFragment() {
                                     if (denNedeli == Calendar.SUNDAY) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                             if (isGosSvita) {
-                                                if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_sabytie_today)
+                                                if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_sabytie_today)
                                                 else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_today)
                                             } else {
-                                                if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today)
+                                                if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today)
                                                 else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_today)
                                             }
                                         } else {
                                             if (isGosSvita) {
-                                                if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_sabytie)
+                                                if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata_sabytie)
                                                 else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_gos_sviata)
                                             } else {
-                                                if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie)
+                                                if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta_sabytie)
                                                 else getTextView(e).setBackgroundResource(R.drawable.calendar_bez_posta)
                                             }
                                         }
                                     } else {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                             if (isGosSvita) {
-                                                if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_day_gos_sviata_sabytie_today)
+                                                if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_day_gos_sviata_sabytie_today)
                                                 else getTextView(e).setBackgroundResource(R.drawable.calendar_day_gos_sviata_today)
                                             } else {
-                                                if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_day_sabytie_today)
+                                                if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_day_sabytie_today)
                                                 else getTextView(e).setBackgroundResource(R.drawable.calendar_day_today)
                                             }
                                         } else {
                                             if (isGosSvita) {
-                                                if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_day_gos_sviata_sabytie)
+                                                if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_day_gos_sviata_sabytie)
                                                 else getTextView(e).setBackgroundResource(R.drawable.calendar_day_gos_sviata)
                                             } else {
-                                                if (sab || isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_day_sabytie)
+                                                if (isSviatyRKC) getTextView(e).setBackgroundResource(R.drawable.calendar_day_sabytie)
                                                 else getTextView(e).setBackgroundResource(R.drawable.calendar_day)
                                             }
                                         }

@@ -204,16 +204,14 @@ class PageFragmentMonth : BaseFragment() {
                         }
                         getTextView(e).setOnLongClickListener {
                             val text = (it as TextView).text.toString().toInt()
-                            if (isGosSvita || data[text - 1][5].toInt() == 1 || data[text - 1][5].toInt() == 2 || isSviatyRKC) {
-                                val sviaty = if (data[text - 1][5].toInt() == 1 || data[text - 1][5].toInt() == 2) data[text - 1][6]
-                                else ""
-                                val sviatyRKC = if (isSviatyRKC) data[text - 1][19]
-                                else ""
-                                val gosSvity = if (isGosSvita) data[text - 1][15]
-                                else ""
-                                val dialogSabytieShowInMun = DialogSabytieShowInMun.getInstance(pageNumberFull + (e - 1) - wik, text, mun, year, sviaty, sviatyRKC, gosSvity)
-                                dialogSabytieShowInMun.show(childFragmentManager, "dialogSabytieShowInMun")
-                            }
+                            val sviaty = if (data[text - 1][5].toInt() == 1 || data[text - 1][5].toInt() == 2) data[text - 1][6]
+                            else ""
+                            val sviatyRKC = if (isSviatyRKC) data[text - 1][19]
+                            else ""
+                            val gosSvity = if (isGosSvita) data[text - 1][15]
+                            else ""
+                            val dialogSabytieShowInMun = DialogSabytieShowInMun.getInstance(pageNumberFull + (e - 1) - wik, text, mun, year, sviaty, sviatyRKC, gosSvity)
+                            dialogSabytieShowInMun.show(childFragmentManager, "dialogSabytieShowInMun")
                             return@setOnLongClickListener true
                         }
                         getTextView(e).text = day

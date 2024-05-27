@@ -802,5 +802,6 @@
     <string name="find_up">Шукаць уверх</string>
     <string name="find_niz">Шукаць уніз</string>
     <string name="padzei_i_sviaty">Падзеі і сьвяты за %1$d %2$s</string>
+    <string name="padzei_no">Падзей няма</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

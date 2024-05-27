@@ -81,7 +81,11 @@ class DialogSabytieShowInMun : DialogFragment() {
                 binding.textViewGosSvity.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             }
             binding.title.text = getString(R.string.padzei_i_sviaty, date, it.resources.getStringArray(R.array.meciac_smoll)[mun])
-            sabytieView(dayYear)
+            val isSabytie = sabytieView(dayYear)
+            if (gosSviata.isEmpty() && svity.isEmpty() && svityRKC.isEmpty() && !isSabytie) {
+                binding.textViewSvityRKC.text = getString(R.string.padzei_no)
+                binding.textViewSvityRKC.visibility = View.VISIBLE
+            }
             val ad = AlertDialog.Builder(it, style)
             ad.setView(binding.root)
             ad.setPositiveButton(resources.getString(R.string.close)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
@@ -90,12 +94,12 @@ class DialogSabytieShowInMun : DialogFragment() {
         return alert
     }
 
-    private fun sabytieView(dayYear: Int) {
+    private fun sabytieView(dayYear: Int): Boolean {
+        val sabytieList = ArrayList<TextView>()
         activity?.let {
             val density = (resources.displayMetrics.density).toInt()
             val gc = Calendar.getInstance() as GregorianCalendar
             var title: String
-            val sabytieList = ArrayList<TextView>()
             for (index in 0 until MainActivity.padzeia.size) {
                 val p = MainActivity.padzeia[index]
                 val r1 = p.dat.split(".")
@@ -186,6 +190,7 @@ class DialogSabytieShowInMun : DialogFragment() {
                 }
             }
         }
+        return sabytieList.size > 0
     }
 
     companion object {

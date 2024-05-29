@@ -11,8 +11,8 @@ android {
         applicationId =  "by.carkva_gazeta.malitounik"
         minSdk = 21
         targetSdk = 34
-        versionCode = 442284
-        versionName = "4.4.5.10"
+        versionCode = 442285
+        versionName = "4.4.5.11"
 
         //multiDexEnabled = true
 
@@ -59,12 +59,12 @@ dependencies {
     //implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation ("com.google.android.material:material:1.12.0")
-    api ("androidx.appcompat:appcompat:1.6.1")
+    api ("androidx.appcompat:appcompat:1.7.0")
     api ("androidx.gridlayout:gridlayout:1.0.0")
     api ("com.google.android.play:feature-delivery:2.1.0")
     implementation ("com.google.android.play:app-update-ktx:2.1.0")
     implementation ("com.google.android.play:review-ktx:2.0.1")
-    implementation ("com.google.android.gms:play-services-instantapps:18.0.1")
+    implementation ("com.google.android.gms:play-services-instantapps:18.1.0")
     api ("com.google.code.gson:gson:2.11.0")
     //api ("androidx.webkit:webkit:1.10.0")
     api ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")

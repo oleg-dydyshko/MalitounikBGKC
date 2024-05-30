@@ -61,7 +61,7 @@ class DialogSabytieShowInMun : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogSabytieShowInMunBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogSabytieShowInMunBinding.inflate(layoutInflater)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             if (gosSviata.isNotEmpty()) {

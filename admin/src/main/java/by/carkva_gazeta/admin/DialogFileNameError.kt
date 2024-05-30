@@ -40,7 +40,7 @@ class DialogFileNameError : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogTextviewDisplayBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it, R.style.AlertDialogTheme)
             binding.title.text = getString(R.string.error_up)
             binding.content.setText(R.string.file_name_error)

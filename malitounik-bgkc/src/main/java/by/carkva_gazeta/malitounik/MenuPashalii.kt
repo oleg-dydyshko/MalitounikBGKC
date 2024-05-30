@@ -533,7 +533,7 @@ class MenuPashalii : BaseFragment() {
             val rootView: View
             val ea: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItemPaschaliiBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemPaschaliiBinding.inflate(context.layoutInflater, parent, false)
                 rootView = binding.root
                 ea = ViewHolder(binding.label)
                 rootView.tag = ea
@@ -598,7 +598,7 @@ class MenuPashalii : BaseFragment() {
         }
     }
 
-    private class VekAdapter(activity: Activity, private val dataVek: Array<String>) : ArrayAdapter<String>(activity, R.layout.simple_list_item_1, dataVek) {
+    private class VekAdapter(private val activity: Activity, private val dataVek: Array<String>) : ArrayAdapter<String>(activity, R.layout.simple_list_item_1, dataVek) {
         private val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
@@ -617,7 +617,7 @@ class MenuPashalii : BaseFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem1Binding.inflate(activity.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder
@@ -637,7 +637,7 @@ class MenuPashalii : BaseFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = SimpleListItem3Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem3Binding.inflate(mContext.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder

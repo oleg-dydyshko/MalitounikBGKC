@@ -28,7 +28,7 @@ class DialogNoInternet : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogTextviewDisplayBinding.inflate(layoutInflater)
             val dzenNoch = if (it is BaseActivity) {
                 it.getBaseDzenNoch()
             } else false

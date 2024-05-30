@@ -13,7 +13,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -438,12 +437,12 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
         super.onCreateMenu(menu, menuInflater)
     }
 
-    internal inner class BibliotekaAdapter(private val context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.admin_simple_list_item_biblioteka, arrayList) {
+    internal inner class BibliotekaAdapter(context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.admin_simple_list_item_biblioteka, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                val binding = AdminSimpleListItemBibliotekaBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = AdminSimpleListItemBibliotekaBinding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label, binding.imageView2, binding.rubrika)
                 rootView.tag = viewHolder
@@ -497,7 +496,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
 
     private class ViewHolder(var text: TextView, var imageView: ImageView, var rubrika: TextView)
 
-    private class RubrikaAdapter(activity: Activity, private val dataRubrika: Array<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, dataRubrika) {
+    private class RubrikaAdapter(private val activity: Activity, private val dataRubrika: Array<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, dataRubrika) {
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
@@ -515,7 +514,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
             val rootView: View
             val viewHolder: ViewHolderRubrika
             if (convertView == null) {
-                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem1Binding.inflate(activity.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolderRubrika(binding.text1)
                 rootView.tag = viewHolder

@@ -17,7 +17,6 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -1331,7 +1330,6 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             }
             if (filtep) adapter.filter.filter(edit)
         }
-
     }
 
     private inner class SearchBibliaListAdaprer(context: Activity, private val arrayList: ArrayList<Spannable>) : ArrayAdapter<Spannable>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, arrayList) {
@@ -1346,7 +1344,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem2Binding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder
@@ -1418,7 +1416,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItem4Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem4Binding.inflate(context.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder

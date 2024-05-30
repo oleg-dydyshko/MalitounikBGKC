@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -30,7 +29,7 @@ class DialogSvityiaBible : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = AdminDialogSviatyiaBibleDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = AdminDialogSviatyiaBibleDisplayBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it, R.style.AlertDialogTheme)
             binding.title.text = getString(R.string.title_biblia)
             builder.setView(binding.root)
@@ -85,7 +84,7 @@ class DialogSvityiaBible : DialogFragment() {
         return dialog
     }
 
-    private class BibleAdapterTitle(activity: Activity, private val dataTimes: ArrayList<Bible>) : ArrayAdapter<Bible>(activity, R.layout.simple_list_item_1, dataTimes) {
+    private class BibleAdapterTitle(private val activity: Activity, private val dataTimes: ArrayList<Bible>) : ArrayAdapter<Bible>(activity, R.layout.simple_list_item_1, dataTimes) {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
@@ -102,7 +101,7 @@ class DialogSvityiaBible : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem1Binding.inflate(activity.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder
@@ -116,7 +115,7 @@ class DialogSvityiaBible : DialogFragment() {
         }
     }
 
-    private class BibleAdapterFullglav(activity: Activity, private val dataTimes: ArrayList<Int>) : ArrayAdapter<Int>(activity, R.layout.simple_list_item_1, dataTimes) {
+    private class BibleAdapterFullglav(private val activity: Activity, private val dataTimes: ArrayList<Int>) : ArrayAdapter<Int>(activity, R.layout.simple_list_item_1, dataTimes) {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
@@ -133,7 +132,7 @@ class DialogSvityiaBible : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem1Binding.inflate(activity.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder

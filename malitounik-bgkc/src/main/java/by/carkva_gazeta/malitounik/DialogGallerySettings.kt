@@ -55,7 +55,7 @@ class DialogGallerySettings : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogGallerySettingsBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogGallerySettingsBinding.inflate(layoutInflater)
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
@@ -98,7 +98,7 @@ class DialogGallerySettings : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem1Binding.inflate(mContext.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder

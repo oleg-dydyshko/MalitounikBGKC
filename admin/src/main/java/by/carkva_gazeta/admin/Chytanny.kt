@@ -11,7 +11,6 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.StyleSpan
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -328,7 +327,7 @@ class Chytanny : BaseActivity() {
         outState.putBoolean("isError", isError)
     }
 
-    private class SpinnerAdapter(activity: Activity, private val data: ArrayList<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {
+    private class SpinnerAdapter(private val activity: Activity, private val data: ArrayList<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {
 
         private val gc = Calendar.getInstance()
 
@@ -350,7 +349,7 @@ class Chytanny : BaseActivity() {
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem1Binding.inflate(activity.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder

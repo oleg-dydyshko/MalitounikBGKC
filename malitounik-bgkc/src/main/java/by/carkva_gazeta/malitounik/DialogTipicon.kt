@@ -28,7 +28,7 @@ class DialogTipicon : DialogFragment() {
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
-            _binding = TipiconBinding.inflate(LayoutInflater.from(it))
+            _binding = TipiconBinding.inflate(layoutInflater)
             val dvunaIVial = SpannableString(getString(R.string.dvuna_i_vial))
             dvunaIVial.setSpan(StyleSpan(Typeface.BOLD), 0, 13, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.textView8.text = dvunaIVial

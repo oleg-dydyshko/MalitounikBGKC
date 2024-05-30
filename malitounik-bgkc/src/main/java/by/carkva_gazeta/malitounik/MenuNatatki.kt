@@ -273,7 +273,7 @@ class MenuNatatki : BaseFragment() {
 
     private inner class ItemAdapter(private val activity: Activity, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<MyNatatkiFiles, ItemAdapter.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val view = ListItemBinding.inflate(layoutInflater, parent, false)
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) {
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)

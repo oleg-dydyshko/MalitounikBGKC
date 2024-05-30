@@ -80,7 +80,7 @@ class DialogEditImage : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogImageviewEditDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogImageviewEditDisplayBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.admin_opisanne_icon)
             val bitmapCreate = BitmapFactory.decodeFile(path)

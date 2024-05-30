@@ -285,7 +285,7 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
 
     private inner class ItemAdapter(list: ArrayList<BibleNatatkiData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<BibleNatatkiData, ItemAdapter.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val view = ListItemBinding.inflate(layoutInflater, parent, false)
             view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
                 BibleArrayAdapterParallel.colors[0] = "#FFFFFF"

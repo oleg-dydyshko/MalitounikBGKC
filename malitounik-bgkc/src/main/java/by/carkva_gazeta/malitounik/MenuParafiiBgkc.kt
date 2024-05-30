@@ -161,14 +161,14 @@ class MenuParafiiBgkc : BaseFragment() {
         }
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            val rootView = GroupViewBinding.inflate(mContext.layoutInflater, parent, false)
             val bgkc = mContext.resources.getStringArray(R.array.bgkc)
             rootView.textGroup.text = bgkc[groupPosition]
             return rootView.root
         }
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            val rootView = ChildViewBinding.inflate(mContext.layoutInflater, parent, false)
             if ((mContext as BaseActivity).getBaseDzenNoch())
                 rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             rootView.textChild.text = groups[groupPosition][childPosition].title

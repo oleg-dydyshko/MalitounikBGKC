@@ -275,7 +275,7 @@ class NovyZapavietSinaidalList : BaseActivity() {
         }
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            val rootView = GroupViewBinding.inflate(mContext.layoutInflater, parent, false)
             when (groupPosition) {
                 0 -> rootView.textGroup.text = "От Матфея"
                 1 -> rootView.textGroup.text = "От Марка"
@@ -309,7 +309,7 @@ class NovyZapavietSinaidalList : BaseActivity() {
         }
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            val rootView = ChildViewBinding.inflate(mContext.layoutInflater, parent, false)
             val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             if (dzenNoch)
                 rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)

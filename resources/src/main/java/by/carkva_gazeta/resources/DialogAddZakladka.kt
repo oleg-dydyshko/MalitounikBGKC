@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -60,7 +59,7 @@ class DialogAddZakladka : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogSpinnerDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogSpinnerDisplayBinding.inflate(layoutInflater)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
@@ -92,12 +91,12 @@ class DialogAddZakladka : DialogFragment() {
         return alert
     }
 
-    private class ColorAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_color, R.id.label, BibleArrayAdapterParallel.colors) {
+    private class ColorAdapter(private val context: Activity) : ArrayAdapter<String>(context, R.layout.simple_list_item_color, R.id.label, BibleArrayAdapterParallel.colors) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolderColor
             if (convertView == null) {
-                val binding = SimpleListItemColorBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemColorBinding.inflate(context.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolderColor(binding.label)
                 rootView.tag = viewHolder

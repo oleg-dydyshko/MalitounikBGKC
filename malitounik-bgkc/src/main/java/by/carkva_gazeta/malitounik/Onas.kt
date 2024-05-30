@@ -79,8 +79,8 @@ class Onas : BaseActivity() {
         val t3 = textOnas.indexOf("Што новага?")
         textOnas.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View) {
-                val dialog = DialogChtoHovaha()
-                dialog.show(supportFragmentManager, "DialogChtoHovaha")
+                val dialog = DialogSztoHovaha()
+                dialog.show(supportFragmentManager, "DialogSztoHovaha")
             }
         }, t3, t3 + 11, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         binding.onas.text = textOnas

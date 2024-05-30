@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -115,7 +114,7 @@ class SlugbyVialikagaPostuSpis : BaseActivity() {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem2Binding.inflate(context.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder

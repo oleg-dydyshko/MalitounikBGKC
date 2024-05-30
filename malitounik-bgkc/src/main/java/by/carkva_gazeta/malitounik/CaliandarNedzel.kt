@@ -69,7 +69,7 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
         }
     }
 
-    private class CaliandarNedzelListAdapter(private val mContext: Context, private val niadzelia: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.caliandar_nedel, niadzelia) {
+    private class CaliandarNedzelListAdapter(private val mContext: Activity, private val niadzelia: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.caliandar_nedel, niadzelia) {
         private val c = Calendar.getInstance()
         private val munName = mContext.resources.getStringArray(R.array.meciac_smoll)
         private val nedelName = mContext.resources.getStringArray(R.array.dni_nedeli)
@@ -78,7 +78,7 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
             val view: View
             val viewHolder: ViewHolder
             if (rootView == null) {
-                val binding = CaliandarNedelBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = CaliandarNedelBinding.inflate(mContext.layoutInflater, parent, false)
                 view = binding.root
                 viewHolder = ViewHolder(binding.textCalendar, binding.textCviatyGlavnyia, binding.textSviatyia, binding.textPost, binding.linearView, binding.textCviatyGosud, binding.textCviatyRKC)
                 view.tag = viewHolder

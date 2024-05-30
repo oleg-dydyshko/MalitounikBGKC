@@ -2282,7 +2282,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         fun getOpigData() = origData
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = ListItemSabytieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val view = ListItemSabytieBinding.inflate(layoutInflater, parent, false)
             view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
@@ -2444,7 +2444,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             val rootView: View
             val viewHolder: ViewHolderColor
             if (convertView == null) {
-                val binding = SimpleListItemColorBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemColorBinding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolderColor(binding.label)
                 rootView.tag = viewHolder
@@ -2476,7 +2476,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             val rootView: View
             val viewHolder: ViewHolderColor
             if (convertView == null) {
-                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem1Binding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolderColor(binding.text1)
                 rootView.tag = viewHolder

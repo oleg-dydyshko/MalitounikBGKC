@@ -42,7 +42,7 @@ class DialogSabytieTime : DialogFragment() {
     @Suppress("DEPRECATION")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogSettimeDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogSettimeDisplayBinding.inflate(layoutInflater)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             val c = Calendar.getInstance()
             var style = R.style.AlertDialogTheme

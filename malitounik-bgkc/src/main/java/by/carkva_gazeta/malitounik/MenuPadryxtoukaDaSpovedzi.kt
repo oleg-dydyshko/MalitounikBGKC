@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -114,7 +113,7 @@ class MenuPadryxtoukaDaSpovedzi : BaseListFragment() {
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val ea: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItemMaranataBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemMaranataBinding.inflate(activity.layoutInflater, parent, false)
                 rootView = binding.root
                 ea = ViewHolder(binding.label)
                 rootView.tag = ea

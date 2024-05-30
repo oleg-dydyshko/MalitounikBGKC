@@ -25,7 +25,7 @@ class DialogHelpNotification : DialogFragment() {
     
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogTextviewDisplayBinding.inflate(layoutInflater)
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme

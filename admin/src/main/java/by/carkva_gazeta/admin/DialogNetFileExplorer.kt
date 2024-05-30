@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -61,7 +60,7 @@ class DialogNetFileExplorer : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            binding = DialogListviewDisplayBinding.inflate(LayoutInflater.from(it))
+            binding = DialogListviewDisplayBinding.inflate(layoutInflater)
             binding?.let { binding ->
                 binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)
                 binding.content.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
@@ -147,7 +146,7 @@ class DialogNetFileExplorer : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = AdminSimpleListItemBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = AdminSimpleListItemBinding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder

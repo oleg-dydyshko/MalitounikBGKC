@@ -781,9 +781,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
 
         if (BuildConfig.VERSION_CODE != k.getInt("chtoNavaha", 0)) {
-            val dialog = DialogChtoHovaha()
+            val dialog = DialogSztoHovaha()
             dialog.isCancelable = false
-            dialog.show(supportFragmentManager, "DialogChtoHovaha")
+            dialog.show(supportFragmentManager, "DialogSztoHovaha")
             prefEditors.putInt("chtoNavaha", BuildConfig.VERSION_CODE)
             prefEditors.apply()
         }

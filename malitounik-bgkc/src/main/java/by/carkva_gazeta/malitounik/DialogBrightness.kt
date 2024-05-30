@@ -45,7 +45,7 @@ class DialogBrightness : DialogFragment() {
                     MainActivity.brightness = 15
                 }
             }
-            _binding = DialogFontBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogFontBinding.inflate(layoutInflater)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack

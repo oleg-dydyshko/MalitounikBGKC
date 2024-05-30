@@ -226,7 +226,7 @@ class NadsanContentPage : BaseFragment(), OnItemLongClickListener, AdapterView.O
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = SimpleListItemBibleBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemBibleBinding.inflate(mContext.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder

@@ -67,7 +67,7 @@ class DialogBibleNatatka : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { fragmentActivity ->
-            _binding = DialogEditviewDisplayBinding.inflate(LayoutInflater.from(fragmentActivity))
+            _binding = DialogEditviewDisplayBinding.inflate(layoutInflater)
             val dzenNoch = (fragmentActivity as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack

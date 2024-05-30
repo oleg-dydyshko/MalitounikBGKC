@@ -46,7 +46,7 @@ class DialogPiarlinyContextMenu : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogContextDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogContextDisplayBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it)
             binding.title.text = name
             binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.redagaktirovat)

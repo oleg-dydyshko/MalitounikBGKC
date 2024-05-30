@@ -110,7 +110,7 @@ class MenuPamiatka : BaseListFragment() {
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val ea: ExpArrayAdapterParallelItems
             if (convertView == null) {
-                val binding = SimpleListItemMaranataBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemMaranataBinding.inflate(activity.layoutInflater, parent, false)
                 rootView = binding.root
                 ea = ExpArrayAdapterParallelItems(binding.label)
                 rootView.tag = ea

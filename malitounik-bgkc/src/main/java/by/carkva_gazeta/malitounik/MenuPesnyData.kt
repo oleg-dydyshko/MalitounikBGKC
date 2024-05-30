@@ -25,6 +25,7 @@ class MenuPesnyData {
         pesnyBag.add(Data("pesny_bag_14", "Табе, Марыя, давяраю я"))
         pesnyBag.add(Data("pesny_bag_15", "Ціхая, пакорная"))
         pesnyBag.add(Data("piesni_baharodz_zastupnica_duchounaja", "Заступніца духоўная"))
+        pesnyBag.add(Data("piesni_bahar_lubic_maryja_mianie", "Любіць Марыя мяне"))
 
         pesnyBel.add(Data("pesny_bel_0", "Ave Maria"))
         pesnyBel.add(Data("pesny_bel_1", "Божа, што калісь народы"))

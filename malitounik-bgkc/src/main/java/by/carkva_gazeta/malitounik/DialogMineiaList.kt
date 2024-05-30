@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -45,7 +44,7 @@ class DialogMineiaList : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            binding = DialogListviewDisplayBinding.inflate(LayoutInflater.from(it))
+            binding = DialogListviewDisplayBinding.inflate(layoutInflater)
             builder.setView(binding.root)
             val fileList = ArrayList<SlugbovyiaTextuData>()
             val dayOfYear = arguments?.getString("dayOfYear") ?: "1"
@@ -96,7 +95,7 @@ class DialogMineiaList : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem2Binding.inflate(context.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder

@@ -521,7 +521,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private class SpinnerAdapter(activity: Activity, private val data: Array<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {
+    private class SpinnerAdapter(private val activity: Activity, private val data: Array<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
@@ -539,7 +539,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem1Binding.inflate(activity.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder
@@ -555,7 +555,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
 
     private class ViewHolder(var text: TextView)
 
-    private class SpinnerAdapterTipicon(activity: Activity, private val data: ArrayList<Tipicon>) : BaseAdapter() {
+    private class SpinnerAdapterTipicon(private val activity: Activity, private val data: ArrayList<Tipicon>) : BaseAdapter() {
         private val context = activity
 
         override fun getItem(position: Int): Any {
@@ -574,7 +574,7 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
             val rootView: View
             val viewHolderImage: ViewHolderImage
             if (convertView == null) {
-                val binding = SimpleListItemTipiconBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemTipiconBinding.inflate(activity.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolderImage = ViewHolderImage(binding.image, binding.text1)
                 rootView.tag = viewHolderImage

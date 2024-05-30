@@ -53,7 +53,7 @@ class DialogDelite : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogTextviewDisplayBinding.inflate(layoutInflater)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack

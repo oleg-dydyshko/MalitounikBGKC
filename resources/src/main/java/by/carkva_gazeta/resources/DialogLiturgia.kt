@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -42,7 +41,7 @@ class DialogLiturgia : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { activity ->
-            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(activity))
+            _binding = DialogTextviewDisplayBinding.inflate(layoutInflater)
             MainActivity.dialogVisable = true
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()

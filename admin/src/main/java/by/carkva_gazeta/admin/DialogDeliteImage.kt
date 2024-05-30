@@ -52,7 +52,7 @@ class DialogDeliteImage : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogImageviewDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogImageviewDisplayBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.remove)
             val bitmap = BitmapFactory.decodeFile(path)

@@ -8,7 +8,6 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -122,7 +121,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { fragmentActivity ->
             val builder = AlertDialog.Builder(fragmentActivity, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            binding = AdminDialigSaveAsBinding.inflate(LayoutInflater.from(fragmentActivity))
+            binding = AdminDialigSaveAsBinding.inflate(layoutInflater)
             binding?.let { binding ->
                 binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.save_as_up)
                 binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.mk_dir)
@@ -238,7 +237,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = AdminSimpleListItemBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = AdminSimpleListItemBinding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder

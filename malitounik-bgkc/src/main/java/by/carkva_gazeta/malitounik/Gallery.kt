@@ -840,7 +840,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         private val mItemList = ArrayList<GalleryData>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val galleryBinding = GalleryItemBinding.inflate(LayoutInflater.from(this@Gallery), parent, false)
+            val galleryBinding = GalleryItemBinding.inflate(layoutInflater, parent, false)
             val view = galleryBinding.root
             view.setOnClickListener {
                 val position = binding.recyclerView.getChildLayoutPosition(it)

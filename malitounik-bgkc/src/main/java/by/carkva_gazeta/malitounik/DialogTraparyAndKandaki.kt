@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -40,7 +39,7 @@ class DialogTraparyAndKandaki : DialogFragment() {
         activity?.let { activity ->
             chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
-            _binding = TraparyAndKandakiBinding.inflate(LayoutInflater.from(activity))
+            _binding = TraparyAndKandakiBinding.inflate(layoutInflater)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(activity, style)
@@ -87,7 +86,7 @@ class DialogTraparyAndKandaki : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = SimpleListItem2Binding.inflate(activity.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder

@@ -313,7 +313,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
 
     private inner class ItemAdapter(private val activity: BaseActivity, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<VybranoeData, ItemAdapter.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val view = ListItemBinding.inflate(layoutInflater, parent, false)
             view.root.supportedSwipeDirection = ListSwipeItem.SwipeDirection.LEFT
             val dzenNoch = activity.getBaseDzenNoch()
             if (dzenNoch) {

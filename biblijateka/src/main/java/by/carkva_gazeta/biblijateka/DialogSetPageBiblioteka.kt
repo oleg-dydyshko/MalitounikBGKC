@@ -51,7 +51,7 @@ class DialogSetPageBiblioteka : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogEditviewDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogEditviewDisplayBinding.inflate(layoutInflater)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack

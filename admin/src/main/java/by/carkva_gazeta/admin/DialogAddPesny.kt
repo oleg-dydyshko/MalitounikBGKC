@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -53,7 +52,7 @@ class DialogAddPesny : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogAddpesnyBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogAddpesnyBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.add_pesny_title)
             binding.content.requestFocus()
@@ -116,7 +115,7 @@ class DialogAddPesny : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolderColor
             if (convertView == null) {
-                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem2Binding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolderColor(binding.label)
                 rootView.tag = viewHolder

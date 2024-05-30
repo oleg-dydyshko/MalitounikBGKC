@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -114,7 +113,7 @@ class TonNiadzelny : BaseActivity() {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = SimpleListItemTonBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemTonBinding.inflate(mContext.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.text, binding.play)
                 rootView.tag = viewHolder

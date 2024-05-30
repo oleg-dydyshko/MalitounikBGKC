@@ -56,7 +56,7 @@ class DialogBibleRazdel : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogEditviewDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogEditviewDisplayBinding.inflate(layoutInflater)
             builder = AlertDialog.Builder(it, R.style.AlertDialogTheme)
             binding.title.text = resources.getString(R.string.data_search, fullGlav)
             binding.content.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(3) }

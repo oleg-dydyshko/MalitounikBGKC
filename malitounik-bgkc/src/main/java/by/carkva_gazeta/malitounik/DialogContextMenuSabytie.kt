@@ -47,7 +47,7 @@ class DialogContextMenuSabytie : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogContextDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogContextDisplayBinding.inflate(layoutInflater)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             val builder = AlertDialog.Builder(it)
             binding.title.text = name

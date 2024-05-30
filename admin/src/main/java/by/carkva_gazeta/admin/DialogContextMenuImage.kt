@@ -44,7 +44,7 @@ class DialogContextMenuImage : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogContextDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogContextDisplayBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it)
             binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.admin_img_sviat)
             binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.image_upload)

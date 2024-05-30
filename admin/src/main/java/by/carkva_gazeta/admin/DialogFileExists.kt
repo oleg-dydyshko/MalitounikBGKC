@@ -48,7 +48,7 @@ class DialogFileExists : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogTextviewDisplayBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.file_exists)
             binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.file_exists_opis, fileName)

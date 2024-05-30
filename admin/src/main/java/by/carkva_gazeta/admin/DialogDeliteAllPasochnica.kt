@@ -40,7 +40,7 @@ class DialogDeliteAllPasochnica : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogTextviewDisplayBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it, R.style.AlertDialogTheme)
             binding.title.text = resources.getString(R.string.remove)
             binding.content.text = getString(R.string.del_all_pasochnica)

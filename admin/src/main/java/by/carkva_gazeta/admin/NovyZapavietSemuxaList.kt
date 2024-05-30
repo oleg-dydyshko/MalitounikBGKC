@@ -8,7 +8,6 @@ import android.hardware.SensorEvent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -275,7 +274,7 @@ class NovyZapavietSemuxaList : BaseActivity() {
         }
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            val rootView = GroupViewBinding.inflate(layoutInflater, parent, false)
             when (groupPosition) {
                 0 -> rootView.textGroup.text = "Паводле Мацьвея"
                 1 -> rootView.textGroup.text = "Паводле Марка"
@@ -309,7 +308,7 @@ class NovyZapavietSemuxaList : BaseActivity() {
         }
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            val rootView = ChildViewBinding.inflate(layoutInflater, parent, false)
             val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)

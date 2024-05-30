@@ -73,7 +73,7 @@ class MyNatatki : DialogFragment() {
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
-            _binding = MyNatatkiBinding.inflate(LayoutInflater.from(it))
+            _binding = MyNatatkiBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it, style)
             builder.setView(binding.root)
             if (savedInstanceState != null) {

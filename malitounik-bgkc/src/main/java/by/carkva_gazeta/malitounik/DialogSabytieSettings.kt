@@ -59,7 +59,7 @@ class DialogSabytieSettings : DialogFragment(), View.OnClickListener {
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
-            _binding = DialogSabytieSettingsBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogSabytieSettingsBinding.inflate(layoutInflater)
             uriAlarm = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
             uriNotification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             uriRingtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)

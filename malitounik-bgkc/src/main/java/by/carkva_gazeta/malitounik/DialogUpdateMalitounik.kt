@@ -40,7 +40,7 @@ class DialogUpdateMalitounik : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogUpdateMalitounikBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogUpdateMalitounikBinding.inflate(layoutInflater)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack

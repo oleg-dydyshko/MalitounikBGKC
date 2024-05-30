@@ -59,7 +59,7 @@ class DialogFontSize : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             MainActivity.dialogVisable = true
-            _binding = DialogFontBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogFontBinding.inflate(layoutInflater)
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme

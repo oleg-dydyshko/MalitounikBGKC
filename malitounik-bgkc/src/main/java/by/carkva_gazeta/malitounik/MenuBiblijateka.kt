@@ -837,7 +837,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItemBibliotekaBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemBibliotekaBinding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label, binding.imageView2, binding.buttonPopup)
                 rootView.tag = viewHolder

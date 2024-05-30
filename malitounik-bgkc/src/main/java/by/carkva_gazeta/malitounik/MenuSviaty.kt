@@ -108,7 +108,7 @@ class MenuSviaty : BaseListFragment() {
             val rootView: View
             val ea: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItemSviatyBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemSviatyBinding.inflate(context.layoutInflater, parent, false)
                 rootView = binding.root
                 ea = ViewHolder(binding.group, binding.title, binding.date)
                 rootView.tag = ea

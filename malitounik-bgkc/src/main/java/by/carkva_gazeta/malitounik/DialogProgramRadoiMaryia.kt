@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -49,7 +48,7 @@ class DialogProgramRadoiMaryia : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { activity ->
-            binding = DialogProgramRadioMariaBinding.inflate(LayoutInflater.from(activity))
+            binding = DialogProgramRadioMariaBinding.inflate(layoutInflater)
             binding?.let {
                 var style = R.style.AlertDialogTheme
                 if (dzenNoch) style = R.style.AlertDialogThemeBlack

@@ -138,7 +138,7 @@ class DialogCalindarGrid : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
         activity?.let {
-            _binding = CalindarGridBinding.inflate(LayoutInflater.from(it))
+            _binding = CalindarGridBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it)
             builder.setView(binding.root)
             slugba.loadPiarliny()
@@ -206,7 +206,7 @@ class DialogCalindarGrid : DialogFragment() {
     private inner class ItemAdapter(private val activity: Activity, list: ArrayList<Int>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<Int, ItemAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val view = GridItemBinding.inflate(layoutInflater, parent, false)
             when (post) {
                 1 -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_bez_posta)
                 2 -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_post)

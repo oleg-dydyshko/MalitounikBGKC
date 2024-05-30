@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -42,7 +41,7 @@ class MenuListAdaprer : ArrayAdapter<String> {
         val rootView: View
         val viewHolder: ViewHolder
         if (mView == null) {
-            val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+            val binding = SimpleListItem2Binding.inflate(mContext.layoutInflater, parent, false)
             rootView = binding.root
             viewHolder = ViewHolder(binding.label)
             rootView.tag = viewHolder

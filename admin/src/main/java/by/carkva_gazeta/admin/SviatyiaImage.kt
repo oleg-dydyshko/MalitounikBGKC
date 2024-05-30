@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -412,12 +411,12 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
         launch()
     }
 
-    private class SviatyiaImageAdapter(activity: Activity, private val list: ArrayList<DataImages>) : ArrayAdapter<DataImages>(activity, by.carkva_gazeta.malitounik.R.layout.list_item_image, list) {
+    private class SviatyiaImageAdapter(private val activity: Activity, private val list: ArrayList<DataImages>) : ArrayAdapter<DataImages>(activity, by.carkva_gazeta.malitounik.R.layout.list_item_image, list) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val ea: ViewHolder
             if (convertView == null) {
-                val binding = ListItemImageBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = ListItemImageBinding.inflate(activity.layoutInflater, parent, false)
                 rootView = binding.root
                 ea = ViewHolder(binding.imageView, binding.textView, binding.textViewApisanne)
                 rootView.tag = ea

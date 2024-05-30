@@ -89,7 +89,7 @@ class DialogPasochnicaFileName : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogEditviewDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogEditviewDisplayBinding.inflate(layoutInflater)
             builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.set_file_name)
             val text = if (savedInstanceState != null) {

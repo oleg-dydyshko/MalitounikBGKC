@@ -35,7 +35,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         val rootView: View
         val ea: BibleArrayAdapterParallelItems
         if (convertView == null) {
-            val binding = SimpleListItemBibleBinding.inflate(LayoutInflater.from(context), viewGroup, false)
+            val binding = SimpleListItemBibleBinding.inflate(context.layoutInflater, viewGroup, false)
             rootView = binding.root
             ea = BibleArrayAdapterParallelItems(binding.label)
             rootView.tag = ea

@@ -38,7 +38,7 @@ class CheckLogin : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = CheckLoginBinding.inflate(LayoutInflater.from(it))
+            _binding = CheckLoginBinding.inflate(layoutInflater)
             val builder = AlertDialog.Builder(it)
             builder.setView(binding.root)
             alert = builder.create()

@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -15,7 +14,7 @@ class HistoryAdapter(private var context: Activity, private var history: ArrayLi
         val rootView: View
         val viewHolder: ViewHolderHistory
         if (mView == null) {
-            val binding = SimpleListItemHistoryBinding.inflate(LayoutInflater.from(context), parent, false)
+            val binding = SimpleListItemHistoryBinding.inflate(context.layoutInflater, parent, false)
             rootView = binding.root
             viewHolder = ViewHolderHistory(binding.item, binding.search)
             rootView.tag = viewHolder

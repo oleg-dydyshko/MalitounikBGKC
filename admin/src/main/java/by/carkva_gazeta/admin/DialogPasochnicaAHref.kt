@@ -55,7 +55,7 @@ class DialogPasochnicaAHref : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogTwoEditviewDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogTwoEditviewDisplayBinding.inflate(layoutInflater)
             builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.admin_set_name_link)
             if (savedInstanceState != null) {

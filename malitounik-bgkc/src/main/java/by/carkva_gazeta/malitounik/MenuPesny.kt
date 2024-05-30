@@ -62,6 +62,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        R.raw.piesni_bahar_lubic_maryja_mianie
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -450,7 +451,7 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem2Binding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder

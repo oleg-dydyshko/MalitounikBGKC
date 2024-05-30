@@ -267,7 +267,7 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
 
     private inner class ItemAdapter(list: ArrayList<BibleZakladkiData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<BibleZakladkiData, ItemAdapter.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val view = ListItemBinding.inflate(layoutInflater, parent, false)
             view.root.supportedSwipeDirection = ListSwipeItem.SwipeDirection.LEFT
             view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {

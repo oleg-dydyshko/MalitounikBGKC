@@ -722,7 +722,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItemOpisanieBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemOpisanieBinding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.title, binding.text, binding.image, binding.buttonPopup, binding.textApisanne)
                 rootView.tag = viewHolder

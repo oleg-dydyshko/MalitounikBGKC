@@ -38,14 +38,14 @@ class MineiaExpListAdapter(private val mContext: Activity, private val groups:Ar
         }
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            val rootView = GroupViewBinding.inflate(mContext.layoutInflater, parent, false)
             val months = mContext.resources.getStringArray(R.array.meciac3)
             rootView.textGroup.text = months[groups[groupPosition][0].month]
             return rootView.root
         }
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            val rootView = ChildViewBinding.inflate(mContext.layoutInflater, parent, false)
             val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             rootView.textChild.text = groups[groupPosition][childPosition].title

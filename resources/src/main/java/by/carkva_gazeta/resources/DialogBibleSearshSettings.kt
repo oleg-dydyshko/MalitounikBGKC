@@ -64,7 +64,7 @@ class DialogBibleSearshSettings : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogBibleSearshSettingsBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogBibleSearshSettingsBinding.inflate(layoutInflater)
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             prefEditors = chin.edit()
             var style = R.style.AlertDialogTheme
@@ -147,7 +147,7 @@ class DialogBibleSearshSettings : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItem4Binding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItem4Binding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder

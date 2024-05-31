@@ -7,7 +7,6 @@ import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem

@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem

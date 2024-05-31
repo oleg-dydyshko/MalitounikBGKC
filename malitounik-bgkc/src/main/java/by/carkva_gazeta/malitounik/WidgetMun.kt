@@ -12,7 +12,8 @@ import android.os.SystemClock
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class WidgetMun : AppWidgetProvider() {
     private var updateViews: RemoteViews? = null

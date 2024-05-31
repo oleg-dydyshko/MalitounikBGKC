@@ -832,7 +832,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         }
     }
 
-    internal inner class BibliotekaAdapter(private val context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
+    internal inner class BibliotekaAdapter(context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder

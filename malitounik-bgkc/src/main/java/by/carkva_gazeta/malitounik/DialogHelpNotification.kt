@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment

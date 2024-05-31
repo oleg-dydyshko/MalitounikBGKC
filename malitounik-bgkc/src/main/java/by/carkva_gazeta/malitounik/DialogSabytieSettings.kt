@@ -12,7 +12,6 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.RadioGroup

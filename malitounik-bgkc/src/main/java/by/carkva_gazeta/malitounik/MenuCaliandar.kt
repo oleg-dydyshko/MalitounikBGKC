@@ -9,7 +9,10 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -26,7 +29,8 @@ import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.FileWriter
 import java.io.InputStreamReader
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class MenuCaliandar : BaseFragment() {
     private var listinner: MenuCaliandarPageListinner? = null

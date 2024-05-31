@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat

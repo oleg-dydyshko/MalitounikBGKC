@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
+
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog

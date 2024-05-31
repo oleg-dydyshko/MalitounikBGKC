@@ -13,7 +13,11 @@ import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class BogashlugbovyaTryjodz : BaseActivity() {
     private val data get() = resources.getStringArray(R.array.bogaslugbovuia_tryjodz)

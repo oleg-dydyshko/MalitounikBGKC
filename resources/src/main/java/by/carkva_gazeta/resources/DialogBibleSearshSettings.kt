@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView

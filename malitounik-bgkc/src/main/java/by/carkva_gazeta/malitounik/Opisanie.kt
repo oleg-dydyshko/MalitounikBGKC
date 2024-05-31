@@ -9,7 +9,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Spanned
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -717,7 +716,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         startActivity(Intent.createChooser(sendIntent, getText(R.string.zmiest)))
     }
 
-    private inner class OpisanieAdapter(private val context: Activity) : ArrayAdapter<OpisanieData>(context, R.layout.simple_list_item_opisanie, arrayList) {
+    private inner class OpisanieAdapter(context: Activity) : ArrayAdapter<OpisanieData>(context, R.layout.simple_list_item_opisanie, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder

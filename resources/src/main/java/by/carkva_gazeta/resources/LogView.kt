@@ -83,7 +83,7 @@ class LogView : BaseActivity() {
         if (log.isEmpty()) {
             binding.textView.text = getString(by.carkva_gazeta.malitounik.R.string.admin_upload_contine)
         } else {
-            val strB = java.lang.StringBuilder()
+            val strB = StringBuilder()
             log.forEach {
                 strB.append(it)
                 strB.append("\n")
@@ -120,50 +120,7 @@ class LogView : BaseActivity() {
     }
 
     private fun checkResources() {
-        val list = sb.toString().split("\n")/*val fields = R.raw::class.java.fields
-        val fields2 = by.carkva_gazeta.malitounik.R.raw::class.java.fields
-        for (element in fields) {
-            val name = element.name
-            var testR = false
-            for (i in list.indices) {
-                val t1 = list[i].indexOf("<name>")
-                val t2 = list[i].indexOf("</name>")
-                if (t1 != -1 && t2 != -1) {
-                    val name1 = list[i].substring(t1 + 6, t2)
-                    val t3 = name1.indexOf(".")
-                    val nameR = if (t3 != -1) name1.substring(0, t3)
-                    else name1
-                    if (nameR == name) {
-                        testR = true
-                        break
-                    }
-                }
-            }
-            if (!testR) {
-                checkSB.append("firebase: няма resources.R.raw.$name\n")
-            }
-        }
-        for (element in fields2) {
-            val name = element.name
-            var testR = false
-            for (i in list.indices) {
-                val t1 = list[i].indexOf("<name>")
-                val t2 = list[i].indexOf("</name>")
-                if (t1 != -1 && t2 != -1) {
-                    val name1 = list[i].substring(t1 + 6, t2)
-                    val t3 = name1.indexOf(".")
-                    val nameR = if (t3 != -1) name1.substring(0, t3)
-                    else name1
-                    if (nameR == name) {
-                        testR = true
-                        break
-                    }
-                }
-            }
-            if (!testR) {
-                checkSB.append("firebase: няма malitounik.R.raw.$name\n")
-            }
-        }*/
+        val list = sb.toString().split("\n")
         val oldList = oldCheckSB.split("\n")
         for (element in oldList.indices) {
             val t11 = oldList[element].indexOf("<name>")
@@ -354,6 +311,8 @@ class LogView : BaseActivity() {
                         strB.append(file)
                         strB.append("\n")
                     }
+                    strB.append("\n")
+                    strB.append(checkSB.toString())
                     logFile.writer().use {
                         it.write(strB.toString())
                     }

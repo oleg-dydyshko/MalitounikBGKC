@@ -145,10 +145,12 @@ class MenuPesnyData {
         pesnyPrasl.add(Data("pesny_prasl_73", "Аднаві маю надзею"))
         pesnyPrasl.add(Data("pesny_prasl_74", "Праслаўляйце Пана Бога"))
         pesnyPrasl.add(Data("pesny_prasl_75", "Радуйся і слаў Яго"))
-        pesnyPrasl.add(Data("piesni_prasl_aliluja", "Алілуя"))
+        pesnyPrasl.add(Data("piesni_prasl_aliluja_leanard_koen_zanna_hauryczenkava", "Алілуя (Я чуў таемны той акорд...)"))
         pesnyPrasl.add(Data("piesni_prasl_bo_lublu", "Бо люблю"))
         pesnyPrasl.add(Data("piesni_prasl_prad_taboju_moj_boh", "Прад табою, мой Бог"))
         pesnyPrasl.add(Data("piesni_prasl_chrystos_uvaskros", "Хрыстос уваскрос"))
+        pesnyPrasl.add(Data("piesni_prasl_aliluja_leanard_koen_maryja_trapaszka", "Алілуя (О Божа, памажы нам жыць...)"))
+        pesnyPrasl.add(Data("piesni_prasl_aliluja_leanard_koen_eduard_akulin", "Алілуя (Сярод нягод і сумных кроз...)"))
 
         pesnyTaize.add(Data("pesny_taize_0", "Magnifikat"))
         pesnyTaize.add(Data("pesny_taize_1", "Ostende nobis"))

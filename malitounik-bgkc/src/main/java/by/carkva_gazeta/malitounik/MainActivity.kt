@@ -2179,6 +2179,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val nw = connectivityManager.activeNetwork ?: return false
                 val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
+                val downSpeed = actNw.linkDownstreamBandwidthKbps
+                val upSpeed = actNw.linkUpstreamBandwidthKbps
+                if (downSpeed < 10000 || upSpeed < 10000) return false
                 when (typeTransport) {
                     TRANSPORT_CELLULAR -> {
                         if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) return true

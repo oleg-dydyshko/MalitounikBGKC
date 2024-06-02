@@ -24,18 +24,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <by.carkva_gazeta.malitounik.TextViewCustom
+        <ImageView
             android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@drawable/selector_red"
-            android:gravity="end"
+            android:contentDescription="@string/mk_dir"
             android:padding="10sp"
-            android:text="@string/mk_dir"
-            android:textColor="@color/colorWhite"
-            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/add_folder" />
     </LinearLayout>
 
     <LinearLayout

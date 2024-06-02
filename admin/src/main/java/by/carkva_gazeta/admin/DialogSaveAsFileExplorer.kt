@@ -124,7 +124,6 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             binding = AdminDialigSaveAsBinding.inflate(layoutInflater)
             binding?.let { binding ->
                 binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.save_as_up)
-                binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.mk_dir)
                 binding.content.setOnClickListener {
                     val dialogPasochnicaMkDir = DialogPasochnicaMkDir.getInstance(dir, oldName, binding.edittext.text.toString())
                     dialogPasochnicaMkDir.show(childFragmentManager, "dialogPasochnicaMkDir")

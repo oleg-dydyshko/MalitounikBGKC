@@ -146,7 +146,7 @@ class DialogNetFileExplorer : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                val binding = AdminSimpleListItemBinding.inflate(layoutInflater, parent, false)
+                val binding = AdminSimpleListItemBinding.inflate(mContext.layoutInflater, parent, false)
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder

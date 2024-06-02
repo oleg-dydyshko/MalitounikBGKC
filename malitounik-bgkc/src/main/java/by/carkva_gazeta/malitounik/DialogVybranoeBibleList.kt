@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
@@ -7,8 +8,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
-import android.view.LayoutInflater
-
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
@@ -125,7 +124,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             }
             if (bibleVybranoe != "") arrayListVybranoe = gson.fromJson(bibleVybranoe, type)
             binding.dragListView.setLayoutManager(LinearLayoutManager(activity))
-            binding.dragListView.setAdapter(ItemAdapter(arrayListVybranoe, R.id.image, false), false)
+            binding.dragListView.setAdapter(ItemAdapter(activity, arrayListVybranoe, R.id.image, false), false)
             binding.dragListView.setCanDragHorizontally(false)
             binding.dragListView.setCanDragVertically(true)
             binding.dragListView.setSwipeListener(object : OnSwipeListenerAdapter() {
@@ -367,9 +366,9 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
         return sb.toString()
     }
 
-    private inner class ItemAdapter(list: ArrayList<VybranoeBibliaData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<VybranoeBibliaData, ItemAdapter.ViewHolder>() {
+    private inner class ItemAdapter(private val mContext: Activity, list: ArrayList<VybranoeBibliaData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<VybranoeBibliaData, ItemAdapter.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val view = ListItemBinding.inflate(mContext.layoutInflater, parent, false)
             view.root.supportedSwipeDirection = SwipeDirection.LEFT
             if (dzenNoch) {
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)

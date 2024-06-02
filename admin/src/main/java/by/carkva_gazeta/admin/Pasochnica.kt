@@ -638,6 +638,17 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                         newFile = newFile.replace("-", "_")
                     }
                     newFile = newFile.replace(" ", "_").lowercase()
+                    val t7 = newFile.lastIndexOf(".")
+                    if (t7 != -1) {
+                        var checkName = newFile.substring(0, t7)
+                        val t2 = checkName.indexOf(".")
+                        if (t2 != -1) {
+                            checkName = checkName.replace(".", "_")
+                            newFile = checkName + newFile.substring(t7)
+                        }
+                    } else {
+                        newFile = "$newFile.html"
+                    }
                     if (newFile[0].isDigit()) newFile = "mm_$newFile"
                     Malitounik.referens.child("/$newDir$newFile").putFile(Uri.fromFile(localFile)).await()
                     Malitounik.referens.child("/admin/piasochnica/" + fileName.replace("\n", " ")).delete().await()

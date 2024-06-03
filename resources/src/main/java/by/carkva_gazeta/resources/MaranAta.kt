@@ -678,9 +678,165 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         return true
     }
 
+    private fun getBibleSinoidalNameFull(kniga: Int): String {
+        return when (kniga) {
+            1 -> "Бытие"
+            2 -> "Исход"
+            3 -> "Левит"
+            4 -> "Числа"
+            5 -> "Второзаконие"
+            6 -> "Иисуса Навина"
+            7 -> "Судей израилевых"
+            8 -> "Руфи"
+            9 -> "1-я Царств"
+            10 -> "2-я Царств"
+            11 -> "3-я Царств"
+            12 -> "4-я Царств"
+            13 -> "1-я Паралипоменон"
+            14 -> "2-я Паралипоменон"
+            15 -> "1-я Ездры"
+            16 -> "Неемии"
+            17 -> "2-я Ездры"
+            18 -> "Товита"
+            19 -> "Иудифи"
+            20 -> "Есфири"
+            21 -> "Иова"
+            22 -> "Псалтирь"
+            23 -> "Притчи Соломона"
+            24 -> "Екклезиаста"
+            25 -> "Песнь песней Соломона"
+            26 -> "Премудрости Соломона"
+            27 -> "Премудрости Иисуса, сына Сирахова"
+            28 -> "Исаии"
+            29 -> "Иеремии"
+            30 -> "Плач Иеремии"
+            31 -> "Послание Иеремии"
+            32 -> "Варуха"
+            33 -> "Иезекииля"
+            34 -> "Даниила"
+            35 -> "Осии"
+            36 -> "Иоиля"
+            37 -> "Амоса"
+            38 -> "Авдия"
+            39 -> "Ионы"
+            40 -> "Михея"
+            41 -> "Наума"
+            42 -> "Аввакума"
+            43 -> "Сафонии"
+            44 -> "Аггея"
+            45 -> "Захарии"
+            46 -> "Малахии"
+            47 -> "1-я Маккавейская"
+            48 -> "2-я Маккавейская"
+            49 -> "3-я Маккавейская"
+            50 -> "3-я Ездры"
+            51 -> "От Матфея"
+            52 -> "От Марка"
+            53 -> "От Луки"
+            54 -> "От Иоанна"
+            55 -> "Деяния святых апостолов"
+            56 -> "Иакова"
+            57 -> "1-е Петра"
+            58 -> "2-е Петра"
+            59 -> "1-е Иоанна"
+            60 -> "2-е Иоанна"
+            61 -> "3-е Иоанна"
+            62 -> "Иуды"
+            63 -> "Римлянам"
+            64 -> "1-е Коринфянам"
+            65 -> "2-е Коринфянам"
+            66 -> "Галатам"
+            67 -> "Ефесянам"
+            68 -> "Филиппийцам"
+            69 -> "Колоссянам"
+            70 -> "1-е Фессалоникийцам (Солунянам)"
+            71 -> "2-е Фессалоникийцам (Солунянам)"
+            72 -> "1-е Тимофею"
+            73 -> "2-е Тимофею"
+            74 -> "Титу"
+            75 -> "Филимону"
+            76 -> "Евреям"
+            77 -> "Откровение (Апокалипсис)"
+            else -> "Бытие"
+        }
+    }
+
+    private fun getBibleSemuxaNameFull(kniga: Int): String {
+        return when (kniga) {
+            1 -> "Быцьцё"
+            2 -> "Выхад"
+            3 -> "Лявіт"
+            4 -> "Лікі"
+            5 -> "Другі Закон"
+            6 -> "Ісуса сына Нава"
+            7 -> "Судзьдзяў"
+            8 -> "Рут"
+            9 -> "1-я Царстваў"
+            10 -> "2-я Царстваў"
+            11 -> "3-я Царстваў"
+            12 -> "4-я Царстваў"
+            13 -> "1-я Летапісаў"
+            14 -> "2-я Летапісаў"
+            15 -> "Эздры"
+            16 -> "Нээміі"
+            20 -> "Эстэр"
+            21 -> "Ёва"
+            22 -> "Псалтыр"
+            23 -> "Выслоўяў Саламонавых"
+            24 -> "Эклезіяста"
+            25 -> "Найвышэйшая Песьня Саламонава"
+            28 -> "Ісаі"
+            29 -> "Ераміі"
+            30 -> "Ераміін Плач"
+            33 -> "Езэкііля"
+            34 -> "Данііла"
+            35 -> "Асіі"
+            36 -> "Ёіля"
+            37 -> "Амоса"
+            38 -> "Аўдзея"
+            39 -> "Ёны"
+            40 -> "Міхея"
+            41 -> "Навума"
+            42 -> "Абакума"
+            43 -> "Сафона"
+            44 -> "Агея"
+            45 -> "Захарыі"
+            46 -> "Малахіі"
+            51 -> "Паводле Мацьвея"
+            52 -> "Паводле Марка"
+            53 -> "Паводле Лукаша"
+            54 -> "Паводле Яна"
+            55 -> "Дзеі Апосталаў"
+            56 -> "Якава"
+            57 -> "1-е Пятра"
+            58 -> "2-е Пятра"
+            59 -> "1-е Яна Багаслова"
+            60 -> "2-е Яна Багаслова"
+            61 -> "3-е Яна Багаслова"
+            62 -> "Юды"
+            63 -> "Да Рымлянаў"
+            64 -> "1-е да Карынфянаў"
+            65 -> "2-е да Карынфянаў"
+            66 -> "Да Галятаў"
+            67 -> "Да Эфэсянаў"
+            68 -> "Да Піліпянаў"
+            69 -> "Да Каласянаў"
+            70 -> "1-е да Фесаланікійцаў"
+            71 -> "2-е да Фесаланікійцаў"
+            72 -> "1-е да Цімафея"
+            73 -> "2-е да Цімафея"
+            74 -> "Да Ціта"
+            75 -> "Да Філімона"
+            76 -> "Да Габрэяў"
+            77 -> "Адкрыцьцё (Апакаліпсіс)"
+            else -> getBibleSinoidalNameFull(kniga)
+        }
+    }
+
     private fun setMaranata(savedInstanceState: Bundle?) {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         val chten = cytanne.split(";")
+        var saveName = ""
         for (i in chten.indices) {
             val fit = chten[i].trim()
             var nazvaFull = ""
@@ -693,14 +849,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val paralelnyeMesta = ParalelnyeMesta()
                 val bible = paralelnyeMesta.biblia(fit)
                 val kniga = bible[0]
-                val nazva = bible[1]
-                val nazvaBel = if (DialogVybranoeBibleList.biblia == "3") getString(by.carkva_gazeta.malitounik.R.string.psalom2)
-                else bible[2]
                 val nomer = bible[3].toInt()
-                nazvaFull = bible[4]
-                nazvaFullBel = bible[5]
-                if (nazvaFull == "") nazvaFull = bible[1]
-                if (nazvaFullBel == "") nazvaFullBel = bible[2]
+                nazvaFull = getBibleSinoidalNameFull(nomer)
+                nazvaFullBel = getBibleSemuxaNameFull(nomer)
                 val s2 = fit.lastIndexOf(" ")
                 var s5 = -1
                 if (s2 == -1) {
@@ -832,7 +983,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 var underline: Int
                 var color: Int
                 if (replace) {
-                    maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>", 0, 0, 0))
+                    maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>", 0, 0, 0))
                 }
                 val builder = StringBuilder()
                 var line: String
@@ -852,9 +1003,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 }
                 if (chten.size == 6 && i == 3) {
                     if (belarus) {
-                        maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n", 0, 0, 0))
+                        maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n", 0, 0, 0))
                     } else {
-                        maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", "", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n", 0, 0, 0))
+                        maranAta.add(MaranAtaData(sinoidal = true, novyZapavet = false, -1, 0, 0, "", saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n", 0, 0, 0))
                     }
                 }
                 val split2Pre = builder.toString().split("===")
@@ -902,10 +1053,12 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         }
                     } else {
                         if (belarus) {
-                            if (addGlava == e) maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazvaBel $e", "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>", 0, 0, 0))
-                            maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazvaBel $e", "<br><strong>$nazvaFullBel $e</strong><br>\n", 0, 0, 0))
+                            saveName = "$nazvaFullBel $e"
+                            if (addGlava == e) maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>", 0, 0, 0))
+                            maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", saveName, "<br><strong>$nazvaFullBel $e</strong><br>\n", 0, 0, 0))
                         } else {
-                            maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazva $e", "<br><strong>$nazvaFull $e</strong><br>\n", 0, 0, 0))
+                            saveName = "$nazvaFull $e"
+                            maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazvaFull $e", "<br><strong>$nazvaFull $e</strong><br>\n", 0, 0, 0))
                         }
                         val splitline = split2[e].trim().split("\n")
                         for (i2 in splitline.indices) {
@@ -919,17 +1072,24 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 underline = 0
                                 bold = 0
                             }
-                            if (belarus) maranAta.add(MaranAtaData(replace, nomer > 50, nomer, e - 1, i2 + 1, kniga + "." + e + "." + (i2 + 1), "$nazvaBel $e", splitline[i2], bold, underline, color))
-                            else maranAta.add(MaranAtaData(true, nomer > 50, nomer, e - 1, i2 + 1, kniga + "." + e + "." + (i2 + 1), "$nazva $e", splitline[i2], bold, underline, color))
+                            if (belarus) {
+                                saveName = "$nazvaFullBel $e"
+                                maranAta.add(MaranAtaData(replace, nomer > 50, nomer, e - 1, i2 + 1, kniga + "." + e + "." + (i2 + 1), saveName, splitline[i2], bold, underline, color))
+                            } else {
+                                saveName = "$nazvaFull $e"
+                                maranAta.add(MaranAtaData(true, nomer > 50, nomer, e - 1, i2 + 1, kniga + "." + e + "." + (i2 + 1), saveName, splitline[i2], bold, underline, color))
+                            }
                         }
                     }
                 }
                 if (stixn != -1) {
                     val t1 = fit.indexOf(".")
                     if (belarus) {
-                        maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazvaBel " + fit.substring(s2 + 1, t1), "<br><strong>" + nazvaFullBel + " " + fit.substring(s2 + 1) + "</strong><br>\n", 0, 0, 0))
+                        saveName = nazvaFullBel + " " + fit.substring(s2 + 1)
+                        maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazvaFullBel " + fit.substring(s2 + 1, t1), "<br><strong>$saveName</strong><br>\n", 0, 0, 0))
                     } else {
-                        maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazva " + fit.substring(s2 + 1, t1), "<br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n", 0, 0, 0))
+                        saveName = nazvaFull + " " + fit.substring(s2 + 1)
+                        maranAta.add(MaranAtaData(true, nomer > 50, -1, 0, 0, "", "$nazvaFull " + fit.substring(s2 + 1, t1), "<br><strong>$saveName</strong><br>\n", 0, 0, 0))
                     }
                     val res1 = r1.toString().trim().split("\n")
                     var i3 = stixn
@@ -966,8 +1126,13 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             underline = 0
                             bold = 0
                         }
-                        if (belarus) maranAta.add(MaranAtaData(replace, nomer > 50, nomer, glava - 1, i3, "$kniga.$glava.$i3", "$nazvaBel $glava", resbib, bold, underline, color))
-                        else maranAta.add(MaranAtaData(true, nomer > 50, nomer, glava - 1, i3, "$kniga.$glava.$i3", "$nazva $glava", resbib, bold, underline, color))
+                        if (belarus) {
+                            saveName = "$nazvaFullBel $glava"
+                            maranAta.add(MaranAtaData(replace, nomer > 50, nomer, glava - 1, i3, "$kniga.$glava.$i3", saveName, resbib, bold, underline, color))
+                        } else {
+                            saveName = "$nazvaFull $glava"
+                            maranAta.add(MaranAtaData(true, nomer > 50, nomer, glava - 1, i3, "$kniga.$glava.$i3", saveName, resbib, bold, underline, color))
+                        }
                         i3++
                     }
                     if (konec - nachalo != 0) {
@@ -983,8 +1148,13 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 underline = 0
                                 bold = 0
                             }
-                            if (belarus) maranAta.add(MaranAtaData(replace, nomer > 50, nomer, konec - 1, i21 + 1, kniga + "." + konec + "." + (i21 + 1), "$nazvaBel $konec", res2[i21], bold, underline, color))
-                            else maranAta.add(MaranAtaData(true, nomer > 50, nomer, konec - 1, i21 + 1, kniga + "." + konec + "." + (i21 + 1), "$nazva $konec", res2[i21], bold, underline, color))
+                            if (belarus) {
+                                saveName = "$nazvaFullBel $konec"
+                                maranAta.add(MaranAtaData(replace, nomer > 50, nomer, konec - 1, i21 + 1, kniga + "." + konec + "." + (i21 + 1), saveName, res2[i21], bold, underline, color))
+                            } else {
+                                saveName = "$nazvaFull $konec"
+                                maranAta.add(MaranAtaData(true, nomer > 50, nomer, konec - 1, i21 + 1, kniga + "." + konec + "." + (i21 + 1), saveName, res2[i21], bold, underline, color))
+                            }
                         }
                     }
                 }
@@ -1855,13 +2025,13 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private fun parralelMestaView(position: Int) {
         if (k.getBoolean("paralel_maranata", true) && !vybranae) {
             if (!autoscroll) {
-                val t1 = maranAta[position].bible.indexOf("$")
-                if (t1 != -1) {
+                val res = getParallel(maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
+                if (!res.contains("+-+")) {
                     paralel = true
                     val pm = ParalelnyeMesta()
                     val ch = maranAta[position].paralel
                     val biblia = ch.split(".")
-                    binding.conteiner.text = pm.paralel(maranAta[position].bible.substring(t1 + 1).trim(), belarus).trim()
+                    binding.conteiner.text = pm.paralel(res, belarus).trim()
                     binding.scroll.visibility = View.VISIBLE
                     binding.ListView.visibility = View.GONE
                     binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, biblia[0] + " " + biblia[1] + "." + biblia[2])
@@ -1920,6 +2090,246 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         return true
     }
 
+    private fun getParallel(kniga: Int, glava: Int, styx: Int): String {
+        val parallel = BibliaParallelChtenia()
+        var res = "+-+"
+        if (kniga == 1) {
+            res = parallel.kniga1(glava, styx + 1)
+        }
+        if (kniga == 2) {
+            res = parallel.kniga2(glava, styx + 1)
+        }
+        if (kniga == 3) {
+            res = parallel.kniga3(glava, styx + 1)
+        }
+        if (kniga == 4) {
+            res = parallel.kniga4(glava, styx + 1)
+        }
+        if (kniga == 5) {
+            res = parallel.kniga5(glava, styx + 1)
+        }
+        if (kniga == 6) {
+            res = parallel.kniga6(glava, styx + 1)
+        }
+        if (kniga == 7) {
+            res = parallel.kniga7(glava, styx + 1)
+        }
+        if (kniga == 8) {
+            res = parallel.kniga8(glava, styx + 1)
+        }
+        if (kniga == 9) {
+            res = parallel.kniga9(glava, styx + 1)
+        }
+        if (kniga == 10) {
+            res = parallel.kniga10(glava, styx + 1)
+        }
+        if (kniga == 11) {
+            res = parallel.kniga11(glava, styx + 1)
+        }
+        if (kniga == 12) {
+            res = parallel.kniga12(glava, styx + 1)
+        }
+        if (kniga == 13) {
+            res = parallel.kniga13(glava, styx + 1)
+        }
+        if (kniga == 14) {
+            res = parallel.kniga14(glava, styx + 1)
+        }
+        if (kniga == 15) {
+            res = parallel.kniga15(glava, styx + 1)
+        }
+        if (kniga == 16) {
+            res = parallel.kniga16(glava, styx + 1)
+        }
+        if (kniga == 17) {
+            res = parallel.kniga17(glava, styx + 1)
+        }
+        if (kniga == 18) {
+            res = parallel.kniga18(glava, styx + 1)
+        }
+        if (kniga == 19) {
+            res = parallel.kniga19(glava, styx + 1)
+        }
+        if (kniga == 20) {
+            res = parallel.kniga20(glava, styx + 1)
+        }
+        if (kniga == 21) {
+            res = parallel.kniga21(glava, styx + 1)
+        }
+        if (kniga == 22) {
+            res = parallel.kniga22(glava, styx + 1)
+        }
+        if (kniga == 23) {
+            res = parallel.kniga23(glava, styx + 1)
+        }
+        if (kniga == 24) {
+            res = parallel.kniga24(glava, styx + 1)
+        }
+        if (kniga == 25) {
+            res = parallel.kniga25(glava, styx + 1)
+        }
+        if (kniga == 26) {
+            res = parallel.kniga26(glava, styx + 1)
+        }
+        if (kniga == 27) {
+            res = parallel.kniga27(glava, styx + 1)
+        }
+        if (kniga == 28) {
+            res = parallel.kniga28(glava, styx + 1)
+        }
+        if (kniga == 29) {
+            res = parallel.kniga29(glava, styx + 1)
+        }
+        if (kniga == 30) {
+            res = parallel.kniga30(glava, styx + 1)
+        }
+        if (kniga == 31) {
+            res = parallel.kniga31(glava, styx + 1)
+        }
+        if (kniga == 32) {
+            res = parallel.kniga32(glava, styx + 1)
+        }
+        if (kniga == 33) {
+            res = parallel.kniga33(glava, styx + 1)
+        }
+        if (kniga == 34) {
+            res = parallel.kniga34(glava, styx + 1)
+        }
+        if (kniga == 35) {
+            res = parallel.kniga35(glava, styx + 1)
+        }
+        if (kniga == 36) {
+            res = parallel.kniga36(glava, styx + 1)
+        }
+        if (kniga == 37) {
+            res = parallel.kniga37(glava, styx + 1)
+        }
+        if (kniga == 38) {
+            res = parallel.kniga38(glava, styx + 1)
+        }
+        if (kniga == 39) {
+            res = parallel.kniga39(glava, styx + 1)
+        }
+        if (kniga == 40) {
+            res = parallel.kniga40(glava, styx + 1)
+        }
+        if (kniga == 41) {
+            res = parallel.kniga41(glava, styx + 1)
+        }
+        if (kniga == 42) {
+            res = parallel.kniga42(glava, styx + 1)
+        }
+        if (kniga == 43) {
+            res = parallel.kniga43(glava, styx + 1)
+        }
+        if (kniga == 44) {
+            res = parallel.kniga44(glava, styx + 1)
+        }
+        if (kniga == 45) {
+            res = parallel.kniga45(glava, styx + 1)
+        }
+        if (kniga == 46) {
+            res = parallel.kniga46(glava, styx + 1)
+        }
+        if (kniga == 47) {
+            res = parallel.kniga47(glava, styx + 1)
+        }
+        if (kniga == 48) {
+            res = parallel.kniga48(glava, styx + 1)
+        }
+        if (kniga == 49) {
+            res = parallel.kniga49(glava, styx + 1)
+        }
+        if (kniga == 50) {
+            res = parallel.kniga50(glava, styx + 1)
+        }
+        if (kniga == 51) {
+            res = parallel.kniga51(glava, styx + 1)
+        }
+        if (kniga == 52) {
+            res = parallel.kniga52(glava, styx + 1)
+        }
+        if (kniga == 53) {
+            res = parallel.kniga53(glava, styx + 1)
+        }
+        if (kniga == 54) {
+            res = parallel.kniga54(glava, styx + 1)
+        }
+        if (kniga == 55) {
+            res = parallel.kniga55(glava, styx + 1)
+        }
+        if (kniga == 56) {
+            res = parallel.kniga56(glava, styx + 1)
+        }
+        if (kniga == 57) {
+            res = parallel.kniga57(glava, styx + 1)
+        }
+        if (kniga == 58) {
+            res = parallel.kniga58(glava, styx + 1)
+        }
+        if (kniga == 59) {
+            res = parallel.kniga59(glava, styx + 1)
+        }
+        if (kniga == 60) {
+            res = parallel.kniga60(glava, styx + 1)
+        }
+        if (kniga == 61) {
+            res = parallel.kniga61(glava, styx + 1)
+        }
+        if (kniga == 62) {
+            res = parallel.kniga62(glava, styx + 1)
+        }
+        if (kniga == 63) {
+            res = parallel.kniga63(glava, styx + 1)
+        }
+        if (kniga == 64) {
+            res = parallel.kniga64(glava, styx + 1)
+        }
+        if (kniga == 65) {
+            res = parallel.kniga65(glava, styx + 1)
+        }
+        if (kniga == 66) {
+            res = parallel.kniga66(glava, styx + 1)
+        }
+        if (kniga == 67) {
+            res = parallel.kniga67(glava, styx + 1)
+        }
+        if (kniga == 68) {
+            res = parallel.kniga68(glava, styx + 1)
+        }
+        if (kniga == 69) {
+            res = parallel.kniga69(glava, styx + 1)
+        }
+        if (kniga == 70) {
+            res = parallel.kniga70(glava, styx + 1)
+        }
+        if (kniga == 71) {
+            res = parallel.kniga71(glava, styx + 1)
+        }
+        if (kniga == 72) {
+            res = parallel.kniga72(glava, styx + 1)
+        }
+        if (kniga == 73) {
+            res = parallel.kniga73(glava, styx + 1)
+        }
+        if (kniga == 74) {
+            res = parallel.kniga74(glava, styx + 1)
+        }
+        if (kniga == 75) {
+            res = parallel.kniga75(glava, styx + 1)
+        }
+        if (kniga == 76) {
+            res = parallel.kniga76(glava, styx + 1)
+        }
+        if (kniga == 77) {
+            res = parallel.kniga77(glava, styx + 1)
+        }
+        if (!res.contains("+-+") && belarus) {
+            res = MainActivity.translateToBelarus(res)
+        }
+        return res
+    }
+
     private inner class MaranAtaListAdaprer(private val activity: Activity) : ArrayAdapter<MaranAtaData>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_maranata, maranAta) {
         override fun isEnabled(position: Int): Boolean {
             return when {
@@ -1943,12 +2353,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             val zakladka = SpannableStringBuilder()
-            if (DialogVybranoeBibleList.biblia == "1") {
-                zakladka.append(setZakladkiSemuxa(maranAta[position].novyZapavet, getNumarKnigiSemuxi(getNumarKnigi(maranAta[position].kniga)), maranAta[position].glava, maranAta[position].styx))
-            }
-            if (DialogVybranoeBibleList.biblia == "2") {
+            if (maranAta[position].sinoidal) {
                 zakladka.append(setZakladkiSinoidal(maranAta[position].novyZapavet, getNumarKnigi(maranAta[position].kniga), maranAta[position].glava, maranAta[position].styx))
-
+            } else {
+                zakladka.append(setZakladkiSemuxa(maranAta[position].novyZapavet, getNumarKnigiSemuxi(getNumarKnigi(maranAta[position].kniga)), maranAta[position].glava, maranAta[position].styx))
             }
             val ssb = SpannableStringBuilder(MainActivity.fromHtml(maranAta[position].bible)).append(zakladka)
             val res = getParallel(maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
@@ -1984,7 +2392,22 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     else viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
                 }
             }
-            if (DialogVybranoeBibleList.biblia == "1") {
+            if (maranAta[position].sinoidal) {
+                var zav = "0"
+                if (maranAta[position].novyZapavet) zav = "1"
+                if (BibleGlobalList.natatkiSinodal.size > 0) {
+                    for (i in BibleGlobalList.natatkiSinodal.indices) {
+                        if (BibleGlobalList.natatkiSinodal[i].list[0].contains(zav) && BibleGlobalList.natatkiSinodal[i].list[1].toInt() == getNumarKnigi(maranAta[position].kniga) && BibleGlobalList.natatkiSinodal[i].list[2].toInt() == maranAta[position].glava && BibleGlobalList.natatkiSinodal[i].list[3].toInt() == maranAta[position].styx - 1) {
+                            val ssb1 = SpannableStringBuilder(viewHolder.text.text)
+                            val nachalo = ssb1.length
+                            ssb1.append("\nНататка:\n").append(BibleGlobalList.natatkiSinodal[i].list[5]).append("\n")
+                            ssb1.setSpan(StyleSpan(Typeface.ITALIC), nachalo, ssb1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            viewHolder.text.text = ssb1
+                            break
+                        }
+                    }
+                }
+            } else {
                 var zav = "0"
                 if (maranAta[position].novyZapavet) zav = "1"
                 if (BibleGlobalList.natatkiSemuxa.size > 0) {
@@ -2000,263 +2423,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     }
                 }
             }
-            if (DialogVybranoeBibleList.biblia == "2") {
-                var zav = "0"
-                if (maranAta[position].novyZapavet) zav = "1"
-                if (BibleGlobalList.natatkiSinodal.size > 0) {
-                    for (i in BibleGlobalList.natatkiSinodal.indices) {
-                        if (BibleGlobalList.natatkiSinodal[i].list[0].contains(zav) && BibleGlobalList.natatkiSinodal[i].list[1].toInt() == getNumarKnigi(maranAta[position].kniga) && BibleGlobalList.natatkiSinodal[i].list[2].toInt() == maranAta[position].glava && BibleGlobalList.natatkiSinodal[i].list[3].toInt() == maranAta[position].styx - 1) {
-                            val ssb1 = SpannableStringBuilder(viewHolder.text.text)
-                            val nachalo = ssb1.length
-                            ssb1.append("\nНататка:\n").append(BibleGlobalList.natatkiSinodal[i].list[5]).append("\n")
-                            ssb1.setSpan(StyleSpan(Typeface.ITALIC), nachalo, ssb1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            viewHolder.text.text = ssb1
-                            break
-                        }
-                    }
-                }
-            }
             return rootView
-        }
-
-        private fun getParallel(kniga: Int, glava: Int, styx: Int): String {
-            val parallel = BibliaParallelChtenia()
-            var res = "+-+"
-            if (kniga == 1) {
-                res = parallel.kniga1(glava, styx + 1)
-            }
-            if (kniga == 2) {
-                res = parallel.kniga2(glava, styx + 1)
-            }
-            if (kniga == 3) {
-                res = parallel.kniga3(glava, styx + 1)
-            }
-            if (kniga == 4) {
-                res = parallel.kniga4(glava, styx + 1)
-            }
-            if (kniga == 5) {
-                res = parallel.kniga5(glava, styx + 1)
-            }
-            if (kniga == 6) {
-                res = parallel.kniga6(glava, styx + 1)
-            }
-            if (kniga == 7) {
-                res = parallel.kniga7(glava, styx + 1)
-            }
-            if (kniga == 8) {
-                res = parallel.kniga8(glava, styx + 1)
-            }
-            if (kniga == 9) {
-                res = parallel.kniga9(glava, styx + 1)
-            }
-            if (kniga == 10) {
-                res = parallel.kniga10(glava, styx + 1)
-            }
-            if (kniga == 11) {
-                res = parallel.kniga11(glava, styx + 1)
-            }
-            if (kniga == 12) {
-                res = parallel.kniga12(glava, styx + 1)
-            }
-            if (kniga == 13) {
-                res = parallel.kniga13(glava, styx + 1)
-            }
-            if (kniga == 14) {
-                res = parallel.kniga14(glava, styx + 1)
-            }
-            if (kniga == 15) {
-                res = parallel.kniga15(glava, styx + 1)
-            }
-            if (kniga == 16) {
-                res = parallel.kniga16(glava, styx + 1)
-            }
-            if (kniga == 17) {
-                res = parallel.kniga17(glava, styx + 1)
-            }
-            if (kniga == 18) {
-                res = parallel.kniga18(glava, styx + 1)
-            }
-            if (kniga == 19) {
-                res = parallel.kniga19(glava, styx + 1)
-            }
-            if (kniga == 20) {
-                res = parallel.kniga20(glava, styx + 1)
-            }
-            if (kniga == 21) {
-                res = parallel.kniga21(glava, styx + 1)
-            }
-            if (kniga == 22) {
-                res = parallel.kniga22(glava, styx + 1)
-            }
-            if (kniga == 23) {
-                res = parallel.kniga23(glava, styx + 1)
-            }
-            if (kniga == 24) {
-                res = parallel.kniga24(glava, styx + 1)
-            }
-            if (kniga == 25) {
-                res = parallel.kniga25(glava, styx + 1)
-            }
-            if (kniga == 26) {
-                res = parallel.kniga26(glava, styx + 1)
-            }
-            if (kniga == 27) {
-                res = parallel.kniga27(glava, styx + 1)
-            }
-            if (kniga == 28) {
-                res = parallel.kniga28(glava, styx + 1)
-            }
-            if (kniga == 29) {
-                res = parallel.kniga29(glava, styx + 1)
-            }
-            if (kniga == 30) {
-                res = parallel.kniga30(glava, styx + 1)
-            }
-            if (kniga == 31) {
-                res = parallel.kniga31(glava, styx + 1)
-            }
-            if (kniga == 32) {
-                res = parallel.kniga32(glava, styx + 1)
-            }
-            if (kniga == 33) {
-                res = parallel.kniga33(glava, styx + 1)
-            }
-            if (kniga == 34) {
-                res = parallel.kniga34(glava, styx + 1)
-            }
-            if (kniga == 35) {
-                res = parallel.kniga35(glava, styx + 1)
-            }
-            if (kniga == 36) {
-                res = parallel.kniga36(glava, styx + 1)
-            }
-            if (kniga == 37) {
-                res = parallel.kniga37(glava, styx + 1)
-            }
-            if (kniga == 38) {
-                res = parallel.kniga38(glava, styx + 1)
-            }
-            if (kniga == 39) {
-                res = parallel.kniga39(glava, styx + 1)
-            }
-            if (kniga == 40) {
-                res = parallel.kniga40(glava, styx + 1)
-            }
-            if (kniga == 41) {
-                res = parallel.kniga41(glava, styx + 1)
-            }
-            if (kniga == 42) {
-                res = parallel.kniga42(glava, styx + 1)
-            }
-            if (kniga == 43) {
-                res = parallel.kniga43(glava, styx + 1)
-            }
-            if (kniga == 44) {
-                res = parallel.kniga44(glava, styx + 1)
-            }
-            if (kniga == 45) {
-                res = parallel.kniga45(glava, styx + 1)
-            }
-            if (kniga == 46) {
-                res = parallel.kniga46(glava, styx + 1)
-            }
-            if (kniga == 47) {
-                res = parallel.kniga47(glava, styx + 1)
-            }
-            if (kniga == 48) {
-                res = parallel.kniga48(glava, styx + 1)
-            }
-            if (kniga == 49) {
-                res = parallel.kniga49(glava, styx + 1)
-            }
-            if (kniga == 50) {
-                res = parallel.kniga50(glava, styx + 1)
-            }
-            if (kniga == 51) {
-                res = parallel.kniga51(glava, styx + 1)
-            }
-            if (kniga == 52) {
-                res = parallel.kniga52(glava, styx + 1)
-            }
-            if (kniga == 53) {
-                res = parallel.kniga53(glava, styx + 1)
-            }
-            if (kniga == 54) {
-                res = parallel.kniga54(glava, styx + 1)
-            }
-            if (kniga == 55) {
-                res = parallel.kniga55(glava, styx + 1)
-            }
-            if (kniga == 56) {
-                res = parallel.kniga56(glava, styx + 1)
-            }
-            if (kniga == 57) {
-                res = parallel.kniga57(glava, styx + 1)
-            }
-            if (kniga == 58) {
-                res = parallel.kniga58(glava, styx + 1)
-            }
-            if (kniga == 59) {
-                res = parallel.kniga59(glava, styx + 1)
-            }
-            if (kniga == 60) {
-                res = parallel.kniga60(glava, styx + 1)
-            }
-            if (kniga == 61) {
-                res = parallel.kniga61(glava, styx + 1)
-            }
-            if (kniga == 62) {
-                res = parallel.kniga62(glava, styx + 1)
-            }
-            if (kniga == 63) {
-                res = parallel.kniga63(glava, styx + 1)
-            }
-            if (kniga == 64) {
-                res = parallel.kniga64(glava, styx + 1)
-            }
-            if (kniga == 65) {
-                res = parallel.kniga65(glava, styx + 1)
-            }
-            if (kniga == 66) {
-                res = parallel.kniga66(glava, styx + 1)
-            }
-            if (kniga == 67) {
-                res = parallel.kniga67(glava, styx + 1)
-            }
-            if (kniga == 68) {
-                res = parallel.kniga68(glava, styx + 1)
-            }
-            if (kniga == 69) {
-                res = parallel.kniga69(glava, styx + 1)
-            }
-            if (kniga == 70) {
-                res = parallel.kniga70(glava, styx + 1)
-            }
-            if (kniga == 71) {
-                res = parallel.kniga71(glava, styx + 1)
-            }
-            if (kniga == 72) {
-                res = parallel.kniga72(glava, styx + 1)
-            }
-            if (kniga == 73) {
-                res = parallel.kniga73(glava, styx + 1)
-            }
-            if (kniga == 74) {
-                res = parallel.kniga74(glava, styx + 1)
-            }
-            if (kniga == 75) {
-                res = parallel.kniga75(glava, styx + 1)
-            }
-            if (kniga == 76) {
-                res = parallel.kniga76(glava, styx + 1)
-            }
-            if (kniga == 77) {
-                res = parallel.kniga77(glava, styx + 1)
-            }
-            if (!res.contains("+-+") && belarus) {
-                res = MainActivity.translateToBelarus(res)
-            }
-            return res
         }
 
         private fun setZakladkiSemuxa(zavet: Boolean, kniga: Int, glava: Int, styx: Int): SpannableStringBuilder {

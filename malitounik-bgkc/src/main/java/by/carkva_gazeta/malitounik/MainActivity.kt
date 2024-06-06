@@ -2181,7 +2181,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
                 val downSpeed = actNw.linkDownstreamBandwidthKbps
                 val upSpeed = actNw.linkUpstreamBandwidthKbps
-                if (downSpeed < 10000 || upSpeed < 10000) return false
+                if (downSpeed < 3000 || upSpeed < 3000) return false
                 when (typeTransport) {
                     TRANSPORT_CELLULAR -> {
                         if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) return true

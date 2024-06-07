@@ -507,8 +507,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
 
                 data.toString().contains("shortcuts=2") -> {
-                    idSelect = R.id.label140
-                    selectFragment(binding.label140, true, shortcuts = true)
+                    if (isNiadaunia()) {
+                        idSelect = R.id.label140
+                        selectFragment(binding.label140, true, shortcuts = true)
+                    } else {
+                        idSelect = R.id.label142
+                        selectFragment(binding.label142, true, shortcuts = true)
+                    }
                 }
 
                 data.scheme == "content" -> {

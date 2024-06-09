@@ -131,55 +131,55 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.let {
-            if (MainActivity.isNetworkAvailable()) {
-                binding.progressBar2.visibility = View.VISIBLE
-                var url = "/chytanne/Semucha/biblias1.txt"
-                when (kniga) {
-                    0 -> url = "/chytanne/Semucha/biblias1.txt"
-                    1 -> url = "/chytanne/Semucha/biblias2.txt"
-                    2 -> url = "/chytanne/Semucha/biblias3.txt"
-                    3 -> url = "/chytanne/Semucha/biblias4.txt"
-                    4 -> url = "/chytanne/Semucha/biblias5.txt"
-                    5 -> url = "/chytanne/Semucha/biblias6.txt"
-                    6 -> url = "/chytanne/Semucha/biblias7.txt"
-                    7 -> url = "/chytanne/Semucha/biblias8.txt"
-                    8 -> url = "/chytanne/Semucha/biblias9.txt"
-                    9 -> url = "/chytanne/Semucha/biblias10.txt"
-                    10 -> url = "/chytanne/Semucha/biblias11.txt"
-                    11 -> url = "/chytanne/Semucha/biblias12.txt"
-                    12 -> url = "/chytanne/Semucha/biblias13.txt"
-                    13 -> url = "/chytanne/Semucha/biblias14.txt"
-                    14 -> url = "/chytanne/Semucha/biblias15.txt"
-                    15 -> url = "/chytanne/Semucha/biblias16.txt"
-                    16 -> url = "/chytanne/Semucha/biblias17.txt"
-                    17 -> url = "/chytanne/Semucha/biblias18.txt"
-                    18 -> url = "/chytanne/Semucha/biblias19.txt"
-                    19 -> url = "/chytanne/Semucha/biblias20.txt"
-                    20 -> url = "/chytanne/Semucha/biblias21.txt"
-                    21 -> url = "/chytanne/Semucha/biblias22.txt"
-                    22 -> url = "/chytanne/Semucha/biblias23.txt"
-                    23 -> url = "/chytanne/Semucha/biblias24.txt"
-                    24 -> url = "/chytanne/Semucha/biblias25.txt"
-                    25 -> url = "/chytanne/Semucha/biblias26.txt"
-                    26 -> url = "/chytanne/Semucha/biblias27.txt"
-                    27 -> url = "/chytanne/Semucha/biblias28.txt"
-                    28 -> url = "/chytanne/Semucha/biblias29.txt"
-                    29 -> url = "/chytanne/Semucha/biblias30.txt"
-                    30 -> url = "/chytanne/Semucha/biblias31.txt"
-                    31 -> url = "/chytanne/Semucha/biblias32.txt"
-                    32 -> url = "/chytanne/Semucha/biblias33.txt"
-                    33 -> url = "/chytanne/Semucha/biblias34.txt"
-                    34 -> url = "/chytanne/Semucha/biblias35.txt"
-                    35 -> url = "/chytanne/Semucha/biblias36.txt"
-                    36 -> url = "/chytanne/Semucha/biblias37.txt"
-                    37 -> url = "/chytanne/Semucha/biblias38.txt"
-                    38 -> url = "/chytanne/Semucha/biblias39.txt"
-                }
-                urlJob = CoroutineScope(Dispatchers.Main).launch {
+        if (MainActivity.isNetworkAvailable()) {
+            binding.progressBar2.visibility = View.VISIBLE
+            var url = "/chytanne/Semucha/biblias1.txt"
+            when (kniga) {
+                0 -> url = "/chytanne/Semucha/biblias1.txt"
+                1 -> url = "/chytanne/Semucha/biblias2.txt"
+                2 -> url = "/chytanne/Semucha/biblias3.txt"
+                3 -> url = "/chytanne/Semucha/biblias4.txt"
+                4 -> url = "/chytanne/Semucha/biblias5.txt"
+                5 -> url = "/chytanne/Semucha/biblias6.txt"
+                6 -> url = "/chytanne/Semucha/biblias7.txt"
+                7 -> url = "/chytanne/Semucha/biblias8.txt"
+                8 -> url = "/chytanne/Semucha/biblias9.txt"
+                9 -> url = "/chytanne/Semucha/biblias10.txt"
+                10 -> url = "/chytanne/Semucha/biblias11.txt"
+                11 -> url = "/chytanne/Semucha/biblias12.txt"
+                12 -> url = "/chytanne/Semucha/biblias13.txt"
+                13 -> url = "/chytanne/Semucha/biblias14.txt"
+                14 -> url = "/chytanne/Semucha/biblias15.txt"
+                15 -> url = "/chytanne/Semucha/biblias16.txt"
+                16 -> url = "/chytanne/Semucha/biblias17.txt"
+                17 -> url = "/chytanne/Semucha/biblias18.txt"
+                18 -> url = "/chytanne/Semucha/biblias19.txt"
+                19 -> url = "/chytanne/Semucha/biblias20.txt"
+                20 -> url = "/chytanne/Semucha/biblias21.txt"
+                21 -> url = "/chytanne/Semucha/biblias22.txt"
+                22 -> url = "/chytanne/Semucha/biblias23.txt"
+                23 -> url = "/chytanne/Semucha/biblias24.txt"
+                24 -> url = "/chytanne/Semucha/biblias25.txt"
+                25 -> url = "/chytanne/Semucha/biblias26.txt"
+                26 -> url = "/chytanne/Semucha/biblias27.txt"
+                27 -> url = "/chytanne/Semucha/biblias28.txt"
+                28 -> url = "/chytanne/Semucha/biblias29.txt"
+                29 -> url = "/chytanne/Semucha/biblias30.txt"
+                30 -> url = "/chytanne/Semucha/biblias31.txt"
+                31 -> url = "/chytanne/Semucha/biblias32.txt"
+                32 -> url = "/chytanne/Semucha/biblias33.txt"
+                33 -> url = "/chytanne/Semucha/biblias34.txt"
+                34 -> url = "/chytanne/Semucha/biblias35.txt"
+                35 -> url = "/chytanne/Semucha/biblias36.txt"
+                36 -> url = "/chytanne/Semucha/biblias37.txt"
+                37 -> url = "/chytanne/Semucha/biblias38.txt"
+                38 -> url = "/chytanne/Semucha/biblias39.txt"
+            }
+            urlJob = CoroutineScope(Dispatchers.Main).launch {
+                activity?.let { fragmentActivity ->
                     val sb = StringBuilder()
                     try {
-                        val localFile = File("${it.filesDir}/cache/cache.txt")
+                        val localFile = File("${fragmentActivity.filesDir}/cache/cache.txt")
                         Malitounik.referens.child(url).getFile(localFile).addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 if (localFile.length() != 0L) {
@@ -196,16 +196,20 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
                                         }
                                     }
                                 } else {
-                                    activity?.let {
-                                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                                    context?.let {
+                                        MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error))
                                     }
                                 }
                             } else {
-                                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                                context?.let {
+                                    MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error))
+                                }
                             }
                         }.await()
                     } catch (e: Throwable) {
-                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        context?.let {
+                            MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }
                     }
                     binding.textView.setText(sb.toString().trim())
                     binding.progressBar2.visibility = View.GONE

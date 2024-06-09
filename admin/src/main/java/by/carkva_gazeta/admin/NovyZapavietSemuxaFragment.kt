@@ -185,18 +185,20 @@ class NovyZapavietSemuxaFragment : BaseFragment() {
                                         }
                                     }
                                 } else {
-                                    activity?.let {
-                                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                                    context?.let {
+                                        MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error))
                                     }
                                 }
                             } else {
-                                activity?.let {
-                                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                                context?.let {
+                                    MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error))
                                 }
                             }
                         }.await()
                     } catch (e: Throwable) {
-                        MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        context?.let {
+                            MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }
                     }
                     binding.textView.setText(sb.toString().trim())
                     binding.progressBar2.visibility = View.GONE

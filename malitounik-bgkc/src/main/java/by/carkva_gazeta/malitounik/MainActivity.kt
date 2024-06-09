@@ -66,6 +66,8 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.InputStreamReader
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.util.Calendar
 import java.util.Random
 
@@ -785,13 +787,38 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
 
-        if (BuildConfig.VERSION_CODE != k.getInt("chtoNavaha", 0)) {
+        if (checkASztoNovagaMD5Sum()) {
             val dialog = DialogSztoHovaha()
             dialog.isCancelable = false
             dialog.show(supportFragmentManager, "DialogSztoHovaha")
             prefEditors.putInt("chtoNavaha", BuildConfig.VERSION_CODE)
             prefEditors.apply()
         }
+    }
+
+    private fun checkASztoNovagaMD5Sum(): Boolean {
+        var st: String
+        val inputStream = resources.openRawResource(R.raw.a_szto_novaha)
+        val isr = InputStreamReader(inputStream)
+        val reader = BufferedReader(isr)
+        reader.use { bufferedReader ->
+            st = bufferedReader.readText()
+        }
+        val messageDigest = MessageDigest.getInstance("MD5")
+        messageDigest.reset()
+        messageDigest.update(st.toByteArray())
+        val digest = messageDigest.digest()
+        val bigInt = BigInteger(1, digest)
+        val md5Hex = StringBuilder(bigInt.toString(16))
+        while (md5Hex.length < 32) {
+            md5Hex.insert(0, "0")
+        }
+        val checkMD5 = k.getString("chtoNavahaMD5", "0")
+        val edit = k.edit()
+        edit.putString("chtoNavahaMD5", md5Hex.toString())
+        edit.remove("chtoNavaha")
+        edit.apply()
+        return checkMD5 != md5Hex.toString()
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams?) {

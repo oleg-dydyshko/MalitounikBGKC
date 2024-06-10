@@ -319,7 +319,9 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 return@setOnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val strText = adapterView.adapter.getItem(position).toString()
+            var strText = adapterView.adapter.getItem(position).toString()
+            val t5 = strText.indexOf("\n")
+            strText = strText.substring(0, t5)
             var nazva = 0
             var nazvaS = -1
             if (zavet == 2) {
@@ -373,6 +375,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 if (strText.contains("2-я Маккавейская")) nazvaS = 47
                 if (strText.contains("3-я Маккавейская")) nazvaS = 48
                 if (strText.contains("3-я Ездры")) nazvaS = 49
+                if (strText.contains("От Матфея")) nazva = 0
                 if (strText.contains("От Марка")) nazva = 1
                 if (strText.contains("От Луки")) nazva = 2
                 if (strText.contains("От Иоанна")) nazva = 3
@@ -440,6 +443,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 if (strText.contains("Агея")) nazvaS = 36
                 if (strText.contains("Захарыі")) nazvaS = 37
                 if (strText.contains("Малахіі")) nazvaS = 38
+                if (strText.contains("Паводле Мацьвея")) nazva = 0
                 if (strText.contains("Паводле Марка")) nazva = 1
                 if (strText.contains("Паводле Лукаша")) nazva = 2
                 if (strText.contains("Паводле Яна")) nazva = 3

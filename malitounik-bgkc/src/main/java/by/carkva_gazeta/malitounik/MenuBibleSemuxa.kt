@@ -148,7 +148,7 @@ class MenuBibleSemuxa : BaseFragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                val semukha = DialogAlesyaSemukha()
+                val semukha = DialogAlesyaSemukha.getInstance(true)
                 semukha.show(childFragmentManager, "Alesya_Semukha")
             }
         }

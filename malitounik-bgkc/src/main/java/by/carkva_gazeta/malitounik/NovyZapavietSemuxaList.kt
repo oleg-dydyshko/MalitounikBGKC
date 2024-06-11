@@ -182,6 +182,7 @@ class NovyZapavietSemuxaList : BaseActivity() {
                 intent.setClassName(this, MainActivity.NOVYZAPAVIETSEMUXA)
                 intent.putExtra("kniga", groupPosition)
                 intent.putExtra("glava", childPosition)
+                intent.putExtra("fullglav", adapter.getChildrenCount(groupPosition))
                 startActivity(intent)
             } else {
                 installFullMalitounik()
@@ -191,9 +192,11 @@ class NovyZapavietSemuxaList : BaseActivity() {
         if (intent.extras?.getBoolean("prodolzyt", false) == true) {
             val intent1 = Intent()
             intent1.setClassName(this, MainActivity.NOVYZAPAVIETSEMUXA)
+            val kniga = intent.extras?.getInt("kniga") ?: 0
             intent1.putExtra("kniga", intent.extras?.getInt("kniga") ?: 0)
             intent1.putExtra("glava", intent.extras?.getInt("glava") ?: 0)
             intent1.putExtra("stix", intent.extras?.getInt("stix") ?: 0)
+            intent1.putExtra("fullglav", adapter.getChildrenCount(kniga))
             startActivity(intent1)
         }
         setTollbarTheme()
@@ -275,35 +278,7 @@ class NovyZapavietSemuxaList : BaseActivity() {
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = GroupViewBinding.inflate(mContext.layoutInflater, parent, false)
-            when (groupPosition) {
-                0 -> rootView.textGroup.text = "Паводле Мацьвея"
-                1 -> rootView.textGroup.text = "Паводле Марка"
-                2 -> rootView.textGroup.text = "Паводле Лукаша"
-                3 -> rootView.textGroup.text = "Паводле Яна"
-                4 -> rootView.textGroup.text = "Дзеі Апосталаў"
-                5 -> rootView.textGroup.text = "Якава"
-                6 -> rootView.textGroup.text = "1-е Пятра"
-                7 -> rootView.textGroup.text = "2-е Пятра"
-                8 -> rootView.textGroup.text = "1-е Яна Багаслова"
-                9 -> rootView.textGroup.text = "2-е Яна Багаслова"
-                10 -> rootView.textGroup.text = "3-е Яна Багаслова"
-                11 -> rootView.textGroup.text = "Юды"
-                12 -> rootView.textGroup.text = "Да Рымлянаў"
-                13 -> rootView.textGroup.text = "1-е да Карынфянаў"
-                14 -> rootView.textGroup.text = "2-е да Карынфянаў"
-                15 -> rootView.textGroup.text = "Да Галятаў"
-                16 -> rootView.textGroup.text = "Да Эфэсянаў"
-                17 -> rootView.textGroup.text = "Да Піліпянаў"
-                18 -> rootView.textGroup.text = "Да Каласянаў"
-                19 -> rootView.textGroup.text = "1-е да Фесаланікійцаў"
-                20 -> rootView.textGroup.text = "2-е да Фесаланікійцаў"
-                21 -> rootView.textGroup.text = "1-е да Цімафея"
-                22 -> rootView.textGroup.text = "2-е да Цімафея"
-                23 -> rootView.textGroup.text = "Да Ціта"
-                24 -> rootView.textGroup.text = "Да Філімона"
-                25 -> rootView.textGroup.text = "Да Габрэяў"
-                26 -> rootView.textGroup.text = "Адкрыцьцё (Апакаліпсіс)"
-            }
+            rootView.textGroup.text = mContext.resources.getStringArray(R.array.semuxan)[groupPosition]
             return rootView.root
         }
 

@@ -2429,6 +2429,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         private fun setZakladkiSemuxa(zavet: Boolean, kniga: Int, glava: Int, styx: Int): SpannableStringBuilder {
             val ssb = SpannableStringBuilder()
             if (BibleGlobalList.zakladkiSemuxa.size > 0) {
+                val listn = activity.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan)
+                val lists = activity.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas)
                 for (i in BibleGlobalList.zakladkiSemuxa.indices) {
                     var knigaN = -1
                     var knigaS = -1
@@ -2437,72 +2439,12 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     var t3: Int
                     var glava1: Int
                     val knigaName = BibleGlobalList.zakladkiSemuxa[i].data
-                    if (knigaName.contains("Паводле Мацьвея")) knigaN = 0
-                    if (knigaName.contains("Паводле Марка")) knigaN = 1
-                    if (knigaName.contains("Паводле Лукаша")) knigaN = 2
-                    if (knigaName.contains("Паводле Яна")) knigaN = 3
-                    if (knigaName.contains("Дзеі Апосталаў")) knigaN = 4
-                    if (knigaName.contains("Якава")) knigaN = 5
-                    if (knigaName.contains("1-е Пятра")) knigaN = 6
-                    if (knigaName.contains("2-е Пятра")) knigaN = 7
-                    if (knigaName.contains("1-е Яна Багаслова")) knigaN = 8
-                    if (knigaName.contains("2-е Яна Багаслова")) knigaN = 9
-                    if (knigaName.contains("3-е Яна Багаслова")) knigaN = 10
-                    if (knigaName.contains("Юды")) knigaN = 11
-                    if (knigaName.contains("Да Рымлянаў")) knigaN = 12
-                    if (knigaName.contains("1-е да Карынфянаў")) knigaN = 13
-                    if (knigaName.contains("2-е да Карынфянаў")) knigaN = 14
-                    if (knigaName.contains("Да Галятаў")) knigaN = 15
-                    if (knigaName.contains("Да Эфэсянаў")) knigaN = 16
-                    if (knigaName.contains("Да Піліпянаў")) knigaN = 17
-                    if (knigaName.contains("Да Каласянаў")) knigaN = 18
-                    if (knigaName.contains("1-е да Фесаланікійцаў")) knigaN = 19
-                    if (knigaName.contains("2-е да Фесаланікійцаў")) knigaN = 20
-                    if (knigaName.contains("1-е да Цімафея")) knigaN = 21
-                    if (knigaName.contains("2-е да Цімафея")) knigaN = 22
-                    if (knigaName.contains("Да Ціта")) knigaN = 23
-                    if (knigaName.contains("Да Філімона")) knigaN = 24
-                    if (knigaName.contains("Да Габрэяў")) knigaN = 25
-                    if (knigaName.contains("Адкрыцьцё (Апакаліпсіс)")) knigaN = 26
-                    if (knigaName.contains("Быцьцё")) knigaS = 0
-                    if (knigaName.contains("Выхад")) knigaS = 1
-                    if (knigaName.contains("Лявіт")) knigaS = 2
-                    if (knigaName.contains("Лікі")) knigaS = 3
-                    if (knigaName.contains("Другі Закон")) knigaS = 4
-                    if (knigaName.contains("Ісуса сына Нава")) knigaS = 5
-                    if (knigaName.contains("Судзьдзяў")) knigaS = 6
-                    if (knigaName.contains("Рут")) knigaS = 7
-                    if (knigaName.contains("1-я Царстваў")) knigaS = 8
-                    if (knigaName.contains("2-я Царстваў")) knigaS = 9
-                    if (knigaName.contains("3-я Царстваў")) knigaS = 10
-                    if (knigaName.contains("4-я Царстваў")) knigaS = 11
-                    if (knigaName.contains("1-я Летапісаў")) knigaS = 12
-                    if (knigaName.contains("2-я Летапісаў")) knigaS = 13
-                    if (knigaName.contains("Эздры")) knigaS = 14
-                    if (knigaName.contains("Нээміі")) knigaS = 15
-                    if (knigaName.contains("Эстэр")) knigaS = 19
-                    if (knigaName.contains("Ёва")) knigaS = 20
-                    if (knigaName.contains("Псалтыр")) knigaS = 21
-                    if (knigaName.contains("Выслоўяў Саламонавых")) knigaS = 22
-                    if (knigaName.contains("Эклезіяста")) knigaS = 23
-                    if (knigaName.contains("Найвышэйшая Песьня Саламонава")) knigaS = 24
-                    if (knigaName.contains("Ісаі")) knigaS = 27
-                    if (knigaName.contains("Ераміі")) knigaS = 28
-                    if (knigaName.contains("Ераміін Плач")) knigaS = 29
-                    if (knigaName.contains("Езэкііля")) knigaS = 32
-                    if (knigaName.contains("Данііла")) knigaS = 33
-                    if (knigaName.contains("Асіі")) knigaS = 34
-                    if (knigaName.contains("Ёіля")) knigaS = 35
-                    if (knigaName.contains("Амоса")) knigaS = 36
-                    if (knigaName.contains("Аўдзея")) knigaS = 37
-                    if (knigaName.contains("Ёны")) knigaS = 38
-                    if (knigaName.contains("Міхея")) knigaS = 39
-                    if (knigaName.contains("Навума")) knigaS = 40
-                    if (knigaName.contains("Абакума")) knigaS = 41
-                    if (knigaName.contains("Сафона")) knigaS = 42
-                    if (knigaName.contains("Агея")) knigaS = 43
-                    if (knigaName.contains("Захарыі")) knigaS = 44
-                    if (knigaName.contains("Малахіі")) knigaS = 45
+                    for (e in listn.indices) {
+                        if (knigaName.contains(listn[e])) knigaN = e
+                    }
+                    for (e in lists.indices) {
+                        if (knigaName.contains(lists[e])) knigaS = e
+                    }
                     t1 = knigaName.indexOf("Разьдзел ")
                     t2 = knigaName.indexOf("/", t1)
                     t3 = knigaName.indexOf("\n\n")
@@ -2557,6 +2499,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         private fun setZakladkiSinoidal(zavet: Boolean, kniga: Int, glava: Int, styx: Int): SpannableStringBuilder {
             val ssb = SpannableStringBuilder()
             if (BibleGlobalList.zakladkiSinodal.size > 0) {
+                val listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln)
+                val lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals)
                 for (i in BibleGlobalList.zakladkiSinodal.indices) {
                     var knigaN = -1
                     var knigaS = -1
@@ -2565,83 +2509,12 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     var t3: Int
                     var glava1: Int
                     val knigaName = BibleGlobalList.zakladkiSinodal[i].data
-                    if (knigaName.contains("От Матфея")) knigaN = 0
-                    if (knigaName.contains("От Марка")) knigaN = 1
-                    if (knigaName.contains("От Луки")) knigaN = 2
-                    if (knigaName.contains("От Иоанна")) knigaN = 3
-                    if (knigaName.contains("Деяния святых апостолов")) knigaN = 4
-                    if (knigaName.contains("Иакова")) knigaN = 5
-                    if (knigaName.contains("1-е Петра")) knigaN = 6
-                    if (knigaName.contains("2-е Петра")) knigaN = 7
-                    if (knigaName.contains("1-е Иоанна")) knigaN = 8
-                    if (knigaName.contains("2-е Иоанна")) knigaN = 9
-                    if (knigaName.contains("3-е Иоанна")) knigaN = 10
-                    if (knigaName.contains("Иуды")) knigaN = 11
-                    if (knigaName.contains("Римлянам")) knigaN = 12
-                    if (knigaName.contains("1-е Коринфянам")) knigaN = 13
-                    if (knigaName.contains("2-е Коринфянам")) knigaN = 14
-                    if (knigaName.contains("Галатам")) knigaN = 15
-                    if (knigaName.contains("Ефесянам")) knigaN = 16
-                    if (knigaName.contains("Филиппийцам")) knigaN = 17
-                    if (knigaName.contains("Колоссянам")) knigaN = 18
-                    if (knigaName.contains("1-е Фессалоникийцам (Солунянам)")) knigaN = 19
-                    if (knigaName.contains("2-е Фессалоникийцам (Солунянам)")) knigaN = 20
-                    if (knigaName.contains("1-е Тимофею")) knigaN = 21
-                    if (knigaName.contains("2-е Тимофею")) knigaN = 22
-                    if (knigaName.contains("Титу")) knigaN = 23
-                    if (knigaName.contains("Филимону")) knigaN = 24
-                    if (knigaName.contains("Евреям")) knigaN = 25
-                    if (knigaName.contains("Откровение (Апокалипсис)")) knigaN = 26
-                    if (knigaName.contains("Бытие")) knigaS = 0
-                    if (knigaName.contains("Исход")) knigaS = 1
-                    if (knigaName.contains("Левит")) knigaS = 2
-                    if (knigaName.contains("Числа")) knigaS = 3
-                    if (knigaName.contains("Второзаконие")) knigaS = 4
-                    if (knigaName.contains("Иисуса Навина")) knigaS = 5
-                    if (knigaName.contains("Судей израилевых")) knigaS = 6
-                    if (knigaName.contains("Руфи")) knigaS = 7
-                    if (knigaName.contains("1-я Царств")) knigaS = 8
-                    if (knigaName.contains("2-я Царств")) knigaS = 9
-                    if (knigaName.contains("3-я Царств")) knigaS = 10
-                    if (knigaName.contains("4-я Царств")) knigaS = 11
-                    if (knigaName.contains("1-я Паралипоменон")) knigaS = 12
-                    if (knigaName.contains("2-я Паралипоменон")) knigaS = 13
-                    if (knigaName.contains("1-я Ездры")) knigaS = 14
-                    if (knigaName.contains("Неемии")) knigaS = 15
-                    if (knigaName.contains("2-я Ездры")) knigaS = 16
-                    if (knigaName.contains("Товита")) knigaS = 17
-                    if (knigaName.contains("Иудифи")) knigaS = 18
-                    if (knigaName.contains("Есфири")) knigaS = 19
-                    if (knigaName.contains("Иова")) knigaS = 20
-                    if (knigaName.contains("Псалтирь")) knigaS = 21
-                    if (knigaName.contains("Притчи Соломона")) knigaS = 22
-                    if (knigaName.contains("Екклезиаста")) knigaS = 23
-                    if (knigaName.contains("Песнь песней Соломона")) knigaS = 24
-                    if (knigaName.contains("Премудрости Соломона")) knigaS = 25
-                    if (knigaName.contains("Премудрости Иисуса, сына Сирахова")) knigaS = 26
-                    if (knigaName.contains("Исаии")) knigaS = 27
-                    if (knigaName.contains("Иеремии")) knigaS = 28
-                    if (knigaName.contains("Плач Иеремии")) knigaS = 29
-                    if (knigaName.contains("Послание Иеремии")) knigaS = 30
-                    if (knigaName.contains("Варуха")) knigaS = 31
-                    if (knigaName.contains("Иезекииля")) knigaS = 32
-                    if (knigaName.contains("Даниила")) knigaS = 33
-                    if (knigaName.contains("Осии")) knigaS = 34
-                    if (knigaName.contains("Иоиля")) knigaS = 35
-                    if (knigaName.contains("Амоса")) knigaS = 36
-                    if (knigaName.contains("Авдия")) knigaS = 37
-                    if (knigaName.contains("Ионы")) knigaS = 38
-                    if (knigaName.contains("Михея")) knigaS = 39
-                    if (knigaName.contains("Наума")) knigaS = 40
-                    if (knigaName.contains("Аввакума")) knigaS = 41
-                    if (knigaName.contains("Сафонии")) knigaS = 42
-                    if (knigaName.contains("Аггея")) knigaS = 43
-                    if (knigaName.contains("Захарии")) knigaS = 44
-                    if (knigaName.contains("Малахии")) knigaS = 45
-                    if (knigaName.contains("1-я Маккавейская")) knigaS = 46
-                    if (knigaName.contains("2-я Маккавейская")) knigaS = 47
-                    if (knigaName.contains("3-я Маккавейская")) knigaS = 48
-                    if (knigaName.contains("3-я Ездры")) knigaS = 49
+                    for (e in listn.indices) {
+                        if (knigaName.contains(listn[e])) knigaN = e
+                    }
+                    for (e in lists.indices) {
+                        if (knigaName.contains(lists[e])) knigaS = e
+                    }
                     t1 = knigaName.indexOf("Глава ")
                     t2 = knigaName.indexOf("/", t1)
                     t3 = knigaName.indexOf("\n\n")

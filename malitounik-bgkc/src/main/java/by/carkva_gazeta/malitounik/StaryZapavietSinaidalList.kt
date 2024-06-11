@@ -309,6 +309,7 @@ class StaryZapavietSinaidalList : BaseActivity() {
                 intent.setClassName(this, MainActivity.STARYZAPAVIETSINAIDAL)
                 intent.putExtra("kniga", groupPosition)
                 intent.putExtra("glava", childPosition)
+                intent.putExtra("fullglav", adapter.getChildrenCount(groupPosition))
                 startActivity(intent)
             } else {
                 installFullMalitounik()
@@ -318,9 +319,11 @@ class StaryZapavietSinaidalList : BaseActivity() {
         if (intent.extras?.getBoolean("prodolzyt", false) == true) {
             val intent1 = Intent()
             intent1.setClassName(this, MainActivity.STARYZAPAVIETSINAIDAL)
+            val kniga = intent.extras?.getInt("kniga") ?: 0
             intent1.putExtra("kniga", intent.extras?.getInt("kniga"))
             intent1.putExtra("glava", intent.extras?.getInt("glava"))
             intent1.putExtra("stix", intent.extras?.getInt("stix"))
+            intent1.putExtra("fullglav", adapter.getChildrenCount(kniga))
             startActivity(intent1)
         }
         setTollbarTheme()
@@ -402,58 +405,7 @@ class StaryZapavietSinaidalList : BaseActivity() {
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = GroupViewBinding.inflate(mContext.layoutInflater, parent, false)
-            when (groupPosition) {
-                0 -> rootView.textGroup.text = "Бытие"
-                1 -> rootView.textGroup.text = "Исход"
-                2 -> rootView.textGroup.text = "Левит"
-                3 -> rootView.textGroup.text = "Числа"
-                4 -> rootView.textGroup.text = "Второзаконие"
-                5 -> rootView.textGroup.text = "Иисуса Навина"
-                6 -> rootView.textGroup.text = "Судей израилевых"
-                7 -> rootView.textGroup.text = "Руфи"
-                8 -> rootView.textGroup.text = "1-я Царств"
-                9 -> rootView.textGroup.text = "2-я Царств"
-                10 -> rootView.textGroup.text = "3-я Царств"
-                11 -> rootView.textGroup.text = "4-я Царств"
-                12 -> rootView.textGroup.text = "1-я Паралипоменон"
-                13 -> rootView.textGroup.text = "2-я Паралипоменон"
-                14 -> rootView.textGroup.text = "1-я Ездры"
-                15 -> rootView.textGroup.text = "Неемии"
-                16 -> rootView.textGroup.text = "2-я Ездры"
-                17 -> rootView.textGroup.text = "Товита"
-                18 -> rootView.textGroup.text = "Иудифи"
-                19 -> rootView.textGroup.text = "Есфири"
-                20 -> rootView.textGroup.text = "Иова"
-                21 -> rootView.textGroup.text = "Псалтирь"
-                22 -> rootView.textGroup.text = "Притчи Соломона"
-                23 -> rootView.textGroup.text = "Екклезиаста"
-                24 -> rootView.textGroup.text = "Песнь песней Соломона"
-                25 -> rootView.textGroup.text = "Премудрости Соломона"
-                26 -> rootView.textGroup.text = "Премудрости Иисуса, сына Сирахова"
-                27 -> rootView.textGroup.text = "Исаии"
-                28 -> rootView.textGroup.text = "Иеремии"
-                29 -> rootView.textGroup.text = "Плач Иеремии"
-                30 -> rootView.textGroup.text = "Послание Иеремии"
-                31 -> rootView.textGroup.text = "Варуха"
-                32 -> rootView.textGroup.text = "Иезекииля"
-                33 -> rootView.textGroup.text = "Даниила"
-                34 -> rootView.textGroup.text = "Осии"
-                35 -> rootView.textGroup.text = "Иоиля"
-                36 -> rootView.textGroup.text = "Амоса"
-                37 -> rootView.textGroup.text = "Авдия"
-                38 -> rootView.textGroup.text = "Ионы"
-                39 -> rootView.textGroup.text = "Михея"
-                40 -> rootView.textGroup.text = "Наума"
-                41 -> rootView.textGroup.text = "Аввакума"
-                42 -> rootView.textGroup.text = "Сафонии"
-                43 -> rootView.textGroup.text = "Аггея"
-                44 -> rootView.textGroup.text = "Захарии"
-                45 -> rootView.textGroup.text = "Малахии"
-                46 -> rootView.textGroup.text = "1-я Маккавейская"
-                47 -> rootView.textGroup.text = "2-я Маккавейская"
-                48 -> rootView.textGroup.text = "3-я Маккавейская"
-                49 -> rootView.textGroup.text = "3-я Ездры"
-            }
+            rootView.textGroup.text = mContext.resources.getStringArray(R.array.sinoidals)[groupPosition]
             return rootView.root
         }
 

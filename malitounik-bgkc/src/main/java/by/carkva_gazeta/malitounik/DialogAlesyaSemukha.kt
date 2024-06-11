@@ -29,15 +29,31 @@ class DialogAlesyaSemukha : DialogFragment() {
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             ad = AlertDialog.Builder(it, style)
             binding.title.setText(R.string.alesyaSemukha)
+            val isSemuxa = arguments?.getBoolean("isSemuxa", true) ?: true
             val inputStream = resources.openRawResource(R.raw.all_rights_reserved)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
-            binding.content.text = reader.readText()
+            var text = reader.readText()
+            if (!isSemuxa) {
+                val t1 = text.indexOf("Усе правы належаць")
+                text = text.substring(0, t1)
+            }
+            binding.content.text = text
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             ad.setView(binding.root)
             ad.setPositiveButton(resources.getString(R.string.close)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
         }
         return ad.create()
+    }
+
+    companion object {
+        fun getInstance(isSemuxa: Boolean): DialogAlesyaSemukha {
+            val instance = DialogAlesyaSemukha()
+            val args = Bundle()
+            args.putBoolean("isSemuxa", isSemuxa)
+            instance.arguments = args
+            return instance
+        }
     }
 }

@@ -33,7 +33,43 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
+            android:name="by.carkva_gazeta.resources.StaryZapavietBokuna"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:label="@string/title_activity_stary_zapaviet2"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
+            android:name="by.carkva_gazeta.resources.StaryZapavietCarniauski"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:label="@string/title_activity_stary_zapaviet2"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
             android:name="by.carkva_gazeta.resources.NovyZapavietSemuxa"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:label="@string/novy_zapaviet"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
+            android:name="by.carkva_gazeta.resources.NovyZapavietBokuna"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:label="@string/novy_zapaviet"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
+            android:name="by.carkva_gazeta.resources.NovyZapavietCarniauski"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:label="@string/novy_zapaviet"
             android:theme="@style/AppTheme">

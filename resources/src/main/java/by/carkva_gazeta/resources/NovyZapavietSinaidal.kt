@@ -54,7 +54,7 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
 
     private var fullscreenPage = false
     private var paralel = false
-    private var fullglav = 0
+    private var fullglav = 1
     private var kniga = 0
     private var glava = 0
     private lateinit var k: SharedPreferences
@@ -190,119 +190,11 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
         setContentView(binding.root)
         kniga = intent.extras?.getInt("kniga", 0) ?: 0
         glava = intent.extras?.getInt("glava", 0) ?: 0
+        fullglav = intent.extras?.getInt("fullglav", 1) ?: 1
         if (intent.extras?.containsKey("stix") == true) {
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
         }
-        when (kniga) {
-            0 -> {
-                title = "От Матфея"
-                fullglav = 28
-            }
-            1 -> {
-                title = "От Марка"
-                fullglav = 16
-            }
-            2 -> {
-                title = "От Луки"
-                fullglav = 24
-            }
-            3 -> {
-                title = "От Иоанна"
-                fullglav = 21
-            }
-            4 -> {
-                title = "Деяния святых апостолов"
-                fullglav = 28
-            }
-            5 -> {
-                title = "Иакова"
-                fullglav = 5
-            }
-            6 -> {
-                title = "1-е Петра"
-                fullglav = 5
-            }
-            7 -> {
-                title = "2-е Петра"
-                fullglav = 3
-            }
-            8 -> {
-                title = "1-е Иоанна"
-                fullglav = 5
-            }
-            9 -> {
-                title = "2-е Иоанна"
-                fullglav = 1
-            }
-            10 -> {
-                title = "3-е Иоанна"
-                fullglav = 1
-            }
-            11 -> {
-                title = "Иуды"
-                fullglav = 1
-            }
-            12 -> {
-                title = "Римлянам"
-                fullglav = 16
-            }
-            13 -> {
-                title = "1-е Коринфянам"
-                fullglav = 16
-            }
-            14 -> {
-                title = "2-е Коринфянам"
-                fullglav = 13
-            }
-            15 -> {
-                title = "Галатам"
-                fullglav = 6
-            }
-            16 -> {
-                title = "Ефесянам"
-                fullglav = 6
-            }
-            17 -> {
-                title = "Филиппийцам"
-                fullglav = 4
-            }
-            18 -> {
-                title = "Колоссянам"
-                fullglav = 4
-            }
-            19 -> {
-                title = "1-е Фессалоникийцам (Солунянам)"
-                fullglav = 5
-            }
-            20 -> {
-                title = "2-е Фессалоникийцам (Солунянам)"
-                fullglav = 3
-            }
-            21 -> {
-                title = "1-е Тимофею"
-                fullglav = 6
-            }
-            22 -> {
-                title = "2-е Тимофею"
-                fullglav = 4
-            }
-            23 -> {
-                title = "Титу"
-                fullglav = 3
-            }
-            24 -> {
-                title = "Филимону"
-                fullglav = 1
-            }
-            25 -> {
-                title = "Евреям"
-                fullglav = 13
-            }
-            26 -> {
-                title = "Откровение (Апокалипсис)"
-                fullglav = 22
-            }
-        }
+        title = resources.getStringArray(R.array.semuxas)[kniga]
         BibleGlobalList.mListGlava = 0
         val adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager

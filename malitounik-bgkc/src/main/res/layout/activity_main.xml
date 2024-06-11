@@ -160,6 +160,18 @@
                     android:background="@color/colorSecondary_text" />
 
                 <by.carkva_gazeta.malitounik.TextViewCustom
+                    android:id="@+id/label16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="10sp"
+                    android:gravity="center_vertical"
+                    android:padding="10sp"
+                    android:paddingBottom="10sp"
+                    android:text="@string/title_biblia_bokun"
+                    android:contentDescription="@string/title_biblia"
+                    android:textSize="14sp" />
+
+                <by.carkva_gazeta.malitounik.TextViewCustom
                     android:id="@+id/label8"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -168,6 +180,18 @@
                     android:padding="10sp"
                     android:paddingBottom="10sp"
                     android:text="@string/title_biblia"
+                    android:contentDescription="@string/title_biblia"
+                    android:textSize="14sp" />
+
+                <by.carkva_gazeta.malitounik.TextViewCustom
+                    android:id="@+id/label17"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="10sp"
+                    android:gravity="center_vertical"
+                    android:padding="10sp"
+                    android:paddingBottom="10sp"
+                    android:text="@string/title_biblia_charniauski"
                     android:contentDescription="@string/title_biblia"
                     android:textSize="14sp" />
 

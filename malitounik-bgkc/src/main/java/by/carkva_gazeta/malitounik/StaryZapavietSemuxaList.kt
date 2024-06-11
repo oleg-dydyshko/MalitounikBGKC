@@ -250,6 +250,7 @@ class StaryZapavietSemuxaList : BaseActivity() {
                 intent.setClassName(this, MainActivity.STARYZAPAVIETSEMUXA)
                 intent.putExtra("kniga", groupPosition)
                 intent.putExtra("glava", childPosition)
+                intent.putExtra("fullglav", adapter.getChildrenCount(groupPosition))
                 startActivity(intent)
             } else {
                 installFullMalitounik()
@@ -259,9 +260,11 @@ class StaryZapavietSemuxaList : BaseActivity() {
         if (intent.extras?.getBoolean("prodolzyt", false) == true) {
             val intent1 = Intent()
             intent1.setClassName(this, MainActivity.STARYZAPAVIETSEMUXA)
+            val kniga = intent.extras?.getInt("kniga") ?: 0
             intent1.putExtra("kniga", intent.extras?.getInt("kniga"))
             intent1.putExtra("glava", intent.extras?.getInt("glava"))
             intent1.putExtra("stix", intent.extras?.getInt("stix"))
+            intent1.putExtra("fullglav", adapter.getChildrenCount(kniga))
             startActivity(intent1)
         }
         setTollbarTheme()
@@ -343,47 +346,7 @@ class StaryZapavietSemuxaList : BaseActivity() {
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = GroupViewBinding.inflate(mContext.layoutInflater, parent, false)
-            when (groupPosition) {
-                0 -> rootView.textGroup.text = "Быцьцё"
-                1 -> rootView.textGroup.text = "Выхад"
-                2 -> rootView.textGroup.text = "Лявіт"
-                3 -> rootView.textGroup.text = "Лікі"
-                4 -> rootView.textGroup.text = "Другі Закон"
-                5 -> rootView.textGroup.text = "Ісуса сына Нава"
-                6 -> rootView.textGroup.text = "Судзьдзяў"
-                7 -> rootView.textGroup.text = "Рут"
-                8 -> rootView.textGroup.text = "1-я Царстваў"
-                9 -> rootView.textGroup.text = "2-я Царстваў"
-                10 -> rootView.textGroup.text = "3-я Царстваў"
-                11 -> rootView.textGroup.text = "4-я Царстваў"
-                12 -> rootView.textGroup.text = "1-я Летапісаў"
-                13 -> rootView.textGroup.text = "2-я Летапісаў"
-                14 -> rootView.textGroup.text = "Эздры"
-                15 -> rootView.textGroup.text = "Нээміі"
-                16 -> rootView.textGroup.text = "Эстэр"
-                17 -> rootView.textGroup.text = "Ёва"
-                18 -> rootView.textGroup.text = "Псалтыр"
-                19 -> rootView.textGroup.text = "Выслоўяў Саламонавых"
-                20 -> rootView.textGroup.text = "Эклезіяста"
-                21 -> rootView.textGroup.text = "Найвышэйшая Песьня Саламонава"
-                22 -> rootView.textGroup.text = "Ісаі"
-                23 -> rootView.textGroup.text = "Ераміі"
-                24 -> rootView.textGroup.text = "Ераміін Плач"
-                25 -> rootView.textGroup.text = "Езэкііля"
-                26 -> rootView.textGroup.text = "Данііла"
-                27 -> rootView.textGroup.text = "Асіі"
-                28 -> rootView.textGroup.text = "Ёіля"
-                29 -> rootView.textGroup.text = "Амоса"
-                30 -> rootView.textGroup.text = "Аўдзея"
-                31 -> rootView.textGroup.text = "Ёны"
-                32 -> rootView.textGroup.text = "Міхея"
-                33 -> rootView.textGroup.text = "Навума"
-                34 -> rootView.textGroup.text = "Абакума"
-                35 -> rootView.textGroup.text = "Сафона"
-                36 -> rootView.textGroup.text = "Агея"
-                37 -> rootView.textGroup.text = "Захарыі"
-                38 -> rootView.textGroup.text = "Малахіі"
-            }
+            rootView.textGroup.text = mContext.resources.getStringArray(R.array.semuxas)[groupPosition]
             return rootView.root
         }
 

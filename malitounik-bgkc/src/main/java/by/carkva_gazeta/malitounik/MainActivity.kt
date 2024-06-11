@@ -462,6 +462,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding.label6.setOnClickListener(this)
         binding.label7.setOnClickListener(this)
         binding.label8.setOnClickListener(this)
+        binding.label16.setOnClickListener(this)
+        binding.label17.setOnClickListener(this)
         binding.label91.setOnClickListener(this)
         binding.label92.setOnClickListener(this)
         binding.label93.setOnClickListener(this)
@@ -651,6 +653,16 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             R.id.label8 -> {
                 if (!binding.label8.isShown) scroll = true
                 selectFragment(binding.label8, true)
+            }
+
+            R.id.label16 -> {
+                if (!binding.label16.isShown) scroll = true
+                selectFragment(binding.label16, true)
+            }
+
+            R.id.label17 -> {
+                if (!binding.label17.isShown) scroll = true
+                selectFragment(binding.label17, true)
             }
 
             R.id.label91 -> {
@@ -866,6 +878,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         ajustCompoundDrawableSizeWithText(binding.label6, drawable)
         ajustCompoundDrawableSizeWithText(binding.label7, drawable)
         ajustCompoundDrawableSizeWithText(binding.label8, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label16, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label17, drawable)
         ajustCompoundDrawableSizeWithText(binding.label9, drawable)
         ajustCompoundDrawableSizeWithText(binding.label10, drawable)
         ajustCompoundDrawableSizeWithText(binding.label11, drawable)
@@ -1119,6 +1133,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.label6.setBackgroundResource(R.drawable.selector_dark)
                 binding.label7.setBackgroundResource(R.drawable.selector_dark)
                 binding.label8.setBackgroundResource(R.drawable.selector_dark)
+                binding.label16.setBackgroundResource(R.drawable.selector_dark)
+                binding.label17.setBackgroundResource(R.drawable.selector_dark)
                 binding.label91.setBackgroundResource(R.drawable.selector_dark)
                 binding.label92.setBackgroundResource(R.drawable.selector_dark)
                 binding.label93.setBackgroundResource(R.drawable.selector_dark)
@@ -1148,6 +1164,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 binding.label6.setBackgroundResource(R.drawable.selector_default)
                 binding.label7.setBackgroundResource(R.drawable.selector_default)
                 binding.label8.setBackgroundResource(R.drawable.selector_default)
+                binding.label16.setBackgroundResource(R.drawable.selector_default)
+                binding.label17.setBackgroundResource(R.drawable.selector_default)
                 binding.label91.setBackgroundResource(R.drawable.selector_default)
                 binding.label92.setBackgroundResource(R.drawable.selector_default)
                 binding.label93.setBackgroundResource(R.drawable.selector_default)
@@ -1271,6 +1289,18 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 tolbarTitle = getString(R.string.title_biblia)
                 if (dzenNoch) binding.label8.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else binding.label8.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            R.id.label16 -> {
+                tolbarTitle = getString(R.string.title_biblia_bokun)
+                if (dzenNoch) binding.label16.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label16.setBackgroundResource(R.drawable.selector_gray)
+            }
+
+            R.id.label17 -> {
+                tolbarTitle = getString(R.string.title_biblia_charniauski)
+                if (dzenNoch) binding.label17.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label17.setBackgroundResource(R.drawable.selector_gray)
             }
 
             R.id.label13 -> {
@@ -1445,6 +1475,28 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (fragment == null) {
                     val semuxa = MenuBibleSemuxa()
                     ftrans.replace(R.id.conteiner, semuxa, "semuxa")
+                    prefEditors.putInt("id", id)
+                    idSelect = id
+                    prefEditors.putBoolean("novyzavet", false)
+                }
+            }
+
+            R.id.label16 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("bokuna")
+                if (fragment == null) {
+                    val semuxa = MenuBibleBokuna()
+                    ftrans.replace(R.id.conteiner, semuxa, "bokuna")
+                    prefEditors.putInt("id", id)
+                    idSelect = id
+                    prefEditors.putBoolean("novyzavet", false)
+                }
+            }
+
+            R.id.label17 -> {
+                val fragment = supportFragmentManager.findFragmentByTag("carniauski")
+                if (fragment == null) {
+                    val semuxa = MenuBibleCarniauski()
+                    ftrans.replace(R.id.conteiner, semuxa, "carniauski")
                     prefEditors.putInt("id", id)
                     idSelect = id
                     prefEditors.putBoolean("novyzavet", false)
@@ -1924,6 +1976,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val NOVYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.NovyZapavietSinaidal"
         const val STARYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.StaryZapavietSinaidal"
         const val SEARCHBOGASHLUGBOVYA = "by.carkva_gazeta.resources.SearchBogashlugbovya"
+        const val NOVYZAPAVIETBOKUNA = "by.carkva_gazeta.resources.NovyZapavietBokuna"
+        const val STARYZAPAVIETBOKUNA = "by.carkva_gazeta.resources.StaryZapavietBokuna"
+        const val NOVYZAPAVIETCARNIAUSKI = "by.carkva_gazeta.resources.NovyZapavietCarniauski"
+        const val STARYZAPAVIETCARNIAUSKI = "by.carkva_gazeta.resources.StaryZapavietCarniauski"
         const val LOGVIEW = "by.carkva_gazeta.resources.LogView"
         const val NIADAUNIA = 0
         const val GISTORYIACARKVY = 1
@@ -2213,7 +2269,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
                 val downSpeed = actNw.linkDownstreamBandwidthKbps
                 val upSpeed = actNw.linkUpstreamBandwidthKbps
-                if (downSpeed < 3000 || upSpeed < 3000) return false
+                if (downSpeed < 500 || upSpeed < 250) {
+                    return false
+                }
                 when (typeTransport) {
                     TRANSPORT_CELLULAR -> {
                         if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) return true

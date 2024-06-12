@@ -137,7 +137,7 @@ class MenuBibleBokuna : BaseFragment() {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
-                    intent.putExtra("zavet", 1)
+                    intent.putExtra("zavet", 4)
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()

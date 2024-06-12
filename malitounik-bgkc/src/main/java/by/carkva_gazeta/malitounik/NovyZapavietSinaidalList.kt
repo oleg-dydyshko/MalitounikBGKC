@@ -222,7 +222,8 @@ class NovyZapavietSinaidalList : BaseActivity() {
         }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.setText(R.string.novsinaidal)
+        binding.titleToolbar.setText(R.string.bsinaidal)
+        binding.subTitleToolbar.setText(R.string.novsinaidal)
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }

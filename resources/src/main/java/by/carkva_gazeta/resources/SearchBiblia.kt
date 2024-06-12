@@ -41,6 +41,15 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogClearHishory
 import by.carkva_gazeta.malitounik.HistoryAdapter
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.NadsanContent
+import by.carkva_gazeta.malitounik.NovyZapavietBokunaList
+import by.carkva_gazeta.malitounik.NovyZapavietCarniauskiList
+import by.carkva_gazeta.malitounik.NovyZapavietSemuxaList
+import by.carkva_gazeta.malitounik.NovyZapavietSinaidalList
+import by.carkva_gazeta.malitounik.StaryZapavietBokunaList
+import by.carkva_gazeta.malitounik.StaryZapavietCarniauskiList
+import by.carkva_gazeta.malitounik.StaryZapavietSemuxaList
+import by.carkva_gazeta.malitounik.StaryZapavietSinaidalList
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
@@ -69,6 +78,8 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
     private var fierstPosition = 0
     private var sinodalBible = ArrayList<Int>()
     private var semuxaBible = ArrayList<Int>()
+    private var bokunaBible = ArrayList<Int>()
+    private var carniauskiBible = ArrayList<Int>()
     private lateinit var binding: SearchBibliaBinding
     private var keyword = false
     private var edittext2Focus = false
@@ -220,6 +231,147 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         semuxaBible.add(R.raw.biblian25)
         semuxaBible.add(R.raw.biblian26)
         semuxaBible.add(R.raw.biblian27)
+
+        bokunaBible.add(R.raw.bokunas1)
+        bokunaBible.add(R.raw.bokunas2)
+        bokunaBible.add(R.raw.bokunas3)
+        bokunaBible.add(R.raw.bokunas4)
+        bokunaBible.add(R.raw.bokunas5)
+        bokunaBible.add(R.raw.bokunas6)
+        bokunaBible.add(R.raw.bokunas7)
+        bokunaBible.add(R.raw.bokunas8)
+        bokunaBible.add(R.raw.bokunas9)
+        bokunaBible.add(R.raw.bokunas10)
+        bokunaBible.add(R.raw.bokunas11)
+        bokunaBible.add(R.raw.bokunas12)
+        bokunaBible.add(R.raw.bokunas13)
+        bokunaBible.add(R.raw.bokunas14)
+        bokunaBible.add(R.raw.bokunas15)
+        bokunaBible.add(R.raw.bokunas16)
+        bokunaBible.add(R.raw.bokunas17)
+        bokunaBible.add(R.raw.bokunas18)
+        bokunaBible.add(R.raw.bokunas19)
+        bokunaBible.add(R.raw.bokunas20)
+        bokunaBible.add(R.raw.bokunas21)
+        bokunaBible.add(R.raw.bokunas22)
+        bokunaBible.add(R.raw.bokunas23)
+        bokunaBible.add(R.raw.bokunas24)
+        bokunaBible.add(R.raw.bokunas25)
+        bokunaBible.add(R.raw.bokunas26)
+        bokunaBible.add(R.raw.bokunas27)
+        bokunaBible.add(R.raw.bokunas28)
+        bokunaBible.add(R.raw.bokunas29)
+        bokunaBible.add(R.raw.bokunas30)
+        bokunaBible.add(R.raw.bokunas31)
+        bokunaBible.add(R.raw.bokunas32)
+        bokunaBible.add(R.raw.bokunas33)
+        bokunaBible.add(R.raw.bokunas34)
+        bokunaBible.add(R.raw.bokunas35)
+        bokunaBible.add(R.raw.bokunas36)
+        bokunaBible.add(R.raw.bokunas37)
+        bokunaBible.add(R.raw.bokunas38)
+        bokunaBible.add(R.raw.bokunas39)
+        bokunaBible.add(R.raw.bokunan1)
+        bokunaBible.add(R.raw.bokunan2)
+        bokunaBible.add(R.raw.bokunan3)
+        bokunaBible.add(R.raw.bokunan4)
+        bokunaBible.add(R.raw.bokunan5)
+        bokunaBible.add(R.raw.bokunan6)
+        bokunaBible.add(R.raw.bokunan7)
+        bokunaBible.add(R.raw.bokunan8)
+        bokunaBible.add(R.raw.bokunan9)
+        bokunaBible.add(R.raw.bokunan10)
+        bokunaBible.add(R.raw.bokunan11)
+        bokunaBible.add(R.raw.bokunan12)
+        bokunaBible.add(R.raw.bokunan13)
+        bokunaBible.add(R.raw.bokunan14)
+        bokunaBible.add(R.raw.bokunan15)
+        bokunaBible.add(R.raw.bokunan16)
+        bokunaBible.add(R.raw.bokunan17)
+        bokunaBible.add(R.raw.bokunan18)
+        bokunaBible.add(R.raw.bokunan19)
+        bokunaBible.add(R.raw.bokunan20)
+        bokunaBible.add(R.raw.bokunan21)
+        bokunaBible.add(R.raw.bokunan22)
+        bokunaBible.add(R.raw.bokunan23)
+        bokunaBible.add(R.raw.bokunan24)
+        bokunaBible.add(R.raw.bokunan25)
+        bokunaBible.add(R.raw.bokunan26)
+        bokunaBible.add(R.raw.bokunan27)
+
+        carniauskiBible.add(R.raw.carniauskis1)
+        carniauskiBible.add(R.raw.carniauskis2)
+        carniauskiBible.add(R.raw.carniauskis3)
+        carniauskiBible.add(R.raw.carniauskis4)
+        carniauskiBible.add(R.raw.carniauskis5)
+        carniauskiBible.add(R.raw.carniauskis6)
+        carniauskiBible.add(R.raw.carniauskis7)
+        carniauskiBible.add(R.raw.carniauskis8)
+        carniauskiBible.add(R.raw.carniauskis9)
+        carniauskiBible.add(R.raw.carniauskis10)
+        carniauskiBible.add(R.raw.carniauskis11)
+        carniauskiBible.add(R.raw.carniauskis12)
+        carniauskiBible.add(R.raw.carniauskis13)
+        carniauskiBible.add(R.raw.carniauskis14)
+        carniauskiBible.add(R.raw.carniauskis15)
+        carniauskiBible.add(R.raw.carniauskis16)
+        carniauskiBible.add(R.raw.carniauskis17)
+        carniauskiBible.add(R.raw.carniauskis18)
+        carniauskiBible.add(R.raw.carniauskis19)
+        carniauskiBible.add(R.raw.carniauskis20)
+        carniauskiBible.add(R.raw.carniauskis21)
+        carniauskiBible.add(R.raw.carniauskis22)
+        carniauskiBible.add(R.raw.carniauskis23)
+        carniauskiBible.add(R.raw.carniauskis24)
+        carniauskiBible.add(R.raw.carniauskis25)
+        carniauskiBible.add(R.raw.carniauskis26)
+        carniauskiBible.add(R.raw.carniauskis27)
+        carniauskiBible.add(R.raw.carniauskis28)
+        carniauskiBible.add(R.raw.carniauskis29)
+        carniauskiBible.add(R.raw.carniauskis30)
+        carniauskiBible.add(R.raw.carniauskis31)
+        carniauskiBible.add(R.raw.carniauskis32)
+        carniauskiBible.add(R.raw.carniauskis33)
+        carniauskiBible.add(R.raw.carniauskis34)
+        carniauskiBible.add(R.raw.carniauskis35)
+        carniauskiBible.add(R.raw.carniauskis36)
+        carniauskiBible.add(R.raw.carniauskis37)
+        carniauskiBible.add(R.raw.carniauskis38)
+        carniauskiBible.add(R.raw.carniauskis39)
+        carniauskiBible.add(R.raw.carniauskis40)
+        carniauskiBible.add(R.raw.carniauskis41)
+        carniauskiBible.add(R.raw.carniauskis42)
+        carniauskiBible.add(R.raw.carniauskis43)
+        carniauskiBible.add(R.raw.carniauskis44)
+        carniauskiBible.add(R.raw.carniauskis45)
+        carniauskiBible.add(R.raw.carniauskis46)
+        carniauskiBible.add(R.raw.carniauskin1)
+        carniauskiBible.add(R.raw.carniauskin2)
+        carniauskiBible.add(R.raw.carniauskin3)
+        carniauskiBible.add(R.raw.carniauskin4)
+        carniauskiBible.add(R.raw.carniauskin5)
+        carniauskiBible.add(R.raw.carniauskin6)
+        carniauskiBible.add(R.raw.carniauskin7)
+        carniauskiBible.add(R.raw.carniauskin8)
+        carniauskiBible.add(R.raw.carniauskin9)
+        carniauskiBible.add(R.raw.carniauskin10)
+        carniauskiBible.add(R.raw.carniauskin11)
+        carniauskiBible.add(R.raw.carniauskin12)
+        carniauskiBible.add(R.raw.carniauskin13)
+        carniauskiBible.add(R.raw.carniauskin14)
+        carniauskiBible.add(R.raw.carniauskin15)
+        carniauskiBible.add(R.raw.carniauskin16)
+        carniauskiBible.add(R.raw.carniauskin17)
+        carniauskiBible.add(R.raw.carniauskin18)
+        carniauskiBible.add(R.raw.carniauskin19)
+        carniauskiBible.add(R.raw.carniauskin20)
+        carniauskiBible.add(R.raw.carniauskin21)
+        carniauskiBible.add(R.raw.carniauskin22)
+        carniauskiBible.add(R.raw.carniauskin23)
+        carniauskiBible.add(R.raw.carniauskin24)
+        carniauskiBible.add(R.raw.carniauskin25)
+        carniauskiBible.add(R.raw.carniauskin26)
+        carniauskiBible.add(R.raw.carniauskin27)
     }
 
     override fun onPause() {
@@ -266,6 +418,14 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             3 -> {
                 title = getString(by.carkva_gazeta.malitounik.R.string.poshuk_nadsan)
                 biblia = "nadsan"
+            }
+            4 -> {
+                title = getString(by.carkva_gazeta.malitounik.R.string.poshuk_bokun)
+                biblia = "bokuna"
+            }
+            5 -> {
+                title = getString(by.carkva_gazeta.malitounik.R.string.poshuk_charniauski)
+                biblia = "carniauski"
             }
         }
         if (chin.getString("history_bible_$biblia", "") != "") {
@@ -324,152 +484,45 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             strText = strText.substring(0, t5)
             var nazva = 0
             var nazvaS = -1
-            if (zavet == 2) {
-                if (strText.contains("Бытие")) nazvaS = 0
-                if (strText.contains("Исход")) nazvaS = 1
-                if (strText.contains("Левит")) nazvaS = 2
-                if (strText.contains("Числа")) nazvaS = 3
-                if (strText.contains("Второзаконие")) nazvaS = 4
-                if (strText.contains("Иисуса Навина")) nazvaS = 5
-                if (strText.contains("Судей израилевых")) nazvaS = 6
-                if (strText.contains("Руфи")) nazvaS = 7
-                if (strText.contains("1-я Царств")) nazvaS = 8
-                if (strText.contains("2-я Царств")) nazvaS = 9
-                if (strText.contains("3-я Царств")) nazvaS = 10
-                if (strText.contains("4-я Царств")) nazvaS = 11
-                if (strText.contains("1-я Паралипоменон")) nazvaS = 12
-                if (strText.contains("2-я Паралипоменон")) nazvaS = 13
-                if (strText.contains("1-я Ездры")) nazvaS = 14
-                if (strText.contains("Неемии")) nazvaS = 15
-                if (strText.contains("2-я Ездры")) nazvaS = 16
-                if (strText.contains("Товита")) nazvaS = 17
-                if (strText.contains("Иудифи")) nazvaS = 18
-                if (strText.contains("Есфири")) nazvaS = 19
-                if (strText.contains("Иова")) nazvaS = 20
-                if (strText.contains("Псалтирь")) nazvaS = 21
-                if (strText.contains("Притчи Соломона")) nazvaS = 22
-                if (strText.contains("Екклезиаста")) nazvaS = 23
-                if (strText.contains("Песнь песней Соломона")) nazvaS = 24
-                if (strText.contains("Премудрости Соломона")) nazvaS = 25
-                if (strText.contains("Премудрости Иисуса, сына Сирахова")) nazvaS = 26
-                if (strText.contains("Исаии")) nazvaS = 27
-                if (strText.contains("Иеремии")) nazvaS = 28
-                if (strText.contains("Плач Иеремии")) nazvaS = 29
-                if (strText.contains("Послание Иеремии")) nazvaS = 30
-                if (strText.contains("Варуха")) nazvaS = 31
-                if (strText.contains("Иезекииля")) nazvaS = 32
-                if (strText.contains("Даниила")) nazvaS = 33
-                if (strText.contains("Осии")) nazvaS = 34
-                if (strText.contains("Иоиля")) nazvaS = 35
-                if (strText.contains("Амоса")) nazvaS = 36
-                if (strText.contains("Авдия")) nazvaS = 37
-                if (strText.contains("Ионы")) nazvaS = 38
-                if (strText.contains("Михея")) nazvaS = 39
-                if (strText.contains("Наума")) nazvaS = 40
-                if (strText.contains("Аввакума")) nazvaS = 41
-                if (strText.contains("Сафонии")) nazvaS = 42
-                if (strText.contains("Аггея")) nazvaS = 43
-                if (strText.contains("Захарии")) nazvaS = 44
-                if (strText.contains("Малахии")) nazvaS = 45
-                if (strText.contains("1-я Маккавейская")) nazvaS = 46
-                if (strText.contains("2-я Маккавейская")) nazvaS = 47
-                if (strText.contains("3-я Маккавейская")) nazvaS = 48
-                if (strText.contains("3-я Ездры")) nazvaS = 49
-                if (strText.contains("От Матфея")) nazva = 0
-                if (strText.contains("От Марка")) nazva = 1
-                if (strText.contains("От Луки")) nazva = 2
-                if (strText.contains("От Иоанна")) nazva = 3
-                if (strText.contains("Деяния святых апостолов")) nazva = 4
-                if (strText.contains("Иакова")) nazva = 5
-                if (strText.contains("1-е Петра")) nazva = 6
-                if (strText.contains("2-е Петра")) nazva = 7
-                if (strText.contains("1-е Иоанна")) nazva = 8
-                if (strText.contains("2-е Иоанна")) nazva = 9
-                if (strText.contains("3-е Иоанна")) nazva = 10
-                if (strText.contains("Иуды")) nazva = 11
-                if (strText.contains("Римлянам")) nazva = 12
-                if (strText.contains("1-е Коринфянам")) nazva = 13
-                if (strText.contains("2-е Коринфянам")) nazva = 14
-                if (strText.contains("Галатам")) nazva = 15
-                if (strText.contains("Эфэсянам")) nazva = 16
-                if (strText.contains("Филиппийцам")) nazva = 17
-                if (strText.contains("Колоссянам")) nazva = 18
-                if (strText.contains("1-е Фессалоникийцам (Солунянам)")) nazva = 19
-                if (strText.contains("2-е Фессалоникийцам (Солунянам)")) nazva = 20
-                if (strText.contains("1-е Тимофею")) nazva = 21
-                if (strText.contains("2-е Тимофею")) nazva = 22
-                if (strText.contains("Титу")) nazva = 23
-                if (strText.contains("Филимону")) nazva = 24
-                if (strText.contains("Евреям")) nazva = 25
-                if (strText.contains("Откровение (Апокалипсис)")) nazva = 26
-            }
             if (zavet == 1) {
-                if (strText.contains("Быцьцё")) nazvaS = 0
-                if (strText.contains("Выхад")) nazvaS = 1
-                if (strText.contains("Лявіт")) nazvaS = 2
-                if (strText.contains("Лікі")) nazvaS = 3
-                if (strText.contains("Другі Закон")) nazvaS = 4
-                if (strText.contains("Ісуса сына Нава")) nazvaS = 5
-                if (strText.contains("Судзьдзяў")) nazvaS = 6
-                if (strText.contains("Рут")) nazvaS = 7
-                if (strText.contains("1-я Царстваў")) nazvaS = 8
-                if (strText.contains("2-я Царстваў")) nazvaS = 9
-                if (strText.contains("3-я Царстваў")) nazvaS = 10
-                if (strText.contains("4-я Царстваў")) nazvaS = 11
-                if (strText.contains("1-я Летапісаў")) nazvaS = 12
-                if (strText.contains("2-я Летапісаў")) nazvaS = 13
-                if (strText.contains("Эздры")) nazvaS = 14
-                if (strText.contains("Нээміі")) nazvaS = 15
-                if (strText.contains("Эстэр")) nazvaS = 16
-                if (strText.contains("Ёва")) nazvaS = 17
-                if (strText.contains("Псалтыр")) nazvaS = 18
-                if (strText.contains("Выслоўяў Саламонавых")) nazvaS = 19
-                if (strText.contains("Эклезіяста")) nazvaS = 20
-                if (strText.contains("Найвышэйшая Песьня Саламонава")) nazvaS = 21
-                if (strText.contains("Ісаі")) nazvaS = 22
-                if (strText.contains("Ераміі")) nazvaS = 23
-                if (strText.contains("Ераміін Плач")) nazvaS = 24
-                if (strText.contains("Езэкііля")) nazvaS = 25
-                if (strText.contains("Данііла")) nazvaS = 26
-                if (strText.contains("Асіі")) nazvaS = 27
-                if (strText.contains("Ёіля")) nazvaS = 28
-                if (strText.contains("Амоса")) nazvaS = 29
-                if (strText.contains("Аўдзея")) nazvaS = 30
-                if (strText.contains("Ёны")) nazvaS = 31
-                if (strText.contains("Міхея")) nazvaS = 32
-                if (strText.contains("Навума")) nazvaS = 33
-                if (strText.contains("Абакума")) nazvaS = 34
-                if (strText.contains("Сафона")) nazvaS = 35
-                if (strText.contains("Агея")) nazvaS = 36
-                if (strText.contains("Захарыі")) nazvaS = 37
-                if (strText.contains("Малахіі")) nazvaS = 38
-                if (strText.contains("Паводле Мацьвея")) nazva = 0
-                if (strText.contains("Паводле Марка")) nazva = 1
-                if (strText.contains("Паводле Лукаша")) nazva = 2
-                if (strText.contains("Паводле Яна")) nazva = 3
-                if (strText.contains("Дзеі Апосталаў")) nazva = 4
-                if (strText.contains("Якава")) nazva = 5
-                if (strText.contains("1-е Пятра")) nazva = 6
-                if (strText.contains("2-е Пятра")) nazva = 7
-                if (strText.contains("1-е Яна Багаслова")) nazva = 8
-                if (strText.contains("2-е Яна Багаслова")) nazva = 9
-                if (strText.contains("3-е Яна Багаслова")) nazva = 10
-                if (strText.contains("Юды")) nazva = 11
-                if (strText.contains("Да Рымлянаў")) nazva = 12
-                if (strText.contains("1-е да Карынфянаў")) nazva = 13
-                if (strText.contains("2-е да Карынфянаў")) nazva = 14
-                if (strText.contains("Да Галятаў")) nazva = 15
-                if (strText.contains("Да Эфэсянаў")) nazva = 16
-                if (strText.contains("Да Піліпянаў")) nazva = 17
-                if (strText.contains("Да Каласянаў")) nazva = 18
-                if (strText.contains("1-е да Фесаланікійцаў")) nazva = 19
-                if (strText.contains("2-е да Фесаланікійцаў")) nazva = 20
-                if (strText.contains("1-е да Цімафея")) nazva = 21
-                if (strText.contains("2-е да Цімафея")) nazva = 22
-                if (strText.contains("Да Ціта")) nazva = 23
-                if (strText.contains("Да Філімона")) nazva = 24
-                if (strText.contains("Да Габрэяў")) nazva = 25
-                if (strText.contains("Адкрыцьцё (Апакаліпсіс)")) nazva = 26
+                val lists = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas)
+                val listn = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan)
+                for (i in lists.indices) {
+                    if (strText.contains(lists[i])) nazvaS = i
+                }
+                for (i in listn.indices) {
+                    if (strText.contains(listn[i])) nazva = i
+                }
+            }
+            if (zavet == 2) {
+                val lists = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals)
+                val listn = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln)
+                for (i in lists.indices) {
+                    if (strText.contains(lists[i])) nazvaS = i
+                }
+                for (i in listn.indices) {
+                    if (strText.contains(listn[i])) nazva = i
+                }
+            }
+            if (zavet == 4) {
+                val lists = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunas)
+                val listn = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunan)
+                for (i in lists.indices) {
+                    if (strText.contains(lists[i])) nazvaS = i
+                }
+                for (i in listn.indices) {
+                    if (strText.contains(listn[i])) nazva = i
+                }
+            }
+            if (zavet == 5) {
+                val lists = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskis)
+                val listn = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskin)
+                for (i in lists.indices) {
+                    if (strText.contains(lists[i])) nazvaS = i
+                }
+                for (i in listn.indices) {
+                    if (strText.contains(listn[i])) nazva = i
+                }
             }
             val str1 = strText.indexOf("glava.")
             val str2 = strText.indexOf("-->")
@@ -478,54 +531,52 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             val glava = strText.substring(str1 + 6, str2).toInt()
             val stix = strText.substring(str3 + 9, str4).toInt()
             if (zavet == 3) {
-                val intent = Intent(this@SearchBiblia, NadsanContentActivity::class.java)
+                val intent = Intent(this@SearchBiblia, NadsanContent::class.java)
                 intent.putExtra("glava", glava - 1)
                 intent.putExtra("stix", stix - 1)
+                intent.putExtra("prodolzyt", true)
                 prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
                 prefEditors.apply()
                 startActivity(intent)
             } else {
+                var intent = Intent(this@SearchBiblia, StaryZapavietSemuxaList::class.java)
                 if (nazvaS != -1) {
                     if (zavet == 1) {
-                        val intent = Intent(this@SearchBiblia, StaryZapavietSemuxa::class.java)
-                        intent.putExtra("kniga", nazvaS)
-                        intent.putExtra("glava", glava - 1)
-                        intent.putExtra("stix", stix - 1)
-                        prefEditors.putBoolean("novyzavet", false)
-                        prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
-                        prefEditors.apply()
-                        startActivity(intent)
-                    } else {
-                        val intent = Intent(this@SearchBiblia, StaryZapavietSinaidal::class.java)
-                        intent.putExtra("kniga", nazvaS)
-                        intent.putExtra("glava", glava - 1)
-                        intent.putExtra("stix", stix - 1)
-                        prefEditors.putBoolean("novyzavet", false)
-                        prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
-                        prefEditors.apply()
-                        startActivity(intent)
+                        intent = Intent(this@SearchBiblia, StaryZapavietSemuxaList::class.java)
                     }
+                    if (zavet == 2) {
+                        intent = Intent(this@SearchBiblia, StaryZapavietSinaidalList::class.java)
+                    }
+                    if (zavet == 4) {
+                        intent = Intent(this@SearchBiblia, StaryZapavietBokunaList::class.java)
+                    }
+                    if (zavet == 5) {
+                        intent = Intent(this@SearchBiblia, StaryZapavietCarniauskiList::class.java)
+                    }
+                    intent.putExtra("kniga", nazvaS)
+                    prefEditors.putBoolean("novyzavet", false)
                 } else {
                     if (zavet == 1) {
-                        val intent = Intent(this@SearchBiblia, NovyZapavietSemuxa::class.java)
-                        intent.putExtra("kniga", nazva)
-                        intent.putExtra("glava", glava - 1)
-                        intent.putExtra("stix", stix - 1)
-                        prefEditors.putBoolean("novyzavet", true)
-                        prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
-                        prefEditors.apply()
-                        startActivity(intent)
-                    } else {
-                        val intent = Intent(this@SearchBiblia, NovyZapavietSinaidal::class.java)
-                        intent.putExtra("kniga", nazva)
-                        intent.putExtra("glava", glava - 1)
-                        intent.putExtra("stix", stix - 1)
-                        prefEditors.putBoolean("novyzavet", true)
-                        prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
-                        prefEditors.apply()
-                        startActivity(intent)
+                        intent = Intent(this@SearchBiblia, NovyZapavietSemuxaList::class.java)
                     }
+                    if (zavet == 2) {
+                        intent = Intent(this@SearchBiblia, NovyZapavietSinaidalList::class.java)
+                    }
+                    if (zavet == 4) {
+                        intent = Intent(this@SearchBiblia, NovyZapavietBokunaList::class.java)
+                    }
+                    if (zavet == 5) {
+                        intent = Intent(this@SearchBiblia, NovyZapavietCarniauskiList::class.java)
+                    }
+                    intent.putExtra("kniga", nazva)
+                    prefEditors.putBoolean("novyzavet", true)
                 }
+                intent.putExtra("glava", glava - 1)
+                intent.putExtra("stix", stix - 1)
+                intent.putExtra("prodolzyt", true)
+                prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
+                prefEditors.apply()
+                startActivity(intent)
             }
         }
         historyAdapter = HistoryAdapter(this, history)
@@ -762,6 +813,8 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             1 -> biblia = "semuxa"
             2 -> biblia = "sinoidal"
             3 -> biblia = "nadsan"
+            4 -> biblia = "bokuna"
+            5 -> biblia = "carniauski"
         }
         val gson = Gson()
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
@@ -833,21 +886,11 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
     }
 
     private fun doInBackground(searche: String): ArrayList<Spannable> {
-        var list = when (zavet) {
-            1 -> semuxa(searche)
-            2 -> sinoidal(searche)
-            3 -> nadsan(searche)
-            else -> null
+        var list = biblia(searche, zavet)
+        if (list.isEmpty() && chin.getInt("slovocalkam", 0) == 0) {
+            list = biblia(searche, zavet, true)
         }
-        if (list?.isEmpty() == true && chin.getInt("slovocalkam", 0) == 0) {
-            list = when (zavet) {
-                1 -> semuxa(searche, true)
-                2 -> sinoidal(searche, true)
-                3 -> nadsan(searche, true)
-                else -> null
-            }
-        }
-        return list ?: ArrayList()
+        return list
     }
 
     private fun onPostExecute(result: ArrayList<Spannable>) {
@@ -876,12 +919,13 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         }
     }
 
-    private fun semuxa(poshuk: String, secondRun: Boolean = false): ArrayList<Spannable> {
+    private fun biblia(poshuk: String, perevod: Int, secondRun: Boolean = false): ArrayList<Spannable> {
         var poshuk1 = poshuk
         val seashpost = ArrayList<Spannable>()
         val registr = chin.getBoolean("pegistrbukv", true)
         if (secondRun) {
-            val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
+            val m = if (perevod == 2) charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
+            else charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
             for (aM in m) {
                 val r = poshuk1.length - 1
                 if (poshuk1.length >= 3) {
@@ -891,305 +935,97 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 }
             }
         }
-        val range = when (chin.getInt("biblia_seash", 0)) {
-            1 -> 39..42
-            2 -> 39 until semuxaBible.size
-            3 -> 0..4
-            4 -> 0..38
-            else -> 0 until semuxaBible.size
+        var range = 0..0
+        var list = arrayOf("")
+        when (perevod) {
+            1 -> {
+                range = when (chin.getInt("biblia_seash", 0)) {
+                    1 -> 39..42
+                    2 -> 39 until semuxaBible.size
+                    3 -> 0..4
+                    4 -> 0..38
+                    else -> 0 until semuxaBible.size
+                }
+                list = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan))
+            }
+
+            2 -> {
+                range = when (chin.getInt("biblia_seash", 0)) {
+                    1 -> 50..53
+                    2 -> 50 until sinodalBible.size
+                    3 -> 0..4
+                    4 -> 0..49
+                    else -> 0 until sinodalBible.size
+                }
+                list = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln))
+            }
+
+            3 -> {
+                range = 0..150
+            }
+
+            4 -> {
+                range = when (chin.getInt("biblia_seash", 0)) {
+                    1 -> 39..42
+                    2 -> 39 until bokunaBible.size
+                    3 -> 0..4
+                    4 -> 0..38
+                    else -> 0 until bokunaBible.size
+                }
+                list = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunas).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunan))
+            }
+
+            5 -> {
+                range = when (chin.getInt("biblia_seash", 0)) {
+                    1 -> 46..50
+                    2 -> 46 until carniauskiBible.size
+                    3 -> 0..4
+                    4 -> 0..45
+                    else -> 0 until carniauskiBible.size
+                }
+                list = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskis).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskin))
+            }
         }
         for (i in range) {
             if (searchJob?.isActive == false) break
-            val nazva = when (i) {
-                0 -> "Быцьцё"
-                1 -> "Выхад"
-                2 -> "Лявіт"
-                3 -> "Лікі"
-                4 -> "Другі Закон"
-                5 -> "Ісуса сына Нава"
-                6 -> "Судзьдзяў"
-                7 -> "Рут"
-                8 -> "1-я Царстваў"
-                9 -> "2-я Царстваў"
-                10 -> "3-я Царстваў"
-                11 -> "4-я Царстваў"
-                12 -> "1-я Летапісаў"
-                13 -> "2-я Летапісаў"
-                14 -> "Эздры"
-                15 -> "Нээміі"
-                16 -> "Эстэр"
-                17 -> "Ёва"
-                18 -> "Псалтыр"
-                19 -> "Выслоўяў Саламонавых"
-                20 -> "Эклезіяста"
-                21 -> "Найвышэйшая Песьня Саламонава"
-                22 -> "Ісаі"
-                23 -> "Ераміі"
-                24 -> "Ераміін Плач"
-                25 -> "Езэкііля"
-                26 -> "Данііла"
-                27 -> "Асіі"
-                28 -> "Ёіля"
-                29 -> "Амоса"
-                30 -> "Аўдзея"
-                31 -> "Ёны"
-                32 -> "Міхея"
-                33 -> "Навума"
-                34 -> "Абакума"
-                35 -> "Сафона"
-                36 -> "Агея"
-                37 -> "Захарыі"
-                38 -> "Малахіі"
-                39 -> "Паводле Мацьвея"
-                40 -> "Паводле Марка"
-                41 -> "Паводле Лукаша"
-                42 -> "Паводле Яна"
-                43 -> "Дзеі Апосталаў"
-                44 -> "Якава"
-                45 -> "1-е Пятра"
-                46 -> "2-е Пятра"
-                47 -> "1-е Яна Багаслова"
-                48 -> "2-е Яна Багаслова"
-                49 -> "3-е Яна Багаслова"
-                50 -> "Юды"
-                51 -> "Да Рымлянаў"
-                52 -> "1-е да Карынфянаў"
-                53 -> "2-е да Карынфянаў"
-                54 -> "Да Галятаў"
-                55 -> "Да Эфэсянаў"
-                56 -> "Да Піліпянаў"
-                57 -> "Да Каласянаў"
-                58 -> "1-е да Фесаланікійцаў"
-                59 -> "2-е да Фесаланікійцаў"
-                60 -> "1-е да Цімафея"
-                61 -> "2-е да Цімафея"
-                62 -> "Да Ціта"
-                63 -> "Да Філімона"
-                64 -> "Да Габрэяў"
-                65 -> "Адкрыцьцё (Апакаліпсіс)"
-                else -> ""
+            val nazva = list[i]
+            val inputStream = when (perevod) {
+                1 -> resources.openRawResource(semuxaBible[i])
+                2 -> resources.openRawResource(sinodalBible[i])
+                3 -> resources.openRawResource(R.raw.psaltyr_nadsan)
+                4 -> resources.openRawResource(bokunaBible[i])
+                5 -> resources.openRawResource(carniauskiBible[i])
+                else -> resources.openRawResource(semuxaBible[i])
             }
-            if (nazva != "") {
-                val inputStream = resources.openRawResource(semuxaBible[i])
-                val isr = InputStreamReader(inputStream)
-                val reader = BufferedReader(isr)
-                var glava = 0
-                val split = reader.use {
-                    it.readText().split("===")
-                }
-                for (e in 1 until split.size) {
-                    glava++
-                    val bibleline = split[e].split("\n")
-                    var stix = 0
-                    for (r in 1 until bibleline.size) {
-                        stix++
-                        val aSviatyia = MainActivity.fromHtml(bibleline[r]).toString()
-                        val title = "<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n"
-                        val t3 = title.length
-                        val span = SpannableStringBuilder()
-                        val poshuk2 = findChars(poshuk1, aSviatyia)
-                        if (poshuk2.isEmpty()) continue
-                        span.append(title)
-                        span.setSpan(StyleSpan(Typeface.BOLD), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        span.append(aSviatyia)
-                        for (w in 0 until poshuk2.size) {
-                            val t2 = poshuk2[w].str.length
-                            val t1 = poshuk2[w].position + t3
-                            span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
-                        seashpost.add(span)
+            val isr = InputStreamReader(inputStream)
+            val reader = BufferedReader(isr)
+            var glava = 0
+            val split = reader.use {
+                it.readText().split("===")
+            }
+            for (e in 1 until split.size) {
+                glava++
+                val bibleline = split[e].split("\n")
+                var stix = 0
+                for (r in 1 until bibleline.size) {
+                    stix++
+                    val aSviatyia = MainActivity.fromHtml(bibleline[r]).toString()
+                    val title = "<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n"
+                    val t3 = title.length
+                    val span = SpannableStringBuilder()
+                    val poshuk2 = findChars(poshuk1, aSviatyia)
+                    if (poshuk2.isEmpty()) continue
+                    span.append(title)
+                    span.setSpan(StyleSpan(Typeface.BOLD), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    span.append(aSviatyia)
+                    for (w in 0 until poshuk2.size) {
+                        val t2 = poshuk2[w].str.length
+                        val t1 = poshuk2[w].position + t3
+                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
+                    seashpost.add(span)
                 }
-            }
-        }
-        return seashpost
-    }
-
-    private fun sinoidal(poshuk: String, secondRun: Boolean = false): ArrayList<Spannable> {
-        var poshuk1 = poshuk
-        val seashpost = ArrayList<Spannable>()
-        val registr = chin.getBoolean("pegistrbukv", true)
-        if (secondRun) {
-            val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
-            for (aM in m) {
-                val r = poshuk1.length - 1
-                if (poshuk1[r] == aM && r >= 3) {
-                    poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), registr)
-                }
-            }
-        }
-        val range = when (chin.getInt("biblia_seash", 0)) {
-            1 -> 50..53
-            2 -> 50 until sinodalBible.size
-            3 -> 0..4
-            4 -> 0..49
-            else -> 0 until sinodalBible.size
-        }
-        for (i in range) {
-            if (searchJob?.isActive == false) break
-            val nazva = when (i) {
-                0 -> "Бытие"
-                1 -> "Исход"
-                2 -> "Левит"
-                3 -> "Числа"
-                4 -> "Второзаконие"
-                5 -> "Иисуса Навина"
-                6 -> "Судей израилевых"
-                7 -> "Руфи"
-                8 -> "1-я Царств"
-                9 -> "2-я Царств"
-                10 -> "3-я Царств"
-                11 -> "4-я Царств"
-                12 -> "1-я Паралипоменон"
-                13 -> "2-я Паралипоменон"
-                14 -> "1-я Ездры"
-                15 -> "Неемии"
-                16 -> "2-я Ездры"
-                17 -> "Товита"
-                18 -> "Иудифи"
-                19 -> "Есфири"
-                20 -> "Иова"
-                21 -> "Псалтирь"
-                22 -> "Притчи Соломона"
-                23 -> "Екклезиаста"
-                24 -> "Песнь песней Соломона"
-                25 -> "Премудрости Соломона"
-                26 -> "Премудрости Иисуса, сына Сирахова"
-                27 -> "Исаии"
-                28 -> "Иеремии"
-                29 -> "Плач Иеремии"
-                30 -> "Послание Иеремии"
-                31 -> "Варуха"
-                32 -> "Иезекииля"
-                33 -> "Даниила"
-                34 -> "Осии"
-                35 -> "Иоиля"
-                36 -> "Амоса"
-                37 -> "Авдия"
-                38 -> "Ионы"
-                39 -> "Михея"
-                40 -> "Наума"
-                41 -> "Аввакума"
-                42 -> "Сафонии"
-                43 -> "Аггея"
-                44 -> "Захарии"
-                45 -> "Малахии"
-                46 -> "1-я Маккавейская"
-                47 -> "2-я Маккавейская"
-                48 -> "3-я Маккавейская"
-                49 -> "3-я Ездры"
-                50 -> "От Матфея"
-                51 -> "От Марка"
-                52 -> "От Луки"
-                53 -> "От Иоанна"
-                54 -> "Деяния святых апостолов"
-                55 -> "Иакова"
-                56 -> "1-е Петра"
-                57 -> "2-е Петра"
-                58 -> "1-е Иоанна"
-                59 -> "2-е Иоанна"
-                60 -> "3-е Иоанна"
-                61 -> "Иуды"
-                62 -> "Римлянам"
-                63 -> "1-е Коринфянам"
-                64 -> "2-е Коринфянам"
-                65 -> "Галатам"
-                66 -> "Эфэсянам"
-                67 -> "Филиппийцам"
-                68 -> "Колоссянам"
-                69 -> "1-е Фессалоникийцам (Солунянам)"
-                70 -> "2-е Фессалоникийцам (Солунянам)"
-                71 -> "1-е Тимофею"
-                72 -> "2-е Тимофею"
-                73 -> "Титу"
-                74 -> "Филимону"
-                75 -> "Евреям"
-                76 -> "Откровение (Апокалипсис)"
-                else -> ""
-            }
-            if (nazva != "") {
-                val inputStream = resources.openRawResource(sinodalBible[i])
-                val isr = InputStreamReader(inputStream)
-                val reader = BufferedReader(isr)
-                var glava = 0
-                val split = reader.use {
-                    it.readText().split("===")
-                }
-                for (e in 1 until split.size) {
-                    glava++
-                    val bibleline = split[e].split("\n")
-                    var stix = 0
-                    for (r in 1 until bibleline.size) {
-                        stix++
-                        val aSviatyia = MainActivity.fromHtml(bibleline[r]).toString()
-                        val title = "<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n"
-                        val t3 = title.length
-                        val span = SpannableStringBuilder()
-                        val poshuk2 = findChars(poshuk1, aSviatyia)
-                        if (poshuk2.isEmpty()) continue
-                        span.append(title)
-                        span.setSpan(StyleSpan(Typeface.BOLD), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        span.append(aSviatyia)
-                        for (w in 0 until poshuk2.size) {
-                            val t2 = poshuk2[w].str.length
-                            val t1 = poshuk2[w].position + t3
-                            span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
-                        seashpost.add(span)
-                    }
-                }
-            }
-        }
-        return seashpost
-    }
-
-    private fun nadsan(poshuk: String, secondRun: Boolean = false): ArrayList<Spannable> {
-        var poshuk1 = poshuk
-        val seashpost = ArrayList<Spannable>()
-        val registr = chin.getBoolean("pegistrbukv", true)
-        if (secondRun) {
-            val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ь', 'ы')
-            for (aM in m) {
-                val r = poshuk1.length - 1
-                if (poshuk1.length >= 3) {
-                    if (poshuk1[r] == aM && r >= 3) {
-                        poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r), registr)
-                    }
-                }
-            }
-        }
-        val nazva = getString(by.carkva_gazeta.malitounik.R.string.psalter)
-        val inputStream = resources.openRawResource(R.raw.psaltyr_nadsan)
-        val isr = InputStreamReader(inputStream)
-        val reader = BufferedReader(isr)
-        val split = reader.use {
-            it.readText().split("===")
-        }
-        var glava = 0
-        for (e in 1 until split.size) {
-            glava++
-            val bibleline = split[e].split("\n")
-            var stix = 0
-            for (r in 1 until bibleline.size) {
-                stix++
-                val aSviatyia = MainActivity.fromHtml(bibleline[r]).toString()
-                val title = "<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n"
-                val t3 = title.length
-                val span = SpannableStringBuilder()
-                val poshuk2 = findChars(poshuk1, aSviatyia)
-                if (poshuk2.isEmpty()) continue
-                span.append(title)
-                span.setSpan(StyleSpan(Typeface.BOLD), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                span.append(aSviatyia)
-                for (w in 0 until poshuk2.size) {
-                    val t2 = poshuk2[w].str.length
-                    val t1 = poshuk2[w].position + t3
-                    span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                }
-                seashpost.add(span)
             }
         }
         return seashpost
@@ -1262,10 +1098,10 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                         else " "
                         val endString = if (strSub1Pos + stringBuilder.length + 1 <= textSearch.length) textSearch.substring(strSub1Pos + stringBuilder.length, strSub1Pos + stringBuilder.length + 1)
                         else " "
-                       if (!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit()) {
-                           result.add(FindString(stringBuilder.toString(), strSub))
-                           stringBuilder.clear()
-                       }
+                        if (!startString.toCharArray()[0].isLetterOrDigit() && !endString.toCharArray()[0].isLetterOrDigit()) {
+                            result.add(FindString(stringBuilder.toString(), strSub))
+                            stringBuilder.clear()
+                        }
                     } else {
                         result.add(FindString(stringBuilder.toString(), strSub))
                         stringBuilder.clear()

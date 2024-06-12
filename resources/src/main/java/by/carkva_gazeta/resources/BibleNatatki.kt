@@ -1,6 +1,5 @@
 package by.carkva_gazeta.resources
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -10,7 +9,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
@@ -18,8 +16,16 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.DialogContextMenu
+import by.carkva_gazeta.malitounik.NovyZapavietBokunaList
+import by.carkva_gazeta.malitounik.NovyZapavietCarniauskiList
+import by.carkva_gazeta.malitounik.NovyZapavietSemuxaList
+import by.carkva_gazeta.malitounik.NovyZapavietSinaidalList
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.StaryZapavietBokunaList
+import by.carkva_gazeta.malitounik.StaryZapavietCarniauskiList
+import by.carkva_gazeta.malitounik.StaryZapavietSemuxaList
+import by.carkva_gazeta.malitounik.StaryZapavietSinaidalList
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.resources.DialogBibleNatatkaEdit.BibleNatatkaEditlistiner
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
@@ -47,15 +53,17 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
     private var mLastClickTime: Long = 0
     private lateinit var binding: BibleZakladkiNatatkiBinding
     private var resetTollbarJob: Job? = null
-    private val zapavietLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            if (semuxa == 1) data = BibleGlobalList.natatkiSemuxa
-            if (semuxa == 2) data = BibleGlobalList.natatkiSinodal
-            if (data.size == 0) {
-                onBack()
-            } else {
-                adapter.updateList(data)
-            }
+
+    override fun onResume() {
+        super.onResume()
+        if (semuxa == 1) data = BibleGlobalList.natatkiSemuxa
+        if (semuxa == 2) data = BibleGlobalList.natatkiSinodal
+        if (semuxa == 3) data = BibleGlobalList.natatkiBokuna
+        if (semuxa == 4) data = BibleGlobalList.natatkiCarniauski
+        if (data.size == 0) {
+            onBack()
+        } else {
+            adapter.updateList(data)
         }
     }
 
@@ -94,6 +102,22 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 fileNatatki.delete()
             }
         }
+        if (semuxa == 3) {
+            data.removeAll(data.toSet())
+            adapter.updateList(data)
+            val fileNatatki = File("$filesDir/BibliaBokunaNatatki.json")
+            if (fileNatatki.exists()) {
+                fileNatatki.delete()
+            }
+        }
+        if (semuxa == 4) {
+            data.removeAll(data.toSet())
+            adapter.updateList(data)
+            val fileNatatki = File("$filesDir/BibliaCarniauskiNatatki.json")
+            if (fileNatatki.exists()) {
+                fileNatatki.delete()
+            }
+        }
         onBack()
     }
 
@@ -104,6 +128,8 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
         semuxa = intent.getIntExtra("semuxa", 1)
         if (semuxa == 1) data = BibleGlobalList.natatkiSemuxa
         if (semuxa == 2) data = BibleGlobalList.natatkiSinodal
+        if (semuxa == 3) data = BibleGlobalList.natatkiBokuna
+        if (semuxa == 4) data = BibleGlobalList.natatkiCarniauski
         adapter = ItemAdapter(data, R.id.image, false)
         binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
         binding.dragListView.setLayoutManager(LinearLayoutManager(this))
@@ -163,9 +189,36 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                             }
                         }
                     }
+                    if (semuxa == 3) {
+                        val fileZakladki = File("$filesDir/BibliaBokunaNatatki.json")
+                        if (data.size == 0) {
+                            if (fileZakladki.exists()) {
+                                fileZakladki.delete()
+                            }
+                        } else {
+                            fileZakladki.writer().use {
+                                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                                it.write(gson.toJson(data, type))
+                            }
+                        }
+                    }
+                    if (semuxa == 4) {
+                        val fileZakladki = File("$filesDir/BibliaCarniauskiNatatki.json")
+                        if (data.size == 0) {
+                            if (fileZakladki.exists()) {
+                                fileZakladki.delete()
+                            }
+                        } else {
+                            fileZakladki.writer().use {
+                                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                                it.write(gson.toJson(data, type))
+                            }
+                        }
+                    }
                 }
             }
         })
+        setTollbarTheme()
     }
 
     private fun setTollbarTheme() {
@@ -228,11 +281,6 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
         return false
     }
 
-    override fun onResume() {
-        super.onResume()
-        setTollbarTheme()
-    }
-
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
@@ -266,6 +314,40 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
             data.removeAt(position)
             adapter.notifyItemRemoved(position)
             val fileNatatki = File("$filesDir/BibliaSinodalNatatki.json")
+            if (data.size == 0) {
+                if (fileNatatki.exists()) {
+                    fileNatatki.delete()
+                }
+                onBack()
+            } else {
+                val gson = Gson()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                val outputStream = FileWriter(fileNatatki)
+                outputStream.write(gson.toJson(data, type))
+                outputStream.close()
+            }
+        }
+        if (semuxa == 3) {
+            data.removeAt(position)
+            adapter.notifyItemRemoved(position)
+            val fileNatatki = File("$filesDir/BibliaBokunaNatatki.json")
+            if (data.size == 0) {
+                if (fileNatatki.exists()) {
+                    fileNatatki.delete()
+                }
+                onBack()
+            } else {
+                val gson = Gson()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                val outputStream = FileWriter(fileNatatki)
+                outputStream.write(gson.toJson(data, type))
+                outputStream.close()
+            }
+        }
+        if (semuxa == 4) {
+            data.removeAt(position)
+            adapter.notifyItemRemoved(position)
+            val fileNatatki = File("$filesDir/BibliaCarniauskiNatatki.json")
             if (data.size == 0) {
                 if (fileNatatki.exists()) {
                     fileNatatki.delete()
@@ -321,19 +403,25 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 var kniga = -1
                 var knigaS = -1
                 if (data[bindingAdapterPosition].list[0].contains("1")) kniga = data[bindingAdapterPosition].list[1].toInt() else knigaS = data[bindingAdapterPosition].list[1].toInt()
-                var intent = Intent()
+                var intent = Intent(this@BibleNatatki, NovyZapavietSemuxaList::class.java)
                 if (kniga != -1) {
                     if (semuxa == 1) {
-                        intent = Intent(this@BibleNatatki, NovyZapavietSemuxa::class.java)
+                        intent = Intent(this@BibleNatatki, NovyZapavietSemuxaList::class.java)
                     }
                     if (semuxa == 2) {
-                        intent = Intent(this@BibleNatatki, NovyZapavietSinaidal::class.java)
+                        intent = Intent(this@BibleNatatki, NovyZapavietSinaidalList::class.java)
+                    }
+                    if (semuxa == 3) {
+                        intent = Intent(this@BibleNatatki, NovyZapavietBokunaList::class.java)
+                    }
+                    if (semuxa == 4) {
+                        intent = Intent(this@BibleNatatki, NovyZapavietCarniauskiList::class.java)
                     }
                     intent.putExtra("kniga", kniga)
                 }
                 if (knigaS != -1) {
                     if (semuxa == 1) {
-                        intent = Intent(this@BibleNatatki, StaryZapavietSemuxa::class.java)
+                        intent = Intent(this@BibleNatatki, StaryZapavietSemuxaList::class.java)
                         when (knigaS) {
                             19 -> knigaS = 16
                             20 -> knigaS = 17
@@ -361,13 +449,77 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                         }
                     }
                     if (semuxa == 2) {
-                        intent = Intent(this@BibleNatatki, StaryZapavietSinaidal::class.java)
+                        intent = Intent(this@BibleNatatki, StaryZapavietSinaidalList::class.java)
+                    }
+                    if (semuxa == 3) {
+                        intent = Intent(this@BibleNatatki, StaryZapavietBokunaList::class.java)
+                        when (knigaS) {
+                            19 -> knigaS = 16
+                            20 -> knigaS = 17
+                            21 -> knigaS = 18
+                            22 -> knigaS = 19
+                            23 -> knigaS = 20
+                            24 -> knigaS = 21
+                            27 -> knigaS = 22
+                            28 -> knigaS = 23
+                            29 -> knigaS = 24
+                            32 -> knigaS = 25
+                            33 -> knigaS = 26
+                            34 -> knigaS = 27
+                            35 -> knigaS = 28
+                            36 -> knigaS = 29
+                            37 -> knigaS = 30
+                            38 -> knigaS = 31
+                            39 -> knigaS = 32
+                            40 -> knigaS = 33
+                            41 -> knigaS = 34
+                            42 -> knigaS = 35
+                            43 -> knigaS = 36
+                            44 -> knigaS = 37
+                            45 -> knigaS = 38
+                        }
+                    }
+                    if (semuxa == 4) {
+                        intent = Intent(this@BibleNatatki, StaryZapavietCarniauskiList::class.java)
+                        when (knigaS) {
+                            19 -> knigaS = 16
+                            20 -> knigaS = 17
+                            21 -> knigaS = 18
+                            22 -> knigaS = 19
+                            23 -> knigaS = 20
+                            24 -> knigaS = 21
+                            27 -> knigaS = 22
+                            28 -> knigaS = 23
+                            29 -> knigaS = 24
+                            32 -> knigaS = 25
+                            33 -> knigaS = 26
+                            34 -> knigaS = 27
+                            35 -> knigaS = 28
+                            36 -> knigaS = 29
+                            37 -> knigaS = 30
+                            38 -> knigaS = 31
+                            39 -> knigaS = 32
+                            40 -> knigaS = 33
+                            41 -> knigaS = 34
+                            42 -> knigaS = 35
+                            43 -> knigaS = 36
+                            44 -> knigaS = 37
+                            45 -> knigaS = 38
+                            17 -> knigaS = 39
+                            18 -> knigaS = 40
+                            25 -> knigaS = 41
+                            26 -> knigaS = 42
+                            31 -> knigaS = 43
+                            46 -> knigaS = 44
+                            47 -> knigaS = 45
+                        }
                     }
                     intent.putExtra("kniga", knigaS)
                 }
                 intent.putExtra("glava", Integer.valueOf(data[bindingAdapterPosition].list[2]))
                 intent.putExtra("stix", Integer.valueOf(data[bindingAdapterPosition].list[3]))
-                zapavietLauncher.launch(intent)
+                intent.putExtra("prodolzyt", true)
+                startActivity(intent)
             }
 
             override fun onItemLongClicked(view: View): Boolean {

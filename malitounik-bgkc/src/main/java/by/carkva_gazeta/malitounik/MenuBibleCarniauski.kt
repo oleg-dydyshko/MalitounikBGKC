@@ -137,7 +137,7 @@ class MenuBibleCarniauski : Fragment() {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
-                    intent.putExtra("zavet", 2)
+                    intent.putExtra("zavet", 5)
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()

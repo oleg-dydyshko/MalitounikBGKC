@@ -1,6 +1,5 @@
 package by.carkva_gazeta.resources
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -14,7 +13,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
@@ -22,8 +20,16 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.BibleZakladkiData
+import by.carkva_gazeta.malitounik.NovyZapavietBokunaList
+import by.carkva_gazeta.malitounik.NovyZapavietCarniauskiList
+import by.carkva_gazeta.malitounik.NovyZapavietSemuxaList
+import by.carkva_gazeta.malitounik.NovyZapavietSinaidalList
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.StaryZapavietBokunaList
+import by.carkva_gazeta.malitounik.StaryZapavietCarniauskiList
+import by.carkva_gazeta.malitounik.StaryZapavietSemuxaList
+import by.carkva_gazeta.malitounik.StaryZapavietSinaidalList
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
 import by.carkva_gazeta.resources.DialogZakladkaDelite.ZakladkaDeliteListiner
@@ -49,17 +55,17 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
     private var mLastClickTime: Long = 0
     private lateinit var binding: BibleZakladkiNatatkiBinding
     private var resetTollbarJob: Job? = null
-    private val zapavietLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            if (semuxa == 1) data = BibleGlobalList.zakladkiSemuxa
-            if (semuxa == 2) data = BibleGlobalList.zakladkiSinodal
-            if (semuxa == 3) data = BibleGlobalList.zakladkiBokuna
-            if (semuxa == 4) data = BibleGlobalList.zakladkiCarniauski
-            if (data.size == 0) {
-                onBack()
-            } else {
-                adapter.updateList(data)
-            }
+
+    override fun onResume() {
+        super.onResume()
+        if (semuxa == 1) data = BibleGlobalList.zakladkiSemuxa
+        if (semuxa == 2) data = BibleGlobalList.zakladkiSinodal
+        if (semuxa == 3) data = BibleGlobalList.zakladkiBokuna
+        if (semuxa == 4) data = BibleGlobalList.zakladkiCarniauski
+        if (data.size == 0) {
+            onBack()
+        } else {
+            adapter.updateList(data)
         }
     }
 
@@ -194,6 +200,7 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 }
             }
         })
+        setTollbarTheme()
     }
 
     private fun setTollbarTheme() {
@@ -254,11 +261,6 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
             return true
         }
         return false
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setTollbarTheme()
     }
 
     override fun onPause() {
@@ -395,10 +397,10 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 val knigaName = mItemList[bindingAdapterPosition].data
                 var kniga = -1
                 var knigaS = -1
-                var t1: Int
-                var t2 = 0
-                var t3 = 0
-                var glava = 0
+                val t1: Int
+                val t2: Int
+                val t3: Int
+                val glava: Int
                 val listn: Array<String>
                 val lists: Array<String>
                 when (semuxa) {
@@ -433,53 +435,53 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 for (e in lists.indices) {
                     if (knigaName.contains(lists[e])) knigaS = e
                 }
-                if (semuxa == 1) {
-                    t1 = knigaName.indexOf("Разьдзел ")
-                    t2 = knigaName.indexOf("/", t1)
-                    t3 = knigaName.indexOf("\n\n")
-                    glava = knigaName.substring(t1 + 9, t2).toInt()
-                }
                 if (semuxa == 2) {
                     t1 = knigaName.indexOf("Глава ")
                     t2 = knigaName.indexOf("/", t1)
                     t3 = knigaName.indexOf("\n\n", t2)
                     glava = knigaName.substring(t1 + 6, t2).toInt()
+                } else {
+                    t1 = knigaName.indexOf("Разьдзел ")
+                    t2 = knigaName.indexOf("/", t1)
+                    t3 = knigaName.indexOf("\n\n")
+                    glava = knigaName.substring(t1 + 9, t2).toInt()
                 }
                 val stix = knigaName.substring(t2 + 6, t3).toInt()
-                var intent = Intent()
+                var intent = Intent(this@BibleZakladki, NovyZapavietSemuxaList::class.java)
                 if (kniga != -1) {
                     if (semuxa == 1) {
-                        intent = Intent(this@BibleZakladki, NovyZapavietSemuxa::class.java)
+                        intent = Intent(this@BibleZakladki, NovyZapavietSemuxaList::class.java)
                     }
                     if (semuxa == 2) {
-                        intent = Intent(this@BibleZakladki, NovyZapavietSinaidal::class.java)
+                        intent = Intent(this@BibleZakladki, NovyZapavietSinaidalList::class.java)
                     }
                     if (semuxa == 3) {
-                        intent = Intent(this@BibleZakladki, NovyZapavietBokuna::class.java)
+                        intent = Intent(this@BibleZakladki, NovyZapavietBokunaList::class.java)
                     }
                     if (semuxa == 4) {
-                        intent = Intent(this@BibleZakladki, NovyZapavietCarniauski::class.java)
+                        intent = Intent(this@BibleZakladki, NovyZapavietCarniauskiList::class.java)
                     }
                     intent.putExtra("kniga", kniga)
                 }
                 if (knigaS != -1) {
                     if (semuxa == 1) {
-                        intent = Intent(this@BibleZakladki, StaryZapavietSemuxa::class.java)
+                        intent = Intent(this@BibleZakladki, StaryZapavietSemuxaList::class.java)
                     }
                     if (semuxa == 2) {
-                        intent = Intent(this@BibleZakladki, StaryZapavietSinaidal::class.java)
+                        intent = Intent(this@BibleZakladki, StaryZapavietSinaidalList::class.java)
                     }
                     if (semuxa == 3) {
-                        intent = Intent(this@BibleZakladki, StaryZapavietBokuna::class.java)
+                        intent = Intent(this@BibleZakladki, StaryZapavietBokunaList::class.java)
                     }
                     if (semuxa == 4) {
-                        intent = Intent(this@BibleZakladki, StaryZapavietCarniauski::class.java)
+                        intent = Intent(this@BibleZakladki, StaryZapavietCarniauskiList::class.java)
                     }
                     intent.putExtra("kniga", knigaS)
                 }
                 intent.putExtra("glava", glava - 1)
                 intent.putExtra("stix", stix - 1)
-                zapavietLauncher.launch(intent)
+                intent.putExtra("prodolzyt", true)
+                startActivity(intent)
             }
 
             override fun onItemLongClicked(view: View): Boolean {

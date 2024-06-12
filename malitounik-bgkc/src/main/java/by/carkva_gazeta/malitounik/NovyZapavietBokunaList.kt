@@ -222,7 +222,8 @@ class NovyZapavietBokunaList : BaseActivity() {
         }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.setText(R.string.novy_zapaviet)
+        binding.titleToolbar.setText(R.string.title_biblia_bokun)
+        binding.subTitleToolbar.setText(R.string.novy_zapaviet)
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }

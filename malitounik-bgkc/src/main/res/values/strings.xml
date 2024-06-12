@@ -131,6 +131,8 @@
     <string name="poshuk_semuxa">Пошук па перакладу В. Сёмухі</string>
     <string name="poshuk">Пошук</string>
     <string name="poshuk_sinoidal">Пошук па Сінадальным расейскім перакладзе</string>
+    <string name="poshuk_bokun">Пошук па перакладу А. Бокуна</string>
+    <string name="poshuk_charniauski">Пошук па перакладу У. Чарняўскага 2017</string>
     <string name="procent">%1$d%%</string>
     <string name="sabytieKali">Калі: %1$s %2$s \n%3$s\nРэдагаваць/Выдаліць</string>
     <string name="sabytieDoKuda">Пачатак: %1$s %2$s \nКанец: %3$s %4$s \n%5$s\nРэдагаваць/Выдаліць</string>

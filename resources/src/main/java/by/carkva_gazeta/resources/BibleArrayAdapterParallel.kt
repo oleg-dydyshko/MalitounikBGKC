@@ -20,6 +20,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
+import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -414,17 +415,20 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         if (zapavet) zav = "1"
         val listn: Array<String>
         val lists: Array<String>
+        val listAll: ArrayList<BibleZakladkiData>
         when (perevod) {
             1 -> {
                 if (BibleGlobalList.zakladkiSemuxa.size == 0) return ssb
                 listn = context.resources.getStringArray(R.array.semuxan)
                 lists = context.resources.getStringArray(R.array.semuxas)
+                listAll = BibleGlobalList.zakladkiSemuxa
             }
 
             2 -> {
                 if (BibleGlobalList.zakladkiSinodal.size == 0) return ssb
                 listn = context.resources.getStringArray(R.array.sinoidaln)
                 lists = context.resources.getStringArray(R.array.sinoidals)
+                listAll = BibleGlobalList.zakladkiSinodal
             }
 
             3 -> {
@@ -435,33 +439,36 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                 if (BibleGlobalList.zakladkiBokuna.size == 0) return ssb
                 listn = context.resources.getStringArray(R.array.bokunan)
                 lists = context.resources.getStringArray(R.array.bokunas)
+                listAll = BibleGlobalList.zakladkiBokuna
             }
 
             5 -> {
                 if (BibleGlobalList.zakladkiCarniauski.size == 0) return ssb
                 listn = context.resources.getStringArray(R.array.charniauskin)
                 lists = context.resources.getStringArray(R.array.charniauskis)
+                listAll = BibleGlobalList.zakladkiCarniauski
             }
 
             else -> {
                 if (BibleGlobalList.zakladkiSemuxa.size == 0) return ssb
                 listn = context.resources.getStringArray(R.array.semuxan)
                 lists = context.resources.getStringArray(R.array.semuxas)
+                listAll = BibleGlobalList.zakladkiSemuxa
             }
         }
-        for (i in BibleGlobalList.zakladkiBokuna.indices) {
+        for (i in listAll.indices) {
             var knigaN = -1
             var knigaS = -1
             var t1: Int
             var t2: Int
             var t3: Int
             var glava1: Int
-            val knigaName = BibleGlobalList.zakladkiBokuna[i].data
-            for (e in listn.indices) {
-                if (knigaName.contains(listn[e])) knigaN = e
-            }
+            val knigaName = listAll[i].data
             for (e in lists.indices) {
                 if (knigaName.contains(lists[e])) knigaS = e
+            }
+            for (e in listn.indices) {
+                if (knigaName.contains(listn[e])) knigaN = e
             }
             t1 = knigaName.indexOf("Разьдзел ")
             t2 = knigaName.indexOf("/", t1)
@@ -472,6 +479,44 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             if (knigaS != -1) {
                 zavet = "0"
                 knigaN = knigaS
+                if (perevod == 1 || perevod == 4 || perevod == 5) {
+                    when (knigaS) {
+                        16 -> knigaN = 19
+                        17 -> knigaN = 20
+                        18 -> knigaN = 21
+                        19 -> knigaN = 22
+                        20 -> knigaN = 23
+                        21 -> knigaN = 24
+                        22 -> knigaN = 27
+                        23 -> knigaN = 28
+                        24 -> knigaN = 29
+                        25 -> knigaN = 32
+                        26 -> knigaN = 33
+                        27 -> knigaN = 34
+                        28 -> knigaN = 35
+                        29 -> knigaN = 36
+                        30 -> knigaN = 37
+                        31 -> knigaN = 38
+                        32 -> knigaN = 39
+                        33 -> knigaN = 40
+                        34 -> knigaN = 41
+                        35 -> knigaN = 42
+                        36 -> knigaN = 43
+                        37 -> knigaN = 44
+                        38 -> knigaN = 45
+                    }
+                }
+                if (perevod == 5) {
+                    when (knigaS) {
+                        39 -> knigaN = 17
+                        40 -> knigaN = 18
+                        41 -> knigaN = 25
+                        42 -> knigaN = 26
+                        43 -> knigaN = 31
+                        44 -> knigaN = 46
+                        45 -> knigaN = 47
+                    }
+                }
             }
 
             if (zavet.contains(zav) && knigaN == kniga && glava1 == glava && stix1 == position) {

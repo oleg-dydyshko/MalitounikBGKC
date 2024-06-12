@@ -53,6 +53,8 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
         if (result.resultCode == Activity.RESULT_OK) {
             if (semuxa == 1) data = BibleGlobalList.zakladkiSemuxa
             if (semuxa == 2) data = BibleGlobalList.zakladkiSinodal
+            if (semuxa == 3) data = BibleGlobalList.zakladkiBokuna
+            if (semuxa == 4) data = BibleGlobalList.zakladkiCarniauski
             if (data.size == 0) {
                 onBack()
             } else {
@@ -78,6 +80,22 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 fileZakladki.delete()
             }
         }
+        if (semuxa == 3) {
+            data.removeAll(data.toSet())
+            adapter.updateList(data)
+            val fileZakladki = File("$filesDir/BibliaBokunaZakladki.json")
+            if (fileZakladki.exists()) {
+                fileZakladki.delete()
+            }
+        }
+        if (semuxa == 4) {
+            data.removeAll(data.toSet())
+            adapter.updateList(data)
+            val fileZakladki = File("$filesDir/BibliaCarniauskiZakladki.json")
+            if (fileZakladki.exists()) {
+                fileZakladki.delete()
+            }
+        }
         onBack()
     }
 
@@ -88,6 +106,8 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
         semuxa = intent.getIntExtra("semuxa", 1)
         if (semuxa == 1) data = BibleGlobalList.zakladkiSemuxa
         if (semuxa == 2) data = BibleGlobalList.zakladkiSinodal
+        if (semuxa == 3) data = BibleGlobalList.zakladkiBokuna
+        if (semuxa == 4) data = BibleGlobalList.zakladkiCarniauski
         adapter = ItemAdapter(data, R.id.image, false)
         binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
         binding.dragListView.setLayoutManager(LinearLayoutManager(this))
@@ -134,6 +154,32 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                     }
                     if (semuxa == 2) {
                         val fileZakladki = File("$filesDir/BibliaSinodalZakladki.json")
+                        if (data.size == 0) {
+                            if (fileZakladki.exists()) {
+                                fileZakladki.delete()
+                            }
+                        } else {
+                            fileZakladki.writer().use {
+                                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                                it.write(gson.toJson(data, type))
+                            }
+                        }
+                    }
+                    if (semuxa == 3) {
+                        val fileZakladki = File("$filesDir/BibliaBokunaZakladki.json")
+                        if (data.size == 0) {
+                            if (fileZakladki.exists()) {
+                                fileZakladki.delete()
+                            }
+                        } else {
+                            fileZakladki.writer().use {
+                                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                                it.write(gson.toJson(data, type))
+                            }
+                        }
+                    }
+                    if (semuxa == 4) {
+                        val fileZakladki = File("$filesDir/BibliaCarniauskiZakladki.json")
                         if (data.size == 0) {
                             if (fileZakladki.exists()) {
                                 fileZakladki.delete()
@@ -261,6 +307,40 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 }
             }
         }
+        if (semuxa == 3) {
+            data.removeAt(position)
+            adapter.notifyItemRemoved(position)
+            val fileZakladki = File("$filesDir/BibliaBokunaZakladki.json")
+            if (data.size == 0) {
+                if (fileZakladki.exists()) {
+                    fileZakladki.delete()
+                }
+                onBack()
+            } else {
+                val gson = Gson()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                fileZakladki.writer().use {
+                    it.write(gson.toJson(data, type))
+                }
+            }
+        }
+        if (semuxa == 4) {
+            data.removeAt(position)
+            adapter.notifyItemRemoved(position)
+            val fileZakladki = File("$filesDir/BibliaCarniauskiZakladki.json")
+            if (data.size == 0) {
+                if (fileZakladki.exists()) {
+                    fileZakladki.delete()
+                }
+                onBack()
+            } else {
+                val gson = Gson()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                fileZakladki.writer().use {
+                    it.write(gson.toJson(data, type))
+                }
+            }
+        }
         invalidateOptionsMenu()
     }
 
@@ -319,156 +399,47 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 var t2 = 0
                 var t3 = 0
                 var glava = 0
+                val listn: Array<String>
+                val lists: Array<String>
+                when (semuxa) {
+                    1 -> {
+                        listn = resources.getStringArray(R.array.semuxan)
+                        lists = resources.getStringArray(R.array.semuxas)
+                    }
+
+                    2 -> {
+                        listn = resources.getStringArray(R.array.sinoidaln)
+                        lists = resources.getStringArray(R.array.sinoidals)
+                    }
+
+                    3 -> {
+                        listn = resources.getStringArray(R.array.bokunan)
+                        lists = resources.getStringArray(R.array.bokunas)
+                    }
+
+                    4 -> {
+                        listn = resources.getStringArray(R.array.charniauskin)
+                        lists = resources.getStringArray(R.array.charniauskis)
+                    }
+
+                    else -> {
+                        listn = resources.getStringArray(R.array.semuxan)
+                        lists = resources.getStringArray(R.array.semuxas)
+                    }
+                }
+                for (e in listn.indices) {
+                    if (knigaName.contains(listn[e])) kniga = e
+                }
+                for (e in lists.indices) {
+                    if (knigaName.contains(lists[e])) knigaS = e
+                }
                 if (semuxa == 1) {
-                    if (knigaName.contains("Паводле Мацьвея")) kniga = 0
-                    if (knigaName.contains("Паводле Марка")) kniga = 1
-                    if (knigaName.contains("Паводле Лукаша")) kniga = 2
-                    if (knigaName.contains("Паводле Яна")) kniga = 3
-                    if (knigaName.contains("Дзеі Апосталаў")) kniga = 4
-                    if (knigaName.contains("Якава")) kniga = 5
-                    if (knigaName.contains("1-е Пятра")) kniga = 6
-                    if (knigaName.contains("2-е Пятра")) kniga = 7
-                    if (knigaName.contains("1-е Яна Багаслова")) kniga = 8
-                    if (knigaName.contains("2-е Яна Багаслова")) kniga = 9
-                    if (knigaName.contains("3-е Яна Багаслова")) kniga = 10
-                    if (knigaName.contains("Юды")) kniga = 11
-                    if (knigaName.contains("Да Рымлянаў")) kniga = 12
-                    if (knigaName.contains("1-е да Карынфянаў")) kniga = 13
-                    if (knigaName.contains("2-е да Карынфянаў")) kniga = 14
-                    if (knigaName.contains("Да Галятаў")) kniga = 15
-                    if (knigaName.contains("Да Эфэсянаў")) kniga = 16
-                    if (knigaName.contains("Да Піліпянаў")) kniga = 17
-                    if (knigaName.contains("Да Каласянаў")) kniga = 18
-                    if (knigaName.contains("1-е да Фесаланікійцаў")) kniga = 19
-                    if (knigaName.contains("2-е да Фесаланікійцаў")) kniga = 20
-                    if (knigaName.contains("1-е да Цімафея")) kniga = 21
-                    if (knigaName.contains("2-е да Цімафея")) kniga = 22
-                    if (knigaName.contains("Да Ціта")) kniga = 23
-                    if (knigaName.contains("Да Філімона")) kniga = 24
-                    if (knigaName.contains("Да Габрэяў")) kniga = 25
-                    if (knigaName.contains("Адкрыцьцё (Апакаліпсіс)")) kniga = 26
-                    if (knigaName.contains("Быцьцё")) knigaS = 0
-                    if (knigaName.contains("Выхад")) knigaS = 1
-                    if (knigaName.contains("Лявіт")) knigaS = 2
-                    if (knigaName.contains("Лікі")) knigaS = 3
-                    if (knigaName.contains("Другі Закон")) knigaS = 4
-                    if (knigaName.contains("Ісуса сына Нава")) knigaS = 5
-                    if (knigaName.contains("Судзьдзяў")) knigaS = 6
-                    if (knigaName.contains("Рут")) knigaS = 7
-                    if (knigaName.contains("1-я Царстваў")) knigaS = 8
-                    if (knigaName.contains("2-я Царстваў")) knigaS = 9
-                    if (knigaName.contains("3-я Царстваў")) knigaS = 10
-                    if (knigaName.contains("4-я Царстваў")) knigaS = 11
-                    if (knigaName.contains("1-я Летапісаў")) knigaS = 12
-                    if (knigaName.contains("2-я Летапісаў")) knigaS = 13
-                    if (knigaName.contains("Эздры")) knigaS = 14
-                    if (knigaName.contains("Нээміі")) knigaS = 15
-                    if (knigaName.contains("Эстэр")) knigaS = 16
-                    if (knigaName.contains("Ёва")) knigaS = 17
-                    if (knigaName.contains("Псалтыр")) knigaS = 18
-                    if (knigaName.contains("Выслоўяў Саламонавых")) knigaS = 19
-                    if (knigaName.contains("Эклезіяста")) knigaS = 20
-                    if (knigaName.contains("Найвышэйшая Песьня Саламонава")) knigaS = 21
-                    if (knigaName.contains("Ісаі")) knigaS = 22
-                    if (knigaName.contains("Ераміі")) knigaS = 23
-                    if (knigaName.contains("Ераміін Плач")) knigaS = 24
-                    if (knigaName.contains("Езэкііля")) knigaS = 25
-                    if (knigaName.contains("Данііла")) knigaS = 26
-                    if (knigaName.contains("Асіі")) knigaS = 27
-                    if (knigaName.contains("Ёіля")) knigaS = 28
-                    if (knigaName.contains("Амоса")) knigaS = 29
-                    if (knigaName.contains("Аўдзея")) knigaS = 30
-                    if (knigaName.contains("Ёны")) knigaS = 31
-                    if (knigaName.contains("Міхея")) knigaS = 32
-                    if (knigaName.contains("Навума")) knigaS = 33
-                    if (knigaName.contains("Абакума")) knigaS = 34
-                    if (knigaName.contains("Сафона")) knigaS = 35
-                    if (knigaName.contains("Агея")) knigaS = 36
-                    if (knigaName.contains("Захарыі")) knigaS = 37
-                    if (knigaName.contains("Малахіі")) knigaS = 38
                     t1 = knigaName.indexOf("Разьдзел ")
                     t2 = knigaName.indexOf("/", t1)
                     t3 = knigaName.indexOf("\n\n")
                     glava = knigaName.substring(t1 + 9, t2).toInt()
                 }
                 if (semuxa == 2) {
-                    if (knigaName.contains("От Матфея")) kniga = 0
-                    if (knigaName.contains("От Марка")) kniga = 1
-                    if (knigaName.contains("От Луки")) kniga = 2
-                    if (knigaName.contains("От Иоанна")) kniga = 3
-                    if (knigaName.contains("Деяния святых апостолов")) kniga = 4
-                    if (knigaName.contains("Иакова")) kniga = 5
-                    if (knigaName.contains("1-е Петра")) kniga = 6
-                    if (knigaName.contains("2-е Петра")) kniga = 7
-                    if (knigaName.contains("1-е Иоанна")) kniga = 8
-                    if (knigaName.contains("2-е Иоанна")) kniga = 9
-                    if (knigaName.contains("3-е Иоанна")) kniga = 10
-                    if (knigaName.contains("Иуды")) kniga = 11
-                    if (knigaName.contains("Римлянам")) kniga = 12
-                    if (knigaName.contains("1-е Коринфянам")) kniga = 13
-                    if (knigaName.contains("2-е Коринфянам")) kniga = 14
-                    if (knigaName.contains("Галатам")) kniga = 15
-                    if (knigaName.contains("Ефесянам")) kniga = 16
-                    if (knigaName.contains("Филиппийцам")) kniga = 17
-                    if (knigaName.contains("Колоссянам")) kniga = 18
-                    if (knigaName.contains("1-е Фессалоникийцам (Солунянам)")) kniga = 19
-                    if (knigaName.contains("2-е Фессалоникийцам (Солунянам)")) kniga = 20
-                    if (knigaName.contains("1-е Тимофею")) kniga = 21
-                    if (knigaName.contains("2-е Тимофею")) kniga = 22
-                    if (knigaName.contains("Титу")) kniga = 23
-                    if (knigaName.contains("Филимону")) kniga = 24
-                    if (knigaName.contains("Евреям")) kniga = 25
-                    if (knigaName.contains("Откровение (Апокалипсис)")) kniga = 26
-                    if (knigaName.contains("Бытие")) knigaS = 0
-                    if (knigaName.contains("Исход")) knigaS = 1
-                    if (knigaName.contains("Левит")) knigaS = 2
-                    if (knigaName.contains("Числа")) knigaS = 3
-                    if (knigaName.contains("Второзаконие")) knigaS = 4
-                    if (knigaName.contains("Иисуса Навина")) knigaS = 5
-                    if (knigaName.contains("Судей израилевых")) knigaS = 6
-                    if (knigaName.contains("Руфи")) knigaS = 7
-                    if (knigaName.contains("1-я Царств")) knigaS = 8
-                    if (knigaName.contains("2-я Царств")) knigaS = 9
-                    if (knigaName.contains("3-я Царств")) knigaS = 10
-                    if (knigaName.contains("4-я Царств")) knigaS = 11
-                    if (knigaName.contains("1-я Паралипоменон")) knigaS = 12
-                    if (knigaName.contains("2-я Паралипоменон")) knigaS = 13
-                    if (knigaName.contains("1-я Ездры")) knigaS = 14
-                    if (knigaName.contains("Неемии")) knigaS = 15
-                    if (knigaName.contains("2-я Ездры")) knigaS = 16
-                    if (knigaName.contains("Товита")) knigaS = 17
-                    if (knigaName.contains("Иудифи")) knigaS = 18
-                    if (knigaName.contains("Есфири")) knigaS = 19
-                    if (knigaName.contains("Иова")) knigaS = 20
-                    if (knigaName.contains("Псалтирь")) knigaS = 21
-                    if (knigaName.contains("Притчи Соломона")) knigaS = 22
-                    if (knigaName.contains("Екклезиаста")) knigaS = 23
-                    if (knigaName.contains("Песнь песней Соломона")) knigaS = 24
-                    if (knigaName.contains("Премудрости Соломона")) knigaS = 25
-                    if (knigaName.contains("Премудрости Иисуса, сына Сирахова")) knigaS = 26
-                    if (knigaName.contains("Исаии")) knigaS = 27
-                    if (knigaName.contains("Иеремии")) knigaS = 28
-                    if (knigaName.contains("Плач Иеремии")) knigaS = 29
-                    if (knigaName.contains("Послание Иеремии")) knigaS = 30
-                    if (knigaName.contains("Варуха")) knigaS = 31
-                    if (knigaName.contains("Иезекииля")) knigaS = 32
-                    if (knigaName.contains("Даниила")) knigaS = 33
-                    if (knigaName.contains("Осии")) knigaS = 34
-                    if (knigaName.contains("Иоиля")) knigaS = 35
-                    if (knigaName.contains("Амоса")) knigaS = 36
-                    if (knigaName.contains("Авдия")) knigaS = 37
-                    if (knigaName.contains("Ионы")) knigaS = 38
-                    if (knigaName.contains("Михея")) knigaS = 39
-                    if (knigaName.contains("Наума")) knigaS = 40
-                    if (knigaName.contains("Аввакума")) knigaS = 41
-                    if (knigaName.contains("Сафонии")) knigaS = 42
-                    if (knigaName.contains("Аггея")) knigaS = 43
-                    if (knigaName.contains("Захарии")) knigaS = 44
-                    if (knigaName.contains("Малахии")) knigaS = 45
-                    if (knigaName.contains("1-я Маккавейская")) knigaS = 46
-                    if (knigaName.contains("2-я Маккавейская")) knigaS = 47
-                    if (knigaName.contains("3-я Маккавейская")) knigaS = 48
-                    if (knigaName.contains("3-я Ездры")) knigaS = 49
                     t1 = knigaName.indexOf("Глава ")
                     t2 = knigaName.indexOf("/", t1)
                     t3 = knigaName.indexOf("\n\n", t2)
@@ -483,6 +454,12 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                     if (semuxa == 2) {
                         intent = Intent(this@BibleZakladki, NovyZapavietSinaidal::class.java)
                     }
+                    if (semuxa == 3) {
+                        intent = Intent(this@BibleZakladki, NovyZapavietBokuna::class.java)
+                    }
+                    if (semuxa == 4) {
+                        intent = Intent(this@BibleZakladki, NovyZapavietCarniauski::class.java)
+                    }
                     intent.putExtra("kniga", kniga)
                 }
                 if (knigaS != -1) {
@@ -491,6 +468,12 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                     }
                     if (semuxa == 2) {
                         intent = Intent(this@BibleZakladki, StaryZapavietSinaidal::class.java)
+                    }
+                    if (semuxa == 3) {
+                        intent = Intent(this@BibleZakladki, StaryZapavietBokuna::class.java)
+                    }
+                    if (semuxa == 4) {
+                        intent = Intent(this@BibleZakladki, StaryZapavietCarniauski::class.java)
                     }
                     intent.putExtra("kniga", knigaS)
                 }

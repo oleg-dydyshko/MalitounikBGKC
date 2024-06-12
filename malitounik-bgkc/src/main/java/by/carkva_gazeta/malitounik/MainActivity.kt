@@ -856,11 +856,27 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (!dir.exists()) {
             dir.mkdir()
         }
+        dir = File("$filesDir/BibliaBokunaNovyZavet")
+        if (!dir.exists()) {
+            dir.mkdir()
+        }
+        dir = File("$filesDir/BibliaCarniauskiNovyZavet")
+        if (!dir.exists()) {
+            dir.mkdir()
+        }
         dir = File("$filesDir/BibliaSemuxaStaryZavet")
         if (!dir.exists()) {
             dir.mkdir()
         }
         dir = File("$filesDir/BibliaSinodalStaryZavet")
+        if (!dir.exists()) {
+            dir.mkdir()
+        }
+        dir = File("$filesDir/BibliaBokunaStaryZavet")
+        if (!dir.exists()) {
+            dir.mkdir()
+        }
+        dir = File("$filesDir/BibliaCarniauskiStaryZavet")
         if (!dir.exists()) {
             dir.mkdir()
         }

@@ -2353,11 +2353,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             val zakladka = SpannableStringBuilder()
-            if (maranAta[position].sinoidal) {
-                zakladka.append(setZakladkiSinoidal(maranAta[position].novyZapavet, getNumarKnigi(maranAta[position].kniga), maranAta[position].glava, maranAta[position].styx))
-            } else {
-                zakladka.append(setZakladkiSemuxa(maranAta[position].novyZapavet, getNumarKnigiSemuxi(getNumarKnigi(maranAta[position].kniga)), maranAta[position].glava, maranAta[position].styx))
-            }
+            val mPerevod = if (maranAta[position].sinoidal) 2
+            else 1
+            zakladka.append(setZakladki(maranAta[position].novyZapavet, getNumarKnigiSemuxi(getNumarKnigi(maranAta[position].kniga)), maranAta[position].glava, maranAta[position].styx, mPerevod))
             val ssb = SpannableStringBuilder(MainActivity.fromHtml(maranAta[position].bible)).append(zakladka)
             val res = getParallel(maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
             if (!res.contains("+-+")) {
@@ -2426,141 +2424,104 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return rootView
         }
 
-        private fun setZakladkiSemuxa(zavet: Boolean, kniga: Int, glava: Int, styx: Int): SpannableStringBuilder {
+        private fun setZakladki(zavet: Boolean, kniga: Int, glava: Int, styx: Int, perevod: Int): SpannableStringBuilder {
             val ssb = SpannableStringBuilder()
-            if (BibleGlobalList.zakladkiSemuxa.size > 0) {
-                val listn = activity.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan)
-                val lists = activity.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas)
-                for (i in BibleGlobalList.zakladkiSemuxa.indices) {
-                    var knigaN = -1
-                    var knigaS = -1
-                    var t1: Int
-                    var t2: Int
-                    var t3: Int
-                    var glava1: Int
-                    val knigaName = BibleGlobalList.zakladkiSemuxa[i].data
-                    for (e in listn.indices) {
-                        if (knigaName.contains(listn[e])) knigaN = e
-                    }
-                    for (e in lists.indices) {
-                        if (knigaName.contains(lists[e])) knigaS = e
-                    }
-                    t1 = knigaName.indexOf("Разьдзел ")
-                    t2 = knigaName.indexOf("/", t1)
-                    t3 = knigaName.indexOf("\n\n")
-                    glava1 = knigaName.substring(t1 + 9, t2).toInt() - 1
-                    val stix1 = knigaName.substring(t2 + 6, t3).toInt() - 1
-                    var zavetLocal = true
-                    if (knigaS != -1) {
-                        zavetLocal = false
-                        knigaN = knigaS
-                    }
-                    if (zavet == zavetLocal && knigaN == kniga && glava1 == glava && stix1 == styx - 1) {
-                        ssb.append(".")
-                        val t5 = knigaName.lastIndexOf("<!--")
-                        val color = if (t5 != -1) knigaName.substring(t5 + 4).toInt()
-                        else 0
-                        val d = when (color) {
-                            0 -> {
-                                if (dzenNoch) ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark)
-                                else ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark_black)
-                            }
-                            1 -> {
-                                if (dzenNoch) ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark1_black)
-                                else ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark1)
-                            }
-                            2 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark2)
-                            3 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark3)
-                            4 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark4)
-                            5 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark5)
-                            6 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark6)
-                            7 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark7)
-                            8 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark8)
-                            9 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark9)
-                            10 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark10)
-                            11 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark11)
-                            12 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark12)
-                            else -> null
-                        }
-                        val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-                        val realpadding = (fontSize * resources.displayMetrics.density).toInt()
-                        d?.setBounds(0, 0, realpadding, realpadding)
-                        d?.let {
-                            val span = ImageSpan(it, DynamicDrawableSpan.ALIGN_BASELINE)
-                            ssb.setSpan(span, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
-                        break
-                    }
+            val listn: Array<String>
+            val lists: Array<String>
+            when (perevod) {
+                1 -> {
+                    if (BibleGlobalList.zakladkiSemuxa.size == 0) return ssb
+                    listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan)
+                    lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas)
+                }
+
+                2 -> {
+                    if (BibleGlobalList.zakladkiSinodal.size == 0) return ssb
+                    listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln)
+                    lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals)
+                }
+
+                3 -> {
+                    return ssb
+                }
+
+                4 -> {
+                    if (BibleGlobalList.zakladkiBokuna.size == 0) return ssb
+                    listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunan)
+                    lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunas)
+                }
+
+                5 -> {
+                    if (BibleGlobalList.zakladkiCarniauski.size == 0) return ssb
+                    listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskin)
+                    lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskis)
+                }
+
+                else -> {
+                    if (BibleGlobalList.zakladkiSemuxa.size == 0) return ssb
+                    listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan)
+                    lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas)
                 }
             }
-            return ssb
-        }
-
-        private fun setZakladkiSinoidal(zavet: Boolean, kniga: Int, glava: Int, styx: Int): SpannableStringBuilder {
-            val ssb = SpannableStringBuilder()
-            if (BibleGlobalList.zakladkiSinodal.size > 0) {
-                val listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln)
-                val lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals)
-                for (i in BibleGlobalList.zakladkiSinodal.indices) {
-                    var knigaN = -1
-                    var knigaS = -1
-                    var t1: Int
-                    var t2: Int
-                    var t3: Int
-                    var glava1: Int
-                    val knigaName = BibleGlobalList.zakladkiSinodal[i].data
-                    for (e in listn.indices) {
-                        if (knigaName.contains(listn[e])) knigaN = e
-                    }
-                    for (e in lists.indices) {
-                        if (knigaName.contains(lists[e])) knigaS = e
-                    }
-                    t1 = knigaName.indexOf("Глава ")
-                    t2 = knigaName.indexOf("/", t1)
-                    t3 = knigaName.indexOf("\n\n")
-                    glava1 = knigaName.substring(t1 + 6, t2).toInt() - 1
-                    val stix1 = knigaName.substring(t2 + 6, t3).toInt() - 1
-                    var zavetLocal = true
-                    if (knigaS != -1) {
-                        zavetLocal = false
-                        knigaN = knigaS
-                    }
-                    if (zavet == zavetLocal && knigaN == kniga && glava1 == glava && stix1 == styx - 1) {
-                        ssb.append(".")
-                        val t5 = knigaName.lastIndexOf("<!--")
-                        val color = if (t5 != -1) knigaName.substring(t5 + 4).toInt()
-                        else 0
-                        val d = when (color) {
-                            0 -> {
-                                if (dzenNoch) ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark)
-                                else ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark_black)
-                            }
-                            1 -> {
-                                if (dzenNoch) ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark1_black)
-                                else ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark1)
-                            }
-                            2 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark2)
-                            3 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark3)
-                            4 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark4)
-                            5 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark5)
-                            6 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark6)
-                            7 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark7)
-                            8 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark8)
-                            9 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark9)
-                            10 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark10)
-                            11 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark11)
-                            12 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark12)
-                            else -> null
+            for (i in BibleGlobalList.zakladkiSemuxa.indices) {
+                var knigaN = -1
+                var knigaS = -1
+                var t1: Int
+                var t2: Int
+                var t3: Int
+                var glava1: Int
+                val knigaName = BibleGlobalList.zakladkiSemuxa[i].data
+                for (e in listn.indices) {
+                    if (knigaName.contains(listn[e])) knigaN = e
+                }
+                for (e in lists.indices) {
+                    if (knigaName.contains(lists[e])) knigaS = e
+                }
+                t1 = knigaName.indexOf("Разьдзел ")
+                t2 = knigaName.indexOf("/", t1)
+                t3 = knigaName.indexOf("\n\n")
+                glava1 = knigaName.substring(t1 + 9, t2).toInt() - 1
+                val stix1 = knigaName.substring(t2 + 6, t3).toInt() - 1
+                var zavetLocal = true
+                if (knigaS != -1) {
+                    zavetLocal = false
+                    knigaN = knigaS
+                }
+                if (zavet == zavetLocal && knigaN == kniga && glava1 == glava && stix1 == styx - 1) {
+                    ssb.append(".")
+                    val t5 = knigaName.lastIndexOf("<!--")
+                    val color = if (t5 != -1) knigaName.substring(t5 + 4).toInt()
+                    else 0
+                    val d = when (color) {
+                        0 -> {
+                            if (dzenNoch) ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark)
+                            else ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark_black)
                         }
-                        val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-                        val realpadding = (fontSize * resources.displayMetrics.density).toInt()
-                        d?.setBounds(0, 0, realpadding, realpadding)
-                        d?.let {
-                            val span = ImageSpan(it, DynamicDrawableSpan.ALIGN_BASELINE)
-                            ssb.setSpan(span, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        1 -> {
+                            if (dzenNoch) ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark1_black)
+                            else ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark1)
                         }
-                        break
+                        2 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark2)
+                        3 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark3)
+                        4 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark4)
+                        5 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark5)
+                        6 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark6)
+                        7 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark7)
+                        8 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark8)
+                        9 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark9)
+                        10 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark10)
+                        11 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark11)
+                        12 -> ContextCompat.getDrawable(activity, by.carkva_gazeta.malitounik.R.drawable.bookmark12)
+                        else -> null
                     }
+                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                    val realpadding = (fontSize * resources.displayMetrics.density).toInt()
+                    d?.setBounds(0, 0, realpadding, realpadding)
+                    d?.let {
+                        val span = ImageSpan(it, DynamicDrawableSpan.ALIGN_BASELINE)
+                        ssb.setSpan(span, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                    break
                 }
             }
             return ssb

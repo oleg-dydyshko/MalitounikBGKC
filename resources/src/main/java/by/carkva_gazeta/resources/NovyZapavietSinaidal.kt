@@ -194,7 +194,7 @@ class NovyZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBible
         if (intent.extras?.containsKey("stix") == true) {
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
         }
-        title = resources.getStringArray(R.array.semuxas)[kniga]
+        title = resources.getStringArray(R.array.sinoidaln)[kniga]
         BibleGlobalList.mListGlava = 0
         val adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager

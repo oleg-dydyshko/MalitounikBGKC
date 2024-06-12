@@ -351,8 +351,8 @@ class StaryZapavietCarniauski : BaseActivity(), DialogFontSizeListener, DialogBi
             men = DialogVybranoeBibleList.setVybranoe(title, kniga, BibleGlobalList.mListGlava)
             if (men) {
                 MainActivity.toastView(this, getString(R.string.addVybranoe))
-                if (!DialogVybranoeBibleList.checkVybranoe("1")) {
-                    MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "1", getString(R.string.title_biblia)))
+                if (!DialogVybranoeBibleList.checkVybranoe("5")) {
+                    MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "5", getString(R.string.title_biblia_charniauski)))
                     val gson = Gson()
                     val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                     val file = File("$filesDir/Vybranoe.json")

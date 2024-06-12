@@ -195,7 +195,7 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
         if (intent.extras?.containsKey("stix") == true) {
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
         }
-        title = resources.getStringArray(R.array.semuxas)[kniga]
+        title = resources.getStringArray(R.array.sinoidals)[kniga]
         BibleGlobalList.mListGlava = 0
         binding.pager.adapter = MyPagerAdapter(this)
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->

@@ -75,6 +75,8 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                     "1" -> prefEditors.remove("bibleVybranoeSemuxa")
                     "2" -> prefEditors.remove("bibleVybranoeSinoidal")
                     "3" -> prefEditors.remove("bibleVybranoeNadsan")
+                    "4" -> prefEditors.remove("bibleVybranoeBokuna")
+                    "5" -> prefEditors.remove("bibleVybranoeCarniauski")
                 }
                 var posDelite = -1
                 MenuVybranoe.vybranoe.forEachIndexed { index, it ->
@@ -99,6 +101,8 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                     "1" -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe, type))
                     "2" -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe, type))
                     "3" -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe, type))
+                    "4" -> prefEditors.putString("bibleVybranoeBokuna", gson.toJson(arrayListVybranoe, type))
+                    "5" -> prefEditors.putString("bibleVybranoeCarniauski", gson.toJson(arrayListVybranoe, type))
                 }
             }
             prefEditors.apply()
@@ -121,6 +125,8 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 "1" -> bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
                 "2" -> bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
                 "3" -> bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
+                "4" -> bibleVybranoe = k.getString("bibleVybranoeBokuna", "") ?: ""
+                "5" -> bibleVybranoe = k.getString("bibleVybranoeCarniauski", "") ?: ""
             }
             if (bibleVybranoe != "") arrayListVybranoe = gson.fromJson(bibleVybranoe, type)
             binding.dragListView.setLayoutManager(LinearLayoutManager(activity))
@@ -154,6 +160,8 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                         "1" -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe, type))
                         "2" -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe, type))
                         "3" -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe, type))
+                        "4" -> prefEditors.putString("bibleVybranoeBokuna", gson.toJson(arrayListVybranoe, type))
+                        "5" -> prefEditors.putString("bibleVybranoeCarniauski", gson.toJson(arrayListVybranoe, type))
                     }
                     prefEditors.apply()
                 }
@@ -199,6 +207,8 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             "1" -> binding.subtitleToolbar.text = getString(R.string.title_biblia)
             "2" -> binding.subtitleToolbar.text = getString(R.string.bsinaidal)
             "3" -> binding.subtitleToolbar.text = getString(R.string.title_psalter)
+            "4" -> binding.subtitleToolbar.text = getString(R.string.title_biblia_bokun)
+            "5" -> binding.subtitleToolbar.text = getString(R.string.title_biblia_charniauski)
         }
     }
 
@@ -440,6 +450,8 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 1 -> bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
                 2 -> bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
                 3 -> bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
+                4 -> bibleVybranoe = k.getString("bibleVybranoeBokuna", "") ?: ""
+                5 -> bibleVybranoe = k.getString("bibleVybranoeCarniauski", "") ?: ""
             }
             if (bibleVybranoe != "") {
                 arrayListVybranoe = gson.fromJson(bibleVybranoe, type)

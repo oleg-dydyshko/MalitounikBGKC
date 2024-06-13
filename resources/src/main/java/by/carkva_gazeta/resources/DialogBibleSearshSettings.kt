@@ -17,6 +17,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.DialogBibleSearshSettingsBinding
@@ -105,16 +106,16 @@ class DialogBibleSearshSettings : DialogFragment() {
                 prefEditors.apply()
 
             }
-            val zavet = arguments?.getInt("zavet") ?: 1
-            val data = if (zavet == 3) arrayOf(getString(R.string.psalter))
+            val perevod = arguments?.getString("perevod") ?: DialogVybranoeBibleList.PEREVODSEMUXI
+            val data = if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) arrayOf(getString(R.string.psalter))
             else resources.getStringArray(R.array.serche_bible)
-            if (zavet == 3) {
+            if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
                 binding.spinner6.visibility = View.GONE
             }
             val spinner = binding.spinner6
             val arrayAdapter = DialogBibleAdapter(it, data)
             spinner.adapter = arrayAdapter
-            if (zavet != 3) {
+            if (perevod != DialogVybranoeBibleList.PEREVODNADSAN) {
                 spinner.setSelection(check3)
                 spinner.onItemSelectedListener = object : OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -169,10 +170,10 @@ class DialogBibleSearshSettings : DialogFragment() {
     private class ViewHolder(var text: TextView)
 
     companion object {
-        fun getInstance(zavet: Int): DialogBibleSearshSettings {
+        fun getInstance(perevod: String): DialogBibleSearshSettings {
             val instance = DialogBibleSearshSettings()
             val args = Bundle()
-            args.putInt("zavet", zavet)
+            args.putString("perevod", perevod)
             instance.arguments = args
             return instance
         }

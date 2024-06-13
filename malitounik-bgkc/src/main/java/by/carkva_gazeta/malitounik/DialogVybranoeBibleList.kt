@@ -72,11 +72,11 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             val prefEditors = k.edit()
             if (arrayListVybranoe.isEmpty()) {
                 when (biblia) {
-                    "1" -> prefEditors.remove("bibleVybranoeSemuxa")
-                    "2" -> prefEditors.remove("bibleVybranoeSinoidal")
-                    "3" -> prefEditors.remove("bibleVybranoeNadsan")
-                    "4" -> prefEditors.remove("bibleVybranoeBokuna")
-                    "5" -> prefEditors.remove("bibleVybranoeCarniauski")
+                    PEREVODSEMUXI -> prefEditors.remove("bibleVybranoeSemuxa")
+                    PEREVODSINOIDAL -> prefEditors.remove("bibleVybranoeSinoidal")
+                    PEREVODNADSAN -> prefEditors.remove("bibleVybranoeNadsan")
+                    PEREVODBOKUNA -> prefEditors.remove("bibleVybranoeBokuna")
+                    PEREVODCARNIAUSKI -> prefEditors.remove("bibleVybranoeCarniauski")
                 }
                 var posDelite = -1
                 MenuVybranoe.vybranoe.forEachIndexed { index, it ->
@@ -98,11 +98,11 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             } else {
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
                 when (biblia) {
-                    "1" -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe, type))
-                    "2" -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe, type))
-                    "3" -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe, type))
-                    "4" -> prefEditors.putString("bibleVybranoeBokuna", gson.toJson(arrayListVybranoe, type))
-                    "5" -> prefEditors.putString("bibleVybranoeCarniauski", gson.toJson(arrayListVybranoe, type))
+                    PEREVODSEMUXI -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe, type))
+                    PEREVODSINOIDAL -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe, type))
+                    PEREVODNADSAN -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe, type))
+                    PEREVODBOKUNA -> prefEditors.putString("bibleVybranoeBokuna", gson.toJson(arrayListVybranoe, type))
+                    PEREVODCARNIAUSKI -> prefEditors.putString("bibleVybranoeCarniauski", gson.toJson(arrayListVybranoe, type))
                 }
             }
             prefEditors.apply()
@@ -122,11 +122,11 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
             var bibleVybranoe = ""
             when (biblia) {
-                "1" -> bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
-                "2" -> bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
-                "3" -> bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
-                "4" -> bibleVybranoe = k.getString("bibleVybranoeBokuna", "") ?: ""
-                "5" -> bibleVybranoe = k.getString("bibleVybranoeCarniauski", "") ?: ""
+                PEREVODSEMUXI -> bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
+                PEREVODSINOIDAL -> bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
+                PEREVODNADSAN -> bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
+                PEREVODBOKUNA -> bibleVybranoe = k.getString("bibleVybranoeBokuna", "") ?: ""
+                PEREVODCARNIAUSKI -> bibleVybranoe = k.getString("bibleVybranoeCarniauski", "") ?: ""
             }
             if (bibleVybranoe != "") arrayListVybranoe = gson.fromJson(bibleVybranoe, type)
             binding.dragListView.setLayoutManager(LinearLayoutManager(activity))
@@ -157,11 +157,11 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
                     val prefEditors = k.edit()
                     when (biblia) {
-                        "1" -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe, type))
-                        "2" -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe, type))
-                        "3" -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe, type))
-                        "4" -> prefEditors.putString("bibleVybranoeBokuna", gson.toJson(arrayListVybranoe, type))
-                        "5" -> prefEditors.putString("bibleVybranoeCarniauski", gson.toJson(arrayListVybranoe, type))
+                        PEREVODSEMUXI -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe, type))
+                        PEREVODSINOIDAL -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe, type))
+                        PEREVODNADSAN -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe, type))
+                        PEREVODBOKUNA -> prefEditors.putString("bibleVybranoeBokuna", gson.toJson(arrayListVybranoe, type))
+                        PEREVODCARNIAUSKI -> prefEditors.putString("bibleVybranoeCarniauski", gson.toJson(arrayListVybranoe, type))
                     }
                     prefEditors.apply()
                 }
@@ -181,7 +181,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 if ((activity as? BaseActivity)?.checkmoduleResources() == true) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.MARANATA)
-                    intent.putExtra("cytanneMaranaty", biblia())
+                    intent.putExtra("cytanneMaranaty", biblia(biblia.toInt()))
                     intent.putExtra("prodoljyt", true)
                     intent.putExtra("vybranae", true)
                     startActivity(intent)
@@ -204,11 +204,11 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
         }
         binding.titleToolbar.text = resources.getText(R.string.str_short_label1)
         when (biblia) {
-            "1" -> binding.subtitleToolbar.text = getString(R.string.title_biblia)
-            "2" -> binding.subtitleToolbar.text = getString(R.string.bsinaidal)
-            "3" -> binding.subtitleToolbar.text = getString(R.string.title_psalter)
-            "4" -> binding.subtitleToolbar.text = getString(R.string.title_biblia_bokun)
-            "5" -> binding.subtitleToolbar.text = getString(R.string.title_biblia_charniauski)
+            PEREVODSEMUXI -> binding.subtitleToolbar.text = getString(R.string.title_biblia)
+            PEREVODSINOIDAL -> binding.subtitleToolbar.text = getString(R.string.bsinaidal)
+            PEREVODNADSAN -> binding.subtitleToolbar.text = getString(R.string.title_psalter)
+            PEREVODBOKUNA -> binding.subtitleToolbar.text = getString(R.string.title_biblia_bokun)
+            PEREVODCARNIAUSKI -> binding.subtitleToolbar.text = getString(R.string.title_biblia_charniauski)
         }
     }
 
@@ -233,140 +233,135 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
         binding.subtitleToolbar.isSingleLine = true
     }
 
-    private fun biblia(): String {
+    private fun biblia(perevod: Int): String {
         var result = ""
         val sb = StringBuilder()
         arrayListVybranoe.forEachIndexed { index, vybranoeBibliaData ->
-            if (vybranoeBibliaData.novyZavet) {
-                when (vybranoeBibliaData.kniga + 1) {
-                    1 -> result = "Мц"
-                    2 -> result = "Мк"
-                    3 -> result = "Лк"
-                    4 -> result = "Ян"
-                    5 -> result = "Дз"
-                    6 -> result = "Як"
-                    7 -> result = "1 Пт"
-                    8 -> result = "2 Пт"
-                    9 -> result = "1 Ян"
-                    10 -> result = "2 Ян"
-                    11 -> result = "3 Ян"
-                    12 -> result = "Юды"
-                    13 -> result = "Рым"
-                    14 -> result = "1 Кар"
-                    15 -> result = "2 Кар"
-                    16 -> result = "Гал"
-                    17 -> result = "Эф"
-                    18 -> result = "Плп"
-                    19 -> result = "Клс"
-                    20 -> result = "1 Фес"
-                    21 -> result = "2 Фес"
-                    22 -> result = "1 Цім"
-                    23 -> result = "2 Цім"
-                    24 -> result = "Ціт"
-                    25 -> result = "Флм"
-                    26 -> result = "Гбр"
-                    27 -> result = "Адкр"
-                }
+            if (perevod == 3) {
+                result = "Пс"
             } else {
-                if (biblia == "1") {
-                    when (vybranoeBibliaData.kniga + 1) {
-                        1 -> result = "Быц"
-                        2 -> result = "Вых"
-                        3 -> result = "Ляв"
-                        4 -> result = "Лікі"
-                        5 -> result = "Дрг"
-                        6 -> result = "Нав"
-                        7 -> result = "Суд"
-                        8 -> result = "Рут"
-                        9 -> result = "1 Цар"
-                        10 -> result = "2 Цар"
-                        11 -> result = "3 Цар"
-                        12 -> result = "4 Цар"
-                        13 -> result = "1 Лет"
-                        14 -> result = "2 Лет"
-                        15 -> result = "1 Эзд"
-                        16 -> result = "Нээм"
-                        17 -> result = "Эст"
-                        18 -> result = "Ёва"
-                        19 -> result = "Пс"
-                        20 -> result = "Высл"
-                        21 -> result = "Экл"
-                        22 -> result = "Псн"
-                        23 -> result = "Іс"
-                        24 -> result = "Ер"
-                        25 -> result = "Плач"
-                        26 -> result = "Езк"
-                        27 -> result = "Дан"
-                        28 -> result = "Ас"
-                        29 -> result = "Ёіл"
-                        30 -> result = "Ам"
-                        31 -> result = "Аўдз"
-                        32 -> result = "Ёны"
-                        33 -> result = "Міх"
-                        34 -> result = "Нвм"
-                        35 -> result = "Абк"
-                        36 -> result = "Саф"
-                        37 -> result = "Аг"
-                        38 -> result = "Зах"
-                        39 -> result = "Мал"
+                if (vybranoeBibliaData.novyZavet) {
+                    when (vybranoeBibliaData.kniga) {
+                        0 -> result = "Мц"
+                        1 -> result = "Мк"
+                        2 -> result = "Лк"
+                        3 -> result = "Ян"
+                        4 -> result = "Дз"
+                        5 -> result = "Як"
+                        6 -> result = "1 Пт"
+                        7 -> result = "2 Пт"
+                        8 -> result = "1 Ян"
+                        9 -> result = "2 Ян"
+                        10 -> result = "3 Ян"
+                        11 -> result = "Юды"
+                        12 -> result = "Рым"
+                        13 -> result = "1 Кар"
+                        14 -> result = "2 Кар"
+                        15 -> result = "Гал"
+                        16 -> result = "Эф"
+                        17 -> result = "Плп"
+                        18 -> result = "Клс"
+                        19 -> result = "1 Фес"
+                        20 -> result = "2 Фес"
+                        21 -> result = "1 Цім"
+                        22 -> result = "2 Цім"
+                        23 -> result = "Ціт"
+                        24 -> result = "Флм"
+                        25 -> result = "Гбр"
+                        26 -> result = "Адкр"
                     }
-                }
-                if (biblia == "2") {
-                    when (vybranoeBibliaData.kniga + 1) {
-                        1 -> result = "Быц"
-                        2 -> result = "Вых"
-                        3 -> result = "Ляв"
-                        4 -> result = "Лікі"
-                        5 -> result = "Дрг"
-                        6 -> result = "Нав"
-                        7 -> result = "Суд"
-                        8 -> result = "Рут"
-                        9 -> result = "1 Цар"
-                        10 -> result = "2 Цар"
-                        11 -> result = "3 Цар"
-                        12 -> result = "4 Цар"
-                        13 -> result = "1 Лет"
-                        14 -> result = "2 Лет"
-                        15 -> result = "1 Эзд"
-                        16 -> result = "Нээм"
-                        17 -> result = "2 Эзд"
-                        18 -> result = "Тав"
-                        19 -> result = "Юдт"
-                        20 -> result = "Эст"
-                        21 -> result = "Ёва"
-                        22 -> result = "Пс"
-                        23 -> result = "Высл"
-                        24 -> result = "Экл"
-                        25 -> result = "Псн"
-                        26 -> result = "Мдр"
-                        27 -> result = "Сір"
-                        28 -> result = "Іс"
-                        29 -> result = "Ер"
-                        30 -> result = "Плач"
-                        31 -> result = "Пасл Ер"
-                        32 -> result = "Бар"
-                        33 -> result = "Езк"
-                        34 -> result = "Дан"
-                        35 -> result = "Ас"
-                        36 -> result = "Ёіл"
-                        37 -> result = "Ам"
-                        38 -> result = "Аўдз"
-                        39 -> result = "Ёны"
-                        40 -> result = "Міх"
-                        41 -> result = "Нвм"
-                        42 -> result = "Абк"
-                        43 -> result = "Саф"
-                        44 -> result = "Аг"
-                        45 -> result = "Зах"
-                        46 -> result = "Мал"
-                        47 -> result = "1 Мак"
-                        48 -> result = "2 Мак"
-                        49 -> result = "3 Мак"
-                        50 -> result = "3 Эзд"
+                } else {
+                    var vybranoeBibliaKniga = vybranoeBibliaData.kniga
+                    if (perevod == 1 || perevod == 4 || perevod == 5) {
+                        when (vybranoeBibliaData.kniga) {
+                            16 -> vybranoeBibliaKniga = 19
+                            17 -> vybranoeBibliaKniga = 20
+                            18 -> vybranoeBibliaKniga = 21
+                            19 -> vybranoeBibliaKniga = 22
+                            20 -> vybranoeBibliaKniga = 23
+                            21 -> vybranoeBibliaKniga = 24
+                            22 -> vybranoeBibliaKniga = 27
+                            23 -> vybranoeBibliaKniga = 28
+                            24 -> vybranoeBibliaKniga = 29
+                            25 -> vybranoeBibliaKniga = 32
+                            26 -> vybranoeBibliaKniga = 33
+                            27 -> vybranoeBibliaKniga = 34
+                            28 -> vybranoeBibliaKniga = 35
+                            29 -> vybranoeBibliaKniga = 36
+                            30 -> vybranoeBibliaKniga = 37
+                            31 -> vybranoeBibliaKniga = 38
+                            32 -> vybranoeBibliaKniga = 39
+                            33 -> vybranoeBibliaKniga = 40
+                            34 -> vybranoeBibliaKniga = 41
+                            35 -> vybranoeBibliaKniga = 42
+                            36 -> vybranoeBibliaKniga = 43
+                            37 -> vybranoeBibliaKniga = 44
+                            38 -> vybranoeBibliaKniga = 45
+                        }
                     }
-                }
-                if (biblia == "3") {
-                    result = "Пс"
+                    if (perevod == 5) {
+                        when (vybranoeBibliaData.kniga) {
+                            39 -> vybranoeBibliaKniga = 17
+                            40 -> vybranoeBibliaKniga = 18
+                            41 -> vybranoeBibliaKniga = 25
+                            42 -> vybranoeBibliaKniga = 26
+                            43 -> vybranoeBibliaKniga = 31
+                            44 -> vybranoeBibliaKniga = 46
+                            45 -> vybranoeBibliaKniga = 47
+                        }
+                    }
+                    when (vybranoeBibliaKniga) {
+                        0 -> result = "Быц"
+                        1 -> result = "Вых"
+                        2 -> result = "Ляв"
+                        3 -> result = "Лікі"
+                        4 -> result = "Дрг"
+                        5 -> result = "Нав"
+                        6 -> result = "Суд"
+                        7 -> result = "Рут"
+                        8 -> result = "1 Цар"
+                        9 -> result = "2 Цар"
+                        10 -> result = "3 Цар"
+                        11 -> result = "4 Цар"
+                        12 -> result = "1 Лет"
+                        13 -> result = "2 Лет"
+                        14 -> result = "1 Эзд"
+                        15 -> result = "Нээм"
+                        16 -> result = "2 Эзд"
+                        17 -> result = "Тав"
+                        18 -> result = "Юдт"
+                        19 -> result = "Эст"
+                        20 -> result = "Ёва"
+                        21 -> result = "Пс"
+                        22 -> result = "Высл"
+                        23 -> result = "Экл"
+                        24 -> result = "Псн"
+                        25 -> result = "Мдр"
+                        26 -> result = "Сір"
+                        27 -> result = "Іс"
+                        28 -> result = "Ер"
+                        29 -> result = "Плач"
+                        30 -> result = "Пасл Ер"
+                        31 -> result = "Бар"
+                        32 -> result = "Езк"
+                        33 -> result = "Дан"
+                        34 -> result = "Ас"
+                        35 -> result = "Ёіл"
+                        36 -> result = "Ам"
+                        37 -> result = "Аўдз"
+                        38 -> result = "Ёны"
+                        39 -> result = "Міх"
+                        40 -> result = "Нвм"
+                        41 -> result = "Абк"
+                        42 -> result = "Саф"
+                        43 -> result = "Аг"
+                        44 -> result = "Зах"
+                        45 -> result = "Мал"
+                        46 -> result = "1 Мак"
+                        47 -> result = "2 Мак"
+                        48 -> result = "3 Мак"
+                        49 -> result = "3 Эзд"
+                    }
                 }
             }
             val delimiter = if (arrayListVybranoe.size == index + 1) ""
@@ -413,7 +408,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                     if (it.checkmoduleResources()) {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.MARANATA)
-                        intent.putExtra("cytanneMaranaty", biblia())
+                        intent.putExtra("cytanneMaranaty", biblia(biblia.toInt()))
                         intent.putExtra("vybranae", true)
                         intent.putExtra("title", mItemList[bindingAdapterPosition].title)
                         startActivity(intent)
@@ -437,21 +432,26 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
     }
 
     companion object {
+        const val PEREVODSEMUXI = "1"
+        const val PEREVODSINOIDAL = "2"
+        const val PEREVODNADSAN = "3"
+        const val PEREVODBOKUNA = "4"
+        const val PEREVODCARNIAUSKI = "5"
         var arrayListVybranoe = ArrayList<VybranoeBibliaData>()
-        var biblia = "1"
+        var biblia = PEREVODSEMUXI
 
-        fun checkVybranoe(kniga: Int, glava: Int, bibleName: Int = 1): Boolean {
+        fun checkVybranoe(kniga: Int, glava: Int, perevod: String): Boolean {
             val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val knigaglava = "${kniga + 1}${glava + 1}".toLong()
             val gson = Gson()
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
             var bibleVybranoe = ""
-            when (bibleName) {
-                1 -> bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
-                2 -> bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
-                3 -> bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
-                4 -> bibleVybranoe = k.getString("bibleVybranoeBokuna", "") ?: ""
-                5 -> bibleVybranoe = k.getString("bibleVybranoeCarniauski", "") ?: ""
+            when (perevod) {
+                PEREVODSEMUXI -> bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
+                PEREVODSINOIDAL -> bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
+                PEREVODNADSAN -> bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
+                PEREVODBOKUNA -> bibleVybranoe = k.getString("bibleVybranoeBokuna", "") ?: ""
+                PEREVODCARNIAUSKI -> bibleVybranoe = k.getString("bibleVybranoeCarniauski", "") ?: ""
             }
             if (bibleVybranoe != "") {
                 arrayListVybranoe = gson.fromJson(bibleVybranoe, type)
@@ -474,7 +474,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             return false
         }
 
-        fun setVybranoe(title: String, kniga: Int, glava: Int, perakvad: Int, novyZavet: Boolean = false): Boolean {
+        fun setVybranoe(title: String, kniga: Int, glava: Int, perakvad: String, novyZavet: Boolean = false): Boolean {
             val knigaglava = "${kniga + 1}${glava + 1}".toLong()
             var remove = true
             for (i in 0 until arrayListVybranoe.size) {
@@ -491,11 +491,11 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
             val gsonSave = gson.toJson(arrayListVybranoe, type)
             when (perakvad) {
-                1 -> prefEditors.putString("bibleVybranoeSemuxa", gsonSave)
-                2 -> prefEditors.putString("bibleVybranoeSinoidal", gsonSave)
-                3 -> prefEditors.putString("bibleVybranoeNadsan", gsonSave)
-                4 -> prefEditors.putString("bibleVybranoeBokuna", gsonSave)
-                5 -> prefEditors.putString("bibleVybranoeCarniauski", gsonSave)
+                PEREVODSEMUXI -> prefEditors.putString("bibleVybranoeSemuxa", gsonSave)
+                PEREVODSINOIDAL -> prefEditors.putString("bibleVybranoeSinoidal", gsonSave)
+                PEREVODNADSAN -> prefEditors.putString("bibleVybranoeNadsan", gsonSave)
+                PEREVODBOKUNA -> prefEditors.putString("bibleVybranoeBokuna", gsonSave)
+                PEREVODCARNIAUSKI -> prefEditors.putString("bibleVybranoeCarniauski", gsonSave)
             }
             prefEditors.apply()
             return remove

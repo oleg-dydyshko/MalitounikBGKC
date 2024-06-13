@@ -70,194 +70,61 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
     private fun checkBibleVybranoe() {
         val gson = Gson()
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
-        var bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
-        var indexVybranoe = 0
-        var remove = false
-        if (bibleVybranoe != "") {
-            try {
-                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
-                if (arrayListVybranoe.isEmpty()) {
-                    vybranoe.forEachIndexed { index, vybranoeData ->
-                        if (vybranoeData.resurs == "1") {
-                            indexVybranoe = index
-                            remove = true
-                            return@forEachIndexed
+        for (i in 1..5) {
+            val bibleVybranoe = when (i) {
+                1 -> k.getString("bibleVybranoeSemuxa", "") ?: ""
+                2 -> k.getString("bibleVybranoeSinoidal", "") ?: ""
+                3 -> k.getString("bibleVybranoeNadsan", "") ?: ""
+                4 -> k.getString("bibleVybranoeBokuna", "") ?: ""
+                5 -> k.getString("bibleVybranoeCarniauski", "") ?: ""
+                else -> k.getString("bibleVybranoeSemuxa", "") ?: ""
+            }
+            var indexVybranoe = 0
+            var remove = false
+            if (bibleVybranoe != "") {
+                try {
+                    val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
+                    if (arrayListVybranoe.isEmpty()) {
+                        vybranoe.forEachIndexed { index, vybranoeData ->
+                            if (vybranoeData.resurs == "1") {
+                                indexVybranoe = index
+                                remove = true
+                                return@forEachIndexed
+                            }
+                        }
+                    } else {
+                        var isResurs = false
+                        vybranoe.forEach {
+                            if (it.resurs == "1") isResurs = true
+                        }
+                        if (!isResurs) {
+                            vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), "1", getString(R.string.title_biblia)))
                         }
                     }
-                } else {
-                    var isResurs = false
-                    vybranoe.forEach {
-                        if (it.resurs == "1") isResurs = true
+                } catch (e: Throwable) {
+                    val edit = k.edit()
+                    when (i) {
+                        1 -> edit.remove("bibleVybranoeSemuxa")
+                        2 -> edit.remove("bibleVybranoeSinoidal")
+                        3 -> edit.remove("bibleVybranoeNadsan")
+                        4 -> edit.remove("bibleVybranoeBokuna")
+                        5 -> edit.remove("bibleVybranoeCarniauski")
                     }
-                    if (!isResurs) {
-                        vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), "1", getString(R.string.title_biblia)))
+                    edit.remove("bibleVybranoeSemuxa")
+                    edit.apply()
+                }
+            } else {
+                vybranoe.forEachIndexed { index, vybranoeData ->
+                    if (vybranoeData.resurs == "1") {
+                        indexVybranoe = index
+                        remove = true
+                        return@forEachIndexed
                     }
                 }
-            } catch (e: Throwable) {
-                val edit = k.edit()
-                edit.remove("bibleVybranoeSemuxa")
-                edit.apply()
             }
-        } else {
-            vybranoe.forEachIndexed { index, vybranoeData ->
-                if (vybranoeData.resurs == "1") {
-                    indexVybranoe = index
-                    remove = true
-                    return@forEachIndexed
-                }
+            if (remove) {
+                vybranoe.removeAt(indexVybranoe)
             }
-        }
-        if (remove) {
-            vybranoe.removeAt(indexVybranoe)
-            remove = false
-        }
-        bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
-        if (bibleVybranoe != "") {
-            try {
-                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
-                if (arrayListVybranoe.isEmpty()) {
-                    vybranoe.forEachIndexed { index, vybranoeData ->
-                        if (vybranoeData.resurs == "2") {
-                            indexVybranoe = index
-                            remove = true
-                            return@forEachIndexed
-                        }
-                    }
-                } else {
-                    var isResurs = false
-                    vybranoe.forEach {
-                        if (it.resurs == "2") isResurs = true
-                    }
-                    if (!isResurs) {
-                        vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), "2", getString(R.string.bsinaidal)))
-                    }
-                }
-            } catch (e: Throwable) {
-                val edit = k.edit()
-                edit.remove("bibleVybranoeSinoidal")
-                edit.apply()
-            }
-        } else {
-            vybranoe.forEachIndexed { index, vybranoeData ->
-                if (vybranoeData.resurs == "2") {
-                    indexVybranoe = index
-                    remove = true
-                    return@forEachIndexed
-                }
-            }
-        }
-        if (remove) {
-            vybranoe.removeAt(indexVybranoe)
-            remove = false
-        }
-        bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
-        if (bibleVybranoe != "") {
-            try {
-                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
-                if (arrayListVybranoe.isEmpty()) {
-                    vybranoe.forEachIndexed { index, vybranoeData ->
-                        if (vybranoeData.resurs == "3") {
-                            indexVybranoe = index
-                            remove = true
-                            return@forEachIndexed
-                        }
-                    }
-                } else {
-                    var isResurs = false
-                    vybranoe.forEach {
-                        if (it.resurs == "3") isResurs = true
-                    }
-                    if (!isResurs) {
-                        vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), "3", getString(R.string.title_psalter)))
-                    }
-                }
-            } catch (e: Throwable) {
-                val edit = k.edit()
-                edit.remove("bibleVybranoeNadsan")
-                edit.apply()
-            }
-        } else {
-            vybranoe.forEachIndexed { index, vybranoeData ->
-                if (vybranoeData.resurs == "3") {
-                    indexVybranoe = index
-                    remove = true
-                    return@forEachIndexed
-                }
-            }
-        }
-        bibleVybranoe = k.getString("bibleVybranoeBokuna", "") ?: ""
-        if (bibleVybranoe != "") {
-            try {
-                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
-                if (arrayListVybranoe.isEmpty()) {
-                    vybranoe.forEachIndexed { index, vybranoeData ->
-                        if (vybranoeData.resurs == "4") {
-                            indexVybranoe = index
-                            remove = true
-                            return@forEachIndexed
-                        }
-                    }
-                } else {
-                    var isResurs = false
-                    vybranoe.forEach {
-                        if (it.resurs == "4") isResurs = true
-                    }
-                    if (!isResurs) {
-                        vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), "4", getString(R.string.title_biblia_bokun)))
-                    }
-                }
-            } catch (e: Throwable) {
-                val edit = k.edit()
-                edit.remove("bibleVybranoeBokuna")
-                edit.apply()
-            }
-        } else {
-            vybranoe.forEachIndexed { index, vybranoeData ->
-                if (vybranoeData.resurs == "4") {
-                    indexVybranoe = index
-                    remove = true
-                    return@forEachIndexed
-                }
-            }
-        }
-        bibleVybranoe = k.getString("bibleVybranoeCarniauski", "") ?: ""
-        if (bibleVybranoe != "") {
-            try {
-                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
-                if (arrayListVybranoe.isEmpty()) {
-                    vybranoe.forEachIndexed { index, vybranoeData ->
-                        if (vybranoeData.resurs == "5") {
-                            indexVybranoe = index
-                            remove = true
-                            return@forEachIndexed
-                        }
-                    }
-                } else {
-                    var isResurs = false
-                    vybranoe.forEach {
-                        if (it.resurs == "5") isResurs = true
-                    }
-                    if (!isResurs) {
-                        vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), "5", getString(R.string.title_biblia_charniauski)))
-                    }
-                }
-            } catch (e: Throwable) {
-                val edit = k.edit()
-                edit.remove("bibleVybranoeCarniauski")
-                edit.apply()
-            }
-        } else {
-            vybranoe.forEachIndexed { index, vybranoeData ->
-                if (vybranoeData.resurs == "5") {
-                    indexVybranoe = index
-                    remove = true
-                    return@forEachIndexed
-                }
-            }
-        }
-        if (remove) {
-            vybranoe.removeAt(indexVybranoe)
-            remove = false
         }
     }
 

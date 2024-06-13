@@ -21,12 +21,13 @@ import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleZakladkiData
+import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibleBinding
 
-internal class BibleArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val zapavet: Boolean, private val mPerevod: Int) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) {
+internal class BibleArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val zapavet: Boolean, private val mPerevod: String) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) {
     // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана, 4-Бокуна, 5-Чарняўскага
     private val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     private val dzenNoch get() = (context as BaseActivity).getBaseDzenNoch()
@@ -283,14 +284,14 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         }
         var stix = stixi[position]
         stix = stix.replace("\\n", "\n")
-        if (!zapavet && kniga == 21 && mPerevod == 1) {
+        if (!zapavet && kniga == 21 && mPerevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
             ea.textView.text = MainActivity.fromHtml(stix)
         } else {
             ea.textView.text = stix
         }
         val zakladka = SpannableStringBuilder()
         var space = 1
-        if (mPerevod == 1) {
+        if (mPerevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
             res = MainActivity.translateToBelarus(res)
         }
         zakladka.append(setZakladki(position, mPerevod))
@@ -342,7 +343,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                 else ea.textView.setBackgroundResource(R.drawable.selector_default)
             }
         }
-        if (mPerevod == 1) {
+        if (mPerevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
             var zav = "0"
             if (zapavet) zav = "1"
             if (BibleGlobalList.natatkiSemuxa.size > 0) {
@@ -358,7 +359,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                 }
             }
         }
-        if (mPerevod == 2) {
+        if (mPerevod == DialogVybranoeBibleList.PEREVODSINOIDAL) {
             var zav = "0"
             if (zapavet) zav = "1"
             if (BibleGlobalList.natatkiSinodal.size > 0) {
@@ -374,7 +375,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                 }
             }
         }
-        if (mPerevod == 4) {
+        if (mPerevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
             var zav = "0"
             if (zapavet) zav = "1"
             if (BibleGlobalList.natatkiBokuna.size > 0) {
@@ -390,7 +391,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                 }
             }
         }
-        if (mPerevod == 5) {
+        if (mPerevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
             var zav = "0"
             if (zapavet) zav = "1"
             if (BibleGlobalList.natatkiCarniauski.size > 0) {
@@ -409,7 +410,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         return rootView
     }
 
-    private fun setZakladki(position: Int, perevod: Int): SpannableStringBuilder {
+    private fun setZakladki(position: Int, perevod: String): SpannableStringBuilder {
         val ssb = SpannableStringBuilder()
         var zav = "0"
         if (zapavet) zav = "1"
@@ -417,32 +418,32 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         val lists: Array<String>
         val listAll: ArrayList<BibleZakladkiData>
         when (perevod) {
-            1 -> {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> {
                 if (BibleGlobalList.zakladkiSemuxa.size == 0) return ssb
                 listn = context.resources.getStringArray(R.array.semuxan)
                 lists = context.resources.getStringArray(R.array.semuxas)
                 listAll = BibleGlobalList.zakladkiSemuxa
             }
 
-            2 -> {
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> {
                 if (BibleGlobalList.zakladkiSinodal.size == 0) return ssb
                 listn = context.resources.getStringArray(R.array.sinoidaln)
                 lists = context.resources.getStringArray(R.array.sinoidals)
                 listAll = BibleGlobalList.zakladkiSinodal
             }
 
-            3 -> {
+            DialogVybranoeBibleList.PEREVODNADSAN -> {
                 return ssb
             }
 
-            4 -> {
+            DialogVybranoeBibleList.PEREVODBOKUNA -> {
                 if (BibleGlobalList.zakladkiBokuna.size == 0) return ssb
                 listn = context.resources.getStringArray(R.array.bokunan)
                 lists = context.resources.getStringArray(R.array.bokunas)
                 listAll = BibleGlobalList.zakladkiBokuna
             }
 
-            5 -> {
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
                 if (BibleGlobalList.zakladkiCarniauski.size == 0) return ssb
                 listn = context.resources.getStringArray(R.array.charniauskin)
                 lists = context.resources.getStringArray(R.array.charniauskis)
@@ -479,7 +480,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             if (knigaS != -1) {
                 zavet = "0"
                 knigaN = knigaS
-                if (perevod == 1 || perevod == 4 || perevod == 5) {
+                if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODBOKUNA || perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
                     when (knigaS) {
                         16 -> knigaN = 19
                         17 -> knigaN = 20
@@ -506,7 +507,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                         38 -> knigaN = 45
                     }
                 }
-                if (perevod == 5) {
+                if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
                     when (knigaS) {
                         39 -> knigaN = 17
                         40 -> knigaN = 18

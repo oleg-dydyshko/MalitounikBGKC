@@ -79,7 +79,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
-                    intent.putExtra("zavet", 3)
+                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()
@@ -97,7 +97,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                     val dialogBibleVybranoeError = DialogBibleVybranoeError()
                     dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
                 } else {
-                    DialogVybranoeBibleList.biblia = "3"
+                    DialogVybranoeBibleList.biblia = DialogVybranoeBibleList.PEREVODNADSAN
                     val dialogVybranoeList = DialogVybranoeBibleList()
                     dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                 }

@@ -50,7 +50,7 @@ class MenuBibleBokuna : BaseFragment() {
                     val dialogBibleVybranoeError = DialogBibleVybranoeError()
                     dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
                 } else {
-                    DialogVybranoeBibleList.biblia = "4"
+                    DialogVybranoeBibleList.biblia = DialogVybranoeBibleList.PEREVODBOKUNA
                     val dialogVybranoeList = DialogVybranoeBibleList()
                     dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                 }
@@ -137,7 +137,7 @@ class MenuBibleBokuna : BaseFragment() {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
-                    intent.putExtra("zavet", 4)
+                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()

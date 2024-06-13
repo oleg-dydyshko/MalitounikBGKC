@@ -206,12 +206,12 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 BibleGlobalList.mListGlava = position
-                men = DialogVybranoeBibleList.checkVybranoe(kniga, position, 2)
+                men = DialogVybranoeBibleList.checkVybranoe(kniga, position, DialogVybranoeBibleList.PEREVODSINOIDAL)
                 if (glava != position) fierstPosition = 0
                 invalidateOptionsMenu()
             }
         })
-        men = DialogVybranoeBibleList.checkVybranoe(kniga, glava, 2)
+        men = DialogVybranoeBibleList.checkVybranoe(kniga, glava, DialogVybranoeBibleList.PEREVODSINOIDAL)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             dialog = savedInstanceState.getBoolean("dialog")
@@ -347,11 +347,11 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_vybranoe) {
-            men = DialogVybranoeBibleList.setVybranoe(title, kniga, BibleGlobalList.mListGlava, 2)
+            men = DialogVybranoeBibleList.setVybranoe(title, kniga, BibleGlobalList.mListGlava, DialogVybranoeBibleList.PEREVODSINOIDAL)
             if (men) {
                 MainActivity.toastView(this, getString(R.string.addVybranoe))
-                if (!DialogVybranoeBibleList.checkVybranoe("2")) {
-                    MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "2", getString(R.string.bsinaidal)))
+                if (!DialogVybranoeBibleList.checkVybranoe(DialogVybranoeBibleList.PEREVODSINOIDAL)) {
+                    MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), DialogVybranoeBibleList.PEREVODSINOIDAL, getString(R.string.bsinaidal)))
                     val gson = Gson()
                     val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
                     val file = File("$filesDir/Vybranoe.json")

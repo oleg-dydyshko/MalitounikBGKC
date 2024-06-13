@@ -50,7 +50,7 @@ class MenuBibleSinoidal : Fragment() {
                     val dialogBibleVybranoeError = DialogBibleVybranoeError()
                     dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
                 } else {
-                    DialogVybranoeBibleList.biblia = "2"
+                    DialogVybranoeBibleList.biblia = DialogVybranoeBibleList.PEREVODSINOIDAL
                     val dialogVybranoeList = DialogVybranoeBibleList()
                     dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                 }
@@ -137,7 +137,7 @@ class MenuBibleSinoidal : Fragment() {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
-                    intent.putExtra("zavet", 2)
+                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()

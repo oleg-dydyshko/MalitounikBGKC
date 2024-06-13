@@ -50,7 +50,7 @@ class MenuBibleSemuxa : BaseFragment() {
                     val dialogBibleVybranoeError = DialogBibleVybranoeError()
                     dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
                 } else {
-                    DialogVybranoeBibleList.biblia = "1"
+                    DialogVybranoeBibleList.biblia = DialogVybranoeBibleList.PEREVODSEMUXI
                     val dialogVybranoeList = DialogVybranoeBibleList()
                     dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                 }
@@ -137,7 +137,7 @@ class MenuBibleSemuxa : BaseFragment() {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
-                    intent.putExtra("zavet", 1)
+                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()

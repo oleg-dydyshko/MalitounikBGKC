@@ -18,6 +18,7 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BaseFragment
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleZakladkiData
+import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.resources.databinding.ActivityBiblePageFragmentBinding
 import java.io.BufferedReader
@@ -640,7 +641,7 @@ class StaryZapavietCarniauskiFragment : BaseFragment(), OnItemLongClickListener,
             if (it.trim() != "") bible.add(it)
         }
         activity?.let { activity ->
-            adapter = BibleArrayAdapterParallel(activity, bible, knigaReal, page, false, 5)
+            adapter = BibleArrayAdapterParallel(activity, bible, knigaReal, page, false, DialogVybranoeBibleList.PEREVODCARNIAUSKI)
             binding.listView.divider = null
             binding.listView.adapter = adapter
             binding.listView.setSelection(pazicia)
@@ -856,7 +857,7 @@ class StaryZapavietCarniauskiFragment : BaseFragment(), OnItemLongClickListener,
                         45 -> knigaReal = 47
                     }
                     val knigaName = knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1)
-                    val zametka = DialogBibleNatatka.getInstance(perevod = 4, novyzavet = false, kniga = knigaReal, glava = BibleGlobalList.mListGlava, stix = BibleGlobalList.bibleCopyList[0], bibletext = knigaName)
+                    val zametka = DialogBibleNatatka.getInstance(perevod = DialogVybranoeBibleList.PEREVODCARNIAUSKI, novyzavet = false, kniga = knigaReal, glava = BibleGlobalList.mListGlava, stix = BibleGlobalList.bibleCopyList[0], bibletext = knigaName)
                     zametka.show(childFragmentManager, "bible_zametka")
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     binding.linearLayout4.visibility = View.GONE

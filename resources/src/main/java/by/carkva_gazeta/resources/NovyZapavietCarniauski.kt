@@ -348,7 +348,7 @@ class NovyZapavietCarniauski : BaseActivity(), DialogFontSizeListener, DialogBib
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_vybranoe) {
-            men = DialogVybranoeBibleList.setVybranoe(title, kniga, BibleGlobalList.mListGlava, true)
+            men = DialogVybranoeBibleList.setVybranoe(title, kniga, BibleGlobalList.mListGlava, 4,  true)
             if (men) {
                 MainActivity.toastView(this, getString(R.string.addVybranoe))
                 if (!DialogVybranoeBibleList.checkVybranoe("5")) {

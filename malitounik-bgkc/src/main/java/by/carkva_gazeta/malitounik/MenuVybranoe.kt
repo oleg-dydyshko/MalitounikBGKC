@@ -51,6 +51,8 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
             "1" -> edit.remove("bibleVybranoeSemuxa")
             "2" -> edit.remove("bibleVybranoeSinoidal")
             "3" -> edit.remove("bibleVybranoeNadsan")
+            "4" -> edit.remove("bibleVybranoeBokuna")
+            "5" -> edit.remove("bibleVybranoeCarniauski")
         }
         edit.apply()
         adapter.itemList.removeAt(position)
@@ -183,6 +185,76 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                 }
             }
         }
+        bibleVybranoe = k.getString("bibleVybranoeBokuna", "") ?: ""
+        if (bibleVybranoe != "") {
+            try {
+                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
+                if (arrayListVybranoe.isEmpty()) {
+                    vybranoe.forEachIndexed { index, vybranoeData ->
+                        if (vybranoeData.resurs == "4") {
+                            indexVybranoe = index
+                            remove = true
+                            return@forEachIndexed
+                        }
+                    }
+                } else {
+                    var isResurs = false
+                    vybranoe.forEach {
+                        if (it.resurs == "4") isResurs = true
+                    }
+                    if (!isResurs) {
+                        vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), "4", getString(R.string.title_biblia_bokun)))
+                    }
+                }
+            } catch (e: Throwable) {
+                val edit = k.edit()
+                edit.remove("bibleVybranoeBokuna")
+                edit.apply()
+            }
+        } else {
+            vybranoe.forEachIndexed { index, vybranoeData ->
+                if (vybranoeData.resurs == "4") {
+                    indexVybranoe = index
+                    remove = true
+                    return@forEachIndexed
+                }
+            }
+        }
+        bibleVybranoe = k.getString("bibleVybranoeCarniauski", "") ?: ""
+        if (bibleVybranoe != "") {
+            try {
+                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
+                if (arrayListVybranoe.isEmpty()) {
+                    vybranoe.forEachIndexed { index, vybranoeData ->
+                        if (vybranoeData.resurs == "5") {
+                            indexVybranoe = index
+                            remove = true
+                            return@forEachIndexed
+                        }
+                    }
+                } else {
+                    var isResurs = false
+                    vybranoe.forEach {
+                        if (it.resurs == "5") isResurs = true
+                    }
+                    if (!isResurs) {
+                        vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), "5", getString(R.string.title_biblia_charniauski)))
+                    }
+                }
+            } catch (e: Throwable) {
+                val edit = k.edit()
+                edit.remove("bibleVybranoeCarniauski")
+                edit.apply()
+            }
+        } else {
+            vybranoe.forEachIndexed { index, vybranoeData ->
+                if (vybranoeData.resurs == "5") {
+                    indexVybranoe = index
+                    remove = true
+                    return@forEachIndexed
+                }
+            }
+        }
         if (remove) {
             vybranoe.removeAt(indexVybranoe)
             remove = false
@@ -195,6 +267,8 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
             edit.remove("bibleVybranoeSemuxa")
             edit.remove("bibleVybranoeSinoidal")
             edit.remove("bibleVybranoeNadsan")
+            edit.remove("bibleVybranoeBokuna")
+            edit.remove("bibleVybranoeCarniauski")
             edit.apply()
             adapter.itemList.clear()
             File(activity.filesDir.toString() + "/Vybranoe.json").delete()
@@ -363,6 +437,20 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
 
                         "3" -> {
                             DialogVybranoeBibleList.biblia = "3"
+                            val dialogVybranoeList = DialogVybranoeBibleList()
+                            dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
+                            dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                        }
+
+                        "4" -> {
+                            DialogVybranoeBibleList.biblia = "4"
+                            val dialogVybranoeList = DialogVybranoeBibleList()
+                            dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
+                            dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                        }
+
+                        "5" -> {
+                            DialogVybranoeBibleList.biblia = "5"
                             val dialogVybranoeList = DialogVybranoeBibleList()
                             dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
                             dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")

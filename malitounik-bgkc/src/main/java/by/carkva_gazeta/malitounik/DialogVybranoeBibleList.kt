@@ -474,7 +474,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             return false
         }
 
-        fun setVybranoe(title: String, kniga: Int, glava: Int, novyZavet: Boolean = false, bibleName: Int = 1): Boolean {
+        fun setVybranoe(title: String, kniga: Int, glava: Int, perakvad: Int, novyZavet: Boolean = false): Boolean {
             val knigaglava = "${kniga + 1}${glava + 1}".toLong()
             var remove = true
             for (i in 0 until arrayListVybranoe.size) {
@@ -484,16 +484,18 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                     break
                 }
             }
-            if (remove) arrayListVybranoe.add(0, VybranoeBibliaData(knigaglava, "$title ${glava + 1}", kniga, glava + 1, novyZavet, bibleName))
+            if (remove) arrayListVybranoe.add(0, VybranoeBibliaData(knigaglava, "$title ${glava + 1}", kniga, glava + 1, novyZavet, perakvad))
             val gson = Gson()
             val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val prefEditors = k.edit()
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
             val gsonSave = gson.toJson(arrayListVybranoe, type)
-            when (bibleName) {
+            when (perakvad) {
                 1 -> prefEditors.putString("bibleVybranoeSemuxa", gsonSave)
                 2 -> prefEditors.putString("bibleVybranoeSinoidal", gsonSave)
                 3 -> prefEditors.putString("bibleVybranoeNadsan", gsonSave)
+                4 -> prefEditors.putString("bibleVybranoeBokuna", gsonSave)
+                5 -> prefEditors.putString("bibleVybranoeCarniauski", gsonSave)
             }
             prefEditors.apply()
             return remove

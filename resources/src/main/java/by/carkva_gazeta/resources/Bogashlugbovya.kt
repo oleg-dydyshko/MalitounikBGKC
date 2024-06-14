@@ -514,7 +514,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             vybranoePosition = intent.extras?.getInt("vybranaePos", -1) ?: -1
         }
         if (resurs == "1" || resurs == "2" || resurs == "3") {
-            DialogVybranoeBibleList.biblia = resurs
+            DialogVybranoeBibleList.perevod = resurs
             val text = SpannableString(title)
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
@@ -659,7 +659,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         val duration: Long = 1000
         ObjectAnimator.ofInt(binding.scrollView2, "scrollY", 0).setDuration(duration).start()
         if (resurs == "1" || resurs == "2" || resurs == "3") {
-            DialogVybranoeBibleList.biblia = resurs
+            DialogVybranoeBibleList.perevod = resurs
             val dialogVybranoeList = DialogVybranoeBibleList()
             dialogVybranoeList.setDialogVybranoeBibleListListener(this@Bogashlugbovya)
             dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")

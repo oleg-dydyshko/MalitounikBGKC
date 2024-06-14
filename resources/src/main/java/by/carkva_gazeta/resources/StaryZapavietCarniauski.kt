@@ -467,7 +467,7 @@ class StaryZapavietCarniauski : BaseActivity(), DialogFontSizeListener, DialogBi
         this.cytanneParalelnye = cytanneParalelnye
         this.cytanneSours = cytanneSours
         val pm = ParalelnyeMesta()
-        binding.conteiner.text = pm.paralel(this.cytanneParalelnye, true).trim()
+        binding.conteiner.text = pm.paralel(this.cytanneParalelnye, DialogVybranoeBibleList.PEREVODCARNIAUSKI).trim()
         binding.scroll.visibility = View.VISIBLE
         binding.pager.visibility = View.GONE
         binding.tabLayout.visibility = View.GONE

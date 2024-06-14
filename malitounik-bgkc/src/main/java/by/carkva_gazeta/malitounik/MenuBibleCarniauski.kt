@@ -50,7 +50,7 @@ class MenuBibleCarniauski : Fragment() {
                     val dialogBibleVybranoeError = DialogBibleVybranoeError()
                     dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
                 } else {
-                    DialogVybranoeBibleList.biblia = DialogVybranoeBibleList.PEREVODCARNIAUSKI
+                    DialogVybranoeBibleList.perevod = DialogVybranoeBibleList.PEREVODCARNIAUSKI
                     val dialogVybranoeList = DialogVybranoeBibleList()
                     dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                 }

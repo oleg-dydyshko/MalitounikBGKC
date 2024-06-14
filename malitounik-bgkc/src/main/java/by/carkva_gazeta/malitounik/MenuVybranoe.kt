@@ -289,35 +289,35 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                 if (activity.checkmoduleResources()) {
                     when (itemList[bindingAdapterPosition].resurs) {
                         "1" -> {
-                            DialogVybranoeBibleList.biblia = "1"
+                            DialogVybranoeBibleList.perevod = "1"
                             val dialogVybranoeList = DialogVybranoeBibleList()
                             dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
                             dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                         }
 
                         "2" -> {
-                            DialogVybranoeBibleList.biblia = "2"
+                            DialogVybranoeBibleList.perevod = "2"
                             val dialogVybranoeList = DialogVybranoeBibleList()
                             dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
                             dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                         }
 
                         "3" -> {
-                            DialogVybranoeBibleList.biblia = "3"
+                            DialogVybranoeBibleList.perevod = "3"
                             val dialogVybranoeList = DialogVybranoeBibleList()
                             dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
                             dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                         }
 
                         "4" -> {
-                            DialogVybranoeBibleList.biblia = "4"
+                            DialogVybranoeBibleList.perevod = "4"
                             val dialogVybranoeList = DialogVybranoeBibleList()
                             dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
                             dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                         }
 
                         "5" -> {
-                            DialogVybranoeBibleList.biblia = "5"
+                            DialogVybranoeBibleList.perevod = "5"
                             val dialogVybranoeList = DialogVybranoeBibleList()
                             dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
                             dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")

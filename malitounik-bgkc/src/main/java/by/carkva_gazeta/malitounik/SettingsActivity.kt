@@ -903,6 +903,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         binding.maranata.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
         binding.maranataRus.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
         binding.maranataBel.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.maranataBelBokuna.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
+        binding.maranataBelCarniauski.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
         binding.sinoidal.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
         binding.notificationFull.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
         binding.notificationOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
@@ -1009,13 +1011,32 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 notifi.show(supportFragmentManager, "help_notification")
             }
         }
-        val belarus = k.getBoolean("belarus", true)
-        if (belarus) {
-            binding.maranataBel.isChecked = true
-            binding.maranataRus.isChecked = false
-        } else {
-            binding.maranataRus.isChecked = true
-            binding.maranataBel.isChecked = false
+        val perevod = k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
+        when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> {
+                binding.maranataBel.isChecked = true
+                binding.maranataRus.isChecked = false
+                binding.maranataBelBokuna.isChecked = false
+                binding.maranataBelCarniauski.isChecked = false
+            }
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> {
+                binding.maranataBel.isChecked = false
+                binding.maranataRus.isChecked = true
+                binding.maranataBelBokuna.isChecked = false
+                binding.maranataBelCarniauski.isChecked = false
+            }
+            DialogVybranoeBibleList.PEREVODBOKUNA -> {
+                binding.maranataBel.isChecked = false
+                binding.maranataRus.isChecked = false
+                binding.maranataBelBokuna.isChecked = true
+                binding.maranataBelCarniauski.isChecked = false
+            }
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
+                binding.maranataBel.isChecked = false
+                binding.maranataRus.isChecked = false
+                binding.maranataBelBokuna.isChecked = false
+                binding.maranataBelCarniauski.isChecked = true
+            }
         }
         binding.notificationOnly.isChecked = notification == NOTIFICATION_SVIATY_ONLY
         binding.notificationFull.isChecked = notification == NOTIFICATION_SVIATY_FULL
@@ -1029,8 +1050,12 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.maranata.isChecked = true
         } else {
             binding.maranataBel.isClickable = false
+            binding.maranataBelBokuna.isClickable = false
+            binding.maranataBelCarniauski.isClickable = false
             binding.maranataRus.isClickable = false
             binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataBelBokuna.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataBelCarniauski.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
         }
@@ -1108,7 +1133,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("nedelia", 0)
             prefEditor.putInt("gosud", 0)
             prefEditor.putInt("pafesii", 0)
-            prefEditor.putBoolean("belarus", true)
             prefEditor.putInt("notification", NOTIFICATION_SVIATY_FULL)
             prefEditor.putInt("power", 1)
             prefEditor.putInt("vibra", 1)
@@ -1129,8 +1153,12 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("menuPiarlinyPage", 0)
             prefEditor.putInt("menuCitatyPage", 0)
             binding.maranataBel.isClickable = false
+            binding.maranataBelBokuna.isClickable = false
+            binding.maranataBelCarniauski.isClickable = false
             binding.maranataRus.isClickable = false
             binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataBelBokuna.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataBelCarniauski.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             prefEditor.putInt("trafic", 0)
@@ -1151,6 +1179,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.maranata.isChecked = false
             binding.maranataRus.isChecked = false
             binding.maranataBel.isChecked = true
+            binding.maranataBelBokuna.isChecked = false
+            binding.maranataBelCarniauski.isChecked = false
             binding.sinoidal.isChecked = false
             binding.notificationOnly.isChecked = false
             binding.notificationFull.isChecked = true
@@ -1169,18 +1199,16 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         binding.maranataGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
                 R.id.maranataBel -> {
-                    prefEditor.putBoolean("belarus", true)
-                    if (binding.maranata.isChecked) {
-                        val semuxaNoKnigi = DialogSemuxaNoKnigi.getInstance(true)
-                        semuxaNoKnigi.show(supportFragmentManager, "semuxa_no_knigi")
-                    }
+                    prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
                 }
-
                 R.id.maranataRus -> {
-                    prefEditor.putBoolean("belarus", false)
+                    prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
                 }
-
-                else -> {
+                R.id.maranataBelBokuna -> {
+                    prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
+                }
+                R.id.maranataBelCarniauski -> {
+                    prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
                 }
             }
             prefEditor.apply()
@@ -1250,10 +1278,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         binding.maranata.setOnCheckedChangeListener { _, isChecked: Boolean ->
             val check = k.getInt("maranata", 0)
             if (isChecked) {
-                if (k.getBoolean("belarus", true)) {
-                    val semuxaNoKnigi = DialogSemuxaNoKnigi.getInstance(true)
-                    semuxaNoKnigi.show(supportFragmentManager, "semuxa_no_knigi")
-                }
                 prefEditor.putInt("maranata", 1)
                 binding.maranataBel.isClickable = true
                 binding.maranataRus.isClickable = true

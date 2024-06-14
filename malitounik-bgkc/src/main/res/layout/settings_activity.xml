@@ -259,12 +259,12 @@
                 android:layout_height="wrap_content">
 
                 <RadioButton
-                    android:id="@+id/maranataRus"
+                    android:id="@+id/maranataBelBokuna"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="10sp"
                     android:paddingBottom="10sp"
-                    android:text="@string/bsinaidal"
+                    android:text="@string/title_biblia_bokun"
                     android:textSize="14sp" />
 
                 <RadioButton
@@ -275,6 +275,26 @@
                     android:paddingBottom="10sp"
                     android:text="@string/title_biblia"
                     android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/maranataBelCarniauski"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10sp"
+                    android:paddingBottom="10sp"
+                    android:text="@string/title_biblia_charniauski"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/maranataRus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10sp"
+                    android:paddingBottom="10sp"
+                    android:text="@string/bsinaidal"
+                    android:textSize="14sp" />
+
+
             </RadioGroup>
 
             <androidx.appcompat.widget.SwitchCompat

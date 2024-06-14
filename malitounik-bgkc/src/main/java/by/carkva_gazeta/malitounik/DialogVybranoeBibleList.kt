@@ -71,7 +71,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             val gson = Gson()
             val prefEditors = k.edit()
             if (arrayListVybranoe.isEmpty()) {
-                when (biblia) {
+                when (perevod) {
                     PEREVODSEMUXI -> prefEditors.remove("bibleVybranoeSemuxa")
                     PEREVODSINOIDAL -> prefEditors.remove("bibleVybranoeSinoidal")
                     PEREVODNADSAN -> prefEditors.remove("bibleVybranoeNadsan")
@@ -80,7 +80,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 }
                 var posDelite = -1
                 MenuVybranoe.vybranoe.forEachIndexed { index, it ->
-                    if (it.resurs == biblia) {
+                    if (it.resurs == perevod) {
                         posDelite = index
                         return@forEachIndexed
                     }
@@ -97,7 +97,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 dialog?.cancel()
             } else {
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
-                when (biblia) {
+                when (perevod) {
                     PEREVODSEMUXI -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe, type))
                     PEREVODSINOIDAL -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe, type))
                     PEREVODNADSAN -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe, type))
@@ -121,7 +121,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             val gson = Gson()
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
             var bibleVybranoe = ""
-            when (biblia) {
+            when (perevod) {
                 PEREVODSEMUXI -> bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
                 PEREVODSINOIDAL -> bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
                 PEREVODNADSAN -> bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
@@ -156,7 +156,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
 
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
                     val prefEditors = k.edit()
-                    when (biblia) {
+                    when (perevod) {
                         PEREVODSEMUXI -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe, type))
                         PEREVODSINOIDAL -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe, type))
                         PEREVODNADSAN -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe, type))
@@ -181,7 +181,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 if ((activity as? BaseActivity)?.checkmoduleResources() == true) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.MARANATA)
-                    intent.putExtra("cytanneMaranaty", biblia(biblia.toInt()))
+                    intent.putExtra("cytanneMaranaty", biblia(perevod))
                     intent.putExtra("prodoljyt", true)
                     intent.putExtra("vybranae", true)
                     startActivity(intent)
@@ -203,7 +203,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             fullTextTollbar()
         }
         binding.titleToolbar.text = resources.getText(R.string.str_short_label1)
-        when (biblia) {
+        when (perevod) {
             PEREVODSEMUXI -> binding.subtitleToolbar.text = getString(R.string.title_biblia)
             PEREVODSINOIDAL -> binding.subtitleToolbar.text = getString(R.string.bsinaidal)
             PEREVODNADSAN -> binding.subtitleToolbar.text = getString(R.string.title_psalter)
@@ -233,11 +233,11 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
         binding.subtitleToolbar.isSingleLine = true
     }
 
-    private fun biblia(perevod: Int): String {
+    private fun biblia(perevod: String): String {
         var result = ""
         val sb = StringBuilder()
         arrayListVybranoe.forEachIndexed { index, vybranoeBibliaData ->
-            if (perevod == 3) {
+            if (perevod == PEREVODNADSAN) {
                 result = "Пс"
             } else {
                 if (vybranoeBibliaData.novyZavet) {
@@ -272,7 +272,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                     }
                 } else {
                     var vybranoeBibliaKniga = vybranoeBibliaData.kniga
-                    if (perevod == 1 || perevod == 4 || perevod == 5) {
+                    if (perevod == PEREVODSEMUXI || perevod == PEREVODBOKUNA || perevod == PEREVODCARNIAUSKI) {
                         when (vybranoeBibliaData.kniga) {
                             16 -> vybranoeBibliaKniga = 19
                             17 -> vybranoeBibliaKniga = 20
@@ -299,7 +299,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                             38 -> vybranoeBibliaKniga = 45
                         }
                     }
-                    if (perevod == 5) {
+                    if (perevod == PEREVODCARNIAUSKI) {
                         when (vybranoeBibliaData.kniga) {
                             39 -> vybranoeBibliaKniga = 17
                             40 -> vybranoeBibliaKniga = 18
@@ -408,7 +408,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                     if (it.checkmoduleResources()) {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.MARANATA)
-                        intent.putExtra("cytanneMaranaty", biblia(biblia.toInt()))
+                        intent.putExtra("cytanneMaranaty", biblia(perevod))
                         intent.putExtra("vybranae", true)
                         intent.putExtra("title", mItemList[bindingAdapterPosition].title)
                         startActivity(intent)
@@ -438,7 +438,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
         const val PEREVODBOKUNA = "4"
         const val PEREVODCARNIAUSKI = "5"
         var arrayListVybranoe = ArrayList<VybranoeBibliaData>()
-        var biblia = PEREVODSEMUXI
+        var perevod = PEREVODSEMUXI
 
         fun checkVybranoe(kniga: Int, glava: Int, perevod: String): Boolean {
             val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)

@@ -21,9 +21,9 @@
         android:visible="false"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_semuxa"
+        android:id="@+id/action_perevod"
         android:orderInCategory="100"
-        android:title="@string/title_biblia"
+        android:title="@string/perevody"
         android:visible="false"
         app:showAsAction="never" />
     <item

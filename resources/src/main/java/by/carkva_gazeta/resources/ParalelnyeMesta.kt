@@ -440,7 +440,13 @@ class ParalelnyeMesta {
                             r2 = r2.trim()
                         }
                         if (noKnigaSemuxi) {
-                            val src = Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error).toSpannable()
+                            val title = when (perevod) {
+                                DialogVybranoeBibleList.PEREVODSEMUXI -> Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
+                                DialogVybranoeBibleList.PEREVODBOKUNA -> Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_bokun)
+                                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_charniauski)
+                                else -> Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
+                            }
+                            val src = Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error, title).toSpannable()
                             src.setSpan(StyleSpan(Typeface.ITALIC), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             stringBuilder.append(src).append("\n")
                         }

@@ -349,8 +349,8 @@ class StaryZapavietSinaidalList : BaseActivity() {
         }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.setText(R.string.bsinaidal)
-        binding.subTitleToolbar.setText(R.string.stsinaidal)
+        binding.subTitleToolbar.setText(R.string.bsinaidal2)
+        binding.titleToolbar.setText(R.string.stsinaidal)
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }

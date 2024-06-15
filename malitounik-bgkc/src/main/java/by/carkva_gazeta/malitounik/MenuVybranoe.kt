@@ -86,7 +86,7 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                     val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
                     if (arrayListVybranoe.isEmpty()) {
                         vybranoe.forEachIndexed { index, vybranoeData ->
-                            if (vybranoeData.resurs == "1") {
+                            if (vybranoeData.resurs == i.toString()) {
                                 indexVybranoe = index
                                 remove = true
                                 return@forEachIndexed
@@ -95,10 +95,18 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                     } else {
                         var isResurs = false
                         vybranoe.forEach {
-                            if (it.resurs == "1") isResurs = true
+                            if (it.resurs == i.toString()) isResurs = true
                         }
                         if (!isResurs) {
-                            vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), "1", getString(R.string.title_biblia)))
+                            val title = when(i) {
+                                1 -> getString(R.string.title_biblia)
+                                2 -> getString(R.string.bsinaidal)
+                                3 -> getString(R.string.title_psalter)
+                                4 -> getString(R.string.title_biblia_bokun)
+                                5 -> getString(R.string.title_biblia_charniauski)
+                                else -> getString(R.string.title_biblia)
+                            }
+                            vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), i.toString(), title))
                         }
                     }
                 } catch (e: Throwable) {

@@ -37,6 +37,8 @@ import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
+import by.carkva_gazeta.malitounik.DialogPerevodBiblii
+import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
 import by.carkva_gazeta.malitounik.MainActivity
@@ -54,7 +56,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.Calendar
 
-class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
+class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogPerevodBiblii.DialogPerevodBibliiListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -80,6 +82,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
     private var mun = 0
     private var day = 1
+    private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -297,6 +300,16 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         return true
     }
 
+    override fun setPerevod(perevod: String) {
+        val edit = k.edit()
+        edit.putString("perevodChytanne", perevod)
+        edit.apply()
+        if (this.perevod != perevod) {
+            this.perevod = perevod
+            setChtenia(null)
+        }
+    }
+
     private fun setChtenia(savedInstanceState: Bundle?) {
         try {
             var w = intent.extras?.getString("cytanne") ?: ""
@@ -427,7 +440,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                         var errorChytanne = false
                         when (kniga) {
                             0 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian1)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian1)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan1)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin1)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_0, spln, zaglavieName))
                                 } else {
@@ -436,7 +453,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             1 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian2)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian2)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan2)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin2)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_1, spln, zaglavieName))
                                 } else {
@@ -445,7 +466,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             2 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian3)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian3)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan3)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin3)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_2, spln, zaglavieName))
                                 } else {
@@ -454,7 +479,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             3 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian4)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian4)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan4)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin4)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_3, spln, zaglavieName))
                                 } else {
@@ -463,7 +492,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             4 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian5)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian5)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan5)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin5)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_4, spln, zaglavieName))
                                 } else {
@@ -472,7 +505,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             5 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian6)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian6)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan6)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin6)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_5, spln, zaglavieName))
                                 } else {
@@ -481,7 +518,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             6 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian7)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian7)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan7)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin7)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_6, spln, zaglavieName))
                                 } else {
@@ -490,7 +531,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             7 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian8)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian8)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan8)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin8)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_7, spln, zaglavieName))
                                 } else {
@@ -499,7 +544,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             8 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian9)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian9)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan9)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin9)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_8, spln, zaglavieName))
                                 } else {
@@ -508,7 +557,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             9 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian10)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian10)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan10)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin10)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_9, spln, zaglavieName))
                                 } else {
@@ -517,7 +570,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             10 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian11)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian11)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan11)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin11)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_10, spln, zaglavieName))
                                 } else {
@@ -526,7 +583,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             11 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian12)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian12)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan12)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin12)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_11, spln, zaglavieName))
                                 } else {
@@ -535,7 +596,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             12 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian13)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian13)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan13)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin13)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_12, spln, zaglavieName))
                                 } else {
@@ -544,7 +609,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             13 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian14)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian14)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan14)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin14)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_13, spln, zaglavieName))
                                 } else {
@@ -553,7 +622,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             14 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian15)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian15)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan15)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin15)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_14, spln, zaglavieName))
                                 } else {
@@ -562,7 +635,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             15 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian16)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian16)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan16)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin16)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_15, spln, zaglavieName))
                                 } else {
@@ -571,7 +648,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             16 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian17)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian17)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan17)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin17)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_16, spln, zaglavieName))
                                 } else {
@@ -580,7 +661,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             17 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian18)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian18)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan18)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin18)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_17, spln, zaglavieName))
                                 } else {
@@ -589,7 +674,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             18 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian19)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian19)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan19)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin19)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_18, spln, zaglavieName))
                                 } else {
@@ -598,7 +687,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             19 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian20)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian20)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan20)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin20)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_19, spln, zaglavieName))
                                 } else {
@@ -607,7 +700,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             20 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian21)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian21)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan21)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin21)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_20, spln, zaglavieName))
                                 } else {
@@ -616,7 +713,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             21 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian22)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian22)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan22)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin22)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_21, spln, zaglavieName))
                                 } else {
@@ -625,7 +726,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             22 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian23)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian23)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan23)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin23)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_22, spln, zaglavieName))
                                 } else {
@@ -634,7 +739,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             23 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian24)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian24)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan24)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin24)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_23, spln, zaglavieName))
                                 } else {
@@ -643,7 +752,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             24 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian25)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian25)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan25)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin25)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_24, spln, zaglavieName))
                                 } else {
@@ -652,7 +765,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             25 -> {
-                                inputStream = resources.openRawResource(R.raw.biblian26)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian26)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan26)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin26)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_25, spln, zaglavieName))
                                 } else {
@@ -661,7 +778,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             26 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias1)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias1)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas1)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis1)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_26, spln, zaglavieName))
                                 } else {
@@ -670,7 +791,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             27 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias20)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias20)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas20)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis20)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_27, spln, zaglavieName))
                                 } else {
@@ -679,7 +804,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             28 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias26)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias26)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas26)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis26)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_28, spln, zaglavieName))
                                 } else {
@@ -688,7 +817,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             29 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias2)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias2)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas2)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis2)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_29, spln, zaglavieName))
                                 } else {
@@ -697,7 +830,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             30 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias18)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias18)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas18)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis18)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_30, spln, zaglavieName))
                                 } else {
@@ -706,7 +843,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             31 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias38)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias38)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas38)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis38)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_31, spln, zaglavieName))
                                 } else {
@@ -715,7 +856,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             32 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias29)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias29)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas29)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis29)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_32, spln, zaglavieName))
                                 } else {
@@ -724,7 +869,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             33 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias36)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias36)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas36)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis36)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_33, spln, zaglavieName))
                                 } else {
@@ -733,7 +882,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             34 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias23)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias23)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas23)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis23)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_34, spln, zaglavieName))
                                 } else {
@@ -742,7 +895,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             35 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias24)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias24)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas24)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis24)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_35, spln, zaglavieName))
                                 } else {
@@ -751,7 +908,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             36 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias27)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias27)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas27)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis27)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_36, spln, zaglavieName))
                                 } else {
@@ -760,7 +921,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             37 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias4)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias4)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas4)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis4)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_37, spln, zaglavieName))
                                 } else {
@@ -769,7 +934,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             38 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias33)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias33)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas33)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis33)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_38, spln, zaglavieName))
                                 } else {
@@ -778,7 +947,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             39 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias5)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias5)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas5)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis5)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_39, spln, zaglavieName))
                                 } else {
@@ -787,7 +960,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             40 -> {
-                                inputStream = resources.openRawResource(R.raw.carniauski)
+                                inputStream = resources.openRawResource(R.raw.carniauskis42)
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_40, spln, zaglavieName))
                                 } else {
@@ -796,7 +969,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
 
                             41 -> {
-                                inputStream = resources.openRawResource(R.raw.biblias39)
+                                when (perevod) {
+                                    DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias39)
+                                    DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas39)
+                                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis39)
+                                }
                                 title = if (e == 0) {
                                     SpannableString(getString(by.carkva_gazeta.malitounik.R.string.chtinia_41, spln, zaglavieName))
                                 } else {
@@ -832,11 +1009,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             var desK1: Int
                             var desN: Int
                             spl = split2[zaglnum].trim()
-                            desN = spl.indexOf("$knigaN.")
+                            desN = spl.indexOf(knigaN)
                             if (knigaN == knigaK && zag3 == -1) {
                                 desK1 = desN
                             } else {
-                                desK1 = spl.indexOf("$knigaK.")
+                                desK1 = spl.indexOf(knigaK)
                                 if (desK1 == -1) {
                                     val splAll = spl.split("\n").size
                                     desK1 = spl.indexOf("$splAll.")
@@ -844,17 +1021,17 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                 if (zag3 != -1 || glav) {
                                     val spl1 = split2[zaglnum].trim()
                                     val des1 = spl1.length
-                                    desN = spl1.indexOf("$knigaN.")
+                                    desN = spl1.indexOf(knigaN)
                                     if (zaglnumEnd - zaglnum == 2) {
                                         val spl3 = split2[zaglnum + 2].trim()
                                         val spl2 = split2[zaglnum + 1].trim()
                                         val des2 = spl2.length
-                                        desK1 = spl3.indexOf("$knigaK.")
+                                        desK1 = spl3.indexOf(knigaK)
                                         desK1 += des1 + des2 + 2
                                         spl = spl1 + "\n" + spl2 + "\n" + spl3
                                     } else {
                                         val spl2 = split2[zaglnum + 1].trim()
-                                        desK1 = spl2.indexOf("$knigaK.")
+                                        desK1 = spl2.indexOf(knigaK)
                                         desK1 += des1 + 1
                                         spl = spl1 + "\n" + spl2
                                     }
@@ -867,7 +1044,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             }
                             val textBiblia = spl.substring(desN, desK).toSpannable()
                             if (polstixaA) {
-                                val t2 = textBiblia.indexOf("$knigaK.")
+                                val t2 = textBiblia.indexOf(knigaK)
                                 val t3 = textBiblia.indexOf(".", t2)
                                 var t1 = textBiblia.indexOf(":", t2)
                                 if (t1 == -1) t1 = textBiblia.indexOf(";", t3 + 1)
@@ -1132,6 +1309,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_utran).isChecked = k.getBoolean("utran", true)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_utran).isVisible = true
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_perevod).isVisible = true
     }
 
     override fun onPause() {
@@ -1163,6 +1341,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         val prefEditor = k.edit()
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {
+            val dialog = DialogPerevodBiblii.getInstance(false)
+            dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {

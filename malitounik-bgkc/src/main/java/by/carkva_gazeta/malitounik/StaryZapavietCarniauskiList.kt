@@ -325,8 +325,8 @@ class StaryZapavietCarniauskiList : BaseActivity() {
         }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.setText(R.string.title_biblia_charniauski)
-        binding.subTitleToolbar.setText(R.string.stary_zapaviet)
+        binding.subTitleToolbar.setText(R.string.title_biblia_charniauski2)
+        binding.titleToolbar.setText(R.string.stary_zapaviet)
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }

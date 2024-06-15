@@ -6,58 +6,104 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.databinding.DialogSpinnerDisplayBinding
-import by.carkva_gazeta.malitounik.databinding.SimpleListItemColorBinding
+import by.carkva_gazeta.malitounik.databinding.DialogPerevodBibliiBinding
 
 class DialogPerevodBiblii : DialogFragment() {
     private var dzenNoch = false
     private lateinit var alert: AlertDialog
-    private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
-    private var _binding: DialogSpinnerDisplayBinding? = null
+    private var _binding: DialogPerevodBibliiBinding? = null
     private val binding get() = _binding!!
+    private var mListener: DialogPerevodBibliiListener? = null
+    private var isMaranata = true
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    interface DialogPerevodBibliiListener {
+        fun setPerevod(perevod: String)
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        MainActivity.dialogVisable = false
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is Activity) {
+            mListener = try {
+                context as DialogPerevodBibliiListener
+            } catch (e: ClassCastException) {
+                throw ClassCastException(activity.toString() + " must implement DialogPerevodBibliiListener")
+            }
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogSpinnerDisplayBinding.inflate(layoutInflater)
+            MainActivity.dialogVisable = true
+            _binding = DialogPerevodBibliiBinding.inflate(layoutInflater)
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            val perevodList = ArrayList<PerevodBiblii>()
-            perevodList.add(PerevodBiblii(getString(R.string.title_biblia_bokun), DialogVybranoeBibleList.PEREVODBOKUNA))
-            perevodList.add(PerevodBiblii(getString(R.string.title_biblia), DialogVybranoeBibleList.PEREVODSEMUXI))
-            perevodList.add(PerevodBiblii(getString(R.string.title_biblia_charniauski), DialogVybranoeBibleList.PEREVODCARNIAUSKI))
-            perevodList.add(PerevodBiblii(getString(R.string.bsinaidal), DialogVybranoeBibleList.PEREVODSINOIDAL))
-            binding.title.text = resources.getString(R.string.perevod)
-            binding.content.adapter = PerevodAdapter(it, perevodList)
-            perevod = k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
-            val setPos = when (perevod) {
-                DialogVybranoeBibleList.PEREVODBOKUNA -> 0
-                DialogVybranoeBibleList.PEREVODSEMUXI -> 1
-                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> 2
-                DialogVybranoeBibleList.PEREVODSINOIDAL -> 3
-                else -> 1
+            isMaranata = arguments?.getBoolean("isMaranata", true) ?: true
+            val perevod = if (isMaranata) k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
+            else k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
+            if (!isMaranata) binding.sinoidal.visibility = View.GONE
+            when (perevod) {
+                DialogVybranoeBibleList.PEREVODSEMUXI -> {
+                    binding.semuxa.isChecked = true
+                    binding.sinoidal.isChecked = false
+                    binding.bokuna.isChecked = false
+                    binding.carniauski.isChecked = false
+                }
+                DialogVybranoeBibleList.PEREVODSINOIDAL -> {
+                    binding.semuxa.isChecked = false
+                    binding.sinoidal.isChecked = true
+                    binding.bokuna.isChecked = false
+                    binding.carniauski.isChecked = false
+                }
+                DialogVybranoeBibleList.PEREVODBOKUNA -> {
+                    binding.semuxa.isChecked = false
+                    binding.sinoidal.isChecked = false
+                    binding.bokuna.isChecked = true
+                    binding.carniauski.isChecked = false
+                }
+                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
+                    binding.semuxa.isChecked = false
+                    binding.sinoidal.isChecked = false
+                    binding.bokuna.isChecked = false
+                    binding.carniauski.isChecked = true
+                }
             }
-            binding.content.setSelection(setPos)
+            var newperevod = perevod
+            binding.perevodGrupBible.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
+                when (checkedId) {
+                    R.id.semuxa -> {
+                        newperevod = DialogVybranoeBibleList.PEREVODSEMUXI
+                    }
+                    R.id.sinoidal -> {
+                        newperevod = DialogVybranoeBibleList.PEREVODSINOIDAL
+                    }
+                    R.id.bokuna -> {
+                        newperevod = DialogVybranoeBibleList.PEREVODBOKUNA
+                    }
+                    R.id.carniauski -> {
+                        newperevod = DialogVybranoeBibleList.PEREVODCARNIAUSKI
+                    }
+                }
+            }
+            binding.title.text = resources.getString(R.string.perevod)
             builder.setView(binding.root)
-            builder.setPositiveButton(getString(R.string.ok)) { dialog: DialogInterface, _: Int ->
-                val pos = perevodList[binding.content.selectedItemPosition]
-                val edit = k.edit()
-                edit.putString("perevod", pos.perevod)
-                edit.apply()
-                dialog.cancel()
-                if (perevod != pos.perevod) it.recreate()
+            builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface, _: Int ->
+                mListener?.setPerevod(newperevod)
             }
             builder.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int ->
                 dialog.cancel()
@@ -67,37 +113,13 @@ class DialogPerevodBiblii : DialogFragment() {
         return alert
     }
 
-    private class PerevodAdapter(private val context: Activity, private val perevodList: ArrayList<PerevodBiblii>) : ArrayAdapter<PerevodBiblii>(context, R.layout.simple_list_item_color, R.id.label, perevodList) {
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolderColor
-            if (convertView == null) {
-                val binding = SimpleListItemColorBinding.inflate(context.layoutInflater, parent, false)
-                rootView = binding.root
-                viewHolder = ViewHolderColor(binding.label)
-                rootView.tag = viewHolder
-            } else {
-                rootView = convertView
-                viewHolder = rootView.tag as ViewHolderColor
-            }
-            viewHolder.text.text = perevodList[position].title
-            return rootView
-        }
-
-        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val view = super.getDropDownView(position, convertView, parent)
-            val textView = view as TextView
-            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            if (dzenNoch)
-                textView.setBackgroundResource(R.drawable.selector_dark)
-            else
-                textView.setBackgroundResource(R.drawable.selector_default)
-            textView.text = perevodList[position].title
-            return view
+    companion object {
+        fun getInstance(isMaranata: Boolean): DialogPerevodBiblii {
+            val dialogPerevodBiblii = DialogPerevodBiblii()
+            val bundle = Bundle()
+            bundle.putBoolean("isMaranata", isMaranata)
+            dialogPerevodBiblii.arguments = bundle
+            return dialogPerevodBiblii
         }
     }
-
-    private class ViewHolderColor(var text: TextView)
-
-    private data class PerevodBiblii(val title: String, val perevod: String)
 }

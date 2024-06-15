@@ -25,7 +25,7 @@ class DialogBibleVybranoeError : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val ad = AlertDialog.Builder(it, style)
-            binding.title.setText(R.string.error_up)
+            binding.title.setText(R.string.help_davedka)
             binding.content.setText(R.string.bible_vybranoe_error)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))

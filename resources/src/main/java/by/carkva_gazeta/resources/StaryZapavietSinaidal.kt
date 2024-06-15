@@ -241,7 +241,7 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
         binding.actionBack.setOnClickListener {
             onBack()
         }
-        binding.titleToolbar.text = savedInstanceState?.getString("title") ?: getText(R.string.stsinaidal)
+        binding.titleToolbar.text = savedInstanceState?.getString("title") ?: title
     }
 
     private fun setTollbarTheme() {
@@ -253,7 +253,7 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
         }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.subtitleToolbar.text = title
+        binding.subtitleToolbar.text = getString(R.string.bsinaidal2)
         if (dzenNoch) {
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
@@ -309,8 +309,7 @@ class StaryZapavietSinaidal : BaseActivity(), DialogFontSizeListener, DialogBibl
                 binding.pager.visibility = View.VISIBLE
                 binding.tabLayout.visibility = View.VISIBLE
                 binding.subtitleToolbar.visibility = View.VISIBLE
-                binding.titleToolbar.text = resources.getText(R.string.stsinaidal)
-                binding.subtitleToolbar.text = title
+                binding.titleToolbar.text = title
                 paralel = false
                 invalidateOptionsMenu()
             }

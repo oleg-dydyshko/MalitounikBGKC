@@ -110,7 +110,6 @@
                 android:paddingTop="10sp"
                 android:soundEffectsEnabled="false"
                 android:text="@string/settengs_font_size_app"
-                android:textSize="14sp"
                 android:textStyle="italic" />
 
             <Spinner
@@ -129,8 +128,7 @@
                 android:drawablePadding="10sp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:text="@string/fullscreen"
-                android:textSize="14sp" />
+                android:text="@string/fullscreen" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/checkBox8"

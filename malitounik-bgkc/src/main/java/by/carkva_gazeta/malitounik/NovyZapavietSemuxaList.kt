@@ -222,8 +222,8 @@ class NovyZapavietSemuxaList : BaseActivity() {
         }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.setText(R.string.title_biblia)
-        binding.subTitleToolbar.setText(R.string.novy_zapaviet)
+        binding.subTitleToolbar.setText(R.string.title_biblia2)
+        binding.titleToolbar.setText(R.string.novy_zapaviet)
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }

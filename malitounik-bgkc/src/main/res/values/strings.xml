@@ -18,6 +18,9 @@
     <string name="title_biblia">БІБЛІЯ (пераклад В. Сёмухі)</string>
     <string name="title_biblia_bokun">БІБЛІЯ (пераклад А. Бокуна)</string>
     <string name="title_biblia_charniauski">БІБЛІЯ (пераклад У. Чарняўскага 2017)</string>
+    <string name="title_biblia2">Пераклад В. Сёмухі</string>
+    <string name="title_biblia_bokun2">Пераклад А. Бокуна</string>
+    <string name="title_biblia_charniauski2">Пераклад У. Чарняўскага 2017</string>
     <string name="tools_item">Налады</string>
     <string name="tools_admin_item">Налады%1$s</string>
     <string name="search_call">Абраць сёньняшні дзень</string>
@@ -111,6 +114,7 @@
     <string name="rsinaidal">Глава</string>
     <string name="psinaidal">Псалтирь</string>
     <string name="bsinaidal">БІБЛІЯ (Расейскі Сінадальны пераклад)</string>
+    <string name="bsinaidal2">Расейскі Сінадальны пераклад</string>
     <string name="stsinaidal">Ветхий завет</string>
     <string name="novsinaidal">Новый завет</string>
     <string name="maranata">Штодзённае чытаньне Бібліі за год:</string>
@@ -274,8 +278,8 @@
     <string name="natatki_biblii2">нататку</string>
     <string name="stix_ru">/Стих</string>
     <string name="stix_by">/Верш</string>
-    <string name="semuxa_maran_ata_error">У перакладзе Бібліі на беларускую мову гэтая кніга адсутнічае\n</string>
-    <string name="semuxa_maran_ata_error_glava">У перакладзе Бібліі на беларускую мову гэты разьдзел адсутнічае\n</string>
+    <string name="semuxa_maran_ata_error">У перакладзе Бібліі %1$s на беларускую мову гэтая кніга адсутнічае\n</string>
+    <string name="semuxa_maran_ata_error_glava">У перакладзе Бібліі %1$s на беларускую мову гэты разьдзел адсутнічае\n</string>
     <string name="end_fabreary_be">Чытаецца 28.02 альбо 1.03</string>
     <string name="end_fabreary_ru">Читается 28.02 или 1.03</string>
     <string name="get_date">Выберыце дату</string>
@@ -1106,5 +1110,8 @@
     </string-array>
     <string name="perevod">ПЕРАКЛАД БІБЛІІ</string>
     <string name="perevody">Пераклады Бібліі</string>
+    <string name="biblia_semuxi">В. Сёмухі</string>
+    <string name="biblia_bokun">А. Бокуна</string>
+    <string name="biblia_charniauski">У. Чарняўскага</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

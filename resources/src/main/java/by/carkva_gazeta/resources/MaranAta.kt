@@ -57,6 +57,8 @@ import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.DialogPerevodBiblii
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuBibleBokuna
+import by.carkva_gazeta.malitounik.MenuBibleCarniauski
 import by.carkva_gazeta.malitounik.MenuBibleSemuxa
 import by.carkva_gazeta.malitounik.MenuBibleSinoidal
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -79,7 +81,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.Calendar
 
-class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
+class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogPerevodBiblii.DialogPerevodBibliiListener {
 
     private var fullscreenPage = false
     private var cytanne = ""
@@ -414,8 +416,13 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         binding.zakladka.setOnClickListener {
             if (BibleGlobalList.bibleCopyList.size > 0) {
                 var index = -1
-                val list = if (maranAta[BibleGlobalList.bibleCopyList[0]].perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) BibleGlobalList.zakladkiSinodal
-                else BibleGlobalList.zakladkiSemuxa
+                val list = when (maranAta[BibleGlobalList.bibleCopyList[0]].perevod) {
+                    DialogVybranoeBibleList.PEREVODSEMUXI -> BibleGlobalList.zakladkiSemuxa
+                    DialogVybranoeBibleList.PEREVODSINOIDAL -> BibleGlobalList.zakladkiSinodal
+                    DialogVybranoeBibleList.PEREVODBOKUNA -> BibleGlobalList.zakladkiBokuna
+                    DialogVybranoeBibleList.PEREVODCARNIAUSKI -> BibleGlobalList.zakladkiCarniauski
+                    else -> BibleGlobalList.zakladkiSemuxa
+                }
                 for (i in list.indices) {
                     if (list[i].data.contains(maranAta[BibleGlobalList.bibleCopyList[0]].bible.substring(0, maranAta[BibleGlobalList.bibleCopyList[0]].bible.length - 1))) {
                         index = i
@@ -720,9 +727,13 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 47 -> fullKniga = 45
             }
         }
+        if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
+            fullKniga = 0
+        }
         val list = when (perevod) {
             DialogVybranoeBibleList.PEREVODSEMUXI -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan))
             DialogVybranoeBibleList.PEREVODSINOIDAL -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln))
+            DialogVybranoeBibleList.PEREVODNADSAN -> arrayOf(getString(by.carkva_gazeta.malitounik.R.string.psalom2))
             DialogVybranoeBibleList.PEREVODBOKUNA -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunas).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunan))
             DialogVybranoeBibleList.PEREVODCARNIAUSKI -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskis).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskin))
             else -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan))
@@ -730,7 +741,18 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         return list[fullKniga]
     }
 
+    override fun setPerevod(perevod: String) {
+        val edit = k.edit()
+        edit.putString("perevod", perevod)
+        edit.apply()
+        if (this.perevod != perevod) {
+            this.perevod = perevod
+            setMaranata(null)
+        }
+    }
+
     private fun setMaranata(savedInstanceState: Bundle?) {
+        maranAta.clear()
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         val chten = cytanne.split(";")
         var saveName = ""
@@ -1043,7 +1065,13 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 var underline: Int
                 var color: Int
                 if (replace) {
-                    maranAta.add(MaranAtaData(perevod, false, -1, 0, 0, "", saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>", 0, 0, 0))
+                    val title = when (perevod) {
+                        DialogVybranoeBibleList.PEREVODSEMUXI -> getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
+                        DialogVybranoeBibleList.PEREVODBOKUNA -> getString(by.carkva_gazeta.malitounik.R.string.biblia_bokun)
+                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.biblia_charniauski)
+                        else -> getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
+                    }
+                    maranAta.add(MaranAtaData(perevod, false, -1, 0, 0, "", saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error, title) + "</em>", 0, 0, 0))
                 }
                 val builder = StringBuilder()
                 var line: String
@@ -1102,8 +1130,14 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             r1.append(split2[e].substring(vN, vK))
                         }
                     } else {
+                        val title = when (perevod) {
+                            DialogVybranoeBibleList.PEREVODSEMUXI -> getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
+                            DialogVybranoeBibleList.PEREVODBOKUNA -> getString(by.carkva_gazeta.malitounik.R.string.biblia_bokun)
+                            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.biblia_charniauski)
+                            else -> getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
+                        }
                         if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) {
-                            if (addGlava == e) maranAta.add(MaranAtaData(perevod, nomer > 50, -1, 0, 0, "", saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>", 0, 0, 0))
+                            if (addGlava == e) maranAta.add(MaranAtaData(perevod, nomer > 50, -1, 0, 0, "", saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava, title) + "</em>", 0, 0, 0))
                         }
                         val p = if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || replace) DialogVybranoeBibleList.PEREVODSINOIDAL
                         else perevod
@@ -1635,6 +1669,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         clearEmptyPosition()
         val listBible = ArrayList<ArrayList<Int>>()
+        val maranataSave = ArrayList<MaranAtaSave>()
         var kniga = -1
         maranAta.forEach { maranata ->
             if (maranata.kniga != -1) {
@@ -1647,37 +1682,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     setVydelenie.add(maranata.bold)
                     listBible.add(setVydelenie)
                     if (kniga != getNumarKnigi(maranata.kniga)) {
-                        when (maranata.perevod) {
-                            DialogVybranoeBibleList.PEREVODSEMUXI -> {
-                                if (maranata.novyZapavet) {
-                                    saveGsonFile(File("$filesDir/BibliaSemuxaNovyZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
-                                } else {
-                                    saveGsonFile(File("$filesDir/BibliaSemuxaStaryZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
-                                }
-                            }
-                            DialogVybranoeBibleList.PEREVODSINOIDAL -> {
-                                if (maranata.novyZapavet) {
-                                    saveGsonFile(File("$filesDir/BibliaSinodalNovyZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
-                                } else {
-                                    saveGsonFile(File("$filesDir/BibliaSinodalStaryZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
-                                }
-                            }
-                            DialogVybranoeBibleList.PEREVODBOKUNA -> {
-                                if (maranata.novyZapavet) {
-                                    saveGsonFile(File("$filesDir/BibliaBokunaNovyZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
-                                } else {
-                                    saveGsonFile(File("$filesDir/BibliaBokunaStaryZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
-                                }
-                            }
-                            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
-                                if (maranata.novyZapavet) {
-                                    saveGsonFile(File("$filesDir/BibliaCarniauskiNovyZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
-                                } else {
-                                    saveGsonFile(File("$filesDir/BibliaCarniauskiStaryZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
-                                }
-                            }
-                        }
-
+                        maranataSave.add(MaranAtaSave(maranata.perevod, maranata.novyZapavet, maranata.kniga))
                     }
                     kniga = getNumarKnigi(maranata.kniga)
                 } else {
@@ -1721,67 +1726,99 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     if (file.exists()) file.delete()
                 }
             }
-            var zakladki = BibleGlobalList.zakladkiSemuxa
-            val fileZakladki = when(perevod) {
+        }
+        maranataSave.forEach { maranata ->
+            when (maranata.perevod) {
                 DialogVybranoeBibleList.PEREVODSEMUXI -> {
-                    zakladki = BibleGlobalList.zakladkiSemuxa
-                    File("$filesDir/BibliaSemuxaZakladki.json")
+                    if (maranata.novyZapavet) {
+                        saveGsonFile(File("$filesDir/BibliaSemuxaNovyZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                    } else {
+                        saveGsonFile(File("$filesDir/BibliaSemuxaStaryZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                    }
                 }
                 DialogVybranoeBibleList.PEREVODSINOIDAL -> {
-                    zakladki = BibleGlobalList.zakladkiSinodal
-                    File("$filesDir/BibliaSinodalZakladki.json")
+                    if (maranata.novyZapavet) {
+                        saveGsonFile(File("$filesDir/BibliaSinodalNovyZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                    } else {
+                        saveGsonFile(File("$filesDir/BibliaSinodalStaryZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                    }
                 }
                 DialogVybranoeBibleList.PEREVODBOKUNA -> {
-                    zakladki = BibleGlobalList.zakladkiBokuna
-                    File("$filesDir/BibliaBokunaZakladki.json")
+                    if (maranata.novyZapavet) {
+                        saveGsonFile(File("$filesDir/BibliaBokunaNovyZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                    } else {
+                        saveGsonFile(File("$filesDir/BibliaBokunaStaryZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                    }
                 }
                 DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
-                    zakladki = BibleGlobalList.zakladkiCarniauski
-                    File("$filesDir/BibliaCarniauskiZakladki.json")
-                }
-                else -> File("$filesDir/BibliaSemuxaZakladki.json")
-            }
-            if (zakladki.size == 0) {
-                if (fileZakladki.exists()) {
-                    fileZakladki.delete()
-                }
-            } else {
-                fileZakladki.writer().use {
-                    val gson = Gson()
-                    val type2 = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleZakladkiData::class.java).type
-                    it.write(gson.toJson(zakladki, type2))
+                    if (maranata.novyZapavet) {
+                        saveGsonFile(File("$filesDir/BibliaCarniauskiNovyZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                    } else {
+                        saveGsonFile(File("$filesDir/BibliaCarniauskiStaryZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                    }
                 }
             }
-            var natatki = BibleGlobalList.natatkiSemuxa
-            val fileNatatki = when(perevod) {
-                DialogVybranoeBibleList.PEREVODSEMUXI -> {
-                    natatki = BibleGlobalList.natatkiSemuxa
-                    File("$filesDir/BibliaSemuxaNatatki.json")
-                }
-                DialogVybranoeBibleList.PEREVODSINOIDAL -> {
-                    natatki = BibleGlobalList.natatkiSinodal
-                    File("$filesDir/BibliaSinodalNatatki.json")
-                }
-                DialogVybranoeBibleList.PEREVODBOKUNA -> {
-                    natatki = BibleGlobalList.natatkiBokuna
-                    File("$filesDir/BibliaBokunaNatatki.json")
-                }
-                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
-                    natatki = BibleGlobalList.natatkiCarniauski
-                    File("$filesDir/BibliaCarniauskiNatatki.json")
-                }
-                else -> File("$filesDir/BibliaSemuxaNatatki.json")
+        }
+        var zakladki = BibleGlobalList.zakladkiSemuxa
+        val fileZakladki = when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> {
+                zakladki = BibleGlobalList.zakladkiSemuxa
+                File("$filesDir/BibliaSemuxaZakladki.json")
             }
-            if (natatki.size == 0) {
-                if (fileNatatki.exists()) {
-                    fileNatatki.delete()
-                }
-            } else {
-                fileNatatki.writer().use {
-                    val gson = Gson()
-                    val type3 = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
-                    it.write(gson.toJson(natatki, type3))
-                }
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> {
+                zakladki = BibleGlobalList.zakladkiSinodal
+                File("$filesDir/BibliaSinodalZakladki.json")
+            }
+            DialogVybranoeBibleList.PEREVODBOKUNA -> {
+                zakladki = BibleGlobalList.zakladkiBokuna
+                File("$filesDir/BibliaBokunaZakladki.json")
+            }
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
+                zakladki = BibleGlobalList.zakladkiCarniauski
+                File("$filesDir/BibliaCarniauskiZakladki.json")
+            }
+            else -> File("$filesDir/BibliaSemuxaZakladki.json")
+        }
+        if (zakladki.size == 0) {
+            if (fileZakladki.exists()) {
+                fileZakladki.delete()
+            }
+        } else {
+            fileZakladki.writer().use {
+                val gson = Gson()
+                val type2 = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleZakladkiData::class.java).type
+                it.write(gson.toJson(zakladki, type2))
+            }
+        }
+        var natatki = BibleGlobalList.natatkiSemuxa
+        val fileNatatki = when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> {
+                natatki = BibleGlobalList.natatkiSemuxa
+                File("$filesDir/BibliaSemuxaNatatki.json")
+            }
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> {
+                natatki = BibleGlobalList.natatkiSinodal
+                File("$filesDir/BibliaSinodalNatatki.json")
+            }
+            DialogVybranoeBibleList.PEREVODBOKUNA -> {
+                natatki = BibleGlobalList.natatkiBokuna
+                File("$filesDir/BibliaBokunaNatatki.json")
+            }
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
+                natatki = BibleGlobalList.natatkiCarniauski
+                File("$filesDir/BibliaCarniauskiNatatki.json")
+            }
+            else -> File("$filesDir/BibliaSemuxaNatatki.json")
+        }
+        if (natatki.size == 0) {
+            if (fileNatatki.exists()) {
+                fileNatatki.delete()
+            }
+        } else {
+            fileNatatki.writer().use {
+                val gson = Gson()
+                val type3 = TypeToken.getParameterized(java.util.ArrayList::class.java, BibleNatatkiData::class.java).type
+                it.write(gson.toJson(natatki, type3))
             }
         }
         BibleGlobalList.mPedakVisable = false
@@ -1806,6 +1843,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         super.onResume()
         MenuBibleSemuxa.loadNatatkiZakladkiSemuxa(this)
         MenuBibleSinoidal.loadNatatkiZakladkiSinodal(this)
+        MenuBibleBokuna.loadNatatkiZakladkiBokuna(this)
+        MenuBibleCarniauski.loadNatatkiZakladkiCarniauski(this)
         if (fullscreenPage) {
             binding.constraint.post {
                 hideHelp()
@@ -1879,7 +1918,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {
-            val dialog = DialogPerevodBiblii()
+            val dialog = DialogPerevodBiblii.getInstance(true)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }
@@ -2451,7 +2490,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         }
                     }
                 }
-            } else {
+            }
+            if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
                 var zav = "0"
                 if (maranAta[position].novyZapavet) zav = "1"
                 if (BibleGlobalList.natatkiSemuxa.size > 0) {
@@ -2467,6 +2507,38 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     }
                 }
             }
+            if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
+                var zav = "0"
+                if (maranAta[position].novyZapavet) zav = "1"
+                if (BibleGlobalList.natatkiBokuna.size > 0) {
+                    for (i in BibleGlobalList.natatkiBokuna.indices) {
+                        if (BibleGlobalList.natatkiBokuna[i].list[0].contains(zav) && BibleGlobalList.natatkiBokuna[i].list[1].toInt() == getNumarKnigiBelarusPerevoda(getNumarKnigi(maranAta[position].kniga)) && BibleGlobalList.natatkiBokuna[i].list[2].toInt() == maranAta[position].glava && BibleGlobalList.natatkiBokuna[i].list[3].toInt() == maranAta[position].styx - 1) {
+                            val ssb1 = SpannableStringBuilder(viewHolder.text.text)
+                            val nachalo = ssb1.length
+                            ssb1.append("\nНататка:\n").append(BibleGlobalList.natatkiBokuna[i].list[5]).append("\n")
+                            ssb1.setSpan(StyleSpan(Typeface.ITALIC), nachalo, ssb1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            viewHolder.text.text = ssb1
+                            break
+                        }
+                    }
+                }
+            }
+            if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
+                var zav = "0"
+                if (maranAta[position].novyZapavet) zav = "1"
+                if (BibleGlobalList.natatkiCarniauski.size > 0) {
+                    for (i in BibleGlobalList.natatkiCarniauski.indices) {
+                        if (BibleGlobalList.natatkiCarniauski[i].list[0].contains(zav) && BibleGlobalList.natatkiCarniauski[i].list[1].toInt() == getNumarKnigiBelarusPerevoda(getNumarKnigi(maranAta[position].kniga)) && BibleGlobalList.natatkiCarniauski[i].list[2].toInt() == maranAta[position].glava && BibleGlobalList.natatkiCarniauski[i].list[3].toInt() == maranAta[position].styx - 1) {
+                            val ssb1 = SpannableStringBuilder(viewHolder.text.text)
+                            val nachalo = ssb1.length
+                            ssb1.append("\nНататка:\n").append(BibleGlobalList.natatkiCarniauski[i].list[5]).append("\n")
+                            ssb1.setSpan(StyleSpan(Typeface.ITALIC), nachalo, ssb1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            viewHolder.text.text = ssb1
+                            break
+                        }
+                    }
+                }
+            }
             return rootView
         }
 
@@ -2474,17 +2546,19 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             val ssb = SpannableStringBuilder()
             val listn: Array<String>
             val lists: Array<String>
-            when (perevod) {
+            val globalList = when (perevod) {
                 DialogVybranoeBibleList.PEREVODSEMUXI -> {
                     if (BibleGlobalList.zakladkiSemuxa.size == 0) return ssb
                     listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan)
                     lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas)
+                    BibleGlobalList.zakladkiSemuxa
                 }
 
                 DialogVybranoeBibleList.PEREVODSINOIDAL -> {
                     if (BibleGlobalList.zakladkiSinodal.size == 0) return ssb
                     listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln)
                     lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals)
+                    BibleGlobalList.zakladkiSinodal
                 }
 
                 DialogVybranoeBibleList.PEREVODNADSAN -> {
@@ -2495,28 +2569,31 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     if (BibleGlobalList.zakladkiBokuna.size == 0) return ssb
                     listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunan)
                     lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunas)
+                    BibleGlobalList.zakladkiBokuna
                 }
 
                 DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
                     if (BibleGlobalList.zakladkiCarniauski.size == 0) return ssb
                     listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskin)
                     lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskis)
+                    BibleGlobalList.zakladkiCarniauski
                 }
 
                 else -> {
                     if (BibleGlobalList.zakladkiSemuxa.size == 0) return ssb
                     listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan)
                     lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas)
+                    BibleGlobalList.zakladkiSemuxa
                 }
             }
-            for (i in BibleGlobalList.zakladkiSemuxa.indices) {
+            for (i in globalList.indices) {
                 var knigaN = -1
                 var knigaS = -1
                 var t1: Int
                 var t2: Int
                 var t3: Int
                 var glava1: Int
-                val knigaName = BibleGlobalList.zakladkiSemuxa[i].data
+                val knigaName = globalList[i].data
                 for (e in lists.indices) {
                     if (knigaName.contains(lists[e])) knigaS = e
                 }
@@ -2615,4 +2692,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private class ViewHolder(var text: TextView)
 
     private data class MaranAtaData(val perevod: String, val novyZapavet: Boolean, val kniga: Int, val glava: Int, val styx: Int, val paralel: String, val title: String, val bible: String, var bold: Int, var underline: Int, var color: Int)
+
+    private data class MaranAtaSave(val perevod: String, val novyZapavet: Boolean, val kniga: Int)
 }

@@ -241,7 +241,7 @@ class NovyZapavietCarniauski : BaseActivity(), DialogFontSizeListener, DialogBib
         binding.actionBack.setOnClickListener {
             onBack()
         }
-        binding.titleToolbar.text = savedInstanceState?.getString("title") ?: getString(R.string.novy_zapaviet)
+        binding.titleToolbar.text = savedInstanceState?.getString("title") ?: title
     }
 
     private fun setTollbarTheme() {
@@ -253,7 +253,7 @@ class NovyZapavietCarniauski : BaseActivity(), DialogFontSizeListener, DialogBib
         }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.subtitleToolbar.text = title
+        binding.subtitleToolbar.text = getString(R.string.title_biblia_charniauski2)
         if (dzenNoch) {
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
@@ -309,8 +309,7 @@ class NovyZapavietCarniauski : BaseActivity(), DialogFontSizeListener, DialogBib
                 binding.pager.visibility = View.VISIBLE
                 binding.tabLayout.visibility = View.VISIBLE
                 binding.subtitleToolbar.visibility = View.VISIBLE
-                binding.titleToolbar.text = getString(R.string.novy_zapaviet)
-                binding.subtitleToolbar.text = title
+                binding.titleToolbar.text = title
                 paralel = false
                 invalidateOptionsMenu()
             }

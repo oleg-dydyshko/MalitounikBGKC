@@ -25,7 +25,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.Settings
-import android.util.Log
 import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
@@ -1336,7 +1335,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             notifi.show(supportFragmentManager, "help_notification")
         }
         setTollbarTheme()
-        Log.d("Oleg", (binding.spinnerFontOpis.textSize / resources.displayMetrics.density).toString())
     }
 
     override fun dynamicModuleDownloading(totalBytesToDownload: Double, bytesDownloaded: Double) {

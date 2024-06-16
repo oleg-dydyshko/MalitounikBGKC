@@ -407,7 +407,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             prefEditors.apply()
         }
         var biblia = "semuxa"
-        perevod = intent.getStringExtra("zavet") ?: DialogVybranoeBibleList.PEREVODSEMUXI
+        perevod = intent.getStringExtra("perevod") ?: DialogVybranoeBibleList.PEREVODSEMUXI
         when (perevod) {
             DialogVybranoeBibleList.PEREVODSEMUXI -> {
                 title = getString(by.carkva_gazeta.malitounik.R.string.poshuk_semuxa)
@@ -979,7 +979,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
 
             DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
                 range = when (chin.getInt("biblia_seash", 0)) {
-                    1 -> 46..50
+                    1 -> 46..49
                     2 -> 46 until carniauskiBible.size
                     3 -> 0..4
                     4 -> 0..45

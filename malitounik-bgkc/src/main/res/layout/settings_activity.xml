@@ -57,8 +57,7 @@
                 android:paddingTop="10sp"
                 android:paddingRight="10sp"
                 android:text="@string/vygliad"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp" />
+                android:textColor="@color/colorPrimary" />
 
             <View
                 android:id="@+id/line1"
@@ -80,8 +79,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10sp"
                     android:paddingBottom="10sp"
-                    android:text="@string/day"
-                    android:textSize="14sp" />
+                    android:text="@string/day" />
 
                 <RadioButton
                     android:id="@+id/night"
@@ -89,8 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10sp"
                     android:paddingBottom="10sp"
-                    android:text="@string/widget_day_d_n"
-                    android:textSize="14sp" />
+                    android:text="@string/widget_day_d_n" />
 
                 <RadioButton
                     android:id="@+id/autoNight"
@@ -98,8 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10sp"
                     android:paddingBottom="10sp"
-                    android:text="@string/auto_widget_day_d_n"
-                    android:textSize="14sp" />
+                    android:text="@string/auto_widget_day_d_n" />
             </RadioGroup>
 
             <by.carkva_gazeta.malitounik.TextViewCustom
@@ -141,7 +137,6 @@
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
                 android:text="@string/admin_day_in_year"
-                android:textSize="14sp"
                 android:visibility="gone" />
 
             <by.carkva_gazeta.malitounik.TextViewCustom
@@ -152,8 +147,7 @@
                 android:paddingTop="10sp"
                 android:paddingRight="10sp"
                 android:text="@string/kiravanne"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp" />
+                android:textColor="@color/colorPrimary" />
 
             <View
                 android:id="@+id/line4"
@@ -174,8 +168,7 @@
                 android:drawablePadding="10sp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:text="@string/autoprag"
-                android:textSize="14sp" />
+                android:text="@string/autoprag" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/checkBox7"
@@ -187,8 +180,7 @@
                 android:drawablePadding="10sp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:text="@string/ekpan_on"
-                android:textSize="14sp" />
+                android:text="@string/ekpan_on" />
 
             <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/admin"
@@ -204,7 +196,6 @@
                 android:paddingRight="10sp"
                 android:text="@string/site_admin"
                 android:textColor="@color/colorPrimary_text"
-                android:textSize="14sp"
                 android:visibility="gone" />
 
             <by.carkva_gazeta.malitounik.TextViewCustom
@@ -215,8 +206,7 @@
                 android:paddingTop="10sp"
                 android:paddingRight="10sp"
                 android:text="@string/biblia"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp" />
+                android:textColor="@color/colorPrimary" />
 
             <View
                 android:id="@+id/line2"
@@ -226,6 +216,22 @@
                 android:layout_marginRight="10sp"
                 android:layout_marginBottom="10sp"
                 android:background="@color/colorPrimary" />
+
+            <by.carkva_gazeta.malitounik.TextViewCustom
+                android:id="@+id/cytanneOpis"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10sp"
+                android:paddingBottom="10sp"
+                android:soundEffectsEnabled="false"
+                android:text="@string/cytanne_opis"
+                android:textStyle="normal|italic" />
+
+            <Spinner
+                android:id="@+id/spinnerCytanne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/maranata"
@@ -237,8 +243,7 @@
                 android:drawablePadding="10sp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:text="@string/maranata"
-                android:textSize="14sp" />
+                android:text="@string/maranata" />
 
             <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/maranataOpis"
@@ -248,52 +253,13 @@
                 android:paddingBottom="10sp"
                 android:soundEffectsEnabled="false"
                 android:text="@string/maranata_opis"
-                android:textSize="14sp"
                 android:textStyle="normal|italic" />
 
-            <RadioGroup
-                android:id="@+id/maranataGrup"
+            <Spinner
+                android:id="@+id/spinnerMaranata"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <RadioButton
-                    android:id="@+id/maranataBelBokuna"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10sp"
-                    android:paddingBottom="10sp"
-                    android:text="@string/title_biblia_bokun"
-                    android:textSize="14sp" />
-
-                <RadioButton
-                    android:id="@+id/maranataBel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10sp"
-                    android:paddingBottom="10sp"
-                    android:text="@string/title_biblia"
-                    android:textSize="14sp" />
-
-                <RadioButton
-                    android:id="@+id/maranataBelCarniauski"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10sp"
-                    android:paddingBottom="10sp"
-                    android:text="@string/title_biblia_charniauski"
-                    android:textSize="14sp" />
-
-                <RadioButton
-                    android:id="@+id/maranataRus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="10sp"
-                    android:paddingBottom="10sp"
-                    android:text="@string/bsinaidal"
-                    android:textSize="14sp" />
-
-
-            </RadioGroup>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/sinoidal"
@@ -305,8 +271,7 @@
                 android:drawablePadding="10sp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:text="@string/bsinaidal"
-                android:textSize="14sp" />
+                android:text="@string/bsinaidal" />
 
             <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/notificationView"
@@ -316,8 +281,7 @@
                 android:paddingTop="10sp"
                 android:paddingRight="10sp"
                 android:text="@string/sviaty_notifi"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp" />
+                android:textColor="@color/colorPrimary" />
 
             <View
                 android:id="@+id/line3"
@@ -339,8 +303,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10sp"
                     android:paddingBottom="10sp"
-                    android:text="@string/apav_only"
-                    android:textSize="14sp" />
+                    android:text="@string/apav_only" />
 
                 <RadioButton
                     android:id="@+id/notificationFull"
@@ -348,8 +311,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10sp"
                     android:paddingBottom="10sp"
-                    android:text="@string/apav_all"
-                    android:textSize="14sp" />
+                    android:text="@string/apav_all" />
 
                 <RadioButton
                     android:id="@+id/notificationNon"
@@ -357,8 +319,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10sp"
                     android:paddingBottom="5sp"
-                    android:text="@string/apav_no"
-                    android:textSize="14sp" />
+                    android:text="@string/apav_no" />
             </RadioGroup>
 
             <Spinner
@@ -378,8 +339,7 @@
                 android:drawablePadding="10sp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:text="@string/vibration"
-                android:textSize="14sp" />
+                android:text="@string/vibration" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/guk"
@@ -392,8 +352,7 @@
                 android:drawablePadding="10sp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:text="@string/sound"
-                android:textSize="14sp" />
+                android:text="@string/sound" />
 
             <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/notifiSvizta"
@@ -405,7 +364,6 @@
                 android:paddingRight="10sp"
                 android:text="@string/settings_notifi_sviata"
                 android:textColor="@color/colorPrimary_text"
-                android:textSize="14sp"
                 android:visibility="gone" />
 
             <by.carkva_gazeta.malitounik.TextViewCustom
@@ -417,7 +375,6 @@
                 android:padding="10sp"
                 android:text="@string/no_notifikations"
                 android:textColor="@color/colorPrimary"
-                android:textSize="15sp"
                 android:visibility="gone" />
 
             <by.carkva_gazeta.malitounik.TextViewCustom
@@ -430,7 +387,6 @@
                 android:paddingRight="10sp"
                 android:text="@string/notifi_fix"
                 android:textColor="@color/colorPrimary_text"
-                android:textSize="14sp"
                 android:visibility="gone" />
 
             <by.carkva_gazeta.malitounik.TextViewCustom
@@ -441,8 +397,7 @@
                 android:paddingTop="10sp"
                 android:paddingRight="10sp"
                 android:text="@string/sviaty_under"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp" />
+                android:textColor="@color/colorPrimary" />
 
             <View
                 android:id="@+id/line"
@@ -463,8 +418,7 @@
                 android:drawablePadding="10sp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:text="@string/pkc"
-                android:textSize="14sp" />
+                android:text="@string/pkc" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/prav"
@@ -476,8 +430,7 @@
                 android:drawablePadding="10sp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:text="@string/sviaty_ulian"
-                android:textSize="14sp" />
+                android:text="@string/sviaty_ulian" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/dzair"
@@ -489,8 +442,7 @@
                 android:drawablePadding="10sp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:text="@string/sviaty_dziar"
-                android:textSize="14sp" />
+                android:text="@string/sviaty_dziar" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/praf"
@@ -502,8 +454,7 @@
                 android:drawablePadding="10sp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:text="@string/sviaty_pfes"
-                android:textSize="14sp" />
+                android:text="@string/sviaty_pfes" />
 
             <View
                 android:layout_width="match_parent"
@@ -519,8 +470,7 @@
                 android:paddingLeft="10sp"
                 android:paddingRight="10sp"
                 android:text="@string/settings_default"
-                android:textColor="@color/colorWhite"
-                android:textSize="14sp" />
+                android:textColor="@color/colorWhite" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

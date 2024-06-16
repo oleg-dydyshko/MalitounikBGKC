@@ -166,6 +166,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         sinodalBible.add(R.raw.sinaidaln25)
         sinodalBible.add(R.raw.sinaidaln26)
         sinodalBible.add(R.raw.sinaidaln27)
+
         semuxaBible.add(R.raw.biblias1)
         semuxaBible.add(R.raw.biblias2)
         semuxaBible.add(R.raw.biblias3)
@@ -392,7 +393,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         setContentView(binding.root)
         binding.filterGrup.visibility = View.VISIBLE
         binding.buttonx2.setOnClickListener {
-            binding.editText2.setText("")
+            binding.editText2.text?.clear()
         }
         DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
         if (dzenNoch) {

@@ -1113,5 +1113,6 @@
     <string name="biblia_semuxi">В. Сёмухі</string>
     <string name="biblia_bokun">А. Бокуна</string>
     <string name="biblia_charniauski">У. Чарняўскага</string>
+    <string name="cytanne_opis">Штодзённае чытаньне Бібліі за год, паводле плану Царквы, выкарыстоўваючы:</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

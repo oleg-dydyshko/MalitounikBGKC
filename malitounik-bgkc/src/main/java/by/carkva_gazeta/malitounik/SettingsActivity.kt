@@ -25,6 +25,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.Settings
+import android.util.Log
 import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
@@ -827,7 +828,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             override fun onNothingSelected(adapterView: AdapterView<*>?) {}
         }
         val fontList = resources.getStringArray(R.array.fonts)
-        binding.spinnerFont.adapter = FontAdapter(this, fontList)
+        binding.spinnerFont.adapter = StringAdapter(this, fontList)
         binding.spinnerFont.setSelection(k.getInt("fontInterface", 1))
         binding.spinnerFont.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -837,6 +838,60 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                     prefEditor.apply()
                     editFull = true
                     recreate()
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        val perevodCytanne = arrayOf(getString(R.string.title_biblia_bokun2), getString(R.string.title_biblia2), getString(R.string.title_biblia_charniauski2))
+        binding.spinnerCytanne.adapter = StringAdapter(this, perevodCytanne)
+        val perevodC = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI)
+        val select = when (perevodC) {
+            DialogVybranoeBibleList.PEREVODBOKUNA -> 0
+            DialogVybranoeBibleList.PEREVODSEMUXI -> 1
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> 2
+            else -> 1
+        }
+        binding.spinnerCytanne.setSelection(select)
+        binding.spinnerCytanne.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val newPerevod = when (position) {
+                    0 -> DialogVybranoeBibleList.PEREVODBOKUNA
+                    1 -> DialogVybranoeBibleList.PEREVODSEMUXI
+                    2 -> DialogVybranoeBibleList.PEREVODCARNIAUSKI
+                    else -> DialogVybranoeBibleList.PEREVODSEMUXI
+                }
+                if (perevodC != newPerevod) {
+                    prefEditor.putString("perevodChytanne", newPerevod)
+                    prefEditor.apply()
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        val perevodMaranata = perevodCytanne.plus(arrayOf(getString(R.string.bsinaidal2)))
+        binding.spinnerMaranata.adapter = StringAdapter(this, perevodMaranata)
+        val perevodM = k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+        val selectM = when (perevodM) {
+            DialogVybranoeBibleList.PEREVODBOKUNA -> 0
+            DialogVybranoeBibleList.PEREVODSEMUXI -> 1
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> 2
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> 3
+            else -> 1
+        }
+        binding.spinnerMaranata.setSelection(selectM)
+        binding.spinnerMaranata.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val newPerevod = when (position) {
+                    0 -> DialogVybranoeBibleList.PEREVODBOKUNA
+                    1 -> DialogVybranoeBibleList.PEREVODSEMUXI
+                    2 -> DialogVybranoeBibleList.PEREVODCARNIAUSKI
+                    3 -> DialogVybranoeBibleList.PEREVODSINOIDAL
+                    else -> DialogVybranoeBibleList.PEREVODSEMUXI
+                }
+                if (perevodM != newPerevod) {
+                    prefEditor.putString("perevod", newPerevod)
+                    prefEditor.apply()
                 }
             }
 
@@ -892,29 +947,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.line3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
         }
-        val font = setFontInterface(GET_FONT_SIZE_MIN, true)
-        binding.day.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.night.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.autoNight.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.checkBox9.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.checkBox6.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.checkBox7.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.checkBox8.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.maranata.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.maranataRus.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.maranataBel.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.maranataBelBokuna.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.maranataBelCarniauski.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.sinoidal.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.notificationFull.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.notificationOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.notificationNon.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.vibro.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.guk.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.pkc.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.dzair.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
-        binding.praf.setTextSize(TypedValue.COMPLEX_UNIT_SP, font)
         binding.textView16.setOnClickListener {
             if (SystemClock.elapsedRealtime() - adminClickTime < 2000) {
                 adminItemCount++
@@ -1011,33 +1043,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 notifi.show(supportFragmentManager, "help_notification")
             }
         }
-        val perevod = k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
-        when (perevod) {
-            DialogVybranoeBibleList.PEREVODSEMUXI -> {
-                binding.maranataBel.isChecked = true
-                binding.maranataRus.isChecked = false
-                binding.maranataBelBokuna.isChecked = false
-                binding.maranataBelCarniauski.isChecked = false
-            }
-            DialogVybranoeBibleList.PEREVODSINOIDAL -> {
-                binding.maranataBel.isChecked = false
-                binding.maranataRus.isChecked = true
-                binding.maranataBelBokuna.isChecked = false
-                binding.maranataBelCarniauski.isChecked = false
-            }
-            DialogVybranoeBibleList.PEREVODBOKUNA -> {
-                binding.maranataBel.isChecked = false
-                binding.maranataRus.isChecked = false
-                binding.maranataBelBokuna.isChecked = true
-                binding.maranataBelCarniauski.isChecked = false
-            }
-            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
-                binding.maranataBel.isChecked = false
-                binding.maranataRus.isChecked = false
-                binding.maranataBelBokuna.isChecked = false
-                binding.maranataBelCarniauski.isChecked = true
-            }
-        }
         binding.notificationOnly.isChecked = notification == NOTIFICATION_SVIATY_ONLY
         binding.notificationFull.isChecked = notification == NOTIFICATION_SVIATY_FULL
         binding.notificationNon.isChecked = notification == NOTIFICATION_SVIATY_NONE
@@ -1049,14 +1054,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         if (maranata == 1) {
             binding.maranata.isChecked = true
         } else {
-            binding.maranataBel.isClickable = false
-            binding.maranataBelBokuna.isClickable = false
-            binding.maranataBelCarniauski.isClickable = false
-            binding.maranataRus.isClickable = false
-            binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            binding.maranataBelBokuna.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            binding.maranataBelCarniauski.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
         }
         val autoDzenNochSettings = k.getBoolean("auto_dzen_noch", false)
@@ -1152,14 +1149,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("fullscreenCount", 0)
             prefEditor.putInt("menuPiarlinyPage", 0)
             prefEditor.putInt("menuCitatyPage", 0)
-            binding.maranataBel.isClickable = false
-            binding.maranataBelBokuna.isClickable = false
-            binding.maranataBelCarniauski.isClickable = false
-            binding.maranataRus.isClickable = false
-            binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            binding.maranataBelBokuna.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            binding.maranataBelCarniauski.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             prefEditor.putInt("trafic", 0)
             prefEditor.putBoolean("admin", false)
@@ -1177,10 +1166,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.checkBox8.isChecked = false
             binding.checkBox9.isChecked = false
             binding.maranata.isChecked = false
-            binding.maranataRus.isChecked = false
-            binding.maranataBel.isChecked = true
-            binding.maranataBelBokuna.isChecked = false
-            binding.maranataBelCarniauski.isChecked = false
             binding.sinoidal.isChecked = false
             binding.notificationOnly.isChecked = false
             binding.notificationFull.isChecked = true
@@ -1195,23 +1180,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             editFull = true
             if (getCheckDzenNoch() != dzenNoch) recreate()
             else setNotificationFull()
-        }
-        binding.maranataGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
-            when (checkedId) {
-                R.id.maranataBel -> {
-                    prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
-                }
-                R.id.maranataRus -> {
-                    prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
-                }
-                R.id.maranataBelBokuna -> {
-                    prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
-                }
-                R.id.maranataBelCarniauski -> {
-                    prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
-                }
-            }
-            prefEditor.apply()
         }
         binding.notificationGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
@@ -1279,23 +1247,13 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             val check = k.getInt("maranata", 0)
             if (isChecked) {
                 prefEditor.putInt("maranata", 1)
-                binding.maranataBel.isClickable = true
-                binding.maranataRus.isClickable = true
                 if (dzenNoch) {
-                    binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-                    binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                     binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                 } else {
-                    binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                 }
             } else {
                 prefEditor.putInt("maranata", 0)
-                binding.maranataBel.isClickable = false
-                binding.maranataRus.isClickable = false
-                binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-                binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
                 binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             }
             prefEditor.apply()
@@ -1378,6 +1336,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             notifi.show(supportFragmentManager, "help_notification")
         }
         setTollbarTheme()
+        Log.d("Oleg", (binding.spinnerFontOpis.textSize / resources.displayMetrics.density).toString())
     }
 
     override fun dynamicModuleDownloading(totalBytesToDownload: Double, bytesDownloaded: Double) {
@@ -1552,19 +1511,19 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         }
     }
 
-    private class FontAdapter(private val activity: Activity, private val dataFont: Array<String>) : ArrayAdapter<String>(activity, R.layout.simple_list_item_1, dataFont) {
+    private class StringAdapter(private val activity: Activity, private val data: Array<String>) : ArrayAdapter<String>(activity, R.layout.simple_list_item_1, data) {
         private val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
-            textView.text = dataFont[position]
+            textView.text = data[position]
             if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
             else textView.setBackgroundResource(R.drawable.selector_default)
             return v
         }
 
         override fun getCount(): Int {
-            return dataFont.size
+            return data.size
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -1579,7 +1538,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text.text = dataFont[position]
+            viewHolder.text.text = data[position]
             if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
             else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             return rootView

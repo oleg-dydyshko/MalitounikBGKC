@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -8,7 +8,7 @@
         <item name="android:windowBackground">@color/colorWhite</item>
         <item name="android:colorBackground">@color/colorWhite</item>
         <item name="android:textColorPrimary">@color/colorPrimary_text</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorPrimaryDark
+        <item name="android:navigationBarColor">@color/colorPrimaryDark
         </item>
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>
         <item name="android:textColor">@color/colorPrimary_text</item>
@@ -63,7 +63,7 @@
         <item name="android:windowBackground">@color/colorbackground_material_dark</item>
         <item name="android:colorBackground">@color/colorbackground_material_dark</item>
         <item name="android:textColorPrimary">@color/colorWhite</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">
+        <item name="android:navigationBarColor">
             @color/colorPrimary_text
         </item>
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>

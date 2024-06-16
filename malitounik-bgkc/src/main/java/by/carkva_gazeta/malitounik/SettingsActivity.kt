@@ -842,60 +842,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-        val perevodCytanne = arrayOf(getString(R.string.title_biblia_bokun2), getString(R.string.title_biblia2), getString(R.string.title_biblia_charniauski2))
-        binding.spinnerCytanne.adapter = StringAdapter(this, perevodCytanne)
-        val perevodC = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI)
-        val select = when (perevodC) {
-            DialogVybranoeBibleList.PEREVODBOKUNA -> 0
-            DialogVybranoeBibleList.PEREVODSEMUXI -> 1
-            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> 2
-            else -> 1
-        }
-        binding.spinnerCytanne.setSelection(select)
-        binding.spinnerCytanne.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val newPerevod = when (position) {
-                    0 -> DialogVybranoeBibleList.PEREVODBOKUNA
-                    1 -> DialogVybranoeBibleList.PEREVODSEMUXI
-                    2 -> DialogVybranoeBibleList.PEREVODCARNIAUSKI
-                    else -> DialogVybranoeBibleList.PEREVODSEMUXI
-                }
-                if (perevodC != newPerevod) {
-                    prefEditor.putString("perevodChytanne", newPerevod)
-                    prefEditor.apply()
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-        val perevodMaranata = perevodCytanne.plus(arrayOf(getString(R.string.bsinaidal2)))
-        binding.spinnerMaranata.adapter = StringAdapter(this, perevodMaranata)
-        val perevodM = k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
-        val selectM = when (perevodM) {
-            DialogVybranoeBibleList.PEREVODBOKUNA -> 0
-            DialogVybranoeBibleList.PEREVODSEMUXI -> 1
-            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> 2
-            DialogVybranoeBibleList.PEREVODSINOIDAL -> 3
-            else -> 1
-        }
-        binding.spinnerMaranata.setSelection(selectM)
-        binding.spinnerMaranata.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val newPerevod = when (position) {
-                    0 -> DialogVybranoeBibleList.PEREVODBOKUNA
-                    1 -> DialogVybranoeBibleList.PEREVODSEMUXI
-                    2 -> DialogVybranoeBibleList.PEREVODCARNIAUSKI
-                    3 -> DialogVybranoeBibleList.PEREVODSINOIDAL
-                    else -> DialogVybranoeBibleList.PEREVODSEMUXI
-                }
-                if (perevodM != newPerevod) {
-                    prefEditor.putString("perevod", newPerevod)
-                    prefEditor.apply()
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.vibro.visibility = View.GONE
             binding.guk.visibility = View.GONE
@@ -1052,8 +998,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         if (dzenNoch) binding.maranata.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         if (maranata == 1) {
             binding.maranata.isChecked = true
-        } else {
-            binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
         }
         val autoDzenNochSettings = k.getBoolean("auto_dzen_noch", false)
         if (isLightSensorExist()) {
@@ -1135,6 +1079,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("guk", 1)
             prefEditor.putInt("sinoidal", 0)
             prefEditor.putInt("maranata", 0)
+            prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
             prefEditor.putInt("soundnotification", 0)
             prefEditor.putInt("timeNotification", 8)
             prefEditor.putString("search_string", "")
@@ -1148,7 +1093,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("fullscreenCount", 0)
             prefEditor.putInt("menuPiarlinyPage", 0)
             prefEditor.putInt("menuCitatyPage", 0)
-            binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             prefEditor.putInt("trafic", 0)
             prefEditor.putBoolean("admin", false)
             prefEditor.putBoolean("adminDayInYear", false)
@@ -1246,14 +1190,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             val check = k.getInt("maranata", 0)
             if (isChecked) {
                 prefEditor.putInt("maranata", 1)
-                if (dzenNoch) {
-                    binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-                } else {
-                    binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                }
             } else {
                 prefEditor.putInt("maranata", 0)
-                binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             }
             prefEditor.apply()
             if (check != k.getInt("maranata", 0)) edit = true

@@ -107,6 +107,9 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         } else {
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne3, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
+            if (k.getBoolean("autoscrollAutostart", false)) {
+                autoStartScroll()
+            }
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
@@ -132,6 +135,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         }
         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
         bindingprogress.seekBarBrighess.progress = MainActivity.brightness
+        perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
         checkDay()
         setChtenia(savedInstanceState)
         bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -1095,10 +1099,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             binding.InteractiveScroll.scrollY = y
                         }
                     }
-                }
-            } else {
-                if (k.getBoolean("autoscrollAutostart", false)) {
-                    autoStartScroll()
                 }
             }
         } catch (t: Throwable) {

@@ -119,7 +119,7 @@
     <string name="novsinaidal">Новый завет</string>
     <string name="maranata">Штодзённае чытаньне Бібліі за год:</string>
     <string name="maranata2">Штодзённае чытаньне Бібліі за год, за %1$d %2$s</string>
-    <string name="maranata_opis">Прачытаньне Бібліі за год паводле плану супольнасьці «Μαραν αθα», выкарыстоўваючы:</string>
+    <string name="maranata_opis">Штодзённае чытаньне Бібліі за год, паводле плану супольнасьці «Μαραν αθα»</string>
     <string name="pasliaPrychscia">Малітвы пасьля сьвятога прычасьця</string>
     <string name="vybranoe">Дадаць у Выбранае</string>
     <string name="vybranoe_del">Выдаліць з Выбранага</string>
@@ -1113,6 +1113,5 @@
     <string name="biblia_semuxi">В. Сёмухі</string>
     <string name="biblia_bokun">А. Бокуна</string>
     <string name="biblia_charniauski">У. Чарняўскага</string>
-    <string name="cytanne_opis">Штодзённае чытаньне Бібліі за год, паводле плану Царквы, выкарыстоўваючы:</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

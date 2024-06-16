@@ -16,7 +16,7 @@
         android:textSize="14sp"
         android:textStyle="bold" />
 
-    <androidx.appcompat.widget.SwitchCompat
+    <by.carkva_gazeta.malitounik.SwitchCompatCustom
         android:id="@+id/checkBox20"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

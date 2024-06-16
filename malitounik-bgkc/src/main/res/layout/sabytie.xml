@@ -235,14 +235,14 @@
                 android:paddingRight="10sp"
                 android:visibility="gone">
 
-                <RadioButton
+                <by.carkva_gazeta.malitounik.RadioButtonCustom
                     android:id="@+id/radioButton1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/Sabytie_no_data_zakan" />
 
-                <RadioButton
+                <by.carkva_gazeta.malitounik.RadioButtonCustom
                     android:id="@+id/radioButton2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -275,7 +275,7 @@
                         android:textSize="15sp" />
                 </LinearLayout>
 
-                <RadioButton
+                <by.carkva_gazeta.malitounik.RadioButtonCustom
                     android:id="@+id/radioButton3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

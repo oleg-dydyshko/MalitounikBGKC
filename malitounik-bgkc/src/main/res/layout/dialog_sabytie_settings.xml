@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <RadioButton
+        <by.carkva_gazeta.malitounik.RadioButtonCustom
             android:id="@+id/notificationNotification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
             android:paddingBottom="10sp"
             android:textSize="12sp" />
 
-        <RadioButton
+        <by.carkva_gazeta.malitounik.RadioButtonCustom
             android:id="@+id/notificationAlarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             android:paddingBottom="10sp"
             android:textSize="12sp" />
 
-        <RadioButton
+        <by.carkva_gazeta.malitounik.RadioButtonCustom
             android:id="@+id/notificationRingtone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             android:paddingBottom="5sp"
             android:textSize="12sp" />
 
-        <RadioButton
+        <by.carkva_gazeta.malitounik.RadioButtonCustom
             android:id="@+id/notificationPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
             app:srcCompat="@drawable/stop" />
     </LinearLayout>
 
-    <androidx.appcompat.widget.SwitchCompat
+    <by.carkva_gazeta.malitounik.SwitchCompatCustom
         android:id="@+id/guk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

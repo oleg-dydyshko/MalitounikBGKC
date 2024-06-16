@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10sp">
 
-        <RadioButton
+        <by.carkva_gazeta.malitounik.RadioButtonCustom
             android:id="@+id/bokuna"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:text="@string/title_biblia_bokun"
             android:textSize="14sp" />
 
-        <RadioButton
+        <by.carkva_gazeta.malitounik.RadioButtonCustom
             android:id="@+id/semuxa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             android:text="@string/title_biblia"
             android:textSize="14sp" />
 
-        <RadioButton
+        <by.carkva_gazeta.malitounik.RadioButtonCustom
             android:id="@+id/carniauski"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             android:text="@string/title_biblia_charniauski"
             android:textSize="14sp" />
 
-        <RadioButton
+        <by.carkva_gazeta.malitounik.RadioButtonCustom
             android:id="@+id/sinoidal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BaseFragment
+import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.resources.databinding.NadsanPravila5Binding
 
 class PsalterNadsana5 : BaseFragment(), View.OnClickListener {
@@ -101,7 +102,7 @@ class PsalterNadsana5 : BaseFragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         activity?.let {
-            val intent = Intent(it, NadsanContentActivity::class.java)
+            val intent = Intent(it, BibliaActivity::class.java)
             var glava = 1
             when (v?.id ?: 0) {
                 R.id.textView1 -> glava = 2
@@ -115,6 +116,8 @@ class PsalterNadsana5 : BaseFragment(), View.OnClickListener {
                 R.id.textView25 -> glava = 17
             }
             intent.putExtra("kafizma", glava)
+            intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
+            intent.putExtra("fullglav", 151)
             startActivity(intent)
         }
     }

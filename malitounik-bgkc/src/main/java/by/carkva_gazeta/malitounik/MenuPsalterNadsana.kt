@@ -193,8 +193,10 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
             if (glava != -1) {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
-                    intent.setClassName(activity, MainActivity.NADSANCONTENTACTIVITY)
+                    intent.setClassName(activity, MainActivity.BIBLIAACTIVITY)
                     intent.putExtra("kafizma", glava)
+                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
+                    intent.putExtra("fullglav", 151)
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()

@@ -24,72 +24,9 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.StaryZapavietSemuxa"
+            android:name="by.carkva_gazeta.resources.BibliaActivity"
             android:windowSoftInputMode="stateAlwaysHidden"
-            android:label="@string/title_activity_stary_zapaviet2"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.StaryZapavietBokuna"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:label="@string/title_activity_stary_zapaviet2"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.StaryZapavietCarniauski"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:label="@string/title_activity_stary_zapaviet2"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.NovyZapavietSemuxa"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:label="@string/novy_zapaviet"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.NovyZapavietBokuna"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:label="@string/novy_zapaviet"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.NovyZapavietCarniauski"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:label="@string/novy_zapaviet"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.StaryZapavietSinaidal"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:label="@string/stsinaidal"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.NovyZapavietSinaidal"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:label="@string/novsinaidal"
+            android:label="@string/perevody"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -152,14 +89,6 @@
         </activity>
         <activity
             android:name="by.carkva_gazeta.resources.PsalterNadsana"
-            android:label="@string/title_psalter"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.NadsanContentActivity"
             android:label="@string/title_psalter"
             android:theme="@style/AppTheme">
             <meta-data

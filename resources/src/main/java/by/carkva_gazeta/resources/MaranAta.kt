@@ -742,6 +742,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     }
 
     override fun setPerevod(perevod: String) {
+        saveVydelenieNatatkiZakladki()
         val edit = k.edit()
         edit.putString("perevod", perevod)
         edit.apply()
@@ -1667,6 +1668,16 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     override fun onPause() {
         super.onPause()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
+        saveVydelenieNatatkiZakladki()
+        maranAtaScrollPosition = binding.ListView.firstVisiblePosition
+        val prefEditors = k.edit()
+        if (vybranae) prefEditors.putInt(perevod + "BibleVybranoeScroll", maranAtaScrollPosition)
+        else prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
+        prefEditors.apply()
+        stopAutoStartScroll()
+    }
+
+    private fun saveVydelenieNatatkiZakladki() {
         clearEmptyPosition()
         val listBible = ArrayList<ArrayList<Int>>()
         val maranataSave = ArrayList<MaranAtaSave>()
@@ -1823,12 +1834,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
         BibleGlobalList.mPedakVisable = false
         binding.linearLayout4.visibility = View.GONE
-        maranAtaScrollPosition = binding.ListView.firstVisiblePosition
-        val prefEditors = k.edit()
-        if (vybranae) prefEditors.putInt(perevod + "BibleVybranoeScroll", maranAtaScrollPosition)
-        else prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
-        prefEditors.apply()
-        stopAutoStartScroll()
     }
 
     private fun saveGsonFile(file: File, list: ArrayList<ArrayList<Int>>) {

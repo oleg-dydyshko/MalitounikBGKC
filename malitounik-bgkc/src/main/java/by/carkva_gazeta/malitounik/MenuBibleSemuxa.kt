@@ -60,14 +60,18 @@ class MenuBibleSemuxa : BaseFragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                startActivity(Intent(activity, NovyZapavietSemuxaList::class.java))
+                val intent = Intent(activity, BibliaSemuxaList::class.java)
+                intent.putExtra("novyZapavet", true)
+                startActivity(intent)
             }
             binding.staryZavet.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                startActivity(Intent(activity, StaryZapavietSemuxaList::class.java))
+                val intent = Intent(activity, BibliaSemuxaList::class.java)
+                intent.putExtra("novyZapavet", false)
+                startActivity(intent)
             }
             binding.prodolzych.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -79,8 +83,8 @@ class MenuBibleSemuxa : BaseFragment() {
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
                     if (activity.checkmoduleResources()) {
-                        val intent = if (k.getBoolean("bible_time_semuxa_zavet", true)) Intent(activity, NovyZapavietSemuxaList::class.java)
-                        else Intent(activity, StaryZapavietSemuxaList::class.java)
+                        val intent = Intent(activity, BibliaSemuxaList::class.java)
+                        intent.putExtra("novyZapavet", k.getBoolean("bible_time_semuxa_zavet", true))
                         intent.putExtra("kniga", k.getInt("bible_time_semuxa_kniga", 0))
                         intent.putExtra("glava", k.getInt("bible_time_semuxa_glava", 0))
                         intent.putExtra("stix", k.getInt("bible_time_semuxa_stix", 0))

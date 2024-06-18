@@ -60,14 +60,18 @@ class MenuBibleBokuna : BaseFragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                startActivity(Intent(activity, NovyZapavietBokunaList::class.java))
+                val intent = Intent(activity, BibliaBokunaList::class.java)
+                intent.putExtra("novyZapavet", true)
+                startActivity(intent)
             }
             binding.staryZavet.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                startActivity(Intent(activity, StaryZapavietBokunaList::class.java))
+                val intent = Intent(activity, BibliaBokunaList::class.java)
+                intent.putExtra("novyZapavet", false)
+                startActivity(intent)
             }
             binding.prodolzych.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -79,8 +83,8 @@ class MenuBibleBokuna : BaseFragment() {
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
                     if (activity.checkmoduleResources()) {
-                        val intent = if (k.getBoolean("bible_time_bokuna_zavet", true)) Intent(activity, NovyZapavietBokunaList::class.java)
-                        else Intent(activity, StaryZapavietBokunaList::class.java)
+                        val intent = Intent(activity, BibliaBokunaList::class.java)
+                        intent.putExtra("novyZapavet", k.getBoolean("bible_time_bokuna_zavet", true))
                         intent.putExtra("kniga", k.getInt("bible_time_bokuna_kniga", 0))
                         intent.putExtra("glava", k.getInt("bible_time_bokuna_glava", 0))
                         intent.putExtra("stix", k.getInt("bible_time_bokuna_stix", 0))

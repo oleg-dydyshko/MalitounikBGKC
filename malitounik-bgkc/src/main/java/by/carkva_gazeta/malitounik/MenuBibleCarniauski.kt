@@ -60,14 +60,18 @@ class MenuBibleCarniauski : Fragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                startActivity(Intent(activity, NovyZapavietCarniauskiList::class.java))
+                val intent = Intent(activity, BibliaCarniauskiList::class.java)
+                intent.putExtra("novyZapavet", true)
+                startActivity(intent)
             }
             binding.staryZavet.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                startActivity(Intent(activity, StaryZapavietCarniauskiList::class.java))
+                val intent = Intent(activity, BibliaCarniauskiList::class.java)
+                intent.putExtra("novyZapavet", false)
+                startActivity(intent)
             }
             binding.prodolzych.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -79,8 +83,8 @@ class MenuBibleCarniauski : Fragment() {
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
                     if (activity.checkmoduleResources()) {
-                        val intent = if (k.getBoolean("bible_time_carniauski_zavet", true)) Intent(activity, NovyZapavietCarniauskiList::class.java)
-                        else Intent(activity, StaryZapavietCarniauskiList::class.java)
+                        val intent = Intent(activity, BibliaCarniauskiList::class.java)
+                        intent.putExtra("novyZapavet", k.getBoolean("bible_time_carniauski_zavet", true))
                         intent.putExtra("kniga", k.getInt("bible_time_carniauski_kniga", 0))
                         intent.putExtra("glava", k.getInt("bible_time_carniauski_glava", 0))
                         intent.putExtra("stix", k.getInt("bible_time_carniauski_stix", 0))

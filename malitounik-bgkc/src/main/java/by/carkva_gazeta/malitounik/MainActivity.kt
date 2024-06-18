@@ -1986,16 +1986,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val MALITVYPRYNAGODNYIA = "by.carkva_gazeta.resources.MalitvyPrynagodnyia"
         const val NADSANMALITVYIPESNILIST = "by.carkva_gazeta.resources.NadsanMalitvyIPesniList"
         const val PSALTERNADSANA = "by.carkva_gazeta.resources.PsalterNadsana"
-        const val NADSANCONTENTACTIVITY = "by.carkva_gazeta.resources.NadsanContentActivity"
-        const val NOVYZAPAVIETSEMUXA = "by.carkva_gazeta.resources.NovyZapavietSemuxa"
-        const val STARYZAPAVIETSEMUXA = "by.carkva_gazeta.resources.StaryZapavietSemuxa"
-        const val NOVYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.NovyZapavietSinaidal"
-        const val STARYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.StaryZapavietSinaidal"
         const val SEARCHBOGASHLUGBOVYA = "by.carkva_gazeta.resources.SearchBogashlugbovya"
-        const val NOVYZAPAVIETBOKUNA = "by.carkva_gazeta.resources.NovyZapavietBokuna"
-        const val STARYZAPAVIETBOKUNA = "by.carkva_gazeta.resources.StaryZapavietBokuna"
-        const val NOVYZAPAVIETCARNIAUSKI = "by.carkva_gazeta.resources.NovyZapavietCarniauski"
-        const val STARYZAPAVIETCARNIAUSKI = "by.carkva_gazeta.resources.StaryZapavietCarniauski"
+        const val BIBLIAACTIVITY = "by.carkva_gazeta.resources.BibliaActivity"
         const val LOGVIEW = "by.carkva_gazeta.resources.LogView"
         const val NIADAUNIA = 0
         const val GISTORYIACARKVY = 1

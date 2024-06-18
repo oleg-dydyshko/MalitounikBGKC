@@ -38,19 +38,15 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.BibliaBokunaList
+import by.carkva_gazeta.malitounik.BibliaCarniauskiList
+import by.carkva_gazeta.malitounik.BibliaSemuxaList
+import by.carkva_gazeta.malitounik.BibliaSinaidalList
 import by.carkva_gazeta.malitounik.DialogClearHishory
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.HistoryAdapter
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.NadsanContent
-import by.carkva_gazeta.malitounik.NovyZapavietBokunaList
-import by.carkva_gazeta.malitounik.NovyZapavietCarniauskiList
-import by.carkva_gazeta.malitounik.NovyZapavietSemuxaList
-import by.carkva_gazeta.malitounik.NovyZapavietSinaidalList
-import by.carkva_gazeta.malitounik.StaryZapavietBokunaList
-import by.carkva_gazeta.malitounik.StaryZapavietCarniauskiList
-import by.carkva_gazeta.malitounik.StaryZapavietSemuxaList
-import by.carkva_gazeta.malitounik.StaryZapavietSinaidalList
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
@@ -541,36 +537,38 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 prefEditors.apply()
                 startActivity(intent)
             } else {
-                var intent = Intent(this@SearchBiblia, StaryZapavietSemuxaList::class.java)
+                var intent = Intent(this@SearchBiblia, BibliaSemuxaList::class.java)
                 if (nazvaS != -1) {
                     if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
-                        intent = Intent(this@SearchBiblia, StaryZapavietSemuxaList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaSemuxaList::class.java)
                     }
                     if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) {
-                        intent = Intent(this@SearchBiblia, StaryZapavietSinaidalList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaSinaidalList::class.java)
                     }
                     if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
-                        intent = Intent(this@SearchBiblia, StaryZapavietBokunaList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaBokunaList::class.java)
                     }
                     if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                        intent = Intent(this@SearchBiblia, StaryZapavietCarniauskiList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaCarniauskiList::class.java)
                     }
                     intent.putExtra("kniga", nazvaS)
+                    intent.putExtra("novyZapavet", false)
                     prefEditors.putBoolean("novyzavet", false)
                 } else {
                     if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
-                        intent = Intent(this@SearchBiblia, NovyZapavietSemuxaList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaSemuxaList::class.java)
                     }
                     if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) {
-                        intent = Intent(this@SearchBiblia, NovyZapavietSinaidalList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaSinaidalList::class.java)
                     }
                     if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
-                        intent = Intent(this@SearchBiblia, NovyZapavietBokunaList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaBokunaList::class.java)
                     }
                     if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                        intent = Intent(this@SearchBiblia, NovyZapavietCarniauskiList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaCarniauskiList::class.java)
                     }
                     intent.putExtra("kniga", nazva)
+                    intent.putExtra("novyZapavet", true)
                     prefEditors.putBoolean("novyzavet", true)
                 }
                 intent.putExtra("glava", glava - 1)

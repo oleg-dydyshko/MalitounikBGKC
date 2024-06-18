@@ -60,14 +60,18 @@ class MenuBibleSinoidal : Fragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                startActivity(Intent(activity, NovyZapavietSinaidalList::class.java))
+                val intent = Intent(activity, BibliaSinaidalList::class.java)
+                intent.putExtra("novyZapavet", true)
+                startActivity(intent)
             }
             binding.staryZavet.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                startActivity(Intent(activity, StaryZapavietSinaidalList::class.java))
+                val intent = Intent(activity, BibliaSinaidalList::class.java)
+                intent.putExtra("novyZapavet", false)
+                startActivity(intent)
             }
             binding.prodolzych.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -79,8 +83,8 @@ class MenuBibleSinoidal : Fragment() {
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
                     if (activity.checkmoduleResources()) {
-                        val intent = if (k.getBoolean("bible_time_sinodal_zavet", true)) Intent(activity, NovyZapavietSinaidalList::class.java)
-                        else Intent(activity, StaryZapavietSinaidalList::class.java)
+                        val intent = Intent(activity, BibliaSinaidalList::class.java)
+                        intent.putExtra("novyZapavet", k.getBoolean("bible_time_sinodal_zavet", true))
                         intent.putExtra("kniga", k.getInt("bible_time_sinodal_kniga", 0))
                         intent.putExtra("glava", k.getInt("bible_time_sinodal_glava", 0))
                         intent.putExtra("stix", k.getInt("bible_time_sinodal_stix", 0))

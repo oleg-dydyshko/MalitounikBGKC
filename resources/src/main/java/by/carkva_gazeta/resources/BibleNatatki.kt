@@ -15,17 +15,13 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
+import by.carkva_gazeta.malitounik.BibliaBokunaList
+import by.carkva_gazeta.malitounik.BibliaCarniauskiList
+import by.carkva_gazeta.malitounik.BibliaSemuxaList
+import by.carkva_gazeta.malitounik.BibliaSinaidalList
 import by.carkva_gazeta.malitounik.DialogContextMenu
-import by.carkva_gazeta.malitounik.NovyZapavietBokunaList
-import by.carkva_gazeta.malitounik.NovyZapavietCarniauskiList
-import by.carkva_gazeta.malitounik.NovyZapavietSemuxaList
-import by.carkva_gazeta.malitounik.NovyZapavietSinaidalList
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.StaryZapavietBokunaList
-import by.carkva_gazeta.malitounik.StaryZapavietCarniauskiList
-import by.carkva_gazeta.malitounik.StaryZapavietSemuxaList
-import by.carkva_gazeta.malitounik.StaryZapavietSinaidalList
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.resources.DialogBibleNatatkaEdit.BibleNatatkaEditlistiner
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
@@ -403,25 +399,26 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 var kniga = -1
                 var knigaS = -1
                 if (data[bindingAdapterPosition].list[0].contains("1")) kniga = data[bindingAdapterPosition].list[1].toInt() else knigaS = data[bindingAdapterPosition].list[1].toInt()
-                var intent = Intent(this@BibleNatatki, NovyZapavietSemuxaList::class.java)
+                var intent = Intent(this@BibleNatatki, BibliaSemuxaList::class.java)
                 if (kniga != -1) {
                     if (semuxa == 1) {
-                        intent = Intent(this@BibleNatatki, NovyZapavietSemuxaList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaSemuxaList::class.java)
                     }
                     if (semuxa == 2) {
-                        intent = Intent(this@BibleNatatki, NovyZapavietSinaidalList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaSinaidalList::class.java)
                     }
                     if (semuxa == 3) {
-                        intent = Intent(this@BibleNatatki, NovyZapavietBokunaList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaBokunaList::class.java)
                     }
                     if (semuxa == 4) {
-                        intent = Intent(this@BibleNatatki, NovyZapavietCarniauskiList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaCarniauskiList::class.java)
                     }
                     intent.putExtra("kniga", kniga)
+                    intent.putExtra("novyZapavet", true)
                 }
                 if (knigaS != -1) {
                     if (semuxa == 1) {
-                        intent = Intent(this@BibleNatatki, StaryZapavietSemuxaList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaSemuxaList::class.java)
                         when (knigaS) {
                             19 -> knigaS = 16
                             20 -> knigaS = 17
@@ -449,10 +446,10 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                         }
                     }
                     if (semuxa == 2) {
-                        intent = Intent(this@BibleNatatki, StaryZapavietSinaidalList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaSinaidalList::class.java)
                     }
                     if (semuxa == 3) {
-                        intent = Intent(this@BibleNatatki, StaryZapavietBokunaList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaBokunaList::class.java)
                         when (knigaS) {
                             19 -> knigaS = 16
                             20 -> knigaS = 17
@@ -480,7 +477,7 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                         }
                     }
                     if (semuxa == 4) {
-                        intent = Intent(this@BibleNatatki, StaryZapavietCarniauskiList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaCarniauskiList::class.java)
                         when (knigaS) {
                             19 -> knigaS = 16
                             20 -> knigaS = 17
@@ -515,6 +512,7 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                         }
                     }
                     intent.putExtra("kniga", knigaS)
+                    intent.putExtra("novyZapavet", false)
                 }
                 intent.putExtra("glava", Integer.valueOf(data[bindingAdapterPosition].list[2]))
                 intent.putExtra("stix", Integer.valueOf(data[bindingAdapterPosition].list[3]))

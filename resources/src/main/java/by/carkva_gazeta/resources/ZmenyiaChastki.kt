@@ -170,7 +170,7 @@ internal class ZmenyiaChastki {
             var desK1: Int
             var desN: Int
             spl = split2[zaglnum].trim()
-            desN = spl.indexOf("$knigaN.")
+            desN = spl.indexOf(knigaN)
             if (e == 0) {
                 res.append("<strong>").append(data.keyAt(kniga)).append(zaglavieName).append("</strong><br>")
             } else {
@@ -179,7 +179,7 @@ internal class ZmenyiaChastki {
             if (knigaN == knigaK) {
                 desK1 = desN
             } else {
-                desK1 = spl.indexOf("$knigaK.")
+                desK1 = spl.indexOf(knigaK)
                 if (desK1 == -1) {
                     val splAll = spl.split("\n").size
                     desK1 = spl.indexOf("$splAll.")
@@ -188,8 +188,8 @@ internal class ZmenyiaChastki {
                     val spl1 = split2[zaglnum].trim()
                     val spl2 = split2[zaglnum + 1].trim()
                     val des1 = spl1.length
-                    desN = spl1.indexOf("$knigaN.")
-                    desK1 = spl2.indexOf("$knigaK.")
+                    desN = spl1.indexOf(knigaN)
+                    desK1 = spl2.indexOf(knigaK)
                     var desN1: Int = spl2.indexOf((knigaK.toInt() + 1).toString().plus("."), desK1)
                     if (desN1 == -1) {
                         desN1 = spl1.length
@@ -204,7 +204,7 @@ internal class ZmenyiaChastki {
             else res.append(spl.substring(desN, desK))
             result = res.toString()
             if (polstixaA) {
-                val t2 = result.indexOf("$knigaK.")
+                val t2 = result.indexOf(knigaK)
                 val t3 = result.indexOf(".", t2)
                 var t1 = result.indexOf(":", t2)
                 if (t1 == -1) t1 = result.indexOf(";", t3 + 1)

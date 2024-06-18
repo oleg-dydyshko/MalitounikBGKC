@@ -44,8 +44,10 @@ class NadsanContent : BaseActivity() {
             mLastClickTime = SystemClock.elapsedRealtime()
             if (checkmoduleResources()) {
                 val intent = Intent()
-                intent.setClassName(this, MainActivity.NADSANCONTENTACTIVITY)
+                intent.setClassName(this, MainActivity.BIBLIAACTIVITY)
                 intent.putExtra("glava", position)
+                intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
+                intent.putExtra("fullglav", arrayList.size)
                 startActivity(intent)
             } else {
                 installFullMalitounik()
@@ -54,9 +56,11 @@ class NadsanContent : BaseActivity() {
         setTollbarTheme()
         if (intent.extras?.getBoolean("prodolzyt", false) == true) {
             val intent1 = Intent()
-            intent1.setClassName(this, MainActivity.NADSANCONTENTACTIVITY)
+            intent1.setClassName(this, MainActivity.BIBLIAACTIVITY)
             intent1.putExtra("glava", intent.extras?.getInt("glava") ?: 0)
             intent1.putExtra("stix", intent.extras?.getInt("stix") ?: 0)
+            intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
+            intent1.putExtra("fullglav", arrayList.size)
             startActivity(intent1)
         }
     }

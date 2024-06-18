@@ -20,16 +20,12 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.BibleZakladkiData
-import by.carkva_gazeta.malitounik.NovyZapavietBokunaList
-import by.carkva_gazeta.malitounik.NovyZapavietCarniauskiList
-import by.carkva_gazeta.malitounik.NovyZapavietSemuxaList
-import by.carkva_gazeta.malitounik.NovyZapavietSinaidalList
+import by.carkva_gazeta.malitounik.BibliaBokunaList
+import by.carkva_gazeta.malitounik.BibliaCarniauskiList
+import by.carkva_gazeta.malitounik.BibliaSemuxaList
+import by.carkva_gazeta.malitounik.BibliaSinaidalList
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.StaryZapavietBokunaList
-import by.carkva_gazeta.malitounik.StaryZapavietCarniauskiList
-import by.carkva_gazeta.malitounik.StaryZapavietSemuxaList
-import by.carkva_gazeta.malitounik.StaryZapavietSinaidalList
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
 import by.carkva_gazeta.resources.DialogZakladkaDelite.ZakladkaDeliteListiner
@@ -447,36 +443,38 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                     glava = knigaName.substring(t1 + 9, t2).toInt()
                 }
                 val stix = knigaName.substring(t2 + 6, t3).toInt()
-                var intent = Intent(this@BibleZakladki, NovyZapavietSemuxaList::class.java)
+                var intent = Intent(this@BibleZakladki, BibliaSemuxaList::class.java)
                 if (kniga != -1) {
                     if (semuxa == 1) {
-                        intent = Intent(this@BibleZakladki, NovyZapavietSemuxaList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaSemuxaList::class.java)
                     }
                     if (semuxa == 2) {
-                        intent = Intent(this@BibleZakladki, NovyZapavietSinaidalList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaSinaidalList::class.java)
                     }
                     if (semuxa == 3) {
-                        intent = Intent(this@BibleZakladki, NovyZapavietBokunaList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaBokunaList::class.java)
                     }
                     if (semuxa == 4) {
-                        intent = Intent(this@BibleZakladki, NovyZapavietCarniauskiList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaCarniauskiList::class.java)
                     }
                     intent.putExtra("kniga", kniga)
+                    intent.putExtra("novyZapavet", true)
                 }
                 if (knigaS != -1) {
                     if (semuxa == 1) {
-                        intent = Intent(this@BibleZakladki, StaryZapavietSemuxaList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaSemuxaList::class.java)
                     }
                     if (semuxa == 2) {
-                        intent = Intent(this@BibleZakladki, StaryZapavietSinaidalList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaSinaidalList::class.java)
                     }
                     if (semuxa == 3) {
-                        intent = Intent(this@BibleZakladki, StaryZapavietBokunaList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaBokunaList::class.java)
                     }
                     if (semuxa == 4) {
-                        intent = Intent(this@BibleZakladki, StaryZapavietCarniauskiList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaCarniauskiList::class.java)
                     }
                     intent.putExtra("kniga", knigaS)
+                    intent.putExtra("novyZapavet", false)
                 }
                 intent.putExtra("glava", glava - 1)
                 intent.putExtra("stix", stix - 1)

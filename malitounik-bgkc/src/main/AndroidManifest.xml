@@ -239,28 +239,28 @@
             android:taskAffinity=""
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".BibliaSemuxaList"
+            android:name="by.carkva_gazeta.resources.BibliaSemuxaList"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".BibliaBokunaList"
+            android:name="by.carkva_gazeta.resources.BibliaBokunaList"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".BibliaCarniauskiList"
+            android:name="by.carkva_gazeta.resources.BibliaList"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".BibliaSinaidalList"
+            android:name="by.carkva_gazeta.resources.BibliaSinaidalList"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

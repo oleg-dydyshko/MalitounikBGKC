@@ -38,10 +38,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import by.carkva_gazeta.malitounik.BaseActivity
-import by.carkva_gazeta.malitounik.BibliaBokunaList
-import by.carkva_gazeta.malitounik.BibliaCarniauskiList
-import by.carkva_gazeta.malitounik.BibliaSemuxaList
-import by.carkva_gazeta.malitounik.BibliaSinaidalList
 import by.carkva_gazeta.malitounik.DialogClearHishory
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.HistoryAdapter
@@ -537,35 +533,43 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 prefEditors.apply()
                 startActivity(intent)
             } else {
-                var intent = Intent(this@SearchBiblia, BibliaSemuxaList::class.java)
+                var intent = Intent(this@SearchBiblia, BibliaList::class.java)
                 if (nazvaS != -1) {
                     if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
-                        intent = Intent(this@SearchBiblia, BibliaSemuxaList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
                     }
                     if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) {
-                        intent = Intent(this@SearchBiblia, BibliaSinaidalList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
                     }
                     if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
-                        intent = Intent(this@SearchBiblia, BibliaBokunaList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
                     }
                     if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                        intent = Intent(this@SearchBiblia, BibliaCarniauskiList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
                     }
                     intent.putExtra("kniga", nazvaS)
                     intent.putExtra("novyZapavet", false)
                     prefEditors.putBoolean("novyzavet", false)
                 } else {
                     if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
-                        intent = Intent(this@SearchBiblia, BibliaSemuxaList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
                     }
                     if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) {
-                        intent = Intent(this@SearchBiblia, BibliaSinaidalList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
                     }
                     if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
-                        intent = Intent(this@SearchBiblia, BibliaBokunaList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
                     }
                     if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                        intent = Intent(this@SearchBiblia, BibliaCarniauskiList::class.java)
+                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
                     }
                     intent.putExtra("kniga", nazva)
                     intent.putExtra("novyZapavet", true)

@@ -1987,6 +1987,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val NADSANMALITVYIPESNILIST = "by.carkva_gazeta.resources.NadsanMalitvyIPesniList"
         const val PSALTERNADSANA = "by.carkva_gazeta.resources.PsalterNadsana"
         const val SEARCHBOGASHLUGBOVYA = "by.carkva_gazeta.resources.SearchBogashlugbovya"
+        const val BIBLIALIST = "by.carkva_gazeta.resources.BibliaList"
         const val BIBLIAACTIVITY = "by.carkva_gazeta.resources.BibliaActivity"
         const val LOGVIEW = "by.carkva_gazeta.resources.LogView"
         const val NIADAUNIA = 0

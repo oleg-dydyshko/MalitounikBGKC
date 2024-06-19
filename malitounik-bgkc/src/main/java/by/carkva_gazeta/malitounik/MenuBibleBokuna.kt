@@ -60,18 +60,30 @@ class MenuBibleBokuna : BaseFragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                val intent = Intent(activity, BibliaBokunaList::class.java)
-                intent.putExtra("novyZapavet", true)
-                startActivity(intent)
+                if (activity.checkmoduleResources()) {
+                    val intent = Intent()
+                    intent.setClassName(activity, MainActivity.BIBLIALIST)
+                    intent.putExtra("novyZapavet", true)
+                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
+                    startActivity(intent)
+                } else {
+                    activity.installFullMalitounik()
+                }
             }
             binding.staryZavet.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                val intent = Intent(activity, BibliaBokunaList::class.java)
-                intent.putExtra("novyZapavet", false)
-                startActivity(intent)
+                if (activity.checkmoduleResources()) {
+                    val intent = Intent()
+                    intent.setClassName(activity, MainActivity.BIBLIALIST)
+                    intent.putExtra("novyZapavet", false)
+                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
+                    startActivity(intent)
+                } else {
+                    activity.installFullMalitounik()
+                }
             }
             binding.prodolzych.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -83,8 +95,10 @@ class MenuBibleBokuna : BaseFragment() {
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
                     if (activity.checkmoduleResources()) {
-                        val intent = Intent(activity, BibliaBokunaList::class.java)
+                        val intent = Intent()
+                        intent.setClassName(activity, MainActivity.BIBLIALIST)
                         intent.putExtra("novyZapavet", k.getBoolean("bible_time_bokuna_zavet", true))
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
                         intent.putExtra("kniga", k.getInt("bible_time_bokuna_kniga", 0))
                         intent.putExtra("glava", k.getInt("bible_time_bokuna_glava", 0))
                         intent.putExtra("stix", k.getInt("bible_time_bokuna_stix", 0))

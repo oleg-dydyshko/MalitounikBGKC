@@ -15,11 +15,8 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
-import by.carkva_gazeta.malitounik.BibliaBokunaList
-import by.carkva_gazeta.malitounik.BibliaCarniauskiList
-import by.carkva_gazeta.malitounik.BibliaSemuxaList
-import by.carkva_gazeta.malitounik.BibliaSinaidalList
 import by.carkva_gazeta.malitounik.DialogContextMenu
+import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
@@ -399,26 +396,31 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 var kniga = -1
                 var knigaS = -1
                 if (data[bindingAdapterPosition].list[0].contains("1")) kniga = data[bindingAdapterPosition].list[1].toInt() else knigaS = data[bindingAdapterPosition].list[1].toInt()
-                var intent = Intent(this@BibleNatatki, BibliaSemuxaList::class.java)
+                var intent = Intent(this@BibleNatatki, BibliaList::class.java)
                 if (kniga != -1) {
                     if (semuxa == 1) {
-                        intent = Intent(this@BibleNatatki, BibliaSemuxaList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
                     }
                     if (semuxa == 2) {
-                        intent = Intent(this@BibleNatatki, BibliaSinaidalList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
                     }
                     if (semuxa == 3) {
-                        intent = Intent(this@BibleNatatki, BibliaBokunaList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
                     }
                     if (semuxa == 4) {
-                        intent = Intent(this@BibleNatatki, BibliaCarniauskiList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
                     }
                     intent.putExtra("kniga", kniga)
                     intent.putExtra("novyZapavet", true)
                 }
                 if (knigaS != -1) {
                     if (semuxa == 1) {
-                        intent = Intent(this@BibleNatatki, BibliaSemuxaList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
                         when (knigaS) {
                             19 -> knigaS = 16
                             20 -> knigaS = 17
@@ -446,10 +448,12 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                         }
                     }
                     if (semuxa == 2) {
-                        intent = Intent(this@BibleNatatki, BibliaSinaidalList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
                     }
                     if (semuxa == 3) {
-                        intent = Intent(this@BibleNatatki, BibliaBokunaList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
                         when (knigaS) {
                             19 -> knigaS = 16
                             20 -> knigaS = 17
@@ -477,7 +481,8 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                         }
                     }
                     if (semuxa == 4) {
-                        intent = Intent(this@BibleNatatki, BibliaCarniauskiList::class.java)
+                        intent = Intent(this@BibleNatatki, BibliaList::class.java)
+                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
                         when (knigaS) {
                             19 -> knigaS = 16
                             20 -> knigaS = 17

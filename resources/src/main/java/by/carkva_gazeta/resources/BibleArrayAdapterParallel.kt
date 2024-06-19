@@ -11,6 +11,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.ImageSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.text.style.SuperscriptSpan
 import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.View
@@ -18,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.text.isDigitsOnly
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleZakladkiData
@@ -299,6 +301,28 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         zakladka.append(setZakladki(position, mPerevod))
         if (zakladka.isNotEmpty()) space = 2
         val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka)
+        val t1 = ssb.indexOf(" ")
+        if (t1 != -1) {
+            val subText = ssb.substring(0, t1)
+            if (subText.isDigitsOnly()) {
+                ssb.setSpan(SuperscriptSpan(), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                ssb.setSpan(RelativeSizeSpan(0.7f), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            } else {
+                val t2 = ssb.indexOf("\n")
+                if (t2 != -1) {
+                    val t3 = ssb.indexOf(" ", t2)
+                    val subText2 = ssb.substring(t2 + 1, t3)
+                    if (subText2.isDigitsOnly()) {
+                        ssb.setSpan(SuperscriptSpan(), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        ssb.setSpan(RelativeSizeSpan(0.7f), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                }
+            }
+        }
         if (!res.contains("+-+")) {
             ssb.append("\n").append(res)
             val start = ea.textView.text.length

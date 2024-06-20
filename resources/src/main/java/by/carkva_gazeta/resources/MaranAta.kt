@@ -692,7 +692,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     private fun getBibleNameFull(kniga: Int, perevod: String): String {
         var fullKniga = kniga - 1
-        if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODBOKUNA || perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
+        if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
             when (kniga - 1) {
                 19 -> fullKniga = 16
                 20 -> fullKniga = 17
@@ -717,10 +717,60 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 43 -> fullKniga = 36
                 44 -> fullKniga = 37
                 45 -> fullKniga = 38
+                50 -> fullKniga = 39
+                51 -> fullKniga = 40
+                52 -> fullKniga = 41
+                53 -> fullKniga = 42
+                54 -> fullKniga = 43
+                55 -> fullKniga = 44
+                56 -> fullKniga = 45
+                57 -> fullKniga = 46
+                58 -> fullKniga = 47
+                59 -> fullKniga = 48
+                60 -> fullKniga = 49
+                61 -> fullKniga = 50
+                62 -> fullKniga = 51
+                63 -> fullKniga = 52
+                64 -> fullKniga = 53
+                65 -> fullKniga = 54
+                66 -> fullKniga = 55
+                67 -> fullKniga = 56
+                68 -> fullKniga = 57
+                69 -> fullKniga = 58
+                70 -> fullKniga = 59
+                71 -> fullKniga = 60
+                72 -> fullKniga = 61
+                73 -> fullKniga = 62
+                74 -> fullKniga = 63
+                75 -> fullKniga = 64
+                76 -> fullKniga = 65
             }
         }
         if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
             when (kniga - 1) {
+                19 -> fullKniga = 16
+                20 -> fullKniga = 17
+                21 -> fullKniga = 18
+                22 -> fullKniga = 19
+                23 -> fullKniga = 20
+                24 -> fullKniga = 21
+                27 -> fullKniga = 22
+                28 -> fullKniga = 23
+                29 -> fullKniga = 24
+                32 -> fullKniga = 25
+                33 -> fullKniga = 26
+                34 -> fullKniga = 27
+                35 -> fullKniga = 28
+                36 -> fullKniga = 29
+                37 -> fullKniga = 30
+                38 -> fullKniga = 31
+                39 -> fullKniga = 32
+                40 -> fullKniga = 33
+                41 -> fullKniga = 34
+                42 -> fullKniga = 35
+                43 -> fullKniga = 36
+                44 -> fullKniga = 37
+                45 -> fullKniga = 38
                 17 -> fullKniga = 39
                 18 -> fullKniga = 40
                 25 -> fullKniga = 41
@@ -728,6 +778,32 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 31 -> fullKniga = 43
                 46 -> fullKniga = 44
                 47 -> fullKniga = 45
+                51 -> fullKniga = 47
+                52 -> fullKniga = 48
+                53 -> fullKniga = 49
+                54 -> fullKniga = 50
+                55 -> fullKniga = 51
+                56 -> fullKniga = 52
+                57 -> fullKniga = 53
+                58 -> fullKniga = 54
+                59 -> fullKniga = 55
+                60 -> fullKniga = 56
+                61 -> fullKniga = 57
+                62 -> fullKniga = 58
+                63 -> fullKniga = 59
+                64 -> fullKniga = 60
+                65 -> fullKniga = 61
+                66 -> fullKniga = 62
+                67 -> fullKniga = 63
+                68 -> fullKniga = 64
+                69 -> fullKniga = 65
+                70 -> fullKniga = 66
+                71 -> fullKniga = 67
+                72 -> fullKniga = 68
+                73 -> fullKniga = 69
+                74 -> fullKniga = 70
+                75 -> fullKniga = 71
+                76 -> fullKniga = 72
             }
         }
         if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
@@ -1165,14 +1241,14 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 }
                 if (stixn != -1) {
                     val t1 = fit.indexOf(".")
+                    var glava = fit.substring(s2 + 1, t1).toInt()
                     val p = if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || replace) DialogVybranoeBibleList.PEREVODSINOIDAL
                     else perevod
-                    saveName = getBibleNameFull(nomer, p) + " " + fit.substring(s2 + 1)
+                    saveName = getBibleNameFull(nomer, p) + " $glava"
                     maranAta.add(MaranAtaData(DialogVybranoeBibleList.PEREVODSEMUXI, nomer > 50, -1, 0, 0, "", saveName, "<br><strong>$saveName</strong><br>\n", 0, 0, 0))
                     val res1 = r1.toString().trim().split("\n")
                     var i3 = stixn
                     var ires1 = 1
-                    var glava = fit.substring(s2 + 1, t1).toInt()
                     for (i2 in res1.indices) {
                         val tr1 = res1[i2].indexOf(" ")
                         if (tr1 != -1) {

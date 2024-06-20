@@ -21,7 +21,9 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.text.style.SuperscriptSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -39,6 +41,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.text.isDigitsOnly
 import androidx.core.text.toSpannable
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -54,6 +57,7 @@ import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.EditTextCustom
 import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.MalitvyPasliaPrychascia
 import by.carkva_gazeta.malitounik.MenuCaliandar
 import by.carkva_gazeta.malitounik.MenuVybranoe
@@ -903,7 +907,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
             return@withContext builder.toString()
         }
-        val text = MainActivity.fromHtml(res).toSpannable()
+        val text = setIndexBiblii(MainActivity.fromHtml(res).toSpannable())
         if (liturgia) {
             val ch1 = runZmennyiaChastki(text, 0)
             val ch2 = runZmennyiaChastki(text, ch1)
@@ -1510,6 +1514,25 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         })
         if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_niz_back)
         binding.imageView5.setOnClickListener { findNext() }
+    }
+
+    private fun setIndexBiblii(ssb: Spannable): Spannable {
+        var index = 0
+        while (true) {
+            val t2 = ssb.indexOf("\n", index)
+            if (t2 == -1) break
+            val t1 = ssb.indexOf(" ", t2 + 1)
+            if (t1 == -1) break
+            index = t1 + 1
+            val subText = ssb.substring(t2 + 1, t1)
+            if (subText.isDigitsOnly()) {
+                ssb.setSpan(SuperscriptSpan(), t2 + 1, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                ssb.setSpan(RelativeSizeSpan(0.7f), t2 + 1, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(Malitounik.applicationContext(), by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(Malitounik.applicationContext(), by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
+        return ssb
     }
 
     private fun runZmennyiaChastki(text: Spannable, index: Int): Int {

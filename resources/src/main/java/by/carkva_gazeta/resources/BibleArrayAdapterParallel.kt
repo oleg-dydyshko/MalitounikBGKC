@@ -288,7 +288,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         }
         var stix = stixi[position]
         stix = stix.replace("\\n", "\n")
-        if ((!zapavet && kniga == 21 && mPerevod == DialogVybranoeBibleList.PEREVODSEMUXI) || mPerevod == DialogVybranoeBibleList.PEREVODNADSAN) {
+        if (mPerevod == DialogVybranoeBibleList.PEREVODSEMUXI || mPerevod == DialogVybranoeBibleList.PEREVODNADSAN) {
             ea.textView.text = MainActivity.fromHtml(stix)
         } else {
             ea.textView.text = stix

@@ -21,6 +21,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.ImageSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.text.style.SuperscriptSpan
 import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.Menu
@@ -42,6 +43,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
+import androidx.core.text.isDigitsOnly
+import androidx.core.text.toSpannable
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -2446,7 +2449,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             val zakladka = SpannableStringBuilder()
             zakladka.append(setZakladki(maranAta[position].novyZapavet, getNumarKnigiBelarusPerevoda(getNumarKnigi(maranAta[position].kniga)), maranAta[position].glava, maranAta[position].styx, maranAta[position].perevod))
-            val ssb = SpannableStringBuilder(MainActivity.fromHtml(maranAta[position].bible)).append(zakladka)
+            val biblia = setIndexBiblii(MainActivity.fromHtml(maranAta[position].bible).toSpannable())
+            val ssb = SpannableStringBuilder(biblia).append(zakladka)
             val res = getParallel(maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
             if (!res.contains("+-+")) {
                 if (k.getBoolean("paralel_maranata", true) && !vybranae) {
@@ -2545,6 +2549,32 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 }
             }
             return rootView
+        }
+
+        private fun setIndexBiblii(ssb: Spannable): Spannable {
+            val t1 = ssb.indexOf(" ")
+            if (t1 != -1) {
+                val subText = ssb.substring(0, t1)
+                if (subText.isDigitsOnly()) {
+                    ssb.setSpan(SuperscriptSpan(), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ssb.setSpan(RelativeSizeSpan(0.7f), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                } else {
+                    val t2 = ssb.indexOf("\n")
+                    if (t2 != -1) {
+                        val t3 = ssb.indexOf(" ", t2)
+                        val subText2 = ssb.substring(t2 + 1, t3)
+                        if (subText2.isDigitsOnly()) {
+                            ssb.setSpan(SuperscriptSpan(), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            ssb.setSpan(RelativeSizeSpan(0.7f), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
+                    }
+                }
+            }
+            return ssb
         }
 
         private fun setZakladki(zavet: Boolean, kniga: Int, glava: Int, styx: Int, perevod: String): SpannableStringBuilder {

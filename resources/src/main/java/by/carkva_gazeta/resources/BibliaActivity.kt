@@ -292,6 +292,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             onBack()
         }
         binding.titleToolbar.text = savedInstanceState?.getString("title") ?: title
+        setTollbarTheme()
     }
 
     private fun setTollbarTheme() {
@@ -504,7 +505,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 hide()
             }
         }
-        setTollbarTheme()
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

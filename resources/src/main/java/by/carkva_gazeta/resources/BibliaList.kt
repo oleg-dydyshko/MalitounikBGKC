@@ -192,6 +192,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadSinaidal,
             intent1.putExtra("fullglav", adapter.getChildrenCount(kniga))
             intent1.putExtra("novyZapavet", novyZapavet)
             intent1.putExtra("perevod", getNamePerevod())
+            intent.removeExtra("prodolzyt")
             startActivity(intent1)
         }
         setTollbarTheme()

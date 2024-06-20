@@ -12,8 +12,11 @@ import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
+import android.text.style.SuperscriptSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -27,6 +30,7 @@ import android.view.animation.AnimationUtils
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.text.isDigitsOnly
 import androidx.core.text.toSpannable
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -1064,7 +1068,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                 if (t1 == -1) t1 = textPol.indexOf(".", t3 + 1)
                                 if (t1 != -1) textBiblia.setSpan(StrikethroughSpan(), t3 + 1, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             }
-                            ssbTitle.append("\n").append(textBiblia).append("\n")
+                            ssbTitle.append("\n").append(setIndexBiblii(textBiblia)).append("\n")
                         } else {
                             ssbTitle.append("\n").append(error())
                         }
@@ -1104,6 +1108,39 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         } catch (t: Throwable) {
             binding.textView.text = error()
         }
+    }
+
+    private fun setIndexBiblii(ssb: Spannable): Spannable {
+        val list = ssb.split("\n")
+        val result = SpannableStringBuilder()
+        for (glava in list.indices) {
+            val stext = SpannableString(list[glava])
+            val t1 = list[glava].indexOf(" ")
+            if (t1 != -1) {
+                val subText = list[glava].substring(0, t1)
+                if (subText.isDigitsOnly()) {
+                    stext.setSpan(SuperscriptSpan(), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    stext.setSpan(RelativeSizeSpan(0.7f), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    if (dzenNoch) stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    else stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    result.append(stext).append("\n")
+                } else {
+                    val t2 = stext.indexOf("\n")
+                    if (t2 != -1) {
+                        val t3 = stext.indexOf(" ", t2)
+                        val subText2 = stext.substring(t2 + 1, t3)
+                        if (subText2.isDigitsOnly()) {
+                            stext.setSpan(SuperscriptSpan(), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            stext.setSpan(RelativeSizeSpan(0.7f), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (dzenNoch) stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            else stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            result.append(stext).append("\n")
+                        }
+                    }
+                }
+            }
+        }
+        return result
     }
 
     override fun linkMovementMethodCheckOnTouch(onTouch: Boolean) {

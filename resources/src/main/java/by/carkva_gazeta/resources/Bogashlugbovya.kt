@@ -1679,7 +1679,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         if (autoScrollJob?.isActive != true) {
             if (binding.find.visibility == View.VISIBLE) {
                 findRemoveSpan()
-                binding.textSearch.setText("")
+                binding.textSearch.text?.clear()
                 binding.find.visibility = View.GONE
                 val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
@@ -2016,7 +2016,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
             binding.find.visibility == View.VISIBLE -> {
                 binding.find.visibility = View.GONE
-                binding.textSearch.setText("")
+                binding.textSearch.text?.clear()
                 findRemoveSpan()
                 val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)

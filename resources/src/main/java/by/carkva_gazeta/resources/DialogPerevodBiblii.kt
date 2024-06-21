@@ -1,4 +1,4 @@
-package by.carkva_gazeta.malitounik
+package by.carkva_gazeta.resources
 
 import android.app.Activity
 import android.app.Dialog
@@ -9,6 +9,10 @@ import android.view.View
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.DialogPerevodBibliiBinding
 
 class DialogPerevodBiblii : DialogFragment() {
@@ -17,7 +21,7 @@ class DialogPerevodBiblii : DialogFragment() {
     private var _binding: DialogPerevodBibliiBinding? = null
     private val binding get() = _binding!!
     private var mListener: DialogPerevodBibliiListener? = null
-    private var isMaranata = true
+    private var isSinoidal = true
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -53,10 +57,9 @@ class DialogPerevodBiblii : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            isMaranata = arguments?.getBoolean("isMaranata", true) ?: true
-            val perevod = if (isMaranata) k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
-            else k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
-            if (!isMaranata) binding.sinoidal.visibility = View.GONE
+            isSinoidal = arguments?.getBoolean("isMaranata", true) ?: true
+            val perevod = arguments?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
+            if (!isSinoidal) binding.sinoidal.visibility = View.GONE
             when (perevod) {
                 DialogVybranoeBibleList.PEREVODSEMUXI -> {
                     binding.semuxa.isChecked = true
@@ -114,10 +117,11 @@ class DialogPerevodBiblii : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(isMaranata: Boolean): DialogPerevodBiblii {
+        fun getInstance(isSinoidal: Boolean, perevod: String): DialogPerevodBiblii {
             val dialogPerevodBiblii = DialogPerevodBiblii()
             val bundle = Bundle()
-            bundle.putBoolean("isMaranata", isMaranata)
+            bundle.putBoolean("isSinoidal", isSinoidal)
+            bundle.putString("perevod", perevod)
             dialogPerevodBiblii.arguments = bundle
             return dialogPerevodBiblii
         }

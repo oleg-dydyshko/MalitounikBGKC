@@ -103,7 +103,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                 }
             }
             if (id == R.id.psalter) {
-                startActivity(Intent(activity, NadsanContent::class.java))
+                startActivity(Intent(activity, BibleNadsanList::class.java))
             }
             if (id == R.id.prodolzych) {
                 val bibleTime = k.getInt("psalter_time_psalter_nadsan_glava", -1)
@@ -112,7 +112,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                     dialogBibleTimeError.show(parentFragmentManager, "dialogBibleTimeError")
                 } else {
                     if (activity.checkmoduleResources()) {
-                        val intent = Intent(activity, NadsanContent::class.java)
+                        val intent = Intent(activity, BibleNadsanList::class.java)
                         intent.putExtra("glava", k.getInt("psalter_time_psalter_nadsan_glava", 0))
                         intent.putExtra("stix", k.getInt("psalter_time_psalter_nadsan_stix", 0))
                         intent.putExtra("prodolzyt", true)

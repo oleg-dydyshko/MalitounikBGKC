@@ -13,7 +13,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.text.style.SuperscriptSpan
@@ -41,7 +40,6 @@ import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
-import by.carkva_gazeta.malitounik.DialogPerevodBiblii
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
@@ -1120,25 +1118,11 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                 val subText = list[glava].substring(0, t1)
                 if (subText.isDigitsOnly()) {
                     stext.setSpan(SuperscriptSpan(), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    stext.setSpan(RelativeSizeSpan(0.7f), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     if (dzenNoch) stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     else stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    result.append(stext).append("\n")
-                } else {
-                    val t2 = stext.indexOf("\n")
-                    if (t2 != -1) {
-                        val t3 = stext.indexOf(" ", t2)
-                        val subText2 = stext.substring(t2 + 1, t3)
-                        if (subText2.isDigitsOnly()) {
-                            stext.setSpan(SuperscriptSpan(), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            stext.setSpan(RelativeSizeSpan(0.7f), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            if (dzenNoch) stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            else stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            result.append(stext).append("\n")
-                        }
-                    }
                 }
             }
+            result.append(stext).append("\n")
         }
         return result
     }
@@ -1381,7 +1365,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {
-            val dialog = DialogPerevodBiblii.getInstance(false)
+            val dialog = DialogPerevodBiblii.getInstance(false, k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }

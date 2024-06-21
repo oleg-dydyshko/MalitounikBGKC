@@ -267,7 +267,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".NadsanContent"
+            android:name=".BibleNadsanList"
             android:label="@string/title_psalter"
             android:theme="@style/AppTheme">
             <meta-data

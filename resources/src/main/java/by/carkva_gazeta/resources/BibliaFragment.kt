@@ -40,6 +40,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
     }
 
     fun upDateListView() {
+        loadBibleList()
         adapter.notifyDataSetChanged()
     }
 
@@ -493,19 +494,9 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun loadBibleList() {
         (activity as? BibliaActivity)?.let { activity ->
-            BibleGlobalList.bibleCopyList.clear()
-            binding.listView.onItemLongClickListener = this
-            binding.listView.onItemClickListener = this
-            binding.listView.setOnScrollListener(object : AbsListView.OnScrollListener {
-                override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                    bibleListiner?.getListPosition(view.firstVisiblePosition)
-                }
-
-                override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {}
-            })
+            bible.clear()
             val inputStream = activity.getInputStream(novyZapavet, kniga)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
@@ -527,6 +518,23 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
             bibleline.forEach {
                 if (it.trim() != "") bible.add(it)
             }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as? BibliaActivity)?.let { activity ->
+            BibleGlobalList.bibleCopyList.clear()
+            binding.listView.onItemLongClickListener = this
+            binding.listView.onItemClickListener = this
+            binding.listView.setOnScrollListener(object : AbsListView.OnScrollListener {
+                override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+                    bibleListiner?.getListPosition(view.firstVisiblePosition)
+                }
+
+                override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {}
+            })
+            loadBibleList()
             adapter = BibleArrayAdapterParallel(activity, bible, activity.getKnigaReal(kniga), page, novyZapavet, activity.getNamePerevod())
             binding.listView.divider = null
             binding.listView.adapter = adapter

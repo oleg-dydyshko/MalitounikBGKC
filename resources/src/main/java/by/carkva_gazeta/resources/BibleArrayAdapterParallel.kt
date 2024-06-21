@@ -306,7 +306,6 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             val subText = ssb.substring(0, t1)
             if (subText.isDigitsOnly()) {
                 ssb.setSpan(SuperscriptSpan(), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                ssb.setSpan(RelativeSizeSpan(0.7f), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             } else {
@@ -316,7 +315,6 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                     val subText2 = ssb.substring(t2 + 1, t3)
                     if (subText2.isDigitsOnly()) {
                         ssb.setSpan(SuperscriptSpan(), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        ssb.setSpan(RelativeSizeSpan(0.7f), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }

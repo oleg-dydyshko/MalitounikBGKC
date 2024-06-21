@@ -2,6 +2,7 @@ package by.carkva_gazeta.resources
 
 import android.content.Context
 import android.text.SpannableString
+import androidx.core.text.isDigitsOnly
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
@@ -729,9 +730,9 @@ internal class ZmenyiaChastki {
                 spl = split2[zaglnum].trim()
                 desN = spl.indexOf(knigaN)
                 if (e == 0) {
-                    res.append("<strong>").append(title).append("</strong><br>")
+                    res.append("<strong>").append(title).append("</strong><br>\n")
                 } else {
-                    res.append("[&#8230;]<br>")
+                    res.append("[&#8230;]<br>\n")
                 }
                 if (knigaN == knigaK) {
                     desK1 = desN
@@ -780,7 +781,28 @@ internal class ZmenyiaChastki {
                 }
             }
         }
-        return "$result<br>"
+        return setIndexBiblii("$result<br>")
+    }
+
+    private fun setIndexBiblii(ssb: String): String {
+        val list = ssb.split("\n")
+        val result = StringBuilder()
+        for (glava in list.indices) {
+            val stext = list[glava]
+            val t1 = list[glava].indexOf(" ")
+            if (t1 != -1) {
+                var subText = list[glava].substring(0, t1)
+                if (subText.isDigitsOnly()) {
+                    val color = if (dzenNoch) "<font color=\"#ff6666\">"
+                    else "<font color=\"#d00505\">"
+                    subText = subText.replace(subText, "$color<sup>$subText</sup></font>")
+                    result.append(subText).append(stext.substring(t1)).append("\n")
+                } else {
+                    result.append(stext).append("\n")
+                }
+            }
+        }
+        return result.toString()
     }
 
     fun traparyIKandakiNiadzelnyia(chast: Int): String {

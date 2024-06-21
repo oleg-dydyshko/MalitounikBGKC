@@ -57,7 +57,6 @@ import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
-import by.carkva_gazeta.malitounik.DialogPerevodBiblii
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuBibleBokuna
@@ -2002,7 +2001,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {
-            val dialog = DialogPerevodBiblii.getInstance(true)
+            val dialog = DialogPerevodBiblii.getInstance(true, k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }
@@ -2633,7 +2632,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val subText = ssb.substring(0, t1)
                 if (subText.isDigitsOnly()) {
                     ssb.setSpan(SuperscriptSpan(), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    ssb.setSpan(RelativeSizeSpan(0.7f), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 } else {
@@ -2643,7 +2641,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         val subText2 = ssb.substring(t2 + 1, t3)
                         if (subText2.isDigitsOnly()) {
                             ssb.setSpan(SuperscriptSpan(), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            ssb.setSpan(RelativeSizeSpan(0.7f), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }

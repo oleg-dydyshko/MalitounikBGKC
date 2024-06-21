@@ -16,7 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class NadsanContent : BaseActivity() {
+class BibleNadsanList : BaseActivity() {
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
     private lateinit var binding: ContentPsalterBinding
@@ -59,8 +59,9 @@ class NadsanContent : BaseActivity() {
             intent1.setClassName(this, MainActivity.BIBLIAACTIVITY)
             intent1.putExtra("glava", intent.extras?.getInt("glava") ?: 0)
             intent1.putExtra("stix", intent.extras?.getInt("stix") ?: 0)
-            intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
+            intent1.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
             intent1.putExtra("fullglav", arrayList.size)
+            intent.removeExtra("prodolzyt")
             startActivity(intent1)
         }
     }

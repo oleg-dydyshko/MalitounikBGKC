@@ -42,7 +42,7 @@ import by.carkva_gazeta.malitounik.DialogClearHishory
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.HistoryAdapter
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.NadsanContent
+import by.carkva_gazeta.malitounik.BibleNadsanList
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
@@ -525,7 +525,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             val glava = strText.substring(str1 + 6, str2).toInt()
             val stix = strText.substring(str3 + 9, str4).toInt()
             if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
-                val intent = Intent(this@SearchBiblia, NadsanContent::class.java)
+                val intent = Intent(this@SearchBiblia, BibleNadsanList::class.java)
                 intent.putExtra("glava", glava - 1)
                 intent.putExtra("stix", stix - 1)
                 intent.putExtra("prodolzyt", true)

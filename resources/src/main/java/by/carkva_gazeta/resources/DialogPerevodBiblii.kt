@@ -5,7 +5,9 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -48,6 +50,11 @@ class DialogPerevodBiblii : DialogFragment() {
         }
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        dialog?.window?.setDimAmount(0F)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             MainActivity.dialogVisable = true
@@ -59,7 +66,8 @@ class DialogPerevodBiblii : DialogFragment() {
             val builder = AlertDialog.Builder(it, style)
             isSinoidal = arguments?.getBoolean("isMaranata", true) ?: true
             val perevod = arguments?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
-            if (!isSinoidal) binding.sinoidal.visibility = View.GONE
+            val sinoidal = k.getInt("sinoidal", 0)
+            if (sinoidal == 1 && !isSinoidal) binding.sinoidal.visibility = View.GONE
             when (perevod) {
                 DialogVybranoeBibleList.PEREVODSEMUXI -> {
                     binding.semuxa.isChecked = true
@@ -86,29 +94,25 @@ class DialogPerevodBiblii : DialogFragment() {
                     binding.carniauski.isChecked = true
                 }
             }
-            var newperevod = perevod
             binding.perevodGrupBible.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
                 when (checkedId) {
                     R.id.semuxa -> {
-                        newperevod = DialogVybranoeBibleList.PEREVODSEMUXI
+                        mListener?.setPerevod(DialogVybranoeBibleList.PEREVODSEMUXI)
                     }
                     R.id.sinoidal -> {
-                        newperevod = DialogVybranoeBibleList.PEREVODSINOIDAL
+                        mListener?.setPerevod(DialogVybranoeBibleList.PEREVODSINOIDAL)
                     }
                     R.id.bokuna -> {
-                        newperevod = DialogVybranoeBibleList.PEREVODBOKUNA
+                        mListener?.setPerevod(DialogVybranoeBibleList.PEREVODBOKUNA)
                     }
                     R.id.carniauski -> {
-                        newperevod = DialogVybranoeBibleList.PEREVODCARNIAUSKI
+                        mListener?.setPerevod(DialogVybranoeBibleList.PEREVODCARNIAUSKI)
                     }
                 }
             }
             binding.title.text = resources.getString(R.string.perevod)
             builder.setView(binding.root)
-            builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface, _: Int ->
-                mListener?.setPerevod(newperevod)
-            }
-            builder.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int ->
+            builder.setPositiveButton(getString(R.string.close)) { dialog: DialogInterface, _: Int ->
                 dialog.cancel()
             }
             alert = builder.create()

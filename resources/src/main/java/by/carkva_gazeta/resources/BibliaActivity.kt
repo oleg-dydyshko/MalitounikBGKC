@@ -47,7 +47,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.InputStream
 
-class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSinaidal, DialogFontSize.DialogFontSizeListener, DialogBibleRazdel.DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogPerevodBiblii.DialogPerevodBibliiListener {
+class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSinaidal, DialogFontSize.DialogFontSizeListener, DialogBibleRazdel.DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
     private var fullscreenPage = false
     private var paralel = false
     private var fullglav = 1
@@ -395,26 +395,10 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false) && perevod == DialogVybranoeBibleList.PEREVODSEMUXI
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    override fun setPerevod(perevod: String) {
-        clearEmptyPosition()
-        saveVydelenieZakladkiNtanki(novyZapavet, kniga, binding.pager.currentItem, fierstPosition)
-        this.perevod = perevod
-        title = getSpisKnig(novyZapavet)[kniga]
-        binding.subtitleToolbar.text = getSubTitlePerevod()
-        binding.titleToolbar.text = title
-        binding.pager.adapter?.notifyDataSetChanged()
-    }
-
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
-            return true
-        }
-        if (id == R.id.action_perevod) {
-            val dialog = DialogPerevodBiblii.getInstance(true, perevod)
-            dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }
         if (id == R.id.action_vybranoe) {

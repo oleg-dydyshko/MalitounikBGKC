@@ -45,6 +45,7 @@ internal class ZmenyiaChastki {
     private fun chtenia(w: String, apostal: Int): String {
         var w1 = w
         val res = StringBuilder()
+        w1 = w1.replace("\n", ";")
         w1 = MainActivity.removeZnakiAndSlovy(w1)
         val split = w1.split(";")
         if (split.size == 1) return "<em>" + Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"

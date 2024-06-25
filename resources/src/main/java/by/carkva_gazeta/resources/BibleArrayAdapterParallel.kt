@@ -490,10 +490,12 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             var glava1: Int
             val knigaName = listAll[i].data
             for (e in lists.indices) {
-                if (knigaName.contains(lists[e])) knigaS = e
+                val t4 = lists[e].indexOf("#")
+                if (knigaName.contains(lists[e].substring(0, t4))) knigaS = e
             }
             for (e in listn.indices) {
-                if (knigaName.contains(listn[e])) knigaN = e
+                val t4 = listn[e].indexOf("#")
+                if (knigaName.contains(listn[e].substring(0, t4))) knigaN = e
             }
             t1 = knigaName.indexOf("Разьдзел ")
             t2 = knigaName.indexOf("/", t1)

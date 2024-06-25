@@ -492,10 +492,12 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 val lists = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals)
                 val listn = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln)
                 for (i in lists.indices) {
-                    if (strText.contains(lists[i])) nazvaS = i
+                    val t4 = lists[i].indexOf("#")
+                    if (strText.contains(lists[i].substring(0, t4))) nazvaS = i
                 }
                 for (i in listn.indices) {
-                    if (strText.contains(listn[i])) nazva = i
+                    val t4 = listn[i].indexOf("#")
+                    if (strText.contains(listn[i].substring(0, t4))) nazva = i
                 }
             }
             if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
@@ -992,7 +994,8 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         }
         for (i in range) {
             if (searchJob?.isActive == false) break
-            val nazva = list[i]
+            val t4 = list[i].indexOf("#")
+            val nazva = list[i].substring(0, t4)
             val inputStream = when (perevod) {
                 DialogVybranoeBibleList.PEREVODSEMUXI -> resources.openRawResource(semuxaBible[i])
                 DialogVybranoeBibleList.PEREVODSINOIDAL -> resources.openRawResource(sinodalBible[i])

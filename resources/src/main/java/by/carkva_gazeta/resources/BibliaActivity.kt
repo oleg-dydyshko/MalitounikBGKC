@@ -47,7 +47,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.InputStream
 
-class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSinaidal, DialogFontSize.DialogFontSizeListener, DialogBibleRazdel.DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
+class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSinaidal, DialogFontSize.DialogFontSizeListener, DialogBibleRazdel.DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogPerevodBiblii.DialogPerevodBibliiListener {
     private var fullscreenPage = false
     private var paralel = false
     private var fullglav = 1
@@ -241,6 +241,8 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
         }
         title = getSpisKnig(novyZapavet)[kniga]
+        val t1 = title.indexOf("#")
+        title = title.substring(0, t1)
         BibleGlobalList.mListGlava = 0
         val adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
@@ -395,10 +397,53 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false) && perevod == DialogVybranoeBibleList.PEREVODSEMUXI
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    override fun setPerevod(perevod: String) {
+        clearEmptyPosition()
+        saveVydelenieZakladkiNtanki(novyZapavet, kniga, binding.pager.currentItem, fierstPosition)
+        //Бытие#50#0
+        if (!novyZapavet) {
+            val list = getSpisKnig(false)[kniga]
+            val t1 = list.indexOf("#")
+            val t2 = list.indexOf("#", t1 + 1)
+            val myKniga = list.substring(t2 + 1).toInt()
+            val glav = binding.pager.currentItem + 1 //list.substring(t1 + 1, t2)
+            val per = this.perevod
+            this.perevod = perevod
+            val per2 = this.perevod
+            var kniga2 = -1
+            var myKniga2: Int
+            var glav2 = ""
+            val list2 = getSpisKnig(false)//[kniga]
+            for (i in list2.indices) {
+                val t3 = list2[i].indexOf("#")
+                val t4 = list2[i].indexOf("#", t3 + 1)
+                myKniga2 = list2[i].substring(t4 + 1).toInt()
+                if (myKniga == myKniga2) {
+                    glav2 = list2[i].substring(t3 + 1, t4)
+                    kniga2 = myKniga2
+                    break
+                }
+            }
+            this.perevod = per
+            MainActivity.toastView(this, "$myKniga == $kniga2 ($per) && $glav == $glav2 ($per2)")
+            //Log.d("Oleg", "$myKniga == $kniga2 ($per) && $glav == $glav2 ($per2)")
+        }
+        /*title = getSpisKnig(novyZapavet)[kniga]
+        binding.subtitleToolbar.text = getSubTitlePerevod()
+        binding.titleToolbar.text = title
+        binding.pager.adapter?.notifyDataSetChanged()*/
+    }
+
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == R.id.action_perevod) {
+            val dialog = DialogPerevodBiblii.getInstance(true, perevod)
+            dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }
         if (id == R.id.action_vybranoe) {

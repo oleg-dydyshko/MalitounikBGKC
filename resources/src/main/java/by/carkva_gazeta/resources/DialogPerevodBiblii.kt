@@ -67,7 +67,7 @@ class DialogPerevodBiblii : DialogFragment() {
             isSinoidal = arguments?.getBoolean("isMaranata", true) ?: true
             val perevod = arguments?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
             val sinoidal = k.getInt("sinoidal", 0)
-            if (sinoidal == 1 && !isSinoidal) binding.sinoidal.visibility = View.GONE
+            if (sinoidal == 0 && !isSinoidal) binding.sinoidal.visibility = View.GONE
             when (perevod) {
                 DialogVybranoeBibleList.PEREVODSEMUXI -> {
                     binding.semuxa.isChecked = true

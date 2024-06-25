@@ -811,302 +811,302 @@
     <string name="padzei_i_sviaty">Падзеі і сьвяты за %1$d %2$s</string>
     <string name="padzei_no">Падзей няма</string>
     <string-array name="semuxan">
-        <item>Паводле Мацьвея</item>
-        <item>Паводле Марка</item>
-        <item>Паводле Лукаша</item>
-        <item>Паводле Яна</item>
-        <item>Дзеі Апосталаў</item>
-        <item>Якава</item>
-        <item>1-е Пятра</item>
-        <item>2-е Пятра</item>
-        <item>1-е Яна Багаслова</item>
-        <item>2-е Яна Багаслова</item>
-        <item>3-е Яна Багаслова</item>
-        <item>Юды</item>
-        <item>Да Рымлянаў</item>
-        <item>1-е да Карынфянаў</item>
-        <item>2-е да Карынфянаў</item>
-        <item>Да Галятаў</item>
-        <item>Да Эфэсянаў</item>
-        <item>Да Піліпянаў</item>
-        <item>Да Каласянаў</item>
-        <item>1-е да Фесаланікійцаў</item>
-        <item>2-е да Фесаланікійцаў</item>
-        <item>1-е да Цімафея</item>
-        <item>2-е да Цімафея</item>
-        <item>Да Ціта</item>
-        <item>Да Філімона</item>
-        <item>Да Габрэяў</item>
-        <item>Адкрыцьцё (Апакаліпсіс)</item>
+        <item>Паводле Мацьвея#28#0</item>
+        <item>Паводле Марка#16#1</item>
+        <item>Паводле Лукаша#24#2</item>
+        <item>Паводле Яна#21#3</item>
+        <item>Дзеі Апосталаў#28#4</item>
+        <item>Якава#5#5</item>
+        <item>1-е Пятра#5#6</item>
+        <item>2-е Пятра#3#7</item>
+        <item>1-е Яна Багаслова#5#8</item>
+        <item>2-е Яна Багаслова#1#9</item>
+        <item>3-е Яна Багаслова#1#10</item>
+        <item>Юды#1#11</item>
+        <item>Да Рымлянаў#16#12</item>
+        <item>1-е да Карынфянаў#16#13</item>
+        <item>2-е да Карынфянаў#13#14</item>
+        <item>Да Галятаў#6#15</item>
+        <item>Да Эфэсянаў#6#16</item>
+        <item>Да Піліпянаў#4#17</item>
+        <item>Да Каласянаў#4#18</item>
+        <item>1-е да Фесаланікійцаў#5#19</item>
+        <item>2-е да Фесаланікійцаў#3#20</item>
+        <item>1-е да Цімафея#6#21</item>
+        <item>2-е да Цімафея#4#22</item>
+        <item>Да Ціта#3#23</item>
+        <item>Да Філімона#1#24</item>
+        <item>Да Габрэяў#13#25</item>
+        <item>Адкрыцьцё (Апакаліпсіс)#22#26</item>
     </string-array>
     <string-array name="semuxas">
-        <item>Быцьцё</item>
-        <item>Выхад</item>
-        <item>Лявіт</item>
-        <item>Лікі</item>
-        <item>Другі Закон</item>
-        <item>Ісуса сына Нава</item>
-        <item>Судзьдзяў</item>
-        <item>Рут</item>
-        <item>1-я Царстваў</item>
-        <item>2-я Царстваў</item>
-        <item>3-я Царстваў</item>
-        <item>4-я Царстваў</item>
-        <item>1-я Летапісаў</item>
-        <item>2-я Летапісаў</item>
-        <item>Эздры</item>
-        <item>Нээміі</item>
-        <item>Эстэр</item>
-        <item>Ёва</item>
-        <item>Псалтыр</item>
-        <item>Выслоўяў Саламонавых</item>
-        <item>Эклезіяста</item>
-        <item>Найвышэйшая Песьня Саламонава</item>
-        <item>Ісаі</item>
-        <item>Ераміі</item>
-        <item>Ераміін Плач</item>
-        <item>Езэкііля</item>
-        <item>Данііла</item>
-        <item>Асіі</item>
-        <item>Ёіля</item>
-        <item>Амоса</item>
-        <item>Аўдзея</item>
-        <item>Ёны</item>
-        <item>Міхея</item>
-        <item>Навума</item>
-        <item>Абакума</item>
-        <item>Сафона</item>
-        <item>Агея</item>
-        <item>Захарыі</item>
-        <item>Малахіі</item>
+        <item>Быцьцё#50#0</item>
+        <item>Выхад#40#1</item>
+        <item>Лявіт#27#2</item>
+        <item>Лікі#36#3</item>
+        <item>Другі Закон#34#4</item>
+        <item>Ісуса сына Нава#24#5</item>
+        <item>Судзьдзяў#21#6</item>
+        <item>Рут#4#7</item>
+        <item>1-я Царстваў#31#8</item>
+        <item>2-я Царстваў#24#9</item>
+        <item>3-я Царстваў#22#10</item>
+        <item>4-я Царстваў#25#11</item>
+        <item>1-я Летапісаў#29#12</item>
+        <item>2-я Летапісаў#36#13</item>
+        <item>Эздры#10#14</item>
+        <item>Нээміі#13#15</item>
+        <item>Эстэр#10#19</item>
+        <item>Ёва#42#20</item>
+        <item>Псалтыр#151#21</item>
+        <item>Выслоўяў Саламонавых#31#22</item>
+        <item>Эклезіяста#12#23</item>
+        <item>Найвышэйшая Песьня Саламонава#8#24</item>
+        <item>Ісаі#66#27</item>
+        <item>Ераміі#52#28</item>
+        <item>Ераміін Плач#5#29</item>
+        <item>Езэкііля#48#32</item>
+        <item>Данііла#12#33</item>
+        <item>Асіі#14#34</item>
+        <item>Ёіля#3#35</item>
+        <item>Амоса#9#36</item>
+        <item>Аўдзея#1#37</item>
+        <item>Ёны#4#38</item>
+        <item>Міхея#7#39</item>
+        <item>Навума#3#40</item>
+        <item>Абакума#3#41</item>
+        <item>Сафона#3#42</item>
+        <item>Агея#2#43</item>
+        <item>Захарыі#14#44</item>
+        <item>Малахіі#4#45</item>
     </string-array>
     <string-array name="bokunan">
-        <item>Мацьвея</item>
-        <item>Марка</item>
-        <item>Лукі</item>
-        <item>Яна</item>
-        <item>Дзеі</item>
-        <item>Якуба</item>
-        <item>1 Пятра</item>
-        <item>2 Пятра</item>
-        <item>1 Яна</item>
-        <item>2 Яна</item>
-        <item>3 Яна</item>
-        <item>Юды</item>
-        <item>Рымлянам</item>
-        <item>1 Карыньцянам</item>
-        <item>2 Карыньцянам</item>
-        <item>Галятам</item>
-        <item>Эфэсцам</item>
-        <item>Філіпянам</item>
-        <item>Каласянам</item>
-        <item>1 Тэсалонцам</item>
-        <item>2 Тэсалонцам</item>
-        <item>1 Цімафею</item>
-        <item>2 Цімафею</item>
-        <item>Ціту</item>
-        <item>Філімону</item>
-        <item>Гебраям</item>
-        <item>Адкрыцьцё</item>
+        <item>Мацьвея#28#0</item>
+        <item>Марка#16#1</item>
+        <item>Лукі#24#2</item>
+        <item>Яна#21#3</item>
+        <item>Дзеі#28#4</item>
+        <item>Якуба#5#5</item>
+        <item>1 Пятра#5#6</item>
+        <item>2 Пятра#3#7</item>
+        <item>1 Яна#5#8</item>
+        <item>2 Яна#1#9</item>
+        <item>3 Яна#1#10</item>
+        <item>Юды#1#11</item>
+        <item>Рымлянам#16#12</item>
+        <item>1 Карыньцянам#16#13</item>
+        <item>2 Карыньцянам#13#14</item>
+        <item>Галятам#6#15</item>
+        <item>Эфэсцам#6#16</item>
+        <item>Філіпянам#4#17</item>
+        <item>Каласянам#4#18</item>
+        <item>1 Тэсалонцам#5#19</item>
+        <item>2 Тэсалонцам#3#20</item>
+        <item>1 Цімафею#6#21</item>
+        <item>2 Цімафею#4#22</item>
+        <item>Ціту#3#23</item>
+        <item>Філімону#1#24</item>
+        <item>Гебраям#13#25</item>
+        <item>Адкрыцьцё#22#26</item>
     </string-array>
     <string-array name="bokunas">
-        <item>Быцьцё</item>
-        <item>Выхад</item>
-        <item>Лявіт</item>
-        <item>Лікі</item>
-        <item>Другазаконьне</item>
-        <item>Егошуа</item>
-        <item>Судзьдзяў</item>
-        <item>Рут</item>
-        <item>1 Самуэля</item>
-        <item>2 Самуэля</item>
-        <item>1 Валадароў</item>
-        <item>2 Валадароў</item>
-        <item>1 Летапісаў</item>
-        <item>2 Летапісаў</item>
-        <item>Эзры</item>
-        <item>Нээміі</item>
-        <item>Эстэр</item>
-        <item>Ёва</item>
-        <item>Псальмы</item>
-        <item>Прыповесьцяў</item>
-        <item>Эклезіяста</item>
-        <item>Песьня Песьняў</item>
-        <item>Ісаі</item>
-        <item>Ярэміі</item>
-        <item>Плач</item>
-        <item>Эзэкіэля</item>
-        <item>Данііла</item>
-        <item>Осіі</item>
-        <item>Ёэля</item>
-        <item>Амоса</item>
-        <item>Абадыі</item>
-        <item>Ёны</item>
-        <item>Міхея</item>
-        <item>Навума</item>
-        <item>Абакума</item>
-        <item>Сафоніі</item>
-        <item>Агея</item>
-        <item>Захарыі</item>
-        <item>Малахіі</item>
+        <item>Быцьцё#50#0</item>
+        <item>Выхад#40#1</item>
+        <item>Лявіт#27#2</item>
+        <item>Лікі#36#3</item>
+        <item>Другазаконьне#34#4</item>
+        <item>Егошуа#24#5</item>
+        <item>Судзьдзяў#21#6</item>
+        <item>Рут#4#7</item>
+        <item>1 Самуэля#31#8</item>
+        <item>2 Самуэля#24#9</item>
+        <item>1 Валадароў#22#10</item>
+        <item>2 Валадароў#25#11</item>
+        <item>1 Летапісаў#29#12</item>
+        <item>2 Летапісаў#36#13</item>
+        <item>Эзры#10#14</item>
+        <item>Нээміі#13#15</item>
+        <item>Эстэр#10#19</item>
+        <item>Ёва#42#20</item>
+        <item>Псальмы#150#21</item>
+        <item>Прыповесьцяў#31#22</item>
+        <item>Эклезіяста#12#23</item>
+        <item>Песьня Песьняў#8#24</item>
+        <item>Ісаі#66#27</item>
+        <item>Ярэміі#52#28</item>
+        <item>Плач#5#29</item>
+        <item>Эзэкіэля#48#32</item>
+        <item>Данііла#12#33</item>
+        <item>Осіі#14#34</item>
+        <item>Ёэля#3#35</item>
+        <item>Амоса#9#36</item>
+        <item>Абадыі#1#37</item>
+        <item>Ёны#4#38</item>
+        <item>Міхея#7#39</item>
+        <item>Навума#3#40</item>
+        <item>Абакума#3#41</item>
+        <item>Сафоніі#3#42</item>
+        <item>Агея#2#43</item>
+        <item>Захарыі#14#44</item>
+        <item>Малахіі#4#45</item>
     </string-array>
     <string-array name="charniauskin">
-        <item>Мацвея</item>
-        <item>Марка</item>
-        <item>Лукі</item>
-        <item>Яна</item>
-        <item>Дзеі</item>
-        <item>Да Рымлянаў</item>
-        <item>1 да Карынцянаў</item>
-        <item>2 да Карынцянаў</item>
-        <item>Да Галатаў</item>
-        <item>Да Эфесцаў</item>
-        <item>Да Піліпцаў</item>
-        <item>Да Калосцаў</item>
-        <item>1 да Тэсалонцаў</item>
-        <item>2 да Тэсалонцаў</item>
-        <item>1 да Цімафея</item>
-        <item>2 да Цімафея</item>
-        <item>Да Ціта</item>
-        <item>Да Філімона</item>
-        <item>Да Гебраяў</item>
-        <item>Якуба</item>
-        <item>1 Пятра</item>
-        <item>2 Пятра</item>
-        <item>1 Яна</item>
-        <item>2 Яна</item>
-        <item>3 Яна</item>
-        <item>Юды</item>
-        <item>Адкрыццё</item>
+        <item>Мацвея#28#0</item>
+        <item>Марка#16#1</item>
+        <item>Лукі#24#2</item>
+        <item>Яна#21#3</item>
+        <item>Дзеі#28#4</item>
+        <item>Да Рымлянаў#5#5</item>
+        <item>1 да Карынцянаў#5#6</item>
+        <item>2 да Карынцянаў#3#7</item>
+        <item>Да Галатаў#5#8</item>
+        <item>Да Эфесцаў#1#9</item>
+        <item>Да Піліпцаў#1#10</item>
+        <item>Да Калосцаў#1#11</item>
+        <item>1 да Тэсалонцаў#16#12</item>
+        <item>2 да Тэсалонцаў#16#13</item>
+        <item>1 да Цімафея#13#14</item>
+        <item>2 да Цімафея#6#15</item>
+        <item>Да Ціта#6#16</item>
+        <item>Да Філімона#4#17</item>
+        <item>Да Гебраяў#4#18</item>
+        <item>Якуба#5#19</item>
+        <item>1 Пятра#3#20</item>
+        <item>2 Пятра#6#21</item>
+        <item>1 Яна#4#22</item>
+        <item>2 Яна#3#23</item>
+        <item>3 Яна#1#24</item>
+        <item>Юды#13#25</item>
+        <item>Адкрыццё#22#26</item>
     </string-array>
     <string-array name="charniauskis">
-        <item>Роду</item>
-        <item>Выхад</item>
-        <item>Святарская</item>
-        <item>Лічбаў</item>
-        <item>Паўтор Закону</item>
-        <item>Ешуа</item>
-        <item>Суддзяў</item>
-        <item>Рут</item>
-        <item>1 Самуэля</item>
-        <item>2 Самуэля</item>
-        <item>1 Цароў</item>
-        <item>2 Цароў</item>
-        <item>1 Хронікаў</item>
-        <item>2 Хронікаў</item>
-        <item>Эздры</item>
-        <item>Нэгэміі</item>
-        <item>Эстэр</item>
-        <item>Ёва</item>
-        <item>Псальмаў</item>
-        <item>Выслоўяў</item>
-        <item>Эклезіяста</item>
-        <item>Песня з Песняў</item>
-        <item>Ісаі</item>
-        <item>Ярэміі</item>
-        <item>Ламентацыі</item>
-        <item>Эзэкіэля</item>
-        <item>Даніэля</item>
-        <item>Осіі</item>
-        <item>Ёэля</item>
-        <item>Амоса</item>
-        <item>Абдыі</item>
-        <item>Ёны</item>
-        <item>Міхея</item>
-        <item>Навума</item>
-        <item>Абакука</item>
-        <item>Сафоніі</item>
-        <item>Агэя</item>
-        <item>Захарыі</item>
-        <item>Малахіі</item>
-        <item>Тобіі</item>
-        <item>Юдыт</item>
-        <item>Мудрасці</item>
-        <item>Эклезіясціка</item>
-        <item>Баруха</item>
-        <item>1 Макабэяў</item>
-        <item>2 Макабэяў</item>
+        <item>Роду#50#0</item>
+        <item>Выхад#40#1</item>
+        <item>Святарская#27#2</item>
+        <item>Лічбаў#36#3</item>
+        <item>Паўтор Закону#34#4</item>
+        <item>Ешуа#24#5</item>
+        <item>Суддзяў#21#6</item>
+        <item>Рут#4#7</item>
+        <item>1 Самуэля#31#8</item>
+        <item>2 Самуэля#24#9</item>
+        <item>1 Цароў#22#10</item>
+        <item>2 Цароў#25#11</item>
+        <item>1 Хронікаў#29#12</item>
+        <item>2 Хронікаў#36#13</item>
+        <item>Эздры#10#14</item>
+        <item>Нэгэміі#13#15</item>
+        <item>Эстэр#10#19</item>
+        <item>Ёва#42#20</item>
+        <item>Псальмаў#150#21</item>
+        <item>Выслоўяў#31#22</item>
+        <item>Эклезіяста#12#23</item>
+        <item>Песня з Песняў#8#24</item>
+        <item>Ісаі#66#27</item>
+        <item>Ярэміі#52#28</item>
+        <item>Ламентацыі#5#29</item>
+        <item>Эзэкіэля#48#32</item>
+        <item>Даніэля#14#33</item>
+        <item>Осіі#14#34</item>
+        <item>Ёэля#3#35</item>
+        <item>Амоса#9#36</item>
+        <item>Абдыі#1#37</item>
+        <item>Ёны#4#38</item>
+        <item>Міхея#7#39</item>
+        <item>Навума#3#40</item>
+        <item>Абакука#3#41</item>
+        <item>Сафоніі#3#42</item>
+        <item>Агэя#2#43</item>
+        <item>Захарыі#14#44</item>
+        <item>Малахіі#4#45</item>
+        <item>Тобіі#14#17</item>
+        <item>Юдыт#16#18</item>
+        <item>Мудрасці#19#25</item>
+        <item>Эклезіясціка#51#26</item>
+        <item>Баруха#6#31</item>
+        <item>1 Макабэяў#16#46</item>
+        <item>2 Макабэяў#15#47</item>
     </string-array>
     <string-array name="sinoidaln">
-        <item>От Матфея</item>
-        <item>От Марка</item>
-        <item>От Луки</item>
-        <item>От Иоанна</item>
-        <item>Деяния святых апостолов</item>
-        <item>Иакова</item>
-        <item>1-е Петра</item>
-        <item>2-е Петра</item>
-        <item>1-е Иоанна</item>
-        <item>2-е Иоанна</item>
-        <item>3-е Иоанна</item>
-        <item>Иуды</item>
-        <item>Римлянам</item>
-        <item>1-е Коринфянам</item>
-        <item>2-е Коринфянам</item>
-        <item>Галатам</item>
-        <item>Ефесянам</item>
-        <item>Филиппийцам</item>
-        <item>Колоссянам</item>
-        <item>1-е Фессалоникийцам (Солунянам)</item>
-        <item>2-е Фессалоникийцам (Солунянам)</item>
-        <item>1-е Тимофею</item>
-        <item>2-е Тимофею</item>
-        <item>Титу</item>
-        <item>Филимону</item>
-        <item>Евреям</item>
-        <item>Откровение (Апокалипсис)</item>
+        <item>От Матфея#28#0</item>
+        <item>От Марка#16#1</item>
+        <item>От Луки#24#2</item>
+        <item>От Иоанна#21#3</item>
+        <item>Деяния святых апостолов#28#4</item>
+        <item>Иакова#5#5</item>
+        <item>1-е Петра#5#6</item>
+        <item>2-е Петра#3#7</item>
+        <item>1-е Иоанна#5#8</item>
+        <item>2-е Иоанна#1#9</item>
+        <item>3-е Иоанна#1#10</item>
+        <item>Иуды#1#11</item>
+        <item>Римлянам#16#12</item>
+        <item>1-е Коринфянам#16#13</item>
+        <item>2-е Коринфянам#13#14</item>
+        <item>Галатам#6#15</item>
+        <item>Ефесянам#6#16</item>
+        <item>Филиппийцам#4#17</item>
+        <item>Колоссянам#4#18</item>
+        <item>1-е Фессалоникийцам (Солунянам)#5#19</item>
+        <item>2-е Фессалоникийцам (Солунянам)#3#20</item>
+        <item>1-е Тимофею#6#21</item>
+        <item>2-е Тимофею#4#22</item>
+        <item>Титу#3#23</item>
+        <item>Филимону#1#24</item>
+        <item>Евреям#13#25</item>
+        <item>Откровение (Апокалипсис)#22#26</item>
     </string-array>
     <string-array name="sinoidals">
-        <item>Бытие</item>
-        <item>Исход</item>
-        <item>Левит</item>
-        <item>Числа</item>
-        <item>Второзаконие</item>
-        <item>Иисуса Навина</item>
-        <item>Судей израилевых</item>
-        <item>Руфи</item>
-        <item>1-я Царств</item>
-        <item>2-я Царств</item>
-        <item>3-я Царств</item>
-        <item>4-я Царств</item>
-        <item>1-я Паралипоменон</item>
-        <item>2-я Паралипоменон</item>
-        <item>1-я Ездры</item>
-        <item>Неемии</item>
-        <item>2-я Ездры</item>
-        <item>Товита</item>
-        <item>Иудифи</item>
-        <item>Есфири</item>
-        <item>Иова</item>
-        <item>Псалтирь</item>
-        <item>Притчи Соломона</item>
-        <item>Екклезиаста</item>
-        <item>Песнь песней Соломона</item>
-        <item>Премудрости Соломона</item>
-        <item>Премудрости Иисуса, сына Сирахова</item>
-        <item>Исаии</item>
-        <item>Иеремии</item>
-        <item>Плач Иеремии</item>
-        <item>Послание Иеремии</item>
-        <item>Варуха</item>
-        <item>Иезекииля</item>
-        <item>Даниила</item>
-        <item>Осии</item>
-        <item>Иоиля</item>
-        <item>Амоса</item>
-        <item>Авдия</item>
-        <item>Ионы</item>
-        <item>Михея</item>
-        <item>Наума</item>
-        <item>Аввакума</item>
-        <item>Сафонии</item>
-        <item>Аггея</item>
-        <item>Захарии</item>
-        <item>Малахии</item>
-        <item>1-я Маккавейская</item>
-        <item>2-я Маккавейская</item>
-        <item>3-я Маккавейская</item>
-        <item>3-я Ездры</item>
+        <item>Бытие#50#0</item>
+        <item>Исход#40#1</item>
+        <item>Левит#27#2</item>
+        <item>Числа#36#3</item>
+        <item>Второзаконие#34#4</item>
+        <item>Иисуса Навина#24#5</item>
+        <item>Судей израилевых#21#6</item>
+        <item>Руфи#4#7</item>
+        <item>1-я Царств#31#8</item>
+        <item>2-я Царств#24#9</item>
+        <item>3-я Царств#22#10</item>
+        <item>4-я Царств#25#11</item>
+        <item>1-я Паралипоменон#29#12</item>
+        <item>2-я Паралипоменон#37#13</item>
+        <item>1-я Ездры#10#14</item>
+        <item>Неемии#13#15</item>
+        <item>2-я Ездры#9#16</item>
+        <item>Товита#14#17</item>
+        <item>Иудифи#16#18</item>
+        <item>Есфири#10#19</item>
+        <item>Иова#44#20</item>
+        <item>Псалтирь#151#21</item>
+        <item>Притчи Соломона#31#22</item>
+        <item>Екклезиаста#12#23</item>
+        <item>Песнь песней Соломона#8#24</item>
+        <item>Премудрости Соломона#19#25</item>
+        <item>Премудрости Иисуса, сына Сирахова#51#26</item>
+        <item>Исаии#66#27</item>
+        <item>Иеремии#52#28</item>
+        <item>Плач Иеремии#5#29</item>
+        <item>Послание Иеремии#1#30</item>
+        <item>Варуха#5#31</item>
+        <item>Иезекииля#48#32</item>
+        <item>Даниила#14#33</item>
+        <item>Осии#14#34</item>
+        <item>Иоиля#3#35</item>
+        <item>Амоса#9#36</item>
+        <item>Авдия#1#37</item>
+        <item>Ионы#4#38</item>
+        <item>Михея#4#39</item>
+        <item>Наума#7#40</item>
+        <item>Аввакума#3#41</item>
+        <item>Сафонии#3#42</item>
+        <item>Аггея#2#43</item>
+        <item>Захарии#14#44</item>
+        <item>Малахии#4#45</item>
+        <item>1-я Маккавейская#16#46</item>
+        <item>2-я Маккавейская#15#47</item>
+        <item>3-я Маккавейская#7#48</item>
+        <item>3-я Ездры#16#49</item>
     </string-array>
     <string name="perevod">ПЕРАКЛАД БІБЛІІ</string>
     <string name="perevody">Пераклады Бібліі</string>

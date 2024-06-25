@@ -20,10 +20,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
-import java.io.InputStreamReader
 
 class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadSinaidal, BibliaPerakvadBokuna, BibliaPerakvadCarniauski {
     private val dzenNoch get() = getBaseDzenNoch()
@@ -135,20 +133,37 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadSinaidal,
         resetTollbarJob?.cancel()
     }
 
-    private fun getAdapterData(): ArrayList<ArrayList<BibliaAdapterData>> {
-        val groups = ArrayList<ArrayList<BibliaAdapterData>>()
+    /*private fun generateSpisKnig() {
         val list = getSpisKnig(novyZapavet)
+        val sb = StringBuilder()
         for (kniga in list.indices) {
             val inputStream = getInputStream(novyZapavet, kniga)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val builder = reader.readText()
             val split = builder.split("===")
+            sb.append("<item>").append(list[kniga]).append("#").append(split.size - 1).append("#").append(kniga).append("</item>\n")
+        }
+        val dir = File("$filesDir/biblia")
+        if (!dir.exists()) dir.mkdir()
+        val fileName = File("$filesDir/biblia/biblia.txt")
+        fileName.writer().use {
+            it.write(sb.toString())
+        }
+    }*/
+
+    private fun getAdapterData(): ArrayList<ArrayList<BibliaAdapterData>> {
+        val groups = ArrayList<ArrayList<BibliaAdapterData>>()
+        val list = getSpisKnig(novyZapavet)
+        for (kniga in list.indices) {
+            val t1 = list[kniga].indexOf("#")
+            val t2 = list[kniga].indexOf("#", t1 + 1)
+            val split = list[kniga].substring(t1 + 1, t2).toInt()
             val children = ArrayList<BibliaAdapterData>()
             val razdel = if (!novyZapavet && getKnigaReal(kniga) == 21) getString(R.string.psalom)
             else getString(R.string.razdzel)
-            for (glava in 1 until split.size) {
-                children.add(BibliaAdapterData(list[kniga], "$razdel $glava"))
+            for (glava in 1 .. split) {
+                children.add(BibliaAdapterData(list[kniga].substring(0, t1), "$razdel $glava"))
             }
             groups.add(children)
         }

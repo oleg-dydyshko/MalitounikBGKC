@@ -423,10 +423,12 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                     }
                 }
                 for (e in listn.indices) {
-                    if (knigaName.contains(listn[e])) kniga = e
+                    val t4 = listn[e].indexOf("#")
+                    if (knigaName.contains(listn[e].substring(0, t4))) kniga = e
                 }
                 for (e in lists.indices) {
-                    if (knigaName.contains(lists[e])) knigaS = e
+                    val t4 = lists[e].indexOf("#")
+                    if (knigaName.contains(lists[e].substring(0, t4))) knigaS = e
                 }
                 if (semuxa == 2) {
                     t1 = knigaName.indexOf("Глава ")

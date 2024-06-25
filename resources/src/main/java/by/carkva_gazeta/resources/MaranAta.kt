@@ -816,7 +816,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             DialogVybranoeBibleList.PEREVODCARNIAUSKI -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskis).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskin))
             else -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan))
         }
-        return list[fullKniga]
+        val t4 = list[fullKniga].indexOf("#")
+        return list[fullKniga].substring(0, t4)
     }
 
     override fun setPerevod(perevod: String) {
@@ -2703,10 +2704,12 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 var glava1: Int
                 val knigaName = globalList[i].data
                 for (e in lists.indices) {
-                    if (knigaName.contains(lists[e])) knigaS = e
+                    val t4 = lists[e].indexOf("#")
+                    if (knigaName.contains(lists[e].substring(0, t4))) knigaS = e
                 }
                 for (e in listn.indices) {
-                    if (knigaName.contains(listn[e])) knigaN = e
+                    val t4 = listn[e].indexOf("#")
+                    if (knigaName.contains(listn[e].substring(0, t4))) knigaN = e
                 }
                 t1 = knigaName.indexOf("Разьдзел ")
                 t2 = knigaName.indexOf("/", t1)

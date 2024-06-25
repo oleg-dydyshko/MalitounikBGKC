@@ -320,6 +320,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         try {
             var w = intent.extras?.getString("cytanne") ?: ""
             val wOld = w
+            w = w.replace("\n", ";")
             w = MainActivity.removeZnakiAndSlovy(w)
             val split = w.split(";")
             var knigaN: String
@@ -329,6 +330,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             val ssbTitle = SpannableStringBuilder()
             var title = SpannableString("")
             for (i in split.indices) {
+                if (split[i].trim().isEmpty()) continue
                 val zaglavie = split[i].split(",")
                 var zagl = ""
                 var zaglavieName = ""
@@ -1067,6 +1069,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                                 if (t1 != -1) textBiblia.setSpan(StrikethroughSpan(), t3 + 1, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             }
                             ssbTitle.append("\n").append(setIndexBiblii(textBiblia)).append("\n")
+
                         } else {
                             ssbTitle.append("\n").append(error())
                         }
@@ -1108,6 +1111,21 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         }
     }
 
+    private fun trimSpannable(spannable: SpannableStringBuilder): SpannableStringBuilder {
+        var trimStart = 0
+        var trimEnd = 0
+        var text = spannable.toString()
+        while (text.isNotEmpty() && text.startsWith("\n")) {
+            text = text.substring(1)
+            trimStart += 1
+        }
+        while (text.isNotEmpty() && text.endsWith("\n")) {
+            text = text.substring(0, text.length - 1)
+            trimEnd += 1
+        }
+        return spannable.delete(0, trimStart).delete(spannable.length - trimEnd, spannable.length)
+    }
+
     private fun setIndexBiblii(ssb: Spannable): Spannable {
         val list = ssb.split("\n")
         val result = SpannableStringBuilder()
@@ -1124,7 +1142,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             }
             result.append(stext).append("\n")
         }
-        return result
+        return trimSpannable(result)
     }
 
     override fun linkMovementMethodCheckOnTouch(onTouch: Boolean) {

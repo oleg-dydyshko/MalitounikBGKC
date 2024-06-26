@@ -65,7 +65,7 @@ class MenuBibleBokuna : BaseFragment() {
                     intent.setClassName(activity, MainActivity.BIBLIALIST)
                     intent.putExtra("novyZapavet", true)
                     intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
-                    startActivity(intent)
+                    (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
                 }
@@ -80,7 +80,7 @@ class MenuBibleBokuna : BaseFragment() {
                     intent.setClassName(activity, MainActivity.BIBLIALIST)
                     intent.putExtra("novyZapavet", false)
                     intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
-                    startActivity(intent)
+                    (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
                 }
@@ -103,7 +103,7 @@ class MenuBibleBokuna : BaseFragment() {
                         intent.putExtra("glava", k.getInt("bible_time_bokuna_glava", 0))
                         intent.putExtra("stix", k.getInt("bible_time_bokuna_stix", 0))
                         intent.putExtra("prodolzyt", true)
-                        startActivity(intent)
+                        (activity as MainActivity).listBibliaLauncher.launch(intent)
                     } else {
                         activity.installFullMalitounik()
                     }

@@ -12,7 +12,7 @@ import by.carkva_gazeta.malitounik.databinding.MenuPsalterBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
+class MenuBibleNadsana : BaseFragment(), View.OnClickListener {
     private lateinit var k: SharedPreferences
     private var mLastClickTime: Long = 0
     private var _binding: MenuPsalterBinding? = null
@@ -103,11 +103,15 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                 }
             }
             if (id == R.id.psalter) {
-                val intent = Intent()
-                intent.setClassName(activity, MainActivity.BIBLIALIST)
-                intent.putExtra("novyZapavet", false)
-                intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
-                startActivity(intent)
+                if (activity.checkmoduleResources()) {
+                    val intent = Intent()
+                    intent.setClassName(activity, MainActivity.BIBLIALIST)
+                    intent.putExtra("novyZapavet", false)
+                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
+                    (activity as MainActivity).listBibliaLauncher.launch(intent)
+                } else {
+                    activity.installFullMalitounik()
+                }
             }
             if (id == R.id.prodolzych) {
                 val bibleTime = k.getInt("psalter_time_psalter_nadsan_glava", -1)
@@ -123,7 +127,7 @@ class MenuPsalterNadsana : BaseFragment(), View.OnClickListener {
                         intent.putExtra("novyZapavet", false)
                         intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
                         intent.putExtra("prodolzyt", true)
-                        startActivity(intent)
+                        (activity as MainActivity).listBibliaLauncher.launch(intent)
                     } else {
                         activity.installFullMalitounik()
                     }

@@ -305,8 +305,8 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         }
         zakladka.append(setZakladki(position, mPerevod))
         if (zakladka.isNotEmpty()) space = 2
-        val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka)
-        val t1 = ssb.indexOf(" ")
+        val ssb = findIntStyx(SpannableStringBuilder(ea.textView.text).append(zakladka))
+        /*val t1 = ssb.indexOf(" ")
         if (t1 != -1) {
             val subText = ssb.substring(0, t1)
             if (subText.isDigitsOnly()) {
@@ -327,7 +327,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                     }
                 }
             }
-        }
+        }*/
         if (!res.contains("+-+")) {
             ssb.append("\n").append(res)
             val start = ea.textView.text.length
@@ -439,6 +439,33 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             }
         }
         return rootView
+    }
+
+    private fun findIntStyx(ssb: SpannableStringBuilder, index: Int = 0): SpannableStringBuilder {
+        val t1 = ssb.indexOf(" ", index)
+        if (t1 != -1) {
+            val subText = ssb.substring(0, t1)
+            if (subText.isDigitsOnly()) {
+                ssb.setSpan(SuperscriptSpan(), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            } else {
+                val t2 = ssb.indexOf("\n", index)
+                if (t2 != -1) {
+                    val t3 = ssb.indexOf(" ", t2)
+                    if (t3 != -1) {
+                        val subText2 = ssb.substring(t2 + 1, t3)
+                        if (subText2.isDigitsOnly()) {
+                            ssb.setSpan(SuperscriptSpan(), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
+                        findIntStyx(ssb, t2 + 1)
+                    }
+                }
+            }
+        }
+        return ssb
     }
 
     private fun setZakladki(position: Int, perevod: String): SpannableStringBuilder {

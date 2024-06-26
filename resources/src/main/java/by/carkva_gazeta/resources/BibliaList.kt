@@ -31,12 +31,25 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
     private var resetTollbarJob: Job? = null
     private var novyZapavet = false
     private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
+    private lateinit var adapter: BibliaAdapterList
+    private val adapterData = ArrayList<ArrayList<BibliaAdapterData>>()
     private val listBibliaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 300) {
             val myPerevod = result.data?.extras?.getString("perevod") ?: DialogVybranoeBibleList.PEREVODSEMUXI
             if (perevod != myPerevod) {
                 perevod = myPerevod
-                getAdapterData()
+                adapterData.clear()
+                adapterData.addAll(getAdapterData())
+                adapter.notifyDataSetChanged()
+                binding.subTitleToolbar.text = getTitlePerevod()
+                if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
+                    binding.titleToolbar.setText(R.string.title_psalter)
+                    binding.subTitleToolbar.visibility = View.GONE
+                } else {
+                    if (novyZapavet) binding.titleToolbar.setText(R.string.novy_zapaviet)
+                    else binding.titleToolbar.setText(R.string.stary_zapaviet)
+                }
+                if (adapter.groupCount == 1) binding.elvMain.expandGroup(0)
             }
         }
     }
@@ -143,6 +156,13 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
         }
     }
 
+    override fun onBack() {
+        val intent = Intent()
+        intent.putExtra("perevod", perevod)
+        setResult(500, intent)
+        super.onBack()
+    }
+
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
@@ -197,7 +217,8 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
         }
         novyZapavet = intent.extras?.getBoolean("novyZapavet", false) ?: false
         perevod = intent.extras?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
-        val adapter = BibliaAdapterList(this, getAdapterData())
+        adapterData.addAll(getAdapterData())
+        adapter = BibliaAdapterList(this, adapterData)
         binding.elvMain.setAdapter(adapter)
         if (adapter.groupCount == 1) binding.elvMain.expandGroup(0)
         binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
@@ -215,7 +236,10 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
         }
         if (intent.extras?.getBoolean("prodolzyt", false) == true) {
             val intent1 = Intent(this, BibliaActivity::class.java)
-            intent1.putExtra("kniga", intent.extras?.getInt("kniga") ?: 0)
+            val kniga = intent.extras?.getInt("kniga") ?: 0
+            binding.elvMain.expandGroup(kniga)
+            binding.elvMain.setSelectedGroup(kniga)
+            intent1.putExtra("kniga", kniga)
             intent1.putExtra("glava", intent.extras?.getInt("glava") ?: 0)
             intent1.putExtra("stix", intent.extras?.getInt("stix") ?: 0)
             intent1.putExtra("novyZapavet", novyZapavet)

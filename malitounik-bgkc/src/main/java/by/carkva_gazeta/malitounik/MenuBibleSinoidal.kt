@@ -65,7 +65,7 @@ class MenuBibleSinoidal : Fragment() {
                     intent.setClassName(activity, MainActivity.BIBLIALIST)
                     intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
                     intent.putExtra("novyZapavet", true)
-                    startActivity(intent)
+                    (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
                 }
@@ -80,7 +80,7 @@ class MenuBibleSinoidal : Fragment() {
                     intent.setClassName(activity, MainActivity.BIBLIALIST)
                     intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
                     intent.putExtra("novyZapavet", false)
-                    startActivity(intent)
+                    (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
                 }
@@ -103,7 +103,7 @@ class MenuBibleSinoidal : Fragment() {
                         intent.putExtra("glava", k.getInt("bible_time_sinodal_glava", 0))
                         intent.putExtra("stix", k.getInt("bible_time_sinodal_stix", 0))
                         intent.putExtra("prodolzyt", true)
-                        startActivity(intent)
+                        (activity as MainActivity).listBibliaLauncher.launch(intent)
                     } else {
                         activity.installFullMalitounik()
                     }

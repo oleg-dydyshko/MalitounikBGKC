@@ -65,7 +65,7 @@ class MenuBibleCarniauski : Fragment() {
                     intent.setClassName(activity, MainActivity.BIBLIALIST)
                     intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
                     intent.putExtra("novyZapavet", true)
-                    startActivity(intent)
+                    (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
                 }
@@ -80,7 +80,7 @@ class MenuBibleCarniauski : Fragment() {
                     intent.setClassName(activity, MainActivity.BIBLIALIST)
                     intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
                     intent.putExtra("novyZapavet", false)
-                    startActivity(intent)
+                    (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
                 }
@@ -103,7 +103,7 @@ class MenuBibleCarniauski : Fragment() {
                         intent.putExtra("glava", k.getInt("bible_time_carniauski_glava", 0))
                         intent.putExtra("stix", k.getInt("bible_time_carniauski_stix", 0))
                         intent.putExtra("prodolzyt", true)
-                        startActivity(intent)
+                        (activity as MainActivity).listBibliaLauncher.launch(intent)
                     } else {
                         activity.installFullMalitounik()
                     }

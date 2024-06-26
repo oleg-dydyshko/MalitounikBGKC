@@ -47,7 +47,11 @@ internal class ZmenyiaChastki {
         val res = StringBuilder()
         w1 = w1.replace("\n", ";")
         w1 = MainActivity.removeZnakiAndSlovy(w1)
-        val split = w1.split(";")
+        val oldList = w1.split(";")
+        val split = ArrayList<String>()
+        for (i in oldList.indices) {
+            if (oldList[i].trim().isNotEmpty()) split.add(oldList[i])
+        }
         if (split.size == 1) return "<em>" + Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
         var knigaN: String
         var knigaK = "0"

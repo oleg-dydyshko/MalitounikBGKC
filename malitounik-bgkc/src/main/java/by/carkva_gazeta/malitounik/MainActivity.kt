@@ -127,6 +127,43 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             selectFragment(binding.label140, true)
         }
     }
+    val listBibliaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == 500) {
+            val myPerevod = result.data?.extras?.getString("perevod") ?: DialogVybranoeBibleList.PEREVODSEMUXI
+            when (myPerevod) {
+                DialogVybranoeBibleList.PEREVODSEMUXI -> {
+                    val fragment = supportFragmentManager.findFragmentByTag("semuxa")
+                    if (fragment == null) {
+                        selectFragment(binding.label8)
+                    }
+                }
+                DialogVybranoeBibleList.PEREVODBOKUNA -> {
+                    val fragment = supportFragmentManager.findFragmentByTag("bokuna")
+                    if (fragment == null) {
+                        selectFragment(binding.label16)
+                    }
+                }
+                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
+                    val fragment = supportFragmentManager.findFragmentByTag("carniauski")
+                    if (fragment == null) {
+                        selectFragment(binding.label17)
+                    }
+                }
+                DialogVybranoeBibleList.PEREVODNADSAN -> {
+                    val fragment = supportFragmentManager.findFragmentByTag("nadsana")
+                    if (fragment == null) {
+                        selectFragment(binding.label13)
+                    }
+                }
+                DialogVybranoeBibleList.PEREVODSINOIDAL -> {
+                    val fragment = supportFragmentManager.findFragmentByTag("sinoidal")
+                    if (fragment == null) {
+                        selectFragment(binding.label11)
+                    }
+                }
+            }
+        }
+    }
     private val mConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as ServiceRadyjoMaryia.ServiceRadyjoMaryiaBinder
@@ -1522,7 +1559,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             R.id.label13 -> {
                 val fragment = supportFragmentManager.findFragmentByTag("nadsana")
                 if (fragment == null) {
-                    val nadsana = MenuPsalterNadsana()
+                    val nadsana = MenuBibleNadsana()
                     ftrans.replace(R.id.conteiner, nadsana, "nadsana")
                     prefEditors.putInt("id", id)
                     idSelect = id

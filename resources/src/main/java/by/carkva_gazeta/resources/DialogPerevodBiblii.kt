@@ -14,8 +14,7 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.databinding.DialogPerevodBibliiBinding
+import by.carkva_gazeta.resources.databinding.DialogPerevodBibliiBinding
 
 class DialogPerevodBiblii : DialogFragment() {
     private var dzenNoch = false
@@ -55,43 +54,61 @@ class DialogPerevodBiblii : DialogFragment() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    fun errorView(isError: Boolean) {
+        if (isError) binding.error.visibility = View.VISIBLE
+        else binding.error.visibility = View.GONE
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             MainActivity.dialogVisable = true
             _binding = DialogPerevodBibliiBinding.inflate(layoutInflater)
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = (it as BaseActivity).getBaseDzenNoch()
-            var style = R.style.AlertDialogTheme
-            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            var style = by.carkva_gazeta.malitounik.R.style.AlertDialogTheme
+            if (dzenNoch) style = by.carkva_gazeta.malitounik.R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
             isSinoidal = arguments?.getBoolean("isMaranata", true) ?: true
             val perevod = arguments?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
             val sinoidal = k.getInt("sinoidal", 0)
             if (sinoidal == 0 && !isSinoidal) binding.sinoidal.visibility = View.GONE
+            val isNadsan = arguments?.getBoolean("isNadsan", false) ?: false
+            if (!isNadsan) binding.nadsan.visibility = View.GONE
             when (perevod) {
                 DialogVybranoeBibleList.PEREVODSEMUXI -> {
                     binding.semuxa.isChecked = true
                     binding.sinoidal.isChecked = false
                     binding.bokuna.isChecked = false
                     binding.carniauski.isChecked = false
+                    binding.nadsan.isChecked = false
                 }
                 DialogVybranoeBibleList.PEREVODSINOIDAL -> {
                     binding.semuxa.isChecked = false
                     binding.sinoidal.isChecked = true
                     binding.bokuna.isChecked = false
                     binding.carniauski.isChecked = false
+                    binding.nadsan.isChecked = false
                 }
                 DialogVybranoeBibleList.PEREVODBOKUNA -> {
                     binding.semuxa.isChecked = false
                     binding.sinoidal.isChecked = false
                     binding.bokuna.isChecked = true
                     binding.carniauski.isChecked = false
+                    binding.nadsan.isChecked = false
+                }
+                DialogVybranoeBibleList.PEREVODNADSAN -> {
+                    binding.semuxa.isChecked = false
+                    binding.sinoidal.isChecked = false
+                    binding.bokuna.isChecked = false
+                    binding.carniauski.isChecked = false
+                    binding.nadsan.isChecked = true
                 }
                 DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
                     binding.semuxa.isChecked = false
                     binding.sinoidal.isChecked = false
                     binding.bokuna.isChecked = false
                     binding.carniauski.isChecked = true
+                    binding.nadsan.isChecked = false
                 }
             }
             binding.perevodGrupBible.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
@@ -105,14 +122,17 @@ class DialogPerevodBiblii : DialogFragment() {
                     R.id.bokuna -> {
                         mListener?.setPerevod(DialogVybranoeBibleList.PEREVODBOKUNA)
                     }
+                    R.id.nadsan -> {
+                        mListener?.setPerevod(DialogVybranoeBibleList.PEREVODNADSAN)
+                    }
                     R.id.carniauski -> {
                         mListener?.setPerevod(DialogVybranoeBibleList.PEREVODCARNIAUSKI)
                     }
                 }
             }
-            binding.title.text = resources.getString(R.string.perevod)
+            binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.perevod)
             builder.setView(binding.root)
-            builder.setPositiveButton(getString(R.string.close)) { dialog: DialogInterface, _: Int ->
+            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.close)) { dialog: DialogInterface, _: Int ->
                 dialog.cancel()
             }
             alert = builder.create()
@@ -121,10 +141,11 @@ class DialogPerevodBiblii : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(isSinoidal: Boolean, perevod: String): DialogPerevodBiblii {
+        fun getInstance(isSinoidal: Boolean, isNadsan: Boolean, perevod: String): DialogPerevodBiblii {
             val dialogPerevodBiblii = DialogPerevodBiblii()
             val bundle = Bundle()
             bundle.putBoolean("isSinoidal", isSinoidal)
+            bundle.putBoolean("isNadsan", isNadsan)
             bundle.putString("perevod", perevod)
             dialogPerevodBiblii.arguments = bundle
             return dialogPerevodBiblii

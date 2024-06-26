@@ -11,8 +11,8 @@ android {
         applicationId =  "by.carkva_gazeta.malitounik"
         minSdk = 21
         targetSdk = 34
-        versionCode = 442302
-        versionName = "4.5.0.12"
+        versionCode = 442303
+        versionName = "4.5.0.13"
 
         //multiDexEnabled = true
 
@@ -80,8 +80,8 @@ dependencies {
     implementation ("androidx.core:core-ktx:1.13.1")
     //implementation ("androidx.multidex:multidex:2.0.1")
     testImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("androidx.test.ext:junit:1.2.0")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.6.0")
 }
 
 apply(plugin = "com.google.gms.google-services")

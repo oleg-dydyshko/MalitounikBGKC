@@ -2002,7 +2002,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {
-            val dialog = DialogPerevodBiblii.getInstance(true, k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI)
+            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = true, isNadsan = false, perevod = k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }

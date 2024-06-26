@@ -42,7 +42,6 @@ import by.carkva_gazeta.malitounik.DialogClearHishory
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.HistoryAdapter
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.BibleNadsanList
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
@@ -58,7 +57,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListener, DialogBibleSearshSettings.DiallogBibleSearshListiner {
-    private lateinit var adapter: SearchBibliaListAdaprer
+    private lateinit var adapter: SearchBibliaActivityAdaprer
     private lateinit var prefEditors: Editor
     private lateinit var chin: SharedPreferences
     private val dzenNoch get() = getBaseDzenNoch()
@@ -428,7 +427,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
             history.addAll(gson.fromJson(json, type))
         }
-        adapter = SearchBibliaListAdaprer(this, ArrayList())
+        adapter = SearchBibliaActivityAdaprer(this, ArrayList())
         binding.ListView.adapter = adapter
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
         else binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
@@ -526,64 +525,28 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             val str4 = strText.indexOf("::")
             val glava = strText.substring(str1 + 6, str2).toInt()
             val stix = strText.substring(str3 + 9, str4).toInt()
+            val intent = Intent(this@SearchBiblia, BibliaActivity::class.java)
             if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
-                val intent = Intent(this@SearchBiblia, BibleNadsanList::class.java)
-                intent.putExtra("glava", glava - 1)
-                intent.putExtra("stix", stix - 1)
-                intent.putExtra("prodolzyt", true)
-                prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
-                prefEditors.apply()
-                startActivity(intent)
+                intent.putExtra("kniga", getString(by.carkva_gazeta.malitounik.R.string.psalter))
+                intent.putExtra("novyZapavet", false)
             } else {
-                var intent = Intent(this@SearchBiblia, BibliaList::class.java)
                 if (nazvaS != -1) {
-                    if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
-                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
-                    }
-                    if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) {
-                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
-                    }
-                    if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
-                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
-                    }
-                    if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
-                    }
                     intent.putExtra("kniga", nazvaS)
                     intent.putExtra("novyZapavet", false)
                     prefEditors.putBoolean("novyzavet", false)
                 } else {
-                    if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
-                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
-                    }
-                    if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) {
-                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
-                    }
-                    if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
-                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
-                    }
-                    if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                        intent = Intent(this@SearchBiblia, BibliaList::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
-                    }
                     intent.putExtra("kniga", nazva)
                     intent.putExtra("novyZapavet", true)
                     prefEditors.putBoolean("novyzavet", true)
                 }
-                intent.putExtra("glava", glava - 1)
-                intent.putExtra("stix", stix - 1)
-                intent.putExtra("prodolzyt", true)
-                prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
-                prefEditors.apply()
-                startActivity(intent)
             }
+            intent.putExtra("perevod", perevod)
+            intent.putExtra("glava", glava - 1)
+            intent.putExtra("stix", stix - 1)
+            intent.putExtra("prodolzyt", true)
+            prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
+            prefEditors.apply()
+            startActivity(intent)
         }
         historyAdapter = HistoryAdapter(this, history)
         if (dzenNoch) binding.History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
@@ -942,7 +905,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             }
         }
         var range = 0..0
-        var list = arrayOf("")
+        var list = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.psalter_list)
         when (perevod) {
             DialogVybranoeBibleList.PEREVODSEMUXI -> {
                 range = when (chin.getInt("biblia_seash", 0)) {
@@ -964,10 +927,6 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                     else -> 0 until sinodalBible.size
                 }
                 list = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln))
-            }
-
-            DialogVybranoeBibleList.PEREVODNADSAN -> {
-                range = 0..150
             }
 
             DialogVybranoeBibleList.PEREVODBOKUNA -> {
@@ -1179,7 +1138,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         }
     }
 
-    private inner class SearchBibliaListAdaprer(context: Activity, private val arrayList: ArrayList<Spannable>) : ArrayAdapter<Spannable>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, arrayList) {
+    private inner class SearchBibliaActivityAdaprer(context: Activity, private val arrayList: ArrayList<Spannable>) : ArrayAdapter<Spannable>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, arrayList) {
         private val origData = ArrayList<Spannable>(arrayList)
         override fun addAll(collection: Collection<Spannable>) {
             super.addAll(collection)

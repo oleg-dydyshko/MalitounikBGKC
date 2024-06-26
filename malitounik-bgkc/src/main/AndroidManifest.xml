@@ -239,42 +239,6 @@
             android:taskAffinity=""
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name="by.carkva_gazeta.resources.BibliaSemuxaList"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.BibliaBokunaList"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.BibliaList"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.BibliaSinaidalList"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name=".BibleNadsanList"
-            android:label="@string/title_psalter"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
             android:name=".PesnyAll"
             android:label="@string/song"
             android:theme="@style/AppTheme"

@@ -39,9 +39,13 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
         _binding = null
     }
 
-    fun upDateListView() {
-        loadBibleList()
-        adapter.notifyDataSetChanged()
+    fun upDateListView(kniga: Int) {
+        (activity as? BibliaActivity)?.let { activity ->
+            this.kniga = kniga
+            loadBibleList()
+            adapter.setPerevod(activity.getNamePerevod())
+            adapter.notifyDataSetChanged()
+        }
     }
 
     fun onBackPressedFragment() {
@@ -448,7 +452,10 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
                     }
                 }
                 if (clic) {
-                    bibleListiner?.setOnClic(res, bibliaActyvity.getSpisKnig(novyZapavet)[kniga] + " " + (page + 1) + ":" + (position + 1))
+                    var cytanneSours = bibliaActyvity.getSpisKnig(novyZapavet)[kniga]
+                    val t1 = cytanneSours.indexOf("#")
+                    cytanneSours = cytanneSours.substring(0, t1)
+                    bibleListiner?.setOnClic(res, cytanneSours + " " + (page + 1) + ":" + (position + 1))
                 }
             } else {
                 var find = false

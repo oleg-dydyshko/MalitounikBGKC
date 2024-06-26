@@ -15,6 +15,16 @@
         android:textSize="14sp"
         android:textStyle="bold" />
 
+    <by.carkva_gazeta.malitounik.TextViewCustom
+        android:id="@+id/error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10sp"
+        android:text="@string/biblia_error"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
     <RadioGroup
         android:id="@+id/perevodGrupBible"
         android:layout_width="wrap_content"
@@ -49,6 +59,16 @@
             android:layout_marginRight="10sp"
             android:paddingBottom="5sp"
             android:text="@string/title_biblia_charniauski"
+            android:textSize="14sp" />
+
+        <by.carkva_gazeta.malitounik.RadioButtonCustom
+            android:id="@+id/nadsan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:paddingBottom="5sp"
+            android:text="@string/title_psalter"
             android:textSize="14sp" />
 
         <by.carkva_gazeta.malitounik.RadioButtonCustom

@@ -442,22 +442,22 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                     glava = knigaName.substring(t1 + 9, t2).toInt()
                 }
                 val stix = knigaName.substring(t2 + 6, t3).toInt()
-                var intent = Intent(this@BibleZakladki, BibliaList::class.java)
+                var intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
                 if (kniga != -1) {
                     if (semuxa == 1) {
-                        intent = Intent(this@BibleZakladki, BibliaList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
                         intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
                     }
                     if (semuxa == 2) {
-                        intent = Intent(this@BibleZakladki, BibliaList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
                         intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
                     }
                     if (semuxa == 3) {
-                        intent = Intent(this@BibleZakladki, BibliaList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
                         intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
                     }
                     if (semuxa == 4) {
-                        intent = Intent(this@BibleZakladki, BibliaList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
                         intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
                     }
                     intent.putExtra("kniga", kniga)
@@ -465,19 +465,19 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 }
                 if (knigaS != -1) {
                     if (semuxa == 1) {
-                        intent = Intent(this@BibleZakladki, BibliaList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
                         intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
                     }
                     if (semuxa == 2) {
-                        intent = Intent(this@BibleZakladki, BibliaList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
                         intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
                     }
                     if (semuxa == 3) {
-                        intent = Intent(this@BibleZakladki, BibliaList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
                         intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
                     }
                     if (semuxa == 4) {
-                        intent = Intent(this@BibleZakladki, BibliaList::class.java)
+                        intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
                         intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
                     }
                     intent.putExtra("kniga", knigaS)

@@ -29,10 +29,14 @@ import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibleBinding
 
-internal class BibleArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val zapavet: Boolean, private val mPerevod: String) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) {
+internal class BibleArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val zapavet: Boolean, private var mPerevod: String) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) {
     // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана, 4-Бокуна, 5-Чарняўскага
     private val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     private val dzenNoch get() = (context as BaseActivity).getBaseDzenNoch()
+
+    fun setPerevod(perevod: String) {
+        mPerevod = perevod
+    }
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup): View {
         val rootView: View
@@ -288,6 +292,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         }
         var stix = stixi[position]
         stix = stix.replace("\\n", "\n")
+        ea.textView.text = MainActivity.fromHtml(stix)
         if (mPerevod == DialogVybranoeBibleList.PEREVODSEMUXI || mPerevod == DialogVybranoeBibleList.PEREVODNADSAN) {
             ea.textView.text = MainActivity.fromHtml(stix)
         } else {
@@ -312,11 +317,13 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                 val t2 = ssb.indexOf("\n")
                 if (t2 != -1) {
                     val t3 = ssb.indexOf(" ", t2)
-                    val subText2 = ssb.substring(t2 + 1, t3)
-                    if (subText2.isDigitsOnly()) {
-                        ssb.setSpan(SuperscriptSpan(), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    if (t3 != -1) {
+                        val subText2 = ssb.substring(t2 + 1, t3)
+                        if (subText2.isDigitsOnly()) {
+                            ssb.setSpan(SuperscriptSpan(), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
                     }
                 }
             }

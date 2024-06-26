@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ExpandableListView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.BaseActivity
@@ -23,13 +24,22 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.InputStream
 
-class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadSinaidal, BibliaPerakvadBokuna, BibliaPerakvadCarniauski {
+class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadSinaidal, BibliaPerakvadBokuna, BibliaPerakvadCarniauski {
     private val dzenNoch get() = getBaseDzenNoch()
     private var mLastClickTime: Long = 0
     private lateinit var binding: ContentBibleBinding
     private var resetTollbarJob: Job? = null
     private var novyZapavet = false
     private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
+    private val listBibliaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == 300) {
+            val myPerevod = result.data?.extras?.getString("perevod") ?: DialogVybranoeBibleList.PEREVODSEMUXI
+            if (perevod != myPerevod) {
+                perevod = myPerevod
+                getAdapterData()
+            }
+        }
+    }
 
     override fun addZakladka(color: Int, knigaBible: String, bible: String) {
         when (perevod) {
@@ -56,6 +66,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadSinaidal,
             DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getNamePerevod()
             DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getNamePerevod()
             DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getNamePerevod()
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getNamePerevod()
             else -> ""
         }
     }
@@ -76,6 +87,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadSinaidal,
             DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getTitlePerevod()
             DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getTitlePerevod()
             DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getTitlePerevod()
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getTitlePerevod()
             else -> ""
         }
     }
@@ -96,6 +108,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadSinaidal,
             DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getSpisKnig(novyZapaviet)
             DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getSpisKnig(novyZapaviet)
             DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getSpisKnig(novyZapaviet)
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getSpisKnig()
             else -> arrayOf("")
         }
     }
@@ -115,6 +128,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadSinaidal,
             DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getInputStream(novyZapaviet, kniga)
             DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getInputStream(novyZapaviet, kniga)
             DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getInputStream(novyZapaviet, kniga)
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getInputStream(novyZapaviet, kniga)
             else -> super<BibliaPerakvadSemuxi>.getInputStream(novyZapaviet, kniga)
         }
     }
@@ -125,6 +139,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadSinaidal,
             DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.saveVydelenieZakladkiNtanki(novyZapaviet, kniga, glava, stix)
             DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.saveVydelenieZakladkiNtanki(novyZapaviet, kniga, glava, stix)
             DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.saveVydelenieZakladkiNtanki(novyZapaviet, kniga, glava, stix)
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.saveVydelenieZakladkiNtanki(glava, stix)
         }
     }
 
@@ -184,6 +199,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadSinaidal,
         perevod = intent.extras?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
         val adapter = BibliaAdapterList(this, getAdapterData())
         binding.elvMain.setAdapter(adapter)
+        if (adapter.groupCount == 1) binding.elvMain.expandGroup(0)
         binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnChildClickListener true
@@ -192,23 +208,20 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadSinaidal,
             val intent = Intent(this, BibliaActivity::class.java)
             intent.putExtra("kniga", groupPosition)
             intent.putExtra("glava", childPosition)
-            intent.putExtra("fullglav", adapter.getChildrenCount(groupPosition))
             intent.putExtra("novyZapavet", novyZapavet)
             intent.putExtra("perevod", getNamePerevod())
-            startActivity(intent)
+            listBibliaLauncher.launch(intent)
             false
         }
         if (intent.extras?.getBoolean("prodolzyt", false) == true) {
             val intent1 = Intent(this, BibliaActivity::class.java)
-            val kniga = intent.extras?.getInt("kniga") ?: 0
             intent1.putExtra("kniga", intent.extras?.getInt("kniga") ?: 0)
             intent1.putExtra("glava", intent.extras?.getInt("glava") ?: 0)
             intent1.putExtra("stix", intent.extras?.getInt("stix") ?: 0)
-            intent1.putExtra("fullglav", adapter.getChildrenCount(kniga))
             intent1.putExtra("novyZapavet", novyZapavet)
             intent1.putExtra("perevod", getNamePerevod())
             intent.removeExtra("prodolzyt")
-            startActivity(intent1)
+            listBibliaLauncher.launch(intent1)
         }
         setTollbarTheme()
     }
@@ -234,8 +247,13 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadSinaidal,
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.subTitleToolbar.text = getTitlePerevod()
-        if (novyZapavet) binding.titleToolbar.setText(R.string.novy_zapaviet)
-        else binding.titleToolbar.setText(R.string.stary_zapaviet)
+        if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
+            binding.titleToolbar.setText(R.string.title_psalter)
+            binding.subTitleToolbar.visibility = View.GONE
+        } else {
+            if (novyZapavet) binding.titleToolbar.setText(R.string.novy_zapaviet)
+            else binding.titleToolbar.setText(R.string.stary_zapaviet)
+        }
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }

@@ -810,6 +810,9 @@
     <string name="find_niz">Шукаць уніз</string>
     <string name="padzei_i_sviaty">Падзеі і сьвяты за %1$d %2$s</string>
     <string name="padzei_no">Падзей няма</string>
+    <string-array name="psalter_list">
+        <item>Псалмы#151#21</item>
+    </string-array>
     <string-array name="semuxan">
         <item>Паводле Мацьвея#28#0</item>
         <item>Паводле Марка#16#1</item>
@@ -1113,5 +1116,6 @@
     <string name="biblia_semuxi">В. Сёмухі</string>
     <string name="biblia_bokun">А. Бокуна</string>
     <string name="biblia_charniauski">У. Чарняўскага</string>
+    <string name="biblia_error">Кніга альбо разьдзел не існуе.</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

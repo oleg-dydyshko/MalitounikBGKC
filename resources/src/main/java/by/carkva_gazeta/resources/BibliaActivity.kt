@@ -372,12 +372,21 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 invalidateOptionsMenu()
             }
             BibleGlobalList.mPedakVisable -> {
-                val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BibliaFragment
-                fragment.onBackPressedFragment()
+                val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as? BibliaFragment
+                if (fragment != null) {
+                    fragment.onBackPressedFragment()
+                } else {
+                    val intent = Intent()
+                    intent.putExtra("perevod", perevod)
+                    intent.putExtra("kniga", kniga)
+                    setResult(300, intent)
+                    super.onBack()
+                }
             }
             else -> {
                 val intent = Intent()
                 intent.putExtra("perevod", perevod)
+                intent.putExtra("kniga", kniga)
                 setResult(300, intent)
                 super.onBack()
             }

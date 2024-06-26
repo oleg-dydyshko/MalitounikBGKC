@@ -38,6 +38,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
             val myPerevod = result.data?.extras?.getString("perevod") ?: DialogVybranoeBibleList.PEREVODSEMUXI
             if (perevod != myPerevod) {
                 perevod = myPerevod
+                val kniga =  result.data?.extras?.getInt("kniga") ?: 0
                 adapterData.clear()
                 adapterData.addAll(getAdapterData())
                 adapter.notifyDataSetChanged()
@@ -48,8 +49,10 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
                 } else {
                     if (novyZapavet) binding.titleToolbar.setText(R.string.novy_zapaviet)
                     else binding.titleToolbar.setText(R.string.stary_zapaviet)
+                    binding.subTitleToolbar.visibility = View.VISIBLE
                 }
-                if (adapter.groupCount == 1) binding.elvMain.expandGroup(0)
+                binding.elvMain.expandGroup(kniga)
+                binding.elvMain.setSelectedGroup(kniga)
             }
         }
     }

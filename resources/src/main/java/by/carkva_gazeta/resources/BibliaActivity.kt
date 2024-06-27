@@ -65,6 +65,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     private var novyZapavet = false
     private lateinit var adapter: MyPagerAdapter
     private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
+    private var isSetPerevod = false
 
     override fun addZakladka(color: Int, knigaBible: String, bible: String) {
         when (perevod) {
@@ -169,6 +170,28 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         }
     }
 
+    override fun translatePsaltyr(psalm: Int, styx: Int, isUpdate: Boolean): Array<Int> {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.translatePsaltyr(psalm, styx, isUpdate)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.translatePsaltyr(psalm, styx, isUpdate)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.translatePsaltyr(psalm,styx, isUpdate)
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.translatePsaltyr(psalm, styx, isUpdate)
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.translatePsaltyr(psalm, styx, isUpdate)
+            else -> arrayOf(1, 1)
+        }
+    }
+
+    override fun isPsaltyrGreek(): Boolean {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.isPsaltyrGreek()
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.isPsaltyrGreek()
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.isPsaltyrGreek()
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.isPsaltyrGreek()
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.isPsaltyrGreek()
+            else -> true
+        }
+    }
+
     private fun clearEmptyPosition() {
         val remove = ArrayList<ArrayList<Int>>()
         for (i in BibleGlobalList.vydelenie.indices) {
@@ -214,13 +237,13 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     }
 
     override fun addZakladka(color: Int) {
-        val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BibliaFragment
-        fragment.addZakladka(color)
+        val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+        fragment?.addZakladka(color)
     }
 
     override fun addNatatka() {
-        val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BibliaFragment
-        fragment.addNatatka()
+        val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+        fragment?.addNatatka()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -263,7 +286,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
 
                 BibleGlobalList.mListGlava = position
                 men = DialogVybranoeBibleList.checkVybranoe(kniga, position, getNamePerevod())
-                if (glava != position) fierstPosition = 0
+                if (glava != position && !isSetPerevod) fierstPosition = 0
                 invalidateOptionsMenu()
             }
         })
@@ -372,7 +395,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 invalidateOptionsMenu()
             }
             BibleGlobalList.mPedakVisable -> {
-                val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as? BibliaFragment
+                val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
                 if (fragment != null) {
                     fragment.onBackPressedFragment()
                 } else {
@@ -415,6 +438,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
 
     @SuppressLint("NotifyDataSetChanged")
     override fun setPerevod(perevod: String) {
+        isSetPerevod = true
         clearEmptyPosition()
         saveVydelenieZakladkiNtanki(novyZapavet, kniga, binding.pager.currentItem, fierstPosition)
         if (!novyZapavet) {
@@ -424,7 +448,8 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             val myKniga = list.substring(t2 + 1).toInt()
             val currentItem = binding.pager.currentItem + 1
             val glav = list.substring(t1 + 1, t2).toInt()
-            val per = this.perevod
+            val oldPerevod = this.perevod
+            val oldPsaltyrGreek = isPsaltyrGreek()
             this.perevod = perevod
             var kniga2 = -1
             var myKniga2: Int
@@ -445,13 +470,13 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             val dialog = supportFragmentManager.findFragmentByTag("DialogPerevodBiblii") as? DialogPerevodBiblii
             if (kniga2 == -1) {
                 dialog?.errorView(true)
-                this.perevod = per
+                this.perevod = oldPerevod
             } else {
                 if (currentItem > glav2) {
                     dialog?.errorView(true)
-                    this.perevod = per
+                    this.perevod = oldPerevod
                 } else {
-                    if (this.perevod != per && glav != glav2) {
+                    if (this.perevod != oldPerevod && glav != glav2) {
                         if (glav > glav2) {
                             adapter.removeFragment(glav2)
                             binding.tabLayout.removeTabAt(glav2)
@@ -464,6 +489,33 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                         }
 
                     }
+                    if (kniga2 == 21) {
+                        val glava = binding.pager.currentItem + 1
+                        val isGrec = oldPsaltyrGreek != isPsaltyrGreek()
+                        var styx = fierstPosition + 1
+                        val arrayPsaltyrStyx = translatePsaltyr(glava, styx, isGrec)
+                        val newGlava = arrayPsaltyrStyx[0]
+                        styx = arrayPsaltyrStyx[1]
+                        binding.pager.currentItem = newGlava - 1
+                        val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+                        fragment?.setStyx(styx - 1)
+                        fierstPosition = styx - 1
+                        /*if (!oldPsaltyrGreek && newGlava == 9) {
+                            styx += 22
+                            fragment?.setStyx(styx - 1)
+                            fierstPosition = styx - 1
+                        }*/
+                        /*if (isGrec) {
+                            if (oldPsaltyrGreek && newGlava == 9 && styx >= 22) {
+                                styx -= 22
+                                fierstPosition = styx - 1
+                                newGlava = 10
+                                binding.pager.currentItem = newGlava - 1
+                                val newFragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+                                newFragment?.setStyx(styx)
+                            }
+                        }*/
+                    }
                     adapter.notifyDataSetChanged()
                     kniga = index
                     val title2 = getSpisKnig(false)[kniga]
@@ -475,11 +527,14 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 }
             }
         } else {
-            title = getSpisKnig(true)[kniga]
+            val title2 = getSpisKnig(true)[kniga]
+            val t3 = title2.indexOf("#")
+            title = title2.substring(0, t3)
             binding.subtitleToolbar.text = getSubTitlePerevod()
             binding.titleToolbar.text = title
             binding.pager.adapter?.notifyDataSetChanged()
         }
+        isSetPerevod = false
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {

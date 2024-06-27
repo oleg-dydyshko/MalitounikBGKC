@@ -1135,7 +1135,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             if (t1 != -1) {
                 val subText = list[glava].substring(0, t1)
                 if (subText.isDigitsOnly()) {
-                    stext.setSpan(SuperscriptSpan(), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     if (dzenNoch) stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     else stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }

@@ -528,6 +528,12 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
         }
     }
 
+    fun setStyx(styx: Int) {
+        binding.listView.post {
+            binding.listView.setSelection(styx)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as? BibliaActivity)?.let { activity ->

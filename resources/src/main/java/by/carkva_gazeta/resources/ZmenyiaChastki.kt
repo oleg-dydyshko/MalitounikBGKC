@@ -800,7 +800,7 @@ internal class ZmenyiaChastki {
                 if (subText.isDigitsOnly()) {
                     val color = if (dzenNoch) "<font color=\"#ff6666\">"
                     else "<font color=\"#d00505\">"
-                    subText = subText.replace(subText, "$color<sup>$subText</sup></font>")
+                    subText = subText.replace(subText, "$color$subText</font>")
                     result.append(subText).append(stext.substring(t1)).append("\n")
                 } else {
                     result.append(stext).append("\n")

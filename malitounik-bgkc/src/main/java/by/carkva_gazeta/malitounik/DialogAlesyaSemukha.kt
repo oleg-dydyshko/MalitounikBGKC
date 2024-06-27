@@ -30,15 +30,11 @@ class DialogAlesyaSemukha : DialogFragment() {
             ad = AlertDialog.Builder(it, style)
             binding.title.setText(R.string.alesyaSemukha)
             val isSemuxa = arguments?.getBoolean("isSemuxa", true) ?: true
-            val inputStream = resources.openRawResource(R.raw.all_rights_reserved)
+            val inputStream = if (isSemuxa) resources.openRawResource(R.raw.all_rights_reserved_semuxa)
+            else resources.openRawResource(R.raw.all_rights_reserved_bokun)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
-            var text = reader.readText()
-            if (!isSemuxa) {
-                val t1 = text.indexOf("Усе правы належаць")
-                text = text.substring(0, t1)
-            }
-            binding.content.text = text
+            binding.content.text = reader.readText()
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             ad.setView(binding.root)

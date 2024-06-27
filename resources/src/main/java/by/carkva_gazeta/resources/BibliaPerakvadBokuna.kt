@@ -16,6 +16,8 @@ import java.io.InputStream
 
 interface BibliaPerakvadBokuna {
 
+    fun isPsaltyrGreek() = false
+
     fun getNamePerevod() = DialogVybranoeBibleList.PEREVODBOKUNA
 
     fun getZakladki() = BibleGlobalList.zakladkiBokuna
@@ -40,6 +42,47 @@ interface BibliaPerakvadBokuna {
         this as BaseActivity
         return if (novyZapaviet) File("$filesDir/BibliaBokunaNovyZavet/$kniga.json")
         else File("$filesDir/BibliaBokunaStaryZavet/$kniga.json")
+    }
+
+    fun translatePsaltyr(psalm: Int, styx: Int, isUpdate: Boolean): Array<Int> {
+        var resultPsalm = psalm
+        var resultStyx = styx
+        if (isUpdate) {
+            if (psalm in 10..112) resultPsalm += 1
+            if (psalm == 113) resultPsalm = 114
+            if (psalm == 114 || psalm == 115) resultPsalm = 116
+            if (psalm in 116..145) resultPsalm += 1
+            if (psalm == 146) resultPsalm = 147
+            if (psalm == 9 && styx >= 22) {
+                resultStyx -= 21
+                resultPsalm = 10
+            }
+            if (psalm == 113 && styx < 9) {
+                resultStyx = styx
+                resultPsalm = 114
+            }
+            if (psalm == 113 && styx >= 9) {
+                resultStyx -= 8
+                resultPsalm = 115
+            }
+            if (psalm == 114) {
+                resultStyx = styx
+                resultPsalm = 116
+            }
+            if (psalm == 115) {
+                resultStyx += 10
+                resultPsalm = 116
+            }
+            if (psalm == 146) {
+                resultStyx = styx
+                resultPsalm = 147
+            }
+            if (psalm == 147) {
+                resultStyx += 12
+                resultPsalm = 147
+            }
+        }
+        return arrayOf(resultPsalm, resultStyx)
     }
 
     fun getKnigaReal(kniga: Int): Int {

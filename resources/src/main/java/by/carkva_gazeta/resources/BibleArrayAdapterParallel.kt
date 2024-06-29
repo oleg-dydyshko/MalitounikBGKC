@@ -201,7 +201,8 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                     res = parallel.kniga21(glava + 1, position + 1)
                 }
                 if (kniga == 21) {
-                    res = parallel.kniga22(glava + 1, position + 1)
+                    res = if ((context as BibliaActivity).isPsaltyrGreek()) parallel.kniga22(glava + 1, position + 1)
+                    else parallel.kniga22Masoretskaya(glava + 1, position + 1)
                 }
                 if (kniga == 22) {
                     res = parallel.kniga23(glava + 1, position + 1)
@@ -308,7 +309,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         if (!res.contains("+-+")) {
             ssb.append("\n").append(res)
             val start = ea.textView.text.length
-            val end = start + space + res.length
+            val end = start + space + res.length + 1
             ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorSecondary_text)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             ssb.setSpan(RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             val pos = BibleGlobalList.checkPosition(glava, position)
@@ -423,8 +424,9 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         if (t1 != -1) {
             val subText = ssb.substring(0, t1)
             if (subText.isDigitsOnly()) {
-                if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                ssb.insert(t1, ".")
+                if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             } else {
                 val t2 = ssb.indexOf("\n", index)
                 if (t2 != -1) {
@@ -432,8 +434,9 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                     if (t3 != -1) {
                         val subText2 = ssb.substring(t2 + 1, t3)
                         if (subText2.isDigitsOnly()) {
-                            if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            ssb.insert(t3, ".")
+                            if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
                         findIntStyx(ssb, t2 + 1)
                     }

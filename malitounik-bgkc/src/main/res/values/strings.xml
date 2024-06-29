@@ -262,8 +262,8 @@
     <string name="paralel">Паралельныя месцы</string>
     <string name="no_internet">НЯМА ІНТЭРНЭТ-ЗЛУЧЭНЬНЯ</string>
     <string name="check_internet">Праверце налады злучэньня</string>
-    <string name="alesyaSemukha">УМОВЫ КАРЫСТАНЬНЯ ТЭКСТАМІ</string>
-    <string name="alesyaSemukha2">Умовы карыстаньня тэкстамі</string>
+    <string name="alesyaSemukha">ПРА ПЕРАКЛАД І ЎМОВЫ КАРЫСТАНЬНЯ ТЭКСТАМІ</string>
+    <string name="alesyaSemukha2">Пра пераклад і ўмовы карыстаньня тэкстамі</string>
     <string name="vybor_daty">Выбраць дату</string>
     <string name="vybor_mun">ВЫБРАЦЬ МЕСЯЦ</string>
     <string name="vybor_year">ВЫБРАЦЬ ГОД</string>
@@ -627,6 +627,12 @@
         <item>Вячэрня Тон 7</item>
         <item>Вячэрня Тон 8</item>
         <item>Багародзічныя адпушчальныя</item>
+    </string-array>
+    <string-array name="trebnik_list">
+        <item>Служба аб вызваленьні бязьвінна зьняволеных</item>
+        <item>Служба за памерлых — Малая паніхіда</item>
+        <item>Чын асьвячэньня транспартнага сродку</item>
+        <item>Асьвячэньне крыжа на сьвятой Літургіі</item>
     </string-array>
     <string-array name="viachernia_list">
         <item>Вячэрня агульная Найсьвяцейшай Багародзіцы</item>

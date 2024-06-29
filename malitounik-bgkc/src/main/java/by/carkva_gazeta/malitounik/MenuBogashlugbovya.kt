@@ -98,9 +98,11 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             var opisanie = ""
             if (isSearch) opisanie = "\nТрэбнік"
             val dataSearch = ArrayList<MenuListData>()
-            dataSearch.add(MenuListData("Служба аб вызваленьні бязьвінна зьняволеных$opisanie", "sluzba_vyzvalen_biazvinna_zniavolenych"))
-            dataSearch.add(MenuListData("Служба за памерлых — Малая паніхіда$opisanie", "panichida_malaja"))
-            dataSearch.add(MenuListData("Чын асьвячэньня транспартнага сродку$opisanie", "czyn_asviaczennia_transpartnaha_srodku"))
+            val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.trebnik_list)
+            dataSearch.add(MenuListData(r1[0] + opisanie, "sluzba_vyzvalen_biazvinna_zniavolenych"))
+            dataSearch.add(MenuListData(r1[1] + opisanie, "panichida_malaja"))
+            dataSearch.add(MenuListData(r1[2] + opisanie, "czyn_asviaczennia_transpartnaha_srodku"))
+            dataSearch.add(MenuListData(r1[3] + opisanie, "asviaczennie_kryza"))
             return dataSearch
         }
 

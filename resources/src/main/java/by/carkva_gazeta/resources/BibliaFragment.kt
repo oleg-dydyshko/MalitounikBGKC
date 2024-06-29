@@ -335,7 +335,8 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
                         if (!res.contains("+-+")) clic = true
                     }
                     if (knigaReal == 21) {
-                        res = parallel.kniga22(page + 1, position + 1)
+                        res = if (bibliaActyvity.isPsaltyrGreek()) parallel.kniga22(page + 1, position + 1)
+                        else parallel.kniga22Masoretskaya(page + 1, position + 1)
                         if (!res.contains("+-+")) clic = true
                     }
                     if (knigaReal == 22) {
@@ -521,6 +522,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
             }
             inputStream.close()
             val split = builder.toString().split("===")
+            if (page + 1 > split.size - 1) page = split.size - 1
             val bibleline = split[page + 1].split("\n")
             bibleline.forEach {
                 if (it.trim() != "") bible.add(it)

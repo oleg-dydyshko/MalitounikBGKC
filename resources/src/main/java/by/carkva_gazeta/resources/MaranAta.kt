@@ -21,7 +21,6 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.ImageSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
-import android.text.style.SuperscriptSpan
 import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.Menu
@@ -44,7 +43,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.core.text.isDigitsOnly
-import androidx.core.text.toSpannable
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -817,7 +815,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             else -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan))
         }
         val t4 = list[fullKniga].indexOf("#")
-        return list[fullKniga].substring(0, t4)
+        return if (t4 != -1) list[fullKniga].substring(0, t4)
+        else list[fullKniga]
     }
 
     override fun setPerevod(perevod: String) {
@@ -2328,7 +2327,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             res = parallel.kniga21(glava, styx + 1)
         }
         if (kniga == 22) {
-            res = parallel.kniga22(glava, styx + 1)
+            res = if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || perevod == DialogVybranoeBibleList.PEREVODNADSAN) parallel.kniga22(glava, styx + 1)
+            else parallel.kniga22Masoretskaya(glava, styx + 1)
         }
         if (kniga == 23) {
             res = parallel.kniga23(glava, styx + 1)
@@ -2525,7 +2525,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             val zakladka = SpannableStringBuilder()
             zakladka.append(setZakladki(maranAta[position].novyZapavet, getNumarKnigiBelarusPerevoda(getNumarKnigi(maranAta[position].kniga)), maranAta[position].glava, maranAta[position].styx, maranAta[position].perevod))
-            val biblia = setIndexBiblii(MainActivity.fromHtml(maranAta[position].bible).toSpannable())
+            val biblia = setIndexBiblii(SpannableStringBuilder(MainActivity.fromHtml(maranAta[position].bible)))
             val ssb = SpannableStringBuilder(biblia).append(zakladka)
             val res = getParallel(maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
             if (!res.contains("+-+")) {
@@ -2627,21 +2627,23 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return rootView
         }
 
-        private fun setIndexBiblii(ssb: Spannable): Spannable {
+        private fun setIndexBiblii(ssb: SpannableStringBuilder): Spannable {
             val t1 = ssb.indexOf(" ")
             if (t1 != -1) {
                 val subText = ssb.substring(0, t1)
                 if (subText.isDigitsOnly()) {
-                    if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ssb.insert(t1, ".")
+                    if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 } else {
                     val t2 = ssb.indexOf("\n")
                     if (t2 != -1) {
                         val t3 = ssb.indexOf(" ", t2)
                         val subText2 = ssb.substring(t2 + 1, t3)
                         if (subText2.isDigitsOnly()) {
-                            if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            ssb.insert(t3, ".")
+                            if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
                     }
                 }

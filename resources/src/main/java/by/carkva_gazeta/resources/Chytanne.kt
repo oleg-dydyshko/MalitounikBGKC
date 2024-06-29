@@ -15,7 +15,6 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
-import android.text.style.SuperscriptSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -1130,13 +1129,14 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         val list = ssb.split("\n")
         val result = SpannableStringBuilder()
         for (glava in list.indices) {
-            val stext = SpannableString(list[glava])
+            val stext = SpannableStringBuilder(list[glava])
             val t1 = list[glava].indexOf(" ")
             if (t1 != -1) {
                 val subText = list[glava].substring(0, t1)
                 if (subText.isDigitsOnly()) {
-                    if (dzenNoch) stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    else stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    stext.insert(t1, ".")
+                    if (dzenNoch) stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    else stext.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
             result.append(stext).append("\n")

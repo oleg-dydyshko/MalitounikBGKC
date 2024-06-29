@@ -34,7 +34,7 @@ class DialogAlesyaSemukha : DialogFragment() {
             else resources.openRawResource(R.raw.all_rights_reserved_bokun)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
-            binding.content.text = reader.readText()
+            binding.content.text = MainActivity.fromHtml(reader.readText())
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             ad.setView(binding.root)

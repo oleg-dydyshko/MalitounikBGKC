@@ -3,16 +3,20 @@ package by.carkva_gazeta.resources
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import androidx.core.content.ContextCompat
+import androidx.core.text.isDigitsOnly
 import androidx.core.text.toSpannable
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
-import by.carkva_gazeta.malitounik.Malitounik
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
-class ParalelnyeMesta {
-    fun paralel(cytanneParalelnye: String, perevod: String): Spannable {
+interface ParalelnyeMesta {
+    fun paralel(cytanneParalelnye: String, perevod: String): SpannableStringBuilder {
+        val activity = this as BaseActivity
         val stringBuilder = SpannableStringBuilder()
         val chten = cytanneParalelnye.split(";")
         var knigaName = "Быт"
@@ -73,7 +77,7 @@ class ParalelnyeMesta {
                 }
                 try {
                     var noKnigaSemuxi = false
-                    val r = Malitounik.applicationContext().resources
+                    val r = activity.resources
                     var inputStream: InputStream? = null
                     if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
                         inputStream = when (nomer) {
@@ -441,20 +445,19 @@ class ParalelnyeMesta {
                         }
                         if (noKnigaSemuxi) {
                             val title = when (perevod) {
-                                DialogVybranoeBibleList.PEREVODSEMUXI -> Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
-                                DialogVybranoeBibleList.PEREVODBOKUNA -> Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_bokun)
-                                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_charniauski)
-                                else -> Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
+                                DialogVybranoeBibleList.PEREVODSEMUXI -> activity.resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
+                                DialogVybranoeBibleList.PEREVODBOKUNA -> activity.resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_bokun)
+                                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> activity.resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_charniauski)
+                                else -> activity.resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
                             }
-                            val src = Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error, title).toSpannable()
+                            val src = activity.resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error, title).toSpannable()
                             src.setSpan(StyleSpan(Typeface.ITALIC), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             stringBuilder.append(src).append("\n")
                         }
-
-                        val src = kon.toSpannable()
+                        val src = SpannableStringBuilder(kon)
                         src.setSpan(StyleSpan(Typeface.BOLD), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         stringBuilder.append(src).append("\n")
-                        stringBuilder.append(Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_opis, r2)).append("\n")
+                        stringBuilder.append(findIntStyx(SpannableStringBuilder(r2))).append("\n\n")
                     }
                 } catch (t: Throwable) {
                     if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) nazva = nazvaBel
@@ -472,13 +475,42 @@ class ParalelnyeMesta {
                     var src = kon.toSpannable()
                     src.setSpan(StyleSpan(Typeface.BOLD), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     stringBuilder.append(src).append("\n\n")
-                    src = Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch).toSpannable()
+                    src = activity.resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch).toSpannable()
                     src.setSpan(StyleSpan(Typeface.ITALIC), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     stringBuilder.append(src)
                 }
             }
         }
-        return stringBuilder.toSpannable()
+        return stringBuilder
+    }
+
+    private fun findIntStyx(ssb: SpannableStringBuilder, index: Int = 0): SpannableStringBuilder {
+        val context = this as BaseActivity
+        val dzenNoch = context.getBaseDzenNoch()
+        val t1 = ssb.indexOf(" ", index)
+        if (t1 != -1) {
+            val subText = ssb.substring(0, t1)
+            if (subText.isDigitsOnly()) {
+                ssb.insert(t1, ".")
+                if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            } else {
+                val t2 = ssb.indexOf("\n", index)
+                if (t2 != -1) {
+                    val t3 = ssb.indexOf(" ", t2)
+                    if (t3 != -1) {
+                        val subText2 = ssb.substring(t2 + 1, t3)
+                        if (subText2.isDigitsOnly()) {
+                            ssb.insert(t3, ".")
+                            if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
+                        findIntStyx(ssb, t2 + 1)
+                    }
+                }
+            }
+        }
+        return ssb
     }
 
     fun biblia(chtenie: String): Array<String> {

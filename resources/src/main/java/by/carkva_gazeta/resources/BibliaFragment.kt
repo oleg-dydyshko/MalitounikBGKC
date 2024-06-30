@@ -249,7 +249,11 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
                         if (!res.contains("+-+")) clic = true
                     }
                 } else {
-                    knigaReal = bibliaActyvity.getKnigaReal(kniga)
+                    val list = bibliaActyvity.getSpisKnig(false)[kniga]
+                    val t1 = list.indexOf("#")
+                    val t2 = list.indexOf("#", t1 + 1)
+                    val myKniga = list.substring(t2 + 1).toInt()
+                    knigaReal = myKniga
                     if (knigaReal == 0) {
                         res = parallel.kniga1(page + 1, position + 1)
                         if (!res.contains("+-+")) clic = true
@@ -550,7 +554,11 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
                 override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {}
             })
             loadBibleList()
-            adapter = BibleArrayAdapterParallel(activity, bible, activity.getKnigaReal(kniga), page, novyZapavet, activity.getNamePerevod())
+            val list = activity.getSpisKnig(novyZapavet)[kniga]
+            val t1 = list.indexOf("#")
+            val t2 = list.indexOf("#", t1 + 1)
+            val myKniga = list.substring(t2 + 1).toInt()
+            adapter = BibleArrayAdapterParallel(activity, bible, myKniga, page, novyZapavet, activity.getNamePerevod())
             binding.listView.divider = null
             binding.listView.adapter = adapter
             binding.listView.setSelection(pazicia)
@@ -742,7 +750,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
             binding.zametka.setOnClickListener {
                 if (BibleGlobalList.bibleCopyList.size > 0) {
                     val knigaName = knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1)
-                    val natatka = DialogBibleNatatka.getInstance(perevod = activity.getNamePerevod(), novyzavet = novyZapavet, kniga = activity.getKnigaReal(kniga), glava = BibleGlobalList.mListGlava, stix = BibleGlobalList.bibleCopyList[0], bibletext = knigaName)
+                    val natatka = DialogBibleNatatka.getInstance(perevod = activity.getNamePerevod(), novyzavet = novyZapavet, kniga = myKniga, glava = BibleGlobalList.mListGlava, stix = BibleGlobalList.bibleCopyList[0], bibletext = knigaName)
                     natatka.show(childFragmentManager, "bible_natatka")
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     binding.linearLayout4.visibility = View.GONE

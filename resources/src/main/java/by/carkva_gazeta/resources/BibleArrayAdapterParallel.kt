@@ -299,17 +299,15 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             ea.textView.text = stix
         }
         val zakladka = SpannableStringBuilder()
-        var space = 1
-        if (mPerevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
+        if (mPerevod == DialogVybranoeBibleList.PEREVODSEMUXI || mPerevod == DialogVybranoeBibleList.PEREVODBOKUNA || mPerevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
             res = MainActivity.translateToBelarus(res)
         }
         zakladka.append(setZakladki(position, mPerevod))
-        if (zakladka.isNotEmpty()) space = 2
         val ssb = findIntStyx(SpannableStringBuilder(ea.textView.text).append(zakladka))
         if (!res.contains("+-+")) {
             ssb.append("\n").append(res)
             val start = ea.textView.text.length
-            val end = start + space + res.length + 1
+            val end = ssb.length
             ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorSecondary_text)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             ssb.setSpan(RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             val pos = BibleGlobalList.checkPosition(glava, position)

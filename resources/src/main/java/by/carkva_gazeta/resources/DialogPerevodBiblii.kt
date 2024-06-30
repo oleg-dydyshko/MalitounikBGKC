@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
@@ -68,6 +69,7 @@ class DialogPerevodBiblii : DialogFragment() {
             var style = by.carkva_gazeta.malitounik.R.style.AlertDialogTheme
             if (dzenNoch) style = by.carkva_gazeta.malitounik.R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
+            if (dzenNoch) binding.error.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             isSinoidal = arguments?.getBoolean("isMaranata", true) ?: true
             val perevod = arguments?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
             val sinoidal = k.getInt("sinoidal", 0)

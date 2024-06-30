@@ -129,15 +129,6 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
         }
     }
 
-    override fun getKnigaReal(kniga: Int): Int {
-        return when (perevod) {
-            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getKnigaReal(kniga)
-            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getKnigaReal(kniga)
-            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getKnigaReal(kniga)
-            else -> kniga
-        }
-    }
-
     override fun getInputStream(novyZapaviet: Boolean, kniga: Int): InputStream {
         return when (perevod) {
             DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getInputStream(novyZapaviet, kniga)
@@ -220,7 +211,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
             val t2 = list[kniga].indexOf("#", t1 + 1)
             val split = list[kniga].substring(t1 + 1, t2).toInt()
             val children = ArrayList<BibliaAdapterData>()
-            val razdel = if (!novyZapavet && getKnigaReal(kniga) == 21) getString(R.string.psalom)
+            val razdel = if (!novyZapavet && split == 21) getString(R.string.psalom)
             else getString(R.string.razdzel)
             for (glava in 1 .. split) {
                 children.add(BibliaAdapterData(list[kniga].substring(0, t1), "$razdel $glava"))

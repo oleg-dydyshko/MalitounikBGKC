@@ -29,6 +29,10 @@ import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuBibleBokuna
+import by.carkva_gazeta.malitounik.MenuBibleCarniauski
+import by.carkva_gazeta.malitounik.MenuBibleSemuxa
+import by.carkva_gazeta.malitounik.MenuBibleSinoidal
 import by.carkva_gazeta.malitounik.MenuVybranoe
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -47,7 +51,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.InputStream
 
-class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSinaidal, DialogFontSize.DialogFontSizeListener, DialogBibleRazdel.DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogPerevodBiblii.DialogPerevodBibliiListener {
+class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSinaidal, DialogFontSize.DialogFontSizeListener, DialogBibleRazdel.DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogPerevodBiblii.DialogPerevodBibliiListener, ParalelnyeMesta {
     private var fullscreenPage = false
     private var paralel = false
     private var kniga = 0
@@ -140,15 +144,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         }
     }
 
-    override fun getKnigaReal(kniga: Int): Int {
-        return when (perevod) {
-            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getKnigaReal(kniga)
-            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getKnigaReal(kniga)
-            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getKnigaReal(kniga)
-            else -> kniga
-        }
-    }
-
     override fun getInputStream(novyZapaviet: Boolean, kniga: Int): InputStream {
         return when (perevod) {
             DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getInputStream(novyZapaviet, kniga)
@@ -174,7 +169,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         return when (perevod) {
             DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.translatePsaltyr(psalm, styx, isUpdate)
             DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.translatePsaltyr(psalm, styx, isUpdate)
-            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.translatePsaltyr(psalm,styx, isUpdate)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.translatePsaltyr(psalm, styx, isUpdate)
             DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.translatePsaltyr(psalm, styx, isUpdate)
             DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.translatePsaltyr(psalm, styx, isUpdate)
             else -> arrayOf(1, 1)
@@ -274,7 +269,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         adapter = MyPagerAdapter(glavyList, this)
         binding.pager.adapter = adapter
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
-            if (getKnigaReal(kniga) == 21) tab.text = resources.getString(R.string.psalom2) + " " + (position + 1)
+            if (title2.substring(t2 + 1).toInt() == 21) tab.text = resources.getString(R.string.psalom2) + " " + (position + 1)
             else tab.text = getString(R.string.razdzel) + " " + (position + 1)
         }.attach()
         binding.pager.offscreenPageLimit = 1
@@ -483,7 +478,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                         } else {
                             adapter.addFragment(glav2)
                             val newTab = binding.tabLayout.newTab()
-                            newTab.text = if (getKnigaReal(kniga) == 21) resources.getString(R.string.psalom2) + " " + glav2
+                            newTab.text = if (myKniga == 21) resources.getString(R.string.psalom2) + " " + glav2
                             else getString(R.string.razdzel) + " " + glav2
                             binding.tabLayout.addTab(newTab, glav2 - 1)
                         }
@@ -500,21 +495,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                         val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
                         fragment?.setStyx(styx - 1)
                         fierstPosition = styx - 1
-                        /*if (!oldPsaltyrGreek && newGlava == 9) {
-                            styx += 22
-                            fragment?.setStyx(styx - 1)
-                            fierstPosition = styx - 1
-                        }*/
-                        /*if (isGrec) {
-                            if (oldPsaltyrGreek && newGlava == 9 && styx >= 22) {
-                                styx -= 22
-                                fierstPosition = styx - 1
-                                newGlava = 10
-                                binding.pager.currentItem = newGlava - 1
-                                val newFragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
-                                newFragment?.setStyx(styx)
-                            }
-                        }*/
                     }
                     adapter.notifyDataSetChanged()
                     kniga = index
@@ -650,6 +630,10 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
 
     override fun onResume() {
         super.onResume()
+        MenuBibleSemuxa.loadNatatkiZakladkiSemuxa(this)
+        MenuBibleSinoidal.loadNatatkiZakladkiSinodal(this)
+        MenuBibleBokuna.loadNatatkiZakladkiBokuna(this)
+        MenuBibleCarniauski.loadNatatkiZakladkiCarniauski(this)
         if (fullscreenPage) {
             binding.linealLayoutTitle.post {
                 hide()
@@ -666,8 +650,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         paralel = true
         this.cytanneParalelnye = cytanneParalelnye
         this.cytanneSours = cytanneSours
-        val pm = ParalelnyeMesta()
-        binding.conteiner.text = pm.paralel(this.cytanneParalelnye, getNamePerevod()).trim()
+        binding.conteiner.text = paralel(this.cytanneParalelnye, getNamePerevod())
         binding.scroll.visibility = View.VISIBLE
         binding.pager.visibility = View.GONE
         binding.tabLayout.visibility = View.GONE

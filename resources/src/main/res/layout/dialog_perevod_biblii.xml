@@ -22,7 +22,7 @@
         android:padding="10sp"
         android:text="@string/biblia_error"
         android:textColor="@color/colorPrimary"
-        android:textSize="14sp"
+        android:textSize="18sp"
         android:visibility="gone" />
 
     <RadioGroup

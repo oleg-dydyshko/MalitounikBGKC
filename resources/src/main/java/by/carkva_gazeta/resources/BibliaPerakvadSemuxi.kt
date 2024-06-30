@@ -86,36 +86,6 @@ interface BibliaPerakvadSemuxi {
         return arrayOf(resultPsalm, resultStyx)
     }
 
-    fun getKnigaReal(kniga: Int): Int {
-        var knigaReal = kniga
-        when (kniga) {
-            16 -> knigaReal = 19
-            17 -> knigaReal = 20
-            18 -> knigaReal = 21
-            19 -> knigaReal = 22
-            20 -> knigaReal = 23
-            21 -> knigaReal = 24
-            22 -> knigaReal = 27
-            23 -> knigaReal = 28
-            24 -> knigaReal = 29
-            25 -> knigaReal = 32
-            26 -> knigaReal = 33
-            27 -> knigaReal = 34
-            28 -> knigaReal = 35
-            29 -> knigaReal = 36
-            30 -> knigaReal = 37
-            31 -> knigaReal = 38
-            32 -> knigaReal = 39
-            33 -> knigaReal = 40
-            34 -> knigaReal = 41
-            35 -> knigaReal = 42
-            36 -> knigaReal = 43
-            37 -> knigaReal = 44
-            38 -> knigaReal = 45
-        }
-        return knigaReal
-    }
-
     fun getInputStream(novyZapaviet: Boolean, kniga: Int): InputStream {
         this as BaseActivity
         var inputStream = resources.openRawResource(R.raw.biblian1)

@@ -5,24 +5,27 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.text.InputFilter
-import android.text.InputType
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
+import android.os.SystemClock
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.GridLayoutManager
 import by.carkva_gazeta.malitounik.BaseActivity
-import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
+import by.carkva_gazeta.malitounik.databinding.DialogBibleRazdelBinding
+import by.carkva_gazeta.malitounik.databinding.DialogBibleRazdelItemBinding
+import com.woxthebox.draglistview.DragItemAdapter
 
 class DialogBibleRazdel : DialogFragment() {
     private var fullGlav = 0
+    private var position = 1
     private var mListener: DialogBibleRazdelListener? = null
     private lateinit var builder: AlertDialog.Builder
-    private var _binding: DialogEditviewDisplayBinding? = null
+    private var _binding: DialogBibleRazdelBinding? = null
     private val binding get() = _binding!!
+    private var mItemArray = ArrayList<Int>()
+    private var mLastClickTime: Long = 0
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -47,84 +50,73 @@ class DialogBibleRazdel : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fullGlav = arguments?.getInt("full_glav") ?: 0
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("glava", binding.content.text.toString())
+        position = arguments?.getInt("position") ?: 1
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogEditviewDisplayBinding.inflate(layoutInflater)
+            _binding = DialogBibleRazdelBinding.inflate(layoutInflater)
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             builder = AlertDialog.Builder(it, style)
-            binding.title.text = resources.getString(R.string.data_search, fullGlav)
-            binding.content.contentDescription = resources.getString(R.string.data_search, fullGlav)
-            binding.content.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(3) }
-            if (savedInstanceState != null) {
-                binding.content.setText(savedInstanceState.getString("glava"))
-            } else {
-                binding.content.setText("")
-            }
-            binding.content.inputType = InputType.TYPE_CLASS_NUMBER
-            if (dzenNoch) {
-                binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                binding.content.setBackgroundResource(R.color.colorbackground_material_dark)
-            } else {
-                binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                binding.content.setBackgroundResource(R.color.colorWhite)
-            }
-            binding.content.requestFocus()
-            binding.content.setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_GO) {
-                    goRazdel()
-                    dialog?.cancel()
-                }
-                false
-            }
-            binding.content.imeOptions = EditorInfo.IME_ACTION_GO
-            builder.setNegativeButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int ->
-                val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)
+            val glm = GridLayoutManager(it, 5)
+            binding.dragGridView.setLayoutManager(glm)
+            for (i in 1..fullGlav) mItemArray.add(i)
+            val listAdapter = ItemAdapter(mItemArray, R.id.item_layout, true)
+            binding.dragGridView.setAdapter(listAdapter, true)
+            binding.dragGridView.setCustomDragItem(null)
+            binding.dragGridView.isDragEnabled = false
+            if (savedInstanceState == null) glm.scrollToPositionWithOffset(position, 0)
+            builder.setPositiveButton(resources.getString(R.string.close)) { dialog: DialogInterface, _: Int ->
                 dialog.cancel()
-            }
-            builder.setPositiveButton(resources.getString(R.string.ok)) { _: DialogInterface?, _: Int ->
-                goRazdel()
             }
         }
         builder.setView(binding.root)
         return builder.create()
     }
 
-    private fun goRazdel() {
-        activity?.let {
-            val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm1.hideSoftInputFromWindow(binding.content.windowToken, 0)
-            if (binding.content.text.toString() == "") {
-                MainActivity.toastView(it, getString(R.string.error))
-            } else {
-                val value: Int = try {
-                    binding.content.text.toString().toInt() - 1
-                } catch (e: NumberFormatException) {
-                    -1
+    private inner class ItemAdapter(list: ArrayList<Int>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<Int, ItemAdapter.ViewHolder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = DialogBibleRazdelItemBinding.inflate(layoutInflater, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            super.onBindViewHolder(holder, position)
+            val text = mItemList[position]
+            holder.mText.text = text.toString()
+            holder.itemView.tag = mItemList[position]
+        }
+
+        override fun getUniqueItemId(position: Int): Long {
+            return mItemList[position].toLong()
+        }
+
+        private inner class ViewHolder(itemView: DialogBibleRazdelItemBinding) : DragItemAdapter.ViewHolder(itemView.root, mGrabHandleId, mDragOnLongPress) {
+            var mText = itemView.text
+            override fun onItemClicked(view: View) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return
                 }
-                if (value in 0 until fullGlav) {
-                    mListener?.onComplete(value)
-                } else {
-                    MainActivity.toastView(it, getString(R.string.error))
-                }
+                mListener?.onComplete(itemList[bindingAdapterPosition].toInt() - 1)
+                mLastClickTime = SystemClock.elapsedRealtime()
+                dialog?.dismiss()
             }
+        }
+
+        init {
+            itemList = list
         }
     }
 
     companion object {
-        fun getInstance(fullGlav: Int): DialogBibleRazdel {
+        fun getInstance(fullGlav: Int, position: Int): DialogBibleRazdel {
             val instance = DialogBibleRazdel()
             val args = Bundle()
             args.putInt("full_glav", fullGlav)
+            args.putInt("position", position)
             instance.arguments = args
             return instance
         }

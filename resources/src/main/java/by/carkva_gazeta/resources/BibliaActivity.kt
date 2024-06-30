@@ -599,7 +599,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             return true
         }
         if (id == R.id.action_glava) {
-            val dialogBibleRazdel = DialogBibleRazdel.getInstance(adapter.itemCount)
+            val dialogBibleRazdel = DialogBibleRazdel.getInstance(adapter.itemCount, binding.pager.currentItem)
             dialogBibleRazdel.show(supportFragmentManager, "full_glav")
             return true
         }

@@ -78,7 +78,7 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogVybranoeBibleList.DialogVybranoeBibleListListener {
+class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogVybranoeBibleList.DialogVybranoeBibleListListener, ZmenyiaChastki {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -118,7 +118,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private var vybranoePosition = -1
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
     private var orientation = Configuration.ORIENTATION_UNDEFINED
-    private val zmenyiaChastki = ZmenyiaChastki()
     private val c = Calendar.getInstance()
     private var startSearchString = ""
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -457,7 +456,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun setDatacalendar(savedInstanceState: Bundle?) {
-        zmenyiaChastki.setArrayData(MenuCaliandar.getDataCalaindar(c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR]))
+        setArrayData(MenuCaliandar.getDataCalaindar(c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR]))
         val cal = Calendar.getInstance()
         val mun = cal[Calendar.MONTH]
         val day = cal[Calendar.DATE]
@@ -731,7 +730,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         var aliert8 = ""
         var aliert9 = ""
         val res = withContext(Dispatchers.IO) {
-            zmenyiaChastki.setDzenNoch(dzenNoch)
             chechZmena = false
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
@@ -743,15 +741,15 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val color = if (dzenNoch) "<font color=\"#ff6666\">"
             else "<font color=\"#d00505\">"
             val slugbovyiaTextu = SlugbovyiaTextu()
-            raznica = zmenyiaChastki.raznica()
-            dayOfYear = zmenyiaChastki.dayOfYear()
+            raznica = raznica()
+            dayOfYear = dayOfYear()
             var zmennyiaCastkiTitle = ""
             val cal = GregorianCalendar()
             val dayOfYar = if (cal.isLeapYear(cal[Calendar.YEAR])) 0
             else 1
-            checkDayOfYear = if (liturgia) slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt(), zmenyiaChastki.getYear())
-            else slugbovyiaTextu.checkViachernia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt(), zmenyiaChastki.getYear())
-            if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, zmenyiaChastki.getYear()))) {
+            checkDayOfYear = if (liturgia) slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt(), getYear())
+            else slugbovyiaTextu.checkViachernia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt(), getYear())
+            if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, getYear()))) {
                 chechZmena = true
                 val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
                 val idZmenyiaChastki = resursMap[resours] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
@@ -759,7 +757,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
             }
             val viachernia = resurs == "lit_raniej_asviaczanych_darou" || resurs == "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara" || resurs == "viaczernia_niadzelnaja" || resurs == "viaczernia_liccia_i_blaslavenne_chliabou" || resurs == "viaczernia_na_kozny_dzen" || resurs == "viaczernia_u_vialikim_poscie"
-            if (viachernia && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, zmenyiaChastki.getYear()))) {
+            if (viachernia && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, getYear()))) {
                 chechZmena = true
                 checkLiturgia = 1
             }
@@ -790,9 +788,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             }
                             try {
                                 if (dayOfWeek == 1) {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(1))
+                                    builder.append(traparyIKandakiNiadzelnyia(1))
                                 } else {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 1))
+                                    builder.append(traparyIKandakiNaKognyDzen(dayOfWeek, 1))
                                 }
                             } catch (t: Throwable) {
                                 builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
@@ -806,9 +804,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             }
                             try {
                                 if (dayOfWeek == 1) {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(2))
+                                    builder.append(traparyIKandakiNiadzelnyia(2))
                                 } else {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 2))
+                                    builder.append(traparyIKandakiNaKognyDzen(dayOfWeek, 2))
                                 }
                             } catch (t: Throwable) {
                                 builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
@@ -822,9 +820,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             }
                             try {
                                 if (dayOfWeek == 1) {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(3))
+                                    builder.append(traparyIKandakiNiadzelnyia(3))
                                 } else {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 3))
+                                    builder.append(traparyIKandakiNaKognyDzen(dayOfWeek, 3))
                                 }
                             } catch (t: Throwable) {
                                 builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
@@ -838,9 +836,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                             }
                             try {
                                 if (dayOfWeek == 1) {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(4))
+                                    builder.append(traparyIKandakiNiadzelnyia(4))
                                 } else {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 4))
+                                    builder.append(traparyIKandakiNaKognyDzen(dayOfWeek, 4))
                                 }
                             } catch (t: Throwable) {
                                 builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br><br>\n")
@@ -852,7 +850,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                                 if (chechZmena && !nochenia) {
                                     builder.append("<br>").append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
                                 }
-                                var sv = zmenyiaChastki.sviatyia()
+                                var sv = sviatyia()
                                 if (sv != "") {
                                     val s1 = sv.split(":")
                                     val s2 = s1[1].split(";")
@@ -862,7 +860,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                                     builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
                                 } else builder.append(line)
                                 try {
-                                    builder.append(zmenyiaChastki.zmenya(1))
+                                    builder.append(zmenya(1))
                                 } catch (t: Throwable) {
                                     builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br><br>\n")
                                 }
@@ -873,7 +871,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                                 if (chechZmena && !nochenia) {
                                     builder.append("<br>").append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
                                 }
-                                var sv = zmenyiaChastki.sviatyia()
+                                var sv = sviatyia()
                                 if (sv != "") {
                                     val s1 = sv.split(":")
                                     val s2 = s1[1].split(";")
@@ -883,7 +881,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                                     builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
                                 } else builder.append(line)
                                 try {
-                                    builder.append(zmenyiaChastki.zmenya(0))
+                                    builder.append(zmenya(0))
                                 } catch (t: Throwable) {
                                     builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                                 }

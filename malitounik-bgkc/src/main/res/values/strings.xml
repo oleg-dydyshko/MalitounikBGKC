@@ -140,49 +140,6 @@
     <string name="procent">%1$d%%</string>
     <string name="sabytieKali">Калі: %1$s %2$s \n%3$s\nРэдагаваць/Выдаліць</string>
     <string name="sabytieDoKuda">Пачатак: %1$s %2$s \nКанец: %3$s %4$s \n%5$s\nРэдагаваць/Выдаліць</string>
-    <string name="chtinia_0">%1$sЕвангельле паводле Мацьвея %2$s</string>
-    <string name="chtinia_1">%1$sЕвангельле паводле Марка %2$s</string>
-    <string name="chtinia_2">%1$sЕвангельле паводле Лукаша %2$s</string>
-    <string name="chtinia_3">%1$sЕвангельле паводле Яна %2$s</string>
-    <string name="chtinia_4">%1$sДзеі Апосталаў %2$s</string>
-    <string name="chtinia_5">%1$sПасланьне Якуба %2$s</string>
-    <string name="chtinia_6">%1$s1-е пасланьне Пятра %2$s</string>
-    <string name="chtinia_7">%1$s2-е пасланьне Пятра %2$s</string>
-    <string name="chtinia_8">%1$s1-е пасланьне Яна Багаслова %2$s</string>
-    <string name="chtinia_9">%1$s2-е пасланьне Яна Багаслова %2$s</string>
-    <string name="chtinia_10">%1$s3-е пасланьне Яна Багаслова %2$s</string>
-    <string name="chtinia_11">%1$sПасланьне Юды %2$s</string>
-    <string name="chtinia_12">%1$sПасланьне да Рымлянаў %2$s</string>
-    <string name="chtinia_13">%1$s1-е пасланьне да Карынфянаў %2$s</string>
-    <string name="chtinia_14">%1$s2-е пасланьне да Карынфянаў %2$s</string>
-    <string name="chtinia_15">%1$sПасланьне да Галятаў %2$s</string>
-    <string name="chtinia_16">%1$sПасланьне да Эфэсянаў %2$s</string>
-    <string name="chtinia_17">%1$sПасланьне да Філіпянаў %2$s</string>
-    <string name="chtinia_18">%1$sПасланьне да Каласянаў %2$s</string>
-    <string name="chtinia_19">%1$s1-е пасланьне да Фесаланікійцаў %2$s</string>
-    <string name="chtinia_20">%1$s2-е пасланьне да Фесаланікійцаў %2$s</string>
-    <string name="chtinia_21">%1$s1-е пасланьне да Цімафея %2$s</string>
-    <string name="chtinia_22">%1$s2-е пасланьне да Цімафея %2$s</string>
-    <string name="chtinia_23">%1$sПасланьне да Ціта %2$s</string>
-    <string name="chtinia_24">%1$sПасланьне да Філімона %2$s</string>
-    <string name="chtinia_25">%1$sПасланьне да Габрэяў %2$s</string>
-    <string name="chtinia_26">%1$sКніга Быцьця %2$s</string>
-    <string name="chtinia_27">%1$sКніга Выслоўяў Саламонавых %2$s</string>
-    <string name="chtinia_28">%1$sКніга прарока Езэкііля %2$s</string>
-    <string name="chtinia_29">%1$sКніга Выхаду %2$s</string>
-    <string name="chtinia_30">%1$sКніга Ёва %2$s</string>
-    <string name="chtinia_31">%1$sКніга прарока Захарыі %2$s</string>
-    <string name="chtinia_32">%1$sКніга прарока Ёіля %2$s</string>
-    <string name="chtinia_33">%1$sКніга прарока Сафона %2$s</string>
-    <string name="chtinia_34">%1$sКніга прарока Ісаі %2$s</string>
-    <string name="chtinia_35">%1$sКніга Прарока Ераміі %2$s</string>
-    <string name="chtinia_36">%1$sКніга Прарока Данііла %2$s</string>
-    <string name="chtinia_37">%1$sКніга Лікаў %2$s</string>
-    <string name="chtinia_38">%1$sКніга Прарока Міхея %2$s</string>
-    <string name="chtinia_39">%1$sКніга Другога Закону %2$s</string>
-    <string name="chtinia_40">%1$sКніга Мудрасці Саламона %2$s</string>
-    <string name="chtinia_41">%1$sКніга Малахіі %2$s</string>
-    <string name="chtinia_zag">%1$s[&#8230;]</string>
     <string name="error_ch">Памылка, даруйце\n</string>
     <string name="error_ch2">Памылка, даруйце</string>
     <string name="error_ch_email">carkvagazeta@gmail.com\nНапішыце пра памылку ў праграме\n\nЗагадзя шчыра дзякуем!</string>
@@ -965,27 +922,27 @@
         <item>Лукі#24#2</item>
         <item>Яна#21#3</item>
         <item>Дзеі#28#4</item>
-        <item>Да Рымлянаў#5#5</item>
-        <item>1 да Карынцянаў#5#6</item>
-        <item>2 да Карынцянаў#3#7</item>
-        <item>Да Галатаў#5#8</item>
-        <item>Да Эфесцаў#1#9</item>
-        <item>Да Піліпцаў#1#10</item>
-        <item>Да Калосцаў#1#11</item>
-        <item>1 да Тэсалонцаў#16#12</item>
-        <item>2 да Тэсалонцаў#16#13</item>
-        <item>1 да Цімафея#13#14</item>
-        <item>2 да Цімафея#6#15</item>
-        <item>Да Ціта#6#16</item>
-        <item>Да Філімона#4#17</item>
-        <item>Да Гебраяў#4#18</item>
-        <item>Якуба#5#19</item>
-        <item>1 Пятра#3#20</item>
-        <item>2 Пятра#6#21</item>
-        <item>1 Яна#4#22</item>
-        <item>2 Яна#3#23</item>
-        <item>3 Яна#1#24</item>
-        <item>Юды#13#25</item>
+        <item>Да Рымлянаў#16#12</item>
+        <item>1 да Карынцянаў#16#13</item>
+        <item>2 да Карынцянаў#13#14</item>
+        <item>Да Галатаў#6#15</item>
+        <item>Да Эфесцаў#6#16</item>
+        <item>Да Піліпцаў#4#17</item>
+        <item>Да Калосцаў#4#18</item>
+        <item>1 да Тэсалонцаў#5#19</item>
+        <item>2 да Тэсалонцаў#3#20</item>
+        <item>1 да Цімафея#6#21</item>
+        <item>2 да Цімафея#4#22</item>
+        <item>Да Ціта#3#23</item>
+        <item>Да Філімона#1#24</item>
+        <item>Да Гебраяў#13#25</item>
+        <item>Якуба#5#5</item>
+        <item>1 Пятра#5#6</item>
+        <item>2 Пятра#3#7</item>
+        <item>1 Яна#5#8</item>
+        <item>2 Яна#1#9</item>
+        <item>3 Яна#1#10</item>
+        <item>Юды#1#11</item>
         <item>Адкрыццё#22#26</item>
     </string-array>
     <string-array name="charniauskis">

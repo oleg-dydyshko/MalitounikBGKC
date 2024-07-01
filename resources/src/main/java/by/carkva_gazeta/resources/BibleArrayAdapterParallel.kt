@@ -515,47 +515,11 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             var zavet = "1"
             if (knigaS != -1) {
                 zavet = "0"
-                knigaN = knigaS
-                if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODBOKUNA || perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                    when (knigaS) {
-                        16 -> knigaN = 19
-                        17 -> knigaN = 20
-                        18 -> knigaN = 21
-                        19 -> knigaN = 22
-                        20 -> knigaN = 23
-                        21 -> knigaN = 24
-                        22 -> knigaN = 27
-                        23 -> knigaN = 28
-                        24 -> knigaN = 29
-                        25 -> knigaN = 32
-                        26 -> knigaN = 33
-                        27 -> knigaN = 34
-                        28 -> knigaN = 35
-                        29 -> knigaN = 36
-                        30 -> knigaN = 37
-                        31 -> knigaN = 38
-                        32 -> knigaN = 39
-                        33 -> knigaN = 40
-                        34 -> knigaN = 41
-                        35 -> knigaN = 42
-                        36 -> knigaN = 43
-                        37 -> knigaN = 44
-                        38 -> knigaN = 45
-                    }
-                }
-                if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                    when (knigaS) {
-                        39 -> knigaN = 17
-                        40 -> knigaN = 18
-                        41 -> knigaN = 25
-                        42 -> knigaN = 26
-                        43 -> knigaN = 31
-                        44 -> knigaN = 46
-                        45 -> knigaN = 47
-                    }
-                }
+                val title = lists[knigaS]
+                val t5 = listn[knigaS].indexOf("#")
+                val t6 = listn[knigaS].indexOf("#", t5 + 1)
+                knigaN = title.substring(t6 + 1).toInt()
             }
-
             if (zavet.contains(zav) && knigaN == kniga && glava1 == glava && stix1 == position) {
                 ssb.append(".")
                 val t5 = knigaName.lastIndexOf("<!--")

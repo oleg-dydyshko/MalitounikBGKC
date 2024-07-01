@@ -1080,6 +1080,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("sinoidal", 0)
             prefEditor.putInt("maranata", 0)
             prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+            prefEditor.putString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI)
             prefEditor.putInt("soundnotification", 0)
             prefEditor.putInt("timeNotification", 8)
             prefEditor.putString("search_string", "")
@@ -1182,6 +1183,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 prefEditor.putInt("sinoidal", 1)
             } else {
                 prefEditor.putInt("sinoidal", 0)
+                prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
             }
             prefEditor.apply()
             if (check != k.getInt("sinoidal", 0)) editFull = true

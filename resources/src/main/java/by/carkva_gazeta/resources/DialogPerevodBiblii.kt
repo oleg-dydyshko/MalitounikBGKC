@@ -70,10 +70,10 @@ class DialogPerevodBiblii : DialogFragment() {
             if (dzenNoch) style = by.carkva_gazeta.malitounik.R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
             if (dzenNoch) binding.error.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            isSinoidal = arguments?.getBoolean("isMaranata", true) ?: true
+            isSinoidal = arguments?.getBoolean("isSinoidal", true) ?: true
             val perevod = arguments?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
             val sinoidal = k.getInt("sinoidal", 0)
-            if (sinoidal == 0 && !isSinoidal) binding.sinoidal.visibility = View.GONE
+            if (sinoidal == 0 || !isSinoidal) binding.sinoidal.visibility = View.GONE
             val isNadsan = arguments?.getBoolean("isNadsan", false) ?: false
             if (!isNadsan) binding.nadsan.visibility = View.GONE
             when (perevod) {

@@ -494,6 +494,7 @@ interface ParalelnyeMesta {
                 ssb.insert(t1, ".")
                 if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                //findIntStyx(ssb, t1 + 1)
             } else {
                 val t2 = ssb.indexOf("\n", index)
                 if (t2 != -1) {

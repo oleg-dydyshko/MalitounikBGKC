@@ -1,21 +1,118 @@
 package by.carkva_gazeta.resources
 
 import android.content.Context
-import android.text.SpannableString
 import androidx.core.text.isDigitsOnly
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.Malitounik
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
 
-internal class ZmenyiaChastki {
-    private var dzenNoch: Boolean = false
-    private val arrayData = ArrayList<ArrayList<String>>()
+interface ZmenyiaChastki : BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSemuxi {
+    companion object {
+        private val arrayData = ArrayList<ArrayList<String>>()
+        private var novyZapavet = false
+        private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
+    }
 
-    fun setDzenNoch(dzenNoch: Boolean) {
-        this.dzenNoch = dzenNoch
+    override fun addZakladka(color: Int, knigaBible: String, bible: String) {
+        when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.addZakladka(color, knigaBible, bible)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.addZakladka(color, knigaBible, bible)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.addZakladka(color, knigaBible, bible)
+        }
+    }
+
+    override fun getFileZavet(novyZapaviet: Boolean, kniga: Int): File {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getFileZavet(novyZapaviet, kniga)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getFileZavet(novyZapaviet, kniga)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getFileZavet(novyZapaviet, kniga)
+            else -> File("")
+        }
+    }
+
+    override fun getNamePerevod(): String {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getNamePerevod()
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getNamePerevod()
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getNamePerevod()
+            else -> ""
+        }
+    }
+
+    override fun getZakladki(): ArrayList<BibleZakladkiData> {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getZakladki()
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getZakladki()
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getZakladki()
+            else -> ArrayList()
+        }
+    }
+
+    override fun getTitlePerevod(): String {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getTitlePerevod()
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getTitlePerevod()
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getTitlePerevod()
+            else -> ""
+        }
+    }
+
+    override fun getSubTitlePerevod(): String {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getSubTitlePerevod()
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getSubTitlePerevod()
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getSubTitlePerevod()
+            else -> ""
+        }
+    }
+
+    override fun getSpisKnig(novyZapaviet: Boolean): Array<String> {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getSpisKnig(novyZapaviet)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getSpisKnig(novyZapaviet)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getSpisKnig(novyZapaviet)
+            else -> arrayOf("")
+        }
+    }
+
+    override fun getInputStream(novyZapaviet: Boolean, kniga: Int): InputStream {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getInputStream(novyZapaviet, kniga)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getInputStream(novyZapaviet, kniga)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getInputStream(novyZapaviet, kniga)
+            else -> super<BibliaPerakvadSemuxi>.getInputStream(novyZapaviet, kniga)
+        }
+    }
+
+    override fun saveVydelenieZakladkiNtanki(novyZapaviet: Boolean, kniga: Int, glava: Int, stix: Int) {
+        when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.saveVydelenieZakladkiNtanki(novyZapaviet, kniga, glava, stix)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.saveVydelenieZakladkiNtanki(novyZapaviet, kniga, glava, stix)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.saveVydelenieZakladkiNtanki(novyZapaviet, kniga, glava, stix)
+        }
+    }
+
+    override fun translatePsaltyr(psalm: Int, styx: Int, isUpdate: Boolean): Array<Int> {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.translatePsaltyr(psalm, styx, isUpdate)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.translatePsaltyr(psalm, styx, isUpdate)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.translatePsaltyr(psalm, styx, isUpdate)
+            else -> arrayOf(1, 1)
+        }
+    }
+
+    override fun isPsaltyrGreek(): Boolean {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.isPsaltyrGreek()
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.isPsaltyrGreek()
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.isPsaltyrGreek()
+            else -> true
+        }
     }
 
     fun sviatyia(): String {
@@ -23,12 +120,21 @@ internal class ZmenyiaChastki {
         else arrayData[0][11]
     }
 
-    fun sviatyiaView(apostal: Int) = chtenia(sviatyia(), apostal)
+    fun sviatyiaView(apostal: Int): String {
+        this as BaseActivity
+        val data = sviatyia()
+        val chtenie = if (apostal == 1) 0 else 1
+        return if (data == "" || data.contains(resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
+        else chtenia(data)[chtenie]
+    }
 
     fun zmenya(apostal: Int): String {
+        this as BaseActivity
         val data = arrayData[0][9]
-        return if (data == "" || data.contains(Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
-        else chtenia(arrayData[0][9], apostal)
+        var chtenie = if (apostal == 1) 0 else 1
+        if (arrayData[0][9].contains("На ютрані")) chtenie++
+        return if (data == "" || data.contains(resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
+        else chtenia(data)[chtenie]
     }
 
     fun setArrayData(arrayList: ArrayList<ArrayList<String>>) {
@@ -42,680 +148,427 @@ internal class ZmenyiaChastki {
 
     fun getYear() = arrayData[0][3].toInt()
 
-    private fun chtenia(w: String, apostal: Int): String {
+    fun bibliaNew(chtenie: String): Int {
+        var bible = 0
+        if (chtenie == "Быт" || chtenie == "Быц") {
+            bible = 0
+            novyZapavet = false
+        }
+        if (chtenie == "Исх" || chtenie == "Вых") {
+            bible = 1
+            novyZapavet = false
+        }
+        if (chtenie == "Лев" || chtenie == "Ляв") {
+            bible = 2
+            novyZapavet = false
+        }
+        if (chtenie == "Чис" || chtenie == "Лікі") {
+            bible = 3
+            novyZapavet = false
+        }
+        if (chtenie == "Втор" || chtenie == "Дрг") {
+            bible = 4
+            novyZapavet = false
+        }
+        if (chtenie == "Нав") {
+            bible = 5
+            novyZapavet = false
+        }
+        if (chtenie == "Суд") {
+            bible = 6
+            novyZapavet = false
+        }
+        if (chtenie == "Руфь" || chtenie == "Рут") {
+            bible = 7
+            novyZapavet = false
+        }
+        if (chtenie == "1 Цар") {
+            bible = 8
+            novyZapavet = false
+        }
+        if (chtenie == "2 Цар") {
+            bible = 9
+            novyZapavet = false
+        }
+        if (chtenie == "3 Цар") {
+            bible = 10
+            novyZapavet = false
+        }
+        if (chtenie == "4 Цар") {
+            bible = 11
+            novyZapavet = false
+        }
+        if (chtenie == "1 Пар" || chtenie == "1 Лет") {
+            bible = 12
+            novyZapavet = false
+        }
+        if (chtenie == "2 Пар" || chtenie == "2 Лет") {
+            bible = 13
+            novyZapavet = false
+        }
+        if (chtenie == "1 Езд" || chtenie == "1 Эзд") {
+            bible = 14
+            novyZapavet = false
+        }
+        if (chtenie == "Неем" || chtenie == "Нээм") {
+            bible = 15
+            novyZapavet = false
+        }
+        if (chtenie == "2 Езд" || chtenie == "2 Эзд") {
+            bible = 16
+            novyZapavet = false
+        }
+        if (chtenie == "Тов" || chtenie == "Тав") {
+            bible = 17
+            novyZapavet = false
+        }
+        if (chtenie == "Иудифь" || chtenie == "Юдт") {
+            bible = 18
+            novyZapavet = false
+        }
+        if (chtenie == "Есф" || chtenie == "Эст") {
+            bible = 19
+            novyZapavet = false
+        }
+        if (chtenie == "Иов" || chtenie == "Ёва") {
+            bible = 20
+            novyZapavet = false
+        }
+        if (chtenie == "Пс") {
+            bible = 21
+            novyZapavet = false
+        }
+        if (chtenie == "Притч" || chtenie == "Высл") {
+            bible = 22
+            novyZapavet = false
+        }
+        if (chtenie == "Еккл" || chtenie == "Экл") {
+            bible = 23
+            novyZapavet = false
+        }
+        if (chtenie == "Песн" || chtenie == "Псн") {
+            bible = 24
+            novyZapavet = false
+        }
+        if (chtenie == "Прем" || chtenie == "Мдр") {
+            bible = 25
+            novyZapavet = false
+        }
+        if (chtenie == "Сир" || chtenie == "Сір") {
+            bible = 26
+            novyZapavet = false
+        }
+        if (chtenie == "Ис" || chtenie == "Іс") {
+            bible = 27
+            novyZapavet = false
+        }
+        if (chtenie == "Иер" || chtenie == "Ер") {
+            bible = 28
+            novyZapavet = false
+        }
+        if (chtenie == "Плач") {
+            bible = 29
+            novyZapavet = false
+        }
+        if (chtenie == "Посл Иер" || chtenie == "Пасл Ер" || chtenie == "Ярэм") {
+            bible = 30
+            novyZapavet = false
+        }
+        if (chtenie == "Вар" || chtenie == "Бар") {
+            bible = 31
+            novyZapavet = false
+        }
+        if (chtenie == "Иез" || chtenie == "Езк") {
+            bible = 32
+            novyZapavet = false
+        }
+        if (chtenie == "Дан") {
+            bible = 33
+            novyZapavet = false
+        }
+        if (chtenie == "Ос" || chtenie == "Ас") {
+            bible = 34
+            novyZapavet = false
+        }
+        if (chtenie == "Иоил" || chtenie == "Ёіл") {
+            bible = 35
+            novyZapavet = false
+        }
+        if (chtenie == "Ам") {
+            bible = 36
+            novyZapavet = false
+        }
+        if (chtenie == "Авд" || chtenie == "Аўдз") {
+            bible = 37
+            novyZapavet = false
+        }
+        if (chtenie == "Иона" || chtenie == "Ёны") {
+            bible = 38
+            novyZapavet = false
+        }
+        if (chtenie == "Мих" || chtenie == "Міх") {
+            bible = 39
+            novyZapavet = false
+        }
+        if (chtenie == "Наум" || chtenie == "Нвм") {
+            bible = 40
+            novyZapavet = false
+        }
+        if (chtenie == "Авв" || chtenie == "Абк") {
+            bible = 41
+            novyZapavet = false
+        }
+        if (chtenie == "Соф" || chtenie == "Саф") {
+            bible = 42
+            novyZapavet = false
+        }
+        if (chtenie == "Агг" || chtenie == "Аг") {
+            bible = 43
+            novyZapavet = false
+        }
+        if (chtenie == "Зах") {
+            bible = 44
+            novyZapavet = false
+        }
+        if (chtenie == "Мал") {
+            bible = 45
+            novyZapavet = false
+        }
+        if (chtenie == "1 Мак") {
+            bible = 46
+            novyZapavet = false
+        }
+        if (chtenie == "2 Мак") {
+            bible = 47
+            novyZapavet = false
+        }
+        if (chtenie == "3 Мак") {
+            bible = 48
+            novyZapavet = false
+        }
+        if (chtenie == "3 Езд" || chtenie == "3 Эзд") {
+            bible = 49
+            novyZapavet = false
+        }
+        if (chtenie == "Мф" || chtenie == "Мц") {
+            bible = 0
+            novyZapavet = true
+        }
+        if (chtenie == "Мк") {
+            bible = 1
+            novyZapavet = true
+        }
+        if (chtenie == "Лк") {
+            bible = 2
+            novyZapavet = true
+        }
+        if (chtenie == "Ин" || chtenie == "Ян") {
+            bible = 3
+            novyZapavet = true
+        }
+        if (chtenie == "Деян" || chtenie == "Дз") {
+            bible = 4
+            novyZapavet = true
+        }
+        if (chtenie == "Иак" || chtenie == "Як") {
+            bible = 5
+            novyZapavet = true
+        }
+        if (chtenie == "1 Пет" || chtenie == "1 Пт") {
+            bible = 6
+            novyZapavet = true
+        }
+        if (chtenie == "2 Пет" || chtenie == "2 Пт") {
+            bible = 7
+            novyZapavet = true
+        }
+        if (chtenie == "1 Ин" || chtenie == "1 Ян") {
+            bible = 8
+            novyZapavet = true
+        }
+        if (chtenie == "2 Ин" || chtenie == "2 Ян") {
+            bible = 9
+            novyZapavet = true
+        }
+        if (chtenie == "3 Ин" || chtenie == "3 Ян") {
+            bible = 10
+            novyZapavet = true
+        }
+        if (chtenie == "Иуд" || chtenie == "Юды") {
+            bible = 11
+            novyZapavet = true
+        }
+        if (chtenie == "Рим" || chtenie == "Рым") {
+            bible = 12
+            novyZapavet = true
+        }
+        if (chtenie == "1 Кор" || chtenie == "1 Кар") {
+            bible = 13
+            novyZapavet = true
+        }
+        if (chtenie == "2 Кор" || chtenie == "2 Кар") {
+            bible = 14
+            novyZapavet = true
+        }
+        if (chtenie == "Гал") {
+            bible = 15
+            novyZapavet = true
+        }
+        if (chtenie == "Еф" || chtenie == "Эф") {
+            bible = 16
+            novyZapavet = true
+        }
+        if (chtenie == "Флп" || chtenie == "Плп") {
+            bible = 17
+            novyZapavet = true
+        }
+        if (chtenie == "Кол" || chtenie == "Клс") {
+            bible = 18
+            novyZapavet = true
+        }
+        if (chtenie == "1 Фес") {
+            bible = 19
+            novyZapavet = true
+        }
+        if (chtenie == "2 Фес") {
+            bible = 20
+            novyZapavet = true
+        }
+        if (chtenie == "1 Тим" || chtenie == "1 Цім") {
+            bible = 21
+            novyZapavet = true
+        }
+        if (chtenie == "2 Тим" || chtenie == "2 Цім") {
+            bible = 22
+            novyZapavet = true
+        }
+        if (chtenie == "Тит" || chtenie == "Ціт") {
+            bible = 23
+            novyZapavet = true
+        }
+        if (chtenie == "Флм") {
+            bible = 24
+            novyZapavet = true
+        }
+        if (chtenie == "Евр" || chtenie == "Гбр") {
+            bible = 25
+            novyZapavet = true
+        }
+        if (chtenie == "Откр" || chtenie == "Адкр") {
+            bible = 26
+            novyZapavet = true
+        }
+        return bible
+    }
+
+    private fun findIndex(chtenie: String): Int {
+        val bibliaNew = bibliaNew(chtenie)
+        val list = getSpisKnig(novyZapavet)
+        var indexListBible = -1
+        for (e in list.indices) {
+            val t1 = list[e].indexOf("#")
+            val t2 = list[e].indexOf("#", t1 + 1)
+            val indexBible = list[e].substring(t2 + 1).toInt()
+            if (indexBible == bibliaNew) {
+                indexListBible = e
+                break
+            }
+        }
+        return indexListBible
+    }
+
+    fun chtenia(w: String): ArrayList<String> {
+        this as BaseActivity
+        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
         var w1 = w
-        val res = StringBuilder()
         w1 = w1.replace("\n", ";")
         w1 = MainActivity.removeZnakiAndSlovy(w1)
-        val oldList = w1.split(";")
-        val split = ArrayList<String>()
-        for (i in oldList.indices) {
-            if (oldList[i].trim().isNotEmpty()) split.add(oldList[i])
-        }
-        if (split.size == 1) return "<em>" + Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
-        var knigaN: String
-        var knigaK = "0"
-        var zaglnum = 0
-        var chtenie = if (apostal == 1) 0 else 1
-        if (w.contains("На ютрані")) chtenie++
-        val zaglavie = split[chtenie].split(",")
-        var zagl = ""
-        var zaglavieName = ""
-        var result = ""
-        for (e in zaglavie.indices) {
-            val zaglav = zaglavie[e].trim()
-            val zag = zaglav.indexOf(" ", 2)
-            val zag1 = zaglav.indexOf(".")
-            val zag2 = zaglav.indexOf("-")
-            val zag3 = zaglav.indexOf(".", zag1 + 1)
-            val zagS = if (zag2 != -1) {
-                zaglav.substring(0, zag2)
-            } else {
-                zaglav
-            }
-            var glav = false
-            if (zag1 > zag2 && zag == -1) {
-                glav = true
-            } else if (zag != -1) {
-                zagl = zaglav.substring(0, zag)
-                val zaglavieName1 = split[chtenie].trim()
-                zaglavieName = " " + zaglavieName1.substring(zag + 1)
-                zaglnum = zaglav.substring(zag + 1, zag1).toInt()
-            } else if (zag1 != -1) {
-                zaglnum = zaglav.substring(0, zag1).toInt()
-            }
-            if (glav) {
-                val zagS1 = zagS.indexOf(".")
-                if (zagS1 == -1) {
-                    knigaN = zagS
-                } else {
-                    zaglnum = zagS.substring(0, zagS1).toInt()
-                    knigaN = zagS.substring(zagS1 + 1)
-                }
-            } else if (zag2 == -1) {
-                knigaN = if (zag1 != -1) {
-                    zaglav.substring(zag1 + 1)
+        val split = w1.split(";")
+        val list = ArrayList<String>()
+        for (i in split.indices) {
+            val res = StringBuilder()
+            var knigaN: String
+            var knigaK = "0"
+            var zaglnum = 0
+            val zaglavie = split[i].split(",")
+            var zagl = ""
+            var zaglavieName = ""
+            var result = ""
+            for (e in zaglavie.indices) {
+                val perevodSave = perevod
+                val zaglav = zaglavie[e].trim()
+                val zag = zaglav.indexOf(" ", 2)
+                val zag1 = zaglav.indexOf(".")
+                val zag2 = zaglav.indexOf("-")
+                val zag3 = zaglav.indexOf(".", zag1 + 1)
+                val zagS = if (zag2 != -1) {
+                    zaglav.substring(0, zag2)
                 } else {
                     zaglav
                 }
-                knigaK = knigaN
-            } else {
-                knigaN = zaglav.substring(zag1 + 1, zag2)
-            }
-            if (glav) {
-                knigaK = zaglav.substring(zag1 + 1)
-            } else if (zag2 != -1) {
-                knigaK = if (zag3 == -1) {
-                    zaglav.substring(zag2 + 1)
+                var glav = false
+                if (zag1 > zag2 && zag == -1) {
+                    glav = true
+                } else if (zag != -1) {
+                    zagl = zaglav.substring(0, zag)
+                    val zaglavieName1 = split[i].trim()
+                    zaglavieName = " " + zaglavieName1.substring(zag + 1)
+                    zaglnum = zaglav.substring(zag + 1, zag1).toInt()
+                } else if (zag1 != -1) {
+                    zaglnum = zaglav.substring(0, zag1).toInt()
+                }
+                if (glav) {
+                    val zagS1 = zagS.indexOf(".")
+                    if (zagS1 == -1) {
+                        knigaN = zagS
+                    } else {
+                        zaglnum = zagS.substring(0, zagS1).toInt()
+                        knigaN = zagS.substring(zagS1 + 1)
+                    }
+                } else if (zag2 == -1) {
+                    knigaN = if (zag1 != -1) {
+                        zaglav.substring(zag1 + 1)
+                    } else {
+                        zaglav
+                    }
+                    knigaK = knigaN
                 } else {
-                    zaglav.substring(zag3 + 1)
+                    knigaN = zaglav.substring(zag1 + 1, zag2)
                 }
-            }
-            var polstixaA = false
-            var polstixaB = false
-            if (knigaK.contains("а", true)) {
-                polstixaA = true
-                knigaK = knigaK.replace("а", "", true)
-            }
-            if (knigaN.contains("б", true)) {
-                polstixaB = true
-                knigaN = knigaN.replace("б", "", true)
-            }
-            var kniga = -1
-            if (zagl == "Мц") kniga = 0
-            if (zagl == "Мк") kniga = 1
-            if (zagl == "Лк") kniga = 2
-            if (zagl == "Ян") kniga = 3
-            if (zagl == "Дз") kniga = 4
-            if (zagl == "Як") kniga = 5
-            if (zagl == "1 Пт") kniga = 6
-            if (zagl == "2 Пт") kniga = 7
-            if (zagl == "1 Ян") kniga = 8
-            if (zagl == "2 Ян") kniga = 9
-            if (zagl == "3 Ян") kniga = 10
-            if (zagl == "Юд") kniga = 11
-            if (zagl == "Рым") kniga = 12
-            if (zagl == "1 Кар") kniga = 13
-            if (zagl == "2 Кар") kniga = 14
-            if (zagl == "Гал") kniga = 15
-            if (zagl == "Эф") kniga = 16
-            if (zagl == "Плп") kniga = 17
-            if (zagl == "Клс") kniga = 18
-            if (zagl == "1 Фес") kniga = 19
-            if (zagl == "2 Фес") kniga = 20
-            if (zagl == "1 Цім") kniga = 21
-            if (zagl == "2 Цім") kniga = 22
-            if (zagl == "Ціт") kniga = 23
-            if (zagl == "Піл") kniga = 24
-            if (zagl == "Гбр") kniga = 25
-            if (zagl == "Быц") kniga = 26
-            if (zagl == "Высл") kniga = 27
-            if (zagl == "Езк") kniga = 28
-            if (zagl == "Вых") kniga = 29
-            if (zagl == "Ёў") kniga = 30
-            if (zagl == "Зах") kniga = 31
-            if (zagl == "Ёіл") kniga = 32
-            if (zagl == "Саф") kniga = 33
-            if (zagl == "Іс") kniga = 34
-            if (zagl == "Ер" || zagl == "Ярэм") kniga = 35
-            if (zagl == "Дан") kniga = 36
-            if (zagl == "Лікі") kniga = 37
-            if (zagl == "Міх") kniga = 38
-            if (zagl == "Дрг") kniga = 39
-            if (zagl == "Мдр") kniga = 40
-            if (zagl == "Мал") kniga = 41
-            var inputStream: InputStream? = null
-            val context = Malitounik.applicationContext()
-            val resources = context.resources
-            val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
-            var title = SpannableString("")
-            val spln = ""
-            when (kniga) {
-                0 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian1)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan1)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin1)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_0, spln, zaglavieName))
+                if (glav) {
+                    knigaK = zaglav.substring(zag1 + 1)
+                } else if (zag2 != -1) {
+                    knigaK = if (zag3 == -1) {
+                        zaglav.substring(zag2 + 1)
                     } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
+                        zaglav.substring(zag3 + 1)
                     }
                 }
-
-                1 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian2)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan2)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin2)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_1, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
+                var polstixaA = false
+                var polstixaB = false
+                if (knigaK.contains("а", true)) {
+                    polstixaA = true
+                    knigaK = knigaK.replace("а", "", true)
                 }
-
-                2 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian3)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan3)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin3)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_2, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
+                if (knigaN.contains("б", true)) {
+                    polstixaB = true
+                    knigaN = knigaN.replace("б", "", true)
                 }
-
-                3 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian4)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan4)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin4)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_3, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
+                var indexBiblii = findIndex(zagl)
+                if (indexBiblii == -1) {
+                    perevod = DialogVybranoeBibleList.PEREVODCARNIAUSKI
+                    indexBiblii = findIndex(zagl)
                 }
-
-                4 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian5)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan5)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin5)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_4, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
+                val inputStream = getInputStream(novyZapavet, indexBiblii)
+                val title = if (e == 0) {
+                    val spis = getSpisKnig(novyZapavet)[indexBiblii]
+                    val t1 = spis.indexOf("#")
+                    spis.substring(0, t1) + " $zaglavieName"
+                } else {
+                    "[&#8230;]"
                 }
-
-                5 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian6)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan6)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin6)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_5, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                6 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian7)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan7)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin7)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_6, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                7 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian8)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan8)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin8)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_7, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                8 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian9)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan9)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin9)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_8, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                9 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian10)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan10)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin10)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_9, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                10 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian11)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan11)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin11)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_10, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                11 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian12)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan12)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin12)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_11, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                12 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian13)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan13)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin13)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_12, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                13 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian14)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan14)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin14)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_13, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                14 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian15)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan15)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin15)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_14, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                15 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian16)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan16)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin16)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_15, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                16 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian17)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan17)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin17)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_16, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                17 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian18)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan18)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin18)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_17, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                18 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian19)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan19)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin19)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_18, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                19 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian20)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan20)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin20)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_19, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                20 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian21)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan21)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin21)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_20, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                21 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian22)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan22)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin22)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_21, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                22 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian23)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan23)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin23)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_22, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                23 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian24)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan24)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin24)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_23, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                24 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian25)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan25)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin25)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_24, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                25 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblian26)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunan26)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskin26)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_25, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                26 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias1)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas1)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis1)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_26, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                27 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias20)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas20)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis20)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_27, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                28 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias26)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas26)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis26)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_28, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                29 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias2)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas2)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis2)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_29, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                30 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias18)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas18)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis18)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_30, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                31 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias38)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas38)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis38)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_31, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                32 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias29)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas29)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis29)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_32, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                33 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias36)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas36)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis36)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_33, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                34 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias23)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas23)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis23)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_34, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                35 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias24)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas24)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis24)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_35, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                36 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias27)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas27)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis27)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_36, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                37 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias4)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas4)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis4)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_37, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                38 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias33)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas33)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis33)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_38, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                39 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias5)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas5)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis5)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_39, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                40 -> {
-                    inputStream = resources.openRawResource(R.raw.carniauskis42)
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_40, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-
-                41 -> {
-                    when (perevod) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> inputStream = resources.openRawResource(R.raw.biblias39)
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> inputStream = resources.openRawResource(R.raw.bokunas39)
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> inputStream = resources.openRawResource(R.raw.carniauskis39)
-                    }
-                    title = if (e == 0) {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_41, spln, zaglavieName))
-                    } else {
-                        SpannableString(context.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
-                    }
-                }
-            }
-            inputStream?.let { inputStream1 ->
-                val isr = InputStreamReader(inputStream1)
+                val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
                 val builder = StringBuilder()
                 reader.use { buffer ->
@@ -765,31 +618,35 @@ internal class ZmenyiaChastki {
                 val desK = spl.indexOf("\n", desK1)
                 if (desK == -1) res.append(spl.substring(desN))
                 else res.append(spl.substring(desN, desK))
-                result = res.toString()
+                var result2 = res.toString()
                 if (polstixaA) {
-                    val t2 = result.indexOf(knigaK)
-                    val t3 = result.indexOf(".", t2)
-                    var t1 = result.indexOf(":", t2)
-                    if (t1 == -1) t1 = result.indexOf(";", t3 + 1)
-                    if (t1 == -1) t1 = result.indexOf(".", t3 + 1)
-                    if (t1 != -1) result = result.substring(0, t1 + 1) + "<s>" + result.substring(t1 + 1, result.length) + "</s>"
+                    val t2 = result2.indexOf(knigaK)
+                    val t3 = result2.indexOf(".", t2)
+                    var t1 = result2.indexOf(":", t2)
+                    if (t1 == -1) t1 = result2.indexOf(";", t3 + 1)
+                    if (t1 == -1) t1 = result2.indexOf(".", t3 + 1)
+                    if (t1 != -1) result2 = result2.substring(0, t1 + 1) + "<s>" + result2.substring(t1 + 1, result2.length) + "</s>"
                 }
                 if (polstixaB) {
-                    val t2 = result.indexOf("\n")
-                    val textPol = result.substring(0, t2 + 1)
+                    val t2 = result2.indexOf("\n")
+                    val textPol = result2.substring(0, t2 + 1)
                     val t4 = textPol.indexOf("</strong><br>")
                     val t3 = textPol.indexOf(".", t4 + 13)
                     var t1 = textPol.indexOf(":")
                     if (t1 == -1) t1 = textPol.indexOf(";", t3 + 1)
                     if (t1 == -1) t1 = textPol.indexOf(".", t3 + 1)
-                    if (t1 != -1) result = result.substring(0, t3 + 1) + "<s>" + result.substring(t3 + 1, t1 + 1) + "</s>" + result.substring(t1 + 1, result.length)
+                    if (t1 != -1) result2 = result2.substring(0, t3 + 1) + "<s>" + result2.substring(t3 + 1, t1 + 1) + "</s>" + result2.substring(t1 + 1, result2.length)
                 }
+                result = result2
+                perevod = perevodSave
             }
+            list.add(setIndexBiblii("$result<br>"))
         }
-        return setIndexBiblii("$result<br>")
+        return list
     }
 
     private fun setIndexBiblii(ssb: String): String {
+        this as BaseActivity
         val list = ssb.split("\n")
         val result = StringBuilder()
         for (glava in list.indices) {
@@ -798,7 +655,7 @@ internal class ZmenyiaChastki {
             if (t1 != -1) {
                 var subText = list[glava].substring(0, t1)
                 if (subText.isDigitsOnly()) {
-                    val color = if (dzenNoch) "<font color=\"#ff6666\">"
+                    val color = if (getBaseDzenNoch()) "<font color=\"#ff6666\">"
                     else "<font color=\"#d00505\">"
                     subText = subText.replace(subText, "$color$subText.</font>")
                     result.append(subText).append(stext.substring(t1)).append("\n")
@@ -1125,14 +982,15 @@ internal class ZmenyiaChastki {
     }
 
     private fun readFile(resource: Int): String {
-        val inputStream = Malitounik.applicationContext().resources.openRawResource(resource)
+        this as BaseActivity
+        val inputStream = resources.openRawResource(resource)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         val builder = StringBuilder()
         var result: String
         reader.forEachLine {
             result = it
-            if (dzenNoch) result = result.replace("#d00505", "#ff6666")
+            if (getBaseDzenNoch()) result = result.replace("#d00505", "#ff6666")
             builder.append(result)
         }
         isr.close()

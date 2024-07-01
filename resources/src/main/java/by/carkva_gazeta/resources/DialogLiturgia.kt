@@ -82,21 +82,17 @@ class DialogLiturgia : DialogFragment() {
                 }
                 8 -> {
                     binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne).uppercase()
-                    val zch = ZmenyiaChastki()
                     arguments?.let {
-                        zch.setArrayData(MenuCaliandar.getDataCalaindar(it.getInt("date"), it.getInt("month"), it.getInt("year")))
+                        (activity as ZmenyiaChastki).setArrayData(MenuCaliandar.getDataCalaindar(it.getInt("date"), it.getInt("month"), it.getInt("year")))
                     }
-                    zch.setDzenNoch(dzenNoch)
-                    builder.append(zch.sviatyiaView(1))
+                    builder.append((activity as ZmenyiaChastki).sviatyiaView(1))
                 }
                 9 -> {
                     binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne).uppercase()
-                    val zch = ZmenyiaChastki()
                     arguments?.let {
-                        zch.setArrayData(MenuCaliandar.getDataCalaindar(it.getInt("date"), it.getInt("month"), it.getInt("year")))
+                        (activity as ZmenyiaChastki).setArrayData(MenuCaliandar.getDataCalaindar(it.getInt("date"), it.getInt("month"), it.getInt("year")))
                     }
-                    zch.setDzenNoch(dzenNoch)
-                    builder.append(zch.sviatyiaView(0))
+                    builder.append((activity as ZmenyiaChastki).sviatyiaView(0))
                 }
                 10 -> {
                     inputStream = r.openRawResource(R.raw.bogashlugbovya1_8)

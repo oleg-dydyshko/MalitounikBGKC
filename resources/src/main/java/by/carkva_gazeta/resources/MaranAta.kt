@@ -117,6 +117,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private var vybranae = false
     private var prodoljyt = false
     private var title = ""
+    private var novyZapavet = false
 
     override fun addZakladka(color: Int, knigaBible: String, bible: String) {
         when (perevod) {
@@ -556,8 +557,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val vershName = if (maranAta[BibleGlobalList.bibleCopyList[0]].perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) getString(by.carkva_gazeta.malitounik.R.string.stix_ru)
                 else getString(by.carkva_gazeta.malitounik.R.string.stix_by)
                 val knigaName = knigaBible + "/" + razdelName + " " + (maranAta[BibleGlobalList.bibleCopyList[0]].glava + 1) + vershName + " " + (maranAta[BibleGlobalList.bibleCopyList[0]].styx)
-                val kniga = if (maranAta[BibleGlobalList.bibleCopyList[0]].perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) getNumarKnigi(maranAta[BibleGlobalList.bibleCopyList[0]].kniga)
-                else getNumarKnigiBelarusPerevoda(getNumarKnigi(maranAta[BibleGlobalList.bibleCopyList[0]].kniga))
+                val kniga = maranAta[BibleGlobalList.bibleCopyList[0]].kniga
                 val zametka = DialogBibleNatatka.getInstance(perevod = maranAta[BibleGlobalList.bibleCopyList[0]].perevod, novyzavet = maranAta[BibleGlobalList.bibleCopyList[0]].novyZapavet, kniga = kniga, glava = maranAta[BibleGlobalList.bibleCopyList[0]].glava, stix = maranAta[BibleGlobalList.bibleCopyList[0]].styx - 1, bibletext = knigaName)
                 zametka.show(supportFragmentManager, "bible_zametka")
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
@@ -793,138 +793,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         return true
     }
 
-    private fun getBibleNameFull(kniga: Int, perevod: String): String {
-        var fullKniga = kniga - 1
-        if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
-            when (kniga - 1) {
-                19 -> fullKniga = 16
-                20 -> fullKniga = 17
-                21 -> fullKniga = 18
-                22 -> fullKniga = 19
-                23 -> fullKniga = 20
-                24 -> fullKniga = 21
-                27 -> fullKniga = 22
-                28 -> fullKniga = 23
-                29 -> fullKniga = 24
-                32 -> fullKniga = 25
-                33 -> fullKniga = 26
-                34 -> fullKniga = 27
-                35 -> fullKniga = 28
-                36 -> fullKniga = 29
-                37 -> fullKniga = 30
-                38 -> fullKniga = 31
-                39 -> fullKniga = 32
-                40 -> fullKniga = 33
-                41 -> fullKniga = 34
-                42 -> fullKniga = 35
-                43 -> fullKniga = 36
-                44 -> fullKniga = 37
-                45 -> fullKniga = 38
-                50 -> fullKniga = 39
-                51 -> fullKniga = 40
-                52 -> fullKniga = 41
-                53 -> fullKniga = 42
-                54 -> fullKniga = 43
-                55 -> fullKniga = 44
-                56 -> fullKniga = 45
-                57 -> fullKniga = 46
-                58 -> fullKniga = 47
-                59 -> fullKniga = 48
-                60 -> fullKniga = 49
-                61 -> fullKniga = 50
-                62 -> fullKniga = 51
-                63 -> fullKniga = 52
-                64 -> fullKniga = 53
-                65 -> fullKniga = 54
-                66 -> fullKniga = 55
-                67 -> fullKniga = 56
-                68 -> fullKniga = 57
-                69 -> fullKniga = 58
-                70 -> fullKniga = 59
-                71 -> fullKniga = 60
-                72 -> fullKniga = 61
-                73 -> fullKniga = 62
-                74 -> fullKniga = 63
-                75 -> fullKniga = 64
-                76 -> fullKniga = 65
-            }
-        }
-        if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-            when (kniga - 1) {
-                19 -> fullKniga = 16
-                20 -> fullKniga = 17
-                21 -> fullKniga = 18
-                22 -> fullKniga = 19
-                23 -> fullKniga = 20
-                24 -> fullKniga = 21
-                27 -> fullKniga = 22
-                28 -> fullKniga = 23
-                29 -> fullKniga = 24
-                32 -> fullKniga = 25
-                33 -> fullKniga = 26
-                34 -> fullKniga = 27
-                35 -> fullKniga = 28
-                36 -> fullKniga = 29
-                37 -> fullKniga = 30
-                38 -> fullKniga = 31
-                39 -> fullKniga = 32
-                40 -> fullKniga = 33
-                41 -> fullKniga = 34
-                42 -> fullKniga = 35
-                43 -> fullKniga = 36
-                44 -> fullKniga = 37
-                45 -> fullKniga = 38
-                17 -> fullKniga = 39
-                18 -> fullKniga = 40
-                25 -> fullKniga = 41
-                26 -> fullKniga = 42
-                31 -> fullKniga = 43
-                46 -> fullKniga = 44
-                47 -> fullKniga = 45
-                51 -> fullKniga = 47
-                52 -> fullKniga = 48
-                53 -> fullKniga = 49
-                54 -> fullKniga = 50
-                55 -> fullKniga = 51
-                56 -> fullKniga = 52
-                57 -> fullKniga = 53
-                58 -> fullKniga = 54
-                59 -> fullKniga = 55
-                60 -> fullKniga = 56
-                61 -> fullKniga = 57
-                62 -> fullKniga = 58
-                63 -> fullKniga = 59
-                64 -> fullKniga = 60
-                65 -> fullKniga = 61
-                66 -> fullKniga = 62
-                67 -> fullKniga = 63
-                68 -> fullKniga = 64
-                69 -> fullKniga = 65
-                70 -> fullKniga = 66
-                71 -> fullKniga = 67
-                72 -> fullKniga = 68
-                73 -> fullKniga = 69
-                74 -> fullKniga = 70
-                75 -> fullKniga = 71
-                76 -> fullKniga = 72
-            }
-        }
-        if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
-            fullKniga = 0
-        }
-        val list = when (perevod) {
-            DialogVybranoeBibleList.PEREVODSEMUXI -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan))
-            DialogVybranoeBibleList.PEREVODSINOIDAL -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln))
-            DialogVybranoeBibleList.PEREVODNADSAN -> arrayOf(getString(by.carkva_gazeta.malitounik.R.string.psalom2))
-            DialogVybranoeBibleList.PEREVODBOKUNA -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunas).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunan))
-            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskis).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskin))
-            else -> resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan))
-        }
-        val t4 = list[fullKniga].indexOf("#")
-        return if (t4 != -1) list[fullKniga].substring(0, t4)
-        else list[fullKniga]
-    }
-
     override fun setPerevod(perevod: String) {
         saveVydelenieNatatkiZakladki()
         val edit = k.edit()
@@ -936,15 +804,346 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
     }
 
+    private fun bibliaNew(chtenie: String): Int {
+        val t1 = chtenie.lastIndexOf(" ")
+        val kniga = if (t1 != -1) chtenie.substring(0, t1)
+        else chtenie
+        var bible = 0
+        if (kniga == "Быт" || kniga == "Быц") {
+            bible = 0
+            novyZapavet = false
+        }
+        if (kniga == "Исх" || kniga == "Вых") {
+            bible = 1
+            novyZapavet = false
+        }
+        if (kniga == "Лев" || kniga == "Ляв") {
+            bible = 2
+            novyZapavet = false
+        }
+        if (kniga == "Чис" || kniga == "Лікі") {
+            bible = 3
+            novyZapavet = false
+        }
+        if (kniga == "Втор" || kniga == "Дрг") {
+            bible = 4
+            novyZapavet = false
+        }
+        if (kniga == "Нав") {
+            bible = 5
+            novyZapavet = false
+        }
+        if (kniga == "Суд") {
+            bible = 6
+            novyZapavet = false
+        }
+        if (kniga == "Руфь" || kniga == "Рут") {
+            bible = 7
+            novyZapavet = false
+        }
+        if (kniga == "1 Цар") {
+            bible = 8
+            novyZapavet = false
+        }
+        if (kniga == "2 Цар") {
+            bible = 9
+            novyZapavet = false
+        }
+        if (kniga == "3 Цар") {
+            bible = 10
+            novyZapavet = false
+        }
+        if (kniga == "4 Цар") {
+            bible = 11
+            novyZapavet = false
+        }
+        if (kniga == "1 Пар" || kniga == "1 Лет") {
+            bible = 12
+            novyZapavet = false
+        }
+        if (kniga == "2 Пар" || kniga == "2 Лет") {
+            bible = 13
+            novyZapavet = false
+        }
+        if (kniga == "1 Езд" || kniga == "1 Эзд") {
+            bible = 14
+            novyZapavet = false
+        }
+        if (kniga == "Неем" || kniga == "Нээм") {
+            bible = 15
+            novyZapavet = false
+        }
+        if (kniga == "2 Езд" || kniga == "2 Эзд") {
+            bible = 16
+            novyZapavet = false
+        }
+        if (kniga == "Тов" || kniga == "Тав") {
+            bible = 17
+            novyZapavet = false
+        }
+        if (kniga == "Иудифь" || kniga == "Юдт") {
+            bible = 18
+            novyZapavet = false
+        }
+        if (kniga == "Есф" || kniga == "Эст") {
+            bible = 19
+            novyZapavet = false
+        }
+        if (kniga == "Иов" || kniga == "Ёва") {
+            bible = 20
+            novyZapavet = false
+        }
+        if (kniga == "Пс") {
+            bible = 21
+            novyZapavet = false
+        }
+        if (kniga == "Притч" || kniga == "Высл") {
+            bible = 22
+            novyZapavet = false
+        }
+        if (kniga == "Еккл" || kniga == "Экл") {
+            bible = 23
+            novyZapavet = false
+        }
+        if (kniga == "Песн" || kniga == "Псн") {
+            bible = 24
+            novyZapavet = false
+        }
+        if (kniga == "Прем" || kniga == "Мдр") {
+            bible = 25
+            novyZapavet = false
+        }
+        if (kniga == "Сир" || kniga == "Сір") {
+            bible = 26
+            novyZapavet = false
+        }
+        if (kniga == "Ис" || kniga == "Іс") {
+            bible = 27
+            novyZapavet = false
+        }
+        if (kniga == "Иер" || kniga == "Ер") {
+            bible = 28
+            novyZapavet = false
+        }
+        if (kniga == "Плач") {
+            bible = 29
+            novyZapavet = false
+        }
+        if (kniga == "Посл Иер" || kniga == "Пасл Ер" || kniga == "Ярэм") {
+            bible = 30
+            novyZapavet = false
+        }
+        if (kniga == "Вар" || kniga == "Бар") {
+            bible = 31
+            novyZapavet = false
+        }
+        if (kniga == "Иез" || kniga == "Езк") {
+            bible = 32
+            novyZapavet = false
+        }
+        if (kniga == "Дан") {
+            bible = 33
+            novyZapavet = false
+        }
+        if (kniga == "Ос" || kniga == "Ас") {
+            bible = 34
+            novyZapavet = false
+        }
+        if (kniga == "Иоил" || kniga == "Ёіл") {
+            bible = 35
+            novyZapavet = false
+        }
+        if (kniga == "Ам") {
+            bible = 36
+            novyZapavet = false
+        }
+        if (kniga == "Авд" || kniga == "Аўдз") {
+            bible = 37
+            novyZapavet = false
+        }
+        if (kniga == "Иона" || kniga == "Ёны") {
+            bible = 38
+            novyZapavet = false
+        }
+        if (kniga == "Мих" || kniga == "Міх") {
+            bible = 39
+            novyZapavet = false
+        }
+        if (kniga == "Наум" || kniga == "Нвм") {
+            bible = 40
+            novyZapavet = false
+        }
+        if (kniga == "Авв" || kniga == "Абк") {
+            bible = 41
+            novyZapavet = false
+        }
+        if (kniga == "Соф" || kniga == "Саф") {
+            bible = 42
+            novyZapavet = false
+        }
+        if (kniga == "Агг" || kniga == "Аг") {
+            bible = 43
+            novyZapavet = false
+        }
+        if (kniga == "Зах") {
+            bible = 44
+            novyZapavet = false
+        }
+        if (kniga == "Мал") {
+            bible = 45
+            novyZapavet = false
+        }
+        if (kniga == "1 Мак") {
+            bible = 46
+            novyZapavet = false
+        }
+        if (kniga == "2 Мак") {
+            bible = 47
+            novyZapavet = false
+        }
+        if (kniga == "3 Мак") {
+            bible = 48
+            novyZapavet = false
+        }
+        if (kniga == "3 Езд" || kniga == "3 Эзд") {
+            bible = 49
+            novyZapavet = false
+        }
+        if (kniga == "Мф" || kniga == "Мц") {
+            bible = 0
+            novyZapavet = true
+        }
+        if (kniga == "Мк") {
+            bible = 1
+            novyZapavet = true
+        }
+        if (kniga == "Лк") {
+            bible = 2
+            novyZapavet = true
+        }
+        if (kniga == "Ин" || kniga == "Ян") {
+            bible = 3
+            novyZapavet = true
+        }
+        if (kniga == "Деян" || kniga == "Дз") {
+            bible = 4
+            novyZapavet = true
+        }
+        if (kniga == "Иак" || kniga == "Як") {
+            bible = 5
+            novyZapavet = true
+        }
+        if (kniga == "1 Пет" || kniga == "1 Пт") {
+            bible = 6
+            novyZapavet = true
+        }
+        if (kniga == "2 Пет" || kniga == "2 Пт") {
+            bible = 7
+            novyZapavet = true
+        }
+        if (kniga == "1 Ин" || kniga == "1 Ян") {
+            bible = 8
+            novyZapavet = true
+        }
+        if (kniga == "2 Ин" || kniga == "2 Ян") {
+            bible = 9
+            novyZapavet = true
+        }
+        if (kniga == "3 Ин" || kniga == "3 Ян") {
+            bible = 10
+            novyZapavet = true
+        }
+        if (kniga == "Иуд" || kniga == "Юды") {
+            bible = 11
+            novyZapavet = true
+        }
+        if (kniga == "Рим" || kniga == "Рым") {
+            bible = 12
+            novyZapavet = true
+        }
+        if (kniga == "1 Кор" || kniga == "1 Кар") {
+            bible = 13
+            novyZapavet = true
+        }
+        if (kniga == "2 Кор" || kniga == "2 Кар") {
+            bible = 14
+            novyZapavet = true
+        }
+        if (kniga == "Гал") {
+            bible = 15
+            novyZapavet = true
+        }
+        if (kniga == "Еф" || kniga == "Эф") {
+            bible = 16
+            novyZapavet = true
+        }
+        if (kniga == "Флп" || kniga == "Плп") {
+            bible = 17
+            novyZapavet = true
+        }
+        if (kniga == "Кол" || kniga == "Клс") {
+            bible = 18
+            novyZapavet = true
+        }
+        if (kniga == "1 Фес") {
+            bible = 19
+            novyZapavet = true
+        }
+        if (kniga == "2 Фес") {
+            bible = 20
+            novyZapavet = true
+        }
+        if (kniga == "1 Тим" || kniga == "1 Цім") {
+            bible = 21
+            novyZapavet = true
+        }
+        if (kniga == "2 Тим" || kniga == "2 Цім") {
+            bible = 22
+            novyZapavet = true
+        }
+        if (kniga == "Тит" || kniga == "Ціт") {
+            bible = 23
+            novyZapavet = true
+        }
+        if (kniga == "Флм") {
+            bible = 24
+            novyZapavet = true
+        }
+        if (kniga == "Евр" || kniga == "Гбр") {
+            bible = 25
+            novyZapavet = true
+        }
+        if (kniga == "Откр" || kniga == "Адкр") {
+            bible = 26
+            novyZapavet = true
+        }
+        return bible
+    }
+
+    private fun findIndex(chtenie: String): Int {
+        val bibliaNew = bibliaNew(chtenie)
+        val list = getSpisKnig(novyZapavet)
+        var indexListBible = -1
+        for (e in list.indices) {
+            val t1 = list[e].indexOf("#")
+            val t2 = list[e].indexOf("#", t1 + 1)
+            val indexBible = list[e].substring(t2 + 1).toInt()
+            if (indexBible == bibliaNew) {
+                indexListBible = e
+                break
+            }
+        }
+        return indexListBible
+    }
+
     private fun setMaranata(savedInstanceState: Bundle?) {
         maranAta.clear()
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         val chten = cytanne.split(";")
         var saveName = ""
         for (i in chten.indices) {
+            val savePerevod = perevod
             val fit = chten[i].trim()
-            val bible = biblia(fit)
-            val nomer = bible[3].toInt()
             try {
                 var nachalo: Int
                 var konec: Int
@@ -980,266 +1179,42 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         }
                     }
                 }
-                var inputStream = resources.openRawResource(R.raw.biblias1)
-                var replace = false
-                if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
-                    inputStream = resources.openRawResource(R.raw.psaltyr_nadsan)
+                var replace = 0
+                var indexBiblii = findIndex(fit)
+                if (indexBiblii == -1) {
+                    perevod = DialogVybranoeBibleList.PEREVODCARNIAUSKI
+                    indexBiblii = findIndex(fit)
+                    replace = 1
                 }
-                if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
-                    when (nomer) {
-                        1 -> inputStream = resources.openRawResource(R.raw.biblias1)
-                        2 -> inputStream = resources.openRawResource(R.raw.biblias2)
-                        3 -> inputStream = resources.openRawResource(R.raw.biblias3)
-                        4 -> inputStream = resources.openRawResource(R.raw.biblias4)
-                        5 -> inputStream = resources.openRawResource(R.raw.biblias5)
-                        6 -> inputStream = resources.openRawResource(R.raw.biblias6)
-                        7 -> inputStream = resources.openRawResource(R.raw.biblias7)
-                        8 -> inputStream = resources.openRawResource(R.raw.biblias8)
-                        9 -> inputStream = resources.openRawResource(R.raw.biblias9)
-                        10 -> inputStream = resources.openRawResource(R.raw.biblias10)
-                        11 -> inputStream = resources.openRawResource(R.raw.biblias11)
-                        12 -> inputStream = resources.openRawResource(R.raw.biblias12)
-                        13 -> inputStream = resources.openRawResource(R.raw.biblias13)
-                        14 -> inputStream = resources.openRawResource(R.raw.biblias14)
-                        15 -> inputStream = resources.openRawResource(R.raw.biblias15)
-                        16 -> inputStream = resources.openRawResource(R.raw.biblias16)
-                        20 -> inputStream = resources.openRawResource(R.raw.biblias17)
-                        21 -> inputStream = resources.openRawResource(R.raw.biblias18)
-                        22 -> inputStream = resources.openRawResource(R.raw.biblias19)
-                        23 -> inputStream = resources.openRawResource(R.raw.biblias20)
-                        24 -> inputStream = resources.openRawResource(R.raw.biblias21)
-                        25 -> inputStream = resources.openRawResource(R.raw.biblias22)
-                        28 -> inputStream = resources.openRawResource(R.raw.biblias23)
-                        29 -> inputStream = resources.openRawResource(R.raw.biblias24)
-                        30 -> inputStream = resources.openRawResource(R.raw.biblias25)
-                        33 -> inputStream = resources.openRawResource(R.raw.biblias26)
-                        34 -> inputStream = resources.openRawResource(R.raw.biblias27)
-                        35 -> inputStream = resources.openRawResource(R.raw.biblias28)
-                        36 -> inputStream = resources.openRawResource(R.raw.biblias29)
-                        37 -> inputStream = resources.openRawResource(R.raw.biblias30)
-                        38 -> inputStream = resources.openRawResource(R.raw.biblias31)
-                        39 -> inputStream = resources.openRawResource(R.raw.biblias32)
-                        40 -> inputStream = resources.openRawResource(R.raw.biblias33)
-                        41 -> inputStream = resources.openRawResource(R.raw.biblias34)
-                        42 -> inputStream = resources.openRawResource(R.raw.biblias35)
-                        43 -> inputStream = resources.openRawResource(R.raw.biblias36)
-                        44 -> inputStream = resources.openRawResource(R.raw.biblias37)
-                        45 -> inputStream = resources.openRawResource(R.raw.biblias38)
-                        46 -> inputStream = resources.openRawResource(R.raw.biblias39)
-                        51 -> inputStream = resources.openRawResource(R.raw.biblian1)
-                        52 -> inputStream = resources.openRawResource(R.raw.biblian2)
-                        53 -> inputStream = resources.openRawResource(R.raw.biblian3)
-                        54 -> inputStream = resources.openRawResource(R.raw.biblian4)
-                        55 -> inputStream = resources.openRawResource(R.raw.biblian5)
-                        56 -> inputStream = resources.openRawResource(R.raw.biblian6)
-                        57 -> inputStream = resources.openRawResource(R.raw.biblian7)
-                        58 -> inputStream = resources.openRawResource(R.raw.biblian8)
-                        59 -> inputStream = resources.openRawResource(R.raw.biblian9)
-                        60 -> inputStream = resources.openRawResource(R.raw.biblian10)
-                        61 -> inputStream = resources.openRawResource(R.raw.biblian11)
-                        62 -> inputStream = resources.openRawResource(R.raw.biblian12)
-                        63 -> inputStream = resources.openRawResource(R.raw.biblian13)
-                        64 -> inputStream = resources.openRawResource(R.raw.biblian14)
-                        65 -> inputStream = resources.openRawResource(R.raw.biblian15)
-                        66 -> inputStream = resources.openRawResource(R.raw.biblian16)
-                        67 -> inputStream = resources.openRawResource(R.raw.biblian17)
-                        68 -> inputStream = resources.openRawResource(R.raw.biblian18)
-                        69 -> inputStream = resources.openRawResource(R.raw.biblian19)
-                        70 -> inputStream = resources.openRawResource(R.raw.biblian20)
-                        71 -> inputStream = resources.openRawResource(R.raw.biblian21)
-                        72 -> inputStream = resources.openRawResource(R.raw.biblian22)
-                        73 -> inputStream = resources.openRawResource(R.raw.biblian23)
-                        74 -> inputStream = resources.openRawResource(R.raw.biblian24)
-                        75 -> inputStream = resources.openRawResource(R.raw.biblian25)
-                        76 -> inputStream = resources.openRawResource(R.raw.biblian26)
-                        77 -> inputStream = resources.openRawResource(R.raw.biblian27)
-                        else -> {
-                            inputStream = getSinoidalResource(nomer)
-                            replace = true
-                        }
-                    }
+                if (indexBiblii == -1) {
+                    perevod = DialogVybranoeBibleList.PEREVODSINOIDAL
+                    indexBiblii = findIndex(fit)
+                    replace = 2
                 }
-                if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
-                    when (nomer) {
-                        1 -> inputStream = resources.openRawResource(R.raw.bokunas1)
-                        2 -> inputStream = resources.openRawResource(R.raw.bokunas2)
-                        3 -> inputStream = resources.openRawResource(R.raw.bokunas3)
-                        4 -> inputStream = resources.openRawResource(R.raw.bokunas4)
-                        5 -> inputStream = resources.openRawResource(R.raw.bokunas5)
-                        6 -> inputStream = resources.openRawResource(R.raw.bokunas6)
-                        7 -> inputStream = resources.openRawResource(R.raw.bokunas7)
-                        8 -> inputStream = resources.openRawResource(R.raw.bokunas8)
-                        9 -> inputStream = resources.openRawResource(R.raw.bokunas9)
-                        10 -> inputStream = resources.openRawResource(R.raw.bokunas10)
-                        11 -> inputStream = resources.openRawResource(R.raw.bokunas11)
-                        12 -> inputStream = resources.openRawResource(R.raw.bokunas12)
-                        13 -> inputStream = resources.openRawResource(R.raw.bokunas13)
-                        14 -> inputStream = resources.openRawResource(R.raw.bokunas14)
-                        15 -> inputStream = resources.openRawResource(R.raw.bokunas15)
-                        16 -> inputStream = resources.openRawResource(R.raw.bokunas16)
-                        20 -> inputStream = resources.openRawResource(R.raw.bokunas17)
-                        21 -> inputStream = resources.openRawResource(R.raw.bokunas18)
-                        22 -> inputStream = resources.openRawResource(R.raw.bokunas19)
-                        23 -> inputStream = resources.openRawResource(R.raw.bokunas20)
-                        24 -> inputStream = resources.openRawResource(R.raw.bokunas21)
-                        25 -> inputStream = resources.openRawResource(R.raw.bokunas22)
-                        28 -> inputStream = resources.openRawResource(R.raw.bokunas23)
-                        29 -> inputStream = resources.openRawResource(R.raw.bokunas24)
-                        30 -> inputStream = resources.openRawResource(R.raw.bokunas25)
-                        33 -> inputStream = resources.openRawResource(R.raw.bokunas26)
-                        34 -> inputStream = resources.openRawResource(R.raw.bokunas27)
-                        35 -> inputStream = resources.openRawResource(R.raw.bokunas28)
-                        36 -> inputStream = resources.openRawResource(R.raw.bokunas29)
-                        37 -> inputStream = resources.openRawResource(R.raw.bokunas30)
-                        38 -> inputStream = resources.openRawResource(R.raw.bokunas31)
-                        39 -> inputStream = resources.openRawResource(R.raw.bokunas32)
-                        40 -> inputStream = resources.openRawResource(R.raw.bokunas33)
-                        41 -> inputStream = resources.openRawResource(R.raw.bokunas34)
-                        42 -> inputStream = resources.openRawResource(R.raw.bokunas35)
-                        43 -> inputStream = resources.openRawResource(R.raw.bokunas36)
-                        44 -> inputStream = resources.openRawResource(R.raw.bokunas37)
-                        45 -> inputStream = resources.openRawResource(R.raw.bokunas38)
-                        46 -> inputStream = resources.openRawResource(R.raw.bokunas39)
-                        51 -> inputStream = resources.openRawResource(R.raw.bokunan1)
-                        52 -> inputStream = resources.openRawResource(R.raw.bokunan2)
-                        53 -> inputStream = resources.openRawResource(R.raw.bokunan3)
-                        54 -> inputStream = resources.openRawResource(R.raw.bokunan4)
-                        55 -> inputStream = resources.openRawResource(R.raw.bokunan5)
-                        56 -> inputStream = resources.openRawResource(R.raw.bokunan6)
-                        57 -> inputStream = resources.openRawResource(R.raw.bokunan7)
-                        58 -> inputStream = resources.openRawResource(R.raw.bokunan8)
-                        59 -> inputStream = resources.openRawResource(R.raw.bokunan9)
-                        60 -> inputStream = resources.openRawResource(R.raw.bokunan10)
-                        61 -> inputStream = resources.openRawResource(R.raw.bokunan11)
-                        62 -> inputStream = resources.openRawResource(R.raw.bokunan12)
-                        63 -> inputStream = resources.openRawResource(R.raw.bokunan13)
-                        64 -> inputStream = resources.openRawResource(R.raw.bokunan14)
-                        65 -> inputStream = resources.openRawResource(R.raw.bokunan15)
-                        66 -> inputStream = resources.openRawResource(R.raw.bokunan16)
-                        67 -> inputStream = resources.openRawResource(R.raw.bokunan17)
-                        68 -> inputStream = resources.openRawResource(R.raw.bokunan18)
-                        69 -> inputStream = resources.openRawResource(R.raw.bokunan19)
-                        70 -> inputStream = resources.openRawResource(R.raw.bokunan20)
-                        71 -> inputStream = resources.openRawResource(R.raw.bokunan21)
-                        72 -> inputStream = resources.openRawResource(R.raw.bokunan22)
-                        73 -> inputStream = resources.openRawResource(R.raw.bokunan23)
-                        74 -> inputStream = resources.openRawResource(R.raw.bokunan24)
-                        75 -> inputStream = resources.openRawResource(R.raw.bokunan25)
-                        76 -> inputStream = resources.openRawResource(R.raw.bokunan26)
-                        77 -> inputStream = resources.openRawResource(R.raw.bokunan27)
-                        else -> {
-                            inputStream = getSinoidalResource(nomer)
-                            replace = true
-                        }
-                    }
-                }
-                if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                    when (nomer) {
-                        1 -> inputStream = resources.openRawResource(R.raw.carniauskis1)
-                        2 -> inputStream = resources.openRawResource(R.raw.carniauskis2)
-                        3 -> inputStream = resources.openRawResource(R.raw.carniauskis3)
-                        4 -> inputStream = resources.openRawResource(R.raw.carniauskis4)
-                        5 -> inputStream = resources.openRawResource(R.raw.carniauskis5)
-                        6 -> inputStream = resources.openRawResource(R.raw.carniauskis6)
-                        7 -> inputStream = resources.openRawResource(R.raw.carniauskis7)
-                        8 -> inputStream = resources.openRawResource(R.raw.carniauskis8)
-                        9 -> inputStream = resources.openRawResource(R.raw.carniauskis9)
-                        10 -> inputStream = resources.openRawResource(R.raw.carniauskis10)
-                        11 -> inputStream = resources.openRawResource(R.raw.carniauskis11)
-                        12 -> inputStream = resources.openRawResource(R.raw.carniauskis12)
-                        13 -> inputStream = resources.openRawResource(R.raw.carniauskis13)
-                        14 -> inputStream = resources.openRawResource(R.raw.carniauskis14)
-                        15 -> inputStream = resources.openRawResource(R.raw.carniauskis15)
-                        16 -> inputStream = resources.openRawResource(R.raw.carniauskis16)
-                        20 -> inputStream = resources.openRawResource(R.raw.carniauskis17)
-                        21 -> inputStream = resources.openRawResource(R.raw.carniauskis18)
-                        22 -> inputStream = resources.openRawResource(R.raw.carniauskis19)
-                        23 -> inputStream = resources.openRawResource(R.raw.carniauskis20)
-                        24 -> inputStream = resources.openRawResource(R.raw.carniauskis21)
-                        25 -> inputStream = resources.openRawResource(R.raw.carniauskis22)
-                        28 -> inputStream = resources.openRawResource(R.raw.carniauskis23)
-                        29 -> inputStream = resources.openRawResource(R.raw.carniauskis24)
-                        30 -> inputStream = resources.openRawResource(R.raw.carniauskis25)
-                        33 -> inputStream = resources.openRawResource(R.raw.carniauskis26)
-                        34 -> inputStream = resources.openRawResource(R.raw.carniauskis27)
-                        35 -> inputStream = resources.openRawResource(R.raw.carniauskis28)
-                        36 -> inputStream = resources.openRawResource(R.raw.carniauskis29)
-                        37 -> inputStream = resources.openRawResource(R.raw.carniauskis30)
-                        38 -> inputStream = resources.openRawResource(R.raw.carniauskis31)
-                        39 -> inputStream = resources.openRawResource(R.raw.carniauskis32)
-                        40 -> inputStream = resources.openRawResource(R.raw.carniauskis33)
-                        41 -> inputStream = resources.openRawResource(R.raw.carniauskis34)
-                        42 -> inputStream = resources.openRawResource(R.raw.carniauskis35)
-                        43 -> inputStream = resources.openRawResource(R.raw.carniauskis36)
-                        44 -> inputStream = resources.openRawResource(R.raw.carniauskis37)
-                        45 -> inputStream = resources.openRawResource(R.raw.carniauskis38)
-                        46 -> inputStream = resources.openRawResource(R.raw.carniauskis39)
-                        18 -> inputStream = resources.openRawResource(R.raw.carniauskis40)
-                        19 -> inputStream = resources.openRawResource(R.raw.carniauskis41)
-                        26 -> inputStream = resources.openRawResource(R.raw.carniauskis42)
-                        27 -> inputStream = resources.openRawResource(R.raw.carniauskis43)
-                        32 -> inputStream = resources.openRawResource(R.raw.carniauskis44)
-                        47 -> inputStream = resources.openRawResource(R.raw.carniauskis45)
-                        48 -> inputStream = resources.openRawResource(R.raw.carniauskis46)
-                        51 -> inputStream = resources.openRawResource(R.raw.carniauskin1)
-                        52 -> inputStream = resources.openRawResource(R.raw.carniauskin2)
-                        53 -> inputStream = resources.openRawResource(R.raw.carniauskin3)
-                        54 -> inputStream = resources.openRawResource(R.raw.carniauskin4)
-                        55 -> inputStream = resources.openRawResource(R.raw.carniauskin5)
-                        56 -> inputStream = resources.openRawResource(R.raw.carniauskin6)
-                        57 -> inputStream = resources.openRawResource(R.raw.carniauskin7)
-                        58 -> inputStream = resources.openRawResource(R.raw.carniauskin8)
-                        59 -> inputStream = resources.openRawResource(R.raw.carniauskin9)
-                        60 -> inputStream = resources.openRawResource(R.raw.carniauskin10)
-                        61 -> inputStream = resources.openRawResource(R.raw.carniauskin11)
-                        62 -> inputStream = resources.openRawResource(R.raw.carniauskin12)
-                        63 -> inputStream = resources.openRawResource(R.raw.carniauskin13)
-                        64 -> inputStream = resources.openRawResource(R.raw.carniauskin14)
-                        65 -> inputStream = resources.openRawResource(R.raw.carniauskin15)
-                        66 -> inputStream = resources.openRawResource(R.raw.carniauskin16)
-                        67 -> inputStream = resources.openRawResource(R.raw.carniauskin17)
-                        68 -> inputStream = resources.openRawResource(R.raw.carniauskin18)
-                        69 -> inputStream = resources.openRawResource(R.raw.carniauskin19)
-                        70 -> inputStream = resources.openRawResource(R.raw.carniauskin20)
-                        71 -> inputStream = resources.openRawResource(R.raw.carniauskin21)
-                        72 -> inputStream = resources.openRawResource(R.raw.carniauskin22)
-                        73 -> inputStream = resources.openRawResource(R.raw.carniauskin23)
-                        74 -> inputStream = resources.openRawResource(R.raw.carniauskin24)
-                        75 -> inputStream = resources.openRawResource(R.raw.carniauskin25)
-                        76 -> inputStream = resources.openRawResource(R.raw.carniauskin26)
-                        77 -> inputStream = resources.openRawResource(R.raw.carniauskin27)
-                        else -> {
-                            inputStream = getSinoidalResource(nomer)
-                            replace = true
-                        }
-                    }
-                }
-                if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) {
-                    inputStream = getSinoidalResource(nomer)
-                }
-                val file = if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || replace) {
-                    if (nomer > 50) {
-                        File("$filesDir/BibliaSinodalNovyZavet/${getNumarKnigi(nomer)}.json")
+                val inputStream = getInputStream(novyZapavet, indexBiblii)
+                val file = if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || replace == 2) {
+                    if (novyZapavet) {
+                        File("$filesDir/BibliaSinodalNovyZavet/$indexBiblii.json")
                     } else {
-                        File("$filesDir/BibliaSinodalStaryZavet/${getNumarKnigi(nomer)}.json")
+                        File("$filesDir/BibliaSinodalStaryZavet/$indexBiblii.json")
                     }
                 } else if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
-                    if (nomer > 50) {
-                        File("$filesDir/BibliaBokunaNovyZavet/${getNumarKnigi(nomer)}.json")
+                    if (novyZapavet) {
+                        File("$filesDir/BibliaBokunaNovyZavet/$indexBiblii.json")
                     } else {
-                        File("$filesDir/BibliaBokunaStaryZavet/${getNumarKnigi(nomer)}.json")
+                        File("$filesDir/BibliaBokunaStaryZavet/$indexBiblii.json")
                     }
-                } else if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                    if (nomer > 50) {
-                        File("$filesDir/BibliaCarniauskiNovyZavet/${getNumarKnigi(nomer)}.json")
+                } else if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI || replace == 1) {
+                    if (novyZapavet) {
+                        File("$filesDir/BibliaCarniauskiNovyZavet/$indexBiblii.json")
                     } else {
-                        File("$filesDir/BibliaCarniauskiStaryZavet/${getNumarKnigi(nomer)}.json")
+                        File("$filesDir/BibliaCarniauskiStaryZavet/$indexBiblii.json")
                     }
                 } else {
-                    if (nomer > 50) {
-                        File("$filesDir/BibliaSemuxaNovyZavet/${getNumarKnigi(nomer)}.json")
+                    if (novyZapavet) {
+                        File("$filesDir/BibliaSemuxaNovyZavet/$indexBiblii.json")
                     } else {
-                        File("$filesDir/BibliaSemuxaStaryZavet/${getNumarKnigi(nomer)}.json")
+                        File("$filesDir/BibliaSemuxaStaryZavet/$indexBiblii.json")
                     }
                 }
                 BibleGlobalList.vydelenie.clear()
@@ -1247,8 +1222,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 var bold: Int
                 var underline: Int
                 var color: Int
-                if (replace) {
-                    val title = when (perevod) {
+                if (replace > 0) {
+                    val title = when (savePerevod) {
                         DialogVybranoeBibleList.PEREVODSEMUXI -> getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
                         DialogVybranoeBibleList.PEREVODBOKUNA -> getString(by.carkva_gazeta.malitounik.R.string.biblia_bokun)
                         DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.biblia_charniauski)
@@ -1284,7 +1259,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 if (konec >= split2.size) {
                     addGlava = split2.size
                     for (g in split2.size..konec) {
-                        split2.add(getSinoidalGlavas(nomer, g))
+                        split2.add(getSinoidalGlavas(fit, g))
                     }
                 }
                 var vN: Int
@@ -1320,12 +1295,15 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             else -> getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
                         }
                         if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) {
-                            if (addGlava == e) maranAta.add(MaranAtaData(perevod, nomer > 50, -1, 0, 0, saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava, title) + "</em>", 0, 0, 0))
+                            if (addGlava == e) maranAta.add(MaranAtaData(perevod, novyZapavet, -1, 0, 0, saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava, title) + "</em>", 0, 0, 0))
                         }
-                        val p = if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || replace) DialogVybranoeBibleList.PEREVODSINOIDAL
+                        val p = if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI || replace == 1) DialogVybranoeBibleList.PEREVODCARNIAUSKI
+                        else if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || replace == 2) DialogVybranoeBibleList.PEREVODSINOIDAL
                         else perevod
-                        saveName = getBibleNameFull(nomer, p) + " $e"
-                        maranAta.add(MaranAtaData(perevod, nomer > 50, -1, 0, 0, saveName, "<br><strong>$saveName</strong><br>\n", 0, 0, 0))
+                        val spis = getSpisKnig(novyZapavet)[indexBiblii]
+                        val t1 = spis.indexOf("#")
+                        saveName = spis.substring(0, t1) + " $e"
+                        maranAta.add(MaranAtaData(perevod, novyZapavet, -1, 0, 0, saveName, "<br><strong>$saveName</strong><br>\n", 0, 0, 0))
                         val splitline = split2[e].trim().split("\n")
                         for (i2 in splitline.indices) {
                             val pos = BibleGlobalList.checkPosition(e - 1, i2)
@@ -1338,17 +1316,20 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 underline = 0
                                 bold = 0
                             }
-                            maranAta.add(MaranAtaData(p, nomer > 50, nomer, e - 1, i2 + 1, saveName, splitline[i2], bold, underline, color))
+                            maranAta.add(MaranAtaData(p, novyZapavet, indexBiblii, e - 1, i2 + 1, saveName, splitline[i2], bold, underline, color))
                         }
                     }
                 }
                 if (stixn != -1) {
                     val t1 = fit.indexOf(".")
                     var glava = fit.substring(s2 + 1, t1).toInt()
-                    val p = if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || replace) DialogVybranoeBibleList.PEREVODSINOIDAL
+                    val p = if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI || replace == 1) DialogVybranoeBibleList.PEREVODCARNIAUSKI
+                    else if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || replace == 2) DialogVybranoeBibleList.PEREVODSINOIDAL
                     else perevod
-                    saveName = getBibleNameFull(nomer, p) + " $glava"
-                    maranAta.add(MaranAtaData(DialogVybranoeBibleList.PEREVODSEMUXI, nomer > 50, -1, 0, 0, saveName, "<br><strong>$saveName</strong><br>\n", 0, 0, 0))
+                    val spis = getSpisKnig(novyZapavet)[indexBiblii]
+                    val t2 = spis.indexOf("#")
+                    saveName = spis.substring(0, t2) + " $glava"
+                    maranAta.add(MaranAtaData(DialogVybranoeBibleList.PEREVODSEMUXI, novyZapavet, -1, 0, 0, saveName, "<br><strong>$saveName</strong><br>\n", 0, 0, 0))
                     val res1 = r1.toString().trim().split("\n")
                     var i3 = stixn
                     var ires1 = 1
@@ -1368,9 +1349,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         }
                         var resbib = res1[i2]
                         if (resbib.contains("#")) {
-                            val t2 = resbib.indexOf("#")
-                            val t3 = resbib.indexOf("#", t2 + 1)
-                            glava = resbib.substring(t2 + 1, t3).toInt()
+                            val t21 = resbib.indexOf("#")
+                            val t3 = resbib.indexOf("#", t21 + 1)
+                            glava = resbib.substring(t21 + 1, t3).toInt()
                             resbib = resbib.substring(t3 + 1)
                         }
                         val pos = BibleGlobalList.checkPosition(glava - 1, i3 - 1)
@@ -1383,8 +1364,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             underline = 0
                             bold = 0
                         }
-                        saveName = getBibleNameFull(nomer, p) + " $glava"
-                        maranAta.add(MaranAtaData(p, nomer > 50, nomer, glava - 1, i3, saveName, resbib, bold, underline, color))
+                        saveName = spis.substring(0, t2) + " $glava"
+                        maranAta.add(MaranAtaData(p, novyZapavet, indexBiblii, glava - 1, i3, saveName, resbib, bold, underline, color))
                         i3++
                     }
                     if (konec - nachalo != 0) {
@@ -1400,17 +1381,18 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 underline = 0
                                 bold = 0
                             }
-                            saveName = getBibleNameFull(nomer, p) + " $konec"
-                            maranAta.add(MaranAtaData(p, nomer > 50, nomer, konec - 1, i21 + 1, saveName, res2[i21], bold, underline, color))
+                            saveName = spis.substring(0, t2) + " $konec"
+                            maranAta.add(MaranAtaData(p, novyZapavet, indexBiblii, konec - 1, i21 + 1, saveName, res2[i21], bold, underline, color))
                         }
                     }
                 }
             } catch (_: Throwable) {
                 val t1 = fit.lastIndexOf(" ")
-                val title = getBibleNameFull(nomer, perevod) + " ${fit.substring(t1 + 1)}"
+                val title = title + " ${fit.substring(t1 + 1)}"
                 maranAta.add(MaranAtaData(perevod = DialogVybranoeBibleList.PEREVODSEMUXI, novyZapavet = false, -1, 0, 0, title, "<br><strong>$title</strong><br>\n", 0, 0, 0))
                 maranAta.add(MaranAtaData(perevod = DialogVybranoeBibleList.PEREVODSEMUXI, novyZapavet = false, -1, 0, 0, title, resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n", 0, 0, 0))
             }
+            perevod = savePerevod
         }
         adapter.notifyDataSetChanged()
         isSmoothScrollToPosition = true
@@ -1430,135 +1412,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         return 0
     }
 
-    private fun getNumarKnigi(nomer: Int): Int {
-        var result = nomer
-        when (nomer) {
-            20 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 17
-            21 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 18
-            22 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 19
-            23 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 20
-            24 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 21
-            25 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 22
-            28 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 23
-            29 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 24
-            30 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 25
-            33 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 26
-            34 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 27
-            35 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 28
-            36 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 29
-            37 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 30
-            38 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 31
-            39 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 32
-            40 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 33
-            41 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 34
-            42 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 35
-            43 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 36
-            44 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 37
-            45 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 38
-            46 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) result = 39
-            18 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL && perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) result = 40
-            19 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL && perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) result = 41
-            26 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL && perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) result = 42
-            27 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL && perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) result = 43
-            32 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL && perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) result = 44
-            47 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL && perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) result = 45
-            48 -> if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL && perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) result = 46
-            51 -> result = 1
-            52 -> result = 2
-            53 -> result = 3
-            54 -> result = 4
-            55 -> result = 5
-            56 -> result = 6
-            57 -> result = 7
-            58 -> result = 8
-            59 -> result = 9
-            60 -> result = 10
-            61 -> result = 11
-            62 -> result = 12
-            63 -> result = 13
-            64 -> result = 14
-            65 -> result = 15
-            66 -> result = 16
-            67 -> result = 17
-            68 -> result = 18
-            69 -> result = 19
-            70 -> result = 20
-            71 -> result = 21
-            72 -> result = 22
-            73 -> result = 23
-            74 -> result = 24
-            75 -> result = 25
-            76 -> result = 26
-            77 -> result = 27
-        }
-        result -= 1
-        return result
-    }
-
-    private fun getNumarKnigiBelarusPerevoda(kniga: Int): Int {
-        var result = kniga
-        when (kniga) {
-            17 -> result = 20
-            18 -> result = 21
-            19 -> result = 22
-            20 -> result = 23
-            21 -> result = 24
-            22 -> result = 25
-            23 -> result = 28
-            24 -> result = 29
-            25 -> result = 30
-            26 -> result = 33
-            27 -> result = 34
-            28 -> result = 35
-            29 -> result = 36
-            30 -> result = 37
-            31 -> result = 38
-            32 -> result = 39
-            33 -> result = 40
-            34 -> result = 41
-            35 -> result = 42
-            36 -> result = 43
-            37 -> result = 44
-            38 -> result = 45
-            39 -> result = 46
-            40 -> result = 18
-            41 -> result = 19
-            42 -> result = 26
-            43 -> result = 27
-            44 -> result = 32
-            45 -> result = 47
-            46 -> result = 48
-            51 -> result = 1
-            52 -> result = 2
-            53 -> result = 3
-            54 -> result = 4
-            55 -> result = 5
-            56 -> result = 6
-            57 -> result = 7
-            58 -> result = 8
-            59 -> result = 9
-            60 -> result = 10
-            61 -> result = 11
-            62 -> result = 12
-            63 -> result = 13
-            64 -> result = 14
-            65 -> result = 15
-            66 -> result = 16
-            67 -> result = 17
-            68 -> result = 18
-            69 -> result = 19
-            70 -> result = 20
-            71 -> result = 21
-            72 -> result = 22
-            73 -> result = 23
-            74 -> result = 24
-            75 -> result = 25
-            76 -> result = 26
-            77 -> result = 27
-        }
-        return result
-    }
-
     private fun readFileGson(file: File): ArrayList<ArrayList<Int>> {
         val result = ArrayList<ArrayList<Int>>()
         if (file.exists()) {
@@ -1572,8 +1425,11 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         return result
     }
 
-    private fun getSinoidalGlavas(nomer: Int, konec: Int): String {
-        val inputStream = getSinoidalResource(nomer)
+    private fun getSinoidalGlavas(chtenie: String, konec: Int): String {
+        val savePerevod = perevod
+        perevod = DialogVybranoeBibleList.PEREVODSINOIDAL
+        val nomer = findIndex(chtenie)
+        val inputStream = getInputStream(novyZapavet, nomer)
         val builder = StringBuilder()
         val isr = InputStreamReader(inputStream)
         BufferedReader(isr).use {
@@ -1581,91 +1437,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 builder.append(string).append("\n")
             }
         }
-        return builder.toString().split("===")[konec]
-    }
-
-    private fun getSinoidalResource(nomer: Int): InputStream {
-        var inputStream = resources.openRawResource(R.raw.biblias1)
-        when (nomer) {
-            1 -> inputStream = resources.openRawResource(R.raw.sinaidals1)
-            2 -> inputStream = resources.openRawResource(R.raw.sinaidals2)
-            3 -> inputStream = resources.openRawResource(R.raw.sinaidals3)
-            4 -> inputStream = resources.openRawResource(R.raw.sinaidals4)
-            5 -> inputStream = resources.openRawResource(R.raw.sinaidals5)
-            6 -> inputStream = resources.openRawResource(R.raw.sinaidals6)
-            7 -> inputStream = resources.openRawResource(R.raw.sinaidals7)
-            8 -> inputStream = resources.openRawResource(R.raw.sinaidals8)
-            9 -> inputStream = resources.openRawResource(R.raw.sinaidals9)
-            10 -> inputStream = resources.openRawResource(R.raw.sinaidals10)
-            11 -> inputStream = resources.openRawResource(R.raw.sinaidals11)
-            12 -> inputStream = resources.openRawResource(R.raw.sinaidals12)
-            13 -> inputStream = resources.openRawResource(R.raw.sinaidals13)
-            14 -> inputStream = resources.openRawResource(R.raw.sinaidals14)
-            15 -> inputStream = resources.openRawResource(R.raw.sinaidals15)
-            16 -> inputStream = resources.openRawResource(R.raw.sinaidals16)
-            17 -> inputStream = resources.openRawResource(R.raw.sinaidals17)
-            18 -> inputStream = resources.openRawResource(R.raw.sinaidals18)
-            19 -> inputStream = resources.openRawResource(R.raw.sinaidals19)
-            20 -> inputStream = resources.openRawResource(R.raw.sinaidals20)
-            21 -> inputStream = resources.openRawResource(R.raw.sinaidals21)
-            22 -> inputStream = resources.openRawResource(R.raw.sinaidals22)
-            23 -> inputStream = resources.openRawResource(R.raw.sinaidals23)
-            24 -> inputStream = resources.openRawResource(R.raw.sinaidals24)
-            25 -> inputStream = resources.openRawResource(R.raw.sinaidals25)
-            26 -> inputStream = resources.openRawResource(R.raw.sinaidals26)
-            27 -> inputStream = resources.openRawResource(R.raw.sinaidals27)
-            28 -> inputStream = resources.openRawResource(R.raw.sinaidals28)
-            29 -> inputStream = resources.openRawResource(R.raw.sinaidals29)
-            30 -> inputStream = resources.openRawResource(R.raw.sinaidals30)
-            31 -> inputStream = resources.openRawResource(R.raw.sinaidals31)
-            32 -> inputStream = resources.openRawResource(R.raw.sinaidals32)
-            33 -> inputStream = resources.openRawResource(R.raw.sinaidals33)
-            34 -> inputStream = resources.openRawResource(R.raw.sinaidals34)
-            35 -> inputStream = resources.openRawResource(R.raw.sinaidals35)
-            36 -> inputStream = resources.openRawResource(R.raw.sinaidals36)
-            37 -> inputStream = resources.openRawResource(R.raw.sinaidals37)
-            38 -> inputStream = resources.openRawResource(R.raw.sinaidals38)
-            39 -> inputStream = resources.openRawResource(R.raw.sinaidals39)
-            40 -> inputStream = resources.openRawResource(R.raw.sinaidals40)
-            41 -> inputStream = resources.openRawResource(R.raw.sinaidals41)
-            42 -> inputStream = resources.openRawResource(R.raw.sinaidals42)
-            43 -> inputStream = resources.openRawResource(R.raw.sinaidals43)
-            44 -> inputStream = resources.openRawResource(R.raw.sinaidals44)
-            45 -> inputStream = resources.openRawResource(R.raw.sinaidals45)
-            46 -> inputStream = resources.openRawResource(R.raw.sinaidals46)
-            47 -> inputStream = resources.openRawResource(R.raw.sinaidals47)
-            48 -> inputStream = resources.openRawResource(R.raw.sinaidals48)
-            49 -> inputStream = resources.openRawResource(R.raw.sinaidals49)
-            50 -> inputStream = resources.openRawResource(R.raw.sinaidals50)
-            51 -> inputStream = resources.openRawResource(R.raw.sinaidaln1)
-            52 -> inputStream = resources.openRawResource(R.raw.sinaidaln2)
-            53 -> inputStream = resources.openRawResource(R.raw.sinaidaln3)
-            54 -> inputStream = resources.openRawResource(R.raw.sinaidaln4)
-            55 -> inputStream = resources.openRawResource(R.raw.sinaidaln5)
-            56 -> inputStream = resources.openRawResource(R.raw.sinaidaln6)
-            57 -> inputStream = resources.openRawResource(R.raw.sinaidaln7)
-            58 -> inputStream = resources.openRawResource(R.raw.sinaidaln8)
-            59 -> inputStream = resources.openRawResource(R.raw.sinaidaln9)
-            60 -> inputStream = resources.openRawResource(R.raw.sinaidaln10)
-            61 -> inputStream = resources.openRawResource(R.raw.sinaidaln11)
-            62 -> inputStream = resources.openRawResource(R.raw.sinaidaln12)
-            63 -> inputStream = resources.openRawResource(R.raw.sinaidaln13)
-            64 -> inputStream = resources.openRawResource(R.raw.sinaidaln14)
-            65 -> inputStream = resources.openRawResource(R.raw.sinaidaln15)
-            66 -> inputStream = resources.openRawResource(R.raw.sinaidaln16)
-            67 -> inputStream = resources.openRawResource(R.raw.sinaidaln17)
-            68 -> inputStream = resources.openRawResource(R.raw.sinaidaln18)
-            69 -> inputStream = resources.openRawResource(R.raw.sinaidaln19)
-            70 -> inputStream = resources.openRawResource(R.raw.sinaidaln20)
-            71 -> inputStream = resources.openRawResource(R.raw.sinaidaln21)
-            72 -> inputStream = resources.openRawResource(R.raw.sinaidaln22)
-            73 -> inputStream = resources.openRawResource(R.raw.sinaidaln23)
-            74 -> inputStream = resources.openRawResource(R.raw.sinaidaln24)
-            75 -> inputStream = resources.openRawResource(R.raw.sinaidaln25)
-            76 -> inputStream = resources.openRawResource(R.raw.sinaidaln26)
-            77 -> inputStream = resources.openRawResource(R.raw.sinaidaln27)
-        }
-        return inputStream
+        perevod = savePerevod
+        return MainActivity.fromHtml(builder.toString()).split("===")[konec]
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
@@ -1875,45 +1648,45 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     setVydelenie.add(maranata.underline)
                     setVydelenie.add(maranata.bold)
                     listBible.add(setVydelenie)
-                    if (kniga != getNumarKnigi(maranata.kniga)) {
+                    if (kniga != maranata.kniga) {
                         maranataSave.add(MaranAtaSave(maranata.perevod, maranata.novyZapavet, maranata.kniga))
                     }
-                    kniga = getNumarKnigi(maranata.kniga)
+                    kniga = maranata.kniga
                 } else {
                     val file = when (maranata.perevod) {
                         DialogVybranoeBibleList.PEREVODSEMUXI -> {
                             if (maranata.novyZapavet) {
-                                File("$filesDir/BibliaSemuxaNovyZavet/${getNumarKnigi(maranata.kniga)}.json")
+                                File("$filesDir/BibliaSemuxaNovyZavet/${maranata.kniga}.json")
                             } else {
-                                File("$filesDir/BibliaSemuxaStaryZavet/${getNumarKnigi(maranata.kniga)}.json")
+                                File("$filesDir/BibliaSemuxaStaryZavet/${maranata.kniga}.json")
                             }
                         }
                         DialogVybranoeBibleList.PEREVODSINOIDAL -> {
                             if (maranata.novyZapavet) {
-                                File("$filesDir/BibliaSinodalNovyZavet/${getNumarKnigi(maranata.kniga)}.json")
+                                File("$filesDir/BibliaSinodalNovyZavet/${maranata.kniga}.json")
                             } else {
-                                File("$filesDir/BibliaSinodalStaryZavet/${getNumarKnigi(maranata.kniga)}.json")
+                                File("$filesDir/BibliaSinodalStaryZavet/${maranata.kniga}.json")
                             }
                         }
                         DialogVybranoeBibleList.PEREVODBOKUNA -> {
                             if (maranata.novyZapavet) {
-                                File("$filesDir/BibliaBokunaNovyZavet/${getNumarKnigi(maranata.kniga)}.json")
+                                File("$filesDir/BibliaBokunaNovyZavet/${maranata.kniga}.json")
                             } else {
-                                File("$filesDir/BibliaBokunaStaryZavet/${getNumarKnigi(maranata.kniga)}.json")
+                                File("$filesDir/BibliaBokunaStaryZavet/${maranata.kniga}.json")
                             }
                         }
                         DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
                             if (maranata.novyZapavet) {
-                                File("$filesDir/BibliaCarniauskiNovyZavet/${getNumarKnigi(maranata.kniga)}.json")
+                                File("$filesDir/BibliaCarniauskiNovyZavet/${maranata.kniga}.json")
                             } else {
-                                File("$filesDir/BibliaCarniauskiStaryZavet/${getNumarKnigi(maranata.kniga)}.json")
+                                File("$filesDir/BibliaCarniauskiStaryZavet/${maranata.kniga}.json")
                             }
                         }
                         else -> {
                             if (maranata.novyZapavet) {
-                                File("$filesDir/BibliaSemuxaNovyZavet/${getNumarKnigi(maranata.kniga)}.json")
+                                File("$filesDir/BibliaSemuxaNovyZavet/${maranata.kniga}.json")
                             } else {
-                                File("$filesDir/BibliaSemuxaStaryZavet/${getNumarKnigi(maranata.kniga)}.json")
+                                File("$filesDir/BibliaSemuxaStaryZavet/${maranata.kniga}.json")
                             }
                         }
                     }
@@ -1925,30 +1698,30 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             when (maranata.perevod) {
                 DialogVybranoeBibleList.PEREVODSEMUXI -> {
                     if (maranata.novyZapavet) {
-                        saveGsonFile(File("$filesDir/BibliaSemuxaNovyZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                        saveGsonFile(File("$filesDir/BibliaSemuxaNovyZavet/${maranata.kniga}.json"), listBible)
                     } else {
-                        saveGsonFile(File("$filesDir/BibliaSemuxaStaryZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                        saveGsonFile(File("$filesDir/BibliaSemuxaStaryZavet/${maranata.kniga}.json"), listBible)
                     }
                 }
                 DialogVybranoeBibleList.PEREVODSINOIDAL -> {
                     if (maranata.novyZapavet) {
-                        saveGsonFile(File("$filesDir/BibliaSinodalNovyZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                        saveGsonFile(File("$filesDir/BibliaSinodalNovyZavet/${maranata.kniga}.json"), listBible)
                     } else {
-                        saveGsonFile(File("$filesDir/BibliaSinodalStaryZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                        saveGsonFile(File("$filesDir/BibliaSinodalStaryZavet/${maranata.kniga}.json"), listBible)
                     }
                 }
                 DialogVybranoeBibleList.PEREVODBOKUNA -> {
                     if (maranata.novyZapavet) {
-                        saveGsonFile(File("$filesDir/BibliaBokunaNovyZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                        saveGsonFile(File("$filesDir/BibliaBokunaNovyZavet/${maranata.kniga}.json"), listBible)
                     } else {
-                        saveGsonFile(File("$filesDir/BibliaBokunaStaryZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                        saveGsonFile(File("$filesDir/BibliaBokunaStaryZavet/${maranata.kniga}.json"), listBible)
                     }
                 }
                 DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
                     if (maranata.novyZapavet) {
-                        saveGsonFile(File("$filesDir/BibliaCarniauskiNovyZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                        saveGsonFile(File("$filesDir/BibliaCarniauskiNovyZavet/${maranata.kniga}.json"), listBible)
                     } else {
-                        saveGsonFile(File("$filesDir/BibliaCarniauskiStaryZavet/${getNumarKnigi(maranata.kniga)}.json"), listBible)
+                        saveGsonFile(File("$filesDir/BibliaCarniauskiStaryZavet/${maranata.kniga}.json"), listBible)
                     }
                 }
             }
@@ -2370,237 +2143,240 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private fun getParallel(kniga: Int, glava: Int, styx: Int): String {
         val parallel = BibliaParallelChtenia()
         var res = "+-+"
-        if (kniga == 1) {
-            res = parallel.kniga1(glava, styx + 1)
-        }
-        if (kniga == 2) {
-            res = parallel.kniga2(glava, styx + 1)
-        }
-        if (kniga == 3) {
-            res = parallel.kniga3(glava, styx + 1)
-        }
-        if (kniga == 4) {
-            res = parallel.kniga4(glava, styx + 1)
-        }
-        if (kniga == 5) {
-            res = parallel.kniga5(glava, styx + 1)
-        }
-        if (kniga == 6) {
-            res = parallel.kniga6(glava, styx + 1)
-        }
-        if (kniga == 7) {
-            res = parallel.kniga7(glava, styx + 1)
-        }
-        if (kniga == 8) {
-            res = parallel.kniga8(glava, styx + 1)
-        }
-        if (kniga == 9) {
-            res = parallel.kniga9(glava, styx + 1)
-        }
-        if (kniga == 10) {
-            res = parallel.kniga10(glava, styx + 1)
-        }
-        if (kniga == 11) {
-            res = parallel.kniga11(glava, styx + 1)
-        }
-        if (kniga == 12) {
-            res = parallel.kniga12(glava, styx + 1)
-        }
-        if (kniga == 13) {
-            res = parallel.kniga13(glava, styx + 1)
-        }
-        if (kniga == 14) {
-            res = parallel.kniga14(glava, styx + 1)
-        }
-        if (kniga == 15) {
-            res = parallel.kniga15(glava, styx + 1)
-        }
-        if (kniga == 16) {
-            res = parallel.kniga16(glava, styx + 1)
-        }
-        if (kniga == 17) {
-            res = parallel.kniga17(glava, styx + 1)
-        }
-        if (kniga == 18) {
-            res = parallel.kniga18(glava, styx + 1)
-        }
-        if (kniga == 19) {
-            res = parallel.kniga19(glava, styx + 1)
-        }
-        if (kniga == 20) {
-            res = parallel.kniga20(glava, styx + 1)
-        }
-        if (kniga == 21) {
-            res = parallel.kniga21(glava, styx + 1)
-        }
-        if (kniga == 22) {
-            res = if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || perevod == DialogVybranoeBibleList.PEREVODNADSAN) parallel.kniga22(glava, styx + 1)
-            else parallel.kniga22Masoretskaya(glava, styx + 1)
-        }
-        if (kniga == 23) {
-            res = parallel.kniga23(glava, styx + 1)
-        }
-        if (kniga == 24) {
-            res = parallel.kniga24(glava, styx + 1)
-        }
-        if (kniga == 25) {
-            res = parallel.kniga25(glava, styx + 1)
-        }
-        if (kniga == 26) {
-            res = parallel.kniga26(glava, styx + 1)
-        }
-        if (kniga == 27) {
-            res = parallel.kniga27(glava, styx + 1)
-        }
-        if (kniga == 28) {
-            res = parallel.kniga28(glava, styx + 1)
-        }
-        if (kniga == 29) {
-            res = parallel.kniga29(glava, styx + 1)
-        }
-        if (kniga == 30) {
-            res = parallel.kniga30(glava, styx + 1)
-        }
-        if (kniga == 31) {
-            res = parallel.kniga31(glava, styx + 1)
-        }
-        if (kniga == 32) {
-            res = parallel.kniga32(glava, styx + 1)
-        }
-        if (kniga == 33) {
-            res = parallel.kniga33(glava, styx + 1)
-        }
-        if (kniga == 34) {
-            res = parallel.kniga34(glava, styx + 1)
-        }
-        if (kniga == 35) {
-            res = parallel.kniga35(glava, styx + 1)
-        }
-        if (kniga == 36) {
-            res = parallel.kniga36(glava, styx + 1)
-        }
-        if (kniga == 37) {
-            res = parallel.kniga37(glava, styx + 1)
-        }
-        if (kniga == 38) {
-            res = parallel.kniga38(glava, styx + 1)
-        }
-        if (kniga == 39) {
-            res = parallel.kniga39(glava, styx + 1)
-        }
-        if (kniga == 40) {
-            res = parallel.kniga40(glava, styx + 1)
-        }
-        if (kniga == 41) {
-            res = parallel.kniga41(glava, styx + 1)
-        }
-        if (kniga == 42) {
-            res = parallel.kniga42(glava, styx + 1)
-        }
-        if (kniga == 43) {
-            res = parallel.kniga43(glava, styx + 1)
-        }
-        if (kniga == 44) {
-            res = parallel.kniga44(glava, styx + 1)
-        }
-        if (kniga == 45) {
-            res = parallel.kniga45(glava, styx + 1)
-        }
-        if (kniga == 46) {
-            res = parallel.kniga46(glava, styx + 1)
-        }
-        if (kniga == 47) {
-            res = parallel.kniga47(glava, styx + 1)
-        }
-        if (kniga == 48) {
-            res = parallel.kniga48(glava, styx + 1)
-        }
-        if (kniga == 49) {
-            res = parallel.kniga49(glava, styx + 1)
-        }
-        if (kniga == 50) {
-            res = parallel.kniga50(glava, styx + 1)
-        }
-        if (kniga == 51) {
-            res = parallel.kniga51(glava, styx + 1)
-        }
-        if (kniga == 52) {
-            res = parallel.kniga52(glava, styx + 1)
-        }
-        if (kniga == 53) {
-            res = parallel.kniga53(glava, styx + 1)
-        }
-        if (kniga == 54) {
-            res = parallel.kniga54(glava, styx + 1)
-        }
-        if (kniga == 55) {
-            res = parallel.kniga55(glava, styx + 1)
-        }
-        if (kniga == 56) {
-            res = parallel.kniga56(glava, styx + 1)
-        }
-        if (kniga == 57) {
-            res = parallel.kniga57(glava, styx + 1)
-        }
-        if (kniga == 58) {
-            res = parallel.kniga58(glava, styx + 1)
-        }
-        if (kniga == 59) {
-            res = parallel.kniga59(glava, styx + 1)
-        }
-        if (kniga == 60) {
-            res = parallel.kniga60(glava, styx + 1)
-        }
-        if (kniga == 61) {
-            res = parallel.kniga61(glava, styx + 1)
-        }
-        if (kniga == 62) {
-            res = parallel.kniga62(glava, styx + 1)
-        }
-        if (kniga == 63) {
-            res = parallel.kniga63(glava, styx + 1)
-        }
-        if (kniga == 64) {
-            res = parallel.kniga64(glava, styx + 1)
-        }
-        if (kniga == 65) {
-            res = parallel.kniga65(glava, styx + 1)
-        }
-        if (kniga == 66) {
-            res = parallel.kniga66(glava, styx + 1)
-        }
-        if (kniga == 67) {
-            res = parallel.kniga67(glava, styx + 1)
-        }
-        if (kniga == 68) {
-            res = parallel.kniga68(glava, styx + 1)
-        }
-        if (kniga == 69) {
-            res = parallel.kniga69(glava, styx + 1)
-        }
-        if (kniga == 70) {
-            res = parallel.kniga70(glava, styx + 1)
-        }
-        if (kniga == 71) {
-            res = parallel.kniga71(glava, styx + 1)
-        }
-        if (kniga == 72) {
-            res = parallel.kniga72(glava, styx + 1)
-        }
-        if (kniga == 73) {
-            res = parallel.kniga73(glava, styx + 1)
-        }
-        if (kniga == 74) {
-            res = parallel.kniga74(glava, styx + 1)
-        }
-        if (kniga == 75) {
-            res = parallel.kniga75(glava, styx + 1)
-        }
-        if (kniga == 76) {
-            res = parallel.kniga76(glava, styx + 1)
-        }
-        if (kniga == 77) {
-            res = parallel.kniga77(glava, styx + 1)
+        if (novyZapavet) {
+            if (kniga == 0) {
+                res = parallel.kniga51(glava, styx + 1)
+            }
+            if (kniga == 1) {
+                res = parallel.kniga52(glava, styx + 1)
+            }
+            if (kniga == 2) {
+                res = parallel.kniga53(glava, styx + 1)
+            }
+            if (kniga == 3) {
+                res = parallel.kniga54(glava, styx + 1)
+            }
+            if (kniga == 4) {
+                res = parallel.kniga55(glava, styx + 1)
+            }
+            if (kniga == 5) {
+                res = parallel.kniga56(glava, styx + 1)
+            }
+            if (kniga == 6) {
+                res = parallel.kniga57(glava, styx + 1)
+            }
+            if (kniga == 7) {
+                res = parallel.kniga58(glava, styx + 1)
+            }
+            if (kniga == 8) {
+                res = parallel.kniga59(glava, styx + 1)
+            }
+            if (kniga == 9) {
+                res = parallel.kniga60(glava, styx + 1)
+            }
+            if (kniga == 10) {
+                res = parallel.kniga61(glava, styx + 1)
+            }
+            if (kniga == 11) {
+                res = parallel.kniga62(glava, styx + 1)
+            }
+            if (kniga == 12) {
+                res = parallel.kniga63(glava, styx + 1)
+            }
+            if (kniga == 13) {
+                res = parallel.kniga64(glava, styx + 1)
+            }
+            if (kniga == 14) {
+                res = parallel.kniga65(glava, styx + 1)
+            }
+            if (kniga == 15) {
+                res = parallel.kniga66(glava, styx + 1)
+            }
+            if (kniga == 16) {
+                res = parallel.kniga67(glava, styx + 1)
+            }
+            if (kniga == 17) {
+                res = parallel.kniga68(glava, styx + 1)
+            }
+            if (kniga == 18) {
+                res = parallel.kniga69(glava, styx + 1)
+            }
+            if (kniga == 19) {
+                res = parallel.kniga70(glava, styx + 1)
+            }
+            if (kniga == 20) {
+                res = parallel.kniga71(glava, styx + 1)
+            }
+            if (kniga == 21) {
+                res = parallel.kniga72(glava, styx + 1)
+            }
+            if (kniga == 22) {
+                res = parallel.kniga73(glava, styx + 1)
+            }
+            if (kniga == 23) {
+                res = parallel.kniga74(glava, styx + 1)
+            }
+            if (kniga == 24) {
+                res = parallel.kniga75(glava, styx + 1)
+            }
+            if (kniga == 25) {
+                res = parallel.kniga76(glava, styx + 1)
+            }
+            if (kniga == 26) {
+                res = parallel.kniga77(glava, styx + 1)
+            }
+        } else {
+            if (kniga == 0) {
+                res = parallel.kniga1(glava, styx + 1)
+            }
+            if (kniga == 1) {
+                res = parallel.kniga2(glava, styx + 1)
+            }
+            if (kniga == 2) {
+                res = parallel.kniga3(glava, styx + 1)
+            }
+            if (kniga == 3) {
+                res = parallel.kniga4(glava, styx + 1)
+            }
+            if (kniga == 4) {
+                res = parallel.kniga5(glava, styx + 1)
+            }
+            if (kniga == 5) {
+                res = parallel.kniga6(glava, styx + 1)
+            }
+            if (kniga == 6) {
+                res = parallel.kniga7(glava, styx + 1)
+            }
+            if (kniga == 7) {
+                res = parallel.kniga8(glava, styx + 1)
+            }
+            if (kniga == 8) {
+                res = parallel.kniga9(glava, styx + 1)
+            }
+            if (kniga == 9) {
+                res = parallel.kniga10(glava, styx + 1)
+            }
+            if (kniga == 10) {
+                res = parallel.kniga11(glava, styx + 1)
+            }
+            if (kniga == 11) {
+                res = parallel.kniga12(glava, styx + 1)
+            }
+            if (kniga == 12) {
+                res = parallel.kniga13(glava, styx + 1)
+            }
+            if (kniga == 13) {
+                res = parallel.kniga14(glava, styx + 1)
+            }
+            if (kniga == 14) {
+                res = parallel.kniga15(glava, styx + 1)
+            }
+            if (kniga == 15) {
+                res = parallel.kniga16(glava, styx + 1)
+            }
+            if (kniga == 16) {
+                res = parallel.kniga17(glava, styx + 1)
+            }
+            if (kniga == 17) {
+                res = parallel.kniga18(glava, styx + 1)
+            }
+            if (kniga == 18) {
+                res = parallel.kniga19(glava, styx + 1)
+            }
+            if (kniga == 19) {
+                res = parallel.kniga20(glava, styx + 1)
+            }
+            if (kniga == 20) {
+                res = parallel.kniga21(glava, styx + 1)
+            }
+            if (kniga == 21) {
+                res = if (isPsaltyrGreek()) parallel.kniga22(glava, styx + 1)
+                else parallel.kniga22Masoretskaya(glava, styx + 1)
+            }
+            if (kniga == 22) {
+                res = parallel.kniga23(glava, styx + 1)
+            }
+            if (kniga == 23) {
+                res = parallel.kniga24(glava, styx + 1)
+            }
+            if (kniga == 24) {
+                res = parallel.kniga25(glava, styx + 1)
+            }
+            if (kniga == 25) {
+                res = parallel.kniga26(glava, styx + 1)
+            }
+            if (kniga == 26) {
+                res = parallel.kniga27(glava, styx + 1)
+            }
+            if (kniga == 27) {
+                res = parallel.kniga28(glava, styx + 1)
+            }
+            if (kniga == 28) {
+                res = parallel.kniga29(glava, styx + 1)
+            }
+            if (kniga == 29) {
+                res = parallel.kniga30(glava, styx + 1)
+            }
+            if (kniga == 30) {
+                res = parallel.kniga31(glava, styx + 1)
+            }
+            if (kniga == 31) {
+                res = parallel.kniga32(glava, styx + 1)
+            }
+            if (kniga == 32) {
+                res = parallel.kniga33(glava, styx + 1)
+            }
+            if (kniga == 33) {
+                res = parallel.kniga34(glava, styx + 1)
+            }
+            if (kniga == 34) {
+                res = parallel.kniga35(glava, styx + 1)
+            }
+            if (kniga == 35) {
+                res = parallel.kniga36(glava, styx + 1)
+            }
+            if (kniga == 36) {
+                res = parallel.kniga37(glava, styx + 1)
+            }
+            if (kniga == 37) {
+                res = parallel.kniga38(glava, styx + 1)
+            }
+            if (kniga == 38) {
+                res = parallel.kniga39(glava, styx + 1)
+            }
+            if (kniga == 39) {
+                res = parallel.kniga40(glava, styx + 1)
+            }
+            if (kniga == 40) {
+                res = parallel.kniga41(glava, styx + 1)
+            }
+            if (kniga == 41) {
+                res = parallel.kniga42(glava, styx + 1)
+            }
+            if (kniga == 42) {
+                res = parallel.kniga43(glava, styx + 1)
+            }
+            if (kniga == 43) {
+                res = parallel.kniga44(glava, styx + 1)
+            }
+            if (kniga == 44) {
+                res = parallel.kniga45(glava, styx + 1)
+            }
+            if (kniga == 45) {
+                res = parallel.kniga46(glava, styx + 1)
+            }
+            if (kniga == 46) {
+                res = parallel.kniga47(glava, styx + 1)
+            }
+            if (kniga == 47) {
+                res = parallel.kniga48(glava, styx + 1)
+            }
+            if (kniga == 48) {
+                res = parallel.kniga49(glava, styx + 1)
+            }
+            if (kniga == 49) {
+                res = parallel.kniga50(glava, styx + 1)
+            }
         }
         if (!res.contains("+-+") && perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) {
             res = MainActivity.translateToBelarus(res)
@@ -2631,7 +2407,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             val zakladka = SpannableStringBuilder()
-            zakladka.append(setZakladki(maranAta[position].novyZapavet, getNumarKnigiBelarusPerevoda(getNumarKnigi(maranAta[position].kniga)), maranAta[position].glava, maranAta[position].styx, maranAta[position].perevod))
+            zakladka.append(setZakladki(maranAta[position].novyZapavet, maranAta[position].kniga, maranAta[position].glava, maranAta[position].styx, maranAta[position].perevod))
             val biblia = setIndexBiblii(SpannableStringBuilder(MainActivity.fromHtml(maranAta[position].bible)))
             val ssb = SpannableStringBuilder(biblia).append(zakladka)
             val res = getParallel(maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
@@ -2672,7 +2448,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 if (maranAta[position].novyZapavet) zav = "1"
                 if (BibleGlobalList.natatkiSinodal.size > 0) {
                     for (i in BibleGlobalList.natatkiSinodal.indices) {
-                        if (BibleGlobalList.natatkiSinodal[i].list[0].contains(zav) && BibleGlobalList.natatkiSinodal[i].list[1].toInt() == getNumarKnigi(maranAta[position].kniga) && BibleGlobalList.natatkiSinodal[i].list[2].toInt() == maranAta[position].glava && BibleGlobalList.natatkiSinodal[i].list[3].toInt() == maranAta[position].styx - 1) {
+                        if (BibleGlobalList.natatkiSinodal[i].list[0].contains(zav) && BibleGlobalList.natatkiSinodal[i].list[1].toInt() == maranAta[position].kniga && BibleGlobalList.natatkiSinodal[i].list[2].toInt() == maranAta[position].glava && BibleGlobalList.natatkiSinodal[i].list[3].toInt() == maranAta[position].styx - 1) {
                             val ssb1 = SpannableStringBuilder(viewHolder.text.text)
                             val nachalo = ssb1.length
                             ssb1.append("\nНататка:\n").append(BibleGlobalList.natatkiSinodal[i].list[5]).append("\n")
@@ -2688,7 +2464,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 if (maranAta[position].novyZapavet) zav = "1"
                 if (BibleGlobalList.natatkiSemuxa.size > 0) {
                     for (i in BibleGlobalList.natatkiSemuxa.indices) {
-                        if (BibleGlobalList.natatkiSemuxa[i].list[0].contains(zav) && BibleGlobalList.natatkiSemuxa[i].list[1].toInt() == getNumarKnigiBelarusPerevoda(getNumarKnigi(maranAta[position].kniga)) && BibleGlobalList.natatkiSemuxa[i].list[2].toInt() == maranAta[position].glava && BibleGlobalList.natatkiSemuxa[i].list[3].toInt() == maranAta[position].styx - 1) {
+                        if (BibleGlobalList.natatkiSemuxa[i].list[0].contains(zav) && BibleGlobalList.natatkiSemuxa[i].list[1].toInt() == maranAta[position].kniga && BibleGlobalList.natatkiSemuxa[i].list[2].toInt() == maranAta[position].glava && BibleGlobalList.natatkiSemuxa[i].list[3].toInt() == maranAta[position].styx - 1) {
                             val ssb1 = SpannableStringBuilder(viewHolder.text.text)
                             val nachalo = ssb1.length
                             ssb1.append("\nНататка:\n").append(BibleGlobalList.natatkiSemuxa[i].list[5]).append("\n")
@@ -2704,7 +2480,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 if (maranAta[position].novyZapavet) zav = "1"
                 if (BibleGlobalList.natatkiBokuna.size > 0) {
                     for (i in BibleGlobalList.natatkiBokuna.indices) {
-                        if (BibleGlobalList.natatkiBokuna[i].list[0].contains(zav) && BibleGlobalList.natatkiBokuna[i].list[1].toInt() == getNumarKnigiBelarusPerevoda(getNumarKnigi(maranAta[position].kniga)) && BibleGlobalList.natatkiBokuna[i].list[2].toInt() == maranAta[position].glava && BibleGlobalList.natatkiBokuna[i].list[3].toInt() == maranAta[position].styx - 1) {
+                        if (BibleGlobalList.natatkiBokuna[i].list[0].contains(zav) && BibleGlobalList.natatkiBokuna[i].list[1].toInt() == maranAta[position].kniga && BibleGlobalList.natatkiBokuna[i].list[2].toInt() == maranAta[position].glava && BibleGlobalList.natatkiBokuna[i].list[3].toInt() == maranAta[position].styx - 1) {
                             val ssb1 = SpannableStringBuilder(viewHolder.text.text)
                             val nachalo = ssb1.length
                             ssb1.append("\nНататка:\n").append(BibleGlobalList.natatkiBokuna[i].list[5]).append("\n")
@@ -2720,7 +2496,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 if (maranAta[position].novyZapavet) zav = "1"
                 if (BibleGlobalList.natatkiCarniauski.size > 0) {
                     for (i in BibleGlobalList.natatkiCarniauski.indices) {
-                        if (BibleGlobalList.natatkiCarniauski[i].list[0].contains(zav) && BibleGlobalList.natatkiCarniauski[i].list[1].toInt() == getNumarKnigiBelarusPerevoda(getNumarKnigi(maranAta[position].kniga)) && BibleGlobalList.natatkiCarniauski[i].list[2].toInt() == maranAta[position].glava && BibleGlobalList.natatkiCarniauski[i].list[3].toInt() == maranAta[position].styx - 1) {
+                        if (BibleGlobalList.natatkiCarniauski[i].list[0].contains(zav) && BibleGlobalList.natatkiCarniauski[i].list[1].toInt() == maranAta[position].kniga && BibleGlobalList.natatkiCarniauski[i].list[2].toInt() == maranAta[position].glava && BibleGlobalList.natatkiCarniauski[i].list[3].toInt() == maranAta[position].styx - 1) {
                             val ssb1 = SpannableStringBuilder(viewHolder.text.text)
                             val nachalo = ssb1.length
                             ssb1.append("\nНататка:\n").append(BibleGlobalList.natatkiCarniauski[i].list[5]).append("\n")

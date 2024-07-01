@@ -507,6 +507,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 }
             }
         } else {
+            this.perevod = perevod
             val title2 = getSpisKnig(true)[kniga]
             val t3 = title2.indexOf("#")
             title = title2.substring(0, t3)

@@ -294,7 +294,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             if (vybranae) {
-                getTitlePerevod()
+                binding.titleToolbar.text = getTitlePerevod()
             } else {
                 binding.titleToolbar.text = savedInstanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])) ?: getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
             }
@@ -307,7 +307,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
         } else {
             if (vybranae) {
-                getTitlePerevod()
+                binding.titleToolbar.text = getTitlePerevod()
             } else {
                 binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
             }

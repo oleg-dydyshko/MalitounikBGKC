@@ -13,7 +13,7 @@ interface BibliaPerakvadNadsana {
 
     fun getTitlePerevod(): String {
         this as BaseActivity
-        return resources.getString(by.carkva_gazeta.malitounik.R.string.psalter)
+        return resources.getString(by.carkva_gazeta.malitounik.R.string.title_psalter)
     }
 
     fun getSubTitlePerevod(glava: Int): String {

@@ -217,7 +217,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         return when (perevod) {
             DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.translatePsaltyr(psalm, styx, isUpdate)
             DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.translatePsaltyr(psalm, styx, isUpdate)
-            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.translatePsaltyr(psalm,styx, isUpdate)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.translatePsaltyr(psalm, styx, isUpdate)
             DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.translatePsaltyr(psalm, styx, isUpdate)
             DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.translatePsaltyr(psalm, styx, isUpdate)
             else -> arrayOf(1, 1)
@@ -2408,7 +2408,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             val zakladka = SpannableStringBuilder()
             zakladka.append(setZakladki(maranAta[position].novyZapavet, maranAta[position].kniga, maranAta[position].glava, maranAta[position].styx, maranAta[position].perevod))
-            val biblia = setIndexBiblii(SpannableStringBuilder(MainActivity.fromHtml(maranAta[position].bible)))
+            val biblia = findIntStyx(SpannableStringBuilder(MainActivity.fromHtml(maranAta[position].bible)))
             val ssb = SpannableStringBuilder(biblia).append(zakladka)
             val res = getParallel(maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
             if (!res.contains("+-+")) {
@@ -2510,23 +2510,26 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return rootView
         }
 
-        private fun setIndexBiblii(ssb: SpannableStringBuilder): Spannable {
-            val t1 = ssb.indexOf(" ")
+        private fun findIntStyx(ssb: SpannableStringBuilder, index: Int = 0): SpannableStringBuilder {
+            val t1 = ssb.indexOf(" ", index)
             if (t1 != -1) {
                 val subText = ssb.substring(0, t1)
                 if (subText.isDigitsOnly()) {
                     ssb.insert(t1, ".")
-                    if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 } else {
-                    val t2 = ssb.indexOf("\n")
+                    val t2 = ssb.indexOf("\n", index)
                     if (t2 != -1) {
                         val t3 = ssb.indexOf(" ", t2)
-                        val subText2 = ssb.substring(t2 + 1, t3)
-                        if (subText2.isDigitsOnly()) {
-                            ssb.insert(t3, ".")
-                            if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (t3 != -1) {
+                            val subText2 = ssb.substring(t2 + 1, t3)
+                            if (subText2.isDigitsOnly()) {
+                                ssb.insert(t3, ".")
+                                if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            }
+                            findIntStyx(ssb, t2 + 1)
                         }
                     }
                 }
@@ -2602,45 +2605,17 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 var zavetLocal = true
                 if (knigaS != -1) {
                     zavetLocal = false
-                    knigaN = knigaS
-                    if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODBOKUNA || perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                        when (knigaS) {
-                            16 -> knigaN = 19
-                            17 -> knigaN = 20
-                            18 -> knigaN = 21
-                            19 -> knigaN = 22
-                            20 -> knigaN = 23
-                            21 -> knigaN = 24
-                            22 -> knigaN = 27
-                            23 -> knigaN = 28
-                            24 -> knigaN = 29
-                            25 -> knigaN = 32
-                            26 -> knigaN = 33
-                            27 -> knigaN = 34
-                            28 -> knigaN = 35
-                            29 -> knigaN = 36
-                            30 -> knigaN = 37
-                            31 -> knigaN = 38
-                            32 -> knigaN = 39
-                            33 -> knigaN = 40
-                            34 -> knigaN = 41
-                            35 -> knigaN = 42
-                            36 -> knigaN = 43
-                            37 -> knigaN = 44
-                            38 -> knigaN = 45
-                        }
-                    }
-                    if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                        when (knigaS) {
-                            39 -> knigaN = 17
-                            40 -> knigaN = 18
-                            41 -> knigaN = 25
-                            42 -> knigaN = 26
-                            43 -> knigaN = 31
-                            44 -> knigaN = 46
-                            45 -> knigaN = 47
-                        }
-                    }
+                    val title = lists[knigaS]
+                    val t5 = lists[knigaS].indexOf("#")
+                    val t6 = lists[knigaS].indexOf("#", t5 + 1)
+                    knigaN = title.substring(t6 + 1).toInt()
+                }
+                if (knigaN != -1) {
+                    zavetLocal = false
+                    val title = listn[knigaN]
+                    val t5 = listn[knigaN].indexOf("#")
+                    val t6 = listn[knigaN].indexOf("#", t5 + 1)
+                    knigaN = title.substring(t6 + 1).toInt()
                 }
                 if (zavet == zavetLocal && knigaN == kniga && glava1 == glava && stix1 == styx - 1) {
                     ssb.append(".")

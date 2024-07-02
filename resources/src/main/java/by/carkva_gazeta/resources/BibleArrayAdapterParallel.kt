@@ -516,8 +516,14 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             if (knigaS != -1) {
                 zavet = "0"
                 val title = lists[knigaS]
-                val t5 = listn[knigaS].indexOf("#")
-                val t6 = listn[knigaS].indexOf("#", t5 + 1)
+                val t5 = lists[knigaS].indexOf("#")
+                val t6 = lists[knigaS].indexOf("#", t5 + 1)
+                knigaN = title.substring(t6 + 1).toInt()
+            }
+            if (knigaN != -1) {
+                val title = listn[knigaN]
+                val t5 = listn[knigaN].indexOf("#")
+                val t6 = listn[knigaN].indexOf("#", t5 + 1)
                 knigaN = title.substring(t6 + 1).toInt()
             }
             if (zavet.contains(zav) && knigaN == kniga && glava1 == glava && stix1 == position) {

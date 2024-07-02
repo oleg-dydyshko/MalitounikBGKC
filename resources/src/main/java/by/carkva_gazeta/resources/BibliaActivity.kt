@@ -436,11 +436,11 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         isSetPerevod = true
         clearEmptyPosition()
         saveVydelenieZakladkiNtanki(novyZapavet, kniga, binding.pager.currentItem, fierstPosition)
+        val list = getSpisKnig(novyZapavet)[kniga]
+        val t1 = list.indexOf("#")
+        val t2 = list.indexOf("#", t1 + 1)
+        val myKniga = list.substring(t2 + 1).toInt()
         if (!novyZapavet) {
-            val list = getSpisKnig(false)[kniga]
-            val t1 = list.indexOf("#")
-            val t2 = list.indexOf("#", t1 + 1)
-            val myKniga = list.substring(t2 + 1).toInt()
             val currentItem = binding.pager.currentItem + 1
             val glav = list.substring(t1 + 1, t2).toInt()
             val oldPerevod = this.perevod
@@ -508,9 +508,20 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             }
         } else {
             this.perevod = perevod
-            val title2 = getSpisKnig(true)[kniga]
-            val t3 = title2.indexOf("#")
-            title = title2.substring(0, t3)
+            val list2 = getSpisKnig(true)
+            var index = 0
+            for (i in list2.indices) {
+                val t3 = list2[i].indexOf("#")
+                val t4 = list2[i].indexOf("#", t3 + 1)
+                val myKniga2 = list2[i].substring(t4 + 1).toInt()
+                if (myKniga == myKniga2) {
+                    index = i
+                    break
+                }
+            }
+            kniga = index
+            val t3 = list2[index].indexOf("#")
+            title = list2[index].substring(0, t3)
             binding.subtitleToolbar.text = getSubTitlePerevod()
             binding.titleToolbar.text = title
             binding.pager.adapter?.notifyDataSetChanged()

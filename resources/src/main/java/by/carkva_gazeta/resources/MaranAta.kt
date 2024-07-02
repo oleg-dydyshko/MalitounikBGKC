@@ -2073,7 +2073,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private fun parralelMestaView(position: Int) {
         if (k.getBoolean("paralel_maranata", true) && !vybranae) {
             if (!autoscroll) {
-                val res = getParallel(maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
+                val res = getParallel(maranAta[position].novyZapavet, maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
                 if (!res.contains("+-+")) {
                     paralel = true
                     binding.conteiner.text = paralel(res, perevod)
@@ -2140,7 +2140,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         return true
     }
 
-    private fun getParallel(kniga: Int, glava: Int, styx: Int): String {
+    private fun getParallel(novyZapavet: Boolean, kniga: Int, glava: Int, styx: Int): String {
         val parallel = BibliaParallelChtenia()
         var res = "+-+"
         if (novyZapavet) {
@@ -2410,7 +2410,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             zakladka.append(setZakladki(maranAta[position].novyZapavet, maranAta[position].kniga, maranAta[position].glava, maranAta[position].styx, maranAta[position].perevod))
             val biblia = findIntStyx(SpannableStringBuilder(MainActivity.fromHtml(maranAta[position].bible)))
             val ssb = SpannableStringBuilder(biblia).append(zakladka)
-            val res = getParallel(maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
+            val res = getParallel(maranAta[position].novyZapavet, maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
             if (!res.contains("+-+")) {
                 if (k.getBoolean("paralel_maranata", true) && !vybranae) {
                     val start = ssb.length
@@ -2518,19 +2518,18 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     ssb.insert(t1, ".")
                     if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                } else {
-                    val t2 = ssb.indexOf("\n", index)
-                    if (t2 != -1) {
-                        val t3 = ssb.indexOf(" ", t2)
-                        if (t3 != -1) {
-                            val subText2 = ssb.substring(t2 + 1, t3)
-                            if (subText2.isDigitsOnly()) {
-                                ssb.insert(t3, ".")
-                                if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            }
-                            findIntStyx(ssb, t2 + 1)
+                }
+                val t2 = ssb.indexOf("\n", index)
+                if (t2 != -1) {
+                    val t3 = ssb.indexOf(" ", t2)
+                    if (t3 != -1) {
+                        val subText2 = ssb.substring(t2 + 1, t3)
+                        if (subText2.isDigitsOnly()) {
+                            ssb.insert(t3, ".")
+                            if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
+                        findIntStyx(ssb, t2 + 1)
                     }
                 }
             }
@@ -2597,11 +2596,12 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     val t4 = listn[e].indexOf("#")
                     if (knigaName.contains(listn[e].substring(0, t4))) knigaN = e
                 }
-                t1 = knigaName.indexOf("Разьдзел ")
+                t1 = knigaName.indexOf(" ")
                 t2 = knigaName.indexOf("/", t1)
                 t3 = knigaName.indexOf("\n\n")
-                glava1 = knigaName.substring(t1 + 9, t2).toInt() - 1
-                val stix1 = knigaName.substring(t2 + 6, t3).toInt() - 1
+                val t4 = knigaName.indexOf(" ", t1 + 1)
+                glava1 = knigaName.substring(t1 + 1, t2).toInt() - 1
+                val stix1 = knigaName.substring(t4 + 1, t3).toInt() - 1
                 var zavetLocal = true
                 if (knigaS != -1) {
                     zavetLocal = false

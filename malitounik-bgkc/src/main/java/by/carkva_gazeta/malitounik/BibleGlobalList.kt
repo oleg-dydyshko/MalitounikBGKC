@@ -2,7 +2,6 @@ package by.carkva_gazeta.malitounik
 
  abstract class BibleGlobalList {
     companion object {
-        var listPosition = 0
         var mListGlava = 0
         var mPedakVisable = false
         val bibleCopyList = ArrayList<Int>()

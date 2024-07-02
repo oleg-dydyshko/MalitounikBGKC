@@ -276,9 +276,8 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
-                    binding.subtitleToolbar.text = getSubTitlePerevod(position)
+                    binding.titleToolbar.text = getSubTitlePerevod(position)
                 }
-
                 BibleGlobalList.mListGlava = position
                 men = DialogVybranoeBibleList.checkVybranoe(kniga, position, getNamePerevod())
                 if (glava != position && !isSetPerevod) fierstPosition = 0
@@ -300,8 +299,8 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         }
         binding.pager.setCurrentItem(glava, false)
         val file = getFileZavet(novyZapavet, kniga)
+        BibleGlobalList.vydelenie.clear()
         if (file.exists()) {
-            BibleGlobalList.vydelenie.clear()
             val inputStream = FileReader(file)
             val reader = BufferedReader(inputStream)
             val gson = Gson()
@@ -315,7 +314,13 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         binding.actionBack.setOnClickListener {
             onBack()
         }
-        binding.titleToolbar.text = savedInstanceState?.getString("title") ?: title
+        if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
+            binding.titleToolbar.text = savedInstanceState?.getString("title") ?: getSubTitlePerevod()
+            binding.subtitleToolbar.text = getTitlePerevod()
+        } else {
+            binding.titleToolbar.text = savedInstanceState?.getString("title") ?: title
+            binding.subtitleToolbar.text = getSubTitlePerevod()
+        }
         setTollbarTheme()
     }
 
@@ -328,7 +333,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.subtitleToolbar.text = getSubTitlePerevod()
         if (dzenNoch) {
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
@@ -384,7 +388,11 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 binding.pager.visibility = View.VISIBLE
                 binding.tabLayout.visibility = View.VISIBLE
                 binding.subtitleToolbar.visibility = View.VISIBLE
-                binding.titleToolbar.text = title
+                if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
+                    binding.titleToolbar.text = getSubTitlePerevod()
+                } else {
+                    binding.titleToolbar.text = title
+                }
                 paralel = false
                 resetTollbar(binding.toolbar.layoutParams)
                 invalidateOptionsMenu()
@@ -501,8 +509,13 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                     val title2 = getSpisKnig(false)[kniga]
                     val t3 = title2.indexOf("#")
                     title = title2.substring(0, t3)
-                    binding.subtitleToolbar.text = getSubTitlePerevod()
-                    binding.titleToolbar.text = title
+                    if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
+                        binding.titleToolbar.text = getSubTitlePerevod()
+                        binding.subtitleToolbar.text = getTitlePerevod()
+                    } else {
+                        binding.titleToolbar.text = title
+                        binding.subtitleToolbar.text = getSubTitlePerevod()
+                    }
                     dialog?.errorView(false)
                 }
             }
@@ -522,9 +535,24 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             kniga = index
             val t3 = list2[index].indexOf("#")
             title = list2[index].substring(0, t3)
-            binding.subtitleToolbar.text = getSubTitlePerevod()
-            binding.titleToolbar.text = title
+            if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
+                binding.titleToolbar.text = getSubTitlePerevod()
+                binding.subtitleToolbar.text = getTitlePerevod()
+            } else {
+                binding.titleToolbar.text = title
+                binding.subtitleToolbar.text = getSubTitlePerevod()
+            }
             binding.pager.adapter?.notifyDataSetChanged()
+        }
+        val file = getFileZavet(novyZapavet, kniga)
+        BibleGlobalList.vydelenie.clear()
+        if (file.exists()) {
+            val inputStream = FileReader(file)
+            val reader = BufferedReader(inputStream)
+            val gson = Gson()
+            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
+            BibleGlobalList.vydelenie.addAll(gson.fromJson(reader.readText(), type))
+            inputStream.close()
         }
         isSetPerevod = false
     }

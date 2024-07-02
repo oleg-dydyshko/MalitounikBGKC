@@ -305,8 +305,8 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         zakladka.append(setZakladki(position, mPerevod))
         val ssb = findIntStyx(SpannableStringBuilder(ea.textView.text).append(zakladka))
         if (!res.contains("+-+")) {
+            val start = ssb.length
             ssb.append("\n").append(res)
-            val start = ea.textView.text.length
             val end = ssb.length
             ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorSecondary_text)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             ssb.setSpan(RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -321,7 +321,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             }
             ea.textView.text = ssb
         } else {
-            val end = ea.textView.text.length
+            val end = ssb.length
             val pos = BibleGlobalList.checkPosition(glava, position)
             if (pos != -1) {
                 if (BibleGlobalList.vydelenie[pos][2] == 1) {
@@ -425,19 +425,18 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                 ssb.insert(t1, ".")
                 if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            } else {
-                val t2 = ssb.indexOf("\n", index)
-                if (t2 != -1) {
-                    val t3 = ssb.indexOf(" ", t2)
-                    if (t3 != -1) {
-                        val subText2 = ssb.substring(t2 + 1, t3)
-                        if (subText2.isDigitsOnly()) {
-                            ssb.insert(t3, ".")
-                            if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
-                        findIntStyx(ssb, t2 + 1)
+            }
+            val t2 = ssb.indexOf("\n", index)
+            if (t2 != -1) {
+                val t3 = ssb.indexOf(" ", t2)
+                if (t3 != -1) {
+                    val subText2 = ssb.substring(t2 + 1, t3)
+                    if (subText2.isDigitsOnly()) {
+                        ssb.insert(t3, ".")
+                        if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
+                    findIntStyx(ssb, t2 + 1)
                 }
             }
         }

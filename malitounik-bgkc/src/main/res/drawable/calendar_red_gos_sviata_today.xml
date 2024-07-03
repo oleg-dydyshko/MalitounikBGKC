@@ -11,9 +11,6 @@
         <item android:top="2sp" android:right="2sp">
             <bitmap android:gravity="right|top" android:src="@drawable/calendar_gos_sviata" />
         </item>
-        <item android:bottom="2sp" android:right="2sp">
-            <bitmap android:gravity="right|bottom" android:src="@drawable/calendar_plus" />
-        </item>
     </layer-list>
 </item>
 <item android:state_focused="true">
@@ -27,9 +24,6 @@
         <item android:top="2sp" android:right="2sp">
             <bitmap android:gravity="right|top" android:src="@drawable/calendar_gos_sviata" />
         </item>
-        <item android:bottom="2sp" android:right="2sp">
-            <bitmap android:gravity="right|bottom" android:src="@drawable/calendar_plus" />
-        </item>
     </layer-list>
 </item>
 <item>
@@ -42,9 +36,6 @@
         </item>
         <item android:top="2sp" android:right="2sp">
             <bitmap android:gravity="right|top" android:src="@drawable/calendar_gos_sviata" />
-        </item>
-        <item android:bottom="2sp" android:right="2sp">
-            <bitmap android:gravity="right|bottom" android:src="@drawable/calendar_plus" />
         </item>
     </layer-list>
 </item>

@@ -1229,7 +1229,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.biblia_charniauski)
                         else -> getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
                     }
-                    maranAta.add(MaranAtaData(perevod, false, -1, 0, 0, saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error, title) + "</em>", 0, 0, 0))
+                    maranAta.add(MaranAtaData(perevod, false, -1, 0, 0, 0, saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error, title) + "</em>", 0, 0, 0))
                 }
                 val builder = StringBuilder()
                 var line: String
@@ -1250,7 +1250,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 if (chten.size == 6 && i == 3) {
                     val endFabreary = if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru)
                     else resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be)
-                    maranAta.add(MaranAtaData(perevod, false, -1, 0, 0, saveName, "<br><em>$endFabreary</em><br>\n", 0, 0, 0))
+                    maranAta.add(MaranAtaData(perevod, false, -1, 0, 0, 0, saveName, "<br><em>$endFabreary</em><br>\n", 0, 0, 0))
                 }
                 val split2Pre = builder.toString().split("===")
                 val split2 = ArrayList<String>()
@@ -1295,15 +1295,17 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             else -> getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
                         }
                         if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) {
-                            if (addGlava == e) maranAta.add(MaranAtaData(perevod, novyZapavet, -1, 0, 0, saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava, title) + "</em>", 0, 0, 0))
+                            if (addGlava == e) maranAta.add(MaranAtaData(perevod, novyZapavet, -1, 0, 0, 0, saveName, "<br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava, title) + "</em>", 0, 0, 0))
                         }
                         val p = if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI || replace == 1) DialogVybranoeBibleList.PEREVODCARNIAUSKI
                         else if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || replace == 2) DialogVybranoeBibleList.PEREVODSINOIDAL
                         else perevod
                         val spis = getSpisKnig(novyZapavet)[indexBiblii]
                         val t1 = spis.indexOf("#")
+                        val t2 = spis.indexOf("#", t1 + 1)
+                        val knigaBiblii = spis.substring(t2 + 1).toInt()
                         saveName = spis.substring(0, t1) + " $e"
-                        maranAta.add(MaranAtaData(perevod, novyZapavet, -1, 0, 0, saveName, "<br><strong>$saveName</strong><br>\n", 0, 0, 0))
+                        maranAta.add(MaranAtaData(perevod, novyZapavet, -1, 0, 0, 0, saveName, "<br><strong>$saveName</strong><br>\n", 0, 0, 0))
                         val splitline = split2[e].trim().split("\n")
                         for (i2 in splitline.indices) {
                             val pos = BibleGlobalList.checkPosition(e - 1, i2)
@@ -1316,7 +1318,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 underline = 0
                                 bold = 0
                             }
-                            maranAta.add(MaranAtaData(p, novyZapavet, indexBiblii, e - 1, i2 + 1, saveName, splitline[i2], bold, underline, color))
+                            maranAta.add(MaranAtaData(p, novyZapavet, indexBiblii, knigaBiblii,e - 1, i2 + 1, saveName, splitline[i2], bold, underline, color))
                         }
                     }
                 }
@@ -1328,8 +1330,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     else perevod
                     val spis = getSpisKnig(novyZapavet)[indexBiblii]
                     val t2 = spis.indexOf("#")
+                    val t3 = spis.indexOf("#", t2 + 1)
+                    val knigaBiblii = spis.substring(t3 + 1).toInt()
                     saveName = spis.substring(0, t2) + " $glava"
-                    maranAta.add(MaranAtaData(DialogVybranoeBibleList.PEREVODSEMUXI, novyZapavet, -1, 0, 0, saveName, "<br><strong>$saveName</strong><br>\n", 0, 0, 0))
+                    maranAta.add(MaranAtaData(DialogVybranoeBibleList.PEREVODSEMUXI, novyZapavet, -1, 0, 0, 0, saveName, "<br><strong>$saveName</strong><br>\n", 0, 0, 0))
                     val res1 = r1.toString().trim().split("\n")
                     var i3 = stixn
                     var ires1 = 1
@@ -1350,9 +1354,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                         var resbib = res1[i2]
                         if (resbib.contains("#")) {
                             val t21 = resbib.indexOf("#")
-                            val t3 = resbib.indexOf("#", t21 + 1)
-                            glava = resbib.substring(t21 + 1, t3).toInt()
-                            resbib = resbib.substring(t3 + 1)
+                            val t31 = resbib.indexOf("#", t21 + 1)
+                            glava = resbib.substring(t21 + 1, t31).toInt()
+                            resbib = resbib.substring(t31 + 1)
                         }
                         val pos = BibleGlobalList.checkPosition(glava - 1, i3 - 1)
                         if (pos != -1) {
@@ -1365,7 +1369,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             bold = 0
                         }
                         saveName = spis.substring(0, t2) + " $glava"
-                        maranAta.add(MaranAtaData(p, novyZapavet, indexBiblii, glava - 1, i3, saveName, resbib, bold, underline, color))
+                        maranAta.add(MaranAtaData(p, novyZapavet, indexBiblii, knigaBiblii, glava - 1, i3, saveName, resbib, bold, underline, color))
                         i3++
                     }
                     if (konec - nachalo != 0) {
@@ -1382,15 +1386,15 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 bold = 0
                             }
                             saveName = spis.substring(0, t2) + " $konec"
-                            maranAta.add(MaranAtaData(p, novyZapavet, indexBiblii, konec - 1, i21 + 1, saveName, res2[i21], bold, underline, color))
+                            maranAta.add(MaranAtaData(p, novyZapavet, indexBiblii, knigaBiblii, konec - 1, i21 + 1, saveName, res2[i21], bold, underline, color))
                         }
                     }
                 }
             } catch (_: Throwable) {
                 val t1 = fit.lastIndexOf(" ")
                 val title = title + " ${fit.substring(t1 + 1)}"
-                maranAta.add(MaranAtaData(perevod = DialogVybranoeBibleList.PEREVODSEMUXI, novyZapavet = false, -1, 0, 0, title, "<br><strong>$title</strong><br>\n", 0, 0, 0))
-                maranAta.add(MaranAtaData(perevod = DialogVybranoeBibleList.PEREVODSEMUXI, novyZapavet = false, -1, 0, 0, title, resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n", 0, 0, 0))
+                maranAta.add(MaranAtaData(perevod = DialogVybranoeBibleList.PEREVODSEMUXI, novyZapavet = false, -1, 0, 0, 0, title, "<br><strong>$title</strong><br>\n", 0, 0, 0))
+                maranAta.add(MaranAtaData(perevod = DialogVybranoeBibleList.PEREVODSEMUXI, novyZapavet = false, -1, 0, 0, 0, title, resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n", 0, 0, 0))
             }
             perevod = savePerevod
         }
@@ -2073,7 +2077,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private fun parralelMestaView(position: Int) {
         if (k.getBoolean("paralel_maranata", true) && !vybranae) {
             if (!autoscroll) {
-                val res = getParallel(maranAta[position].novyZapavet, maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
+                val res = getParallel(maranAta[position].novyZapavet, maranAta[position].knigaBiblii, maranAta[position].glava + 1, maranAta[position].styx - 1)
                 if (!res.contains("+-+")) {
                     paralel = true
                     binding.conteiner.text = paralel(res, perevod)
@@ -2408,9 +2412,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             val zakladka = SpannableStringBuilder()
             zakladka.append(setZakladki(maranAta[position].novyZapavet, maranAta[position].kniga, maranAta[position].glava, maranAta[position].styx, maranAta[position].perevod))
-            val biblia = findIntStyx(SpannableStringBuilder(MainActivity.fromHtml(maranAta[position].bible)))
+            val biblia = if (maranAta[position].kniga != -1) findIntStyx(SpannableStringBuilder(MainActivity.fromHtml(maranAta[position].bible)))
+            else SpannableStringBuilder(MainActivity.fromHtml(maranAta[position].bible))
             val ssb = SpannableStringBuilder(biblia).append(zakladka)
-            val res = getParallel(maranAta[position].novyZapavet, maranAta[position].kniga, maranAta[position].glava + 1, maranAta[position].styx - 1)
+            val res = getParallel(maranAta[position].novyZapavet, maranAta[position].knigaBiblii, maranAta[position].glava + 1, maranAta[position].styx - 1)
             if (!res.contains("+-+")) {
                 if (k.getBoolean("paralel_maranata", true) && !vybranae) {
                     val start = ssb.length
@@ -2660,7 +2665,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     private class ViewHolder(var text: TextView)
 
-    private data class MaranAtaData(val perevod: String, val novyZapavet: Boolean, val kniga: Int, val glava: Int, val styx: Int, val title: String, val bible: String, var bold: Int, var underline: Int, var color: Int)
+    private data class MaranAtaData(val perevod: String, val novyZapavet: Boolean, val kniga: Int, val knigaBiblii: Int, val glava: Int, val styx: Int, val title: String, val bible: String, var bold: Int, var underline: Int, var color: Int)
 
     private data class MaranAtaSave(val perevod: String, val novyZapavet: Boolean, val kniga: Int)
 }

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
@@ -17,19 +18,19 @@ import by.carkva_gazeta.malitounik.databinding.DialogBibleRazdelBinding
 import by.carkva_gazeta.malitounik.databinding.DialogBibleRazdelItemBinding
 import com.woxthebox.draglistview.DragItemAdapter
 
+
 class DialogBibleRazdel : DialogFragment() {
     private var fullGlav = 0
     private var position = 1
     private var mListener: DialogBibleRazdelListener? = null
     private lateinit var builder: AlertDialog.Builder
-    private var _binding: DialogBibleRazdelBinding? = null
-    private val binding get() = _binding!!
+    private var binding: DialogBibleRazdelBinding? = null
     private var mItemArray = ArrayList<Int>()
     private var mLastClickTime: Long = 0
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 
     internal interface DialogBibleRazdelListener {
@@ -53,26 +54,38 @@ class DialogBibleRazdel : DialogFragment() {
         position = arguments?.getInt("position") ?: 1
     }
 
+    private fun calculateNoOfColumns(context: Context, width: Int): Int {
+        val displayMetrics = context.resources.displayMetrics
+        val dpWidth = width / displayMetrics.density
+        val scalingFactor = 50
+        val columnCount = (dpWidth / scalingFactor).toInt()
+        return (if (columnCount >= 2) columnCount else 2)
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogBibleRazdelBinding.inflate(layoutInflater)
-            val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
-            var style = R.style.AlertDialogTheme
-            if (dzenNoch) style = R.style.AlertDialogThemeBlack
-            builder = AlertDialog.Builder(it, style)
-            val glm = GridLayoutManager(it, 5)
-            binding.dragGridView.setLayoutManager(glm)
-            for (i in 1..fullGlav) mItemArray.add(i)
-            val listAdapter = ItemAdapter(mItemArray, R.id.item_layout, true)
-            binding.dragGridView.setAdapter(listAdapter, true)
-            binding.dragGridView.setCustomDragItem(null)
-            binding.dragGridView.isDragEnabled = false
-            if (savedInstanceState == null) glm.scrollToPositionWithOffset(position, 0)
-            builder.setPositiveButton(resources.getString(R.string.close)) { dialog: DialogInterface, _: Int ->
-                dialog.cancel()
+            binding = DialogBibleRazdelBinding.inflate(layoutInflater)
+            binding?.let { binding ->
+                val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
+                var style = R.style.AlertDialogTheme
+                if (dzenNoch) style = R.style.AlertDialogThemeBlack
+                binding.dragGridView.post {
+                    val glm = GridLayoutManager(it, calculateNoOfColumns(it, binding.dragGridView.width))
+                    binding.dragGridView.setLayoutManager(glm)
+                    for (i in 1..fullGlav) mItemArray.add(i)
+                    val listAdapter = ItemAdapter(mItemArray, R.id.item_layout, true)
+                    binding.dragGridView.setAdapter(listAdapter, true)
+                    binding.dragGridView.setCustomDragItem(null)
+                    binding.dragGridView.isDragEnabled = false
+                    if (savedInstanceState == null) glm.scrollToPositionWithOffset(position, 0)
+                }
+                builder = AlertDialog.Builder(it, style)
+                builder.setPositiveButton(resources.getString(R.string.close)) { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+                }
+                builder.setView(binding.root)
             }
         }
-        builder.setView(binding.root)
         return builder.create()
     }
 

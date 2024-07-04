@@ -97,8 +97,7 @@ class MenuBibleNadsana : BaseFragment(), View.OnClickListener {
                     val dialogBibleVybranoeError = DialogBibleVybranoeError()
                     dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
                 } else {
-                    DialogVybranoeBibleList.perevod = DialogVybranoeBibleList.PEREVODNADSAN
-                    val dialogVybranoeList = DialogVybranoeBibleList()
+                    val dialogVybranoeList = DialogVybranoeBibleList.getInstance(DialogVybranoeBibleList.PEREVODNADSAN)
                     dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                 }
             }

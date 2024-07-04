@@ -1183,7 +1183,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 prefEditor.putInt("sinoidal", 1)
             } else {
                 prefEditor.putInt("sinoidal", 0)
-                prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+                val perevod = k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+                if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
             }
             prefEditor.apply()
             if (check != k.getInt("sinoidal", 0)) editFull = true

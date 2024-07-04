@@ -279,7 +279,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                     binding.titleToolbar.text = getSubTitlePerevod(position)
                 }
                 BibleGlobalList.mListGlava = position
-                men = DialogVybranoeBibleList.checkVybranoe(kniga, position, getNamePerevod())
+                men = DialogVybranoeBibleList.checkVybranoe(title2.substring(t2 + 1).toInt(), position, getNamePerevod())
                 if (glava != position && !isSetPerevod) fierstPosition = 0
                 invalidateOptionsMenu()
             }
@@ -298,16 +298,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             fullscreenPage = k.getBoolean("fullscreenPage", false)
         }
         binding.pager.setCurrentItem(glava, false)
-        val file = getFileZavet(novyZapavet, kniga)
-        BibleGlobalList.vydelenie.clear()
-        if (file.exists()) {
-            val inputStream = FileReader(file)
-            val reader = BufferedReader(inputStream)
-            val gson = Gson()
-            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
-            BibleGlobalList.vydelenie.addAll(gson.fromJson(reader.readText(), type))
-            inputStream.close()
-        }
+        loadVydelenie()
         binding.actionFullscreen.setOnClickListener {
             show()
         }
@@ -322,6 +313,23 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             binding.subtitleToolbar.text = getSubTitlePerevod()
         }
         setTollbarTheme()
+    }
+
+    private fun loadVydelenie() {
+        BibleGlobalList.vydelenie.clear()
+        try {
+            val file = getFileZavet(novyZapavet, kniga)
+            if (file.exists()) {
+                val inputStream = FileReader(file)
+                val reader = BufferedReader(inputStream)
+                val gson = Gson()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
+                BibleGlobalList.vydelenie.addAll(gson.fromJson(reader.readText(), type))
+                inputStream.close()
+
+            }
+        } catch (_: Throwable) {
+        }
     }
 
     private fun setTollbarTheme() {
@@ -544,16 +552,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             }
             binding.pager.adapter?.notifyDataSetChanged()
         }
-        val file = getFileZavet(novyZapavet, kniga)
-        BibleGlobalList.vydelenie.clear()
-        if (file.exists()) {
-            val inputStream = FileReader(file)
-            val reader = BufferedReader(inputStream)
-            val gson = Gson()
-            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type).type
-            BibleGlobalList.vydelenie.addAll(gson.fromJson(reader.readText(), type))
-            inputStream.close()
-        }
+        loadVydelenie()
         isSetPerevod = false
     }
 
@@ -576,9 +575,15 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             if (men) {
                 MainActivity.toastView(this, getString(R.string.addVybranoe))
                 if (!DialogVybranoeBibleList.checkVybranoe(getNamePerevod())) {
-                    MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), getNamePerevod(), getTitlePerevod()))
                     val gson = Gson()
                     val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
+                    if (MenuVybranoe.vybranoe.isEmpty()) {
+                        val file = File("$filesDir/Vybranoe.json")
+                        if (file.exists()) {
+                            MenuVybranoe.vybranoe.addAll(gson.fromJson(file.readText(), type))
+                        }
+                    }
+                    MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), getNamePerevod(), getTitlePerevod()))
                     val file = File("$filesDir/Vybranoe.json")
                     file.writer().use {
                         it.write(gson.toJson(MenuVybranoe.vybranoe, type))

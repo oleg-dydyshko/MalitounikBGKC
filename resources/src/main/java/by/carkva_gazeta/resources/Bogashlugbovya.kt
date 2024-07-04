@@ -39,6 +39,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.text.isDigitsOnly
 import androidx.core.text.toSpannable
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -512,12 +513,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             vybranoePosition = intent.extras?.getInt("vybranaePos", -1) ?: -1
         }
-        if (resurs == "1" || resurs == "2" || resurs == "3") {
-            DialogVybranoeBibleList.perevod = resurs
+        if (resurs.isDigitsOnly() && resurs.toInt() < 10) {
             val text = SpannableString(title)
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val dialogVybranoeList = DialogVybranoeBibleList()
+                    val dialogVybranoeList = DialogVybranoeBibleList.getInstance(resurs)
                     dialogVybranoeList.setDialogVybranoeBibleListListener(this@Bogashlugbovya)
                     dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
                 }
@@ -657,9 +657,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         invalidateOptionsMenu()
         val duration: Long = 1000
         ObjectAnimator.ofInt(binding.scrollView2, "scrollY", 0).setDuration(duration).start()
-        if (resurs == "1" || resurs == "2" || resurs == "3") {
-            DialogVybranoeBibleList.perevod = resurs
-            val dialogVybranoeList = DialogVybranoeBibleList()
+        if (resurs.isDigitsOnly() && resurs.toInt() < 10) {
+            val dialogVybranoeList = DialogVybranoeBibleList.getInstance(resurs)
             dialogVybranoeList.setDialogVybranoeBibleListListener(this@Bogashlugbovya)
             dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
             val text = SpannableString(title)

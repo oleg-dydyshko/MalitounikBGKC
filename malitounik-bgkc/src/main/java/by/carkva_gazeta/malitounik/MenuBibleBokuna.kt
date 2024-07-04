@@ -50,8 +50,7 @@ class MenuBibleBokuna : BaseFragment() {
                     val dialogBibleVybranoeError = DialogBibleVybranoeError()
                     dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
                 } else {
-                    DialogVybranoeBibleList.perevod = DialogVybranoeBibleList.PEREVODBOKUNA
-                    val dialogVybranoeList = DialogVybranoeBibleList()
+                    val dialogVybranoeList = DialogVybranoeBibleList.getInstance(DialogVybranoeBibleList.PEREVODBOKUNA)
                     dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                 }
             }

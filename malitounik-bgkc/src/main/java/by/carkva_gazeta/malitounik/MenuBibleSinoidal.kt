@@ -50,8 +50,7 @@ class MenuBibleSinoidal : Fragment() {
                     val dialogBibleVybranoeError = DialogBibleVybranoeError()
                     dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
                 } else {
-                    DialogVybranoeBibleList.perevod = DialogVybranoeBibleList.PEREVODSINOIDAL
-                    val dialogVybranoeList = DialogVybranoeBibleList()
+                    val dialogVybranoeList = DialogVybranoeBibleList.getInstance(DialogVybranoeBibleList.PEREVODSINOIDAL)
                     dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                 }
             }

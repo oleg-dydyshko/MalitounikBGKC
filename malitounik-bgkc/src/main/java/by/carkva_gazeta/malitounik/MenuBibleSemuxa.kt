@@ -50,8 +50,7 @@ class MenuBibleSemuxa : BaseFragment() {
                     val dialogBibleVybranoeError = DialogBibleVybranoeError()
                     dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
                 } else {
-                    DialogVybranoeBibleList.perevod = DialogVybranoeBibleList.PEREVODSEMUXI
-                    val dialogVybranoeList = DialogVybranoeBibleList()
+                    val dialogVybranoeList = DialogVybranoeBibleList.getInstance(DialogVybranoeBibleList.PEREVODSEMUXI)
                     dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                 }
             }

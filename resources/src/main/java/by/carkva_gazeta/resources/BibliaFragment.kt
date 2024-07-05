@@ -526,7 +526,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
             }
             inputStream.close()
             val split = builder.toString().split("===")
-            if (page + 1 > split.size - 1) page = split.size - 1
+            if (page + 1 > split.size - 1) page = split.size - 2
             val bibleline = split[page + 1].split("\n")
             bibleline.forEach {
                 if (it.trim() != "") bible.add(it)
@@ -558,7 +558,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
             val t1 = list.indexOf("#")
             val t2 = list.indexOf("#", t1 + 1)
             val myKniga = list.substring(t2 + 1).toInt()
-            adapter = BibleArrayAdapterParallel(activity, bible, myKniga, page, novyZapavet, activity.getNamePerevod())
+            adapter = BibleArrayAdapterParallel(activity, bible, kniga, myKniga, page, novyZapavet, activity.getNamePerevod())
             binding.listView.divider = null
             binding.listView.adapter = adapter
             binding.listView.setSelection(pazicia)

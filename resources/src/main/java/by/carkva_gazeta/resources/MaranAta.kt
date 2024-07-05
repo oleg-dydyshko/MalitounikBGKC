@@ -1318,7 +1318,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 underline = 0
                                 bold = 0
                             }
-                            maranAta.add(MaranAtaData(p, novyZapavet, indexBiblii, knigaBiblii,e - 1, i2 + 1, saveName, splitline[i2], bold, underline, color))
+                            maranAta.add(MaranAtaData(p, novyZapavet, indexBiblii, knigaBiblii, e - 1, i2 + 1, saveName, splitline[i2], bold, underline, color))
                         }
                     }
                 }
@@ -2541,22 +2541,22 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return ssb
         }
 
-        private fun setZakladki(zavet: Boolean, kniga: Int, glava: Int, styx: Int, perevod: String): SpannableStringBuilder {
+        private fun setZakladki(novyZapavet: Boolean, kniga: Int, glava: Int, styx: Int, perevod: String): SpannableStringBuilder {
             val ssb = SpannableStringBuilder()
-            val listn: Array<String>
-            val lists: Array<String>
+            if (kniga == -1) return ssb
+            val list: Array<String>
             val globalList = when (perevod) {
                 DialogVybranoeBibleList.PEREVODSEMUXI -> {
                     if (BibleGlobalList.zakladkiSemuxa.size == 0) return ssb
-                    listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan)
-                    lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas)
+                    list = if (novyZapavet) context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan)
+                    else context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas)
                     BibleGlobalList.zakladkiSemuxa
                 }
 
                 DialogVybranoeBibleList.PEREVODSINOIDAL -> {
                     if (BibleGlobalList.zakladkiSinodal.size == 0) return ssb
-                    listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln)
-                    lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals)
+                    list = if (novyZapavet) context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln)
+                    else context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals)
                     BibleGlobalList.zakladkiSinodal
                 }
 
@@ -2566,40 +2566,35 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
                 DialogVybranoeBibleList.PEREVODBOKUNA -> {
                     if (BibleGlobalList.zakladkiBokuna.size == 0) return ssb
-                    listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunan)
-                    lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunas)
+                    list = if (novyZapavet) context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunan)
+                    else context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunas)
                     BibleGlobalList.zakladkiBokuna
                 }
 
                 DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
                     if (BibleGlobalList.zakladkiCarniauski.size == 0) return ssb
-                    listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskin)
-                    lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskis)
+                    list = if (novyZapavet) context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskin)
+                    else context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskis)
                     BibleGlobalList.zakladkiCarniauski
                 }
 
                 else -> {
                     if (BibleGlobalList.zakladkiSemuxa.size == 0) return ssb
-                    listn = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan)
-                    lists = context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas)
+                    list = if (novyZapavet) context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan)
+                    else context.resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas)
                     BibleGlobalList.zakladkiSemuxa
                 }
             }
             for (i in globalList.indices) {
-                var knigaN = -1
-                var knigaS = -1
+                var kniga1 = -1
                 var t1: Int
                 var t2: Int
                 var t3: Int
                 var glava1: Int
                 val knigaName = globalList[i].data
-                for (e in lists.indices) {
-                    val t4 = lists[e].indexOf("#")
-                    if (knigaName.contains(lists[e].substring(0, t4))) knigaS = e
-                }
-                for (e in listn.indices) {
-                    val t4 = listn[e].indexOf("#")
-                    if (knigaName.contains(listn[e].substring(0, t4))) knigaN = e
+                for (e in list.indices) {
+                    val t4 = list[e].indexOf("#")
+                    if (knigaName.contains(list[e].substring(0, t4))) kniga1 = e
                 }
                 t1 = knigaName.indexOf(" ")
                 t2 = knigaName.indexOf("/", t1)
@@ -2607,22 +2602,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val t4 = knigaName.indexOf(" ", t1 + 1)
                 glava1 = knigaName.substring(t1 + 1, t2).toInt() - 1
                 val stix1 = knigaName.substring(t4 + 1, t3).toInt() - 1
-                var zavetLocal = true
-                if (knigaS != -1) {
-                    zavetLocal = false
-                    val title = lists[knigaS]
-                    val t5 = lists[knigaS].indexOf("#")
-                    val t6 = lists[knigaS].indexOf("#", t5 + 1)
-                    knigaN = title.substring(t6 + 1).toInt()
-                }
-                if (knigaN != -1) {
-                    zavetLocal = false
-                    val title = listn[knigaN]
-                    val t5 = listn[knigaN].indexOf("#")
-                    val t6 = listn[knigaN].indexOf("#", t5 + 1)
-                    knigaN = title.substring(t6 + 1).toInt()
-                }
-                if (zavet == zavetLocal && knigaN == kniga && glava1 == glava && stix1 == styx - 1) {
+                if (kniga1 == kniga && glava1 == glava && stix1 == styx - 1) {
                     ssb.append(".")
                     val t5 = knigaName.lastIndexOf("<!--")
                     val color = if (t5 != -1) knigaName.substring(t5 + 4).toInt()

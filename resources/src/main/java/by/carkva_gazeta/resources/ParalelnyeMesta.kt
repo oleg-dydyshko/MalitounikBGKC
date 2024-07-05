@@ -79,7 +79,7 @@ interface ParalelnyeMesta {
                     var noKnigaSemuxi = false
                     val r = activity.resources
                     var inputStream: InputStream? = null
-                    if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
+                    if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODBOKUNA || perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
                         inputStream = when (nomer) {
                             1 -> r.openRawResource(R.raw.biblias1)
                             2 -> r.openRawResource(R.raw.biblias2)
@@ -147,155 +147,6 @@ interface ParalelnyeMesta {
                             75 -> r.openRawResource(R.raw.biblian25)
                             76 -> r.openRawResource(R.raw.biblian26)
                             77 -> r.openRawResource(R.raw.biblian27)
-                            else -> null
-                        }
-                    }
-                    if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
-                        inputStream = when (nomer) {
-                            1 -> r.openRawResource(R.raw.bokunas1)
-                            2 -> r.openRawResource(R.raw.bokunas2)
-                            3 -> r.openRawResource(R.raw.bokunas3)
-                            4 -> r.openRawResource(R.raw.bokunas4)
-                            5 -> r.openRawResource(R.raw.bokunas5)
-                            6 -> r.openRawResource(R.raw.bokunas6)
-                            7 -> r.openRawResource(R.raw.bokunas7)
-                            8 -> r.openRawResource(R.raw.bokunas8)
-                            9 -> r.openRawResource(R.raw.bokunas9)
-                            10 -> r.openRawResource(R.raw.bokunas10)
-                            11 -> r.openRawResource(R.raw.bokunas11)
-                            12 -> r.openRawResource(R.raw.bokunas12)
-                            13 -> r.openRawResource(R.raw.bokunas13)
-                            14 -> r.openRawResource(R.raw.bokunas14)
-                            15 -> r.openRawResource(R.raw.bokunas15)
-                            16 -> r.openRawResource(R.raw.bokunas16)
-                            20 -> r.openRawResource(R.raw.bokunas17)
-                            21 -> r.openRawResource(R.raw.bokunas18)
-                            22 -> r.openRawResource(R.raw.bokunas19)
-                            23 -> r.openRawResource(R.raw.bokunas20)
-                            24 -> r.openRawResource(R.raw.bokunas21)
-                            25 -> r.openRawResource(R.raw.bokunas22)
-                            28 -> r.openRawResource(R.raw.bokunas23)
-                            29 -> r.openRawResource(R.raw.bokunas24)
-                            30 -> r.openRawResource(R.raw.bokunas25)
-                            33 -> r.openRawResource(R.raw.bokunas26)
-                            34 -> r.openRawResource(R.raw.bokunas27)
-                            35 -> r.openRawResource(R.raw.bokunas28)
-                            36 -> r.openRawResource(R.raw.bokunas29)
-                            37 -> r.openRawResource(R.raw.bokunas30)
-                            38 -> r.openRawResource(R.raw.bokunas31)
-                            39 -> r.openRawResource(R.raw.bokunas32)
-                            40 -> r.openRawResource(R.raw.bokunas33)
-                            41 -> r.openRawResource(R.raw.bokunas34)
-                            42 -> r.openRawResource(R.raw.bokunas35)
-                            43 -> r.openRawResource(R.raw.bokunas36)
-                            44 -> r.openRawResource(R.raw.bokunas37)
-                            45 -> r.openRawResource(R.raw.bokunas38)
-                            46 -> r.openRawResource(R.raw.bokunas39)
-                            51 -> r.openRawResource(R.raw.bokunan1)
-                            52 -> r.openRawResource(R.raw.bokunan2)
-                            53 -> r.openRawResource(R.raw.bokunan3)
-                            54 -> r.openRawResource(R.raw.bokunan4)
-                            55 -> r.openRawResource(R.raw.bokunan5)
-                            56 -> r.openRawResource(R.raw.bokunan6)
-                            57 -> r.openRawResource(R.raw.bokunan7)
-                            58 -> r.openRawResource(R.raw.bokunan8)
-                            59 -> r.openRawResource(R.raw.bokunan9)
-                            60 -> r.openRawResource(R.raw.bokunan10)
-                            61 -> r.openRawResource(R.raw.bokunan11)
-                            62 -> r.openRawResource(R.raw.bokunan12)
-                            63 -> r.openRawResource(R.raw.bokunan13)
-                            64 -> r.openRawResource(R.raw.bokunan14)
-                            65 -> r.openRawResource(R.raw.bokunan15)
-                            66 -> r.openRawResource(R.raw.bokunan16)
-                            67 -> r.openRawResource(R.raw.bokunan17)
-                            68 -> r.openRawResource(R.raw.bokunan18)
-                            69 -> r.openRawResource(R.raw.bokunan19)
-                            70 -> r.openRawResource(R.raw.bokunan20)
-                            71 -> r.openRawResource(R.raw.bokunan21)
-                            72 -> r.openRawResource(R.raw.bokunan22)
-                            73 -> r.openRawResource(R.raw.bokunan23)
-                            74 -> r.openRawResource(R.raw.bokunan24)
-                            75 -> r.openRawResource(R.raw.bokunan25)
-                            76 -> r.openRawResource(R.raw.bokunan26)
-                            77 -> r.openRawResource(R.raw.bokunan27)
-                            else -> null
-                        }
-                    }
-                    if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
-                        inputStream = when (nomer) {
-                            1 -> r.openRawResource(R.raw.carniauskis1)
-                            2 -> r.openRawResource(R.raw.carniauskis2)
-                            3 -> r.openRawResource(R.raw.carniauskis3)
-                            4 -> r.openRawResource(R.raw.carniauskis4)
-                            5 -> r.openRawResource(R.raw.carniauskis5)
-                            6 -> r.openRawResource(R.raw.carniauskis6)
-                            7 -> r.openRawResource(R.raw.carniauskis7)
-                            8 -> r.openRawResource(R.raw.carniauskis8)
-                            9 -> r.openRawResource(R.raw.carniauskis9)
-                            10 -> r.openRawResource(R.raw.carniauskis10)
-                            11 -> r.openRawResource(R.raw.carniauskis11)
-                            12 -> r.openRawResource(R.raw.carniauskis12)
-                            13 -> r.openRawResource(R.raw.carniauskis13)
-                            14 -> r.openRawResource(R.raw.carniauskis14)
-                            15 -> r.openRawResource(R.raw.carniauskis15)
-                            16 -> r.openRawResource(R.raw.carniauskis16)
-                            20 -> r.openRawResource(R.raw.carniauskis17)
-                            21 -> r.openRawResource(R.raw.carniauskis18)
-                            22 -> r.openRawResource(R.raw.carniauskis19)
-                            23 -> r.openRawResource(R.raw.carniauskis20)
-                            24 -> r.openRawResource(R.raw.carniauskis21)
-                            25 -> r.openRawResource(R.raw.carniauskis22)
-                            28 -> r.openRawResource(R.raw.carniauskis23)
-                            29 -> r.openRawResource(R.raw.carniauskis24)
-                            30 -> r.openRawResource(R.raw.carniauskis25)
-                            33 -> r.openRawResource(R.raw.carniauskis26)
-                            34 -> r.openRawResource(R.raw.carniauskis27)
-                            35 -> r.openRawResource(R.raw.carniauskis28)
-                            36 -> r.openRawResource(R.raw.carniauskis29)
-                            37 -> r.openRawResource(R.raw.carniauskis30)
-                            38 -> r.openRawResource(R.raw.carniauskis31)
-                            39 -> r.openRawResource(R.raw.carniauskis32)
-                            40 -> r.openRawResource(R.raw.carniauskis33)
-                            41 -> r.openRawResource(R.raw.carniauskis34)
-                            42 -> r.openRawResource(R.raw.carniauskis35)
-                            43 -> r.openRawResource(R.raw.carniauskis36)
-                            44 -> r.openRawResource(R.raw.carniauskis37)
-                            45 -> r.openRawResource(R.raw.carniauskis38)
-                            46 -> r.openRawResource(R.raw.carniauskis39)
-                            18 -> r.openRawResource(R.raw.carniauskis40)
-                            19 -> r.openRawResource(R.raw.carniauskis41)
-                            26 -> r.openRawResource(R.raw.carniauskis42)
-                            27 -> r.openRawResource(R.raw.carniauskis43)
-                            32 -> r.openRawResource(R.raw.carniauskis44)
-                            47 -> r.openRawResource(R.raw.carniauskis45)
-                            48 -> r.openRawResource(R.raw.carniauskis46)
-                            51 -> r.openRawResource(R.raw.carniauskin1)
-                            52 -> r.openRawResource(R.raw.carniauskin2)
-                            53 -> r.openRawResource(R.raw.carniauskin3)
-                            54 -> r.openRawResource(R.raw.carniauskin4)
-                            55 -> r.openRawResource(R.raw.carniauskin5)
-                            56 -> r.openRawResource(R.raw.carniauskin6)
-                            57 -> r.openRawResource(R.raw.carniauskin7)
-                            58 -> r.openRawResource(R.raw.carniauskin8)
-                            59 -> r.openRawResource(R.raw.carniauskin9)
-                            60 -> r.openRawResource(R.raw.carniauskin10)
-                            61 -> r.openRawResource(R.raw.carniauskin11)
-                            62 -> r.openRawResource(R.raw.carniauskin12)
-                            63 -> r.openRawResource(R.raw.carniauskin13)
-                            64 -> r.openRawResource(R.raw.carniauskin14)
-                            65 -> r.openRawResource(R.raw.carniauskin15)
-                            66 -> r.openRawResource(R.raw.carniauskin16)
-                            67 -> r.openRawResource(R.raw.carniauskin17)
-                            68 -> r.openRawResource(R.raw.carniauskin18)
-                            69 -> r.openRawResource(R.raw.carniauskin19)
-                            70 -> r.openRawResource(R.raw.carniauskin20)
-                            71 -> r.openRawResource(R.raw.carniauskin21)
-                            72 -> r.openRawResource(R.raw.carniauskin22)
-                            73 -> r.openRawResource(R.raw.carniauskin23)
-                            74 -> r.openRawResource(R.raw.carniauskin24)
-                            75 -> r.openRawResource(R.raw.carniauskin25)
-                            76 -> r.openRawResource(R.raw.carniauskin26)
-                            77 -> r.openRawResource(R.raw.carniauskin27)
                             else -> null
                         }
                     }
@@ -401,7 +252,7 @@ interface ParalelnyeMesta {
                         val vN = r1.indexOf(nachalo)
                         val vK1 = r1.indexOf(konec)
                         val vK = r1.indexOf("\n", vK1)
-                        if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI && nomer == 22) {
+                        if ((perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODBOKUNA || perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) && nomer == 22) {
                             r1 = r1.replace("\n", "<br>\n")
                             val r3 = r1.split("\n")
                             val sb = StringBuilder()
@@ -432,7 +283,7 @@ interface ParalelnyeMesta {
                                 "$nazva $nomerglavy.$nachalo-$konec"
                             }
                         }
-                        if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI && nomer == 22) {
+                        if ((perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODBOKUNA || perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) && nomer == 22) {
                             r2 = r2.replace("<br>", "\n")
                             r2 = r2.replace("\n\n", "\n")
                             r2 = r2.replace("<strong>", "")
@@ -494,27 +345,25 @@ interface ParalelnyeMesta {
                 ssb.insert(t1, ".")
                 if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                //findIntStyx(ssb, t1 + 1)
-            } else {
-                val t2 = ssb.indexOf("\n", index)
-                if (t2 != -1) {
-                    val t3 = ssb.indexOf(" ", t2)
-                    if (t3 != -1) {
-                        val subText2 = ssb.substring(t2 + 1, t3)
-                        if (subText2.isDigitsOnly()) {
-                            ssb.insert(t3, ".")
-                            if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
-                        findIntStyx(ssb, t2 + 1)
+            }
+            val t2 = ssb.indexOf("\n", index)
+            if (t2 != -1) {
+                val t3 = ssb.indexOf(" ", t2)
+                if (t3 != -1) {
+                    val subText2 = ssb.substring(t2 + 1, t3)
+                    if (subText2.isDigitsOnly()) {
+                        ssb.insert(t3, ".")
+                        if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        else ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary)), t2 + 1, t3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
+                    findIntStyx(ssb, t2 + 1)
                 }
             }
         }
         return ssb
     }
 
-    fun biblia(chtenie: String): Array<String> {
+    private fun biblia(chtenie: String): Array<String> {
         val t1 = chtenie.lastIndexOf(" ")
         val kniga = if (t1 != -1) chtenie.substring(0, t1)
         else chtenie

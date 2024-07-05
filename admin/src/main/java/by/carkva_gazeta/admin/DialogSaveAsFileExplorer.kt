@@ -228,6 +228,10 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 }
                 adapter.notifyDataSetChanged()
             }
+        } else {
+            activity?.let {
+                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
+            }
         }
     }
 

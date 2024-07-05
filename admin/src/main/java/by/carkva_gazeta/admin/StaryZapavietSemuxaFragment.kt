@@ -125,6 +125,10 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
                     }.await()
                     _binding?.progressBar2?.visibility = View.GONE
                 }
+            } else {
+                activity?.let {
+                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
+                }
             }
         }
     }
@@ -214,6 +218,10 @@ class StaryZapavietSemuxaFragment : BaseFragment() {
                     binding.textView.setText(sb.toString().trim())
                     binding.progressBar2.visibility = View.GONE
                 }
+            }
+        } else {
+            activity?.let {
+                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
             }
         }
     }

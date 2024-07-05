@@ -196,6 +196,8 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
                 }
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -263,6 +265,8 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
             images.sort()
             adapter.notifyDataSetChanged()
             binding.progressBar2.visibility = View.GONE
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -399,6 +403,8 @@ class SviatyiaImage : BaseActivity(), DialogDeliteImage.DialogDeliteListener, Ad
                 textViewApisanne?.text = text
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 

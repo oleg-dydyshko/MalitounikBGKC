@@ -232,6 +232,8 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
                 MainActivity.toastView(this@BibliatekaList, getString(by.carkva_gazeta.malitounik.R.string.save))
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            MainActivity.toastView(this@BibliatekaList, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -311,6 +313,8 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
                 }
             } catch (_: Throwable) {
             }
+        } else {
+            MainActivity.toastView(this@BibliatekaList, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 

@@ -213,6 +213,8 @@ class SviatyiaPyxomyia : BaseActivity(), View.OnClickListener, DialogEditImage.D
                 loadFilesMetaData()
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -396,6 +398,8 @@ class SviatyiaPyxomyia : BaseActivity(), View.OnClickListener, DialogEditImage.D
                 }
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 

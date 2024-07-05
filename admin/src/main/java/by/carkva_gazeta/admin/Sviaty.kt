@@ -233,6 +233,8 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogEditImage.DialogEditI
                 loadFilesMetaData()
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -514,6 +516,8 @@ class Sviaty : BaseActivity(), View.OnClickListener, DialogEditImage.DialogEditI
                 }
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 

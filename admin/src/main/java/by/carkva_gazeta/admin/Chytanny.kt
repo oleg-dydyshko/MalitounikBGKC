@@ -314,6 +314,8 @@ class Chytanny : BaseActivity() {
                 saveLogFile()
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 

@@ -2,12 +2,10 @@ package by.carkva_gazeta.resources
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.SystemClock
 import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ExpandableListView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
@@ -24,9 +22,8 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.InputStream
 
-class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadSinaidal, BibliaPerakvadBokuna, BibliaPerakvadCarniauski {
+class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadSinaidal, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaAdapterList.BibliaAdapterListListener {
     private val dzenNoch get() = getBaseDzenNoch()
-    private var mLastClickTime: Long = 0
     private lateinit var binding: ContentBibleBinding
     private var resetTollbarJob: Job? = null
     private var novyZapavet = false
@@ -209,13 +206,9 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
         for (kniga in list.indices) {
             val t1 = list[kniga].indexOf("#")
             val t2 = list[kniga].indexOf("#", t1 + 1)
-            val split = list[kniga].substring(t1 + 1, t2).toInt()
+            val glav = list[kniga].substring(t1 + 1, t2).toInt()
             val children = ArrayList<BibliaAdapterData>()
-            val razdel = if (!novyZapavet && split == 21) getString(R.string.psalom)
-            else getString(R.string.razdzel)
-            for (glava in 1 .. split) {
-                children.add(BibliaAdapterData(list[kniga].substring(0, t1), "$razdel $glava"))
-            }
+            children.add(BibliaAdapterData(list[kniga].substring(0, t1), glav))
             groups.add(children)
         }
         return groups
@@ -235,21 +228,9 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
         perevod = intent.extras?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
         adapterData.addAll(getAdapterData())
         adapter = BibliaAdapterList(this, adapterData)
+        adapter.setBibliaAdapterListListener(this)
         binding.elvMain.setAdapter(adapter)
         if (adapter.groupCount == 1) binding.elvMain.expandGroup(0)
-        binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnChildClickListener true
-            }
-            mLastClickTime = SystemClock.elapsedRealtime()
-            val intent = Intent(this, BibliaActivity::class.java)
-            intent.putExtra("kniga", groupPosition)
-            intent.putExtra("glava", childPosition)
-            intent.putExtra("novyZapavet", novyZapavet)
-            intent.putExtra("perevod", getNamePerevod())
-            listBibliaLauncher.launch(intent)
-            false
-        }
         if (intent.extras?.getBoolean("prodolzyt", false) == true) {
             val intent1 = Intent(this, BibliaActivity::class.java)
             val kniga = intent.extras?.getInt("kniga") ?: 0
@@ -264,6 +245,15 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
             listBibliaLauncher.launch(intent1)
         }
         setTollbarTheme()
+    }
+
+    override fun onComplete(groupPosition: Int, childPosition: Int) {
+        val intent = Intent(this, BibliaActivity::class.java)
+        intent.putExtra("kniga", groupPosition)
+        intent.putExtra("glava", childPosition)
+        intent.putExtra("novyZapavet", novyZapavet)
+        intent.putExtra("perevod", getNamePerevod())
+        listBibliaLauncher.launch(intent)
     }
 
     private fun setTollbarTheme() {

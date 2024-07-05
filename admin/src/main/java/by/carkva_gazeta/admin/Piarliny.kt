@@ -388,6 +388,8 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
                 adapter.notifyDataSetChanged()
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 

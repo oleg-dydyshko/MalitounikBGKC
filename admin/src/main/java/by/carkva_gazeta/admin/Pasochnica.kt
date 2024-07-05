@@ -598,6 +598,8 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 saveLogFile()
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -619,6 +621,8 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                 }
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -800,6 +804,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
             } else {
                 binding.apisanne.setText(content)
             }
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 

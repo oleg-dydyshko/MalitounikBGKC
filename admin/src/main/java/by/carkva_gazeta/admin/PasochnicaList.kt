@@ -127,6 +127,8 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 getDirPostRequest()
                 invalidateOptionsMenu()
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -313,6 +315,8 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 intent.putExtra("fileName", "$resourse$res")
                 startActivity(intent)
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -335,6 +339,8 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 fragment?.update()
                 getDirPostRequest()
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -381,6 +387,8 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 fragment?.update()
                 getDirPostRequest()
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -457,6 +465,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             fileList.addAll(backCopy)
             adapter.notifyDataSetChanged()
             binding.listView.invalidate()
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -566,6 +575,8 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                         MainActivity.toastView(Malitounik.applicationContext(), Malitounik.applicationContext().getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                 }
+            } else {
+                MainActivity.toastView(Malitounik.applicationContext(), Malitounik.applicationContext().getString(by.carkva_gazeta.malitounik.R.string.no_internet))
             }
         }
     }

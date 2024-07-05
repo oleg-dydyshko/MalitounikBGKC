@@ -110,6 +110,8 @@ class DialogPasochnicaMkDir : DialogFragment() {
                         }
                         mListener?.setDir()
                     }
+                } else {
+                    MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
                 }
             }
         }

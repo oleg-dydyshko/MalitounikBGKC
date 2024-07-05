@@ -208,6 +208,8 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                     binding.progressBar2.visibility = View.GONE
                 }
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 
@@ -517,6 +519,8 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
                 if (checkSviatyai) saveLogFile()
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 

@@ -625,8 +625,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
             override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
                 if (list.adapter == null || list.getChildAt(0) == null) return
-                val firstPosition = list.firstVisiblePosition
-                val nazva = maranAta[list.firstVisiblePosition].title
+                var firstPosition = list.firstVisiblePosition
+                if (firstPosition > maranAta.size - 1) firstPosition = maranAta.size - 1
+                val nazva = maranAta[firstPosition].title
                 if (fullscreenPage) {
                     if (firstPosition <= maranAtaScrollPosition) {
                         if (binding.textViewTitle.visibility == View.GONE) {

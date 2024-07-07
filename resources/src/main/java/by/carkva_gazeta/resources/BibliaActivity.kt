@@ -455,10 +455,10 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         val list = getSpisKnig(novyZapavet)[kniga]
         val t1 = list.indexOf("#")
         val t2 = list.indexOf("#", t1 + 1)
-        val myKniga = list.substring(t2 + 1).toInt()
+        var myKniga = list.substring(t2 + 1).toInt()
         if (!novyZapavet) {
-            val currentItem = binding.pager.currentItem + 1
-            val glav = list.substring(t1 + 1, t2).toInt()
+            var currentItem = binding.pager.currentItem + 1
+            var glav = list.substring(t1 + 1, t2).toInt()
             val oldPerevod = this.perevod
             val oldPsaltyrGreek = isPsaltyrGreek()
             this.perevod = perevod
@@ -466,6 +466,16 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             var myKniga2: Int
             var glav2 = 0
             val list2 = getSpisKnig(false)
+            var isAdd = false
+            var isAddBack = false
+            if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI && myKniga == 30 && !novyZapavet) {
+                myKniga = 31
+                isAdd = true
+            }
+            if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL && myKniga == 31 && !novyZapavet && currentItem == 6) {
+                myKniga = 30
+                isAddBack = true
+            }
             var index = 0
             for (i in list2.indices) {
                 val t3 = list2[i].indexOf("#")
@@ -479,6 +489,37 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 }
             }
             val dialog = supportFragmentManager.findFragmentByTag("DialogPerevodBiblii") as? DialogPerevodBiblii
+            if (isAdd) {
+                for (i in 1..6) {
+                    if (i != 1) {
+                        adapter.addFragment(i - 1)
+                        val newTab = binding.tabLayout.newTab()
+                        newTab.text = getString(R.string.razdzel) + " " + i
+                        binding.tabLayout.addTab(newTab, i - 1)
+                    }
+                    val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(i - 1)) as? BibliaFragment
+                    fragment?.loadBibleList(index, i)
+                }
+                currentItem = 6
+                glav = 6
+                glava = 6
+                binding.pager.currentItem = glava - 1
+            }
+            if (isAddBack) {
+                binding.pager.currentItem = 0
+                for (i in 6 downTo 1) {
+                    if (i != 1) {
+                        adapter.removeFragment(i - 1)
+                        binding.tabLayout.removeTabAt(i - 1)
+                    } else {
+                        val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(0)) as? BibliaFragment
+                        fragment?.loadBibleList(index, i)
+                    }
+                }
+                currentItem = 1
+                glav = 1
+                glava = 1
+            }
             if (kniga2 == -1) {
                 dialog?.errorView(true)
                 this.perevod = oldPerevod

@@ -134,7 +134,7 @@ class DialogPerevodBiblii : DialogFragment() {
             }
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.perevod)
             builder.setView(binding.root)
-            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.close)) { dialog: DialogInterface, _: Int ->
+            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.ok)) { dialog: DialogInterface, _: Int ->
                 dialog.cancel()
             }
             alert = builder.create()

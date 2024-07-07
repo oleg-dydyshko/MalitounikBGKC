@@ -1122,9 +1122,12 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     }
 
     private fun findIndex(chtenie: String): Int {
-        val bibliaNew = bibliaNew(chtenie)
-        val list = getSpisKnig(novyZapavet)
+        var bibliaNew = bibliaNew(chtenie)
         var indexListBible = -1
+        if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI && bibliaNew == 30 && !novyZapavet) {
+            bibliaNew = 31
+        }
+        val list = getSpisKnig(novyZapavet)
         for (e in list.indices) {
             val t1 = list[e].indexOf("#")
             val t2 = list[e].indexOf("#", t1 + 1)
@@ -1191,6 +1194,11 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     perevod = DialogVybranoeBibleList.PEREVODSINOIDAL
                     indexBiblii = findIndex(fit)
                     replace = 2
+                }
+                val bibliaNumar = bibliaNew(fit)
+                if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI && bibliaNumar == 30 && !novyZapavet) {
+                    nachalo = 6
+                    konec = 6
                 }
                 val inputStream = getInputStream(novyZapavet, indexBiblii)
                 val file = if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || replace == 2) {

@@ -42,7 +42,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
     fun upDateListView(kniga: Int) {
         (activity as? BibliaActivity)?.let { activity ->
             this.kniga = kniga
-            loadBibleList()
+            loadBibleList(kniga, page)
             adapter.setPerevod(activity.getNamePerevod())
             adapter.notifyDataSetChanged()
         }
@@ -506,7 +506,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
         return binding.root
     }
 
-    private fun loadBibleList() {
+    fun loadBibleList(kniga: Int, glava: Int) {
         (activity as? BibliaActivity)?.let { activity ->
             bible.clear()
             val inputStream = activity.getInputStream(novyZapavet, kniga)
@@ -525,6 +525,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
                 }
             }
             inputStream.close()
+            page = glava
             val split = builder.toString().split("===")
             if (page + 1 > split.size - 1) page = split.size - 2
             val bibleline = split[page + 1].split("\n")
@@ -553,7 +554,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
 
                 override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {}
             })
-            loadBibleList()
+            loadBibleList(kniga, page)
             val list = activity.getSpisKnig(novyZapavet)[kniga]
             val t1 = list.indexOf("#")
             val t2 = list.indexOf("#", t1 + 1)

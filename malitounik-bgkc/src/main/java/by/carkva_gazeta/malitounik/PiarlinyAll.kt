@@ -37,8 +37,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.File
-import java.util.Calendar
-import java.util.GregorianCalendar
+import kotlin.random.Random
 
 
 class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
@@ -215,31 +214,9 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
         adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
-            val data = GregorianCalendar()
-            data.timeInMillis = piarliny[position].time * 1000L
-            tab.text = data[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[data[Calendar.MONTH]]
+            tab.text = getString(R.string.piarliny2, position + 1)
         }.attach()
-        var find = findPiarliny()
-        if (find == -1) find = k.getInt("menuPiarlinyPage", 0)
-        binding.pager.currentItem = find
-    }
-
-    private fun findPiarliny(): Int {
-        var result = -1
-        val mun = intent.extras?.getInt("mun")
-        val day = intent.extras?.getInt("day")
-        if (mun != null && day != null) {
-            val cal = GregorianCalendar()
-            piarliny.forEachIndexed { i, piarliny ->
-                cal.timeInMillis = piarliny.time * 1000
-                if (day == cal.get(Calendar.DATE) && mun - 1 == cal.get(Calendar.MONTH)) {
-                    result = i
-                    intent?.removeExtra("mun")
-                    intent?.removeExtra("day")
-                }
-            }
-        }
-        return result
+        binding.pager.currentItem = Random.nextInt(piarliny.size)
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -442,7 +419,7 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
 
         override fun getItemCount() = piarliny.size
 
-        override fun createFragment(position: Int) = PiarlinyAllFragment.newInstance(position)
+        override fun createFragment(position: Int) = PiarlinyAllFragment.newInstance(piarliny[position].data)
     }
 
     private data class PiarlinyData(var time: Long, var data: String) : Comparable<PiarlinyData> {

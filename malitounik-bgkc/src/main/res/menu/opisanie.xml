@@ -2,20 +2,20 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_font"
+        android:id="@+id/action_piarliny"
+        android:icon="@drawable/book_piarliny"
         android:orderInCategory="100"
-        android:title="@string/menu_font_size_app"
-        app:showAsAction="never" />
+        android:title="@string/piarliny"
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_gallery"
         android:orderInCategory="100"
         android:title="@string/gallery"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_piarliny"
-        android:icon="@drawable/book_piarliny"
+        android:id="@+id/action_font"
         android:orderInCategory="100"
-        android:title="@string/piarliny"
+        android:title="@string/menu_font_size_app"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_dzen_noch"

@@ -9,13 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.CytatyFragmentBinding
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.File
 
 class PiarlinyAllFragment : BaseFragment() {
 
-    private var position = 0
+    private var data = ""
     private lateinit var k: SharedPreferences
     private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private var _binding: CytatyFragmentBinding? = null
@@ -33,7 +30,7 @@ class PiarlinyAllFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        position = arguments?.getInt("position") ?: 0
+        data = arguments?.getString("data", "") ?: ""
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,18 +40,7 @@ class PiarlinyAllFragment : BaseFragment() {
             val dzenNoch = activity.getBaseDzenNoch()
             fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-            val localFile = File("${activity.filesDir}/piarliny.json")
-            val piarliny = ArrayList<ArrayList<String>>()
-            if (localFile.exists()) {
-                try {
-                    val builder = localFile.readText()
-                    val gson = Gson()
-                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                    piarliny.addAll(gson.fromJson(builder, type))
-                } catch (_: Throwable) {
-                }
-                binding.TextView.text = MainActivity.fromHtml(piarliny[position][1])
-            }
+            binding.TextView.text = MainActivity.fromHtml(data)
             if (dzenNoch) {
                 binding.TextView.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
             }
@@ -67,10 +53,10 @@ class PiarlinyAllFragment : BaseFragment() {
     }
 
     companion object {
-        fun newInstance(position: Int): PiarlinyAllFragment {
+        fun newInstance(data: String): PiarlinyAllFragment {
             val fragmentFirst = PiarlinyAllFragment()
             val args = Bundle()
-            args.putInt("position", position)
+            args.putString("data", data)
             fragmentFirst.arguments = args
             return fragmentFirst
         }

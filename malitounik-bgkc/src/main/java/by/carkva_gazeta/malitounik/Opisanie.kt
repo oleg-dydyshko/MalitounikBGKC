@@ -531,29 +531,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         invalidateOptionsMenu()
     }
 
-    private fun checkParliny(): Boolean {
-        val piarliny = ArrayList<ArrayList<String>>()
-        val fileOpisanieSviat = File("$filesDir/piarliny.json")
-        if (fileOpisanieSviat.exists()) {
-            try {
-                val builder = fileOpisanieSviat.readText()
-                val gson = Gson()
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                piarliny.addAll(gson.fromJson(builder, type))
-            } catch (t: Throwable) {
-                fileOpisanieSviat.delete()
-            }
-            val cal = GregorianCalendar()
-            piarliny.forEach {
-                cal.timeInMillis = it[0].toLong() * 1000
-                if (day == cal.get(Calendar.DATE) && mun - 1 == cal.get(Calendar.MONTH)) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
     override fun onDialogFontSize(fontSize: Float) {
         adapter.notifyDataSetChanged()
     }
@@ -610,8 +587,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        if (checkParliny()) menu.findItem(R.id.action_piarliny).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        else menu.findItem(R.id.action_piarliny).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         menu.findItem(R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
         menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
         menu.findItem(R.id.action_auto_dzen_noch).isChecked = chin.getBoolean("auto_dzen_noch", false)
@@ -633,10 +608,6 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
         if (id == R.id.action_piarliny) {
             val i = Intent(this, PiarlinyAll::class.java)
-            if (checkParliny()) {
-                i.putExtra("mun", mun)
-                i.putExtra("day", day)
-            }
             startActivity(i)
             return true
         }

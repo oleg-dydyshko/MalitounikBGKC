@@ -264,7 +264,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         BibleGlobalList.mListGlava = 0
         val glavyList = ArrayList<String>()
         for (i in 1..title2.substring(t1 + 1, t2).toInt()) {
-            glavyList.add(resources.getString(R.string.psalom2) + " $i")
+            glavyList.add(resources.getString(R.string.psalom2) + " ${i - 1}")
         }
         adapter = MyPagerAdapter(glavyList, this)
         binding.pager.adapter = adapter
@@ -796,7 +796,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         }
 
         fun addFragment(position: Int) {
-            items.add(position.toString())
+            items.add(resources.getString(R.string.psalom2) + " $position")
             notifyItemInserted(position)
         }
 

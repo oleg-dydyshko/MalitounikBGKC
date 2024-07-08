@@ -242,11 +242,6 @@ class DialogCalindarGrid : DialogFragment() {
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
 
-                mItemList[position] == 8 && !slugba.checkParliny(data, mun) -> {
-                    holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
-                    holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
-                }
-
                 mItemList[position] == 5 && !slugba.checkVialikiaGadziny(raznicia, dayOfYear.toInt(), year) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
@@ -300,12 +295,8 @@ class DialogCalindarGrid : DialogFragment() {
                     return
                 }
                 if (itemList[bindingAdapterPosition].toInt() == 8) {
-                    if (slugba.checkParliny(data, mun)) {
-                        val i = Intent(activity, PiarlinyAll::class.java)
-                        i.putExtra("mun", munreal)
-                        i.putExtra("day", datareal)
-                        startActivity(i)
-                    }
+                    val i = Intent(activity, PiarlinyAll::class.java)
+                    startActivity(i)
                     return
                 }
                 if ((activity as? BaseActivity)?.checkmoduleResources() == false) {

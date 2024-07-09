@@ -45,7 +45,6 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.transition.TransitionManager
-import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.CaliandarMun
 import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogFontSize
@@ -79,7 +78,7 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogVybranoeBibleList.DialogVybranoeBibleListListener, ZmenyiaChastki {
+class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener, DialogVybranoeBibleList.DialogVybranoeBibleListListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -121,6 +120,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private val c = Calendar.getInstance()
     private var startSearchString = ""
+    private var liturgia = false
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
@@ -406,6 +406,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             color = colorSpan[colorSpan.size - 1].foregroundColor
         }
         return color
+    }
+
+    override fun setPerevod(perevod: String) {
+        val edit = k.edit()
+        val oldPerevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI)
+        edit.putString("perevodChytanne", perevod)
+        edit.apply()
+        if (oldPerevod != perevod) {
+            loadData(saveState(Bundle()))
+        }
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -725,7 +735,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
-        val liturgia = resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica" || resurs == "vialikdzien_liturhija"
+        liturgia = resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica" || resurs == "vialikdzien_liturhija"
         var aliert8 = ""
         var aliert9 = ""
         val res = withContext(Dispatchers.IO) {
@@ -1408,12 +1418,16 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 if (textline != "") {
                     binding.textView.layout?.let { layout ->
                         val index = binding.textView.text.indexOf(textline)
-                        val line = layout.getLineForOffset(index)
-                        val y = layout.getLineTop(line)
-                        binding.scrollView2.smoothScrollBy(0, y)
+                        val y = if (index != -1) {
+                            val line = layout.getLineForOffset(index)
+                            layout.getLineTop(line)
+                        } else {
+                            positionY
+                        }
+                        binding.scrollView2.smoothScrollTo(0, y)
                     }
                 } else {
-                    binding.scrollView2.smoothScrollBy(0, positionY)
+                    binding.scrollView2.smoothScrollTo(0, positionY)
                 }
                 if (!autoscroll && savedInstanceState.getBoolean("seach")) {
                     findAllAsanc()
@@ -1433,7 +1447,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         val index = binding.textView.text.indexOf(textline, ignoreCase = true)
                         val line = layout.getLineForOffset(index)
                         val y = layout.getLineTop(line)
-                        binding.scrollView2.smoothScrollBy(0, y)
+                        binding.scrollView2.smoothScrollTo(0, y)
                     }
                     if (binding.textView.bottom <= binding.scrollView2.height) {
                         stopAutoStartScroll()
@@ -1694,7 +1708,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 while (isActive) {
                     delay(spid.toLong())
                     if (!mActionDown && !MainActivity.dialogVisable) {
-                        binding.scrollView2.smoothScrollBy(0, 2)
+                        binding.scrollView2.smoothScrollTo(0, 2)
                     }
                 }
             }
@@ -1785,6 +1799,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         } else {
             itemVybranoe.isVisible = false
         }
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_perevod).isVisible = liturgia
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
@@ -1794,7 +1809,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         itemVybranoe.title = spanString
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_zmena).isVisible = chechZmena
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_mun).isVisible = k.getBoolean("admin", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_mun).isVisible = k.getBoolean("admin", false) && liturgia
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
@@ -1820,6 +1835,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {
+            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = false, isNadsan = false, perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI)
+            dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_mun) {
@@ -2106,8 +2126,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         binding.actionBack.animation = animation
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    private fun saveState(outState: Bundle): Bundle {
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
@@ -2118,6 +2137,12 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         outState.putInt("vybranoePosition", vybranoePosition)
         outState.putBoolean("mAutoScroll", mAutoScroll)
         outState.putString("startSearchString", startSearchString)
+        return outState
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveState(outState)
     }
 
     private data class SpanStr(val color: Int, val start: Int)

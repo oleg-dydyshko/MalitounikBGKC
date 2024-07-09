@@ -14,7 +14,6 @@ import by.carkva_gazeta.malitounik.MenuCaliandar
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 import java.io.BufferedReader
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.Calendar
 
@@ -40,7 +39,7 @@ class DialogLiturgia : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        activity?.let { activity ->
+        (activity as? ZmenyiaChastki)?.let { activity ->
             _binding = DialogTextviewDisplayBinding.inflate(layoutInflater)
             MainActivity.dialogVisable = true
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -50,7 +49,7 @@ class DialogLiturgia : DialogFragment() {
             ab = AlertDialog.Builder(activity, style)
             val builder = StringBuilder()
             val r = activity.resources
-            var inputStream: InputStream = r.openRawResource(R.raw.bogashlugbovya1_1)
+            var inputStream = r.openRawResource(R.raw.bogashlugbovya1_1)
             when (chast) {
                 1 -> {
                     inputStream = r.openRawResource(R.raw.bogashlugbovya1_1)
@@ -83,16 +82,16 @@ class DialogLiturgia : DialogFragment() {
                 8 -> {
                     binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne).uppercase()
                     arguments?.let {
-                        (activity as ZmenyiaChastki).setArrayData(MenuCaliandar.getDataCalaindar(it.getInt("date"), it.getInt("month"), it.getInt("year")))
+                        activity.setArrayData(MenuCaliandar.getDataCalaindar(it.getInt("date"), it.getInt("month"), it.getInt("year")))
                     }
-                    builder.append((activity as ZmenyiaChastki).sviatyiaView(1))
+                    builder.append(activity.sviatyiaView(1))
                 }
                 9 -> {
                     binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne).uppercase()
                     arguments?.let {
-                        (activity as ZmenyiaChastki).setArrayData(MenuCaliandar.getDataCalaindar(it.getInt("date"), it.getInt("month"), it.getInt("year")))
+                        activity.setArrayData(MenuCaliandar.getDataCalaindar(it.getInt("date"), it.getInt("month"), it.getInt("year")))
                     }
-                    builder.append((activity as ZmenyiaChastki).sviatyiaView(0))
+                    builder.append(activity.sviatyiaView(0))
                 }
                 10 -> {
                     inputStream = r.openRawResource(R.raw.bogashlugbovya1_8)

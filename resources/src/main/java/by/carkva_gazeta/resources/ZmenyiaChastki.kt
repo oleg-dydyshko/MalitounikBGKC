@@ -1,22 +1,24 @@
 package by.carkva_gazeta.resources
 
 import android.content.Context
+import android.view.View
 import androidx.core.text.isDigitsOnly
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleZakladkiData
+import by.carkva_gazeta.malitounik.DialogFontSize
+import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
 
-interface ZmenyiaChastki : BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSemuxi {
-    companion object {
-        private val arrayData = ArrayList<ArrayList<String>>()
-        private var novyZapavet = false
-        private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
-    }
+abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogPerevodBiblii.DialogPerevodBibliiListener, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSemuxi {
+    private val arrayData = ArrayList<ArrayList<String>>()
+    private var novyZapavet = false
+    private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
 
     override fun addZakladka(color: Int, knigaBible: String, bible: String) {
         when (perevod) {
@@ -121,7 +123,6 @@ interface ZmenyiaChastki : BibliaPerakvadBokuna, BibliaPerakvadCarniauski, Bibli
     }
 
     fun sviatyiaView(apostal: Int): String {
-        this as BaseActivity
         val data = sviatyia()
         val chtenie = if (apostal == 1) 0 else 1
         return if (data == "" || data.contains(resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
@@ -129,7 +130,6 @@ interface ZmenyiaChastki : BibliaPerakvadBokuna, BibliaPerakvadCarniauski, Bibli
     }
 
     fun zmenya(apostal: Int): String {
-        this as BaseActivity
         val data = arrayData[0][9]
         var chtenie = if (apostal == 1) 0 else 1
         if (arrayData[0][9].contains("На ютрані")) chtenie++
@@ -148,7 +148,7 @@ interface ZmenyiaChastki : BibliaPerakvadBokuna, BibliaPerakvadCarniauski, Bibli
 
     fun getYear() = arrayData[0][3].toInt()
 
-    fun bibliaNew(chtenie: String): Int {
+    private fun bibliaNew(chtenie: String): Int {
         var bible = 0
         if (chtenie == "Быт" || chtenie == "Быц") {
             bible = 0
@@ -478,7 +478,6 @@ interface ZmenyiaChastki : BibliaPerakvadBokuna, BibliaPerakvadCarniauski, Bibli
     }
 
     fun chtenia(w: String): ArrayList<String> {
-        this as BaseActivity
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
         var w1 = w
@@ -646,7 +645,6 @@ interface ZmenyiaChastki : BibliaPerakvadBokuna, BibliaPerakvadCarniauski, Bibli
     }
 
     private fun setIndexBiblii(ssb: String): String {
-        this as BaseActivity
         val list = ssb.split("\n")
         val result = StringBuilder()
         for (glava in list.indices) {
@@ -982,7 +980,6 @@ interface ZmenyiaChastki : BibliaPerakvadBokuna, BibliaPerakvadCarniauski, Bibli
     }
 
     private fun readFile(resource: Int): String {
-        this as BaseActivity
         val inputStream = resources.openRawResource(resource)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)

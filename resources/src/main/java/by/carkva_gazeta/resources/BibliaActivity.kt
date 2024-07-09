@@ -246,14 +246,30 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = ActivityBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        kniga = intent.extras?.getInt("kniga", 0) ?: 0
-        glava = if (intent.extras?.containsKey("kafizma") == true) {
-            setKafizma(intent.extras?.getInt("kafizma", 1) ?: 1)
+        if (savedInstanceState != null) {
+            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
+            dialog = savedInstanceState.getBoolean("dialog")
+            paralel = savedInstanceState.getBoolean("paralel")
+            cytanneSours = savedInstanceState.getString("cytanneSours") ?: ""
+            cytanneParalelnye = savedInstanceState.getString("cytanneParalelnye") ?: ""
+            perevod = savedInstanceState.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+            kniga = savedInstanceState.getInt("kniga", 0)
+            glava = savedInstanceState.getInt("glava", 0)
+            novyZapavet = savedInstanceState.getBoolean("novyZapavet", false)
+            if (paralel) {
+                setOnClic(cytanneParalelnye, cytanneSours)
+            }
         } else {
-            intent.extras?.getInt("glava", 0) ?: 0
+            fullscreenPage = k.getBoolean("fullscreenPage", false)
+            perevod = intent.extras?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
+            kniga = intent.extras?.getInt("kniga", 0) ?: 0
+            glava = if (intent.extras?.containsKey("kafizma") == true) {
+                setKafizma(intent.extras?.getInt("kafizma", 1) ?: 1)
+            } else {
+                intent.extras?.getInt("glava", 0) ?: 0
+            }
+            novyZapavet = intent.extras?.getBoolean("novyZapavet", false) ?: false
         }
-        novyZapavet = intent.extras?.getBoolean("novyZapavet", false) ?: false
-        perevod = intent.extras?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
         if (intent.extras?.containsKey("stix") == true) {
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
         }
@@ -285,18 +301,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             }
         })
         men = DialogVybranoeBibleList.checkVybranoe(kniga, glava, getNamePerevod())
-        if (savedInstanceState != null) {
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            dialog = savedInstanceState.getBoolean("dialog")
-            paralel = savedInstanceState.getBoolean("paralel")
-            cytanneSours = savedInstanceState.getString("cytanneSours") ?: ""
-            cytanneParalelnye = savedInstanceState.getString("cytanneParalelnye") ?: ""
-            if (paralel) {
-                setOnClic(cytanneParalelnye, cytanneSours)
-            }
-        } else {
-            fullscreenPage = k.getBoolean("fullscreenPage", false)
-        }
         binding.pager.setCurrentItem(glava, false)
         loadVydelenie()
         binding.actionFullscreen.setOnClickListener {
@@ -387,6 +391,10 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         outState.putString("cytanneSours", cytanneSours)
         outState.putString("cytanneParalelnye", cytanneParalelnye)
         outState.putString("title", binding.titleToolbar.text.toString())
+        outState.putString("perevod", perevod)
+        outState.putInt("kniga", kniga)
+        outState.putInt("glava", glava)
+        outState.putBoolean("novyZapavet", novyZapavet)
     }
 
     override fun onBack() {

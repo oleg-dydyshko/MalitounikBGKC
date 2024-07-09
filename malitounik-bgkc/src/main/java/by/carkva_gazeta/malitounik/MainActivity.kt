@@ -2042,7 +2042,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val TRANSPORT_WIFI = 101
         const val TRANSPORT_CELLULAR = 102
         var padzeia = ArrayList<Padzeia>()
-        private var setDataCalendar = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])[0][25].toInt()
+        var setDataCalendar = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])[0][25].toInt()
         var checkBrightness = true
         var brightness = 15
         var dialogVisable = false

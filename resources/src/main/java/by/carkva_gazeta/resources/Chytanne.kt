@@ -19,7 +19,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
@@ -30,13 +29,10 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.transition.TransitionManager
-import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogFontSize
-import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
-import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -50,7 +46,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
-class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogPerevodBiblii.DialogPerevodBibliiListener, ZmenyiaChastki {
+class Chytanne : ZmenyiaChastki() {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences

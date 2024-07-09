@@ -104,7 +104,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     private var resetScreenJob: Job? = null
     private var diffScroll = false
     private var findPosition = 0
-    private var firstTextPosition = ""
+    private var firstTextPosition = 0
     private val findListSpans = ArrayList<ArrayList<SpanStr>>()
     private var animatopRun = false
     private var chechZmena = false
@@ -441,8 +441,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         positionY = t
         setMovementMethodscrollY()
         binding.textView.layout?.let { layout ->
-            val textForVertical = binding.textView.text.substring(layout.getLineStart(layout.getLineForVertical(positionY)), layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
-            if (textForVertical != "") firstTextPosition = textForVertical
+            firstTextPosition = layout.getLineStart(layout.getLineForVertical(positionY))
             if (binding.find.visibility == View.VISIBLE && !animatopRun) {
                 if (findListSpans.isNotEmpty()) {
                     val text = binding.textView.text as SpannableString
@@ -1414,20 +1413,11 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         positionY = k.getInt(resurs + "Scroll", 0)
         binding.scrollView2.post {
             if (savedInstanceState != null) {
-                val textline = savedInstanceState.getString("textLine", "")
-                if (textline != "") {
-                    binding.textView.layout?.let { layout ->
-                        val index = binding.textView.text.indexOf(textline)
-                        val y = if (index != -1) {
-                            val line = layout.getLineForOffset(index)
-                            layout.getLineTop(line)
-                        } else {
-                            positionY
-                        }
-                        binding.scrollView2.smoothScrollTo(0, y)
-                    }
-                } else {
-                    binding.scrollView2.smoothScrollTo(0, positionY)
+                val firstTextPosition = savedInstanceState.getInt("firstTextPosition", 0)
+                binding.textView.layout?.let { layout ->
+                    val line = layout.getLineForOffset(firstTextPosition)
+                    val y = layout.getLineTop(line)
+                    binding.scrollView2.smoothScrollTo(0, y)
                 }
                 if (!autoscroll && savedInstanceState.getBoolean("seach")) {
                     findAllAsanc()
@@ -2131,7 +2121,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         outState.putBoolean("fullscreen", fullscreenPage)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)
-        outState.putString("textLine", firstTextPosition)
+        outState.putInt("firstTextPosition", firstTextPosition)
         outState.putInt("day_of_year", c[Calendar.DAY_OF_YEAR])
         outState.putInt("year", c[Calendar.YEAR])
         outState.putInt("vybranoePosition", vybranoePosition)

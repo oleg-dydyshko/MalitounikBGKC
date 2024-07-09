@@ -274,6 +274,10 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
         listBibliaLauncher.launch(intent)
     }
 
+    override fun collapseGroup(groupPosition: Int) {
+        binding.elvMain.collapseGroup(groupPosition)
+    }
+
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams

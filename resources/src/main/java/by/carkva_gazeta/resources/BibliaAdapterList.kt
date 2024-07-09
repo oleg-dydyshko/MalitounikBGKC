@@ -14,14 +14,24 @@ import com.woxthebox.draglistview.DragItemAdapter
 
 class BibliaAdapterList(private val mContext: BaseActivity, private val groups: ArrayList<ArrayList<BibliaAdapterData>>) : BaseExpandableListAdapter() {
     private var mLastClickTime: Long = 0
+    private var lastExpandedGroupPosition = 0
     private var mListener: BibliaAdapterListListener? = null
 
     interface BibliaAdapterListListener {
         fun onComplete(groupPosition: Int, childPosition: Int)
+        fun collapseGroup(groupPosition: Int)
     }
 
     fun setBibliaAdapterListListener(listener: BibliaAdapterListListener) {
         mListener = listener
+    }
+
+    override fun onGroupExpanded(groupPosition: Int) {
+        if (groupPosition != lastExpandedGroupPosition) {
+            mListener?.collapseGroup(lastExpandedGroupPosition)
+        }
+        super.onGroupExpanded(groupPosition)
+        lastExpandedGroupPosition = groupPosition
     }
 
     override fun getGroupCount(): Int {

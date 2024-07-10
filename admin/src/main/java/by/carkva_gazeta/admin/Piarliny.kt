@@ -2,6 +2,7 @@ package by.carkva_gazeta.admin
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Bundle
@@ -13,11 +14,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminPiarlinyBinding
 import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.CaliandarMun
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
+import by.carkva_gazeta.malitounik.MenuCaliandar
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.gson.Gson
@@ -29,14 +33,29 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.File
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDeliteListener {
 
     private lateinit var binding: AdminPiarlinyBinding
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
-    private val piarliny = ArrayList<ArrayList<String>>()
+    private val piarliny = ArrayList<PiarlinyData>()
     private var edit = -1
+    private var timeListCalendar = Calendar.getInstance()
+    private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            if (intent != null) {
+                val position = intent.getIntExtra("position", 0)
+                val arrayList = MenuCaliandar.getPositionCaliandar(position)
+                timeListCalendar.set(VYSOCOSNYI_GOD, arrayList[2].toInt(), arrayList[1].toInt(), 0, 0, 0)
+                timeListCalendar.set(Calendar.MILLISECOND, 0)
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, timeListCalendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[timeListCalendar.get(Calendar.MONTH)])
+            }
+        }
+    }
 
     override fun onSensorChanged(event: SensorEvent?) {
     }
@@ -69,9 +88,12 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
 
     private fun onDialogEditClick(position: Int) {
         edit = position
-        binding.addPiarliny.setText(piarliny[edit][1])
-        binding.addPiarliny.setSelection(piarliny[edit][1].length)
-        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, position + 1)
+        binding.addPiarliny.setText(piarliny[edit].data)
+        binding.addPiarliny.setSelection(piarliny[edit].data.length)
+        timeListCalendar.timeInMillis = piarliny[edit].time * 1000
+        timeListCalendar.set(Calendar.YEAR, VYSOCOSNYI_GOD)
+        timeListCalendar.set(Calendar.MILLISECOND, 0)
+        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, timeListCalendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[timeListCalendar.get(Calendar.MONTH)])
         binding.listView.visibility = View.GONE
         binding.addPiarliny.visibility = View.VISIBLE
         binding.linearLayout2.visibility = View.VISIBLE
@@ -80,12 +102,13 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
 
     override fun fileDelite(position: Int, title: String, isSite: Boolean) {
         piarliny.removeAt(position)
+        piarliny.sort()
         val gson = Gson()
         val resultArray = ArrayList<ArrayList<String>>()
         for (i in 0 until piarliny.size) {
             val resultArray2 = ArrayList<String>()
-            resultArray2.add(piarliny[i][0])
-            resultArray2.add(piarliny[i][1])
+            resultArray2.add(piarliny[i].time.toString())
+            resultArray2.add(piarliny[i].data)
             resultArray.add(resultArray2)
         }
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
@@ -110,7 +133,12 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
                         val jsonFile = localFile.readText()
                         val gson = Gson()
                         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                        piarliny.addAll(gson.fromJson(jsonFile, type))
+                        val piarlin = ArrayList<ArrayList<String>>()
+                        piarlin.addAll(gson.fromJson(jsonFile, type))
+                        piarlin.forEach {
+                            piarliny.add(PiarlinyData(it[0].toLong(), it[1]))
+                        }
+                        piarliny.sort()
                         binding.listView.adapter = PiarlinyListAdaprer(this@Piarliny)
                     } else {
                         MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
@@ -118,8 +146,22 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
                     invalidateOptionsMenu()
                     binding.progressBar2.visibility = View.GONE
                     if (intent.extras != null) {
-                        val position = intent.extras?.getInt("position", 0) ?: 0
-                        onDialogEditClick(position)
+                        val time = intent.extras?.getLong("time") ?: Calendar.getInstance().timeInMillis
+                        val cal = GregorianCalendar()
+                        cal.timeInMillis = time
+                        val day = cal[Calendar.DATE]
+                        val mun = cal[Calendar.MONTH]
+                        val cal2 = GregorianCalendar()
+                        for (i in 0 until piarliny.size) {
+                            val t = piarliny[i].time * 1000
+                            cal2.timeInMillis = t
+                            val day2 = cal2[Calendar.DATE]
+                            val mun2 = cal2[Calendar.MONTH]
+                            if (day == day2 && mun == mun2) {
+                                onDialogEditClick(i)
+                                break
+                            }
+                        }
                     }
                 }.await()
             } catch (e: Throwable) {
@@ -127,9 +169,9 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
             }
         }
         binding.listView.setOnItemLongClickListener { _, _, position, _ ->
-            var text = piarliny[position][1]
-            if (text.length > 50) {
-                text = text.substring(0, 50)
+            var text = piarliny[position].data
+            if (text.length > 30) {
+                text = text.substring(0, 30)
                 text = "$text..."
             }
             val dialogDelite = DialogDelite.getInstance(position, text, false)
@@ -182,13 +224,16 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
     override fun onPrepareMenu(menu: Menu) {
         val plus = menu.findItem(R.id.action_plus)
         val save = menu.findItem(R.id.action_save)
+        val glava = menu.findItem(R.id.action_glava)
         if (piarliny.isNotEmpty()) {
             if (binding.addPiarliny.visibility == View.VISIBLE) {
                 plus.isVisible = false
                 save.isVisible = true
+                glava.isVisible = true
             } else {
                 plus.isVisible = true
                 save.isVisible = false
+                glava.isVisible = false
             }
         }
     }
@@ -207,39 +252,23 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
         if (id == R.id.action_save) {
             val text = binding.addPiarliny.text.toString().trim()
             if (text != "") {
-                var error = false
                 if (edit != -1) {
-                    piarliny[edit][0] = "0"
-                    piarliny[edit][1] = text
+                    piarliny[edit].time = timeListCalendar.timeInMillis / 1000
+                    piarliny[edit].data = text
                 } else {
-                    val sub = text.substring(0, 30)
-                    for (i in piarliny.indices) {
-                        val sub2 = piarliny[i][1].substring(0, 30)
-                        if (sub2 == sub) {
-                            error = true
-                        }
-                    }
-                    if (!error) {
-                        val list = ArrayList<String>()
-                        list.add("0")
-                        list.add(text)
-                        piarliny.add(list)
-                    }
+                    piarliny.add(PiarlinyData(timeListCalendar.timeInMillis / 1000, text))
                 }
-                if (!error) {
-                    val gson = Gson()
-                    val resultArray = ArrayList<ArrayList<String>>()
-                    for (i in 0 until piarliny.size) {
-                        val resultArray2 = ArrayList<String>()
-                        resultArray2.add(piarliny[i][0])
-                        resultArray2.add(piarliny[i][1])
-                        resultArray.add(resultArray2)
-                    }
-                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                    sendPostRequest(gson.toJson(resultArray, type))
-                } else {
-                    MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.piarlina_error))
+                piarliny.sort()
+                val gson = Gson()
+                val resultArray = ArrayList<ArrayList<String>>()
+                for (i in 0 until piarliny.size) {
+                    val resultArray2 = ArrayList<String>()
+                    resultArray2.add(piarliny[i].time.toString())
+                    resultArray2.add(piarliny[i].data)
+                    resultArray.add(resultArray2)
                 }
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                sendPostRequest(gson.toJson(resultArray, type))
             }
             binding.listView.visibility = View.VISIBLE
             binding.addPiarliny.visibility = View.GONE
@@ -248,13 +277,25 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
             invalidateOptionsMenu()
             return true
         }
+        if (id == R.id.action_glava) {
+            val i = Intent(this, CaliandarMun::class.java)
+            val cal = Calendar.getInstance()
+            i.putExtra("day", cal[Calendar.DATE])
+            i.putExtra("year", cal[Calendar.YEAR])
+            i.putExtra("mun", cal[Calendar.MONTH])
+            i.putExtra("getData", true)
+            caliandarMunLauncher.launch(i)
+            return true
+        }
         if (id == R.id.action_plus) {
             edit = -1
             binding.listView.visibility = View.GONE
             binding.addPiarliny.visibility = View.VISIBLE
             binding.linearLayout2.visibility = View.VISIBLE
-            binding.addPiarliny.text?.clear()
-            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.add_piarliny)
+            binding.addPiarliny.setText("")
+            val c = Calendar.getInstance()
+            timeListCalendar.set(VYSOCOSNYI_GOD, c[Calendar.MONTH], c[Calendar.DATE], 0, 0, 0)
+            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, timeListCalendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[timeListCalendar.get(Calendar.MONTH)])
             invalidateOptionsMenu()
             return true
         }
@@ -334,7 +375,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
                     Malitounik.referens.child("/chytanne/piarliny.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                         if (it.isSuccessful) {
                             MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.save))
-                            binding.addPiarliny.text?.clear()
+                            binding.addPiarliny.setText("")
                             edit = -1
                         } else {
                             MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
@@ -352,7 +393,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
         }
     }
 
-    private inner class PiarlinyListAdaprer(context: Activity) : ArrayAdapter<ArrayList<String>>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, piarliny) {
+    private inner class PiarlinyListAdaprer(context: Activity) : ArrayAdapter<PiarlinyData>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, piarliny) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -366,15 +407,28 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            var text = MainActivity.fromHtml(piarliny[position][1]).toString()
-            if (text.length > 50) {
-                text = text.substring(0, 50)
-                text = "$text..."
-            }
-            viewHolder.text.text = text
+            val calendar = GregorianCalendar()
+            calendar.timeInMillis = piarliny[position].time * 1000
+            val munName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)]
+            viewHolder.text.text = MainActivity.fromHtml(calendar.get(Calendar.DATE).toString() + " " + munName)
             return rootView
         }
     }
 
     private class ViewHolder(var text: TextView)
+
+    private data class PiarlinyData(var time: Long, var data: String) : Comparable<PiarlinyData> {
+        override fun compareTo(other: PiarlinyData): Int {
+            if (this.time > other.time) {
+                return 1
+            } else if (this.time < other.time) {
+                return -1
+            }
+            return 0
+        }
+    }
+
+    companion object {
+        private const val VYSOCOSNYI_GOD = 2020
+    }
 }

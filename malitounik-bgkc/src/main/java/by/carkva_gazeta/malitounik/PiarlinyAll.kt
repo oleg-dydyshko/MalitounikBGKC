@@ -37,7 +37,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.File
-import kotlin.random.Random
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 
 class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
@@ -49,7 +50,7 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
     private lateinit var adapterViewPager: MyPagerAdapter
     private lateinit var binding: CytatyActivityBinding
     private lateinit var bindingprogress: ProgressMainBinding
-    private val piarliny = ArrayList<ArrayList<String>>()
+    private val piarliny = ArrayList<PiarlinyData>()
     private var piarlinyJob: Job? = null
     private var procentJobBrightness: Job? = null
     private var procentJobFont: Job? = null
@@ -198,19 +199,47 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
         }
         if (localFile.exists()) {
             try {
+                val piarlin = ArrayList<ArrayList<String>>()
                 val builder = localFile.readText()
                 val gson = Gson()
                 val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                piarliny.addAll(gson.fromJson(builder, type))
+                piarlin.addAll(gson.fromJson(builder, type))
+                piarliny.clear()
+                piarlin.forEach {
+                    piarliny.add(PiarlinyData(it[0].toLong(), it[1]))
+                }
+                piarliny.sort()
             } catch (_: Throwable) {
             }
         }
         adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
-            tab.text = getString(R.string.piarliny2, position + 1)
+            val data = GregorianCalendar()
+            data.timeInMillis = piarliny[position].time * 1000L
+            tab.text = data[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[data[Calendar.MONTH]]
         }.attach()
-        binding.pager.currentItem = Random.nextInt(piarliny.size)
+        var find = findPiarliny()
+        if (find == -1) find = k.getInt("menuPiarlinyPage", 0)
+        binding.pager.currentItem = find
+    }
+
+    private fun findPiarliny(): Int {
+        var result = -1
+        val mun = intent.extras?.getInt("mun")
+        val day = intent.extras?.getInt("day")
+        if (mun != null && day != null) {
+            val cal = GregorianCalendar()
+            piarliny.forEachIndexed { i, piarliny ->
+                cal.timeInMillis = piarliny.time * 1000
+                if (day == cal.get(Calendar.DATE) && mun - 1 == cal.get(Calendar.MONTH)) {
+                    result = i
+                    intent?.removeExtra("mun")
+                    intent?.removeExtra("day")
+                }
+            }
+        }
+        return result
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -290,8 +319,9 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
         if (id == R.id.action_carkva) {
             if (checkmodulesAdmin()) {
                 val intent = Intent()
+                val pos = piarliny[binding.pager.currentItem]
+                intent.putExtra("time", pos.time * 1000)
                 intent.setClassName(this, MainActivity.ADMINPIARLINY)
-                intent.putExtra("position", binding.pager.currentItem)
                 piarlinyLauncher.launch(intent)
             } else {
                 MainActivity.toastView(this, getString(R.string.error))
@@ -412,6 +442,17 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
 
         override fun getItemCount() = piarliny.size
 
-        override fun createFragment(position: Int) = PiarlinyAllFragment.newInstance(piarliny[position][1])
+        override fun createFragment(position: Int) = PiarlinyAllFragment.newInstance(position)
+    }
+
+    private data class PiarlinyData(var time: Long, var data: String) : Comparable<PiarlinyData> {
+        override fun compareTo(other: PiarlinyData): Int {
+            if (this.time > other.time) {
+                return 1
+            } else if (this.time < other.time) {
+                return -1
+            }
+            return 0
+        }
     }
 }

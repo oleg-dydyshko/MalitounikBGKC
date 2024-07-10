@@ -472,7 +472,7 @@
     <string name="liturgia">Літургія</string>
     <string name="jyci">Жыцьці</string>
     <string name="piarliny">Пярліны</string>
-    <string name="piarliny2">Пярліна %1$d</string>
+    <string name="piarliny2">Пярліна за %1$d %2$s</string>
     <string name="ustau">Устаў</string>
     <string-array name="dni_nedeli">
         <item />
@@ -1080,6 +1080,5 @@
     <string name="biblia_bokun">А. Бокуна</string>
     <string name="biblia_charniauski">У. Чарняўскага</string>
     <string name="biblia_error">Кніга альбо разьдзел не існуе.</string>
-    <string name="piarlina_error">Пярліна існуе.</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

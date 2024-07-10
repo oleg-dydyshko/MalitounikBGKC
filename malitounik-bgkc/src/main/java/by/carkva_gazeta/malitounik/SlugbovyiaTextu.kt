@@ -661,6 +661,17 @@ class SlugbovyiaTextu {
         return text
     }
 
+    fun checkParliny(day: Int, mun: Int): Boolean {
+        val cal = GregorianCalendar()
+        piarliny.forEach {
+            cal.timeInMillis = it[0].toLong() * 1000
+            if (day == cal.get(Calendar.DATE) && mun - 1 == cal.get(Calendar.MONTH)) {
+                return true
+            }
+        }
+        return false
+    }
+
     fun checkUtran(day: Int, dayOfYear: Int): Boolean {
         datMinALL.forEach {
             if (it.pasxa) {

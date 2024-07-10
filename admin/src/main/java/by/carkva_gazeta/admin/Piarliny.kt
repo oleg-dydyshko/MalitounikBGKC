@@ -207,25 +207,39 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
         if (id == R.id.action_save) {
             val text = binding.addPiarliny.text.toString().trim()
             if (text != "") {
+                var error = false
                 if (edit != -1) {
                     piarliny[edit][0] = "0"
                     piarliny[edit][1] = text
                 } else {
-                    val list = ArrayList<String>()
-                    list.add("0")
-                    list.add(text)
-                    piarliny.add(list)
+                    val sub = text.substring(0, 30)
+                    for (i in piarliny.indices) {
+                        val sub2 = piarliny[i][1].substring(0, 30)
+                        if (sub2 == sub) {
+                            error = true
+                        }
+                    }
+                    if (!error) {
+                        val list = ArrayList<String>()
+                        list.add("0")
+                        list.add(text)
+                        piarliny.add(list)
+                    }
                 }
-                val gson = Gson()
-                val resultArray = ArrayList<ArrayList<String>>()
-                for (i in 0 until piarliny.size) {
-                    val resultArray2 = ArrayList<String>()
-                    resultArray2.add(piarliny[i][0])
-                    resultArray2.add(piarliny[i][1])
-                    resultArray.add(resultArray2)
+                if (!error) {
+                    val gson = Gson()
+                    val resultArray = ArrayList<ArrayList<String>>()
+                    for (i in 0 until piarliny.size) {
+                        val resultArray2 = ArrayList<String>()
+                        resultArray2.add(piarliny[i][0])
+                        resultArray2.add(piarliny[i][1])
+                        resultArray.add(resultArray2)
+                    }
+                    val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                    sendPostRequest(gson.toJson(resultArray, type))
+                } else {
+                    MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.piarlina_error))
                 }
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-                sendPostRequest(gson.toJson(resultArray, type))
             }
             binding.listView.visibility = View.VISIBLE
             binding.addPiarliny.visibility = View.GONE

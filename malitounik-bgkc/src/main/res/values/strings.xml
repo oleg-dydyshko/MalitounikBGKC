@@ -1080,5 +1080,6 @@
     <string name="biblia_bokun">А. Бокуна</string>
     <string name="biblia_charniauski">У. Чарняўскага</string>
     <string name="biblia_error">Кніга альбо разьдзел не існуе.</string>
+    <string name="piarlina_error">Пярліна існуе.</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

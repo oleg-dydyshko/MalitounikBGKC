@@ -1698,7 +1698,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 while (isActive) {
                     delay(spid.toLong())
                     if (!mActionDown && !MainActivity.dialogVisable) {
-                        binding.scrollView2.smoothScrollTo(0, 2)
+                        binding.scrollView2.smoothScrollBy(0, 2)
                     }
                 }
             }

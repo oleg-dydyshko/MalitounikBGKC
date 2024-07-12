@@ -292,7 +292,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
             binding.listView.visibility = View.GONE
             binding.addPiarliny.visibility = View.VISIBLE
             binding.linearLayout2.visibility = View.VISIBLE
-            binding.addPiarliny.setText("")
+            binding.addPiarliny.text?.clear()
             val c = Calendar.getInstance()
             timeListCalendar.set(VYSOCOSNYI_GOD, c[Calendar.MONTH], c[Calendar.DATE], 0, 0, 0)
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, timeListCalendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[timeListCalendar.get(Calendar.MONTH)])
@@ -375,7 +375,7 @@ class Piarliny : BaseActivity(), View.OnClickListener, DialogDelite.DialogDelite
                     Malitounik.referens.child("/chytanne/piarliny.json").putFile(Uri.fromFile(localFile)).addOnCompleteListener {
                         if (it.isSuccessful) {
                             MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.save))
-                            binding.addPiarliny.setText("")
+                            binding.addPiarliny.text?.clear()
                             edit = -1
                         } else {
                             MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))

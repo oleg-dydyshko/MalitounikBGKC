@@ -414,7 +414,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         edit.putString("perevodChytanne", perevod)
         edit.apply()
         if (oldPerevod != perevod) {
-            loadData(saveState(Bundle()))
+            loadData(saveStateActivity(Bundle()))
         }
     }
 
@@ -1417,7 +1417,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 binding.textView.layout?.let { layout ->
                     val line = layout.getLineForOffset(firstTextPosition)
                     val y = layout.getLineTop(line)
-                    binding.scrollView2.smoothScrollTo(0, y)
+                    binding.scrollView2.scrollTo(0, y)
                 }
                 if (!autoscroll && savedInstanceState.getBoolean("seach")) {
                     findAllAsanc()
@@ -1437,7 +1437,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                         val index = binding.textView.text.indexOf(textline, ignoreCase = true)
                         val line = layout.getLineForOffset(index)
                         val y = layout.getLineTop(line)
-                        binding.scrollView2.smoothScrollTo(0, y)
+                        binding.scrollView2.scrollTo(0, y)
                     }
                     if (binding.textView.bottom <= binding.scrollView2.height) {
                         stopAutoStartScroll()
@@ -2116,7 +2116,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         binding.actionBack.animation = animation
     }
 
-    private fun saveState(outState: Bundle): Bundle {
+    private fun saveStateActivity(outState: Bundle): Bundle {
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
@@ -2132,7 +2132,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        saveState(outState)
+        saveStateActivity(outState)
     }
 
     private data class SpanStr(val color: Int, val start: Int)

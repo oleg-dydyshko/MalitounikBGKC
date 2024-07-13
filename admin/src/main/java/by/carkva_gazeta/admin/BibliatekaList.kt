@@ -157,10 +157,10 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
             binding.opisanie.setText(arrayList[position][1])
         } else {
             binding.imagePdf.setImageDrawable(null)
-            binding.textViewTitle.setText("")
+            binding.textViewTitle.text?.clear()
             binding.rubrika.setSelection(1)
-            binding.pdfTextView.text = ""
-            binding.opisanie.setText("")
+            binding.pdfTextView.text = null
+            binding.opisanie.text?.clear()
         }
         setImageSize(binding.imagePdf)
         binding.imagePdf.setOnClickListener {

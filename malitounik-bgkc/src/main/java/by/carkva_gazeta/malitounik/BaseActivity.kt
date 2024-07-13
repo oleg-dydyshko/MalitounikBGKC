@@ -160,7 +160,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         if (dzenNoch) setTheme(R.style.AppCompatDark)
     }
 
-   fun getCheckDzenNoch() = checkDzenNoch
+    fun getCheckDzenNoch() = checkDzenNoch
 
     fun getBaseDzenNoch() = dzenNoch
 

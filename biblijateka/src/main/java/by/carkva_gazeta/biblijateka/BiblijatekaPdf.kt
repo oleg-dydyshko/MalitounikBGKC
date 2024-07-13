@@ -82,7 +82,7 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
 
     override fun onDialogTitle(page: Int) {
         pdfView.jumpTo(page)
-        binding.pageToolbar.text = String.format("%d/%d", page + 1, pdfView.pageCount)
+        binding.pageToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.pdf_page_count, page + 1, pdfView.pageCount)
         binding.pageToolbar.visibility = View.VISIBLE
     }
 
@@ -93,7 +93,7 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     override fun onDialogSetPage(page: Int) {
         if (pdfView.visibility == View.VISIBLE) {
             pdfView.jumpTo(page - 1)
-            binding.pageToolbar.text = String.format("%d/%d", page, pdfView.pageCount)
+            binding.pageToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.pdf_page_count, page, pdfView.pageCount)
         }
     }
 
@@ -103,7 +103,7 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     }
 
     override fun onPageChanged(page: Int, pageCount: Int) {
-        binding.pageToolbar.text = String.format("%d/%d", page + 1, pageCount)
+        binding.pageToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.pdf_page_count, page + 1, pageCount)
         binding.pageToolbar.visibility = View.VISIBLE
     }
 

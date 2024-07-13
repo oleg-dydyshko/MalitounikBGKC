@@ -436,6 +436,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(129, "Cьвятога апостала і евангеліста Яна Багаслова", "mm_08_05_apostala_jevanhielista_jana_bahaslova_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(130, "Перанясеньне мошчаў сьвятога Мікалая Цудатворцы ў Бары", "mm_09_05_pieraniasiennie_moszczau_mikalaja_cudatvorcy_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(130, "Перанясеньне мошчаў сьвятога Мікалая Цудатворцы ў Бары", "mm_09_05_pieraniasiennie_moszczau_mikalaja_cudatvorcy_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(195, "Сабор арханёла Габрыэля", "mm_13_07_sabor_archaniola_habryela_viaczernia", VIACZERNIA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

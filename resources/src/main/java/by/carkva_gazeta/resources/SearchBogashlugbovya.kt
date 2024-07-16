@@ -84,14 +84,15 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         prefEditors = chin.edit()
         binding = SearchBogaslugBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.filterGrup.visibility = View.VISIBLE
         binding.buttonx2.setOnClickListener {
-            binding.editText2.setText("")
+            binding.editText2.text?.clear()
         }
         DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
         if (dzenNoch) {
@@ -179,10 +180,10 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
             return@setOnItemLongClickListener true
         }
-        if (savedInstanceState != null) {
-            val listView = savedInstanceState.getBoolean("list_view")
+        if (instanceState != null) {
+            val listView = instanceState.getBoolean("list_view")
             if (listView) binding.ListView.visibility = View.VISIBLE
-            fierstPosition = savedInstanceState.getInt("fierstPosition")
+            fierstPosition = instanceState.getInt("fierstPosition")
         } else {
             fierstPosition = chin.getInt("search_bible_fierstPosition", 0)
         }
@@ -279,6 +280,9 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             prefEditors.apply()
             execute(edit, true)
         }
+    }
+
+    override fun setBiblePeraklad(peraklad: String) {
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -384,12 +388,17 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         historyAdapter.notifyDataSetChanged()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun saveStateActivity(outState: Bundle): Bundle {
         outState.putBoolean("list_view", binding.ListView.visibility == View.VISIBLE)
         outState.putInt("fierstPosition", fierstPosition)
         prefEditors.putString("search_bogashugbovya_string", autoCompleteTextView?.text.toString())
         prefEditors.apply()
+        return super.saveStateActivity(outState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveStateActivity(outState)
     }
 
     private fun execute(searcheString: String, run: Boolean = false) {

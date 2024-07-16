@@ -117,10 +117,11 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     private var munsv = 0
     private var vybranoePosition = -1
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
-    private var orientation = Configuration.ORIENTATION_UNDEFINED
+    private var orientation = Configuration.ORIENTATION_PORTRAIT
     private val c = Calendar.getInstance()
     private var startSearchString = ""
     private var liturgia = false
+    private var isLoaded = false
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
@@ -466,6 +467,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     }
 
     private fun setDatacalendar(savedInstanceState: Bundle?) {
+        isLoaded = true
         setArrayData(MenuCaliandar.getDataCalaindar(c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR]))
         val cal = Calendar.getInstance()
         val mun = cal[Calendar.MONTH]
@@ -487,7 +489,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = BogasluzbovyaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
@@ -501,22 +504,22 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         }
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
-        if (savedInstanceState != null) {
-            mAutoScroll = savedInstanceState.getBoolean("mAutoScroll")
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            orientation = savedInstanceState.getInt("orientation")
+        if (instanceState != null) {
+            mAutoScroll = instanceState.getBoolean("mAutoScroll")
+            fullscreenPage = instanceState.getBoolean("fullscreen")
+            orientation = instanceState.getInt("orientation")
             MainActivity.dialogVisable = false
-            if (savedInstanceState.getBoolean("seach")) {
+            if (instanceState.getBoolean("seach")) {
                 binding.find.visibility = View.VISIBLE
             }
-            c.set(Calendar.DAY_OF_YEAR, savedInstanceState.getInt("day_of_year"))
-            c.set(Calendar.YEAR, savedInstanceState.getInt("year"))
-            vybranoePosition = savedInstanceState.getInt("vybranoePosition")
+            c.set(Calendar.DAY_OF_YEAR, instanceState.getInt("day_of_year"))
+            c.set(Calendar.YEAR, instanceState.getInt("year"))
+            vybranoePosition = instanceState.getInt("vybranoePosition")
             if (vybranoePosition != -1) {
                 resurs = MenuVybranoe.vybranoe[vybranoePosition].resurs
                 title = MenuVybranoe.vybranoe[vybranoePosition].data
             }
-            startSearchString = savedInstanceState.getString("startSearchString", "")
+            startSearchString = instanceState.getString("startSearchString", "")
         } else {
             startSearchString = intent.extras?.getString("search", "") ?: ""
             fullscreenPage = k.getBoolean("fullscreenPage", false)
@@ -534,7 +537,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             binding.textView.text = text
             binding.titleToolbar.text = title
         } else {
-            setDatacalendar(savedInstanceState)
+            setDatacalendar(instanceState)
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.textSize = fontBiblia
@@ -1471,6 +1474,13 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 findAllAsanc()
                 intent.removeExtra("search")
             }
+            if (autoscroll) {
+                if (resources.configuration.orientation == orientation) {
+                    startAutoScroll()
+                } else autoStartScroll()
+                orientation = resources.configuration.orientation
+            }
+            isLoaded = false
         }
         if (dzenNoch) binding.imageView6.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_up_black)
         binding.imageView6.setOnClickListener { findNext(previous = true) }
@@ -2058,12 +2068,12 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         }
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
-        if (autoscroll) {
+        if (!isLoaded && autoscroll) {
             if (resources.configuration.orientation == orientation) {
                 startAutoScroll()
             } else autoStartScroll()
+            orientation = resources.configuration.orientation
         }
-        orientation = resources.configuration.orientation
     }
 
     override fun onDialogFullScreenHelpClose() {
@@ -2116,7 +2126,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         binding.actionBack.animation = animation
     }
 
-    private fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle): Bundle {
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
@@ -2127,7 +2137,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         outState.putInt("vybranoePosition", vybranoePosition)
         outState.putBoolean("mAutoScroll", mAutoScroll)
         outState.putString("startSearchString", startSearchString)
-        return outState
+        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

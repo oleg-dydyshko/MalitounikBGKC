@@ -122,12 +122,12 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         }
     }
 
-    override fun getSubTitlePerevod(): String {
+    override fun getSubTitlePerevod(glava: Int): String {
         return when (perevod) {
-            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getSubTitlePerevod()
-            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getSubTitlePerevod()
-            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getSubTitlePerevod()
-            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getSubTitlePerevod()
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getSubTitlePerevod(glava)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getSubTitlePerevod(glava)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getSubTitlePerevod(glava)
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getSubTitlePerevod(glava)
             DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getSubTitlePerevod(glava)
             else -> ""
         }
@@ -139,7 +139,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getSpisKnig(novyZapaviet)
             DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getSpisKnig(novyZapaviet)
             DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getSpisKnig(novyZapaviet)
-            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getSpisKnig()
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getSpisKnig(novyZapaviet)
             else -> arrayOf("")
         }
     }
@@ -242,20 +242,21 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = ActivityBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (savedInstanceState != null) {
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            dialog = savedInstanceState.getBoolean("dialog")
-            paralel = savedInstanceState.getBoolean("paralel")
-            cytanneSours = savedInstanceState.getString("cytanneSours") ?: ""
-            cytanneParalelnye = savedInstanceState.getString("cytanneParalelnye") ?: ""
-            perevod = savedInstanceState.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
-            kniga = savedInstanceState.getInt("kniga", 0)
-            glava = savedInstanceState.getInt("glava", 0)
-            novyZapavet = savedInstanceState.getBoolean("novyZapavet", false)
+        if (instanceState != null) {
+            fullscreenPage = instanceState.getBoolean("fullscreen")
+            dialog = instanceState.getBoolean("dialog")
+            paralel = instanceState.getBoolean("paralel")
+            cytanneSours = instanceState.getString("cytanneSours") ?: ""
+            cytanneParalelnye = instanceState.getString("cytanneParalelnye") ?: ""
+            perevod = instanceState.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+            kniga = instanceState.getInt("kniga", 0)
+            glava = instanceState.getInt("glava", 0)
+            novyZapavet = instanceState.getBoolean("novyZapavet", false)
             if (paralel) {
                 setOnClic(cytanneParalelnye, cytanneSours)
             }
@@ -310,11 +311,11 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             onBack()
         }
         if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
-            binding.titleToolbar.text = savedInstanceState?.getString("title") ?: getSubTitlePerevod()
+            binding.titleToolbar.text = instanceState?.getString("title") ?: getSubTitlePerevod(0)
             binding.subtitleToolbar.text = getTitlePerevod()
         } else {
-            binding.titleToolbar.text = savedInstanceState?.getString("title") ?: title
-            binding.subtitleToolbar.text = getSubTitlePerevod()
+            binding.titleToolbar.text = instanceState?.getString("title") ?: title
+            binding.subtitleToolbar.text = getSubTitlePerevod(0)
         }
         setTollbarTheme()
     }
@@ -383,8 +384,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         binding.subtitleToolbar.isSingleLine = true
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun saveStateActivity(outState: Bundle): Bundle {
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("dialog", dialog)
         outState.putBoolean("paralel", paralel)
@@ -395,6 +395,12 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         outState.putInt("kniga", kniga)
         outState.putInt("glava", glava)
         outState.putBoolean("novyZapavet", novyZapavet)
+        return super.saveStateActivity(outState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveStateActivity(outState)
     }
 
     override fun onBack() {
@@ -405,7 +411,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 binding.tabLayout.visibility = View.VISIBLE
                 binding.subtitleToolbar.visibility = View.VISIBLE
                 if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
-                    binding.titleToolbar.text = getSubTitlePerevod()
+                    binding.titleToolbar.text = getSubTitlePerevod(0)
                 } else {
                     binding.titleToolbar.text = title
                 }
@@ -567,11 +573,11 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                     val t3 = title2.indexOf("#")
                     title = title2.substring(0, t3)
                     if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
-                        binding.titleToolbar.text = getSubTitlePerevod()
+                        binding.titleToolbar.text = getSubTitlePerevod(0)
                         binding.subtitleToolbar.text = getTitlePerevod()
                     } else {
                         binding.titleToolbar.text = title
-                        binding.subtitleToolbar.text = getSubTitlePerevod()
+                        binding.subtitleToolbar.text = getSubTitlePerevod(0)
                     }
                     dialog?.errorView(false)
                 }
@@ -593,11 +599,11 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             val t3 = list2[index].indexOf("#")
             title = list2[index].substring(0, t3)
             if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
-                binding.titleToolbar.text = getSubTitlePerevod()
+                binding.titleToolbar.text = getSubTitlePerevod(0)
                 binding.subtitleToolbar.text = getTitlePerevod()
             } else {
                 binding.titleToolbar.text = title
-                binding.subtitleToolbar.text = getSubTitlePerevod()
+                binding.subtitleToolbar.text = getSubTitlePerevod(0)
             }
             binding.pager.adapter?.notifyDataSetChanged()
         }

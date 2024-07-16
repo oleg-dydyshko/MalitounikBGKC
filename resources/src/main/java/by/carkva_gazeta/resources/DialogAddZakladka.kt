@@ -111,7 +111,7 @@ class DialogAddZakladka : DialogFragment() {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = super.getDropDownView(position, convertView, parent)
             val text = view.findViewById<TextView>(R.id.label)
-            text.text = ""
+            text.text = null
             text.setBackgroundColor(Color.parseColor(BibleArrayAdapterParallel.colors[position]))
             return view
         }

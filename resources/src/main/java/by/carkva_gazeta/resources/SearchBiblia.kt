@@ -16,7 +16,6 @@ import android.text.TextWatcher
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -28,7 +27,6 @@ import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.Filter
 import android.widget.ImageView
@@ -38,12 +36,12 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.DialogClearHishory
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.HistoryAdapter
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
-import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -54,9 +52,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
+import java.io.File
+import java.io.InputStream
 import java.io.InputStreamReader
 
-class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListener, DialogBibleSearshSettings.DiallogBibleSearshListiner {
+class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListener, DialogBibleSearshSettings.DiallogBibleSearshListiner, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadNadsana, BibliaPerakvadSemuxi, BibliaPerakvadSinaidal {
     private lateinit var adapter: SearchBibliaActivityAdaprer
     private lateinit var prefEditors: Editor
     private lateinit var chin: SharedPreferences
@@ -68,303 +68,127 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private var fierstPosition = 0
-    private var sinodalBible = ArrayList<Int>()
-    private var semuxaBible = ArrayList<Int>()
-    private var bokunaBible = ArrayList<Int>()
-    private var carniauskiBible = ArrayList<Int>()
     private lateinit var binding: SearchBibliaBinding
-    private var keyword = false
     private var edittext2Focus = false
     private var title = ""
     private var searchJob: Job? = null
     private var histiryJob: Job? = null
+    private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
 
-    init {
-        sinodalBible.add(R.raw.sinaidals1)
-        sinodalBible.add(R.raw.sinaidals2)
-        sinodalBible.add(R.raw.sinaidals3)
-        sinodalBible.add(R.raw.sinaidals4)
-        sinodalBible.add(R.raw.sinaidals5)
-        sinodalBible.add(R.raw.sinaidals6)
-        sinodalBible.add(R.raw.sinaidals7)
-        sinodalBible.add(R.raw.sinaidals8)
-        sinodalBible.add(R.raw.sinaidals9)
-        sinodalBible.add(R.raw.sinaidals10)
-        sinodalBible.add(R.raw.sinaidals11)
-        sinodalBible.add(R.raw.sinaidals12)
-        sinodalBible.add(R.raw.sinaidals13)
-        sinodalBible.add(R.raw.sinaidals14)
-        sinodalBible.add(R.raw.sinaidals15)
-        sinodalBible.add(R.raw.sinaidals16)
-        sinodalBible.add(R.raw.sinaidals17)
-        sinodalBible.add(R.raw.sinaidals18)
-        sinodalBible.add(R.raw.sinaidals19)
-        sinodalBible.add(R.raw.sinaidals20)
-        sinodalBible.add(R.raw.sinaidals21)
-        sinodalBible.add(R.raw.sinaidals22)
-        sinodalBible.add(R.raw.sinaidals23)
-        sinodalBible.add(R.raw.sinaidals24)
-        sinodalBible.add(R.raw.sinaidals25)
-        sinodalBible.add(R.raw.sinaidals26)
-        sinodalBible.add(R.raw.sinaidals27)
-        sinodalBible.add(R.raw.sinaidals28)
-        sinodalBible.add(R.raw.sinaidals29)
-        sinodalBible.add(R.raw.sinaidals30)
-        sinodalBible.add(R.raw.sinaidals31)
-        sinodalBible.add(R.raw.sinaidals32)
-        sinodalBible.add(R.raw.sinaidals33)
-        sinodalBible.add(R.raw.sinaidals34)
-        sinodalBible.add(R.raw.sinaidals35)
-        sinodalBible.add(R.raw.sinaidals36)
-        sinodalBible.add(R.raw.sinaidals37)
-        sinodalBible.add(R.raw.sinaidals38)
-        sinodalBible.add(R.raw.sinaidals39)
-        sinodalBible.add(R.raw.sinaidals40)
-        sinodalBible.add(R.raw.sinaidals41)
-        sinodalBible.add(R.raw.sinaidals42)
-        sinodalBible.add(R.raw.sinaidals43)
-        sinodalBible.add(R.raw.sinaidals44)
-        sinodalBible.add(R.raw.sinaidals45)
-        sinodalBible.add(R.raw.sinaidals46)
-        sinodalBible.add(R.raw.sinaidals47)
-        sinodalBible.add(R.raw.sinaidals48)
-        sinodalBible.add(R.raw.sinaidals49)
-        sinodalBible.add(R.raw.sinaidals50)
-        sinodalBible.add(R.raw.sinaidaln1)
-        sinodalBible.add(R.raw.sinaidaln2)
-        sinodalBible.add(R.raw.sinaidaln3)
-        sinodalBible.add(R.raw.sinaidaln4)
-        sinodalBible.add(R.raw.sinaidaln5)
-        sinodalBible.add(R.raw.sinaidaln6)
-        sinodalBible.add(R.raw.sinaidaln7)
-        sinodalBible.add(R.raw.sinaidaln8)
-        sinodalBible.add(R.raw.sinaidaln9)
-        sinodalBible.add(R.raw.sinaidaln10)
-        sinodalBible.add(R.raw.sinaidaln11)
-        sinodalBible.add(R.raw.sinaidaln12)
-        sinodalBible.add(R.raw.sinaidaln13)
-        sinodalBible.add(R.raw.sinaidaln14)
-        sinodalBible.add(R.raw.sinaidaln15)
-        sinodalBible.add(R.raw.sinaidaln16)
-        sinodalBible.add(R.raw.sinaidaln17)
-        sinodalBible.add(R.raw.sinaidaln18)
-        sinodalBible.add(R.raw.sinaidaln19)
-        sinodalBible.add(R.raw.sinaidaln20)
-        sinodalBible.add(R.raw.sinaidaln21)
-        sinodalBible.add(R.raw.sinaidaln22)
-        sinodalBible.add(R.raw.sinaidaln23)
-        sinodalBible.add(R.raw.sinaidaln24)
-        sinodalBible.add(R.raw.sinaidaln25)
-        sinodalBible.add(R.raw.sinaidaln26)
-        sinodalBible.add(R.raw.sinaidaln27)
+    override fun addZakladka(color: Int, knigaBible: String, bible: String) {
+        when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.addZakladka(color, knigaBible, bible)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.addZakladka(color, knigaBible, bible)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.addZakladka(color, knigaBible, bible)
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.addZakladka(color, knigaBible, bible)
+        }
+    }
 
-        semuxaBible.add(R.raw.biblias1)
-        semuxaBible.add(R.raw.biblias2)
-        semuxaBible.add(R.raw.biblias3)
-        semuxaBible.add(R.raw.biblias4)
-        semuxaBible.add(R.raw.biblias5)
-        semuxaBible.add(R.raw.biblias6)
-        semuxaBible.add(R.raw.biblias7)
-        semuxaBible.add(R.raw.biblias8)
-        semuxaBible.add(R.raw.biblias9)
-        semuxaBible.add(R.raw.biblias10)
-        semuxaBible.add(R.raw.biblias11)
-        semuxaBible.add(R.raw.biblias12)
-        semuxaBible.add(R.raw.biblias13)
-        semuxaBible.add(R.raw.biblias14)
-        semuxaBible.add(R.raw.biblias15)
-        semuxaBible.add(R.raw.biblias16)
-        semuxaBible.add(R.raw.biblias17)
-        semuxaBible.add(R.raw.biblias18)
-        semuxaBible.add(R.raw.biblias19)
-        semuxaBible.add(R.raw.biblias20)
-        semuxaBible.add(R.raw.biblias21)
-        semuxaBible.add(R.raw.biblias22)
-        semuxaBible.add(R.raw.biblias23)
-        semuxaBible.add(R.raw.biblias24)
-        semuxaBible.add(R.raw.biblias25)
-        semuxaBible.add(R.raw.biblias26)
-        semuxaBible.add(R.raw.biblias27)
-        semuxaBible.add(R.raw.biblias28)
-        semuxaBible.add(R.raw.biblias29)
-        semuxaBible.add(R.raw.biblias30)
-        semuxaBible.add(R.raw.biblias31)
-        semuxaBible.add(R.raw.biblias32)
-        semuxaBible.add(R.raw.biblias33)
-        semuxaBible.add(R.raw.biblias34)
-        semuxaBible.add(R.raw.biblias35)
-        semuxaBible.add(R.raw.biblias36)
-        semuxaBible.add(R.raw.biblias37)
-        semuxaBible.add(R.raw.biblias38)
-        semuxaBible.add(R.raw.biblias39)
-        semuxaBible.add(R.raw.biblian1)
-        semuxaBible.add(R.raw.biblian2)
-        semuxaBible.add(R.raw.biblian3)
-        semuxaBible.add(R.raw.biblian4)
-        semuxaBible.add(R.raw.biblian5)
-        semuxaBible.add(R.raw.biblian6)
-        semuxaBible.add(R.raw.biblian7)
-        semuxaBible.add(R.raw.biblian8)
-        semuxaBible.add(R.raw.biblian9)
-        semuxaBible.add(R.raw.biblian10)
-        semuxaBible.add(R.raw.biblian11)
-        semuxaBible.add(R.raw.biblian12)
-        semuxaBible.add(R.raw.biblian13)
-        semuxaBible.add(R.raw.biblian14)
-        semuxaBible.add(R.raw.biblian15)
-        semuxaBible.add(R.raw.biblian16)
-        semuxaBible.add(R.raw.biblian17)
-        semuxaBible.add(R.raw.biblian18)
-        semuxaBible.add(R.raw.biblian19)
-        semuxaBible.add(R.raw.biblian20)
-        semuxaBible.add(R.raw.biblian21)
-        semuxaBible.add(R.raw.biblian22)
-        semuxaBible.add(R.raw.biblian23)
-        semuxaBible.add(R.raw.biblian24)
-        semuxaBible.add(R.raw.biblian25)
-        semuxaBible.add(R.raw.biblian26)
-        semuxaBible.add(R.raw.biblian27)
+    override fun getFileZavet(novyZapaviet: Boolean, kniga: Int): File {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getFileZavet(novyZapaviet, kniga)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getFileZavet(novyZapaviet, kniga)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getFileZavet(novyZapaviet, kniga)
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getFileZavet(novyZapaviet, kniga)
+            else -> File("")
+        }
+    }
 
-        bokunaBible.add(R.raw.bokunas1)
-        bokunaBible.add(R.raw.bokunas2)
-        bokunaBible.add(R.raw.bokunas3)
-        bokunaBible.add(R.raw.bokunas4)
-        bokunaBible.add(R.raw.bokunas5)
-        bokunaBible.add(R.raw.bokunas6)
-        bokunaBible.add(R.raw.bokunas7)
-        bokunaBible.add(R.raw.bokunas8)
-        bokunaBible.add(R.raw.bokunas9)
-        bokunaBible.add(R.raw.bokunas10)
-        bokunaBible.add(R.raw.bokunas11)
-        bokunaBible.add(R.raw.bokunas12)
-        bokunaBible.add(R.raw.bokunas13)
-        bokunaBible.add(R.raw.bokunas14)
-        bokunaBible.add(R.raw.bokunas15)
-        bokunaBible.add(R.raw.bokunas16)
-        bokunaBible.add(R.raw.bokunas17)
-        bokunaBible.add(R.raw.bokunas18)
-        bokunaBible.add(R.raw.bokunas19)
-        bokunaBible.add(R.raw.bokunas20)
-        bokunaBible.add(R.raw.bokunas21)
-        bokunaBible.add(R.raw.bokunas22)
-        bokunaBible.add(R.raw.bokunas23)
-        bokunaBible.add(R.raw.bokunas24)
-        bokunaBible.add(R.raw.bokunas25)
-        bokunaBible.add(R.raw.bokunas26)
-        bokunaBible.add(R.raw.bokunas27)
-        bokunaBible.add(R.raw.bokunas28)
-        bokunaBible.add(R.raw.bokunas29)
-        bokunaBible.add(R.raw.bokunas30)
-        bokunaBible.add(R.raw.bokunas31)
-        bokunaBible.add(R.raw.bokunas32)
-        bokunaBible.add(R.raw.bokunas33)
-        bokunaBible.add(R.raw.bokunas34)
-        bokunaBible.add(R.raw.bokunas35)
-        bokunaBible.add(R.raw.bokunas36)
-        bokunaBible.add(R.raw.bokunas37)
-        bokunaBible.add(R.raw.bokunas38)
-        bokunaBible.add(R.raw.bokunas39)
-        bokunaBible.add(R.raw.bokunan1)
-        bokunaBible.add(R.raw.bokunan2)
-        bokunaBible.add(R.raw.bokunan3)
-        bokunaBible.add(R.raw.bokunan4)
-        bokunaBible.add(R.raw.bokunan5)
-        bokunaBible.add(R.raw.bokunan6)
-        bokunaBible.add(R.raw.bokunan7)
-        bokunaBible.add(R.raw.bokunan8)
-        bokunaBible.add(R.raw.bokunan9)
-        bokunaBible.add(R.raw.bokunan10)
-        bokunaBible.add(R.raw.bokunan11)
-        bokunaBible.add(R.raw.bokunan12)
-        bokunaBible.add(R.raw.bokunan13)
-        bokunaBible.add(R.raw.bokunan14)
-        bokunaBible.add(R.raw.bokunan15)
-        bokunaBible.add(R.raw.bokunan16)
-        bokunaBible.add(R.raw.bokunan17)
-        bokunaBible.add(R.raw.bokunan18)
-        bokunaBible.add(R.raw.bokunan19)
-        bokunaBible.add(R.raw.bokunan20)
-        bokunaBible.add(R.raw.bokunan21)
-        bokunaBible.add(R.raw.bokunan22)
-        bokunaBible.add(R.raw.bokunan23)
-        bokunaBible.add(R.raw.bokunan24)
-        bokunaBible.add(R.raw.bokunan25)
-        bokunaBible.add(R.raw.bokunan26)
-        bokunaBible.add(R.raw.bokunan27)
+    override fun getNamePerevod(): String {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getNamePerevod()
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getNamePerevod()
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getNamePerevod()
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getNamePerevod()
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getNamePerevod()
+            else -> ""
+        }
+    }
 
-        carniauskiBible.add(R.raw.carniauskis1)
-        carniauskiBible.add(R.raw.carniauskis2)
-        carniauskiBible.add(R.raw.carniauskis3)
-        carniauskiBible.add(R.raw.carniauskis4)
-        carniauskiBible.add(R.raw.carniauskis5)
-        carniauskiBible.add(R.raw.carniauskis6)
-        carniauskiBible.add(R.raw.carniauskis7)
-        carniauskiBible.add(R.raw.carniauskis8)
-        carniauskiBible.add(R.raw.carniauskis9)
-        carniauskiBible.add(R.raw.carniauskis10)
-        carniauskiBible.add(R.raw.carniauskis11)
-        carniauskiBible.add(R.raw.carniauskis12)
-        carniauskiBible.add(R.raw.carniauskis13)
-        carniauskiBible.add(R.raw.carniauskis14)
-        carniauskiBible.add(R.raw.carniauskis15)
-        carniauskiBible.add(R.raw.carniauskis16)
-        carniauskiBible.add(R.raw.carniauskis17)
-        carniauskiBible.add(R.raw.carniauskis18)
-        carniauskiBible.add(R.raw.carniauskis19)
-        carniauskiBible.add(R.raw.carniauskis20)
-        carniauskiBible.add(R.raw.carniauskis21)
-        carniauskiBible.add(R.raw.carniauskis22)
-        carniauskiBible.add(R.raw.carniauskis23)
-        carniauskiBible.add(R.raw.carniauskis24)
-        carniauskiBible.add(R.raw.carniauskis25)
-        carniauskiBible.add(R.raw.carniauskis26)
-        carniauskiBible.add(R.raw.carniauskis27)
-        carniauskiBible.add(R.raw.carniauskis28)
-        carniauskiBible.add(R.raw.carniauskis29)
-        carniauskiBible.add(R.raw.carniauskis30)
-        carniauskiBible.add(R.raw.carniauskis31)
-        carniauskiBible.add(R.raw.carniauskis32)
-        carniauskiBible.add(R.raw.carniauskis33)
-        carniauskiBible.add(R.raw.carniauskis34)
-        carniauskiBible.add(R.raw.carniauskis35)
-        carniauskiBible.add(R.raw.carniauskis36)
-        carniauskiBible.add(R.raw.carniauskis37)
-        carniauskiBible.add(R.raw.carniauskis38)
-        carniauskiBible.add(R.raw.carniauskis39)
-        carniauskiBible.add(R.raw.carniauskis40)
-        carniauskiBible.add(R.raw.carniauskis41)
-        carniauskiBible.add(R.raw.carniauskis42)
-        carniauskiBible.add(R.raw.carniauskis43)
-        carniauskiBible.add(R.raw.carniauskis44)
-        carniauskiBible.add(R.raw.carniauskis45)
-        carniauskiBible.add(R.raw.carniauskis46)
-        carniauskiBible.add(R.raw.carniauskin1)
-        carniauskiBible.add(R.raw.carniauskin2)
-        carniauskiBible.add(R.raw.carniauskin3)
-        carniauskiBible.add(R.raw.carniauskin4)
-        carniauskiBible.add(R.raw.carniauskin5)
-        carniauskiBible.add(R.raw.carniauskin6)
-        carniauskiBible.add(R.raw.carniauskin7)
-        carniauskiBible.add(R.raw.carniauskin8)
-        carniauskiBible.add(R.raw.carniauskin9)
-        carniauskiBible.add(R.raw.carniauskin10)
-        carniauskiBible.add(R.raw.carniauskin11)
-        carniauskiBible.add(R.raw.carniauskin12)
-        carniauskiBible.add(R.raw.carniauskin13)
-        carniauskiBible.add(R.raw.carniauskin14)
-        carniauskiBible.add(R.raw.carniauskin15)
-        carniauskiBible.add(R.raw.carniauskin16)
-        carniauskiBible.add(R.raw.carniauskin17)
-        carniauskiBible.add(R.raw.carniauskin18)
-        carniauskiBible.add(R.raw.carniauskin19)
-        carniauskiBible.add(R.raw.carniauskin20)
-        carniauskiBible.add(R.raw.carniauskin21)
-        carniauskiBible.add(R.raw.carniauskin22)
-        carniauskiBible.add(R.raw.carniauskin23)
-        carniauskiBible.add(R.raw.carniauskin24)
-        carniauskiBible.add(R.raw.carniauskin25)
-        carniauskiBible.add(R.raw.carniauskin26)
-        carniauskiBible.add(R.raw.carniauskin27)
+    override fun getZakladki(): ArrayList<BibleZakladkiData> {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getZakladki()
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getZakladki()
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getZakladki()
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getZakladki()
+            else -> ArrayList()
+        }
+    }
+
+    override fun getTitlePerevod(): String {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getTitlePerevod()
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getTitlePerevod()
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getTitlePerevod()
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getTitlePerevod()
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getTitlePerevod()
+            else -> ""
+        }
+    }
+
+    override fun getSubTitlePerevod(glava: Int): String {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getSubTitlePerevod(0)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getSubTitlePerevod(0)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getSubTitlePerevod(0)
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getSubTitlePerevod(0)
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getSubTitlePerevod(0)
+            else -> ""
+        }
+    }
+
+    override fun getSpisKnig(novyZapaviet: Boolean): Array<String> {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getSpisKnig(novyZapaviet)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getSpisKnig(novyZapaviet)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getSpisKnig(novyZapaviet)
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getSpisKnig(novyZapaviet)
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getSpisKnig(novyZapaviet)
+            else -> arrayOf("")
+        }
+    }
+
+    override fun getInputStream(novyZapaviet: Boolean, kniga: Int): InputStream {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getInputStream(novyZapaviet, kniga)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getInputStream(novyZapaviet, kniga)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getInputStream(novyZapaviet, kniga)
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getInputStream(novyZapaviet, kniga)
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getInputStream(novyZapaviet, kniga)
+            else -> super<BibliaPerakvadSemuxi>.getInputStream(novyZapaviet, kniga)
+        }
+    }
+
+    override fun saveVydelenieZakladkiNtanki(novyZapaviet: Boolean, kniga: Int, glava: Int, stix: Int) {
+        when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.saveVydelenieZakladkiNtanki(novyZapaviet, kniga, glava, stix)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.saveVydelenieZakladkiNtanki(novyZapaviet, kniga, glava, stix)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.saveVydelenieZakladkiNtanki(novyZapaviet, kniga, glava, stix)
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.saveVydelenieZakladkiNtanki(novyZapaviet, kniga, glava, stix)
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.saveVydelenieZakladkiNtanki(glava, stix)
+        }
+    }
+
+    override fun translatePsaltyr(psalm: Int, styx: Int, isUpdate: Boolean): Array<Int> {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.translatePsaltyr(psalm, styx, isUpdate)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.translatePsaltyr(psalm, styx, isUpdate)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.translatePsaltyr(psalm, styx, isUpdate)
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.translatePsaltyr(psalm, styx, isUpdate)
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.translatePsaltyr(psalm, styx, isUpdate)
+            else -> arrayOf(1, 1)
+        }
+    }
+
+    override fun isPsaltyrGreek(): Boolean {
+        return when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.isPsaltyrGreek()
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.isPsaltyrGreek()
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.isPsaltyrGreek()
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.isPsaltyrGreek()
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.isPsaltyrGreek()
+            else -> true
+        }
     }
 
     override fun onPause() {
@@ -377,7 +201,8 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         prefEditors = chin.edit()
         binding = SearchBibliaBinding.inflate(layoutInflater)
@@ -570,69 +395,18 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
             return@setOnItemLongClickListener true
         }
-        if (savedInstanceState != null) {
-            val listView = savedInstanceState.getBoolean("list_view")
+        if (instanceState != null) {
+            val listView = instanceState.getBoolean("list_view")
             if (listView) binding.ListView.visibility = View.VISIBLE
-            fierstPosition = savedInstanceState.getInt("fierstPosition")
+            fierstPosition = instanceState.getInt("fierstPosition")
         } else {
             fierstPosition = chin.getInt("search_bible_fierstPosition", 0)
         }
         binding.ListView.setSelection(fierstPosition)
-        val data = if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) arrayOf(getString(by.carkva_gazeta.malitounik.R.string.psalter))
-        else resources.getStringArray(by.carkva_gazeta.malitounik.R.array.serche_bible)
-        val arrayAdapter = SearchSpinnerAdapter(this, data)
-        binding.spinner6.adapter = arrayAdapter
-        if (perevod != DialogVybranoeBibleList.PEREVODNADSAN) {
-            binding.spinner6.setSelection(chin.getInt("biblia_seash", 0))
-            binding.spinner6.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    setSettingsBibliaSeash(position)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
-        }
-        binding.constraint.viewTreeObserver.addOnGlobalLayoutListener {
-            val heightDiff = binding.constraint.rootView.height - binding.constraint.height
-            val keywordView = binding.constraint.rootView.height / 4
-            keyword = heightDiff > keywordView
-            settingsView()
-        }
         binding.editText2.setOnFocusChangeListener { _, hasFocus ->
             edittext2Focus = hasFocus
-            settingsView()
-        }
-        if (!chin.getBoolean("pegistrbukv", true)) binding.checkBox.isChecked = true
-        binding.checkBox.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            prefEditors.putBoolean("pegistrbukv", !isChecked)
-            prefEditors.apply()
-            autoCompleteTextView?.let {
-                val edit = it.text.toString()
-                execute(edit, true)
-            }
-        }
-        if (chin.getInt("slovocalkam", 0) == 1) binding.checkBox2.isChecked = true
-        binding.checkBox2.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            if (isChecked) {
-                prefEditors.putInt("slovocalkam", 1)
-            } else {
-                prefEditors.putInt("slovocalkam", 0)
-            }
-            prefEditors.apply()
-            autoCompleteTextView?.let {
-                val edit = it.text.toString()
-                execute(edit, true)
-            }
         }
         setTollbarTheme()
-    }
-
-    private fun settingsView() {
-        if (keyword && !edittext2Focus) {
-            binding.settingsGrup.visibility = View.VISIBLE
-        } else {
-            binding.settingsGrup.visibility = View.GONE
-        }
     }
 
     private fun setTollbarTheme() {
@@ -675,16 +449,21 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
     }
 
     override fun setSettingsPegistrbukv(pegistrbukv: Boolean) {
-        binding.checkBox.isChecked = pegistrbukv
+        autoCompleteTextView?.let {
+            val edit = it.text.toString()
+            execute(edit, true)
+        }
     }
 
     override fun setSettingsSlovocalkam(slovocalkam: Int) {
-        binding.checkBox2.isChecked = slovocalkam == 1
+        autoCompleteTextView?.let {
+            val edit = it.text.toString()
+            execute(edit, true)
+        }
     }
 
     override fun setSettingsBibliaSeash(position: Int) {
         if (perevod != DialogVybranoeBibleList.PEREVODNADSAN) {
-            binding.spinner6.setSelection(position)
             autoCompleteTextView?.let {
                 val edit = it.text.toString()
                 val bibliaSeash = chin.getInt("biblia_seash", 0)
@@ -694,6 +473,14 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                     execute(edit, true)
                 }
             }
+        }
+    }
+
+    override fun setBiblePeraklad(peraklad: String) {
+        perevod = peraklad
+        autoCompleteTextView?.let {
+            val edit = it.text.toString()
+            execute(edit, true)
         }
     }
 
@@ -743,7 +530,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_search_bible) {
             val dialogSearshBible = DialogBibleSearshSettings.getInstance(perevod)
-            dialogSearshBible.show(supportFragmentManager, "dialogSearshBible")
+           dialogSearshBible.show(supportFragmentManager, "dialogSearshBible")
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_clean_histopy) {
@@ -808,14 +595,19 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         historyAdapter.notifyDataSetChanged()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun saveStateActivity(outState: Bundle): Bundle {
         outState.putBoolean("list_view", binding.ListView.visibility == View.VISIBLE)
         outState.putInt("fierstPosition", fierstPosition)
         autoCompleteTextView?.let {
             prefEditors.putString("search_string", it.text.toString())
             prefEditors.apply()
         }
+        return super.saveStateActivity(outState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveStateActivity(outState)
     }
 
     private fun execute(searcheString: String, run: Boolean = false) {
@@ -904,93 +696,67 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 }
             }
         }
-        var range = 0..0
-        var list = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.psalter_list)
-        when (perevod) {
-            DialogVybranoeBibleList.PEREVODSEMUXI -> {
-                range = when (chin.getInt("biblia_seash", 0)) {
-                    1 -> 39..42
-                    2 -> 39 until semuxaBible.size
-                    3 -> 0..4
-                    4 -> 0..38
-                    else -> 0 until semuxaBible.size
+        val rangeBibile = if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) 0..0
+        else 0..1
+        for (novyZapaviet in rangeBibile) {
+            val list = if (novyZapaviet == 0) getSpisKnig(false)
+            else getSpisKnig(true)
+            val range = when (chin.getInt("biblia_seash", 0)) {
+                1 -> {
+                    if (novyZapaviet == 0) continue
+                    0 until 4
                 }
-                list = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan))
-            }
-
-            DialogVybranoeBibleList.PEREVODSINOIDAL -> {
-                range = when (chin.getInt("biblia_seash", 0)) {
-                    1 -> 50..53
-                    2 -> 50 until sinodalBible.size
-                    3 -> 0..4
-                    4 -> 0..49
-                    else -> 0 until sinodalBible.size
+                2 -> {
+                    if (novyZapaviet == 0) continue
+                    0 until getSpisKnig(true).size
                 }
-                list = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidals).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.sinoidaln))
-            }
-
-            DialogVybranoeBibleList.PEREVODBOKUNA -> {
-                range = when (chin.getInt("biblia_seash", 0)) {
-                    1 -> 39..42
-                    2 -> 39 until bokunaBible.size
-                    3 -> 0..4
-                    4 -> 0..38
-                    else -> 0 until bokunaBible.size
+                3 -> {
+                    if (novyZapaviet == 1) continue
+                    0 until 4
                 }
-                list = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunas).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunan))
-            }
-
-            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
-                range = when (chin.getInt("biblia_seash", 0)) {
-                    1 -> 46..49
-                    2 -> 46 until carniauskiBible.size
-                    3 -> 0..4
-                    4 -> 0..45
-                    else -> 0 until carniauskiBible.size
+                4 -> {
+                    if (novyZapaviet == 1) continue
+                    0 until getSpisKnig(false).size
                 }
-                list = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskis).plus(resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskin))
+                else -> {
+                    if (novyZapaviet == 0) 0 until getSpisKnig(false).size
+                    else 0 until getSpisKnig(true).size
+                }
             }
-        }
-        for (i in range) {
-            if (searchJob?.isActive == false) break
-            val t4 = list[i].indexOf("#")
-            val nazva = list[i].substring(0, t4)
-            val inputStream = when (perevod) {
-                DialogVybranoeBibleList.PEREVODSEMUXI -> resources.openRawResource(semuxaBible[i])
-                DialogVybranoeBibleList.PEREVODSINOIDAL -> resources.openRawResource(sinodalBible[i])
-                DialogVybranoeBibleList.PEREVODNADSAN -> resources.openRawResource(R.raw.psaltyr_nadsan)
-                DialogVybranoeBibleList.PEREVODBOKUNA -> resources.openRawResource(bokunaBible[i])
-                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> resources.openRawResource(carniauskiBible[i])
-                else -> resources.openRawResource(semuxaBible[i])
-            }
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            var glava = 0
-            val split = reader.use {
-                it.readText().split("===")
-            }
-            for (e in 1 until split.size) {
-                glava++
-                val bibleline = split[e].split("\n")
-                var stix = 0
-                for (r in 1 until bibleline.size) {
-                    stix++
-                    val aSviatyia = MainActivity.fromHtml(bibleline[r]).toString()
-                    val title = "<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n"
-                    val t3 = title.length
-                    val span = SpannableStringBuilder()
-                    val poshuk2 = findChars(poshuk1, aSviatyia)
-                    if (poshuk2.isEmpty()) continue
-                    span.append(title)
-                    span.setSpan(StyleSpan(Typeface.BOLD), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    span.append(aSviatyia)
-                    for (w in 0 until poshuk2.size) {
-                        val t2 = poshuk2[w].str.length
-                        val t1 = poshuk2[w].position + t3
-                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            for (i in range) {
+                if (searchJob?.isActive == false) break
+                val t4 = list[i].indexOf("#")
+                val nazva = list[i].substring(0, t4)
+                val inputStream = getInputStream(novyZapaviet == 1, i)
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                var glava = 0
+                val split = reader.use {
+                    it.readText().split("===")
+                }
+                for (e in 1 until split.size) {
+                    glava++
+                    val bibleline = split[e].split("\n")
+                    var stix = 0
+                    for (r in 1 until bibleline.size) {
+                        stix++
+                        val aSviatyia = MainActivity.fromHtml(bibleline[r]).toString()
+                        val title = "<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n"
+                        val t3 = title.length
+                        val span = SpannableStringBuilder()
+                        val poshuk2 = findChars(poshuk1, aSviatyia)
+                        if (poshuk2.isEmpty()) continue
+                        span.append(title)
+                        span.setSpan(StyleSpan(Typeface.BOLD), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        span.append(aSviatyia)
+                        for (w in 0 until poshuk2.size) {
+                            val t2 = poshuk2[w].str.length
+                            val t1 = poshuk2[w].position + t3
+                            span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1 - t2, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
+                        seashpost.add(span)
                     }
-                    seashpost.add(span)
                 }
             }
         }
@@ -1207,44 +973,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         }
     }
 
-    private class SearchSpinnerAdapter(private val context: Activity, private val name: Array<String>) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_4, name) {
-        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val v = super.getDropDownView(position, convertView, parent)
-            val textView = v as TextView
-            textView.gravity = Gravity.START
-            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            if (dzenNoch) textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-            else textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
-            return v
-        }
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolder
-            if (convertView == null) {
-                val binding = SimpleListItem4Binding.inflate(context.layoutInflater, parent, false)
-                rootView = binding.root
-                viewHolder = ViewHolder(binding.text1)
-                rootView.tag = viewHolder
-            } else {
-                rootView = convertView
-                viewHolder = rootView.tag as ViewHolder
-            }
-            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            if (dzenNoch) viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-            else viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
-            viewHolder.text.gravity = Gravity.START
-            viewHolder.text.text = name[position]
-            return rootView
-        }
-
-    }
-
     private class ViewHolder(var text: TextView)
 
     private data class FindString(val str: String, val position: Int)
-
-    companion object {
-        private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
-    }
 }

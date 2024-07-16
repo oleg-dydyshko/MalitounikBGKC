@@ -82,13 +82,14 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         binding = CytatyActivityBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
         binding.constraint.setOnTouchListener(this)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
+        fullscreenPage = instanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
@@ -427,9 +428,14 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
         binding.actionBack.animation = animation
     }
 
+    override fun saveStateActivity(outState: Bundle): Bundle {
+        outState.putBoolean("fullscreen", fullscreenPage)
+        return super.saveStateActivity(outState)
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean("fullscreen", fullscreenPage)
+        saveStateActivity(outState)
     }
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {

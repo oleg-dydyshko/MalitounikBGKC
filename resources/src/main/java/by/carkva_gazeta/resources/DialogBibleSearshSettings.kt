@@ -19,6 +19,7 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.R
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.DialogBibleSearshSettingsBinding
 
@@ -42,6 +43,7 @@ class DialogBibleSearshSettings : DialogFragment() {
         fun setSettingsPegistrbukv(pegistrbukv: Boolean)
         fun setSettingsSlovocalkam(slovocalkam: Int)
         fun setSettingsBibliaSeash(position: Int)
+        fun setBiblePeraklad(peraklad: String)
     }
 
     override fun onAttach(context: Context) {
@@ -115,18 +117,50 @@ class DialogBibleSearshSettings : DialogFragment() {
             val spinner = binding.spinner6
             val arrayAdapter = DialogBibleAdapter(it, data)
             spinner.adapter = arrayAdapter
+            var listPeraklad = arrayOf(getString(R.string.title_biblia_bokun2), getString(R.string.title_biblia2), getString(R.string.title_biblia_charniauski2), getString(R.string.title_psalter))
+            if (chin.getInt("sinoidal", 0) == 1) listPeraklad = listPeraklad.plus(arrayOf(getString(R.string.bsinaidal2)))
+            val arrayAdapterPeraklad = DialogBibleAdapter(it, listPeraklad)
+            binding.spinnerPerevod.adapter = arrayAdapterPeraklad
+            when (perevod) {
+                DialogVybranoeBibleList.PEREVODBOKUNA -> binding.spinnerPerevod.setSelection(0)
+                DialogVybranoeBibleList.PEREVODSEMUXI -> binding.spinnerPerevod.setSelection(1)
+                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> binding.spinnerPerevod.setSelection(2)
+                DialogVybranoeBibleList.PEREVODNADSAN -> binding.spinnerPerevod.setSelection(3)
+                DialogVybranoeBibleList.PEREVODSINOIDAL -> binding.spinnerPerevod.setSelection(4)
+            }
+            var chek = false
+            binding.spinnerPerevod.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    if (chek) {
+                        val peraklad = when (position) {
+                            0 -> DialogVybranoeBibleList.PEREVODBOKUNA
+                            1 -> DialogVybranoeBibleList.PEREVODSEMUXI
+                            2 -> DialogVybranoeBibleList.PEREVODCARNIAUSKI
+                            3 -> DialogVybranoeBibleList.PEREVODNADSAN
+                            4 -> DialogVybranoeBibleList.PEREVODSINOIDAL
+                            else -> DialogVybranoeBibleList.PEREVODSEMUXI
+                        }
+                        mListener?.setBiblePeraklad(peraklad)
+                    }
+                    chek = true
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
             if (perevod != DialogVybranoeBibleList.PEREVODNADSAN) {
                 spinner.setSelection(check3)
+                var chek2 = false
                 spinner.onItemSelectedListener = object : OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        mListener?.setSettingsBibliaSeash(position)
+                        if (chek2) mListener?.setSettingsBibliaSeash(position)
+                        chek2 = true
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
             }
             builder.setView(binding.root)
-            builder.setPositiveButton(getString(R.string.close)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setPositiveButton(getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
         }
         return builder.create()
     }
@@ -136,10 +170,8 @@ class DialogBibleSearshSettings : DialogFragment() {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextView
             val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            if (dzenNoch)
-                textView.setBackgroundResource(R.drawable.selector_dark)
-            else
-                textView.setBackgroundResource(R.drawable.selector_default)
+            if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
+            else textView.setBackgroundResource(R.drawable.selector_default)
             return v
         }
 
@@ -156,11 +188,10 @@ class DialogBibleSearshSettings : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            if (dzenNoch)
-                viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
-            else
-                viewHolder.text.setBackgroundResource(R.drawable.selector_default)
+            if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
+            else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             viewHolder.text.gravity = Gravity.START
+            viewHolder.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             viewHolder.text.text = name[position]
             return rootView
         }

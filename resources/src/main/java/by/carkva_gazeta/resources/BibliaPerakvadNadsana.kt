@@ -43,7 +43,7 @@ interface BibliaPerakvadNadsana {
         return resources.getString(by.carkva_gazeta.malitounik.R.string.kafizma2, kafizma)
     }
 
-    fun getSpisKnig(): Array<String> {
+    fun getSpisKnig(novyZapaviet: Boolean): Array<String> {
         this as BaseActivity
         return resources.getStringArray(by.carkva_gazeta.malitounik.R.array.psalter_list)
     }

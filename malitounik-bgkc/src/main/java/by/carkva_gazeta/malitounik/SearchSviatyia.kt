@@ -142,7 +142,8 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val c = Calendar.getInstance()
         binding = SearchSviatyiaBinding.inflate(layoutInflater)
@@ -412,11 +413,16 @@ class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryList
         prefEditors.apply()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun saveStateActivity(outState: Bundle): Bundle {
         val prefEditors = chin.edit()
         prefEditors.putString("search_svityx_string", editText?.text.toString())
         prefEditors.apply()
+        return super.saveStateActivity(outState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveStateActivity(outState)
     }
 
     private inner class MyTextWatcher : TextWatcher {

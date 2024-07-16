@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -80,7 +79,7 @@
         android:imeOptions="actionDone"
         android:inputType="text"
         android:singleLine="true"
-        app:layout_constraintBottom_toTopOf="@id/barrier2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonx2"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -88,39 +87,13 @@
         android:id="@+id/buttonx2"
         android:layout_width="20sp"
         android:layout_height="20sp"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="@string/close"
         android:padding="5sp"
         android:src="@drawable/cancel_black"
         app:layout_constraintBottom_toBottomOf="@+id/editText2"
-        app:layout_constraintEnd_toStartOf="@+id/spinner6"
-        app:layout_constraintTop_toTopOf="@+id/editText2"
-        android:contentDescription="@string/close" />
-
-    <Spinner
-        android:id="@+id/spinner6"
-        android:layout_width="0sp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/editText2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editText2" />
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="0sp"
-        android:layout_height="wrap_content"
-        android:text="@string/registr"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/checkBox2"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <CheckBox
-        android:id="@+id/checkBox2"
-        android:layout_width="0sp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8sp"
-        android:layout_marginRight="8sp"
-        android:text="@string/dakladnae_supadzenne"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/filter_grup"
@@ -129,27 +102,11 @@
         android:visibility="gone"
         app:constraint_referenced_ids="editText2,buttonx2" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/settings_grup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="spinner6,checkBox,checkBox2" />
-
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="top"
-        app:constraint_referenced_ids="editText2,buttonx2,spinner6"
-        tools:layout_editor_absoluteY="731sp" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="top"
-        app:constraint_referenced_ids="checkBox,checkBox2"
-        tools:layout_editor_absoluteY="731sp" />
+        app:constraint_referenced_ids="editText2,buttonx2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

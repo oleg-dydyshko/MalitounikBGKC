@@ -62,7 +62,7 @@ class DialogBibleRazdel : DialogFragment() {
             if (savedInstanceState != null) {
                 binding.content.setText(savedInstanceState.getString("glava"))
             } else {
-                binding.content.setText("")
+                binding.content.text?.clear()
             }
             binding.content.inputType = InputType.TYPE_CLASS_NUMBER
             binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))

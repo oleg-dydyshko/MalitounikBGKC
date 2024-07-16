@@ -98,6 +98,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private var paralel = false
     private var paralelPosition = 0
     private var maranAtaScrollPosition = 0
+    private var maranAtaScrollPositionY = 0
     private lateinit var binding: AkafistMaranAtaBinding
     private lateinit var bindingprogress: ProgressBinding
     private var autoScrollJob: Job? = null
@@ -110,7 +111,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private var resetTitleJob: Job? = null
     private var diffScroll = -1
     private var scrolltosatrt = false
-    private var orientation = Configuration.ORIENTATION_UNDEFINED
+    private var orientation = Configuration.ORIENTATION_PORTRAIT
     private var mun = 0
     private var day = 1
     private var isSmoothScrollToPosition = false
@@ -170,12 +171,12 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
     }
 
-    override fun getSubTitlePerevod(): String {
+    override fun getSubTitlePerevod(glava: Int): String {
         return when (perevod) {
-            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getSubTitlePerevod()
-            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getSubTitlePerevod()
-            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getSubTitlePerevod()
-            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getSubTitlePerevod()
+            DialogVybranoeBibleList.PEREVODSEMUXI -> super<BibliaPerakvadSemuxi>.getSubTitlePerevod(0)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getSubTitlePerevod(0)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getSubTitlePerevod(0)
+            DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getSubTitlePerevod(0)
             DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getSubTitlePerevod(0)
             else -> ""
         }
@@ -187,7 +188,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             DialogVybranoeBibleList.PEREVODBOKUNA -> super<BibliaPerakvadBokuna>.getSpisKnig(novyZapaviet)
             DialogVybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.getSpisKnig(novyZapaviet)
             DialogVybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.getSpisKnig(novyZapaviet)
-            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getSpisKnig()
+            DialogVybranoeBibleList.PEREVODNADSAN -> super<BibliaPerakvadNadsana>.getSpisKnig(novyZapaviet)
             else -> arrayOf("")
         }
     }
@@ -260,7 +261,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         spid = k.getInt("autoscrollSpid", 60)
         binding = AkafistMaranAtaBinding.inflate(layoutInflater)
@@ -289,20 +291,20 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
         maranAtaScrollPosition = if (vybranae) k.getInt(perevod + "BibleVybranoeScroll", 0)
         else k.getInt("maranAtaScrollPasition", 0)
-        setMaranata(savedInstanceState)
-        if (savedInstanceState != null) {
+        maranAtaScrollPositionY = k.getInt("maranAtaScrollPasitionY", 0)
+        if (instanceState != null) {
             MainActivity.dialogVisable = false
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
+            fullscreenPage = instanceState.getBoolean("fullscreen")
             if (vybranae) {
                 binding.titleToolbar.text = getTitlePerevod()
             } else {
-                binding.titleToolbar.text = savedInstanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])) ?: getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
+                binding.titleToolbar.text = instanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])) ?: getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
             }
-            binding.subtitleToolbar.text = savedInstanceState.getString("subTollBarText", "") ?: ""
-            paralel = savedInstanceState.getBoolean("paralel", paralel)
-            orientation = savedInstanceState.getInt("orientation")
+            binding.subtitleToolbar.text = instanceState.getString("subTollBarText", "") ?: ""
+            paralel = instanceState.getBoolean("paralel", paralel)
+            orientation = instanceState.getInt("orientation")
             if (paralel) {
-                paralelPosition = savedInstanceState.getInt("paralelPosition")
+                paralelPosition = instanceState.getInt("paralelPosition")
                 parralelMestaView(paralelPosition)
             }
         } else {
@@ -316,6 +318,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 autoStartScroll()
             }
         }
+        setMaranata(orientation, instanceState)
         checkDay()
         bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -606,7 +609,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         adapter.notifyDataSetChanged()
     }
 
-    private fun smoothScrollToPosition(position: Int) {
+    private fun smoothScrollToPosition(orientation: Int, position: Int, positionY: Int = 0) {
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             private var checkDiff = false
 
@@ -648,6 +651,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     binding.textViewTitle.text = nazva
                 }
                 maranAtaScrollPosition = firstPosition
+                maranAtaScrollPositionY = list.getChildAt(0).top
                 if (firstPosition == 0 && scrolltosatrt) {
                     autoStartScroll()
                     scrolltosatrt = false
@@ -673,7 +677,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         })
         if (isSmoothScrollToPosition) {
             CoroutineScope(Dispatchers.Main).launch {
-                binding.ListView.smoothScrollToPositionFromTop(position, 0)
+                val y = if (orientation == this@MaranAta.orientation) positionY
+                else 0
+                binding.ListView.smoothScrollToPositionFromTop(position, y, 0)
             }
         }
     }
@@ -801,7 +807,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         edit.apply()
         if (this.perevod != perevod) {
             this.perevod = perevod
-            setMaranata(null)
+            setMaranata(orientation, null)
         }
     }
 
@@ -1140,7 +1146,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         return indexListBible
     }
 
-    private fun setMaranata(savedInstanceState: Bundle?) {
+    private fun setMaranata(orientation: Int, savedInstanceState: Bundle?) {
         maranAta.clear()
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         val chten = cytanne.split(";")
@@ -1410,9 +1416,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         adapter.notifyDataSetChanged()
         isSmoothScrollToPosition = true
         if (vybranae && !prodoljyt && savedInstanceState == null) {
-            smoothScrollToPosition(findTitle())
+            smoothScrollToPosition(orientation, findTitle())
         } else {
-            smoothScrollToPosition(maranAtaScrollPosition)
+            smoothScrollToPosition(orientation, maranAtaScrollPosition, maranAtaScrollPositionY)
         }
     }
 
@@ -1501,7 +1507,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             autoScroll()
         } else {
             isSmoothScrollToPosition = true
-            smoothScrollToPosition(0)
+            smoothScrollToPosition(orientation, 0)
             scrolltosatrt = true
         }
     }
@@ -1642,6 +1648,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         val prefEditors = k.edit()
         if (vybranae) prefEditors.putInt(perevod + "BibleVybranoeScroll", maranAtaScrollPosition)
         else prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
+        prefEditors.putInt("maranAtaScrollPasitionY", maranAtaScrollPositionY)
         prefEditors.apply()
         stopAutoStartScroll()
     }
@@ -2028,14 +2035,19 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         binding.actionBack.animation = animation
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun saveStateActivity(outState: Bundle): Bundle {
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putString("tollBarText", binding.titleToolbar.text.toString())
         outState.putString("subTollBarText", binding.subtitleToolbar.text.toString())
         outState.putBoolean("paralel", paralel)
         outState.putInt("paralelPosition", paralelPosition)
+        return super.saveStateActivity(outState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveStateActivity(outState)
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

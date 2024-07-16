@@ -94,12 +94,17 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
         sqlJob?.cancel()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun saveStateActivity(outState: Bundle): Bundle {
         outState.putBoolean("editVisibility", binding.edit.visibility == View.VISIBLE)
         outState.putString("pdfTextView", binding.pdfTextView.text.toString())
         outState.putParcelable("BitmapImage", binding.imagePdf.drawable?.toBitmap())
         outState.putInt("position", position)
+        return super.saveStateActivity(outState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveStateActivity(outState)
     }
 
     override fun onBack() {
@@ -339,7 +344,8 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         width = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val display = windowManager.currentWindowMetrics
             val bounds = display.bounds
@@ -362,14 +368,14 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
         binding.rubrika.adapter = rubrikaAdapter
         adapter = BibliotekaAdapter(this)
         binding.listView.adapter = adapter
-        if (savedInstanceState != null) {
-            if (savedInstanceState.getBoolean("editVisibility")) {
+        if (instanceState != null) {
+            if (instanceState.getBoolean("editVisibility")) {
                 binding.edit.visibility = View.VISIBLE
                 binding.listView.visibility = View.GONE
             }
-            position = savedInstanceState.getInt("position")
-            binding.pdfTextView.text = savedInstanceState.getString("pdfTextView")
-            binding.imagePdf.setImageBitmap(savedInstanceState.getParcelable("BitmapImage"))
+            position = instanceState.getInt("position")
+            binding.pdfTextView.text = instanceState.getString("pdfTextView")
+            binding.imagePdf.setImageBitmap(instanceState.getParcelable("BitmapImage"))
             setImageSize(binding.imagePdf)
         }
         getSql()

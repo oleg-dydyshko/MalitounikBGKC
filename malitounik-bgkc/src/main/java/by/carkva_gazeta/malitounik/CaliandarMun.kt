@@ -91,7 +91,8 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = CalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -110,13 +111,13 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
         val c = Calendar.getInstance()
-        if (savedInstanceState != null) {
-            day1 = savedInstanceState.getInt("day")
-            posMun1 = savedInstanceState.getInt("mun")
-            yearG1 = savedInstanceState.getInt("year")
-            day2 = savedInstanceState.getInt("day2")
-            posMun2 = savedInstanceState.getInt("mun2")
-            yearG2 = savedInstanceState.getInt("year2")
+        if (instanceState != null) {
+            day1 = instanceState.getInt("day")
+            posMun1 = instanceState.getInt("mun")
+            yearG1 = instanceState.getInt("year")
+            day2 = instanceState.getInt("day2")
+            posMun2 = instanceState.getInt("mun2")
+            yearG2 = instanceState.getInt("year2")
         } else {
             posMun1 = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
             yearG1 = intent.extras?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
@@ -178,13 +179,18 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
         return false
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun saveStateActivity(outState: Bundle): Bundle {
         outState.putInt("day", day1)
         outState.putInt("mun", posMun1)
         outState.putInt("year", yearG1)
         outState.putInt("day2", day2)
         outState.putInt("mun2", posMun2)
         outState.putInt("year2", yearG1)
+        return super.saveStateActivity(outState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveStateActivity(outState)
     }
 }

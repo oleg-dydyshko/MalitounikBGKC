@@ -27,7 +27,7 @@ interface BibliaPerakvadBokuna {
         return resources.getString(by.carkva_gazeta.malitounik.R.string.title_biblia_bokun)
     }
 
-    fun getSubTitlePerevod(): String {
+    fun getSubTitlePerevod(glava: Int): String {
         this as BaseActivity
         return resources.getString(by.carkva_gazeta.malitounik.R.string.title_biblia_bokun2)
     }

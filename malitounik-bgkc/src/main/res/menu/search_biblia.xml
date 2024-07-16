@@ -2,16 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_search_bible"
-        android:orderInCategory="100"
-        android:title="@string/settings_poshuk_smoll"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_clean_histopy"
-        android:orderInCategory="100"
-        android:title="@string/clean_histopy"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/search"
         android:icon="@drawable/search"
         android:orderInCategory="100"
@@ -24,4 +14,15 @@
         android:title="(0)"
         app:actionViewClass="android.widget.TextView"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_search_bible"
+        android:icon="@drawable/settings"
+        android:orderInCategory="100"
+        android:title="@string/settings_poshuk_smoll"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_clean_histopy"
+        android:orderInCategory="100"
+        android:title="@string/clean_histopy"
+        app:showAsAction="never" />
 </menu>

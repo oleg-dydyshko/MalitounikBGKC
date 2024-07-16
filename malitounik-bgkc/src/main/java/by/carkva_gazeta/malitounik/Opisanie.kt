@@ -229,7 +229,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = OpisanieBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -238,14 +239,14 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         year = intent.extras?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
         svity = intent.extras?.getBoolean("glavnyia", false) ?: false
-        if (savedInstanceState?.getBoolean("imageViewFullVisable") == true) {
-            fullImagePathVisable = savedInstanceState.getString("filePach") ?: ""
+        if (instanceState?.getBoolean("imageViewFullVisable") == true) {
+            fullImagePathVisable = instanceState.getString("filePach") ?: ""
             val file2 = File(fullImagePathVisable)
             Picasso.get().load(file2).into(binding.imageViewFull)
             binding.imageViewFull.visibility = View.VISIBLE
             binding.listview.visibility = View.GONE
             binding.progressBar2.visibility = View.INVISIBLE
-            binding.titleToolbar.text = savedInstanceState.getString("tollbarText")
+            binding.titleToolbar.text = instanceState.getString("tollbarText")
         } else {
             binding.titleToolbar.text = resources.getText(R.string.zmiest)
         }
@@ -257,7 +258,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             binding.imageViewFull.background = ContextCompat.getDrawable(this, R.color.colorbackground_material_dark)
         }
         viewSviaryiaIIcon()
-        if (savedInstanceState == null) startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
+        if (instanceState == null) startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
         setTollbarTheme()
     }
 
@@ -618,11 +619,16 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         menu.findItem(R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun saveStateActivity(outState: Bundle): Bundle {
         outState.putString("filePach", fullImagePathVisable)
         outState.putString("tollbarText", binding.titleToolbar.text.toString())
         outState.putBoolean("imageViewFullVisable", binding.imageViewFull.visibility == View.VISIBLE)
+        return super.saveStateActivity(outState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveStateActivity(outState)
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {

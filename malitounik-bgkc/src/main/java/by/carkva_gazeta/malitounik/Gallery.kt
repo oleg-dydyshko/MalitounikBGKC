@@ -63,22 +63,23 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         binding = GalleryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (savedInstanceState?.getBoolean("imageViewFullVisable") == true) {
+        if (instanceState?.getBoolean("imageViewFullVisable") == true) {
             val file2 = File(fullImagePathVisable)
             Picasso.get().load(file2).into(binding.imageViewFull)
             binding.imageViewFull.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.INVISIBLE
-            binding.titleToolbar.text = savedInstanceState.getString("textFull")
-            isClosed = savedInstanceState.getBoolean("isClosed")
-            isAuto = savedInstanceState.getBoolean("isAuto")
+            binding.titleToolbar.text = instanceState.getString("textFull")
+            isClosed = instanceState.getBoolean("isClosed")
+            isAuto = instanceState.getBoolean("isAuto")
             if (isAuto) {
                startPlayIcons()
             }
-            speedGallery = savedInstanceState.getInt("speedGallery")
+            speedGallery = instanceState.getInt("speedGallery")
         } else {
             binding.titleToolbar.text = resources.getText(R.string.gallery)
             val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -138,7 +139,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             binding.actionOpisanie.visibility = View.GONE
             binding.actionOpisanieClose.visibility = View.GONE
         }
-        savedInstanceState ?: startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
+        instanceState ?: startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
     }
 
     private fun forwardGallery() {
@@ -155,7 +156,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
                     getOpisanieIcons(file)
                 }
             } else {
-                binding.actionOpisanie.text = ""
+                binding.actionOpisanie.text = null
             }
             binding.recyclerView.visibility = View.INVISIBLE
             binding.titleToolbar.text = gallery[fullImagePosition].title.replace("\n", " ")
@@ -187,7 +188,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
     private suspend fun getOpisanieIcons(file: File) {
         binding.actionOpisanie.visibility = View.GONE
         binding.actionOpisanieClose.visibility = View.GONE
-        binding.actionOpisanie.text = ""
+        binding.actionOpisanie.text = null
         val t3 = file.name.lastIndexOf(".")
         val fileNameT = file.name.substring(0, t3) + ".txt"
         val fileOpisanie = File("$filesDir/iconsApisanne/$fileNameT")
@@ -209,7 +210,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
             binding.actionOpisanie.visibility = View.VISIBLE
             binding.actionOpisanieClose.visibility = View.VISIBLE
         } else {
-            binding.actionOpisanie.text = ""
+            binding.actionOpisanie.text = null
             binding.actionOpisanie.visibility = View.GONE
             binding.actionOpisanieClose.visibility = View.GONE
         }
@@ -826,13 +827,18 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         speedGallery = speed
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun saveStateActivity(outState: Bundle): Bundle {
         outState.putBoolean("imageViewFullVisable", binding.imageViewFull.visibility == View.VISIBLE)
         outState.putString("textFull", binding.titleToolbar.text.toString())
         outState.putBoolean("isClosed", isClosed)
         outState.putBoolean("isAuto", isAuto)
         outState.putInt("speedGallery", speedGallery)
+        return super.saveStateActivity(outState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveStateActivity(outState)
     }
 
     private inner class GalleryAdapter(val binding: GalleryBinding, gallery: ArrayList<GalleryData>) : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {

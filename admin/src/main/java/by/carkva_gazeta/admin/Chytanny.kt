@@ -159,10 +159,11 @@ class Chytanny : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         binding = AdminChytannyBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        isError = savedInstanceState?.getBoolean("isError", false) ?: false
+        isError = instanceState?.getBoolean("isError", false) ?: false
         for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) data.add(i.toString())
         binding.spinnerYear.adapter = SpinnerAdapter(this, data)
         binding.spinnerYear.setSelection(2)
@@ -324,9 +325,14 @@ class Chytanny : BaseActivity() {
         super.onCreateMenu(menu, menuInflater)
     }
 
+    override fun saveStateActivity(outState: Bundle): Bundle {
+        outState.putBoolean("isError", isError)
+        return super.saveStateActivity(outState)
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean("isError", isError)
+        saveStateActivity(outState)
     }
 
     private class SpinnerAdapter(private val activity: Activity, private val data: ArrayList<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {

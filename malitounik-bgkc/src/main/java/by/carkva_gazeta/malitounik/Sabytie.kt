@@ -205,7 +205,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 val resul = gc4.timeInMillis
                 if (kon2 - resul < 0) binding.labelbutton12.text = resources.getString(R.string.Sabytie, nol1, setCal[Calendar.DAY_OF_MONTH], nol2, setCal[Calendar.MONTH] + 1, setCal[Calendar.YEAR])
                 val temp = binding.editText2.text
-                binding.editText2.setText("")
+                binding.editText2.text?.clear()
                 binding.editText2.text = temp
             }
         }
@@ -311,7 +311,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             }
             binding.label2.text = ta
             val temp = binding.editText2.text
-            binding.editText2.setText("")
+            binding.editText2.text?.clear()
             binding.editText2.text = temp
         }
         if (nomerDialoga == 2) {
@@ -344,7 +344,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        super.onCreate(instanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = SabytieBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -432,7 +433,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 posit = position
                 val temp = binding.editText2.text
-                binding.editText2.setText("")
+                binding.editText2.text?.clear()
                 binding.editText2.text = temp
             }
 
@@ -631,23 +632,23 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 }
             }
         })
-        if (savedInstanceState != null) {
-            searchViewQwery = savedInstanceState.getString("SearchViewQwery", "")
-            actionExpandOn = savedInstanceState.getBoolean("actionExpandOn")
-            redak = savedInstanceState.getBoolean("redak")
-            back = savedInstanceState.getBoolean("back")
-            save = savedInstanceState.getBoolean("save")
-            idMenu = savedInstanceState.getInt("idMenu")
-            if (savedInstanceState.getBoolean("titleLayout")) {
+        if (instanceState != null) {
+            searchViewQwery = instanceState.getString("SearchViewQwery", "")
+            actionExpandOn = instanceState.getBoolean("actionExpandOn")
+            redak = instanceState.getBoolean("redak")
+            back = instanceState.getBoolean("back")
+            save = instanceState.getBoolean("save")
+            idMenu = instanceState.getInt("idMenu")
+            if (instanceState.getBoolean("titleLayout")) {
                 binding.titleLayout.visibility = View.VISIBLE
                 binding.dragListView.visibility = View.GONE
                 invalidateOptionsMenu()
             }
-            ta = savedInstanceState.getString("ta") ?: "0:0"
-            da = savedInstanceState.getString("da") ?: "0.0.0"
-            taK = savedInstanceState.getString("taK") ?: "0:0"
-            daK = savedInstanceState.getString("daK") ?: "0.0.0"
-            binding.labelbutton12.text = savedInstanceState.getString("labelbutton12")
+            ta = instanceState.getString("ta") ?: "0:0"
+            da = instanceState.getString("da") ?: "0.0.0"
+            taK = instanceState.getString("taK") ?: "0:0"
+            daK = instanceState.getString("daK") ?: "0.0.0"
+            binding.labelbutton12.text = instanceState.getString("labelbutton12")
             binding.label1.text = da
             binding.label2.text = ta
             binding.label12.text = daK
@@ -695,7 +696,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         binding.label2.text = p.tim
         binding.label12.text = p.datK
         binding.label22.text = p.timK
-        if (p.sec == "-1") binding.editText2.setText("") else binding.editText2.setText(p.sec)
+        if (p.sec == "-1") binding.editText2.text?.clear()
+        else binding.editText2.setText(p.sec)
         binding.spinner3.setSelection(p.vybtime)
         binding.spinner4.setSelection(p.repit)
         binding.spinner5.setSelection(p.color)
@@ -1490,8 +1492,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                     }
                 }
                 adapter.updateList(MainActivity.padzeia)
-                binding.editText.setText("")
-                binding.editText2.setText("")
+                binding.editText.text?.clear()
+                binding.editText2.text?.clear()
                 MainActivity.toastView(this, getString(R.string.save))
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
@@ -2057,8 +2059,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                 }
             }
             adapter.updateList(MainActivity.padzeia)
-            binding.editText.setText("")
-            binding.editText2.setText("")
+            binding.editText.text?.clear()
+            binding.editText2.text?.clear()
             binding.spinner3.setSelection(0)
             binding.spinner4.setSelection(0)
             binding.spinner5.setSelection(0)
@@ -2099,8 +2101,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         var nol2 = ""
         if (c[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
         if (c[Calendar.MONTH] < 9) nol2 = "0"
-        binding.editText.setText("")
-        binding.editText2.setText("")
+        binding.editText.text?.clear()
+        binding.editText2.text?.clear()
         binding.spinner3.setSelection(0)
         binding.spinner4.setSelection(0)
         binding.spinner5.setSelection(0)
@@ -2259,8 +2261,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun saveStateActivity(outState: Bundle): Bundle {
         outState.putBoolean("redak", redak)
         outState.putBoolean("save", save)
         outState.putBoolean("titleLayout", binding.titleLayout.visibility == View.VISIBLE)
@@ -2272,6 +2273,12 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         outState.putString("SearchViewQwery", autoCompleteTextView?.text.toString())
         outState.putBoolean("actionExpandOn", actionExpandOn)
         outState.putString("labelbutton12", binding.labelbutton12.text.toString())
+        return super.saveStateActivity(outState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveStateActivity(outState)
     }
 
     private inner class SabytieAdapter(list: ArrayList<Padzeia>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<Padzeia, SabytieAdapter.ViewHolder>(), Filterable {

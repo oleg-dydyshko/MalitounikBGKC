@@ -100,7 +100,25 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        saveStateActivity(outState)
+    }
+
+    protected open fun saveStateActivity(outState: Bundle): Bundle {
         outState.putLong("mLastClickTime", mLastClickTime)
+        return outState
+    }
+
+    override fun recreate() {
+        val state = saveStateActivity(Bundle())
+        onBack()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(Activity.OVERRIDE_TRANSITION_OPEN, android.R.anim.fade_in, android.R.anim.fade_out)
+        } else {
+            @Suppress("DEPRECATION") overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+        val intent1 = intent
+        intent1.putExtra("bundle", state)
+        startActivity(intent1)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

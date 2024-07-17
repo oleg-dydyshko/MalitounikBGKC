@@ -63,7 +63,7 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         binding = GalleryBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -827,13 +827,13 @@ class Gallery : BaseActivity(), DialogOpisanieWIFI.DialogOpisanieWIFIListener, Z
         speedGallery = speed
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putBoolean("imageViewFullVisable", binding.imageViewFull.visibility == View.VISIBLE)
         outState.putString("textFull", binding.titleToolbar.text.toString())
         outState.putBoolean("isClosed", isClosed)
         outState.putBoolean("isAuto", isAuto)
         outState.putInt("speedGallery", speedGallery)
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -81,4 +81,12 @@
             android:text="@string/bsinaidal"
             android:textSize="14sp" />
     </RadioGroup>
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10sp"
+        android:text="@string/default_font"
+        android:textSize="14sp" />
 </LinearLayout>

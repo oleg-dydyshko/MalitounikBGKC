@@ -102,7 +102,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         chin = getSharedPreferences("biblia", MODE_PRIVATE)
         val dzenNoch = getBaseDzenNoch()
@@ -350,10 +350,10 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         }
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putString("SearchViewQwery", autoCompleteTextView?.text.toString())
         outState.putBoolean("actionExpandOn", actionExpandOn)
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

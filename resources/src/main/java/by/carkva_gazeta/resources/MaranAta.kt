@@ -261,7 +261,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         spid = k.getInt("autoscrollSpid", 60)
@@ -1899,7 +1899,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {
-            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = true, isNadsan = false, perevod = k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI)
+            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = true, isNadsan = false, perevod = k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI, false)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }
@@ -2035,14 +2035,14 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         binding.actionBack.animation = animation
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putString("tollBarText", binding.titleToolbar.text.toString())
         outState.putString("subTollBarText", binding.subtitleToolbar.text.toString())
         outState.putBoolean("paralel", paralel)
         outState.putInt("paralelPosition", paralelPosition)
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

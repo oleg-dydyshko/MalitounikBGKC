@@ -81,7 +81,7 @@ class Chytanne : ZmenyiaChastki() {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = AkafistChytanneBinding.inflate(layoutInflater)
@@ -296,9 +296,6 @@ class Chytanne : ZmenyiaChastki() {
     }
 
     override fun setPerevod(perevod: String) {
-        val edit = k.edit()
-        edit.putString("perevodChytanne", perevod)
-        edit.apply()
         if (this.perevod != perevod) {
             this.perevod = perevod
             setChtenia(null)
@@ -309,7 +306,7 @@ class Chytanne : ZmenyiaChastki() {
         try {
             val wOld = intent.extras?.getString("cytanne") ?: ""
             val ssb = StringBuilder()
-            val list = chtenia(wOld)
+            val list = chtenia(wOld, perevod)
             for (i in list.indices) {
                 ssb.append(list[i])
             }
@@ -598,7 +595,7 @@ class Chytanne : ZmenyiaChastki() {
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {
-            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = false, isNadsan = false, perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI)
+            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = false, isNadsan = false, perevod = perevod, isSave = true)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }
@@ -742,11 +739,11 @@ class Chytanne : ZmenyiaChastki() {
         }
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putString("textLine", firstTextPosition)
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

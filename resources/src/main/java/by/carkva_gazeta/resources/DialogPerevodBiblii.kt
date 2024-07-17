@@ -71,11 +71,13 @@ class DialogPerevodBiblii : DialogFragment() {
             val builder = AlertDialog.Builder(it, style)
             if (dzenNoch) binding.error.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             isSinoidal = arguments?.getBoolean("isSinoidal", true) ?: true
-            val perevod = arguments?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
+            var perevod = arguments?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
             val sinoidal = k.getInt("sinoidal", 0)
             if (sinoidal == 0 || !isSinoidal) binding.sinoidal.visibility = View.GONE
             val isNadsan = arguments?.getBoolean("isNadsan", false) ?: false
             if (!isNadsan) binding.nadsan.visibility = View.GONE
+            val isSave = arguments?.getBoolean("isSave", false) ?: false
+            if (!isSave) binding.checkbox.visibility = View.GONE
             when (perevod) {
                 DialogVybranoeBibleList.PEREVODSEMUXI -> {
                     binding.semuxa.isChecked = true
@@ -117,24 +119,32 @@ class DialogPerevodBiblii : DialogFragment() {
                 when (checkedId) {
                     R.id.semuxa -> {
                         mListener?.setPerevod(DialogVybranoeBibleList.PEREVODSEMUXI)
+                        perevod = DialogVybranoeBibleList.PEREVODSEMUXI
                     }
                     R.id.sinoidal -> {
                         mListener?.setPerevod(DialogVybranoeBibleList.PEREVODSINOIDAL)
                     }
                     R.id.bokuna -> {
                         mListener?.setPerevod(DialogVybranoeBibleList.PEREVODBOKUNA)
+                        perevod = DialogVybranoeBibleList.PEREVODBOKUNA
                     }
                     R.id.nadsan -> {
                         mListener?.setPerevod(DialogVybranoeBibleList.PEREVODNADSAN)
                     }
                     R.id.carniauski -> {
                         mListener?.setPerevod(DialogVybranoeBibleList.PEREVODCARNIAUSKI)
+                        perevod = DialogVybranoeBibleList.PEREVODCARNIAUSKI
                     }
                 }
             }
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.perevod)
             builder.setView(binding.root)
             builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.ok)) { dialog: DialogInterface, _: Int ->
+                if (binding.checkbox.isChecked) {
+                    val prefEditor = k.edit()
+                    prefEditor.putString("perevodChytanne", perevod)
+                    prefEditor.apply()
+                }
                 dialog.cancel()
             }
             alert = builder.create()
@@ -143,12 +153,13 @@ class DialogPerevodBiblii : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(isSinoidal: Boolean, isNadsan: Boolean, perevod: String): DialogPerevodBiblii {
+        fun getInstance(isSinoidal: Boolean, isNadsan: Boolean, perevod: String, isSave: Boolean): DialogPerevodBiblii {
             val dialogPerevodBiblii = DialogPerevodBiblii()
             val bundle = Bundle()
             bundle.putBoolean("isSinoidal", isSinoidal)
             bundle.putBoolean("isNadsan", isNadsan)
             bundle.putString("perevod", perevod)
+            bundle.putBoolean("isSave", isSave)
             dialogPerevodBiblii.arguments = bundle
             return dialogPerevodBiblii
         }

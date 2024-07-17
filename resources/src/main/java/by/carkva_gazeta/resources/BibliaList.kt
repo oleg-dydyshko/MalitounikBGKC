@@ -182,11 +182,11 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
         resetTollbarJob?.cancel()
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putString("perevod", perevod)
         outState.putInt("kniga", kniga)
         outState.putBoolean("novyZapavet", novyZapavet)
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -228,7 +228,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)

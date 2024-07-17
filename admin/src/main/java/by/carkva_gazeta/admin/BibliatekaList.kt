@@ -94,12 +94,12 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
         sqlJob?.cancel()
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putBoolean("editVisibility", binding.edit.visibility == View.VISIBLE)
         outState.putString("pdfTextView", binding.pdfTextView.text.toString())
         outState.putParcelable("BitmapImage", binding.imagePdf.drawable?.toBitmap())
         outState.putInt("position", position)
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -344,7 +344,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         width = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val display = windowManager.currentWindowMetrics

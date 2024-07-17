@@ -103,22 +103,22 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         saveStateActivity(outState)
     }
 
-    protected open fun saveStateActivity(outState: Bundle): Bundle {
+    protected open fun saveStateActivity(outState: Bundle) {
         outState.putLong("mLastClickTime", mLastClickTime)
-        return outState
     }
 
+    fun getStateActivity() = bundle
+
     override fun recreate() {
-        val state = saveStateActivity(Bundle())
-        onBack()
+        bundle = Bundle()
+        saveStateActivity(bundle ?: Bundle())
+        finish()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             overrideActivityTransition(Activity.OVERRIDE_TRANSITION_OPEN, android.R.anim.fade_in, android.R.anim.fade_out)
         } else {
             @Suppress("DEPRECATION") overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
-        val intent1 = intent
-        intent1.putExtra("bundle", state)
-        startActivity(intent1)
+        startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,8 +136,9 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
             startTimeDelay = 5000
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (savedInstanceState != null) {
-            mLastClickTime = savedInstanceState.getLong("mLastClickTime")
+        val instanceState = savedInstanceState ?: getStateActivity()
+        if (instanceState != null) {
+            mLastClickTime = instanceState.getLong("mLastClickTime")
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
         checkDzenNoch = getBaseDzenNoch()
@@ -206,11 +207,14 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     override fun onResume() {
         super.onResume()
+        bundle = null
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (k.getBoolean("auto_dzen_noch", false)) {
             setlightSensor()
         }
-        if (checkDzenNoch != getBaseDzenNoch()) recreate()
+        if (checkDzenNoch != getBaseDzenNoch()) {
+            recreate()
+        }
         if (Build.VERSION.SDK_INT >= 34) {
             overrideActivityTransition(Activity.OVERRIDE_TRANSITION_OPEN, R.anim.alphain, R.anim.alphaout)
         } else {
@@ -278,7 +282,9 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
             prefEditor.putBoolean("dzen_noch", isDzenNoch)
             prefEditor.apply()
         }
-        recreate()
+        if (checkDzenNoch != isDzenNoch) {
+            recreate()
+        }
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -407,5 +413,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     companion object {
         private var sessionId = 0
+        private var bundle: Bundle? = null
     }
 }

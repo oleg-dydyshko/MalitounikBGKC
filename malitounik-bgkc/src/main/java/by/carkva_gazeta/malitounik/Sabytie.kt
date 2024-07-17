@@ -344,7 +344,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = SabytieBinding.inflate(layoutInflater)
@@ -2261,7 +2261,8 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         }
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putBoolean("redak", redak)
         outState.putBoolean("save", save)
         outState.putBoolean("titleLayout", binding.titleLayout.visibility == View.VISIBLE)
@@ -2273,7 +2274,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         outState.putString("SearchViewQwery", autoCompleteTextView?.text.toString())
         outState.putBoolean("actionExpandOn", actionExpandOn)
         outState.putString("labelbutton12", binding.labelbutton12.text.toString())
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

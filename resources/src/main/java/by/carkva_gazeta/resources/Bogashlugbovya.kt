@@ -122,6 +122,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     private var startSearchString = ""
     private var liturgia = false
     private var isLoaded = false
+    private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
@@ -410,12 +411,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     }
 
     override fun setPerevod(perevod: String) {
-        val edit = k.edit()
-        val oldPerevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI)
-        edit.putString("perevodChytanne", perevod)
-        edit.apply()
-        if (oldPerevod != perevod) {
-            loadData(saveStateActivity(Bundle()))
+        if (this.perevod != perevod) {
+            loadData(getStateActivity())
         }
     }
 
@@ -489,7 +486,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = BogasluzbovyaBinding.inflate(layoutInflater)
@@ -505,6 +502,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
         if (instanceState != null) {
+            perevod = instanceState.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
             mAutoScroll = instanceState.getBoolean("mAutoScroll")
             fullscreenPage = instanceState.getBoolean("fullscreen")
             orientation = instanceState.getInt("orientation")
@@ -521,6 +519,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             }
             startSearchString = instanceState.getString("startSearchString", "")
         } else {
+            perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
             startSearchString = intent.extras?.getString("search", "") ?: ""
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             vybranoePosition = intent.extras?.getInt("vybranaePos", -1) ?: -1
@@ -1838,7 +1837,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {
-            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = false, isNadsan = false, perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI)
+            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = false, isNadsan = false, perevod = perevod, isSave = true)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }
@@ -2126,7 +2125,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         binding.actionBack.animation = animation
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
@@ -2137,7 +2137,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         outState.putInt("vybranoePosition", vybranoePosition)
         outState.putBoolean("mAutoScroll", mAutoScroll)
         outState.putString("startSearchString", startSearchString)
-        return super.saveStateActivity(outState)
+        outState.putString("perevod", perevod)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

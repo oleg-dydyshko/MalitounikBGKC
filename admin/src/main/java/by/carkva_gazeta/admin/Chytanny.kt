@@ -159,7 +159,7 @@ class Chytanny : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         binding = AdminChytannyBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -325,9 +325,9 @@ class Chytanny : BaseActivity() {
         super.onCreateMenu(menu, menuInflater)
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putBoolean("isError", isError)
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

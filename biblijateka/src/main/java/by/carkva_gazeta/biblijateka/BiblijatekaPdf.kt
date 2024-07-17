@@ -51,7 +51,7 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         binding = BiblijatekaPdfBinding.inflate(layoutInflater)
         try {
@@ -280,13 +280,13 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         prefEditor.apply()
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         val prefEditor = k.edit()
         prefEditor.putInt(fileName, pdfView.currentPage)
         prefEditor.apply()
         outState.putString("filePath", filePath)
         outState.putString("fileName", fileName)
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

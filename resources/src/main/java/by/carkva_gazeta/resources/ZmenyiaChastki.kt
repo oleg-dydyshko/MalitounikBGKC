@@ -1,6 +1,5 @@
 package by.carkva_gazeta.resources
 
-import android.content.Context
 import android.view.View
 import androidx.core.text.isDigitsOnly
 import by.carkva_gazeta.malitounik.BaseActivity
@@ -126,7 +125,7 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFont
         val data = sviatyia()
         val chtenie = if (apostal == 1) 0 else 1
         return if (data == "" || data.contains(resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
-        else chtenia(data)[chtenie]
+        else chtenia(data, perevod)[chtenie]
     }
 
     fun zmenya(apostal: Int): String {
@@ -134,7 +133,7 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFont
         var chtenie = if (apostal == 1) 0 else 1
         if (arrayData[0][9].contains("На ютрані")) chtenie++
         return if (data == "" || data.contains(resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
-        else chtenia(data)[chtenie]
+        else chtenia(data, perevod)[chtenie]
     }
 
     fun setArrayData(arrayList: ArrayList<ArrayList<String>>) {
@@ -477,9 +476,8 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFont
         return indexListBible
     }
 
-    fun chtenia(w: String): ArrayList<String> {
-        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
+    fun chtenia(w: String, perevod: String): ArrayList<String> {
+        this.perevod = perevod
         var w1 = w
         w1 = w1.replace("\n", ";")
         w1 = MainActivity.removeZnakiAndSlovy(w1)
@@ -556,7 +554,7 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFont
                 }
                 var indexBiblii = findIndex(zagl)
                 if (indexBiblii == -1) {
-                    perevod = DialogVybranoeBibleList.PEREVODCARNIAUSKI
+                    this.perevod = DialogVybranoeBibleList.PEREVODCARNIAUSKI
                     indexBiblii = findIndex(zagl)
                 }
                 val inputStream = getInputStream(novyZapavet, indexBiblii)
@@ -637,7 +635,7 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFont
                     if (t1 != -1) result2 = result2.substring(0, t3 + 1) + "<s>" + result2.substring(t3 + 1, t1 + 1) + "</s>" + result2.substring(t1 + 1, result2.length)
                 }
                 result = result2
-                perevod = perevodSave
+                this.perevod = perevodSave
             }
             list.add(setIndexBiblii("$result<br>"))
         }

@@ -91,7 +91,7 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = CalendarBinding.inflate(layoutInflater)
@@ -179,14 +179,14 @@ class CaliandarMun : BaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, 
         return false
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putInt("day", day1)
         outState.putInt("mun", posMun1)
         outState.putInt("year", yearG1)
         outState.putInt("day2", day2)
         outState.putInt("mun2", posMun2)
         outState.putInt("year2", yearG1)
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

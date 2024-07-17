@@ -84,7 +84,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         prefEditors = chin.edit()
@@ -388,12 +388,13 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
         historyAdapter.notifyDataSetChanged()
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putBoolean("list_view", binding.ListView.visibility == View.VISIBLE)
         outState.putInt("fierstPosition", fierstPosition)
         prefEditors.putString("search_bogashugbovya_string", autoCompleteTextView?.text.toString())
         prefEditors.apply()
-        return super.saveStateActivity(outState)
+        return
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

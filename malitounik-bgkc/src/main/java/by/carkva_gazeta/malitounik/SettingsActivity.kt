@@ -777,10 +777,10 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         super.onBack()
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putBoolean("edit", edit)
         outState.putBoolean("editFull", editFull)
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -789,7 +789,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         var notification = k.getInt("notification", NOTIFICATION_SVIATY_FULL)
@@ -1189,8 +1189,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 prefEditor.putInt("sinoidal", 1)
             } else {
                 prefEditor.putInt("sinoidal", 0)
-                val perevod = k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
-                if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+                val perevodMaranAta = k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+                if (perevodMaranAta == DialogVybranoeBibleList.PEREVODSINOIDAL) prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
             }
             prefEditor.apply()
             if (check != k.getInt("sinoidal", 0)) editFull = true

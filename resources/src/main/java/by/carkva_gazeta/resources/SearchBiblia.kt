@@ -201,7 +201,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         prefEditors = chin.edit()
@@ -595,14 +595,14 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         historyAdapter.notifyDataSetChanged()
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putBoolean("list_view", binding.ListView.visibility == View.VISIBLE)
         outState.putInt("fierstPosition", fierstPosition)
         autoCompleteTextView?.let {
             prefEditors.putString("search_string", it.text.toString())
             prefEditors.apply()
         }
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

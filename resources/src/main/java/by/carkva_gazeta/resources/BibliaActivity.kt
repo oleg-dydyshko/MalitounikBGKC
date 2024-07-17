@@ -242,7 +242,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: intent?.extras?.getBundle("bundle")
+        val instanceState = savedInstanceState ?: getStateActivity()
         super.onCreate(instanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = ActivityBibleBinding.inflate(layoutInflater)
@@ -384,7 +384,8 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         binding.subtitleToolbar.isSingleLine = true
     }
 
-    override fun saveStateActivity(outState: Bundle): Bundle {
+    override fun saveStateActivity(outState: Bundle) {
+        super.saveStateActivity(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("dialog", dialog)
         outState.putBoolean("paralel", paralel)
@@ -395,7 +396,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         outState.putInt("kniga", kniga)
         outState.putInt("glava", glava)
         outState.putBoolean("novyZapavet", novyZapavet)
-        return super.saveStateActivity(outState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -621,7 +621,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             val list = getSpisKnig(false)[kniga]
             val t1 = list.indexOf("#")
             val t2 = list.indexOf("#", t1 + 1)
-            val dialog = DialogPerevodBiblii.getInstance(true, list.substring(t2 + 1).toInt() == 21, perevod)
+            val dialog = DialogPerevodBiblii.getInstance(true, list.substring(t2 + 1).toInt() == 21, perevod, false)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }

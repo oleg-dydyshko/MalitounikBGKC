@@ -247,7 +247,7 @@ class MenuSviaty : BaseListFragment() {
             prazdnik.clear()
             c.set(yearG, monthP - 1, dataP)
             c.add(Calendar.DATE, -57)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -4, "Мясапусная бацькоўская субота", c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -4, "Мясапусная задушная субота", c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, monthP - 1, dataP)
             c.add(Calendar.DATE, -50)
             prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 4, "Успамін усіх сьвятых айцоў, манахаў і посьнікаў", c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))

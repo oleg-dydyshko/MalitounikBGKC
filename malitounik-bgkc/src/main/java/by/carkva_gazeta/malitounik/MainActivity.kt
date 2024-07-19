@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.database.Cursor
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.hardware.SensorEvent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -365,6 +366,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
 
     /*override fun onSensorChanged(event: SensorEvent?) {
+        super.onSensorChanged(event)
         event?.let { sensorEvent ->
             bindingappbar.titleToolbar.text = sensorEvent.values[0].toString()
         }

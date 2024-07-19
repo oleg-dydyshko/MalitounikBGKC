@@ -178,6 +178,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                     intent.setClassName(activity, MainActivity.MARANATA)
                     intent.putExtra("cytanneMaranaty", biblia())
                     intent.putExtra("prodoljyt", true)
+                    intent.putExtra("perevod", perevod)
                     intent.putExtra("vybranae", true)
                     startActivity(intent)
                 } else {
@@ -361,6 +362,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.MARANATA)
                         intent.putExtra("cytanneMaranaty", biblia())
+                        intent.putExtra("perevod", perevod)
                         intent.putExtra("vybranae", true)
                         intent.putExtra("title", mItemList[bindingAdapterPosition].title)
                         startActivity(intent)
@@ -390,7 +392,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
         const val PEREVODBOKUNA = "4"
         const val PEREVODCARNIAUSKI = "5"
         var arrayListVybranoe = ArrayList<VybranoeBibliaData>()
-        var perevod = PEREVODSEMUXI
+        private var perevod = PEREVODSEMUXI
 
         fun checkVybranoe(kniga: Int, glava: Int, perevod: String): Boolean {
             val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)

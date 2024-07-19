@@ -306,10 +306,12 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 val lists = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxas)
                 val listn = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.semuxan)
                 for (i in lists.indices) {
-                    if (strText.contains(lists[i])) nazvaS = i
+                    val t4 = lists[i].indexOf("#")
+                    if (strText.contains(lists[i].substring(0, t4))) nazvaS = i
                 }
                 for (i in listn.indices) {
-                    if (strText.contains(listn[i])) nazva = i
+                    val t4 = listn[i].indexOf("#")
+                    if (strText.contains(listn[i].substring(0, t4))) nazva = i
                 }
             }
             if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) {
@@ -328,20 +330,24 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
                 val lists = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunas)
                 val listn = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.bokunan)
                 for (i in lists.indices) {
-                    if (strText.contains(lists[i])) nazvaS = i
+                    val t4 = lists[i].indexOf("#")
+                    if (strText.contains(lists[i].substring(0, t4))) nazvaS = i
                 }
                 for (i in listn.indices) {
-                    if (strText.contains(listn[i])) nazva = i
+                    val t4 = listn[i].indexOf("#")
+                    if (strText.contains(listn[i].substring(0, t4))) nazva = i
                 }
             }
             if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
                 val lists = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskis)
                 val listn = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.charniauskin)
                 for (i in lists.indices) {
-                    if (strText.contains(lists[i])) nazvaS = i
+                    val t4 = lists[i].indexOf("#")
+                    if (strText.contains(lists[i].substring(0, t4))) nazvaS = i
                 }
                 for (i in listn.indices) {
-                    if (strText.contains(listn[i])) nazva = i
+                    val t4 = listn[i].indexOf("#")
+                    if (strText.contains(listn[i].substring(0, t4))) nazva = i
                 }
             }
             val str1 = strText.indexOf("glava.")

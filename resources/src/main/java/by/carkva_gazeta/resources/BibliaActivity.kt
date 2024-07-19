@@ -621,7 +621,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             val list = getSpisKnig(false)[kniga]
             val t1 = list.indexOf("#")
             val t2 = list.indexOf("#", t1 + 1)
-            val dialog = DialogPerevodBiblii.getInstance(true, list.substring(t2 + 1).toInt() == 21, perevod, false)
+            val dialog = DialogPerevodBiblii.getInstance(true, list.substring(t2 + 1).toInt() == 21, perevod)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }

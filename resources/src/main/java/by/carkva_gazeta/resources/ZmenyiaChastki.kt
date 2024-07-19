@@ -128,7 +128,8 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFont
         else chtenia(data, perevod)[chtenie]
     }
 
-    fun zmenya(apostal: Int): String {
+    fun zmenya(apostal: Int, perevod: String): String {
+        this.perevod = perevod
         val data = arrayData[0][9]
         var chtenie = if (apostal == 1) 0 else 1
         if (arrayData[0][9].contains("На ютрані")) chtenie++

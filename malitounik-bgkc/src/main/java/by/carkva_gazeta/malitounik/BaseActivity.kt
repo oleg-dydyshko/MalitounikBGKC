@@ -38,7 +38,6 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Calendar
@@ -48,12 +47,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var checkDzenNoch = false
-    private var mLastClickTime: Long = 0
-    private var startTimeJob1: Job? = null
-    private var startTimeJob2: Job? = null
-    private var startTimeJob3: Job? = null
-    private var startTimeJob4: Job? = null
-    private var startTimeDelay: Long = 5000
+    private var startTimeJob: Job? = null
     private var downloadDynamicModuleListener: DownloadDynamicModuleListener? = null
 
     interface DownloadDynamicModuleListener {
@@ -104,7 +98,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     }
 
     protected open fun saveStateActivity(outState: Bundle) {
-        outState.putLong("mLastClickTime", mLastClickTime)
     }
 
     fun getStateActivity() = bundle
@@ -129,17 +122,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                 onBack()
             }
         })
-        startTimeDelay = 0
-        startTimeJob3?.cancel()
-        startTimeJob3 = CoroutineScope(Dispatchers.IO).launch {
-            delay(4000)
-            startTimeDelay = 5000
-        }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val instanceState = savedInstanceState ?: getStateActivity()
-        if (instanceState != null) {
-            mLastClickTime = instanceState.getLong("mLastClickTime")
-        }
         dzenNoch = k.getBoolean("dzen_noch", false)
         checkDzenNoch = getBaseDzenNoch()
         setMyTheme()
@@ -198,10 +181,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     override fun onPause() {
         super.onPause()
-        startTimeJob1?.cancel()
-        startTimeJob2?.cancel()
-        startTimeJob3?.cancel()
-        startTimeJob4?.cancel()
+        startTimeJob?.cancel()
+        isActiveJob = false
         removelightSensor()
     }
 
@@ -229,17 +210,16 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     }
 
     private fun sensorChangeDzenNoch(sensorValue: Float) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 10000) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 6000) {
             return
         }
         when {
             sensorValue <= 4f -> {
                 if (!dzenNoch) {
-                    startTimeJob2?.cancel()
-                    startTimeJob4?.cancel()
-                    if (startTimeJob1?.isActive != true) {
-                        startTimeJob1 = CoroutineScope(Dispatchers.Main).launch {
-                            delay(startTimeDelay)
+                    if (!isActiveJob) {
+                        isActiveJob = true
+                        startTimeJob?.cancel()
+                        startTimeJob = CoroutineScope(Dispatchers.Main).launch {
                             timeJob(true)
                         }
                     }
@@ -248,11 +228,10 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
             sensorValue >= 21f -> {
                 if (dzenNoch) {
-                    startTimeJob1?.cancel()
-                    startTimeJob4?.cancel()
-                    if (startTimeJob2?.isActive != true) {
-                        startTimeJob2 = CoroutineScope(Dispatchers.Main).launch {
-                            delay(startTimeDelay)
+                    if (!isActiveJob) {
+                        isActiveJob = true
+                        startTimeJob?.cancel()
+                        startTimeJob = CoroutineScope(Dispatchers.Main).launch {
                             timeJob(false)
                         }
                     }
@@ -261,10 +240,10 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
             else -> {
                 if (dzenNoch != checkDzenNoch) {
-                    startTimeJob2?.cancel()
-                    startTimeJob1?.cancel()
-                    if (startTimeJob4?.isActive != true) {
-                        startTimeJob4 = CoroutineScope(Dispatchers.Main).launch {
+                    if (!isActiveJob) {
+                        isActiveJob = true
+                        startTimeJob?.cancel()
+                        startTimeJob = CoroutineScope(Dispatchers.Main).launch {
                             timeJob(!dzenNoch)
                         }
                     }
@@ -274,8 +253,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     }
 
     private fun timeJob(isDzenNoch: Boolean) {
-        startTimeDelay = 5000
-        mLastClickTime = SystemClock.elapsedRealtime()
         dzenNoch = isDzenNoch
         if (k.getBoolean("auto_dzen_noch", false)) {
             val prefEditor = k.edit()
@@ -285,6 +262,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         if (checkDzenNoch != isDzenNoch) {
             recreate()
         }
+        isActiveJob = false
+        mLastClickTime = SystemClock.elapsedRealtime()
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -413,6 +392,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     companion object {
         private var sessionId = 0
+        private var mLastClickTime: Long = 0
         private var bundle: Bundle? = null
+        private var isActiveJob = false
     }
 }

@@ -411,8 +411,18 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     }
 
     override fun setPerevod(perevod: String) {
-        if (this.perevod != perevod) {
+        val edit = k.edit()
+        val oldPerevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI)
+        edit.putString("perevodChytanne", perevod)
+        edit.apply()
+        if (oldPerevod != perevod) {
+            this.perevod = perevod
             loadData(getStateActivity())
+            binding.textView.layout?.let { layout ->
+                val line = layout.getLineForOffset(firstTextPosition)
+                val y = layout.getLineTop(line)
+                binding.scrollView2.scrollTo(0, y)
+            }
         }
     }
 
@@ -870,7 +880,13 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                                     builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
                                 } else builder.append(line)
                                 try {
-                                    builder.append(zmenya(1))
+                                    val textPerevod = when (perevod) {
+                                        DialogVybranoeBibleList.PEREVODSEMUXI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
+                                        DialogVybranoeBibleList.PEREVODBOKUNA -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_bokun2)
+                                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_charniauski2)
+                                        else -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
+                                    }
+                                    builder.append("<em>").append(textPerevod).append("</em><br>\n").append(zmenya(1, perevod))
                                 } catch (t: Throwable) {
                                     builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br><br>\n")
                                 }
@@ -891,7 +907,13 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                                     builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
                                 } else builder.append(line)
                                 try {
-                                    builder.append(zmenya(0))
+                                    val textPerevod = when (perevod) {
+                                        DialogVybranoeBibleList.PEREVODSEMUXI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
+                                        DialogVybranoeBibleList.PEREVODBOKUNA -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_bokun2)
+                                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_charniauski2)
+                                        else -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
+                                    }
+                                    builder.append("<em>").append(textPerevod).append("</em><br>\n").append(zmenya(0, perevod))
                                 } catch (t: Throwable) {
                                     builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                                 }
@@ -1837,7 +1859,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {
-            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = false, isNadsan = false, perevod = perevod, isSave = true)
+            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = false, isNadsan = false, perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }

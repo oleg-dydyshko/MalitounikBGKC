@@ -102,6 +102,13 @@ class Chytanne : ZmenyiaChastki() {
                 autoStartScroll()
             }
         }
+        perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
+        binding.subtitleToolbar.text = when (perevod) {
+            DialogVybranoeBibleList.PEREVODSEMUXI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
+            DialogVybranoeBibleList.PEREVODBOKUNA -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_bokun2)
+            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_charniauski2)
+            else -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
+        }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         binding.constraint.setOnTouchListener(this)
@@ -200,27 +207,35 @@ class Chytanne : ZmenyiaChastki() {
 
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
-            val layoutParams = binding.toolbar.layoutParams
-            if (binding.titleToolbar.isSelected) {
-                resetTollbarJob?.cancel()
-                resetTollbar(layoutParams)
-            } else {
-                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                binding.titleToolbar.isSingleLine = false
-                binding.titleToolbar.isSelected = true
-                resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
-                    delay(5000)
-                    resetTollbar(layoutParams)
-                    TransitionManager.beginDelayedTransition(binding.toolbar)
-                }
-            }
-            TransitionManager.beginDelayedTransition(binding.toolbar)
+            fullTextTollbar()
+        }
+        binding.subtitleToolbar.setOnClickListener {
+            fullTextTollbar()
         }
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
+    }
+
+    private fun fullTextTollbar() {
+        val layoutParams = binding.toolbar.layoutParams
+        resetTollbarJob?.cancel()
+        if (binding.titleToolbar.isSelected) {
+            resetTollbar(layoutParams)
+        } else {
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            binding.titleToolbar.isSingleLine = false
+            binding.subtitleToolbar.isSingleLine = false
+            binding.titleToolbar.isSelected = true
+            resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(5000)
+                resetTollbar(layoutParams)
+                TransitionManager.beginDelayedTransition(binding.toolbar)
+            }
+        }
+        TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
@@ -296,8 +311,17 @@ class Chytanne : ZmenyiaChastki() {
     }
 
     override fun setPerevod(perevod: String) {
+        val edit = k.edit()
+        edit.putString("perevodChytanne", perevod)
+        edit.apply()
         if (this.perevod != perevod) {
             this.perevod = perevod
+            binding.subtitleToolbar.text = when (perevod) {
+                DialogVybranoeBibleList.PEREVODSEMUXI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
+                DialogVybranoeBibleList.PEREVODBOKUNA -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_bokun2)
+                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_charniauski2)
+                else -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
+            }
             setChtenia(null)
         }
     }
@@ -595,7 +619,7 @@ class Chytanne : ZmenyiaChastki() {
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {
-            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = false, isNadsan = false, perevod = perevod, isSave = true)
+            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = false, isNadsan = false, perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }

@@ -22,6 +22,7 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -417,12 +418,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         edit.apply()
         if (oldPerevod != perevod) {
             this.perevod = perevod
+            saveStateActivity(Bundle())
             loadData(getStateActivity())
-            binding.textView.layout?.let { layout ->
-                val line = layout.getLineForOffset(firstTextPosition)
-                val y = layout.getLineTop(line)
-                binding.scrollView2.scrollTo(0, y)
-            }
         }
     }
 
@@ -450,6 +447,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         setMovementMethodscrollY()
         binding.textView.layout?.let { layout ->
             firstTextPosition = layout.getLineStart(layout.getLineForVertical(positionY))
+            Log.d("Oleg2", "$firstTextPosition +++")
             if (binding.find.visibility == View.VISIBLE && !animatopRun) {
                 if (findListSpans.isNotEmpty()) {
                     val text = binding.textView.text as SpannableString
@@ -1437,7 +1435,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         positionY = k.getInt(resurs + "Scroll", 0)
         binding.scrollView2.post {
             if (savedInstanceState != null) {
-                val firstTextPosition = savedInstanceState.getInt("firstTextPosition", 0)
+                firstTextPosition = savedInstanceState.getInt("firstTextPosition", 0)
                 binding.textView.layout?.let { layout ->
                     val line = layout.getLineForOffset(firstTextPosition)
                     val y = layout.getLineTop(line)
@@ -1478,7 +1476,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                         true
                     }
                     invalidateOptionsMenu()
-                    binding.scrollView2.scrollBy(0, positionY)
+                    binding.scrollView2.scrollTo(0, positionY)
                     if (((k.getBoolean("autoscrollAutostart", false) && mAutoScroll) || autoscroll) && !diffScroll) {
                         autoStartScroll()
                     }
@@ -2073,9 +2071,13 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     override fun onPause() {
         super.onPause()
-        val prefEditor = k.edit()
-        prefEditor.putInt(resurs + "Scroll", positionY)
-        prefEditor.apply()
+        binding.textView.layout?.let { layout ->
+            val line = layout.getLineForOffset(firstTextPosition)
+            val y = layout.getLineTop(line)
+            val prefEditor = k.edit()
+            prefEditor.putInt(resurs + "Scroll", y)
+            prefEditor.apply()
+        }
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         autoStartScrollJob?.cancel()
     }

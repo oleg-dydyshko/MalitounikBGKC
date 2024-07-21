@@ -98,13 +98,13 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     }
 
     protected open fun saveStateActivity(outState: Bundle) {
+        bundle = outState
     }
 
-    fun getStateActivity() = bundle
+    protected fun getStateActivity() = bundle
 
     override fun recreate() {
-        bundle = Bundle()
-        saveStateActivity(bundle ?: Bundle())
+        saveStateActivity(Bundle())
         finish()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             overrideActivityTransition(Activity.OVERRIDE_TRANSITION_OPEN, android.R.anim.fade_in, android.R.anim.fade_out)
@@ -216,54 +216,42 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         when {
             sensorValue <= 4f -> {
                 if (!dzenNoch) {
-                    if (!isActiveJob) {
-                        isActiveJob = true
-                        startTimeJob?.cancel()
-                        startTimeJob = CoroutineScope(Dispatchers.Main).launch {
-                            timeJob(true)
-                        }
-                    }
+                    timeJob(true)
                 }
             }
 
             sensorValue >= 21f -> {
                 if (dzenNoch) {
-                    if (!isActiveJob) {
-                        isActiveJob = true
-                        startTimeJob?.cancel()
-                        startTimeJob = CoroutineScope(Dispatchers.Main).launch {
-                            timeJob(false)
-                        }
-                    }
+                    timeJob(false)
                 }
             }
 
             else -> {
                 if (dzenNoch != checkDzenNoch) {
-                    if (!isActiveJob) {
-                        isActiveJob = true
-                        startTimeJob?.cancel()
-                        startTimeJob = CoroutineScope(Dispatchers.Main).launch {
-                            timeJob(!dzenNoch)
-                        }
-                    }
+                    timeJob(!dzenNoch)
                 }
             }
         }
     }
 
     private fun timeJob(isDzenNoch: Boolean) {
-        dzenNoch = isDzenNoch
-        if (k.getBoolean("auto_dzen_noch", false)) {
-            val prefEditor = k.edit()
-            prefEditor.putBoolean("dzen_noch", isDzenNoch)
-            prefEditor.apply()
+        if (!isActiveJob) {
+            isActiveJob = true
+            startTimeJob?.cancel()
+            startTimeJob = CoroutineScope(Dispatchers.Main).launch {
+                dzenNoch = isDzenNoch
+                if (k.getBoolean("auto_dzen_noch", false)) {
+                    val prefEditor = k.edit()
+                    prefEditor.putBoolean("dzen_noch", isDzenNoch)
+                    prefEditor.apply()
+                }
+                if (checkDzenNoch != isDzenNoch) {
+                    recreate()
+                }
+                isActiveJob = false
+                mLastClickTime = SystemClock.elapsedRealtime()
+            }
         }
-        if (checkDzenNoch != isDzenNoch) {
-            recreate()
-        }
-        isActiveJob = false
-        mLastClickTime = SystemClock.elapsedRealtime()
     }
 
     override fun onSensorChanged(event: SensorEvent?) {

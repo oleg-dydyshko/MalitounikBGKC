@@ -807,7 +807,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         edit.apply()
         if (this.perevod != perevod) {
             this.perevod = perevod
-            setMaranata(orientation, null)
+            saveStateActivity(Bundle())
+            setMaranata(orientation, getStateActivity())
         }
     }
 

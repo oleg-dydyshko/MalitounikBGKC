@@ -562,7 +562,7 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFont
                 val title = if (e == 0) {
                     val spis = getSpisKnig(novyZapavet)[indexBiblii]
                     val t1 = spis.indexOf("#")
-                    spis.substring(0, t1) + " $zaglavieName"
+                    spis.substring(0, t1) + zaglavieName
                 } else {
                     "[&#8230;]"
                 }

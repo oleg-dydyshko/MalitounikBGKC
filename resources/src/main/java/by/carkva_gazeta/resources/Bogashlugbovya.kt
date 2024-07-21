@@ -22,7 +22,6 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -447,7 +446,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         setMovementMethodscrollY()
         binding.textView.layout?.let { layout ->
             firstTextPosition = layout.getLineStart(layout.getLineForVertical(positionY))
-            Log.d("Oleg2", "$firstTextPosition +++")
             if (binding.find.visibility == View.VISIBLE && !animatopRun) {
                 if (findListSpans.isNotEmpty()) {
                     val text = binding.textView.text as SpannableString

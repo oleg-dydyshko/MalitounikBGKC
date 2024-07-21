@@ -66,8 +66,8 @@ class Chytanne : ZmenyiaChastki() {
     private var resetTollbarJob: Job? = null
     private var resetScreenJob: Job? = null
     private var diffScroll = false
-    private var titleTwo = SpannableString("")
-    private var firstTextPosition = ""
+    private var titleTwo = ""
+    private var firstTextPosition = 0
     private var orientation = Configuration.ORIENTATION_UNDEFINED
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
     private var mun = 0
@@ -322,7 +322,8 @@ class Chytanne : ZmenyiaChastki() {
                 DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_charniauski2)
                 else -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
             }
-            setChtenia(null)
+            saveStateActivity(Bundle())
+            setChtenia(getStateActivity())
         }
     }
 
@@ -333,6 +334,11 @@ class Chytanne : ZmenyiaChastki() {
             val list = chtenia(wOld, perevod)
             for (i in list.indices) {
                 ssb.append(list[i])
+                if (i == 1) {
+                    val t1 = list[i].indexOf("<strong>")
+                    val t2 = list[i].indexOf("</strong>")
+                    titleTwo = list[i].substring(t1 + 8, t2)
+                }
             }
             binding.textView.text = trimSpannable(SpannableStringBuilder(MainActivity.fromHtml(ssb.toString())))
             binding.textView.movementMethod = setLinkMovementMethodCheck()
@@ -340,7 +346,7 @@ class Chytanne : ZmenyiaChastki() {
             if (k.getBoolean("utran", true) && wOld.contains("На ютрані:") && savedInstanceState == null) {
                 binding.textView.post {
                     binding.textView.layout?.let { layout ->
-                        val strPosition = binding.textView.text.indexOf(titleTwo.toString().trim(), ignoreCase = true)
+                        val strPosition = binding.textView.text.indexOf(titleTwo, ignoreCase = true)
                         val line = layout.getLineForOffset(strPosition)
                         val y = layout.getLineTop(line)
                         val anim = ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", binding.InteractiveScroll.scrollY, y)
@@ -350,14 +356,11 @@ class Chytanne : ZmenyiaChastki() {
             }
             if (savedInstanceState != null) {
                 binding.textView.post {
-                    val textline = savedInstanceState.getString("textLine", "")
-                    if (textline != "") {
-                        binding.textView.layout?.let { layout ->
-                            val index = binding.textView.text.indexOf(textline)
-                            val line = layout.getLineForOffset(index)
-                            val y = layout.getLineTop(line)
-                            binding.InteractiveScroll.scrollY = y
-                        }
+                    val textline = savedInstanceState.getInt("textLine", 0)
+                    binding.textView.layout?.let { layout ->
+                        val line = layout.getLineForOffset(textline)
+                        val y = layout.getLineTop(line)
+                        binding.InteractiveScroll.scrollY = y
                     }
                 }
             }
@@ -757,9 +760,8 @@ class Chytanne : ZmenyiaChastki() {
     }
 
     override fun onScroll(t: Int, oldt: Int) {
-        binding.textView.layout?.let {
-            val textForVertical = binding.textView.text.substring(it.getLineStart(it.getLineForVertical(t)), it.getLineEnd(it.getLineForVertical(t))).trim()
-            if (textForVertical != "") firstTextPosition = textForVertical
+        binding.textView.layout?.let { layout ->
+            firstTextPosition = layout.getLineStart(layout.getLineForVertical(t))
         }
     }
 
@@ -767,7 +769,7 @@ class Chytanne : ZmenyiaChastki() {
         super.saveStateActivity(outState)
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
-        outState.putString("textLine", firstTextPosition)
+        outState.putInt("textLine", firstTextPosition)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

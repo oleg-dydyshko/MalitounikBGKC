@@ -102,17 +102,16 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: getStateActivity()
-        super.onCreate(instanceState)
+        super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", MODE_PRIVATE)
         val dzenNoch = getBaseDzenNoch()
         binding = AkafistListBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        if (instanceState != null) {
-            searchViewQwery = instanceState.getString("SearchViewQwery", "")
-            actionExpandOn = instanceState.getBoolean("actionExpandOn")
+        if (savedInstanceState != null) {
+            searchViewQwery = savedInstanceState.getString("SearchViewQwery", "")
+            actionExpandOn = savedInstanceState.getBoolean("actionExpandOn")
         }
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams
@@ -350,15 +349,10 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         }
     }
 
-    override fun saveStateActivity(outState: Bundle) {
-        super.saveStateActivity(outState)
-        outState.putString("SearchViewQwery", autoCompleteTextView?.text.toString())
-        outState.putBoolean("actionExpandOn", actionExpandOn)
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        saveStateActivity(outState)
+        outState.putString("SearchViewQwery", autoCompleteTextView?.text.toString())
+        outState.putBoolean("actionExpandOn", actionExpandOn)
     }
 
     private inner class MyTextWatcher : TextWatcher {

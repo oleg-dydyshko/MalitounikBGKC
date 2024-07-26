@@ -328,8 +328,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: getStateActivity()
-        super.onCreate(instanceState)
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -365,16 +364,16 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
             setResoursName()
         }
         isHTML = text.contains("<!DOCTYPE HTML>", ignoreCase = true)
-        if (instanceState != null) {
-            isHTML = instanceState.getBoolean("isHTML", true)
-            fileName = instanceState.getString("fileName", "")
-            resours = instanceState.getString("resours", "")
-            if (instanceState.getBoolean("seach")) {
+        if (savedInstanceState != null) {
+            isHTML = savedInstanceState.getBoolean("isHTML", true)
+            fileName = savedInstanceState.getString("fileName", "")
+            resours = savedInstanceState.getString("resours", "")
+            if (savedInstanceState.getBoolean("seach")) {
                 binding.find.visibility = View.VISIBLE
             }
             history.clear()
             binding.apisanne.post {
-                val textline = instanceState.getString("textLine", "")
+                val textline = savedInstanceState.getString("textLine", "")
                 if (textline != "") {
                     binding.apisanne.layout?.let { layout ->
                         val index = binding.apisanne.text.toString().indexOf(textline)
@@ -451,19 +450,14 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         setTollbarTheme()
     }
 
-    override fun saveStateActivity(outState: Bundle) {
-        super.saveStateActivity(outState)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         outState.putBoolean("isHTML", isHTML)
         outState.putString("fileName", fileName)
         outState.putString("textLine", firstTextPosition)
         outState.putString("resours", resours)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        saveStateActivity(outState)
     }
 
     private fun setTollbarTheme() {

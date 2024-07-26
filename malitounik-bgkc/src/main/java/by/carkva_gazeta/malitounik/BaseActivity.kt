@@ -92,28 +92,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         Firebase.appCheck.installAppCheckProviderFactory(PlayIntegrityAppCheckProviderFactory.getInstance())
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        saveStateActivity(outState)
-    }
-
-    protected open fun saveStateActivity(outState: Bundle) {
-        bundle = outState
-    }
-
-    protected fun getStateActivity() = bundle
-
-    override fun recreate() {
-        saveStateActivity(Bundle())
-        finish()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            overrideActivityTransition(Activity.OVERRIDE_TRANSITION_OPEN, android.R.anim.fade_in, android.R.anim.fade_out)
-        } else {
-            @Suppress("DEPRECATION") overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-        startActivity(intent)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addMenuProvider(this)
@@ -122,6 +100,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                 onBack()
             }
         })
+        mLastClickTime = SystemClock.elapsedRealtime() + 10000
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         checkDzenNoch = getBaseDzenNoch()
@@ -188,7 +167,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     override fun onResume() {
         super.onResume()
-        bundle = null
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (k.getBoolean("auto_dzen_noch", false)) {
             setlightSensor()
@@ -381,7 +359,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     companion object {
         private var sessionId = 0
         private var mLastClickTime: Long = 0
-        private var bundle: Bundle? = null
         private var isActiveJob = false
     }
 }

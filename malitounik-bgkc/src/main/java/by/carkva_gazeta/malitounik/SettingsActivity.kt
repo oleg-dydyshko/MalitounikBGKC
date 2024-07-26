@@ -777,20 +777,14 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         super.onBack()
     }
 
-    override fun saveStateActivity(outState: Bundle) {
-        super.saveStateActivity(outState)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         outState.putBoolean("edit", edit)
         outState.putBoolean("editFull", editFull)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        saveStateActivity(outState)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: getStateActivity()
-        super.onCreate(instanceState)
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         var notification = k.getInt("notification", NOTIFICATION_SVIATY_FULL)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -809,9 +803,9 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         if (dzenNoch) binding.guk.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         if (guk == 0) binding.guk.isChecked = false
         if (notification == NOTIFICATION_SVIATY_NONE) binding.spinnerTime.visibility = View.GONE
-        if (instanceState != null) {
-            edit = instanceState.getBoolean("edit", false)
-            editFull = instanceState.getBoolean("editFull", false)
+        if (savedInstanceState != null) {
+            edit = savedInstanceState.getBoolean("edit", false)
+            editFull = savedInstanceState.getBoolean("editFull", false)
         }
         val dataTimes = ArrayList<DataTime>()
         for (i in 6..17) {

@@ -201,8 +201,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: getStateActivity()
-        super.onCreate(instanceState)
+        super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         prefEditors = chin.edit()
         binding = SearchBibliaBinding.inflate(layoutInflater)
@@ -401,10 +400,10 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
             return@setOnItemLongClickListener true
         }
-        if (instanceState != null) {
-            val listView = instanceState.getBoolean("list_view")
+        if (savedInstanceState != null) {
+            val listView = savedInstanceState.getBoolean("list_view")
             if (listView) binding.ListView.visibility = View.VISIBLE
-            fierstPosition = instanceState.getInt("fierstPosition")
+            fierstPosition = savedInstanceState.getInt("fierstPosition")
         } else {
             fierstPosition = chin.getInt("search_bible_fierstPosition", 0)
         }
@@ -601,19 +600,14 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         historyAdapter.notifyDataSetChanged()
     }
 
-    override fun saveStateActivity(outState: Bundle) {
-        super.saveStateActivity(outState)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         outState.putBoolean("list_view", binding.ListView.visibility == View.VISIBLE)
         outState.putInt("fierstPosition", fierstPosition)
         autoCompleteTextView?.let {
             prefEditors.putString("search_string", it.text.toString())
             prefEditors.apply()
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        saveStateActivity(outState)
     }
 
     private fun execute(searcheString: String, run: Boolean = false) {

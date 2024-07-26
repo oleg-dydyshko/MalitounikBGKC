@@ -11,9 +11,11 @@ class TextViewCustom : AppCompatTextView {
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
         setFontInterface(context)
     }
+
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         setFontInterface(context)
     }
+
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         setFontInterface(context)
     }

@@ -55,12 +55,8 @@ class MenuCaliandar : BaseFragment() {
 
     override fun onAttach(activity: Context) {
         super.onAttach(activity)
-        if (activity is Activity) {
-            listinner = try {
-                activity as MenuCaliandarPageListinner
-            } catch (e: ClassCastException) {
-                throw ClassCastException("$activity must implement MenuCaliandarPageListinner")
-            }
+        if (activity is MainActivity) {
+            listinner = activity
         }
     }
 

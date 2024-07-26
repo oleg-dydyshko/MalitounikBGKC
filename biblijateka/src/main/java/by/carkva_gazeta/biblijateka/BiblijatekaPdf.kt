@@ -51,8 +51,7 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: getStateActivity()
-        super.onCreate(instanceState)
+        super.onCreate(savedInstanceState)
         binding = BiblijatekaPdfBinding.inflate(layoutInflater)
         try {
             setContentView(binding.root)
@@ -65,10 +64,10 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         pdfView = binding.pdfView
-        if (instanceState != null) {
-            defaultPage = instanceState.getInt("page")
-            filePath = instanceState.getString("filePath") ?: ""
-            fileName = instanceState.getString("fileName") ?: ""
+        if (savedInstanceState != null) {
+            defaultPage = savedInstanceState.getInt("page")
+            filePath = savedInstanceState.getString("filePath") ?: ""
+            fileName = savedInstanceState.getString("fileName") ?: ""
         } else {
             filePath = intent.extras?.getString("filePath", "") ?: ""
             fileName = intent.extras?.getString("fileName", "") ?: ""
@@ -280,17 +279,12 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
         prefEditor.apply()
     }
 
-    override fun saveStateActivity(outState: Bundle) {
-        super.saveStateActivity(outState)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         val prefEditor = k.edit()
         prefEditor.putInt(fileName, pdfView.currentPage)
         prefEditor.apply()
         outState.putString("filePath", filePath)
         outState.putString("fileName", fileName)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        saveStateActivity(outState)
     }
 }

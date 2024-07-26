@@ -156,7 +156,11 @@
         <activity
             android:name=".CaliandarMun"
             android:label="@string/kaliandar"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+            </activity>
         <activity
             android:name=".Pasxa"
             android:label="@string/pascha_kaliandar_bel"

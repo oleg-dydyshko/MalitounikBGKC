@@ -78,14 +78,13 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: getStateActivity()
-        super.onCreate(instanceState)
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding = CytatyActivityBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
-        pasliaPrychascia = instanceState?.getInt("pasliaPrychascia") ?: (intent.extras?.getInt("paslia_prychascia") ?: 0)
+        pasliaPrychascia = savedInstanceState?.getInt("pasliaPrychascia") ?: (intent.extras?.getInt("paslia_prychascia") ?: 0)
         binding.constraint.setOnTouchListener(this)
         val inputStream = resources.openRawResource(R.raw.citata)
         val isr = InputStreamReader(inputStream)
@@ -100,7 +99,7 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         }.attach()
         binding.pager.offscreenPageLimit = 1
         binding.pager.setCurrentItem(pasliaPrychascia, false)
-        fullscreenPage = instanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
+        fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 pasliaPrychascia = position
@@ -394,15 +393,10 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         binding.actionBack.animation = animation
     }
 
-    override fun saveStateActivity(outState: Bundle) {
-        super.saveStateActivity(outState)
-        outState.putBoolean("fullscreen", fullscreenPage)
-        outState.putInt("pasliaPrychascia", pasliaPrychascia)
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        saveStateActivity(outState)
+        outState.putBoolean("fullscreen", fullscreenPage)
+        outState.putInt("pasliaPrychascia", pasliaPrychascia)
     }
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {

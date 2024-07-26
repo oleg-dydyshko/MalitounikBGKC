@@ -182,16 +182,11 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
         resetTollbarJob?.cancel()
     }
 
-    override fun saveStateActivity(outState: Bundle) {
-        super.saveStateActivity(outState)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         outState.putString("perevod", perevod)
         outState.putInt("kniga", kniga)
         outState.putBoolean("novyZapavet", novyZapavet)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        saveStateActivity(outState)
     }
 
     /*private fun generateSpisKnig() {
@@ -228,8 +223,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: getStateActivity()
-        super.onCreate(instanceState)
+        super.onCreate(savedInstanceState)
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         if (dzenNoch) {
@@ -238,10 +232,10 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
         } else {
             binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         }
-        if (instanceState != null) {
-            perevod = instanceState.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
-            kniga = instanceState.getInt("kniga", 0)
-            novyZapavet = instanceState.getBoolean("novyZapavet", false)
+        if (savedInstanceState != null) {
+            perevod = savedInstanceState.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+            kniga = savedInstanceState.getInt("kniga", 0)
+            novyZapavet = savedInstanceState.getBoolean("novyZapavet", false)
         } else {
             perevod = intent.extras?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
             kniga = intent.extras?.getInt("kniga") ?: 0
@@ -264,7 +258,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
             intent.removeExtra("prodolzyt")
             listBibliaLauncher.launch(intent1)
         }
-        if (instanceState != null) {
+        if (savedInstanceState != null) {
             binding.elvMain.expandGroup(kniga)
             binding.elvMain.setSelectedGroup(kniga)
         }

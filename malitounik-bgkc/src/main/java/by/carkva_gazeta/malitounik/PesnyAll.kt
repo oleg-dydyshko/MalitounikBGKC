@@ -158,15 +158,14 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: getStateActivity()
-        super.onCreate(instanceState)
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding = PesnyBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
         binding.constraint.setOnTouchListener(this)
-        fullscreenPage = instanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
+        fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
@@ -539,14 +538,9 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         binding.actionBack.visibility = View.GONE
         binding.actionBack.animation = animation
     }
-
-    override fun saveStateActivity(outState: Bundle) {
-        super.saveStateActivity(outState)
-        outState.putBoolean("fullscreen", fullscreenPage)
-    }
-
+    
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        saveStateActivity(outState)
+        outState.putBoolean("fullscreen", fullscreenPage)
     }
 }

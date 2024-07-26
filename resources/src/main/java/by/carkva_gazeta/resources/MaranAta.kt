@@ -261,8 +261,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: getStateActivity()
-        super.onCreate(instanceState)
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         spid = k.getInt("autoscrollSpid", 60)
         binding = AkafistMaranAtaBinding.inflate(layoutInflater)
@@ -292,19 +291,19 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         maranAtaScrollPosition = if (vybranae) k.getInt(perevod + "BibleVybranoeScroll", 0)
         else k.getInt("maranAtaScrollPasition", 0)
         maranAtaScrollPositionY = k.getInt("maranAtaScrollPasitionY", 0)
-        if (instanceState != null) {
+        if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
-            fullscreenPage = instanceState.getBoolean("fullscreen")
+            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             if (vybranae) {
                 binding.titleToolbar.text = getTitlePerevod()
             } else {
-                binding.titleToolbar.text = instanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])) ?: getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
+                binding.titleToolbar.text = savedInstanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])) ?: getString(by.carkva_gazeta.malitounik.R.string.maranata2, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
             }
-            binding.subtitleToolbar.text = instanceState.getString("subTollBarText", "") ?: ""
-            paralel = instanceState.getBoolean("paralel", paralel)
-            orientation = instanceState.getInt("orientation")
+            binding.subtitleToolbar.text = savedInstanceState.getString("subTollBarText", "") ?: ""
+            paralel = savedInstanceState.getBoolean("paralel", paralel)
+            orientation = savedInstanceState.getInt("orientation")
             if (paralel) {
-                paralelPosition = instanceState.getInt("paralelPosition")
+                paralelPosition = savedInstanceState.getInt("paralelPosition")
                 parralelMestaView(paralelPosition)
             }
         } else {
@@ -318,7 +317,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 autoStartScroll()
             }
         }
-        setMaranata(orientation, instanceState)
+        setMaranata(orientation, savedInstanceState)
         checkDay()
         bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -807,8 +806,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         edit.apply()
         if (this.perevod != perevod) {
             this.perevod = perevod
-            saveStateActivity(Bundle())
-            setMaranata(orientation, getStateActivity())
+            setMaranata(orientation, Bundle())
         }
     }
 
@@ -2036,19 +2034,14 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         binding.actionBack.animation = animation
     }
 
-    override fun saveStateActivity(outState: Bundle) {
-        super.saveStateActivity(outState)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putString("tollBarText", binding.titleToolbar.text.toString())
         outState.putString("subTollBarText", binding.subtitleToolbar.text.toString())
         outState.putBoolean("paralel", paralel)
         outState.putInt("paralelPosition", paralelPosition)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        saveStateActivity(outState)
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

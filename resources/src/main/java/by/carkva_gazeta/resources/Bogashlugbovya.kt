@@ -417,8 +417,11 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         edit.apply()
         if (oldPerevod != perevod) {
             this.perevod = perevod
-            saveStateActivity(Bundle())
-            loadData(getStateActivity())
+            val bundle = Bundle()
+            bundle.putInt("firstTextPosition", firstTextPosition)
+            if (binding.find.visibility == View.VISIBLE) bundle.putBoolean("seach", true)
+            else bundle.putBoolean("seach", false)
+            loadData(bundle)
         }
     }
 
@@ -492,8 +495,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: getStateActivity()
-        super.onCreate(instanceState)
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = BogasluzbovyaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
@@ -507,23 +509,23 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         }
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
-        if (instanceState != null) {
-            perevod = instanceState.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
-            mAutoScroll = instanceState.getBoolean("mAutoScroll")
-            fullscreenPage = instanceState.getBoolean("fullscreen")
-            orientation = instanceState.getInt("orientation")
+        if (savedInstanceState != null) {
+            perevod = savedInstanceState.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+            mAutoScroll = savedInstanceState.getBoolean("mAutoScroll")
+            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
+            orientation = savedInstanceState.getInt("orientation")
             MainActivity.dialogVisable = false
-            if (instanceState.getBoolean("seach")) {
+            if (savedInstanceState.getBoolean("seach")) {
                 binding.find.visibility = View.VISIBLE
             }
-            c.set(Calendar.DAY_OF_YEAR, instanceState.getInt("day_of_year"))
-            c.set(Calendar.YEAR, instanceState.getInt("year"))
-            vybranoePosition = instanceState.getInt("vybranoePosition")
+            c.set(Calendar.DAY_OF_YEAR, savedInstanceState.getInt("day_of_year"))
+            c.set(Calendar.YEAR, savedInstanceState.getInt("year"))
+            vybranoePosition = savedInstanceState.getInt("vybranoePosition")
             if (vybranoePosition != -1) {
                 resurs = MenuVybranoe.vybranoe[vybranoePosition].resurs
                 title = MenuVybranoe.vybranoe[vybranoePosition].data
             }
-            startSearchString = instanceState.getString("startSearchString", "")
+            startSearchString = savedInstanceState.getString("startSearchString", "")
         } else {
             perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
             startSearchString = intent.extras?.getString("search", "") ?: ""
@@ -542,7 +544,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             binding.textView.text = text
             binding.titleToolbar.text = title
         } else {
-            setDatacalendar(instanceState)
+            setDatacalendar(savedInstanceState)
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.textSize = fontBiblia
@@ -2147,8 +2149,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         binding.actionBack.animation = animation
     }
 
-    override fun saveStateActivity(outState: Bundle) {
-        super.saveStateActivity(outState)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
@@ -2160,11 +2162,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         outState.putBoolean("mAutoScroll", mAutoScroll)
         outState.putString("startSearchString", startSearchString)
         outState.putString("perevod", perevod)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        saveStateActivity(outState)
     }
 
     private data class SpanStr(val color: Int, val start: Int)

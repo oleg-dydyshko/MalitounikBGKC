@@ -81,8 +81,7 @@ class Chytanne : ZmenyiaChastki() {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val instanceState = savedInstanceState ?: getStateActivity()
-        super.onCreate(instanceState)
+        super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = AkafistChytanneBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
@@ -90,11 +89,11 @@ class Chytanne : ZmenyiaChastki() {
         val c = Calendar.getInstance()
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
-        if (instanceState != null) {
+        if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
-            fullscreenPage = instanceState.getBoolean("fullscreen")
-            orientation = instanceState.getInt("orientation")
-            binding.titleToolbar.text = instanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.czytanne3, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])) ?: getString(by.carkva_gazeta.malitounik.R.string.czytanne3, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
+            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
+            orientation = savedInstanceState.getInt("orientation")
+            binding.titleToolbar.text = savedInstanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.czytanne3, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])) ?: getString(by.carkva_gazeta.malitounik.R.string.czytanne3, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
         } else {
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne3, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
@@ -135,7 +134,7 @@ class Chytanne : ZmenyiaChastki() {
         bindingprogress.seekBarBrighess.progress = MainActivity.brightness
         perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
         checkDay()
-        setChtenia(instanceState)
+        setChtenia(savedInstanceState)
         bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fontBiblia != SettingsActivity.getFontSize(progress)) {
@@ -322,8 +321,7 @@ class Chytanne : ZmenyiaChastki() {
                 DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_charniauski2)
                 else -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
             }
-            saveStateActivity(Bundle())
-            setChtenia(getStateActivity())
+            setChtenia(null)
         }
     }
 
@@ -765,15 +763,10 @@ class Chytanne : ZmenyiaChastki() {
         }
     }
 
-    override fun saveStateActivity(outState: Bundle) {
-        super.saveStateActivity(outState)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putInt("textLine", firstTextPosition)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        saveStateActivity(outState)
     }
 }

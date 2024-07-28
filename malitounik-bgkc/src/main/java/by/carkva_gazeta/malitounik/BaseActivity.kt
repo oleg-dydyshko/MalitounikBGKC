@@ -193,13 +193,13 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         }
         when {
             sensorValue <= 4f -> {
-                if (!dzenNoch) {
+                if (!dzenNoch && !checkDzenNoch) {
                     timeJob(true)
                 }
             }
 
             sensorValue >= 21f -> {
-                if (dzenNoch) {
+                if (dzenNoch && checkDzenNoch) {
                     timeJob(false)
                 }
             }
@@ -223,11 +223,9 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                     prefEditor.putBoolean("dzen_noch", isDzenNoch)
                     prefEditor.apply()
                 }
-                if (checkDzenNoch != isDzenNoch) {
-                    recreate()
-                }
-                isActiveJob = false
+                recreate()
                 mLastClickTime = SystemClock.elapsedRealtime()
+                isActiveJob = false
             }
         }
     }

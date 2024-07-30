@@ -21,7 +21,7 @@ import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
 import java.io.File
 
-class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBibleListListener {
+class MenuVybranoe : BaseFragment() {
     private lateinit var adapter: ItemAdapter
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
@@ -30,10 +30,6 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
         if (result.resultCode == 200) {
             adapter.updateList(vybranoe)
         }
-    }
-
-    override fun onAllDeliteBible() {
-        adapter.updateList(vybranoe)
     }
 
     override fun onDestroyView() {
@@ -48,11 +44,11 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
     fun fileDelite(position: Int) {
         val edit = k.edit()
         when (adapter.itemList[position].resurs) {
-            DialogVybranoeBibleList.PEREVODSEMUXI -> edit.remove("bibleVybranoeSemuxa")
-            DialogVybranoeBibleList.PEREVODSINOIDAL -> edit.remove("bibleVybranoeSinoidal")
-            DialogVybranoeBibleList.PEREVODNADSAN -> edit.remove("bibleVybranoeNadsan")
-            DialogVybranoeBibleList.PEREVODBOKUNA -> edit.remove("bibleVybranoeBokuna")
-            DialogVybranoeBibleList.PEREVODCARNIAUSKI -> edit.remove("bibleVybranoeCarniauski")
+            VybranoeBibleList.PEREVODSEMUXI -> edit.remove("bibleVybranoeSemuxa")
+            VybranoeBibleList.PEREVODSINOIDAL -> edit.remove("bibleVybranoeSinoidal")
+            VybranoeBibleList.PEREVODNADSAN -> edit.remove("bibleVybranoeNadsan")
+            VybranoeBibleList.PEREVODBOKUNA -> edit.remove("bibleVybranoeBokuna")
+            VybranoeBibleList.PEREVODCARNIAUSKI -> edit.remove("bibleVybranoeCarniauski")
         }
         edit.apply()
         adapter.itemList.removeAt(position)
@@ -72,11 +68,11 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeBibliaData::class.java).type
         for (i in 1..5) {
             val bibleVybranoe = when (i.toString()) {
-                DialogVybranoeBibleList.PEREVODSEMUXI -> k.getString("bibleVybranoeSemuxa", "") ?: ""
-                DialogVybranoeBibleList.PEREVODSINOIDAL -> k.getString("bibleVybranoeSinoidal", "") ?: ""
-                DialogVybranoeBibleList.PEREVODNADSAN -> k.getString("bibleVybranoeNadsan", "") ?: ""
-                DialogVybranoeBibleList.PEREVODBOKUNA -> k.getString("bibleVybranoeBokuna", "") ?: ""
-                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> k.getString("bibleVybranoeCarniauski", "") ?: ""
+                VybranoeBibleList.PEREVODSEMUXI -> k.getString("bibleVybranoeSemuxa", "") ?: ""
+                VybranoeBibleList.PEREVODSINOIDAL -> k.getString("bibleVybranoeSinoidal", "") ?: ""
+                VybranoeBibleList.PEREVODNADSAN -> k.getString("bibleVybranoeNadsan", "") ?: ""
+                VybranoeBibleList.PEREVODBOKUNA -> k.getString("bibleVybranoeBokuna", "") ?: ""
+                VybranoeBibleList.PEREVODCARNIAUSKI -> k.getString("bibleVybranoeCarniauski", "") ?: ""
                 else -> k.getString("bibleVybranoeSemuxa", "") ?: ""
             }
             var indexVybranoe = 0
@@ -98,12 +94,12 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                             if (it.resurs == i.toString()) isResurs = true
                         }
                         if (!isResurs) {
-                            val title = when(i.toString()) {
-                                DialogVybranoeBibleList.PEREVODSEMUXI -> getString(R.string.title_biblia)
-                                DialogVybranoeBibleList.PEREVODSINOIDAL -> getString(R.string.bsinaidal)
-                                DialogVybranoeBibleList.PEREVODNADSAN -> getString(R.string.title_psalter)
-                                DialogVybranoeBibleList.PEREVODBOKUNA -> getString(R.string.title_biblia_bokun)
-                                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(R.string.title_biblia_charniauski)
+                            val title = when (i.toString()) {
+                                VybranoeBibleList.PEREVODSEMUXI -> getString(R.string.title_biblia)
+                                VybranoeBibleList.PEREVODSINOIDAL -> getString(R.string.bsinaidal)
+                                VybranoeBibleList.PEREVODNADSAN -> getString(R.string.title_psalter)
+                                VybranoeBibleList.PEREVODBOKUNA -> getString(R.string.title_biblia_bokun)
+                                VybranoeBibleList.PEREVODCARNIAUSKI -> getString(R.string.title_biblia_charniauski)
                                 else -> getString(R.string.title_biblia)
                             }
                             vybranoe.add(0, VybranoeData(PesnyAll.vybranoeIndex(), i.toString(), title))
@@ -112,11 +108,11 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                 } catch (e: Throwable) {
                     val edit = k.edit()
                     when (i.toString()) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> edit.remove("bibleVybranoeSemuxa")
-                        DialogVybranoeBibleList.PEREVODSINOIDAL -> edit.remove("bibleVybranoeSinoidal")
-                        DialogVybranoeBibleList.PEREVODNADSAN -> edit.remove("bibleVybranoeNadsan")
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> edit.remove("bibleVybranoeBokuna")
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> edit.remove("bibleVybranoeCarniauski")
+                        VybranoeBibleList.PEREVODSEMUXI -> edit.remove("bibleVybranoeSemuxa")
+                        VybranoeBibleList.PEREVODSINOIDAL -> edit.remove("bibleVybranoeSinoidal")
+                        VybranoeBibleList.PEREVODNADSAN -> edit.remove("bibleVybranoeNadsan")
+                        VybranoeBibleList.PEREVODBOKUNA -> edit.remove("bibleVybranoeBokuna")
+                        VybranoeBibleList.PEREVODCARNIAUSKI -> edit.remove("bibleVybranoeCarniauski")
                     }
                     edit.apply()
                 }
@@ -137,15 +133,23 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
 
     fun deliteAllVybranoe() {
         activity?.let { activity ->
-            val edit = k.edit()
-            edit.remove("bibleVybranoeSemuxa")
-            edit.remove("bibleVybranoeSinoidal")
-            edit.remove("bibleVybranoeNadsan")
-            edit.remove("bibleVybranoeBokuna")
-            edit.remove("bibleVybranoeCarniauski")
-            edit.apply()
-            adapter.itemList.clear()
-            File(activity.filesDir.toString() + "/Vybranoe.json").delete()
+            val delAllVybranoe = ArrayList<VybranoeData>()
+            vybranoe.forEach {
+                if (!(it.resurs == VybranoeBibleList.PEREVODSEMUXI || it.resurs == VybranoeBibleList.PEREVODBOKUNA || it.resurs == VybranoeBibleList.PEREVODNADSAN || it.resurs == VybranoeBibleList.PEREVODCARNIAUSKI || it.resurs == VybranoeBibleList.PEREVODSINOIDAL)) {
+                    delAllVybranoe.add(it)
+                }
+            }
+            vybranoe.removeAll(delAllVybranoe.toSet())
+            val file = File("${activity.filesDir}/Vybranoe.json")
+            if (vybranoe.isEmpty()) {
+                file.delete()
+            } else {
+                val gson = Gson()
+                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, VybranoeData::class.java).type
+                file.writer().use {
+                    it.write(gson.toJson(vybranoe, type))
+                }
+            }
             adapter.updateList(vybranoe)
         }
     }
@@ -295,34 +299,34 @@ class MenuVybranoe : BaseFragment(), DialogVybranoeBibleList.DialogVybranoeBible
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (activity.checkmoduleResources()) {
                     when (itemList[bindingAdapterPosition].resurs) {
-                        DialogVybranoeBibleList.PEREVODSEMUXI -> {
-                            val dialogVybranoeList = DialogVybranoeBibleList.getInstance(DialogVybranoeBibleList.PEREVODSEMUXI)
-                            dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
-                            dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                        VybranoeBibleList.PEREVODSEMUXI -> {
+                            val intent = Intent(activity, VybranoeBibleList::class.java)
+                            intent.putExtra("perevod", VybranoeBibleList.PEREVODSEMUXI)
+                            menuVybranoeLauncher.launch(intent)
                         }
 
-                        DialogVybranoeBibleList.PEREVODSINOIDAL -> {
-                            val dialogVybranoeList = DialogVybranoeBibleList.getInstance(DialogVybranoeBibleList.PEREVODSINOIDAL)
-                            dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
-                            dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                        VybranoeBibleList.PEREVODSINOIDAL -> {
+                            val intent = Intent(activity, VybranoeBibleList::class.java)
+                            intent.putExtra("perevod", VybranoeBibleList.PEREVODSINOIDAL)
+                            menuVybranoeLauncher.launch(intent)
                         }
 
-                        DialogVybranoeBibleList.PEREVODNADSAN -> {
-                            val dialogVybranoeList = DialogVybranoeBibleList.getInstance(DialogVybranoeBibleList.PEREVODNADSAN)
-                            dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
-                            dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                        VybranoeBibleList.PEREVODNADSAN -> {
+                            val intent = Intent(activity, VybranoeBibleList::class.java)
+                            intent.putExtra("perevod", VybranoeBibleList.PEREVODNADSAN)
+                            menuVybranoeLauncher.launch(intent)
                         }
 
-                        DialogVybranoeBibleList.PEREVODBOKUNA -> {
-                            val dialogVybranoeList = DialogVybranoeBibleList.getInstance(DialogVybranoeBibleList.PEREVODBOKUNA)
-                            dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
-                            dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                        VybranoeBibleList.PEREVODBOKUNA -> {
+                            val intent = Intent(activity, VybranoeBibleList::class.java)
+                            intent.putExtra("perevod", VybranoeBibleList.PEREVODBOKUNA)
+                            menuVybranoeLauncher.launch(intent)
                         }
 
-                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
-                            val dialogVybranoeList = DialogVybranoeBibleList.getInstance(DialogVybranoeBibleList.PEREVODCARNIAUSKI)
-                            dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
-                            dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                        VybranoeBibleList.PEREVODCARNIAUSKI -> {
+                            val intent = Intent(activity, VybranoeBibleList::class.java)
+                            intent.putExtra("perevod", VybranoeBibleList.PEREVODCARNIAUSKI)
+                            menuVybranoeLauncher.launch(intent)
                         }
 
                         else -> {

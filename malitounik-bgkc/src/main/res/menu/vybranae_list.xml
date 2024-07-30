@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_sort"
+        android:icon="@drawable/sort_by_az"
+        android:title="@string/sort_alf"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_delite"
+        android:icon="@drawable/trash"
+        android:title="@string/delite_all_vybranoe"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom" />
+</menu>

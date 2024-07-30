@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
@@ -123,15 +122,6 @@ class MyNatatki : DialogFragment() {
                 }
             }
             builder.setPositiveButton(it.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
-            builder.setNeutralButton(getString(R.string.share)) { _: DialogInterface, _: Int ->
-                write()
-                prepareSave()
-                val sendIntent = Intent(Intent.ACTION_SEND)
-                sendIntent.putExtra(Intent.EXTRA_TEXT, binding.EditText.text.toString())
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, binding.file.text.toString())
-                sendIntent.type = "text/plain"
-                startActivity(Intent.createChooser(sendIntent, binding.file.text.toString()))
-            }
             if (redak == 3) {
                 builder.setNegativeButton(getString(R.string.redagaktirovat)) { _: DialogInterface, _: Int ->
                     mListener?.myNatatkiEdit(position)

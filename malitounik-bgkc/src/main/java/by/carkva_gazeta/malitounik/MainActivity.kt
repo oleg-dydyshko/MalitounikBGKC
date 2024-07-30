@@ -129,33 +129,33 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     }
     val listBibliaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 500) {
-            val myPerevod = result.data?.extras?.getString("perevod") ?: DialogVybranoeBibleList.PEREVODSEMUXI
+            val myPerevod = result.data?.extras?.getString("perevod") ?: VybranoeBibleList.PEREVODSEMUXI
             when (myPerevod) {
-                DialogVybranoeBibleList.PEREVODSEMUXI -> {
+                VybranoeBibleList.PEREVODSEMUXI -> {
                     val fragment = supportFragmentManager.findFragmentByTag("semuxa")
                     if (fragment == null) {
                         selectFragment(binding.label8)
                     }
                 }
-                DialogVybranoeBibleList.PEREVODBOKUNA -> {
+                VybranoeBibleList.PEREVODBOKUNA -> {
                     val fragment = supportFragmentManager.findFragmentByTag("bokuna")
                     if (fragment == null) {
                         selectFragment(binding.label16)
                     }
                 }
-                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
+                VybranoeBibleList.PEREVODCARNIAUSKI -> {
                     val fragment = supportFragmentManager.findFragmentByTag("carniauski")
                     if (fragment == null) {
                         selectFragment(binding.label17)
                     }
                 }
-                DialogVybranoeBibleList.PEREVODNADSAN -> {
+                VybranoeBibleList.PEREVODNADSAN -> {
                     val fragment = supportFragmentManager.findFragmentByTag("nadsana")
                     if (fragment == null) {
                         selectFragment(binding.label13)
                     }
                 }
-                DialogVybranoeBibleList.PEREVODSINOIDAL -> {
+                VybranoeBibleList.PEREVODSINOIDAL -> {
                     val fragment = supportFragmentManager.findFragmentByTag("sinoidal")
                     if (fragment == null) {
                         selectFragment(binding.label11)

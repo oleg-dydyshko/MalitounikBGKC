@@ -79,7 +79,7 @@ class MenuBibleNadsana : BaseFragment(), View.OnClickListener {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
-                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
+                    intent.putExtra("perevod", VybranoeBibleList.PEREVODNADSAN)
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()
@@ -97,8 +97,9 @@ class MenuBibleNadsana : BaseFragment(), View.OnClickListener {
                     val dialogBibleVybranoeError = DialogBibleVybranoeError()
                     dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
                 } else {
-                    val dialogVybranoeList = DialogVybranoeBibleList.getInstance(DialogVybranoeBibleList.PEREVODNADSAN)
-                    dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                    val intent = Intent(activity, VybranoeBibleList::class.java)
+                    intent.putExtra("perevod", VybranoeBibleList.PEREVODNADSAN)
+                    startActivity(intent)
                 }
             }
             if (id == R.id.psalter) {
@@ -106,7 +107,7 @@ class MenuBibleNadsana : BaseFragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BIBLIALIST)
                     intent.putExtra("novyZapavet", false)
-                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
+                    intent.putExtra("perevod", VybranoeBibleList.PEREVODNADSAN)
                     (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
@@ -124,7 +125,7 @@ class MenuBibleNadsana : BaseFragment(), View.OnClickListener {
                         intent.putExtra("glava", k.getInt("psalter_time_psalter_nadsan_glava", 0))
                         intent.putExtra("stix", k.getInt("psalter_time_psalter_nadsan_stix", 0))
                         intent.putExtra("novyZapavet", false)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODNADSAN)
                         intent.putExtra("prodolzyt", true)
                         (activity as MainActivity).listBibliaLauncher.launch(intent)
                     } else {
@@ -205,7 +206,7 @@ class MenuBibleNadsana : BaseFragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BIBLIAACTIVITY)
                     intent.putExtra("kafizma", glava)
-                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
+                    intent.putExtra("perevod", VybranoeBibleList.PEREVODNADSAN)
                     intent.putExtra("fullglav", 151)
                     startActivity(intent)
                 } else {

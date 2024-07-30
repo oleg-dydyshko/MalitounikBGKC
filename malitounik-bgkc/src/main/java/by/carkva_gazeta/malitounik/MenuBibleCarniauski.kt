@@ -50,8 +50,9 @@ class MenuBibleCarniauski : Fragment() {
                     val dialogBibleVybranoeError = DialogBibleVybranoeError()
                     dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
                 } else {
-                    val dialogVybranoeList = DialogVybranoeBibleList.getInstance(DialogVybranoeBibleList.PEREVODCARNIAUSKI)
-                    dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                    val intent = Intent(activity, VybranoeBibleList::class.java)
+                    intent.putExtra("perevod", VybranoeBibleList.PEREVODCARNIAUSKI)
+                    startActivity(intent)
                 }
             }
             binding.novyZavet.setOnClickListener {
@@ -62,7 +63,7 @@ class MenuBibleCarniauski : Fragment() {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BIBLIALIST)
-                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
+                    intent.putExtra("perevod", VybranoeBibleList.PEREVODCARNIAUSKI)
                     intent.putExtra("novyZapavet", true)
                     (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
@@ -77,7 +78,7 @@ class MenuBibleCarniauski : Fragment() {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BIBLIALIST)
-                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
+                    intent.putExtra("perevod", VybranoeBibleList.PEREVODCARNIAUSKI)
                     intent.putExtra("novyZapavet", false)
                     (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
@@ -96,7 +97,7 @@ class MenuBibleCarniauski : Fragment() {
                     if (activity.checkmoduleResources()) {
                         val intent = Intent()
                         intent.setClassName(activity, MainActivity.BIBLIALIST)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODCARNIAUSKI)
                         intent.putExtra("novyZapavet", k.getBoolean("bible_time_carniauski_zavet", true))
                         intent.putExtra("kniga", k.getInt("bible_time_carniauski_kniga", 0))
                         intent.putExtra("glava", k.getInt("bible_time_carniauski_glava", 0))
@@ -154,7 +155,7 @@ class MenuBibleCarniauski : Fragment() {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
-                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
+                    intent.putExtra("perevod", VybranoeBibleList.PEREVODCARNIAUSKI)
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()

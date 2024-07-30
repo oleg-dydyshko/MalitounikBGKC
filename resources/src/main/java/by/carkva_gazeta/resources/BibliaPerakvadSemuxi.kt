@@ -5,7 +5,7 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.BibleZakladkiData
-import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -18,7 +18,7 @@ interface BibliaPerakvadSemuxi {
 
     fun isPsaltyrGreek() = true
 
-    fun getNamePerevod() = DialogVybranoeBibleList.PEREVODSEMUXI
+    fun getNamePerevod() = VybranoeBibleList.PEREVODSEMUXI
 
     fun getZakladki() = BibleGlobalList.zakladkiSemuxa
 

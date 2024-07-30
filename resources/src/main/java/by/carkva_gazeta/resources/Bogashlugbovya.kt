@@ -50,7 +50,6 @@ import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.DialogHelpShare
-import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
 import by.carkva_gazeta.malitounik.EditTextCustom
 import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
@@ -59,6 +58,7 @@ import by.carkva_gazeta.malitounik.MenuCaliandar
 import by.carkva_gazeta.malitounik.MenuVybranoe
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.SlugbovyiaTextu
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.VybranoeData
 import by.carkva_gazeta.resources.databinding.BogasluzbovyaBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
@@ -78,7 +78,7 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener, DialogVybranoeBibleList.DialogVybranoeBibleListListener {
+class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -122,7 +122,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     private var startSearchString = ""
     private var liturgia = false
     private var isLoaded = false
-    private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
+    private var perevod = VybranoeBibleList.PEREVODSEMUXI
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
@@ -131,6 +131,18 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 val arrayList = MenuCaliandar.getPositionCaliandar(position)
                 c.set(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0, 0)
                 setDatacalendar(null)
+            }
+        }
+    }
+    private val menuVybranoeLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == 200) {
+            if (MenuVybranoe.vybranoe.size == 0) {
+                onBack()
+            } else {
+                if (MenuVybranoe.vybranoe.size < 2) {
+                    binding.textViewNext.visibility = View.GONE
+                }
+                nextText()
             }
         }
     }
@@ -412,7 +424,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     override fun setPerevod(perevod: String) {
         val edit = k.edit()
-        val oldPerevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI)
+        val oldPerevod = k.getString("perevodChytanne", VybranoeBibleList.PEREVODSEMUXI)
         edit.putString("perevodChytanne", perevod)
         edit.apply()
         if (oldPerevod != perevod) {
@@ -510,7 +522,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {
-            perevod = savedInstanceState.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+            perevod = savedInstanceState.getString("perevod", VybranoeBibleList.PEREVODSEMUXI)
             mAutoScroll = savedInstanceState.getBoolean("mAutoScroll")
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             orientation = savedInstanceState.getInt("orientation")
@@ -527,7 +539,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             }
             startSearchString = savedInstanceState.getString("startSearchString", "")
         } else {
-            perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
+            perevod = k.getString("perevodChytanne", VybranoeBibleList.PEREVODSEMUXI) ?: VybranoeBibleList.PEREVODSEMUXI
             startSearchString = intent.extras?.getString("search", "") ?: ""
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             vybranoePosition = intent.extras?.getInt("vybranaePos", -1) ?: -1
@@ -536,9 +548,9 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             val text = SpannableString(title)
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val dialogVybranoeList = DialogVybranoeBibleList.getInstance(resurs)
-                    dialogVybranoeList.setDialogVybranoeBibleListListener(this@Bogashlugbovya)
-                    dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
+                    val intent = Intent(this@Bogashlugbovya, VybranoeBibleList::class.java)
+                    intent.putExtra("perevod", resurs)
+                    menuVybranoeLauncher.launch(intent)
                 }
             }, 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.textView.text = text
@@ -650,17 +662,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         setTollbarTheme()
     }
 
-    override fun onAllDeliteBible() {
-        if (MenuVybranoe.vybranoe.size == 0) {
-            onBack()
-        } else {
-            if (MenuVybranoe.vybranoe.size < 2) {
-                binding.textViewNext.visibility = View.GONE
-            }
-            nextText()
-        }
-    }
-
     private fun nextText() {
         vybranoePosition += 1
         if (MenuVybranoe.vybranoe.size == vybranoePosition) vybranoePosition = 0
@@ -677,14 +678,13 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         val duration: Long = 1000
         ObjectAnimator.ofInt(binding.scrollView2, "scrollY", 0).setDuration(duration).start()
         if (resurs.isDigitsOnly() && resurs.toInt() < 10) {
-            val dialogVybranoeList = DialogVybranoeBibleList.getInstance(resurs)
-            dialogVybranoeList.setDialogVybranoeBibleListListener(this@Bogashlugbovya)
-            dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
+            val intent = Intent(this, VybranoeBibleList::class.java)
+            intent.putExtra("perevod", resurs)
+            menuVybranoeLauncher.launch(intent)
             val text = SpannableString(title)
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    dialogVybranoeList.setDialogVybranoeBibleListListener(this@Bogashlugbovya)
-                    dialogVybranoeList.show(supportFragmentManager, "vybranoeBibleList")
+                    menuVybranoeLauncher.launch(intent)
                 }
             }, 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.textView.text = text
@@ -879,9 +879,9 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                                 } else builder.append(line)
                                 try {
                                     val textPerevod = when (perevod) {
-                                        DialogVybranoeBibleList.PEREVODSEMUXI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
-                                        DialogVybranoeBibleList.PEREVODBOKUNA -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_bokun2)
-                                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_charniauski2)
+                                        VybranoeBibleList.PEREVODSEMUXI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
+                                        VybranoeBibleList.PEREVODBOKUNA -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_bokun2)
+                                        VybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_charniauski2)
                                         else -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
                                     }
                                     builder.append("<em>").append(textPerevod).append("</em><br>\n").append(zmenya(1, perevod))
@@ -906,9 +906,9 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                                 } else builder.append(line)
                                 try {
                                     val textPerevod = when (perevod) {
-                                        DialogVybranoeBibleList.PEREVODSEMUXI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
-                                        DialogVybranoeBibleList.PEREVODBOKUNA -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_bokun2)
-                                        DialogVybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_charniauski2)
+                                        VybranoeBibleList.PEREVODSEMUXI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
+                                        VybranoeBibleList.PEREVODBOKUNA -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_bokun2)
+                                        VybranoeBibleList.PEREVODCARNIAUSKI -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia_charniauski2)
                                         else -> getString(by.carkva_gazeta.malitounik.R.string.title_biblia2)
                                     }
                                     builder.append("<em>").append(textPerevod).append("</em><br>\n").append(zmenya(0, perevod))
@@ -1857,7 +1857,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {
-            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = false, isNadsan = false, perevod = k.getString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI)
+            val dialog = DialogPerevodBiblii.getInstance(isSinoidal = false, isNadsan = false, perevod = k.getString("perevodChytanne", VybranoeBibleList.PEREVODSEMUXI) ?: VybranoeBibleList.PEREVODSEMUXI)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }

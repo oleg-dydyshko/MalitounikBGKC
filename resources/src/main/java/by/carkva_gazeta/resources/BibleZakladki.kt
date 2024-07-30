@@ -20,7 +20,7 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.BibleZakladkiData
-import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
@@ -446,19 +446,19 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 if (kniga != -1) {
                     if (semuxa == 1) {
                         intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODSEMUXI)
                     }
                     if (semuxa == 2) {
                         intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODSINOIDAL)
                     }
                     if (semuxa == 3) {
                         intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODBOKUNA)
                     }
                     if (semuxa == 4) {
                         intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODCARNIAUSKI)
                     }
                     intent.putExtra("kniga", kniga)
                     intent.putExtra("novyZapavet", true)
@@ -466,19 +466,19 @@ class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZak
                 if (knigaS != -1) {
                     if (semuxa == 1) {
                         intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODSEMUXI)
                     }
                     if (semuxa == 2) {
                         intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODSINOIDAL)
                     }
                     if (semuxa == 3) {
                         intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODBOKUNA)
                     }
                     if (semuxa == 4) {
                         intent = Intent(this@BibleZakladki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODCARNIAUSKI)
                     }
                     intent.putExtra("kniga", knigaS)
                     intent.putExtra("novyZapavet", false)

@@ -16,7 +16,7 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.DialogContextMenu
-import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
@@ -400,19 +400,19 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 if (kniga != -1) {
                     if (semuxa == 1) {
                         intent = Intent(this@BibleNatatki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODSEMUXI)
                     }
                     if (semuxa == 2) {
                         intent = Intent(this@BibleNatatki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODSINOIDAL)
                     }
                     if (semuxa == 3) {
                         intent = Intent(this@BibleNatatki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODBOKUNA)
                     }
                     if (semuxa == 4) {
                         intent = Intent(this@BibleNatatki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODCARNIAUSKI)
                     }
                     intent.putExtra("kniga", kniga)
                     intent.putExtra("novyZapavet", true)
@@ -420,7 +420,7 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                 if (knigaS != -1) {
                     if (semuxa == 1) {
                         intent = Intent(this@BibleNatatki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODSEMUXI)
                         when (knigaS) {
                             19 -> knigaS = 16
                             20 -> knigaS = 17
@@ -449,11 +449,11 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                     }
                     if (semuxa == 2) {
                         intent = Intent(this@BibleNatatki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODSINOIDAL)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODSINOIDAL)
                     }
                     if (semuxa == 3) {
                         intent = Intent(this@BibleNatatki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODBOKUNA)
                         when (knigaS) {
                             19 -> knigaS = 16
                             20 -> knigaS = 17
@@ -482,7 +482,7 @@ class BibleNatatki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakl
                     }
                     if (semuxa == 4) {
                         intent = Intent(this@BibleNatatki, BibliaActivity::class.java)
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODCARNIAUSKI)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODCARNIAUSKI)
                         when (knigaS) {
                             19 -> knigaS = 16
                             20 -> knigaS = 17

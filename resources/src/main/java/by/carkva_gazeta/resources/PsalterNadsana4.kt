@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.BaseActivity
-import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.resources.databinding.NadsanPravila4Binding
 
 class PsalterNadsana4 : Fragment(), View.OnClickListener {
@@ -122,7 +122,7 @@ class PsalterNadsana4 : Fragment(), View.OnClickListener {
                 R.id.textView28 -> glava = 1
             }
             intent.putExtra("kafizma", glava)
-            intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODNADSAN)
+            intent.putExtra("perevod", VybranoeBibleList.PEREVODNADSAN)
             intent.putExtra("fullglav", 151)
             startActivity(intent)
         }

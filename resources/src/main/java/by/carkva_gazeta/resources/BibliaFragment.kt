@@ -16,7 +16,7 @@ import androidx.appcompat.widget.TooltipCompat
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BaseFragment
 import by.carkva_gazeta.malitounik.BibleGlobalList
-import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.resources.databinding.ActivityBiblePageFragmentBinding
 import java.io.BufferedReader
@@ -119,7 +119,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
                 binding.bold.visibility = View.GONE
                 binding.zakladka.visibility = View.GONE
                 binding.zametka.visibility = View.GONE
-            } else if (activity.getNamePerevod() != DialogVybranoeBibleList.PEREVODNADSAN) {
+            } else if (activity.getNamePerevod() != VybranoeBibleList.PEREVODNADSAN) {
                 binding.view.visibility = View.VISIBLE
                 binding.yelloy.visibility = View.VISIBLE
                 binding.underline.visibility = View.VISIBLE
@@ -481,7 +481,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
                 binding.bold.visibility = View.GONE
                 binding.zakladka.visibility = View.GONE
                 binding.zametka.visibility = View.GONE
-            } else if (bibliaActyvity.getNamePerevod() != DialogVybranoeBibleList.PEREVODNADSAN) {
+            } else if (bibliaActyvity.getNamePerevod() != VybranoeBibleList.PEREVODNADSAN) {
                 binding.view.visibility = View.VISIBLE
                 binding.yelloy.visibility = View.VISIBLE
                 binding.underline.visibility = View.VISIBLE
@@ -568,7 +568,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
             if (dzenNoch) {
                 binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta)
             }
-            if (activity.getNamePerevod() == DialogVybranoeBibleList.PEREVODNADSAN) {
+            if (activity.getNamePerevod() == VybranoeBibleList.PEREVODNADSAN) {
                 binding.view.visibility = View.GONE
                 binding.yelloy.visibility = View.GONE
                 binding.underline.visibility = View.GONE

@@ -17,7 +17,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
-import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
@@ -108,10 +108,10 @@ class DialogBibleSearshSettings : DialogFragment() {
                 prefEditors.apply()
 
             }
-            val perevod = arguments?.getString("perevod") ?: DialogVybranoeBibleList.PEREVODSEMUXI
-            val data = if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) arrayOf(getString(R.string.psalter))
+            val perevod = arguments?.getString("perevod") ?: VybranoeBibleList.PEREVODSEMUXI
+            val data = if (perevod == VybranoeBibleList.PEREVODNADSAN) arrayOf(getString(R.string.psalter))
             else resources.getStringArray(R.array.serche_bible)
-            if (perevod == DialogVybranoeBibleList.PEREVODNADSAN) {
+            if (perevod == VybranoeBibleList.PEREVODNADSAN) {
                 binding.spinner6.visibility = View.GONE
             }
             val spinner = binding.spinner6
@@ -122,23 +122,23 @@ class DialogBibleSearshSettings : DialogFragment() {
             val arrayAdapterPeraklad = DialogBibleAdapter(it, listPeraklad)
             binding.spinnerPerevod.adapter = arrayAdapterPeraklad
             when (perevod) {
-                DialogVybranoeBibleList.PEREVODBOKUNA -> binding.spinnerPerevod.setSelection(0)
-                DialogVybranoeBibleList.PEREVODSEMUXI -> binding.spinnerPerevod.setSelection(1)
-                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> binding.spinnerPerevod.setSelection(2)
-                DialogVybranoeBibleList.PEREVODNADSAN -> binding.spinnerPerevod.setSelection(3)
-                DialogVybranoeBibleList.PEREVODSINOIDAL -> binding.spinnerPerevod.setSelection(4)
+                VybranoeBibleList.PEREVODBOKUNA -> binding.spinnerPerevod.setSelection(0)
+                VybranoeBibleList.PEREVODSEMUXI -> binding.spinnerPerevod.setSelection(1)
+                VybranoeBibleList.PEREVODCARNIAUSKI -> binding.spinnerPerevod.setSelection(2)
+                VybranoeBibleList.PEREVODNADSAN -> binding.spinnerPerevod.setSelection(3)
+                VybranoeBibleList.PEREVODSINOIDAL -> binding.spinnerPerevod.setSelection(4)
             }
             var chek = false
             binding.spinnerPerevod.onItemSelectedListener = object : OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     if (chek) {
                         val peraklad = when (position) {
-                            0 -> DialogVybranoeBibleList.PEREVODBOKUNA
-                            1 -> DialogVybranoeBibleList.PEREVODSEMUXI
-                            2 -> DialogVybranoeBibleList.PEREVODCARNIAUSKI
-                            3 -> DialogVybranoeBibleList.PEREVODNADSAN
-                            4 -> DialogVybranoeBibleList.PEREVODSINOIDAL
-                            else -> DialogVybranoeBibleList.PEREVODSEMUXI
+                            0 -> VybranoeBibleList.PEREVODBOKUNA
+                            1 -> VybranoeBibleList.PEREVODSEMUXI
+                            2 -> VybranoeBibleList.PEREVODCARNIAUSKI
+                            3 -> VybranoeBibleList.PEREVODNADSAN
+                            4 -> VybranoeBibleList.PEREVODSINOIDAL
+                            else -> VybranoeBibleList.PEREVODSEMUXI
                         }
                         mListener?.setBiblePeraklad(peraklad)
                     }
@@ -147,7 +147,7 @@ class DialogBibleSearshSettings : DialogFragment() {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-            if (perevod != DialogVybranoeBibleList.PEREVODNADSAN) {
+            if (perevod != VybranoeBibleList.PEREVODNADSAN) {
                 spinner.setSelection(check3)
                 var chek2 = false
                 spinner.onItemSelectedListener = object : OnItemSelectedListener {

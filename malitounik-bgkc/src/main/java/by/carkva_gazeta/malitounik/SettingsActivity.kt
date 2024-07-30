@@ -1079,8 +1079,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("guk", 1)
             prefEditor.putInt("sinoidal", 0)
             prefEditor.putInt("maranata", 0)
-            prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
-            prefEditor.putString("perevodChytanne", DialogVybranoeBibleList.PEREVODSEMUXI)
+            prefEditor.putString("perevod", VybranoeBibleList.PEREVODSEMUXI)
+            prefEditor.putString("perevodChytanne", VybranoeBibleList.PEREVODSEMUXI)
             prefEditor.putInt("soundnotification", 0)
             prefEditor.putInt("timeNotification", 8)
             prefEditor.putString("search_string", "")
@@ -1183,8 +1183,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 prefEditor.putInt("sinoidal", 1)
             } else {
                 prefEditor.putInt("sinoidal", 0)
-                val perevodMaranAta = k.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
-                if (perevodMaranAta == DialogVybranoeBibleList.PEREVODSINOIDAL) prefEditor.putString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI)
+                val perevodMaranAta = k.getString("perevod", VybranoeBibleList.PEREVODSEMUXI)
+                if (perevodMaranAta == VybranoeBibleList.PEREVODSINOIDAL) prefEditor.putString("perevod", VybranoeBibleList.PEREVODSEMUXI)
             }
             prefEditor.apply()
             if (check != k.getInt("sinoidal", 0)) editFull = true

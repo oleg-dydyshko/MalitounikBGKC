@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.isDigitsOnly
 import androidx.core.text.toSpannable
 import by.carkva_gazeta.malitounik.BaseActivity
-import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -79,7 +79,7 @@ interface ParalelnyeMesta {
                     var noKnigaSemuxi = false
                     val r = activity.resources
                     var inputStream: InputStream? = null
-                    if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI || nomer == 22) {
+                    if (perevod == VybranoeBibleList.PEREVODSEMUXI || nomer == 22) {
                         inputStream = when (nomer) {
                             1 -> r.openRawResource(R.raw.biblias1)
                             2 -> r.openRawResource(R.raw.biblias2)
@@ -150,7 +150,7 @@ interface ParalelnyeMesta {
                             else -> null
                         }
                     }
-                    if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA && nomer != 22) {
+                    if (perevod == VybranoeBibleList.PEREVODBOKUNA && nomer != 22) {
                         inputStream = when (nomer) {
                             1 -> r.openRawResource(R.raw.bokunas1)
                             2 -> r.openRawResource(R.raw.bokunas2)
@@ -221,7 +221,7 @@ interface ParalelnyeMesta {
                             else -> null
                         }
                     }
-                    if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI && nomer != 22) {
+                    if (perevod == VybranoeBibleList.PEREVODCARNIAUSKI && nomer != 22) {
                         inputStream = when (nomer) {
                             1 -> r.openRawResource(R.raw.carniauskis1)
                             2 -> r.openRawResource(R.raw.carniauskis2)
@@ -299,8 +299,8 @@ interface ParalelnyeMesta {
                             else -> null
                         }
                     }
-                    if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL || inputStream == null) {
-                        if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) noKnigaSemuxi = true
+                    if (perevod == VybranoeBibleList.PEREVODSINOIDAL || inputStream == null) {
+                        if (perevod != VybranoeBibleList.PEREVODSINOIDAL) noKnigaSemuxi = true
                         if (nomer == 1) inputStream = r.openRawResource(R.raw.sinaidals1)
                         if (nomer == 2) inputStream = r.openRawResource(R.raw.sinaidals2)
                         if (nomer == 3) inputStream = r.openRawResource(R.raw.sinaidals3)
@@ -401,7 +401,7 @@ interface ParalelnyeMesta {
                         val vN = r1.indexOf(nachalo)
                         val vK1 = r1.indexOf(konec)
                         val vK = r1.indexOf("\n", vK1)
-                        if ((perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODBOKUNA || perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) && nomer == 22) {
+                        if ((perevod == VybranoeBibleList.PEREVODSEMUXI || perevod == VybranoeBibleList.PEREVODBOKUNA || perevod == VybranoeBibleList.PEREVODCARNIAUSKI) && nomer == 22) {
                             r1 = r1.replace("\n", "<br>\n")
                             val r3 = r1.split("\n")
                             val sb = StringBuilder()
@@ -420,7 +420,7 @@ interface ParalelnyeMesta {
                                 r1
                             }
                         }
-                        if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) nazva = nazvaBel
+                        if (perevod != VybranoeBibleList.PEREVODSINOIDAL) nazva = nazvaBel
                         val kon = when {
                             nachalo == konec -> {
                                 "$nazva $nomerglavy.$nachalo"
@@ -432,7 +432,7 @@ interface ParalelnyeMesta {
                                 "$nazva $nomerglavy.$nachalo-$konec"
                             }
                         }
-                        if ((perevod == DialogVybranoeBibleList.PEREVODSEMUXI || perevod == DialogVybranoeBibleList.PEREVODBOKUNA || perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) && nomer == 22) {
+                        if ((perevod == VybranoeBibleList.PEREVODSEMUXI || perevod == VybranoeBibleList.PEREVODBOKUNA || perevod == VybranoeBibleList.PEREVODCARNIAUSKI) && nomer == 22) {
                             r2 = r2.replace("<br>", "\n")
                             r2 = r2.replace("\n\n", "\n")
                             r2 = r2.replace("<strong>", "")
@@ -445,9 +445,9 @@ interface ParalelnyeMesta {
                         }
                         if (noKnigaSemuxi) {
                             val title = when (perevod) {
-                                DialogVybranoeBibleList.PEREVODSEMUXI -> activity.resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
-                                DialogVybranoeBibleList.PEREVODBOKUNA -> activity.resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_bokun)
-                                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> activity.resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_charniauski)
+                                VybranoeBibleList.PEREVODSEMUXI -> activity.resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
+                                VybranoeBibleList.PEREVODBOKUNA -> activity.resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_bokun)
+                                VybranoeBibleList.PEREVODCARNIAUSKI -> activity.resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_charniauski)
                                 else -> activity.resources.getString(by.carkva_gazeta.malitounik.R.string.biblia_semuxi)
                             }
                             val src = activity.resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error, title).toSpannable()
@@ -460,7 +460,7 @@ interface ParalelnyeMesta {
                         stringBuilder.append(findIntStyx(SpannableStringBuilder(r2))).append("\n\n")
                     }
                 } catch (t: Throwable) {
-                    if (perevod != DialogVybranoeBibleList.PEREVODSINOIDAL) nazva = nazvaBel
+                    if (perevod != VybranoeBibleList.PEREVODSINOIDAL) nazva = nazvaBel
                     val kon = when {
                         nachalo == konec -> {
                             "$nazva $nomerglavy.$nachalo"

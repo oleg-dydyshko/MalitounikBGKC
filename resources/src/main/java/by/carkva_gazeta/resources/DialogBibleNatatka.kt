@@ -12,14 +12,14 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
-import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
 
 class DialogBibleNatatka : DialogFragment() {
     private var redaktor = false
     private var position = 0
-    private var perevod = DialogVybranoeBibleList.PEREVODSEMUXI
+    private var perevod = VybranoeBibleList.PEREVODSEMUXI
     private var novyzavet = false
     private var nov = "0"
     private var kniga = 0
@@ -57,7 +57,7 @@ class DialogBibleNatatka : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        perevod = arguments?.getString("perevod") ?: DialogVybranoeBibleList.PEREVODSEMUXI
+        perevod = arguments?.getString("perevod") ?: VybranoeBibleList.PEREVODSEMUXI
         novyzavet = arguments?.getBoolean("novyzavet") ?: false
         kniga = arguments?.getInt("kniga") ?: 0
         glava = arguments?.getInt("glava") ?: BibleGlobalList.mListGlava
@@ -76,7 +76,7 @@ class DialogBibleNatatka : DialogFragment() {
             binding.title.setText(R.string.natatka_bersha_biblii)
             if (novyzavet)
                 nov = "1"
-            if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
+            if (perevod == VybranoeBibleList.PEREVODSEMUXI) {
                 for (i in BibleGlobalList.natatkiSemuxa.indices) {
                     if (BibleGlobalList.natatkiSemuxa[i].list[0].contains(nov) && BibleGlobalList.natatkiSemuxa[i].list[1].toInt() == kniga && BibleGlobalList.natatkiSemuxa[i].list[2].toInt() == glava && BibleGlobalList.natatkiSemuxa[i].list[3].toInt() == stix) {
                         redaktor = true
@@ -86,7 +86,7 @@ class DialogBibleNatatka : DialogFragment() {
                     }
                 }
             }
-            if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) {
+            if (perevod == VybranoeBibleList.PEREVODSINOIDAL) {
                 for (i in BibleGlobalList.natatkiSinodal.indices) {
                     if (BibleGlobalList.natatkiSinodal[i].list[0].contains(nov) && BibleGlobalList.natatkiSinodal[i].list[1].toInt() == kniga && BibleGlobalList.natatkiSinodal[i].list[2].toInt() == glava && BibleGlobalList.natatkiSinodal[i].list[3].toInt() == stix) {
                         redaktor = true
@@ -96,7 +96,7 @@ class DialogBibleNatatka : DialogFragment() {
                     }
                 }
             }
-            if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
+            if (perevod == VybranoeBibleList.PEREVODBOKUNA) {
                 for (i in BibleGlobalList.natatkiBokuna.indices) {
                     if (BibleGlobalList.natatkiBokuna[i].list[0].contains(nov) && BibleGlobalList.natatkiBokuna[i].list[1].toInt() == kniga && BibleGlobalList.natatkiBokuna[i].list[2].toInt() == glava && BibleGlobalList.natatkiBokuna[i].list[3].toInt() == stix) {
                         redaktor = true
@@ -106,7 +106,7 @@ class DialogBibleNatatka : DialogFragment() {
                     }
                 }
             }
-            if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
+            if (perevod == VybranoeBibleList.PEREVODCARNIAUSKI) {
                 for (i in BibleGlobalList.natatkiCarniauski.indices) {
                     if (BibleGlobalList.natatkiCarniauski[i].list[0].contains(nov) && BibleGlobalList.natatkiCarniauski[i].list[1].toInt() == kniga && BibleGlobalList.natatkiCarniauski[i].list[2].toInt() == glava && BibleGlobalList.natatkiCarniauski[i].list[3].toInt() == stix) {
                         redaktor = true
@@ -127,7 +127,7 @@ class DialogBibleNatatka : DialogFragment() {
             }
             ad.setView(binding.root)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int ->
-                if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI) {
+                if (perevod == VybranoeBibleList.PEREVODSEMUXI) {
                     if (redaktor && BibleGlobalList.natatkiSemuxa.size > 0) {
                         if (binding.content.text.toString() == "") BibleGlobalList.natatkiSemuxa.removeAt(position)
                         else BibleGlobalList.natatkiSemuxa[position].list[5] = binding.content.text.toString()
@@ -150,7 +150,7 @@ class DialogBibleNatatka : DialogFragment() {
                         }
                     }
                 }
-                if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL) {
+                if (perevod == VybranoeBibleList.PEREVODSINOIDAL) {
                     if (redaktor && BibleGlobalList.natatkiSinodal.size > 0) {
                         if (binding.content.text.toString() == "") BibleGlobalList.natatkiSinodal.removeAt(position)
                         else BibleGlobalList.natatkiSinodal[position].list[5] = binding.content.text.toString()
@@ -173,7 +173,7 @@ class DialogBibleNatatka : DialogFragment() {
                         }
                     }
                 }
-                if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA) {
+                if (perevod == VybranoeBibleList.PEREVODBOKUNA) {
                     if (redaktor && BibleGlobalList.natatkiBokuna.size > 0) {
                         if (binding.content.text.toString() == "") BibleGlobalList.natatkiBokuna.removeAt(position)
                         else BibleGlobalList.natatkiBokuna[position].list[5] = binding.content.text.toString()
@@ -196,7 +196,7 @@ class DialogBibleNatatka : DialogFragment() {
                         }
                     }
                 }
-                if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI) {
+                if (perevod == VybranoeBibleList.PEREVODCARNIAUSKI) {
                     if (redaktor && BibleGlobalList.natatkiCarniauski.size > 0) {
                         if (binding.content.text.toString() == "") BibleGlobalList.natatkiCarniauski.removeAt(position)
                         else BibleGlobalList.natatkiCarniauski[position].list[5] = binding.content.text.toString()
@@ -224,10 +224,10 @@ class DialogBibleNatatka : DialogFragment() {
                 dialog.cancel()
             }
             ad.setNeutralButton(getString(R.string.delite)) { dialog: DialogInterface, _: Int ->
-                if (perevod == DialogVybranoeBibleList.PEREVODSEMUXI && BibleGlobalList.natatkiSemuxa.size > 0) BibleGlobalList.natatkiSemuxa.removeAt(position)
-                if (perevod == DialogVybranoeBibleList.PEREVODSINOIDAL && BibleGlobalList.natatkiSinodal.size > 0) BibleGlobalList.natatkiSinodal.removeAt(position)
-                if (perevod == DialogVybranoeBibleList.PEREVODBOKUNA && BibleGlobalList.natatkiBokuna.size > 0) BibleGlobalList.natatkiBokuna.removeAt(position)
-                if (perevod == DialogVybranoeBibleList.PEREVODCARNIAUSKI && BibleGlobalList.natatkiCarniauski.size > 0) BibleGlobalList.natatkiCarniauski.removeAt(position)
+                if (perevod == VybranoeBibleList.PEREVODSEMUXI && BibleGlobalList.natatkiSemuxa.size > 0) BibleGlobalList.natatkiSemuxa.removeAt(position)
+                if (perevod == VybranoeBibleList.PEREVODSINOIDAL && BibleGlobalList.natatkiSinodal.size > 0) BibleGlobalList.natatkiSinodal.removeAt(position)
+                if (perevod == VybranoeBibleList.PEREVODBOKUNA && BibleGlobalList.natatkiBokuna.size > 0) BibleGlobalList.natatkiBokuna.removeAt(position)
+                if (perevod == VybranoeBibleList.PEREVODCARNIAUSKI && BibleGlobalList.natatkiCarniauski.size > 0) BibleGlobalList.natatkiCarniauski.removeAt(position)
                 val imm12 = fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)
                 dialog.cancel()

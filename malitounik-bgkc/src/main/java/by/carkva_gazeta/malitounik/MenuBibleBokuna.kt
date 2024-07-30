@@ -50,8 +50,9 @@ class MenuBibleBokuna : BaseFragment() {
                     val dialogBibleVybranoeError = DialogBibleVybranoeError()
                     dialogBibleVybranoeError.show(parentFragmentManager, "dialogBibleVybranoeError")
                 } else {
-                    val dialogVybranoeList = DialogVybranoeBibleList.getInstance(DialogVybranoeBibleList.PEREVODBOKUNA)
-                    dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
+                    val intent = Intent(activity, VybranoeBibleList::class.java)
+                    intent.putExtra("perevod", VybranoeBibleList.PEREVODBOKUNA)
+                    startActivity(intent)
                 }
             }
             binding.novyZavet.setOnClickListener {
@@ -63,7 +64,7 @@ class MenuBibleBokuna : BaseFragment() {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BIBLIALIST)
                     intent.putExtra("novyZapavet", true)
-                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
+                    intent.putExtra("perevod", VybranoeBibleList.PEREVODBOKUNA)
                     (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
@@ -78,7 +79,7 @@ class MenuBibleBokuna : BaseFragment() {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BIBLIALIST)
                     intent.putExtra("novyZapavet", false)
-                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
+                    intent.putExtra("perevod", VybranoeBibleList.PEREVODBOKUNA)
                     (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
@@ -97,7 +98,7 @@ class MenuBibleBokuna : BaseFragment() {
                         val intent = Intent()
                         intent.setClassName(activity, MainActivity.BIBLIALIST)
                         intent.putExtra("novyZapavet", k.getBoolean("bible_time_bokuna_zavet", true))
-                        intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
+                        intent.putExtra("perevod", VybranoeBibleList.PEREVODBOKUNA)
                         intent.putExtra("kniga", k.getInt("bible_time_bokuna_kniga", 0))
                         intent.putExtra("glava", k.getInt("bible_time_bokuna_glava", 0))
                         intent.putExtra("stix", k.getInt("bible_time_bokuna_stix", 0))
@@ -154,7 +155,7 @@ class MenuBibleBokuna : BaseFragment() {
                 if (activity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
-                    intent.putExtra("perevod", DialogVybranoeBibleList.PEREVODBOKUNA)
+                    intent.putExtra("perevod", VybranoeBibleList.PEREVODBOKUNA)
                     startActivity(intent)
                 } else {
                     activity.installFullMalitounik()

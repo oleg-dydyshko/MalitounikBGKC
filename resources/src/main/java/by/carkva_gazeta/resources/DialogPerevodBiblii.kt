@@ -13,7 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BaseActivity
-import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.resources.databinding.DialogPerevodBibliiBinding
 
@@ -71,41 +71,41 @@ class DialogPerevodBiblii : DialogFragment() {
             val builder = AlertDialog.Builder(it, style)
             if (dzenNoch) binding.error.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             isSinoidal = arguments?.getBoolean("isSinoidal", true) ?: true
-            val perevod = arguments?.getString("perevod", DialogVybranoeBibleList.PEREVODSEMUXI) ?: DialogVybranoeBibleList.PEREVODSEMUXI
+            val perevod = arguments?.getString("perevod", VybranoeBibleList.PEREVODSEMUXI) ?: VybranoeBibleList.PEREVODSEMUXI
             val sinoidal = k.getInt("sinoidal", 0)
             if (sinoidal == 0 || !isSinoidal) binding.sinoidal.visibility = View.GONE
             val isNadsan = arguments?.getBoolean("isNadsan", false) ?: false
             if (!isNadsan) binding.nadsan.visibility = View.GONE
             when (perevod) {
-                DialogVybranoeBibleList.PEREVODSEMUXI -> {
+                VybranoeBibleList.PEREVODSEMUXI -> {
                     binding.semuxa.isChecked = true
                     binding.sinoidal.isChecked = false
                     binding.bokuna.isChecked = false
                     binding.carniauski.isChecked = false
                     binding.nadsan.isChecked = false
                 }
-                DialogVybranoeBibleList.PEREVODSINOIDAL -> {
+                VybranoeBibleList.PEREVODSINOIDAL -> {
                     binding.semuxa.isChecked = false
                     binding.sinoidal.isChecked = true
                     binding.bokuna.isChecked = false
                     binding.carniauski.isChecked = false
                     binding.nadsan.isChecked = false
                 }
-                DialogVybranoeBibleList.PEREVODBOKUNA -> {
+                VybranoeBibleList.PEREVODBOKUNA -> {
                     binding.semuxa.isChecked = false
                     binding.sinoidal.isChecked = false
                     binding.bokuna.isChecked = true
                     binding.carniauski.isChecked = false
                     binding.nadsan.isChecked = false
                 }
-                DialogVybranoeBibleList.PEREVODNADSAN -> {
+                VybranoeBibleList.PEREVODNADSAN -> {
                     binding.semuxa.isChecked = false
                     binding.sinoidal.isChecked = false
                     binding.bokuna.isChecked = false
                     binding.carniauski.isChecked = false
                     binding.nadsan.isChecked = true
                 }
-                DialogVybranoeBibleList.PEREVODCARNIAUSKI -> {
+                VybranoeBibleList.PEREVODCARNIAUSKI -> {
                     binding.semuxa.isChecked = false
                     binding.sinoidal.isChecked = false
                     binding.bokuna.isChecked = false
@@ -116,19 +116,19 @@ class DialogPerevodBiblii : DialogFragment() {
             binding.perevodGrupBible.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
                 when (checkedId) {
                     R.id.semuxa -> {
-                        mListener?.setPerevod(DialogVybranoeBibleList.PEREVODSEMUXI)
+                        mListener?.setPerevod(VybranoeBibleList.PEREVODSEMUXI)
                     }
                     R.id.sinoidal -> {
-                        mListener?.setPerevod(DialogVybranoeBibleList.PEREVODSINOIDAL)
+                        mListener?.setPerevod(VybranoeBibleList.PEREVODSINOIDAL)
                     }
                     R.id.bokuna -> {
-                        mListener?.setPerevod(DialogVybranoeBibleList.PEREVODBOKUNA)
+                        mListener?.setPerevod(VybranoeBibleList.PEREVODBOKUNA)
                     }
                     R.id.nadsan -> {
-                        mListener?.setPerevod(DialogVybranoeBibleList.PEREVODNADSAN)
+                        mListener?.setPerevod(VybranoeBibleList.PEREVODNADSAN)
                     }
                     R.id.carniauski -> {
-                        mListener?.setPerevod(DialogVybranoeBibleList.PEREVODCARNIAUSKI)
+                        mListener?.setPerevod(VybranoeBibleList.PEREVODCARNIAUSKI)
                     }
                 }
             }

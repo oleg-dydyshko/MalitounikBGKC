@@ -2,14 +2,14 @@ package by.carkva_gazeta.resources
 
 import android.content.Context
 import by.carkva_gazeta.malitounik.BaseActivity
-import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import java.io.InputStream
 
 interface BibliaPerakvadNadsana {
 
     fun isPsaltyrGreek() = true
 
-    fun getNamePerevod() = DialogVybranoeBibleList.PEREVODNADSAN
+    fun getNamePerevod() = VybranoeBibleList.PEREVODNADSAN
 
     fun getTitlePerevod(): String {
         this as BaseActivity

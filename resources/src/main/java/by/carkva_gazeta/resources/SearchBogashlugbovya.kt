@@ -32,7 +32,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogClearHishory
-import by.carkva_gazeta.malitounik.DialogVybranoeBibleList
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.HistoryAdapter
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuBogashlugbovya
@@ -329,7 +329,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_search_bible) {
-            val dialogSearshBible = DialogBibleSearshSettings.getInstance(DialogVybranoeBibleList.PEREVODSEMUXI)
+            val dialogSearshBible = DialogBibleSearshSettings.getInstance(VybranoeBibleList.PEREVODSEMUXI)
             dialogSearshBible.show(supportFragmentManager, "dialogSearshBible")
             return true
         }

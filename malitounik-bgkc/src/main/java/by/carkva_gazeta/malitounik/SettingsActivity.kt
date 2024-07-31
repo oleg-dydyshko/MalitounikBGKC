@@ -26,6 +26,8 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.provider.Settings
 import android.util.TypedValue
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -761,9 +763,26 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         adminResetJob?.cancel()
     }
 
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.settings, menu)
+        super.onCreateMenu(menu, menuInflater)
+    }
+
+    override fun onPrepareMenu(menu: Menu) {
+        menu.findItem(R.id.action_exit).isVisible = k.getBoolean("admin", false)
+    }
+
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (item.itemId == R.id.action_exit) {
+            prefEditor.putBoolean("admin", false)
+            prefEditor.apply()
+            binding.admin.visibility = View.GONE
+            binding.checkBox8.visibility = View.GONE
+            invalidateOptionsMenu()
             return true
         }
         return false

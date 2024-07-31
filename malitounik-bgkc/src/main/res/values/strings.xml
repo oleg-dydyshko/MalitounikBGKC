@@ -1083,5 +1083,6 @@
     <string name="biblia_error">Кніга альбо разьдзел не існуе.</string>
     <string name="pdf_page_count">%1$d/%2$d</string>
     <string name="bibleGrupOpis">Пераклад Бібліі па змаўчаньні:</string>
+    <string name="admin_exit">Выйсьці</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

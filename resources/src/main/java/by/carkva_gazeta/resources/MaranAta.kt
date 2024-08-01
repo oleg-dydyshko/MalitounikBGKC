@@ -55,13 +55,13 @@ import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
-import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuBibleBokuna
 import by.carkva_gazeta.malitounik.MenuBibleCarniauski
 import by.carkva_gazeta.malitounik.MenuBibleSemuxa
 import by.carkva_gazeta.malitounik.MenuBibleSinoidal
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
 import by.carkva_gazeta.resources.databinding.AkafistMaranAtaBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding

@@ -53,7 +53,6 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     private val arrayList = ArrayList<ArrayList<String>>()
     private var width = 0
     private lateinit var adapter: BibliotekaAdapter
-    private var nameRubrika = ""
     private var idSelect = MainActivity.MALITOUNIKI
     private val naidaunia = ArrayList<ArrayList<String>>()
     private var saveindep = true
@@ -149,6 +148,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
 
     interface MunuBiblijatekaListener {
         fun munuBiblijatekaUpdate(isNiadaunia: Boolean)
+        fun menuMainloadNiadaunia()
     }
 
     private fun copyInputStreamToFile(inputStream: InputStream?, mime: String) {
@@ -252,12 +252,14 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         }
     }
 
-    fun onDialogPositiveClick(listPosition: String) {
+    fun onDialogPositiveClick(listPosition: String, isShare: Boolean) {
         if (!MainActivity.isNetworkAvailable()) {
             val dialogNoInternet = DialogNoInternet()
             dialogNoInternet.show(childFragmentManager, "no_internet")
         } else {
-            writeFile(listPosition)
+            activity?.let {
+                writeFile(listPosition, isShare)
+            }
         }
     }
 
@@ -268,13 +270,13 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 if (file.exists()) {
                     filePath = file.path
                     fileName = title
-                    loadComplete()
+                    loadComplete(false)
                 } else {
                     if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
-                        val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition)
+                        val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition, false)
                         bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
                     } else {
-                        writeFile(listPosition)
+                        writeFile(listPosition, false)
                     }
                 }
             } else {
@@ -283,7 +285,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         }
     }
 
-    private fun writeFile(url: String) {
+    private fun writeFile(url: String, isShare: Boolean) {
         binding.progressBar2.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.Main).launch {
             var error = false
@@ -303,7 +305,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             }
             if (!error) {
                 adapter.notifyDataSetChanged()
-                loadComplete()
+                loadComplete(isShare)
             } else {
                 DialogNoInternet().show(childFragmentManager, "no_internet")
             }
@@ -328,14 +330,13 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
     private fun onDialogFile(file: File) {
         saveindep = false
         idSelect = MainActivity.NIADAUNIA
-        nameRubrika = getString(R.string.bibliateka_niadaunia)
         setRubrikaJob = CoroutineScope(Dispatchers.Main).launch {
             if (naidaunia.size > 0) setRubrika(MainActivity.NIADAUNIA)
             else setRubrika(MainActivity.MALITOUNIKI)
         }
         filePath = file.absolutePath
         fileName = file.name
-        loadComplete()
+        loadComplete(false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -397,7 +398,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     if (file.exists()) {
                         filePath = file.absolutePath
                         fileName = file.name
-                        loadComplete()
+                        loadComplete(false)
                     } else {
                         arrayList.removeAt(position)
                         naidaunia.clear()
@@ -416,7 +417,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     if (file.exists()) {
                         filePath = file.absolutePath
                         fileName = file.name
-                        loadComplete()
+                        loadComplete(false)
                     } else {
                         var opisanie = arrayList[position][1]
                         val t1 = opisanie.indexOf("</span><br>")
@@ -431,7 +432,6 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 fileName = savedInstanceState.getString("fileName") ?: ""
                 idSelect = savedInstanceState.getInt("idSelect")
                 isLoad = savedInstanceState.getBoolean("isLoad")
-                nameRubrika = savedInstanceState.getString("nameRubrika") ?: ""
                 saveindep = false
             } else {
                 fileName = arguments?.getString("fileName", "") ?: ""
@@ -459,7 +459,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 }
             }
             if (fileName != "" && filePath != "") {
-                loadComplete()
+                loadComplete(false)
             }
             setTitleBibliateka(idSelect)
         }
@@ -486,16 +486,26 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 arrayList.clear()
                 arrayList.addAll(naidaunia)
                 arrayList.reverse()
+                munuBiblijatekaListener?.menuMainloadNiadaunia()
                 adapter.notifyDataSetChanged()
             }
         }
     }
 
-    private fun loadComplete() {
+    private fun loadComplete(isShare: Boolean) {
         (activity as? BaseActivity)?.let {
             if (it.checkmoduleResources()) {
                 if (it.checkmodulesBiblijateka()) {
-                    dynamicModuleInstalled()
+                    if (isShare) {
+                        val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
+                        val sendIntent = Intent(Intent.ACTION_SEND)
+                        sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(it, "by.carkva_gazeta.malitounik.fileprovider", file))
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, it.getString(R.string.set_log_file))
+                        sendIntent.type = "text/html"
+                        startActivity(Intent.createChooser(sendIntent, it.getString(R.string.set_log_file)))
+                    } else {
+                        dynamicModuleInstalled()
+                    }
                 } else {
                     val dialog = DialogUpdateMalitounik.getInstance(it.getString(R.string.title_download_module))
                     dialog.isCancelable = false
@@ -533,32 +543,26 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             when (rub) {
                 MainActivity.GISTORYIACARKVY -> {
                     idSelect = MainActivity.GISTORYIACARKVY
-                    nameRubrika = it.getString(R.string.bibliateka_gistoryia_carkvy)
                 }
 
                 MainActivity.MALITOUNIKI -> {
                     idSelect = MainActivity.MALITOUNIKI
-                    nameRubrika = it.getString(R.string.bibliateka_malitouniki)
                 }
 
                 MainActivity.SPEUNIKI -> {
                     idSelect = MainActivity.SPEUNIKI
-                    nameRubrika = it.getString(R.string.bibliateka_speuniki)
                 }
 
                 MainActivity.RELLITARATURA -> {
                     idSelect = MainActivity.RELLITARATURA
-                    nameRubrika = it.getString(R.string.bibliateka_rel_litaratura)
                 }
 
                 MainActivity.PDF -> {
                     idSelect = MainActivity.PDF
-                    nameRubrika = it.getString(R.string.arx_num_gaz)
                 }
 
                 else -> {
                     loadNiadaunia()
-                    nameRubrika = it.getString(R.string.bibliateka_niadaunia)
                 }
             }
         }
@@ -767,12 +771,11 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         outState.putString("filePath", filePath)
         outState.putString("fileName", fileName)
         outState.putInt("idSelect", idSelect)
-        outState.putString("nameRubrika", nameRubrika)
         outState.putBoolean("isLoad", isLoad)
     }
 
     private fun showPopupMenu(view: View, position: Int, name: String) {
-        activity?.let {
+        (activity as? BaseActivity)?.let {
             val popup = PopupMenu(it, view)
             val infl = popup.menuInflater
             infl.inflate(R.menu.popup_biblioteka, popup.menu)
@@ -787,7 +790,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 val item = popup.menu.getItem(i)
                 val spanString = SpannableString(popup.menu.getItem(i).title.toString())
                 val end = spanString.length
-                var itemFontSize = (it as BaseActivity).setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+                var itemFontSize = it.setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
                 if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
                 spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 item.title = spanString
@@ -820,8 +823,16 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                             sendIntent.type = "text/html"
                             startActivity(Intent.createChooser(sendIntent, it.getString(R.string.set_log_file)))
                         } else {
-                            val dialogBibliateka = DialogBibliateka.getInstance(arrayList[position][2], arrayList[position][1], arrayList[position][0], arrayList[position][3])
-                            dialogBibliateka.show(childFragmentManager, "dialog_bibliateka")
+                            if (it.checkmoduleResources()) {
+                                if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
+                                    val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(arrayList[position][2], true)
+                                    bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
+                                } else {
+                                    writeFile(arrayList[position][2], true)
+                                }
+                            } else {
+                                it.installFullMalitounik()
+                            }
                         }
                         return@setOnMenuItemClickListener true
                     }

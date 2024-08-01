@@ -288,9 +288,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         fragment?.onDialogbibliatekaPositiveClick(listPosition, title)
     }
 
-    override fun onDialogPositiveClick(listPosition: String) {
+    override fun onDialogPositiveClick(listPosition: String, isShare: Boolean) {
         val fragment = findMenuBiblijateka()
-        fragment?.onDialogPositiveClick(listPosition)
+        fragment?.onDialogPositiveClick(listPosition, isShare)
     }
 
     override fun delAllNiadaunia() {
@@ -1932,6 +1932,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         else binding.label140.visibility = View.GONE
     }
 
+    override fun menuMainloadNiadaunia() {
+        selectFragment(binding.label140)
+    }
+
     private fun isNiadaunia(): Boolean {
         val naidaunia = ArrayList<ArrayList<String>>()
         val gson = Gson()
@@ -2314,11 +2318,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val nw = connectivityManager.activeNetwork ?: return false
                 val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
-                val downSpeed = actNw.linkDownstreamBandwidthKbps
-                val upSpeed = actNw.linkUpstreamBandwidthKbps
-                if (downSpeed < 500 || upSpeed < 250) {
-                    return false
-                }
                 when (typeTransport) {
                     TRANSPORT_CELLULAR -> {
                         if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) return true

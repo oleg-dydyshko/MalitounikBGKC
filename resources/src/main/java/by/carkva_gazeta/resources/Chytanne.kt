@@ -32,10 +32,10 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
-import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.resources.databinding.AkafistChytanneBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import kotlinx.coroutines.CoroutineScope

@@ -12,6 +12,7 @@ import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 
 class DialogBibliotekaWIFI : DialogFragment() {
     private var listPosition = "0"
+    private var isShare = false
     private var mListener: DialogBibliotekaWIFIListener? = null
     private lateinit var builder: AlertDialog.Builder
     private var _binding: DialogTextviewDisplayBinding? = null
@@ -23,12 +24,13 @@ class DialogBibliotekaWIFI : DialogFragment() {
     }
 
     internal interface DialogBibliotekaWIFIListener {
-        fun onDialogPositiveClick(listPosition: String)
+        fun onDialogPositiveClick(listPosition: String, isShare: Boolean)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        listPosition = arguments?.getString("listPosition")?: "0"
+        listPosition = arguments?.getString("listPosition") ?: "0"
+        isShare = arguments?.getBoolean("isShare", false) ?: false
     }
 
     override fun onAttach(context: Context) {
@@ -51,20 +53,21 @@ class DialogBibliotekaWIFI : DialogFragment() {
             builder = AlertDialog.Builder(it, style)
             binding.title.setText(R.string.wifi_error)
             binding.content.setText(R.string.download_bibliateka)
-            if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) 
+            if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             builder.setView(binding.root)
-            builder.setPositiveButton(getString(R.string.dazvolic)) { _: DialogInterface?, _: Int -> mListener?.onDialogPositiveClick(listPosition) }
+            builder.setPositiveButton(getString(R.string.dazvolic)) { _: DialogInterface?, _: Int -> mListener?.onDialogPositiveClick(listPosition, isShare) }
             builder.setNegativeButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
         }
         return builder.create()
     }
 
     companion object {
-        fun getInstance(listPosition: String): DialogBibliotekaWIFI {
+        fun getInstance(listPosition: String, isShare: Boolean): DialogBibliotekaWIFI {
             val instance = DialogBibliotekaWIFI()
             val args = Bundle()
             args.putString("listPosition", listPosition)
+            args.putBoolean("isShare", isShare)
             instance.arguments = args
             return instance
         }

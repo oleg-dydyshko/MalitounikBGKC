@@ -176,6 +176,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         }
         if (Build.VERSION.SDK_INT >= 34) {
             overrideActivityTransition(Activity.OVERRIDE_TRANSITION_OPEN, R.anim.alphain, R.anim.alphaout)
+            overrideActivityTransition(Activity.OVERRIDE_TRANSITION_CLOSE, R.anim.alphain, R.anim.alphaout)
         } else {
             @Suppress("DEPRECATION") overridePendingTransition(R.anim.alphain, R.anim.alphaout)
         }

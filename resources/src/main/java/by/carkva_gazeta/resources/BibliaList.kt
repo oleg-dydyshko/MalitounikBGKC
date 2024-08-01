@@ -11,8 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleZakladkiData
-import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.R
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +53,7 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
                 binding.elvMain.setSelectedGroup(kniga)
             }
         }
+        by.carkva_gazeta.resources.R.raw.mm_02_08_pieraniasiennie_moszczau_pierszamucz_sciapana_viaczernia
     }
 
     override fun addZakladka(color: Int, knigaBible: String, bible: String) {

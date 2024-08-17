@@ -3,7 +3,6 @@ package by.carkva_gazeta.malitounik
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.hardware.SensorEvent
 import android.os.Bundle
 import android.provider.MediaStore
 import java.io.File
@@ -63,8 +62,5 @@ class SplashActivity : BaseActivity() {
         }
         startActivity(intent1)
         finish()
-    }
-
-    override fun onSensorChanged(event: SensorEvent?) {
     }
 }

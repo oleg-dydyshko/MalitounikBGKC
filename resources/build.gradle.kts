@@ -32,7 +32,7 @@ dependencies {
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation ("com.google.android.material:material:1.12.0")
     implementation ("androidx.core:core-ktx:1.13.1")
-    implementation ("org.jsoup:jsoup:1.17.2")
+    implementation ("org.jsoup:jsoup:1.18.1")
     testImplementation ("junit:junit:4.13.2")
     androidTestImplementation ("androidx.test.ext:junit:1.2.1")
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.6.1")

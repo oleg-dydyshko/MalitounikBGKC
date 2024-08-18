@@ -53,7 +53,6 @@ class BibliaList : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, 
                 binding.elvMain.setSelectedGroup(kniga)
             }
         }
-        by.carkva_gazeta.resources.R.raw.mm_02_08_pieraniasiennie_moszczau_pierszamucz_sciapana_viaczernia
     }
 
     override fun addZakladka(color: Int, knigaBible: String, bible: String) {

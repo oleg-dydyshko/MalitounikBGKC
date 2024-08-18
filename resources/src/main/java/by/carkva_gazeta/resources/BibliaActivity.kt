@@ -27,7 +27,6 @@ import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
-import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuBibleBokuna
 import by.carkva_gazeta.malitounik.MenuBibleCarniauski
@@ -36,6 +35,7 @@ import by.carkva_gazeta.malitounik.MenuBibleSinoidal
 import by.carkva_gazeta.malitounik.MenuVybranoe
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.VybranoeData
 import by.carkva_gazeta.resources.databinding.ActivityBibleBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -601,6 +601,11 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             }
             binding.pager.adapter?.notifyDataSetChanged()
         }
+        val title2 = getSpisKnig(novyZapavet)[kniga]
+        val t3 = title2.indexOf("#")
+        val t4 = title2.indexOf("#", t3 + 1)
+        men = VybranoeBibleList.checkVybranoe(title2.substring(t4 + 1).toInt(), binding.pager.currentItem, getNamePerevod())
+        invalidateOptionsMenu()
         loadVydelenie()
         isSetPerevod = false
     }

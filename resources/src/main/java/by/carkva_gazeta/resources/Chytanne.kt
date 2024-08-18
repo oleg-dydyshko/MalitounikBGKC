@@ -234,7 +234,6 @@ class Chytanne : ZmenyiaChastki() {
                 TransitionManager.beginDelayedTransition(binding.toolbar)
             }
         }
-        R.raw.mm_30_08_pasviaccie_adsiaczennia_bisk_alaksandra_jana_paula_novaha_liturhija
         TransitionManager.beginDelayedTransition(binding.toolbar)
     }
 
@@ -406,6 +405,7 @@ class Chytanne : ZmenyiaChastki() {
                 var count = 0
                 if (autoStartScrollJob?.isActive != true) {
                     autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                        Bogashlugbovya.isAutoStartScroll = true
                         delay(1000L)
                         spid = 230
                         autoScroll()
@@ -419,6 +419,7 @@ class Chytanne : ZmenyiaChastki() {
                                 break
                             }
                         }
+                        Bogashlugbovya.isAutoStartScroll = false
                         startAutoScroll()
                     }
                 }
@@ -606,9 +607,11 @@ class Chytanne : ZmenyiaChastki() {
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
         if (autoscroll) {
-            if (resources.configuration.orientation == orientation) {
-                startAutoScroll()
-            } else autoStartScroll()
+            when {
+                Bogashlugbovya.isAutoStartScroll -> autoStartScroll()
+                resources.configuration.orientation == orientation -> startAutoScroll()
+                else -> autoStartScroll()
+            }
         }
         orientation = resources.configuration.orientation
     }
@@ -666,6 +669,7 @@ class Chytanne : ZmenyiaChastki() {
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
+                Bogashlugbovya.isAutoStartScroll = false
                 stopAutoScroll()
             } else {
                 startAutoScroll()

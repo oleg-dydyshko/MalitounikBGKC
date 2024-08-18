@@ -1537,6 +1537,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 var count = 0
                 if (autoStartScrollJob?.isActive != true) {
                     autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                        Bogashlugbovya.isAutoStartScroll = true
                         delay(1000L)
                         spid = 230
                         autoScroll()
@@ -1550,6 +1551,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 break
                             }
                         }
+                        Bogashlugbovya.isAutoStartScroll = false
                         startAutoScroll()
                     }
                 }
@@ -1833,9 +1835,11 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
-            if (resources.configuration.orientation == orientation) {
-                startAutoScroll()
-            } else autoStartScroll()
+            when {
+                Bogashlugbovya.isAutoStartScroll -> autoStartScroll()
+                resources.configuration.orientation == orientation -> startAutoScroll()
+                else -> autoStartScroll()
+            }
         }
         orientation = resources.configuration.orientation
         bindingprogress.progressBrighess.visibility = View.GONE
@@ -1944,6 +1948,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
+                Bogashlugbovya.isAutoStartScroll = false
                 stopAutoScroll()
             } else {
                 startAutoScroll()

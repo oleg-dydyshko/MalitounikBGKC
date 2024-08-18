@@ -149,6 +149,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     companion object {
         val resursMap = ArrayMap<String, Int>()
+        var isAutoStartScroll = false
 
         init {
             resursMap()
@@ -1494,9 +1495,11 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 intent.removeExtra("search")
             }
             if (autoscroll) {
-                if (resources.configuration.orientation == orientation) {
-                    startAutoScroll()
-                } else autoStartScroll()
+                when {
+                    isAutoStartScroll -> autoStartScroll()
+                    resources.configuration.orientation == orientation -> startAutoScroll()
+                    else -> autoStartScroll()
+                }
                 orientation = resources.configuration.orientation
             }
             isLoaded = false
@@ -1577,6 +1580,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 var count = 0
                 if (autoStartScrollJob?.isActive != true) {
                     autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                        isAutoStartScroll = true
                         delay(1000L)
                         spid = 230
                         autoScroll()
@@ -1590,6 +1594,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                                 break
                             }
                         }
+                        isAutoStartScroll = false
                         startAutoScroll()
                     }
                 }
@@ -1941,6 +1946,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
+                isAutoStartScroll = false
                 stopAutoScroll()
             } else {
                 startAutoScroll()
@@ -2079,7 +2085,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             prefEditor.apply()
         }
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
-        autoStartScrollJob?.cancel()
+        stopAutoStartScroll()
     }
 
     override fun onResume() {
@@ -2092,9 +2098,11 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (!isLoaded && autoscroll) {
-            if (resources.configuration.orientation == orientation) {
-                startAutoScroll()
-            } else autoStartScroll()
+            when {
+                isAutoStartScroll -> autoStartScroll()
+                resources.configuration.orientation == orientation -> startAutoScroll()
+                else -> autoStartScroll()
+            }
             orientation = resources.configuration.orientation
         }
     }

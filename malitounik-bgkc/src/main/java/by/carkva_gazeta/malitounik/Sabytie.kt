@@ -252,10 +252,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
     private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (it) {
             binding.pavedamic3.visibility = View.GONE
-        } else {
-            val prefEditor = k.edit()
-            prefEditor.putBoolean("permissionNotificationApi33", false)
-            prefEditor.apply()
         }
     }
 
@@ -264,6 +260,9 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             edit2Save = binding.editText2.text.toString()
             mPermissionResult.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
+    }
+
+    override fun onDialogHelpNotificationApi33Cansel() {
     }
 
     override fun onSettingsAlarm(notification: Int) {
@@ -2552,7 +2551,7 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                             val permissionCheck = ContextCompat.checkSelfPermission(this@Sabytie, Manifest.permission.POST_NOTIFICATIONS)
                             if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                                if (k.getBoolean("permissionNotificationApi33", true) && supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
+                                if (supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
                                     val dialogHelpNotificationApi33 = DialogHelpNotificationApi33()
                                     dialogHelpNotificationApi33.show(supportFragmentManager, "dialogHelpNotificationApi33")
                                 }

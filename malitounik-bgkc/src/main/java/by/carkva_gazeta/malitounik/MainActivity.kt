@@ -1,11 +1,13 @@
 package by.carkva_gazeta.malitounik
 
+import android.Manifest
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -72,7 +74,7 @@ import java.util.Calendar
 import kotlin.random.Random
 
 
-class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener, MenuBiblijateka.MunuBiblijatekaListener {
+class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener, MenuBiblijateka.MunuBiblijatekaListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
 
     private val c = Calendar.getInstance()
     private lateinit var k: SharedPreferences
@@ -187,6 +189,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (state.installStatus() == InstallStatus.DOWNLOADED) {
             dialog?.updateComplete()
             completeUpdate()
+        }
+    }
+    private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (it) {
+            SettingsActivity.setNotifications(k.getInt("notification", SettingsActivity.NOTIFICATION_SVIATY_FULL))
         }
     }
 
@@ -844,6 +851,29 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             prefEditors.putInt("chtoNavaha", BuildConfig.VERSION_CODE)
             prefEditors.apply()
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            if (PackageManager.PERMISSION_DENIED == permissionCheck) {
+                if (k.getBoolean("permissionNotificationApi33", true) && supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
+                    val dialogHelpNotificationApi33 = DialogHelpNotificationApi33.getInstance(SettingsActivity.NOTIFICATION_SVIATY_FULL)
+                    dialogHelpNotificationApi33.isCancelable = false
+                    dialogHelpNotificationApi33.show(supportFragmentManager, "dialogHelpNotificationApi33")
+                }
+            }
+        }
+    }
+
+    override fun onDialogHelpNotificationApi33(notification: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            prefEditors.putInt("notification", notification)
+            prefEditors.apply()
+            mPermissionResult.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
+
+    override fun onDialogHelpNotificationApi33Cansel() {
+        prefEditors.putBoolean("permissionNotificationApi33", false)
+        prefEditors.apply()
     }
 
     private fun checkASztoNovagaMD5Sum(): Boolean {

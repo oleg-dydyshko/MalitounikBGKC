@@ -75,10 +75,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 0 -> setNotificationNon()
             }
             binding.pavedamic3.visibility = View.GONE
-        } else {
-            val prefEditor = k.edit()
-            prefEditor.putBoolean("permissionNotificationApi33", false)
-            prefEditor.apply()
         }
     }
 
@@ -836,7 +832,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
                 prefEditor.putInt("timeNotification", dataTimes[i].data)
                 prefEditor.apply()
-                when (notification) {
+                val notificationSpinner = k.getInt("notification", NOTIFICATION_SVIATY_FULL)
+                when (notificationSpinner) {
                     0 -> setNotificationNon()
                     1 -> setNotificationOnly()
                     2 -> setNotificationFull()
@@ -1150,8 +1147,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                         if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                            if (k.getBoolean("permissionNotificationApi33", true) && supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
-                                val dialogHelpNotificationApi33 = DialogHelpNotificationApi33.getInstance(NOTIFICATION_SVIATY_ONLY)
+                            if (supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
+                                val dialogHelpNotificationApi33 = DialogHelpNotificationApi33.getInstance(NOTIFICATION_SVIATY_FULL)
                                 dialogHelpNotificationApi33.show(supportFragmentManager, "dialogHelpNotificationApi33")
                             }
                             binding.pavedamic3.visibility = View.VISIBLE
@@ -1168,7 +1165,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                         if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                            if (k.getBoolean("permissionNotificationApi33", true) && supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
+                            if (supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
                                 val dialogHelpNotificationApi33 = DialogHelpNotificationApi33.getInstance(NOTIFICATION_SVIATY_FULL)
                                 dialogHelpNotificationApi33.show(supportFragmentManager, "dialogHelpNotificationApi33")
                             }
@@ -1317,6 +1314,12 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.apply()
             mPermissionResult.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
+    }
+
+    override fun onDialogHelpNotificationApi33Cansel() {
+        binding.notificationOnly.isChecked = false
+        binding.notificationFull.isChecked = false
+        binding.notificationNon.isChecked = true
     }
 
     private fun setNotificationOnly() {

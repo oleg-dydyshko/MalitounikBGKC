@@ -18,6 +18,7 @@ class DialogHelpNotificationApi33 : DialogFragment() {
 
     internal interface DialogHelpNotificationApi33Listener {
         fun onDialogHelpNotificationApi33(notification: Int)
+        fun onDialogHelpNotificationApi33Cansel()
     }
 
     override fun onAttach(context: Context) {
@@ -52,7 +53,10 @@ class DialogHelpNotificationApi33 : DialogFragment() {
                 mListener?.onDialogHelpNotificationApi33(arguments?.getInt("notification", SettingsActivity.NOTIFICATION_SVIATY_FULL) ?: SettingsActivity.NOTIFICATION_SVIATY_FULL)
                 dialog.cancel()
             }
-            builder.setNegativeButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setNegativeButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int ->
+                mListener?.onDialogHelpNotificationApi33Cansel()
+                dialog.cancel()
+            }
             alert = builder.create()
         }
         return alert

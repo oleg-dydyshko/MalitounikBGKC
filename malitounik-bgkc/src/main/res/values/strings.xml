@@ -660,7 +660,7 @@
     <string name="settings_poshuk">НАЛАДЫ ПОШУКУ</string>
     <string name="settings_poshuk_smoll">Налады пошуку</string>
     <string name="help_notifications_api33">Для паказу апавяшчэньняў пра падзеі і сьвяты, патрабуецца дазвол на паказ апавяшчэньняў.</string>
-    <string name="no_notifikations">Апавяшчэньні адключаны. Для ўключэньня апавяшчэньняў перайдзіце ў налады Дадатка.</string>
+    <string name="no_notifikations">Апавяшчэньні адключаны. Для ўключэньня апавяшчэньняў націсніце тут.</string>
     <string name="searsh_null_vynik">Вынікаў няма</string>
     <string name="tryjodz_opisanie">%1$s%2$s</string>
     <string name="bogaslujbovyia_data">%1$s за %2$d %3$s %4$d года</string>

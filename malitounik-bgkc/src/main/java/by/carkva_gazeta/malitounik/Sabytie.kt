@@ -68,7 +68,7 @@ import java.io.FileWriter
 import java.util.Calendar
 import java.util.GregorianCalendar
 
-class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener, DialogHelpAlarm.DialogHelpAlarmListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
+class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener, DialogHelpAlarm.DialogHelpAlarmListener {
     private lateinit var k: SharedPreferences
     private val dzenNoch get() = getBaseDzenNoch()
     private var konec = false
@@ -253,16 +253,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         if (it) {
             binding.pavedamic3.visibility = View.GONE
         }
-    }
-
-    override fun onDialogHelpNotificationApi33(notification: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            edit2Save = binding.editText2.text.toString()
-            mPermissionResult.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
-    }
-
-    override fun onDialogHelpNotificationApi33Cansel() {
     }
 
     override fun onSettingsAlarm(notification: Int) {
@@ -561,12 +551,9 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             }
             TransitionManager.beginDelayedTransition(binding.toolbar)
         }
-        binding.pavedamic3.setOnClickListener {
-            try {
-                val intent = Intent(Settings.ACTION_SETTINGS)
-                startActivity(intent)
-            } catch (e: ActivityNotFoundException) {
-                MainActivity.toastView(this, getString(R.string.error_ch2))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            binding.pavedamic3.setOnClickListener {
+                mPermissionResult.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
         binding.titleToolbar.text = resources.getString(R.string.sabytie)
@@ -2551,10 +2538,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                             val permissionCheck = ContextCompat.checkSelfPermission(this@Sabytie, Manifest.permission.POST_NOTIFICATIONS)
                             if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                                if (supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
-                                    val dialogHelpNotificationApi33 = DialogHelpNotificationApi33()
-                                    dialogHelpNotificationApi33.show(supportFragmentManager, "dialogHelpNotificationApi33")
-                                }
                                 binding.pavedamic3.visibility = View.VISIBLE
                             } else {
                                 binding.pavedamic3.visibility = View.GONE

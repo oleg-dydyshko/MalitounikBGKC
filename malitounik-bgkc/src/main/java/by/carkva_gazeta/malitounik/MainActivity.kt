@@ -866,6 +866,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     override fun onDialogHelpNotificationApi33(notification: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             prefEditors.putInt("notification", notification)
+            prefEditors.putBoolean("permissionNotificationApi33", false)
             prefEditors.apply()
             mPermissionResult.launch(Manifest.permission.POST_NOTIFICATIONS)
         }

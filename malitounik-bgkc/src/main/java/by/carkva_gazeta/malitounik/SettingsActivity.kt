@@ -1148,7 +1148,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                         if (PackageManager.PERMISSION_DENIED == permissionCheck) {
                             if (supportFragmentManager.findFragmentByTag("dialogHelpNotificationApi33") == null) {
-                                val dialogHelpNotificationApi33 = DialogHelpNotificationApi33.getInstance(NOTIFICATION_SVIATY_FULL)
+                                val dialogHelpNotificationApi33 = DialogHelpNotificationApi33.getInstance(NOTIFICATION_SVIATY_ONLY)
                                 dialogHelpNotificationApi33.show(supportFragmentManager, "dialogHelpNotificationApi33")
                             }
                             binding.pavedamic3.visibility = View.VISIBLE

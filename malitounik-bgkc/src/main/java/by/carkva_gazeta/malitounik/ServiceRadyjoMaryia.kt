@@ -84,6 +84,9 @@ class ServiceRadyjoMaryia : Service() {
 
                 override fun onPlayerError(error: PlaybackException) {
                     stopServiceRadioMaria(true)
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://server.radiorm.by:8443/live"))
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
                 }
 
                 override fun onPlaybackStateChanged(playbackState: Int) {

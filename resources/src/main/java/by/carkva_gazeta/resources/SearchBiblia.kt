@@ -82,6 +82,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             VybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.addZakladka(color, knigaBible, bible)
             VybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.addZakladka(color, knigaBible, bible)
         }
+        R.raw.mm_30_08_pasviaccie_adsiaczennia_bisk_alaksandra_jana_paula_novaha_viaczernia
     }
 
     override fun getFileZavet(novyZapaviet: Boolean, kniga: Int): File {

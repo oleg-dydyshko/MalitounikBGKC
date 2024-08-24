@@ -447,8 +447,9 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(226, "Адданьне сьвята Перамяненьня", "mm_13_08_addannie_pieramianiennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(229, "Пасьвяцьце Ўсьпеньня і Пакланеньне нерукатворнаму вобразу Госпада нашага Ісуса Хрыста", "mm_16_08_pasviaccie_uspiennia_nierukatvorny_vobraz_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(229, "Пасьвяцьце Ўсьпеньня і Пакланеньне нерукатворнаму вобразу Госпада нашага Ісуса Хрыста", "mm_16_08_pasviaccie_uspiennia_nierukatvorny_vobraz_liturhija", LITURHIJA))
-        datMinALL.add(SlugbovyiaTextuData(230, "Пасьвяцьце Ўсьпеньня і сьвятога мучаніка Мірона", "mm_17_08_pasviaccie_uspiennia_muczanika_mirona", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(230, "Пасьвяцьце Ўсьпеньня і сьвятога мучаніка Мірона", "mm_17_08_pasviaccie_uspiennia_muczanika_mirona_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(243, "Пасьвяцьце Адсячэньня галавы Яна Хрысьціцеля; сьвятых біскупаў Аляксандра, Яна і Паўла Новага", "mm_30_08_pasviaccie_adsiaczennia_bisk_alaksandra_jana_paula_novaha_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(243, "Пасьвяцьце Адсячэньня галавы Яна Хрысьціцеля; сьвятых біскупаў Аляксандра, Яна і Паўла Новага", "mm_30_08_pasviaccie_adsiaczennia_bisk_alaksandra_jana_paula_novaha_viaczernia", VIACZERNIA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

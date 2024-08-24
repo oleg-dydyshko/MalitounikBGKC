@@ -420,9 +420,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         binding.spinner3.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 posit = position
-                val temp = binding.editText2.text
-                binding.editText2.text?.clear()
-                binding.editText2.text = temp
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}

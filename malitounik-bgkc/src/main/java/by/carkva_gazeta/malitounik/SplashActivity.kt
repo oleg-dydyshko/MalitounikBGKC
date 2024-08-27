@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import java.io.File
 import java.io.FileOutputStream
@@ -13,6 +15,7 @@ class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.splash_activity)
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (SettingsActivity.isLightSensorExist() && k.getBoolean("auto_dzen_noch", false)) {
             setlightSensor()
@@ -60,7 +63,9 @@ class SplashActivity : BaseActivity() {
                 }
             }
         }
-        startActivity(intent1)
-        finish()
+        Handler(Looper.getMainLooper()).postDelayed({
+            startActivity(intent1)
+            finish()
+        }, 500)
     }
 }

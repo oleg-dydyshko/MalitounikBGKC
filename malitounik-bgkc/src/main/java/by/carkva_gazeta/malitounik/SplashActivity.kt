@@ -68,4 +68,7 @@ class SplashActivity : BaseActivity() {
             finish()
         }, 500)
     }
+
+    override fun setMyTheme() {
+    }
 }

@@ -47,8 +47,10 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var checkDzenNoch = false
+    private var mLastClickTime: Long = 0
     private var startTimeJob: Job? = null
     private var downloadDynamicModuleListener: DownloadDynamicModuleListener? = null
+    private var ferstStart = false
 
     interface DownloadDynamicModuleListener {
         fun dynamicModuleDownloading(totalBytesToDownload: Double, bytesDownloaded: Double)
@@ -100,7 +102,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                 onBack()
             }
         })
-        mLastClickTime = SystemClock.elapsedRealtime() + 10000
+        ferstStart = true
+        mLastClickTime = SystemClock.elapsedRealtime()
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         checkDzenNoch = getBaseDzenNoch()
@@ -161,7 +164,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     override fun onPause() {
         super.onPause()
         startTimeJob?.cancel()
-        isActiveJob = false
         removelightSensor()
     }
 
@@ -189,8 +191,10 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     }
 
     private fun sensorChangeDzenNoch(sensorValue: Float) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 6000) {
-            return
+        if (!ferstStart) {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 6000) {
+                return
+            }
         }
         when {
             sensorValue <= 4f -> {
@@ -211,12 +215,11 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                 }
             }
         }
+        ferstStart = false
     }
 
     private fun timeJob(isDzenNoch: Boolean) {
-        if (!isActiveJob) {
-            isActiveJob = true
-            startTimeJob?.cancel()
+        if (startTimeJob?.isActive != true) {
             startTimeJob = CoroutineScope(Dispatchers.Main).launch {
                 dzenNoch = isDzenNoch
                 if (k.getBoolean("auto_dzen_noch", false)) {
@@ -226,7 +229,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                 }
                 recreate()
                 mLastClickTime = SystemClock.elapsedRealtime()
-                isActiveJob = false
             }
         }
     }
@@ -357,7 +359,5 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     companion object {
         private var sessionId = 0
-        private var mLastClickTime: Long = 0
-        private var isActiveJob = false
     }
 }

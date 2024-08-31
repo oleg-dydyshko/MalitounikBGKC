@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.hardware.SensorEvent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build

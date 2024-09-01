@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Bundle
+import android.print.PrintAttributes
+import android.print.PrintManager
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -15,6 +17,7 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.biblijateka.databinding.BiblijatekaPdfBinding
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogBrightness
+import by.carkva_gazeta.malitounik.PdfDocumentAdapter
 import com.github.barteksc.pdfviewer.PDFView
 import com.github.barteksc.pdfviewer.listener.OnErrorListener
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener
@@ -244,6 +247,12 @@ class BiblijatekaPdf : BaseActivity(), OnPageChangeListener, OnLoadCompleteListe
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
             return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.menu_print) {
+            val printAdapter = PdfDocumentAdapter(filePath)
+            val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+            val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+            printManager.print(File(filePath).name, printAdapter, printAttributes)
         }
         return false
     }

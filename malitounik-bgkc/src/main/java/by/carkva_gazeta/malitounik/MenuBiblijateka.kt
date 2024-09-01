@@ -11,6 +11,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.SystemClock
+import android.print.PrintAttributes
+import android.print.PrintManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
@@ -252,13 +254,13 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         }
     }
 
-    fun onDialogPositiveClick(listPosition: String, isShare: Boolean) {
+    fun onDialogPositiveClick(listPosition: String, isShare: Boolean, isPrint: Boolean) {
         if (!MainActivity.isNetworkAvailable()) {
             val dialogNoInternet = DialogNoInternet()
             dialogNoInternet.show(childFragmentManager, "no_internet")
         } else {
             activity?.let {
-                writeFile(listPosition, isShare)
+                writeFile(listPosition, isShare, isPrint)
             }
         }
     }
@@ -270,13 +272,13 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 if (file.exists()) {
                     filePath = file.path
                     fileName = title
-                    loadComplete(false)
+                    loadComplete(false, isPrint = false)
                 } else {
                     if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
-                        val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition, false)
+                        val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition, false, isPrint = false)
                         bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
                     } else {
-                        writeFile(listPosition, false)
+                        writeFile(listPosition, false, isPrint = false)
                     }
                 }
             } else {
@@ -285,7 +287,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         }
     }
 
-    private fun writeFile(url: String, isShare: Boolean) {
+    private fun writeFile(url: String, isShare: Boolean, isPrint: Boolean) {
         binding.progressBar2.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.Main).launch {
             var error = false
@@ -305,7 +307,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             }
             if (!error) {
                 adapter.notifyDataSetChanged()
-                loadComplete(isShare)
+                loadComplete(isShare, isPrint)
             } else {
                 DialogNoInternet().show(childFragmentManager, "no_internet")
             }
@@ -336,7 +338,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         }
         filePath = file.absolutePath
         fileName = file.name
-        loadComplete(false)
+        loadComplete(false, isPrint = false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -398,7 +400,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     if (file.exists()) {
                         filePath = file.absolutePath
                         fileName = file.name
-                        loadComplete(false)
+                        loadComplete(false, isPrint = false)
                     } else {
                         arrayList.removeAt(position)
                         naidaunia.clear()
@@ -417,7 +419,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     if (file.exists()) {
                         filePath = file.absolutePath
                         fileName = file.name
-                        loadComplete(false)
+                        loadComplete(false, isPrint = false)
                     } else {
                         var opisanie = arrayList[position][1]
                         val t1 = opisanie.indexOf("</span><br>")
@@ -459,7 +461,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 }
             }
             if (fileName != "" && filePath != "") {
-                loadComplete(false)
+                loadComplete(false, isPrint = false)
             }
             setTitleBibliateka(idSelect)
         }
@@ -492,19 +494,29 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         }
     }
 
-    private fun loadComplete(isShare: Boolean) {
+    private fun loadComplete(isShare: Boolean, isPrint: Boolean) {
         (activity as? BaseActivity)?.let {
             if (it.checkmoduleResources()) {
                 if (it.checkmodulesBiblijateka()) {
-                    if (isShare) {
-                        val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
-                        val sendIntent = Intent(Intent.ACTION_SEND)
-                        sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(it, "by.carkva_gazeta.malitounik.fileprovider", file))
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, it.getString(R.string.set_log_file))
-                        sendIntent.type = "text/html"
-                        startActivity(Intent.createChooser(sendIntent, it.getString(R.string.set_log_file)))
-                    } else {
-                        dynamicModuleInstalled()
+                    when {
+                        isPrint -> {
+                            val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
+                            val printAdapter = PdfDocumentAdapter(file.absolutePath)
+                            val printManager = it.getSystemService(Context.PRINT_SERVICE) as PrintManager
+                            val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+                            printManager.print(file.name, printAdapter, printAttributes)
+                        }
+
+                        isShare -> {
+                            val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
+                            val sendIntent = Intent(Intent.ACTION_SEND)
+                            sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(it, "by.carkva_gazeta.malitounik.fileprovider", file))
+                            sendIntent.putExtra(Intent.EXTRA_SUBJECT, it.getString(R.string.set_log_file))
+                            sendIntent.type = "text/html"
+                            startActivity(Intent.createChooser(sendIntent, it.getString(R.string.set_log_file)))
+                        }
+
+                        else -> dynamicModuleInstalled()
                     }
                 } else {
                     val dialog = DialogUpdateMalitounik.getInstance(it.getString(R.string.title_download_module))
@@ -815,6 +827,27 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                         return@setOnMenuItemClickListener true
                     }
 
+                    R.id.menu_print -> {
+                        if (file.exists()) {
+                            val printAdapter = PdfDocumentAdapter(file.absolutePath)
+                            val printManager = it.getSystemService(Context.PRINT_SERVICE) as PrintManager
+                            val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+                            printManager.print(file.name, printAdapter, printAttributes)
+                        } else {
+                            if (it.checkmoduleResources()) {
+                                if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
+                                    val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(arrayList[position][2], false, isPrint = true)
+                                    bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
+                                } else {
+                                    writeFile(arrayList[position][2], false, isPrint = true)
+                                }
+                            } else {
+                                it.installFullMalitounik()
+                            }
+                        }
+                        return@setOnMenuItemClickListener true
+                    }
+
                     R.id.menu_share -> {
                         if (file.exists()) {
                             val sendIntent = Intent(Intent.ACTION_SEND)
@@ -825,10 +858,10 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                         } else {
                             if (it.checkmoduleResources()) {
                                 if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
-                                    val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(arrayList[position][2], true)
+                                    val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(arrayList[position][2], true, isPrint = false)
                                     bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
                                 } else {
-                                    writeFile(arrayList[position][2], true)
+                                    writeFile(arrayList[position][2], true, isPrint = false)
                                 }
                             } else {
                                 it.installFullMalitounik()

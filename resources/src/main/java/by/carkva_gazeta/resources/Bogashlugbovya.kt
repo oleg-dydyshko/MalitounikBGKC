@@ -12,6 +12,9 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
+import android.print.PrintAttributes
+import android.print.PrintDocumentAdapter
+import android.print.PrintManager
 import android.provider.Settings
 import android.text.Editable
 import android.text.Spannable
@@ -32,6 +35,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -122,6 +127,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     private var startSearchString = ""
     private var liturgia = false
     private var isLoaded = false
+    private var aliert8 = ""
+    private var aliert9 = ""
     private var perevod = VybranoeBibleList.PEREVODSEMUXI
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -744,11 +751,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         binding.titleToolbar.isSingleLine = true
     }
 
-    private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
-        liturgia = resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica" || resurs == "vialikdzien_liturhija"
-        var aliert8 = ""
-        var aliert9 = ""
-        val res = withContext(Dispatchers.IO) {
+    private suspend fun getFileResource(): String {
+        return withContext(Dispatchers.IO) {
             chechZmena = false
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
@@ -932,6 +936,11 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             }
             return@withContext builder.toString()
         }
+    }
+
+    private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
+        liturgia = resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica" || resurs == "vialikdzien_liturhija"
+        val res = getFileResource()
         val text = MainActivity.fromHtml(res).toSpannable()
         if (liturgia) {
             val ch1 = runZmennyiaChastki(text, 0)
@@ -1989,6 +1998,21 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 hideHelp()
             }
             return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.menu_print) {
+            CoroutineScope(Dispatchers.Main).launch {
+                val webView = WebView(this@Bogashlugbovya)
+                val html = getFileResource()
+                webView.loadDataWithBaseURL(null, html, "text/HTML", "UTF-8", null)
+                webView.setWebViewClient(object : WebViewClient() {
+                    override fun onPageFinished(view: WebView, url: String) {
+                        val printAdapter: PrintDocumentAdapter = webView.createPrintDocumentAdapter(title)
+                        val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+                        val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+                        printManager.print(resurs, printAdapter, printAttributes)
+                    }
+                })
+            }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             val pesny = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error

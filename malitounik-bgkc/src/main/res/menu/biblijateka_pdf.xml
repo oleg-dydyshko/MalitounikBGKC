@@ -24,4 +24,9 @@
         android:orderInCategory="100"
         android:title="@string/inversion"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_print"
+        android:orderInCategory="100"
+        android:title="@string/print"
+        app:showAsAction="never" />
 </menu>

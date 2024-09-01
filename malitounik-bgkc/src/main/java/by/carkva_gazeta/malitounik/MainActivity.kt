@@ -11,7 +11,6 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.hardware.SensorEvent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -296,9 +295,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         fragment?.onDialogbibliatekaPositiveClick(listPosition, title)
     }
 
-    override fun onDialogPositiveClick(listPosition: String, isShare: Boolean) {
+    override fun onDialogPositiveClick(listPosition: String, isShare: Boolean, isPrint: Boolean) {
         val fragment = findMenuBiblijateka()
-        fragment?.onDialogPositiveClick(listPosition, isShare)
+        fragment?.onDialogPositiveClick(listPosition, isShare, isPrint)
     }
 
     override fun delAllNiadaunia() {

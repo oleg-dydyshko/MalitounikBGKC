@@ -751,8 +751,9 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         binding.titleToolbar.isSingleLine = true
     }
 
-    private suspend fun getFileResource(): String {
-        return withContext(Dispatchers.IO) {
+    private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
+        liturgia = resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica" || resurs == "vialikdzien_liturhija"
+        val res = withContext(Dispatchers.IO) {
             chechZmena = false
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
@@ -936,11 +937,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             }
             return@withContext builder.toString()
         }
-    }
-
-    private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
-        liturgia = resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica" || resurs == "vialikdzien_liturhija"
-        val res = getFileResource()
         val text = MainActivity.fromHtml(res).toSpannable()
         if (liturgia) {
             val ch1 = runZmennyiaChastki(text, 0)
@@ -2002,8 +1998,31 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         if (id == by.carkva_gazeta.malitounik.R.id.menu_print) {
             CoroutineScope(Dispatchers.Main).launch {
                 val webView = WebView(this@Bogashlugbovya)
-                val html = getFileResource()
-                webView.loadDataWithBaseURL(null, html, "text/HTML", "UTF-8", null)
+                val idResurs = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
+                val inputStream = resources.openRawResource(idResurs)
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                val builder = StringBuilder()
+                reader.forEachLine {
+                    var line = it
+                    line = line.replace("NOCH", "")
+                    line = line.replace("TRAPARN", "")
+                    line = line.replace("TRAPARK", "")
+                    line = line.replace("PRAKIMENN", "")
+                    line = line.replace("PRAKIMENK", "")
+                    line = line.replace("ALILUIAN", "")
+                    line = line.replace("ALILUIAK", "")
+                    line = line.replace("PRICHASNIKN", "")
+                    line = line.replace("PRICHASNIKK", "")
+                    line = line.replace("KANDAK", "")
+                    line = line.replace("PRAKIMEN", "")
+                    line = line.replace("ALILUIA", "")
+                    line = line.replace("PRICHASNIK", "")
+                    line = line.replace("APCH", "")
+                    line = line.replace("EVCH", "")
+                    builder.append(line)
+                }
+                webView.loadDataWithBaseURL(null, builder.toString(), "text/HTML", "UTF-8", null)
                 webView.setWebViewClient(object : WebViewClient() {
                     override fun onPageFinished(view: WebView, url: String) {
                         val printAdapter: PrintDocumentAdapter = webView.createPrintDocumentAdapter(title)

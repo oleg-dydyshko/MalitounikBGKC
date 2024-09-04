@@ -2014,19 +2014,19 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 }
                 val res3 = sluzba.getTydzen3()
                 res3.forEach {
-                    if (resurs == it.resource) printFile = "Tydzien-3 VP_2012.pdf"
+                    if (resurs == it.resource) printFile = "Tydzien-3 VP_2014.pdf"
                 }
                 val res4 = sluzba.getTydzen4()
                 res4.forEach {
-                    if (resurs == it.resource) printFile = "Tydzien-4 VP_2012.pdf"
+                    if (resurs == it.resource) printFile = "Tydzien-4 VP_2014.pdf"
                 }
                 val res5 = sluzba.getTydzen5()
                 res5.forEach {
-                    if (resurs == it.resource) printFile = "Tydzien-5 VP_2012.pdf"
+                    if (resurs == it.resource) printFile = "Tydzien-5 VP_2015.pdf"
                 }
                 val res6 = sluzba.getTydzen6()
                 res6.forEach {
-                    if (resurs == it.resource) printFile = "Tydzien-6 VP_2012.pdf"
+                    if (resurs == it.resource) printFile = "Tydzien-6 VP_2015.pdf"
                 }
                 if (resurs == "lit_jana_zalatavusnaha") printFile = "LITURGIJA Jana Zlt.pdf"
                 if (resurs == "kanon_andreja_kryckaha") printFile = "Kanon_A-Kryckaha.pdf"

@@ -76,6 +76,7 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
             binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         }
         binding.titleToolbar.text = intent?.extras?.getString("title", getString(R.string.tryjodz)) ?: getString(R.string.tryjodz)
+        binding.subTitleToolbar.visibility = View.GONE
         val sluzba = SlugbovyiaTextu()
         var array = ArrayList<SlugbovyiaTextuData>()
         var day = ""

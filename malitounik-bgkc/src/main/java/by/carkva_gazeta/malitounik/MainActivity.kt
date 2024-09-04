@@ -300,6 +300,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         fragment?.onDialogPositiveClick(listPosition, isShare, isPrint)
     }
 
+    override fun onDialogNegativeClick() {
+    }
+
     override fun delAllNiadaunia() {
         val fragment = findMenuBiblijateka()
         fragment?.delAllNiadaunia()

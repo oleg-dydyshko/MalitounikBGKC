@@ -10,10 +10,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Environment
 import android.print.PrintAttributes
-import android.print.PrintDocumentAdapter
 import android.print.PrintManager
 import android.provider.Settings
 import android.text.Editable
@@ -51,6 +52,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.CaliandarMun
+import by.carkva_gazeta.malitounik.DialogBibliotekaWIFI
 import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
@@ -58,9 +60,11 @@ import by.carkva_gazeta.malitounik.DialogHelpShare
 import by.carkva_gazeta.malitounik.EditTextCustom
 import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.MalitvyPasliaPrychascia
 import by.carkva_gazeta.malitounik.MenuCaliandar
 import by.carkva_gazeta.malitounik.MenuVybranoe
+import by.carkva_gazeta.malitounik.PdfDocumentAdapter
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.SlugbovyiaTextu
 import by.carkva_gazeta.malitounik.VybranoeBibleList
@@ -75,6 +79,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.File
@@ -83,7 +88,7 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener {
+class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -127,8 +132,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     private var startSearchString = ""
     private var liturgia = false
     private var isLoaded = false
-    private var aliert8 = ""
-    private var aliert9 = ""
     private var perevod = VybranoeBibleList.PEREVODSEMUXI
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -753,6 +756,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
         liturgia = resurs == "lit_jana_zalatavusnaha" || resurs == "lit_jan_zalat_vielikodn" || resurs == "lit_vasila_vialikaha" || resurs == "abiednica" || resurs == "vialikdzien_liturhija"
+        var aliert8 = ""
+        var aliert9 = ""
         val res = withContext(Dispatchers.IO) {
             chechZmena = false
             val builder = StringBuilder()
@@ -1997,40 +2002,55 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         }
         if (id == by.carkva_gazeta.malitounik.R.id.menu_print) {
             CoroutineScope(Dispatchers.Main).launch {
-                val webView = WebView(this@Bogashlugbovya)
-                val idResurs = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
-                val inputStream = resources.openRawResource(idResurs)
-                val isr = InputStreamReader(inputStream)
-                val reader = BufferedReader(isr)
-                val builder = StringBuilder()
-                reader.forEachLine {
-                    var line = it
-                    line = line.replace("NOCH", "")
-                    line = line.replace("TRAPARN", "")
-                    line = line.replace("TRAPARK", "")
-                    line = line.replace("PRAKIMENN", "")
-                    line = line.replace("PRAKIMENK", "")
-                    line = line.replace("ALILUIAN", "")
-                    line = line.replace("ALILUIAK", "")
-                    line = line.replace("PRICHASNIKN", "")
-                    line = line.replace("PRICHASNIKK", "")
-                    line = line.replace("KANDAK", "")
-                    line = line.replace("PRAKIMEN", "")
-                    line = line.replace("ALILUIA", "")
-                    line = line.replace("PRICHASNIK", "")
-                    line = line.replace("APCH", "")
-                    line = line.replace("EVCH", "")
-                    builder.append(line)
+                val sluzba = SlugbovyiaTextu()
+                var printFile = ""
+                val res1 = sluzba.getTydzen1()
+                res1.forEach {
+                    if (resurs == it.resource) printFile = "Tydzien-1 VP_2012.pdf"
                 }
-                webView.loadDataWithBaseURL(null, builder.toString(), "text/HTML", "UTF-8", null)
-                webView.setWebViewClient(object : WebViewClient() {
-                    override fun onPageFinished(view: WebView, url: String) {
-                        val printAdapter: PrintDocumentAdapter = webView.createPrintDocumentAdapter(title)
-                        val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+                val res2 = sluzba.getTydzen2()
+                res2.forEach {
+                    if (resurs == it.resource) printFile = "Tydzien-2 VP_2012.pdf"
+                }
+                val res3 = sluzba.getTydzen3()
+                res3.forEach {
+                    if (resurs == it.resource) printFile = "Tydzien-3 VP_2012.pdf"
+                }
+                val res4 = sluzba.getTydzen4()
+                res4.forEach {
+                    if (resurs == it.resource) printFile = "Tydzien-4 VP_2012.pdf"
+                }
+                val res5 = sluzba.getTydzen5()
+                res5.forEach {
+                    if (resurs == it.resource) printFile = "Tydzien-5 VP_2012.pdf"
+                }
+                val res6 = sluzba.getTydzen6()
+                res6.forEach {
+                    if (resurs == it.resource) printFile = "Tydzien-6 VP_2012.pdf"
+                }
+                if (resurs == "lit_jana_zalatavusnaha") printFile = "LITURGIJA Jana Zlt.pdf"
+                if (resurs == "kanon_andreja_kryckaha") printFile = "Kanon_A-Kryckaha.pdf"
+                if (resurs == "akafist4") printFile = "Akafist-Padl-muczanikam.pdf"
+                if (resurs == "akafist6") printFile = "Akafist da Ducha Sviatoha.pdf"
+                if (resurs == "vialikaja_piatnica_jutran_12jevanhellau") printFile = "Vial-Piatnica-jutran-12-Evang.pdf"
+                if (printFile != "" && MainActivity.isNetworkAvailable()) {
+                    val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), printFile)
+                    if (file.exists()) {
+                        val printAdapter = PdfDocumentAdapter(file.absolutePath)
                         val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
-                        printManager.print(resurs, printAdapter, printAttributes)
+                        val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+                        printManager.print(file.name, printAdapter, printAttributes)
+                    } else {
+                        if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
+                            val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(printFile, false, isPrint = true)
+                            bibliotekaWiFi.show(supportFragmentManager, "biblioteka_WI_FI")
+                        } else {
+                            writeFile(printFile)
+                        }
                     }
-                })
+                } else {
+                    printResours()
+                }
             }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
@@ -2079,6 +2099,109 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             return true
         }
         return false
+    }
+
+    private suspend fun downloadPdfFile(url: String): Boolean {
+        var error = false
+        val pathReference = Malitounik.referens.child("/data/bibliateka/$url")
+        val localFile = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
+        pathReference.getFile(localFile).addOnFailureListener {
+            error = true
+        }.await()
+        return error
+    }
+
+    private fun writeFile(url: String) {
+        binding.progressBar2.visibility = View.VISIBLE
+        CoroutineScope(Dispatchers.Main).launch {
+            var error = false
+            try {
+                val dir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                if (dir?.exists() != true) {
+                    dir?.mkdir()
+                }
+                for (i in 0..2) {
+                    error = downloadPdfFile(url)
+                    if (!error) break
+                }
+            } catch (t: Throwable) {
+                error = true
+            }
+            if (!error) {
+                loadComplete(url)
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    printResours()
+                }
+            }
+            binding.progressBar2.visibility = View.GONE
+        }
+    }
+
+    private fun loadComplete(fileName: String) {
+        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
+        val printAdapter = PdfDocumentAdapter(file.absolutePath)
+        val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+        val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+        printManager.print(file.name, printAdapter, printAttributes)
+    }
+
+    override fun onDialogPositiveClick(listPosition: String, isShare: Boolean, isPrint: Boolean) {
+        if (!MainActivity.isNetworkAvailable()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                printResours()
+            }
+        } else {
+            writeFile(listPosition)
+        }
+    }
+
+    override fun onDialogNegativeClick() {
+        CoroutineScope(Dispatchers.Main).launch {
+            printResours()
+        }
+    }
+
+    private fun printResours() {
+        val webView = WebView(this@Bogashlugbovya)
+        val idResurs = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
+        val inputStream = resources.openRawResource(idResurs)
+        val isr = InputStreamReader(inputStream)
+        val reader = BufferedReader(isr)
+        val builder = StringBuilder()
+        reader.forEachLine {
+            var line = it
+            line = line.replace("NOCH", "")
+            line = line.replace("TRAPARN", "")
+            line = line.replace("TRAPARK", "")
+            line = line.replace("PRAKIMENN", "")
+            line = line.replace("PRAKIMENK", "")
+            line = line.replace("ALILUIAN", "")
+            line = line.replace("ALILUIAK", "")
+            line = line.replace("PRICHASNIKN", "")
+            line = line.replace("PRICHASNIKK", "")
+            line = line.replace("KANDAK", "")
+            line = line.replace("PRAKIMEN", "")
+            line = line.replace("ALILUIA", "")
+            line = line.replace("PRICHASNIK", "")
+            line = line.replace("APCH", "")
+            line = line.replace("EVCH", "")
+            builder.append(line)
+        }
+        webView.loadDataWithBaseURL(null, builder.toString(), "text/HTML", "UTF-8", null)
+        webView.setWebViewClient(object : WebViewClient() {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                binding.progressBar2.visibility = View.VISIBLE
+            }
+
+            override fun onPageFinished(view: WebView, url: String) {
+                val printAdapter = webView.createPrintDocumentAdapter(title)
+                val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+                val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+                printManager.print(resurs, printAdapter, printAttributes)
+                binding.progressBar2.visibility = View.GONE
+            }
+        })
     }
 
     override fun dialogHelpFullScreenSettingsClose() {

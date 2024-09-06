@@ -451,6 +451,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(230, "Пасьвяцьце Ўсьпеньня і сьвятога мучаніка Мірона", "mm_17_08_pasviaccie_uspiennia_muczanika_mirona_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(243, "Пасьвяцьце Адсячэньня галавы Яна Хрысьціцеля; сьвятых біскупаў Аляксандра, Яна і Паўла Новага", "mm_30_08_pasviaccie_adsiaczennia_bisk_alaksandra_jana_paula_novaha_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(243, "Пасьвяцьце Адсячэньня галавы Яна Хрысьціцеля; сьвятых біскупаў Аляксандра, Яна і Паўла Новага", "mm_30_08_pasviaccie_adsiaczennia_bisk_alaksandra_jana_paula_novaha_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(250, "Успамін цуду сьвятога арханёла Міхаіла ў Калосах", "mm_06_09_cud_archaniola_michala_viaczernia", VIACZERNIA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

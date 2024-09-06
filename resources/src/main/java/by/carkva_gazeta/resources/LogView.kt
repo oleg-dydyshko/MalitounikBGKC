@@ -1,6 +1,8 @@
 package by.carkva_gazeta.resources
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Bundle
@@ -92,6 +94,7 @@ class LogView : BaseActivity() {
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = LogBinding.inflate(layoutInflater)
@@ -101,6 +104,7 @@ class LogView : BaseActivity() {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
         }
         setTollbarTheme()
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun checkResourcesCount() {

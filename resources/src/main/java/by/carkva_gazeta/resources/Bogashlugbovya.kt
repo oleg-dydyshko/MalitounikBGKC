@@ -2130,9 +2130,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             if (!error) {
                 loadComplete(url)
             } else {
-                CoroutineScope(Dispatchers.Main).launch {
-                    printResours()
-                }
+                printResours()
             }
             binding.progressBar2.visibility = View.GONE
         }
@@ -2148,18 +2146,14 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     override fun onDialogPositiveClick(listPosition: String, isShare: Boolean, isPrint: Boolean) {
         if (!MainActivity.isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.Main).launch {
-                printResours()
-            }
+            printResours()
         } else {
             writeFile(listPosition)
         }
     }
 
     override fun onDialogNegativeClick() {
-        CoroutineScope(Dispatchers.Main).launch {
-            printResours()
-        }
+        printResours()
     }
 
     private fun printResours() {

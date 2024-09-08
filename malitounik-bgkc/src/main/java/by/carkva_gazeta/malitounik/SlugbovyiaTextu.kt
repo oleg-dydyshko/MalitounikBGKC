@@ -240,6 +240,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(251, "Перадсьвяцьце Нараджэньня Багародзіцы і сьвятога мучаніка Сазонта", "mm_07_09_pieradsv_naradzennia_baharodzicy_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(252, "Нараджэньне Найсьвяцейшае Багародзіцы", "mm_08_09_naradzennie_baharodzicy_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(253, "Пасьвяцьце Нараджэньня Багародзіцы і сьвятых Якіма і Ганны", "mm_09_09_pasviaccie_naradzennia_baharodzicy_jakima_i_hanny_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(253, "Пасьвяцьце Нараджэньня Багародзіцы і сьвятых Якіма і Ганны", "mm_09_09_pasviaccie_naradzennia_baharodzicy_jakima_i_hanny_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(254, "Пасьвяцьце Нараджэньня Багародзіцы і сьвятых мучаніц Мінадоры, Мітрадоры і Німфадоры", "mm_10_09_pasviaccie_naradzennia_baharodzicy_muczanic_minadory_mitradory_nimfadory_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(255, "Пасьвяцьце Нараджэньня Багародзіцы і сьвятое маці нашае Тадоры", "mm_11_09_pasviaccie_naradzennia_baharodzicy_maci_tadory_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(256, "Адданьне сьвята Нараджэньня Багародзіцы", "mm_12_09_addannie_naradzennia_baharodzicy_viaczernia", VIACZERNIA))

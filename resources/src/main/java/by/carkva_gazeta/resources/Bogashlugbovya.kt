@@ -881,12 +881,20 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                                 }
                                 var sv = sviatyia()
                                 if (sv != "") {
-                                    val s1 = sv.split(":")
-                                    val s2 = s1[1].split(";")
-                                    sv = if (s1[0].contains("На ютрані")) s2[1]
-                                    else s1[0] + ":" + s2[0]
-                                    aliert8 = sv.trim()
-                                    builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
+                                    try {
+                                        val s1 = sv.split(":")
+                                        val s2 = s1[1].split(";")
+                                        sv = if (s1[0].contains("На ютрані")) {
+                                            if (s2[0].contains("\n")) {
+                                                val t1 = s2[0].indexOf("\n")
+                                                s2[0].substring(t1 + 1)
+                                            } else s2[0]
+                                        } else s1[0] + ":" + s2[0]
+                                        aliert8 = sv.trim()
+                                        builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
+                                    } catch (_: Throwable) {
+                                        builder.append(line)
+                                    }
                                 } else builder.append(line)
                                 try {
                                     val textPerevod = when (perevod) {
@@ -908,12 +916,16 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                                 }
                                 var sv = sviatyia()
                                 if (sv != "") {
-                                    val s1 = sv.split(":")
-                                    val s2 = s1[1].split(";")
-                                    sv = if (s1[0].contains("На ютрані")) s2[2]
-                                    else s1[0] + ":" + s2[1]
-                                    aliert9 = sv.trim()
-                                    builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
+                                    try {
+                                        val s1 = sv.split(":")
+                                        val s2 = s1[1].split(";")
+                                        sv = if (s1[0].contains("На ютрані")) s2[1]
+                                        else s1[0] + ":" + s2[1]
+                                        aliert9 = sv.trim()
+                                        builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
+                                    } catch (_: Throwable) {
+                                        builder.append(line)
+                                    }
                                 } else builder.append(line)
                                 try {
                                     val textPerevod = when (perevod) {

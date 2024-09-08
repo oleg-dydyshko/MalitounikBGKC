@@ -6,9 +6,9 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
-import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
@@ -123,7 +123,8 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFont
 
     fun sviatyiaView(apostal: Int): String {
         val data = sviatyia()
-        val chtenie = if (apostal == 1) 0 else 1
+        var chtenie = if (apostal == 1) 0 else 1
+        if (arrayData[0][10].contains("На ютрані") || arrayData[0][11].contains("На ютрані")) chtenie++
         return if (data == "" || data.contains(resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
         else chtenia(data, perevod)[chtenie]
     }

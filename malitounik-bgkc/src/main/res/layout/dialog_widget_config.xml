@@ -16,7 +16,7 @@
         android:textSize="14sp"
         android:textStyle="bold" />
 
-    <by.carkva_gazeta.malitounik.SwitchCompatCustom
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/checkBox20"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,5 +28,5 @@
         android:paddingBottom="5sp"
         android:paddingTop="5sp"
         android:text="@string/widget_day_d_n"
-        android:textSize="14sp" />
+        android:textSize="18sp" />
 </LinearLayout>

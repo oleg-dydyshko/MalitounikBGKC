@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import androidx.core.content.ContextCompat
+import by.carkva_gazeta.malitounik.databinding.SplashActivityBinding
 import java.io.File
 import java.io.FileOutputStream
 
@@ -15,8 +17,13 @@ class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.splash_activity)
+        val binding = SplashActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        if (getBaseDzenNoch()) {
+            binding.constraintlayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+            binding.imageView.setImageResource(R.drawable.logotip_splash_black)
+        }
         if (SettingsActivity.isLightSensorExist() && k.getBoolean("auto_dzen_noch", false)) {
             setlightSensor()
         }
@@ -67,8 +74,5 @@ class SplashActivity : BaseActivity() {
             startActivity(intent1)
             finish()
         }, 500)
-    }
-
-    override fun setMyTheme() {
     }
 }

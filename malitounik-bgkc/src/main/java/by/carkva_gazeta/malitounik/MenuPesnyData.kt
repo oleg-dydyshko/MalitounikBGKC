@@ -38,6 +38,7 @@ class MenuPesnyData {
         pesnyBel.add(Data("piesni_belarus_maja_kraina", "Мая краіна"))
         pesnyBel.add(Data("piesni_belarus_my_choczam_boha", "Мы хочам Бога"))
         pesnyBel.add(Data("piesni_belarus_malitva_buraukin", "Малітва (Г. Бураўкін)"))
+        pesnyBel.add(Data("piesni_belarus_viarszynia_bielarusi_kryz", "Вяршыня Беларусі – крыж"))
 
         pesnyKal.add(Data("pesny_kal_0", "Ave Maria (Зорка зазьзяла)"))
         pesnyKal.add(Data("pesny_kal_1", "А што гэта за сьпевы"))

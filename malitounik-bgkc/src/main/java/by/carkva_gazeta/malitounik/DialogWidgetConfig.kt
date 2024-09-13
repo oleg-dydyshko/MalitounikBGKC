@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
@@ -58,7 +57,6 @@ class DialogWidgetConfig : DialogFragment() {
                 dialog.cancel()
             }
             _binding = DialogWidgetConfigBinding.inflate(layoutInflater)
-            binding.checkBox20.typeface = MainActivity.createFont(Typeface.NORMAL)
             binding.checkBox20.isChecked = chin.getBoolean("dzen_noch_widget_day$widgetID", false)
             binding.checkBox20.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
                 val prefEditor = chin.edit()

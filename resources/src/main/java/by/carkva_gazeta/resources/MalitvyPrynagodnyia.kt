@@ -195,6 +195,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         data.add(MenuListData("Малітва да ўкрыжаванага Хрыста (Францішак Скарына)", "mltv_da_ukryzavanaha_chrysta_skaryna"))
         data.add(MenuListData("Малітва перад пачаткам і пасьля кожнай справы", "mltv_pierad_i_pasla_koznaj_spravy"))
         data.add(MenuListData("Малітва ў дзень нараджэньня", "mltv_dzien_naradzennia"))
+        data.sort()
         adapter = MenuListAdaprer(this, data)
         binding.ListView.adapter = adapter
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)

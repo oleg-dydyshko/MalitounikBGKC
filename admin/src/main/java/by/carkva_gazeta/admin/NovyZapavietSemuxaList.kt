@@ -1,6 +1,5 @@
 package by.carkva_gazeta.admin
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -244,7 +243,7 @@ class NovyZapavietSemuxaList : BaseActivity() {
         setTollbarTheme()
     }
 
-    private inner class ExpListAdapterNovyZapaviet(private val mContext: Activity) : BaseExpandableListAdapter() {
+    private inner class ExpListAdapterNovyZapaviet(private val mContext: BaseActivity) : BaseExpandableListAdapter() {
         override fun getGroupCount(): Int {
             return groups.size
         }
@@ -309,8 +308,7 @@ class NovyZapavietSemuxaList : BaseActivity() {
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = ChildViewBinding.inflate(layoutInflater, parent, false)
-            val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = mContext.getBaseDzenNoch()
             if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
             rootView.textChild.text = groups[groupPosition][childPosition]
             return rootView.root

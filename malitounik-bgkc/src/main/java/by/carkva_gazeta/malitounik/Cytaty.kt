@@ -210,31 +210,8 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
             return true
         }
         if (id == R.id.action_dzen_noch) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                prefEditor.putBoolean("dzen_noch", true)
-            } else {
-                prefEditor.putBoolean("dzen_noch", false)
-            }
-            prefEditor.putBoolean("auto_dzen_noch", false)
-            prefEditor.apply()
-            removelightSensor()
-            recreate()
-            return true
-        }
-        if (id == R.id.action_auto_dzen_noch) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                prefEditor.putBoolean("auto_dzen_noch", true)
-                setlightSensor()
-            } else {
-                prefEditor.putBoolean("auto_dzen_noch", false)
-                removelightSensor()
-            }
-            prefEditor.apply()
-            if (getCheckDzenNoch() != dzenNoch) {
-                recreate()
-            }
+            val dialogDzenNochSettings = DialogDzenNochSettings()
+            dialogDzenNochSettings.show(supportFragmentManager, "DialogDzenNochSettings")
             return true
         }
         if (id == R.id.action_font) {
@@ -295,9 +272,6 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         menu.findItem(R.id.action_find).isVisible = false
         menu.findItem(R.id.action_vybranoe).isVisible = false
         menu.findItem(R.id.action_share).isVisible = false
-        menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
-        menu.findItem(R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
-        menu.findItem(R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
         menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
     }
 

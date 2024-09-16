@@ -74,6 +74,14 @@
                 android:layout_height="wrap_content">
 
                 <by.carkva_gazeta.malitounik.RadioButtonCustom
+                    android:id="@+id/system"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10sp"
+                    android:paddingBottom="10sp"
+                    android:text="@string/system" />
+
+                <by.carkva_gazeta.malitounik.RadioButtonCustom
                     android:id="@+id/day"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

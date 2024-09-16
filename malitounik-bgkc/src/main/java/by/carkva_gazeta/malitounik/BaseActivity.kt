@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -105,8 +106,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         ferstStart = true
         mLastClickTime = SystemClock.elapsedRealtime()
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        checkDzenNoch = getBaseDzenNoch()
+        dzenNoch = savedInstanceState?.getBoolean("dzenNoch", false) ?: getBaseDzenNoch()
+        checkDzenNoch = dzenNoch
         setMyTheme()
         if (checkmodulesBiblijateka()) {
             val c = Calendar.getInstance()
@@ -146,7 +147,33 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     fun getCheckDzenNoch() = checkDzenNoch
 
-    fun getBaseDzenNoch() = dzenNoch
+    fun saveBaseDzenNoch(madeNight: Int) {
+        val prefEditor = k.edit()
+        prefEditor.putInt("mode_night", madeNight)
+        prefEditor.apply()
+        if (checkDzenNoch != getBaseDzenNoch()) {
+            recreate()
+        }
+    }
+
+    fun getBaseDzenNoch(): Boolean {
+        val modeNight = k.getInt("mode_night", SettingsActivity.MODE_NIGHT_SYSTEM)
+        when (modeNight) {
+            SettingsActivity.MODE_NIGHT_SYSTEM -> {
+                val configuration = Resources.getSystem().configuration
+                dzenNoch = configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+            }
+
+            SettingsActivity.MODE_NIGHT_YES -> {
+                dzenNoch = true
+            }
+
+            SettingsActivity.MODE_NIGHT_NO -> {
+                dzenNoch = false
+            }
+        }
+        return dzenNoch
+    }
 
     fun setFontInterface(textSizePixel: Float, isTextSizeSp: Boolean = false): Float {
         var sp = if (isTextSizeSp) textSizePixel
@@ -169,8 +196,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     override fun onResume() {
         super.onResume()
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (k.getBoolean("auto_dzen_noch", false)) {
+        dzenNoch = getBaseDzenNoch()
+        if (k.getInt("mode_night", SettingsActivity.MODE_NIGHT_SYSTEM) == SettingsActivity.MODE_NIGHT_AUTO ) {
             setlightSensor()
         }
         if (checkDzenNoch != getBaseDzenNoch()) {
@@ -222,11 +249,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         if (startTimeJob?.isActive != true) {
             startTimeJob = CoroutineScope(Dispatchers.Main).launch {
                 dzenNoch = isDzenNoch
-                if (k.getBoolean("auto_dzen_noch", false)) {
-                    val prefEditor = k.edit()
-                    prefEditor.putBoolean("dzen_noch", isDzenNoch)
-                    prefEditor.apply()
-                }
                 recreate()
                 mLastClickTime = SystemClock.elapsedRealtime()
             }
@@ -240,6 +262,11 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("dzenNoch", dzenNoch)
     }
 
     fun setlightSensor() {

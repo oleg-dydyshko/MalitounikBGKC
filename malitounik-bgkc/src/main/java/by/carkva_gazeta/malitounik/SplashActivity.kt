@@ -3,6 +3,7 @@ package by.carkva_gazeta.malitounik
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.hardware.SensorEvent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -24,7 +25,7 @@ class SplashActivity : BaseActivity() {
             binding.constraintlayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
             binding.imageView.setImageResource(R.drawable.logotip_splash_black)
         }
-        if (SettingsActivity.isLightSensorExist() && k.getBoolean("auto_dzen_noch", false)) {
+        if (SettingsActivity.isLightSensorExist() && k.getInt("mode_night", SettingsActivity.MODE_NIGHT_SYSTEM) == SettingsActivity.MODE_NIGHT_AUTO) {
             setlightSensor()
         }
         val data = intent.data
@@ -74,5 +75,8 @@ class SplashActivity : BaseActivity() {
             startActivity(intent1)
             finish()
         }, 500)
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
     }
 }

@@ -92,6 +92,10 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         const val NOTIFICATION_SVIATY_NONE = 0
         const val NOTIFICATION_SVIATY_ONLY = 1
         const val NOTIFICATION_SVIATY_FULL = 2
+        const val MODE_NIGHT_SYSTEM = 1
+        const val MODE_NIGHT_NO = 2
+        const val MODE_NIGHT_YES = 3
+        const val MODE_NIGHT_AUTO = 4
         val vibrate = longArrayOf(0, 1000, 700, 1000)
         var isPadzeiaSetAlarm = false
 
@@ -1015,21 +1019,26 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         if (maranata == 1) {
             binding.maranata.isChecked = true
         }
-        val autoDzenNochSettings = k.getBoolean("auto_dzen_noch", false)
         if (isLightSensorExist()) {
-            if (autoDzenNochSettings) {
-                binding.day.isChecked = false
-                binding.night.isChecked = false
-                binding.autoNight.isChecked = true
-            } else {
-                if (dzenNoch) {
-                    binding.day.isChecked = false
-                    binding.night.isChecked = true
-                    binding.autoNight.isChecked = false
-                } else {
+            binding.system.isChecked = false
+            binding.day.isChecked = false
+            binding.night.isChecked = false
+            binding.autoNight.isChecked = false
+            when(k.getInt("mode_night", MODE_NIGHT_SYSTEM)) {
+                MODE_NIGHT_SYSTEM -> {
+                    binding.system.isChecked = true
+                }
+
+                MODE_NIGHT_NO -> {
                     binding.day.isChecked = true
-                    binding.night.isChecked = false
-                    binding.autoNight.isChecked = false
+                }
+
+                MODE_NIGHT_YES -> {
+                    binding.night.isChecked = true
+                }
+
+                MODE_NIGHT_AUTO -> {
+                    binding.autoNight.isChecked = true
                 }
             }
         } else {
@@ -1083,7 +1092,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("id", id)
             prefEditor.putFloat("font_biblia", GET_FONT_SIZE_DEFAULT)
             prefEditor.putInt("fontInterface", 1)
-            prefEditor.putBoolean("dzen_noch", false)
+            prefEditor.putInt("mode_night", MODE_NIGHT_SYSTEM)
             prefEditor.putInt("pravas", 0)
             prefEditor.putInt("pkc", 0)
             prefEditor.putInt("nedelia", 0)
@@ -1118,7 +1127,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
             binding.guk.isClickable = true
             binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-            binding.day.isChecked = true
+            binding.system.isChecked = true
+            binding.day.isChecked = false
             binding.night.isChecked = false
             binding.autoNight.isChecked = false
             binding.checkBox6.isChecked = false
@@ -1249,27 +1259,30 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.apply()
         }
         binding.nightGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
-            if (checkedId == R.id.autoNight) {
-                prefEditor.putBoolean("auto_dzen_noch", true)
-                prefEditor.apply()
-                setlightSensor()
-                if (getCheckDzenNoch() != dzenNoch) {
-                    recreate()
+            when (checkedId) {
+                R.id.system -> {
+                    prefEditor.putInt("mode_night", MODE_NIGHT_SYSTEM)
+                    removelightSensor()
                 }
-            } else {
-                val check = k.getBoolean("dzen_noch", false)
-                prefEditor.putBoolean("auto_dzen_noch", false)
-                removelightSensor()
-                if (checkedId == R.id.day) {
-                    prefEditor.putBoolean("dzen_noch", false)
-                } else {
-                    prefEditor.putBoolean("dzen_noch", true)
+
+                R.id.day -> {
+                    prefEditor.putInt("mode_night", MODE_NIGHT_NO)
+                    removelightSensor()
                 }
-                prefEditor.apply()
-                if (check != k.getBoolean("dzen_noch", false)) {
-                    editFull = true
-                    recreate()
+
+                R.id.night -> {
+                    prefEditor.putInt("mode_night", MODE_NIGHT_YES)
+                    removelightSensor()
                 }
+
+                R.id.autoNight -> {
+                    prefEditor.putInt("mode_night", MODE_NIGHT_AUTO)
+                    setlightSensor()
+                }
+            }
+            prefEditor.apply()
+            if (getCheckDzenNoch() != getBaseDzenNoch()) {
+                recreate()
             }
         }
         binding.vibro.typeface = MainActivity.createFont(Typeface.NORMAL)

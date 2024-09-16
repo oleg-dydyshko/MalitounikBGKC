@@ -52,6 +52,7 @@ import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.DialogBrightness
+import by.carkva_gazeta.malitounik.DialogDzenNochSettings
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
@@ -1875,9 +1876,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         itemAuto.title = spanString
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isChecked = k.getBoolean("paralel_maranata", true)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isVisible = !vybranae
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_perevod).isVisible = !vybranae
     }
 
@@ -1907,31 +1905,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                prefEditor.putBoolean("dzen_noch", true)
-            } else {
-                prefEditor.putBoolean("dzen_noch", false)
-            }
-            prefEditor.putBoolean("auto_dzen_noch", false)
-            prefEditor.apply()
-            removelightSensor()
-            recreate()
-            return true
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                prefEditor.putBoolean("auto_dzen_noch", true)
-                setlightSensor()
-            } else {
-                prefEditor.putBoolean("auto_dzen_noch", false)
-                removelightSensor()
-            }
-            prefEditor.apply()
-            if (getCheckDzenNoch() != dzenNoch) {
-                recreate()
-            }
+            val dialogDzenNochSettings = DialogDzenNochSettings()
+            dialogDzenNochSettings.show(supportFragmentManager, "DialogDzenNochSettings")
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_paralel) {

@@ -30,6 +30,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.DialogBrightness
+import by.carkva_gazeta.malitounik.DialogDzenNochSettings
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
@@ -582,9 +583,6 @@ class Chytanne : ZmenyiaChastki() {
             diffScroll -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_up)
             else -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
         }
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = dzenNoch
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_utran).isChecked = k.getBoolean("utran", true)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_utran).isVisible = true
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_perevod).isVisible = true
@@ -629,31 +627,8 @@ class Chytanne : ZmenyiaChastki() {
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                prefEditor.putBoolean("dzen_noch", true)
-            } else {
-                prefEditor.putBoolean("dzen_noch", false)
-            }
-            prefEditor.putBoolean("auto_dzen_noch", false)
-            prefEditor.apply()
-            removelightSensor()
-            recreate()
-            return true
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_auto_dzen_noch) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                prefEditor.putBoolean("auto_dzen_noch", true)
-                setlightSensor()
-            } else {
-                prefEditor.putBoolean("auto_dzen_noch", false)
-                removelightSensor()
-            }
-            prefEditor.apply()
-            if (getCheckDzenNoch() != dzenNoch) {
-                recreate()
-            }
+            val dialogDzenNochSettings = DialogDzenNochSettings()
+            dialogDzenNochSettings.show(supportFragmentManager, "DialogDzenNochSettings")
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_utran) {

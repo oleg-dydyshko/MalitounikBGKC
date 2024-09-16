@@ -25,6 +25,7 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.DialogBrightness
+import by.carkva_gazeta.malitounik.DialogDzenNochSettings
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.MainActivity
@@ -441,9 +442,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         menu.findItem(R.id.action_font).isVisible = !paralel
         menu.findItem(R.id.action_bright).isVisible = !paralel
         menu.findItem(R.id.action_dzen_noch).isVisible = !paralel
-        menu.findItem(R.id.action_dzen_noch).isChecked = dzenNoch
-        menu.findItem(R.id.action_auto_dzen_noch).isChecked = k.getBoolean("auto_dzen_noch", false)
-        menu.findItem(R.id.action_auto_dzen_noch).isVisible = SettingsActivity.isLightSensorExist()
         val itemVybranoe = menu.findItem(R.id.action_vybranoe)
         if (men) {
             itemVybranoe.icon = ContextCompat.getDrawable(this, R.drawable.star_big_on)
@@ -648,33 +646,8 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             return true
         }
         if (id == R.id.action_dzen_noch) {
-            item.isChecked = !item.isChecked
-            val prefEditor = k.edit()
-            if (item.isChecked) {
-                prefEditor.putBoolean("dzen_noch", true)
-            } else {
-                prefEditor.putBoolean("dzen_noch", false)
-            }
-            prefEditor.putBoolean("auto_dzen_noch", false)
-            prefEditor.apply()
-            removelightSensor()
-            recreate()
-            return true
-        }
-        if (id == R.id.action_auto_dzen_noch) {
-            item.isChecked = !item.isChecked
-            val prefEditor = k.edit()
-            if (item.isChecked) {
-                prefEditor.putBoolean("auto_dzen_noch", true)
-                setlightSensor()
-            } else {
-                prefEditor.putBoolean("auto_dzen_noch", false)
-                removelightSensor()
-            }
-            prefEditor.apply()
-            if (getCheckDzenNoch() != dzenNoch) {
-                recreate()
-            }
+            val dialogDzenNochSettings = DialogDzenNochSettings()
+            dialogDzenNochSettings.show(supportFragmentManager, "DialogDzenNochSettings")
             return true
         }
         if (id == R.id.action_glava) {

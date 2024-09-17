@@ -3,18 +3,23 @@ package by.carkva_gazeta.malitounik
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.hardware.SensorEvent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import android.view.Surface
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.SplashActivityBinding
 import java.io.File
 import java.io.FileOutputStream
 
+
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : BaseActivity() {
+    private var sensor = -1f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,12 +76,39 @@ class SplashActivity : BaseActivity() {
                 }
             }
         }
+        lockOrientation()
         Handler(Looper.getMainLooper()).postDelayed({
+            if (sensor != -1f) {
+                intent1.putExtra("sensor", sensor)
+            }
             startActivity(intent1)
             finish()
         }, 500)
     }
 
+    private fun lockOrientation() {
+        val display = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            display
+        } else {
+            @Suppress("DEPRECATION") windowManager.defaultDisplay
+        }
+        val rotation = display.rotation
+        val currentOrientation = resources.configuration.orientation
+        var orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            orientation = if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90) ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            else ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+        }
+        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
+            orientation = if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_270) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            else ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+        }
+        requestedOrientation = orientation
+    }
+
     override fun onSensorChanged(event: SensorEvent?) {
+        event?.let { sensorEvent ->
+            sensor = sensorEvent.values[0]
+        }
     }
 }

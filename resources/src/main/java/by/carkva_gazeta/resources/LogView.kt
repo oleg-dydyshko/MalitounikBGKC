@@ -3,6 +3,7 @@ package by.carkva_gazeta.resources
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -104,7 +106,27 @@ class LogView : BaseActivity() {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
         }
         setTollbarTheme()
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        lockOrientation()
+    }
+
+    private fun lockOrientation() {
+        val display = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            display
+        } else {
+            @Suppress("DEPRECATION") windowManager.defaultDisplay
+        }
+        val rotation = display.rotation
+        val currentOrientation = resources.configuration.orientation
+        var orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            orientation = if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90) ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            else ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+        }
+        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
+            orientation = if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_270) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            else ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+        }
+        requestedOrientation = orientation
     }
 
     private fun checkResourcesCount() {

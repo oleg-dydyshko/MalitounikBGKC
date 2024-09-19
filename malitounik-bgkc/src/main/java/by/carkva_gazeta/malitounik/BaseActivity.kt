@@ -106,13 +106,12 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         ferstStart = true
         mLastClickTime = SystemClock.elapsedRealtime()
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val sensor = intent.extras?.getFloat("sensor", -1f) ?: -1f
-        dzenNoch = when {
-            savedInstanceState != null -> savedInstanceState.getBoolean("dzenNoch", false)
-            sensor > -1f -> sensor <= 4f
-            else -> getBaseDzenNoch()
+        dzenNoch = savedInstanceState?.getBoolean("dzenNoch", false) ?: if (intent.extras?.containsKey("sensor") == true) {
+            intent.extras?.getBoolean("sensor") ?: false
+        } else {
+            getBaseDzenNoch()
         }
-        dzenNoch = savedInstanceState?.getBoolean("dzenNoch", false) ?: getBaseDzenNoch()
+        intent.removeExtra("sensor")
         checkDzenNoch = dzenNoch
         setMyTheme()
         if (checkmodulesBiblijateka()) {

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.hardware.SensorEvent
 import android.os.Bundle
 import android.os.Handler
@@ -17,8 +18,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 
-@SuppressLint("CustomSplashScreen")
-class SplashActivity : BaseActivity() {
+@SuppressLint("CustomSplashScreen") class SplashActivity : BaseActivity() {
     private var sensor = -1f
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +79,15 @@ class SplashActivity : BaseActivity() {
         lockOrientation()
         Handler(Looper.getMainLooper()).postDelayed({
             if (sensor != -1f) {
-                intent1.putExtra("sensor", sensor)
+                val result = when {
+                    sensor <= 4f -> false
+                    sensor <= 21f -> true
+                    else -> {
+                        val configuration = Resources.getSystem().configuration
+                        configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+                    }
+                }
+                intent1.putExtra("sensor", result)
             }
             startActivity(intent1)
             finish()

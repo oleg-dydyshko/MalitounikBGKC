@@ -80,14 +80,16 @@ import java.io.FileOutputStream
         Handler(Looper.getMainLooper()).postDelayed({
             if (sensor != -1f) {
                 val result = when {
-                    sensor <= 4f -> false
-                    sensor <= 21f -> true
+                    sensor <= 4f -> true
+                    sensor >= 21f -> false
                     else -> {
                         val configuration = Resources.getSystem().configuration
                         configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
                     }
                 }
-                intent1.putExtra("sensor", result)
+                val prefEditors = k.edit()
+                prefEditors.putBoolean("dzen_noch", result)
+                prefEditors.apply()
             }
             startActivity(intent1)
             finish()

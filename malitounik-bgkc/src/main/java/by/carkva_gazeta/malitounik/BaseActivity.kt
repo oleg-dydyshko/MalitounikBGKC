@@ -106,12 +106,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         ferstStart = true
         mLastClickTime = SystemClock.elapsedRealtime()
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = savedInstanceState?.getBoolean("dzenNoch", false) ?: if (intent.extras?.containsKey("sensor") == true) {
-            intent.extras?.getBoolean("sensor") ?: false
-        } else {
-            getBaseDzenNoch()
-        }
-        intent.removeExtra("sensor")
+        dzenNoch = savedInstanceState?.getBoolean("dzenNoch", false) ?: getBaseDzenNoch()
         checkDzenNoch = dzenNoch
         setMyTheme()
         if (checkmodulesBiblijateka()) {
@@ -175,6 +170,10 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
             SettingsActivity.MODE_NIGHT_NO -> {
                 dzenNoch = false
+            }
+
+            SettingsActivity.MODE_NIGHT_AUTO -> {
+                dzenNoch = k.getBoolean("dzen_noch", false)
             }
         }
         return dzenNoch
@@ -254,6 +253,9 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         if (startTimeJob?.isActive != true) {
             startTimeJob = CoroutineScope(Dispatchers.Main).launch {
                 dzenNoch = isDzenNoch
+                val prefEditors = k.edit()
+                prefEditors.putBoolean("dzen_noch", isDzenNoch)
+                prefEditors.apply()
                 recreate()
                 mLastClickTime = SystemClock.elapsedRealtime()
             }

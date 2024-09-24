@@ -35,7 +35,6 @@ import by.carkva_gazeta.malitounik.MenuBibleSemuxa
 import by.carkva_gazeta.malitounik.MenuBibleSinoidal
 import by.carkva_gazeta.malitounik.MenuVybranoe
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.VybranoeData
 import by.carkva_gazeta.resources.databinding.ActivityBibleBinding

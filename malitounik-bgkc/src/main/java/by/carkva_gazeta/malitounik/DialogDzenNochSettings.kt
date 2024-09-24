@@ -18,8 +18,14 @@ class DialogDzenNochSettings : DialogFragment() {
         _binding = null
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        MainActivity.dialogVisable = false
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         (activity as? BaseActivity)?.let {
+            MainActivity.dialogVisable = true
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = it.getBaseDzenNoch()
             var style = R.style.AlertDialogTheme

@@ -50,7 +50,7 @@ class CytatyFragment : BaseFragment() {
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-            val inputStream = resources.openRawResource(R.raw.citata)
+            val inputStream = activity.resources.openRawResource(R.raw.citata)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val arrrayText = ArrayList<String>()

@@ -414,7 +414,6 @@
         </receiver>
         <receiver
             android:name=".WidgetRadyjoMaryia"
-            android:enabled="@bool/widgetRadyjoMaryia"
             android:exported="false"
             android:label="@string/padie_maryia_s">
             <intent-filter>

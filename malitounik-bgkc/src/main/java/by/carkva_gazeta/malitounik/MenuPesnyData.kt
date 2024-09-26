@@ -155,6 +155,7 @@ class MenuPesnyData {
         pesnyPrasl.add(Data("piesni_prasl_aliluja_leanard_koen_maryja_trapaszka", "Алілуя (О Божа, памажы нам жыць...)"))
         pesnyPrasl.add(Data("piesni_prasl_aliluja_leanard_koen_eduard_akulin", "Алілуя (Сярод нягод і сумных кроз...)"))
         pesnyPrasl.add(Data("piesni_prasl_pachvala_sviatomu_jazafatu", "Пахвала сьвятому Язафату"))
+        pesnyPrasl.add(Data("piesni_prasl_nie_cviki_ciabie_trymali", "Не цьвікі Цябе трымалі, а мой грэх"))
 
         pesnyTaize.add(Data("pesny_taize_0", "Magnifikat"))
         pesnyTaize.add(Data("pesny_taize_1", "Ostende nobis"))

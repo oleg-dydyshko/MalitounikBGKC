@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/knopka_blue"
     android:orientation="horizontal"
+    android:padding="5dp"
     tools:viewBindingIgnore="true">
 
     <LinearLayout

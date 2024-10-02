@@ -35,23 +35,18 @@ class WidgetMun : AppWidgetProvider() {
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val c = Calendar.getInstance()
         val monthName = context.resources.getStringArray(R.array.meciac2)
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-        }
         for (i in widgetIDs) {
             val tecmun = chin.getInt("WIDGET$i", c[Calendar.MONTH])
             updateViews?.setTextViewText(R.id.Mun_widget, monthName[tecmun])
             val updateIntent = Intent(context, WidgetMun::class.java)
             updateIntent.action = munPlus
             updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, i)
-            var pIntent = PendingIntent.getBroadcast(context, i, updateIntent, flags)
+            var pIntent = PendingIntent.getBroadcast(context, i, updateIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
             updateViews?.setOnClickPendingIntent(R.id.imageButton2, pIntent)
             val countIntent = Intent(context, WidgetMun::class.java)
             countIntent.action = munMinus
             countIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, i)
-            pIntent = PendingIntent.getBroadcast(context, i, countIntent, flags)
+            pIntent = PendingIntent.getBroadcast(context, i, countIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
             updateViews?.setOnClickPendingIntent(R.id.imageButton, pIntent)
             mun(context, i)
         }
@@ -72,17 +67,12 @@ class WidgetMun : AppWidgetProvider() {
         val updateIntent = Intent(context, WidgetMun::class.java)
         updateIntent.action = munPlus
         updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-        }
-        var pIntent = PendingIntent.getBroadcast(context, widgetID, updateIntent, flags)
+        var pIntent = PendingIntent.getBroadcast(context, widgetID, updateIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         updateViews?.setOnClickPendingIntent(R.id.imageButton2, pIntent)
         val countIntent = Intent(context, WidgetMun::class.java)
         countIntent.action = munMinus
         countIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
-        pIntent = PendingIntent.getBroadcast(context, widgetID, countIntent, flags)
+        pIntent = PendingIntent.getBroadcast(context, widgetID, countIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         updateViews?.setOnClickPendingIntent(R.id.imageButton, pIntent)
         mun(context, widgetID)
         appWidgetManager.updateAppWidget(widgetID, updateViews)
@@ -93,15 +83,10 @@ class WidgetMun : AppWidgetProvider() {
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         chin.edit().putBoolean("WIDGET_MUN_ENABLED", true).apply()
         val intent = Intent(context, WidgetMun::class.java)
-        intent.action = SettingsActivity.UPDATE_ALL_WIDGETS
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_IMMUTABLE or 0
-        } else {
-            0
-        }
-        val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, flags)
+        intent.action = "android.appwidget.action.APPWIDGET_UPDATE_OPTIONS"
+        val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pIntent = PendingIntent.getBroadcast(context, 50, intent, flags)
+        val pIntent = PendingIntent.getBroadcast(context, 50, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms() -> {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(), pIntent)
@@ -132,18 +117,13 @@ class WidgetMun : AppWidgetProvider() {
         edit.putBoolean("WIDGET_MUN_ENABLED", false)
         edit.apply()
         val intent = Intent(context, WidgetMun::class.java)
-        intent.action = SettingsActivity.UPDATE_ALL_WIDGETS
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_IMMUTABLE or 0
-        } else {
-            0
-        }
-        val pIntent = PendingIntent.getBroadcast(context, 52, intent, flags)
-        val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, flags)
+        intent.action = "android.appwidget.action.APPWIDGET_UPDATE_OPTIONS"
+        val pIntent = PendingIntent.getBroadcast(context, 52, intent, PendingIntent.FLAG_IMMUTABLE or 0)
+        val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val reset = Intent(context, WidgetMun::class.java)
         reset.action = this.reset
-        val pReset = PendingIntent.getBroadcast(context, 257, reset, flags)
+        val pReset = PendingIntent.getBroadcast(context, 257, reset, PendingIntent.FLAG_IMMUTABLE or 0)
         alarmManager.cancel(pIntent)
         alarmManager.cancel(pIntentBoot)
         alarmManager.cancel(pReset)
@@ -173,7 +153,7 @@ class WidgetMun : AppWidgetProvider() {
         super.onReceive(context, intent)
         val c = Calendar.getInstance()
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (intent.action.equals(SettingsActivity.UPDATE_ALL_WIDGETS, ignoreCase = true)) {
+        if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
             val thisAppWidget = ComponentName(context.packageName, javaClass.name)
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val ids = appWidgetManager.getAppWidgetIds(thisAppWidget)
@@ -183,14 +163,9 @@ class WidgetMun : AppWidgetProvider() {
             }
             onUpdate(context, appWidgetManager, ids)
             val intentUpdate = Intent(context, WidgetMun::class.java)
-            intentUpdate.action = SettingsActivity.UPDATE_ALL_WIDGETS
+            intentUpdate.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PendingIntent.FLAG_IMMUTABLE or 0
-            } else {
-                0
-            }
-            val pIntent = PendingIntent.getBroadcast(context, 51, intentUpdate, flags)
+            val pIntent = PendingIntent.getBroadcast(context, 51, intentUpdate, PendingIntent.FLAG_IMMUTABLE or 0)
             when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms() -> {
                     alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(1), pIntent)
@@ -249,12 +224,7 @@ class WidgetMun : AppWidgetProvider() {
                 val reset = Intent(context, WidgetMun::class.java)
                 reset.action = this.reset
                 reset.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
-                val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                } else {
-                    PendingIntent.FLAG_UPDATE_CURRENT
-                }
-                val pReset = PendingIntent.getBroadcast(context, 257, reset, flags)
+                val pReset = PendingIntent.getBroadcast(context, 257, reset, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                 val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 alarmManager.cancel(pReset)
                 when {
@@ -375,11 +345,6 @@ class WidgetMun : AppWidgetProvider() {
             }
             calendarPost = GregorianCalendar(year, month, i)
             val widgetMun = "widget_mun"
-            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            } else {
-                PendingIntent.FLAG_UPDATE_CURRENT
-            }
             val dayIntent = Intent(context, SplashActivity::class.java)
             dayIntent.putExtra(widgetMun, true)
             when (day) {
@@ -388,7 +353,7 @@ class WidgetMun : AppWidgetProvider() {
                     dayIntent.putExtra("position", position)
                     dayIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                     val code = year.toString() + "" + mouthOld + "" + oldDay
-                    val pIntent = PendingIntent.getActivity(context, code.toInt(), dayIntent, flags)
+                    val pIntent = PendingIntent.getActivity(context, code.toInt(), dayIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                     updateViews?.setOnClickPendingIntent(idView(e), pIntent)
                     updateViews?.setTextViewText(idView(e), oldDay.toString())
                     if (e == 1) updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -400,7 +365,7 @@ class WidgetMun : AppWidgetProvider() {
                     dayIntent.putExtra("position", position)
                     dayIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                     val code = year.toString() + "" + mouthNew + "" + newDay
-                    val pIntent = PendingIntent.getActivity(context, code.toInt(), dayIntent, flags)
+                    val pIntent = PendingIntent.getActivity(context, code.toInt(), dayIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                     updateViews?.setOnClickPendingIntent(idView(e), pIntent)
                     updateViews?.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorSecondary_text))
                     updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_day)
@@ -459,7 +424,7 @@ class WidgetMun : AppWidgetProvider() {
                     dayIntent.putExtra("position", position)
                     dayIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                     val code = year.toString() + "" + month + "" + i
-                    val pIntent = PendingIntent.getActivity(context, code.toInt(), dayIntent, flags)
+                    val pIntent = PendingIntent.getActivity(context, code.toInt(), dayIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                     updateViews?.setOnClickPendingIntent(idView(e), pIntent)
                 }
             }

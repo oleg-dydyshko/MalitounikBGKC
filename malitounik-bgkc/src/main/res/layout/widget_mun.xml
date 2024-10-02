@@ -6,6 +6,7 @@
     android:layout_gravity="top|center"
     android:gravity="center"
     android:orientation="vertical"
+    android:padding="5dp"
     tools:viewBindingIgnore="true">
 
     <RelativeLayout
@@ -35,9 +36,9 @@
             android:id="@+id/Mun_widget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="@color/colorWhite"

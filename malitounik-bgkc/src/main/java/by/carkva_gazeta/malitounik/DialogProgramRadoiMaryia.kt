@@ -23,6 +23,7 @@ class DialogProgramRadoiMaryia : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var binding: DialogProgramRadioMariaBinding? = null
     private var sendTitlePadioMaryiaJob: Job? = null
+    private var isWidget = false
     private val dzenNoch: Boolean
         get() {
             activity?.let {
@@ -33,10 +34,15 @@ class DialogProgramRadoiMaryia : DialogFragment() {
             return false
         }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        isWidget = arguments?.getBoolean("isWidget", false) ?: false
+    }
+
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         activity?.let {
-            if (it !is BaseActivity) it.finish()
+            if (isWidget) it.finish()
         }
     }
 
@@ -51,7 +57,7 @@ class DialogProgramRadoiMaryia : DialogFragment() {
             binding = DialogProgramRadioMariaBinding.inflate(layoutInflater)
             binding?.let {
                 var style = R.style.AlertDialogTheme
-                if (dzenNoch) style = R.style.AlertDialogThemeBlack
+                if (!isWidget && dzenNoch) style = R.style.AlertDialogThemeBlack
                 val builder = AlertDialog.Builder(activity, style)
                 it.title.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary))
                 it.title.text = getString(R.string.program_radio_maryia)
@@ -61,7 +67,7 @@ class DialogProgramRadoiMaryia : DialogFragment() {
                     dialog.cancel()
                 }
                 alert = builder.create()
-                if (activity !is BaseActivity) {
+                if (isWidget) {
                     val intent = Intent(activity, WidgetRadyjoMaryia::class.java)
                     intent.putExtra("action", ServiceRadyjoMaryia.WIDGET_RADYJO_MARYIA_PROGRAM_EXIT)
                     activity.sendBroadcast(intent)
@@ -145,6 +151,16 @@ class DialogProgramRadoiMaryia : DialogFragment() {
                 }
                 binding?.progressBar?.visibility = View.GONE
             }
+        }
+    }
+
+    companion object {
+        fun getInstance(isWidget: Boolean): DialogProgramRadoiMaryia {
+            val dialogProgramRadoiMaryia = DialogProgramRadoiMaryia()
+            val bundle = Bundle()
+            bundle.putBoolean("isWidget", isWidget)
+            dialogProgramRadoiMaryia.arguments = bundle
+            return dialogProgramRadoiMaryia
         }
     }
 }

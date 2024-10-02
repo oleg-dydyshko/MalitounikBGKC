@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import java.util.Calendar
 
 class Widget : AppWidgetProvider() {
-    private val updateAllWidgets = "update_all_widgets"
+
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         for (widgetID in appWidgetIds) {
@@ -30,15 +30,10 @@ class Widget : AppWidgetProvider() {
         val sp = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         sp.edit().putBoolean("WIDGET_ENABLED", true).apply()
         val intent = Intent(context, Widget::class.java)
-        intent.action = updateAllWidgets
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_IMMUTABLE or 0
-        } else {
-            0
-        }
-        val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, flags)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pIntent = PendingIntent.getBroadcast(context, 50, intent, flags)
+        val pIntent = PendingIntent.getBroadcast(context, 50, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms() -> {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
@@ -76,14 +71,9 @@ class Widget : AppWidgetProvider() {
         edit.putBoolean("WIDGET_ENABLED", false)
         edit.apply()
         val intent = Intent(context, Widget::class.java)
-        intent.action = updateAllWidgets
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_IMMUTABLE or 0
-        } else {
-            0
-        }
-        val pIntent = PendingIntent.getBroadcast(context, 50, intent, flags)
-        val pIntentBoot = PendingIntent.getBroadcast(context, 51, intent, flags)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        val pIntent = PendingIntent.getBroadcast(context, 50, intent, PendingIntent.FLAG_IMMUTABLE or 0)
+        val pIntentBoot = PendingIntent.getBroadcast(context, 51, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pIntent)
         alarmManager.cancel(pIntentBoot)
@@ -102,24 +92,29 @@ class Widget : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         val appWidgetManager = AppWidgetManager.getInstance(context)
-        val name = ComponentName(context, Widget::class.java)
-        val widgetIds = appWidgetManager.getAppWidgetIds(name)
-        for (widgetID in widgetIds.iterator()) {
+        val widgetID = intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+        val extSettings = intent.extras?.getBoolean("settings", false) ?: false
+        if (extSettings) {
+            isSettingsCulling = true
+            val settings = Intent(context, WidgetConfig::class.java)
+            settings.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            settings.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
+            context.startActivity(settings)
+        }
+        if (intent.extras?.getBoolean("actionEndLoad", false) == true) {
+            isSettingsCulling = false
+        }
+        if (widgetID != AppWidgetManager.INVALID_APPWIDGET_ID) {
             kaliandar(context, appWidgetManager, widgetID)
         }
-        if (intent.action.equals(updateAllWidgets, ignoreCase = true)) {
+        if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
             val thisAppWidget = ComponentName(context.packageName, javaClass.name)
             val ids = appWidgetManager.getAppWidgetIds(thisAppWidget)
             onUpdate(context, appWidgetManager, ids)
             val intentUpdate = Intent(context, Widget::class.java)
-            intentUpdate.action = updateAllWidgets
+            intentUpdate.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PendingIntent.FLAG_IMMUTABLE or 0
-            } else {
-                0
-            }
-            val pIntent = PendingIntent.getBroadcast(context, 50, intentUpdate, flags)
+            val pIntent = PendingIntent.getBroadcast(context, 50, intentUpdate, PendingIntent.FLAG_IMMUTABLE or 0)
             when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms() -> {
                     alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(1), pIntent)
@@ -143,12 +138,32 @@ class Widget : AppWidgetProvider() {
         updateViews.setTextColor(R.id.textMesiac, ContextCompat.getColor(context, R.color.colorWhite))
     }
 
+    private fun getBaseDzenNoch(context: Context, widgetID: Int): Boolean {
+        val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        val modeNight = k.getInt("mode_night_widget_day$widgetID", SettingsActivity.MODE_NIGHT_SYSTEM)
+        var dzenNoch = false
+        when (modeNight) {
+            SettingsActivity.MODE_NIGHT_SYSTEM -> {
+                val configuration = Resources.getSystem().configuration
+                dzenNoch = configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+            }
+
+            SettingsActivity.MODE_NIGHT_YES -> {
+                dzenNoch = true
+            }
+
+            SettingsActivity.MODE_NIGHT_NO -> {
+                dzenNoch = false
+            }
+        }
+        return dzenNoch
+    }
+
     private fun kaliandar(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
         val updateViews = RemoteViews(context.packageName, R.layout.widget)
         val g = Calendar.getInstance()
         val data = MenuCaliandar.getDataCalaindar(g[Calendar.DATE])
-        val configuration = Resources.getSystem().configuration
-        val dzenNoch = configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        val dzenNoch = getBaseDzenNoch(context, widgetID)
         val rColorColorPrimaryText: Int
         val rColorColorPrimary: Int
         if (dzenNoch) {
@@ -165,19 +180,26 @@ class Widget : AppWidgetProvider() {
         val widgetDay = "widget_day"
         intent.putExtra(widgetDay, true)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-        }
-        val pIntent = PendingIntent.getActivity(context, 500, intent, flags)
+        val pIntent = PendingIntent.getActivity(context, 500, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         updateViews.setOnClickPendingIntent(R.id.fullCaliandar, pIntent)
+        val settings = Intent(context, Widget::class.java)
+        settings.putExtra("settings", true)
+        settings.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
+        val pSsettings = PendingIntent.getBroadcast(context, 40 + widgetID, settings, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        updateViews.setOnClickPendingIntent(R.id.settings, pSsettings)
         if (dzenNoch) {
             updateViews.setInt(R.id.Layout, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorbackground_material_dark))
             updateViews.setTextColor(R.id.textSviatyia, ContextCompat.getColor(context, R.color.colorWhite))
         } else {
             updateViews.setInt(R.id.Layout, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorWhite))
             updateViews.setTextColor(R.id.textSviatyia, ContextCompat.getColor(context, R.color.colorPrimary_text))
+        }
+        if (isSettingsCulling) {
+            if (dzenNoch) updateViews.setImageViewResource(R.id.imageView7, R.drawable.load_kalendar_black)
+            else updateViews.setImageViewResource(R.id.imageView7, R.drawable.load_kalendar)
+        } else {
+            if (dzenNoch) updateViews.setImageViewResource(R.id.imageView7, R.drawable.settings)
+            else updateViews.setImageViewResource(R.id.imageView7, R.drawable.settings_black)
         }
         updateViews.setTextViewText(R.id.textPost, "Пост")
         updateViews.setViewVisibility(R.id.textPost, View.GONE)
@@ -312,5 +334,9 @@ class Widget : AppWidgetProvider() {
         else updateViews.setFloat(R.id.textDenNedeli, "setTextSize", 14f)
         updateViews.setTextViewText(R.id.textMesiac, monthName[month])
         appWidgetManager.updateAppWidget(widgetID, updateViews)
+    }
+
+    companion object {
+        private var isSettingsCulling = false
     }
 }

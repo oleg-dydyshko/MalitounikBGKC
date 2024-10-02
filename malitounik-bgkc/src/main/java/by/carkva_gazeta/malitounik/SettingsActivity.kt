@@ -79,7 +79,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
     }
 
     companion object {
-        const val UPDATE_ALL_WIDGETS = "update_all_widgets"
         const val RESET_MAIN = "reset_main"
         const val GET_FONT_SIZE_DEFAULT = 22F
         const val GET_FONT_SIZE_TOOLBAR = 18f
@@ -230,7 +229,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 val yearAk = cw[Calendar.YEAR]
                 var resetWid = false
                 intent = Intent(context, WidgetMun::class.java)
-                intent.action = UPDATE_ALL_WIDGETS
+                intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
                 var flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
                 } else {
@@ -270,7 +269,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             if (chin.getBoolean("WIDGET_ENABLED", false)) {
                 val cw = Calendar.getInstance()
                 intent = Intent(context, Widget::class.java)
-                intent.action = UPDATE_ALL_WIDGETS
+                intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
                 var flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
                 } else {

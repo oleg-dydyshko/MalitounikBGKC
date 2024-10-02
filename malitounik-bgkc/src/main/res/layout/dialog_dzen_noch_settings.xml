@@ -12,7 +12,6 @@
         android:padding="10sp"
         android:text="@string/vygliad2"
         android:textColor="@color/colorWhite"
-        android:textSize="14sp"
         android:textStyle="bold" />
 
     <RadioGroup

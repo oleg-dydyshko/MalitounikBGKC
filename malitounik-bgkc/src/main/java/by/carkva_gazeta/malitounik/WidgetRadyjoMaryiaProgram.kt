@@ -1,10 +1,10 @@
 package by.carkva_gazeta.malitounik
 
+import android.hardware.SensorEvent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 
 
-class WidgetRadyjoMaryiaProgram : AppCompatActivity() {
+class WidgetRadyjoMaryiaProgram : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val checkInternet = intent.extras?.getBoolean("checkInternet", false) ?: false
@@ -12,8 +12,14 @@ class WidgetRadyjoMaryiaProgram : AppCompatActivity() {
             val dialog = DialogNoInternet()
             dialog.show(supportFragmentManager, "DialogNoInternet")
         } else {
-            val dialog = DialogProgramRadoiMaryia()
+            val dialog = DialogProgramRadoiMaryia.getInstance(true)
             dialog.show(supportFragmentManager, "DialogWidgetProgramPadoiMaryia")
         }
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+    }
+
+    override fun setMyTheme() {
     }
 }

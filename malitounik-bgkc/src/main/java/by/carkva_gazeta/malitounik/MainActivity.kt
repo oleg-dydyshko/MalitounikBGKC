@@ -1792,7 +1792,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
 
             R.id.image7 -> {
-                val dialog = DialogProgramRadoiMaryia()
+                val dialog = DialogProgramRadoiMaryia.getInstance(false)
                 dialog.show(supportFragmentManager, "DialogProgramRadoiMaryia")
             }
 

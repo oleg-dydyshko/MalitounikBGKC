@@ -16,7 +16,7 @@ class WidgetConfig : BaseActivity(), DialogWidgetConfig.DialogWidgetConfigListen
             finish()
         }
         setResult(Activity.RESULT_CANCELED)
-        val config = DialogWidgetConfig.getInstance(widgetID)
+        val config = DialogWidgetConfig.getInstance(widgetID, false)
         config.show(supportFragmentManager, "config")
     }
 

@@ -7,6 +7,8 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Build
 import android.os.SystemClock
 import android.view.View
@@ -21,6 +23,7 @@ class WidgetMun : AppWidgetProvider() {
     private val munMinus = "mun_minus"
     private val reset = "reset"
     private lateinit var data: ArrayList<ArrayList<String>>
+
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         if (updateViews == null) updateViews = RemoteViews(context.packageName, R.layout.widget_mun)
@@ -30,6 +33,27 @@ class WidgetMun : AppWidgetProvider() {
         appWidgetManager.updateAppWidget(appWidgetIds, updateViews)
     }
 
+    private fun getBaseDzenNoch(context: Context, widgetID: Int): Boolean {
+        val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        val modeNight = k.getInt("mode_night_widget_mun$widgetID", SettingsActivity.MODE_NIGHT_SYSTEM)
+        var dzenNoch = false
+        when (modeNight) {
+            SettingsActivity.MODE_NIGHT_SYSTEM -> {
+                val configuration = Resources.getSystem().configuration
+                dzenNoch = configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+            }
+
+            SettingsActivity.MODE_NIGHT_YES -> {
+                dzenNoch = true
+            }
+
+            SettingsActivity.MODE_NIGHT_NO -> {
+                dzenNoch = false
+            }
+        }
+        return dzenNoch
+    }
+
     private fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, widgetIDs: IntArray) {
         if (updateViews == null) updateViews = RemoteViews(context.packageName, R.layout.widget_mun)
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -37,7 +61,23 @@ class WidgetMun : AppWidgetProvider() {
         val monthName = context.resources.getStringArray(R.array.meciac2)
         for (i in widgetIDs) {
             val tecmun = chin.getInt("WIDGET$i", c[Calendar.MONTH])
-            updateViews?.setTextViewText(R.id.Mun_widget, monthName[tecmun])
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val dzenNoch = getBaseDzenNoch(context, i)
+                if (dzenNoch) {
+                    updateViews?.setTextColor(R.id.Mun_widget, ContextCompat.getColor(context, R.color.colorWhite))
+                    updateViews?.setInt(R.id.root, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorbackground_material_dark))
+                    updateViews?.setImageViewResource(R.id.imageButton, R.drawable.levo_catedra_31)
+                    updateViews?.setImageViewResource(R.id.imageButton2, R.drawable.pravo_catedra_31)
+                } else {
+                    updateViews?.setTextColor(R.id.Mun_widget, ContextCompat.getColor(context, R.color.colorPrimary_text))
+                    updateViews?.setInt(R.id.root, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorWhite))
+                    updateViews?.setImageViewResource(R.id.imageButton, R.drawable.levo_catedra_blak_31)
+                    updateViews?.setImageViewResource(R.id.imageButton2, R.drawable.pravo_catedra_blak_31)
+                }
+                updateViews?.setTextViewText(R.id.Mun_widget, MainActivity.fromHtml("<strong>${monthName[tecmun]}</strong>"))
+            } else {
+                updateViews?.setTextViewText(R.id.Mun_widget, monthName[tecmun])
+            }
             val updateIntent = Intent(context, WidgetMun::class.java)
             updateIntent.action = munPlus
             updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, i)
@@ -56,14 +96,34 @@ class WidgetMun : AppWidgetProvider() {
     private fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val c = Calendar.getInstance()
-        val cYear = SettingsActivity.GET_CALIANDAR_YEAR_MAX //c.get(Calendar.YEAR);
+        val cYear = SettingsActivity.GET_CALIANDAR_YEAR_MAX
         val tecmun = chin.getInt("WIDGET$widgetID", c[Calendar.MONTH])
         val tecyear = chin.getInt("WIDGETYEAR$widgetID", SettingsActivity.GET_CALIANDAR_YEAR_MAX)
         val monthName = context.resources.getStringArray(R.array.meciac2)
         if (updateViews == null) updateViews = RemoteViews(context.packageName, R.layout.widget_mun)
-        if (tecyear == c[Calendar.YEAR]) updateViews?.setTextViewText(R.id.Mun_widget, monthName[tecmun]) else updateViews?.setTextViewText(R.id.Mun_widget, monthName[tecmun] + ", " + tecyear)
-        if (cYear == tecyear && tecmun == 11) updateViews?.setViewVisibility(R.id.imageButton2, View.INVISIBLE) else updateViews?.setViewVisibility(R.id.imageButton2, View.VISIBLE)
+        if (tecyear == c[Calendar.YEAR]) {
+            if (tecmun == c[Calendar.MONTH] && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) updateViews?.setTextViewText(R.id.Mun_widget, MainActivity.fromHtml("<strong>${monthName[tecmun]}</strong>"))
+            else updateViews?.setTextViewText(R.id.Mun_widget, monthName[tecmun])
+        } else {
+            updateViews?.setTextViewText(R.id.Mun_widget, monthName[tecmun] + ", " + tecyear)
+        }
+        if (cYear == tecyear && tecmun == 11) updateViews?.setViewVisibility(R.id.imageButton2, View.INVISIBLE)
+        else updateViews?.setViewVisibility(R.id.imageButton2, View.VISIBLE)
         if (SettingsActivity.GET_CALIANDAR_YEAR_MIN == tecyear && tecmun == 0) updateViews?.setViewVisibility(R.id.imageButton, View.INVISIBLE) else updateViews?.setViewVisibility(R.id.imageButton, View.VISIBLE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val dzenNoch = getBaseDzenNoch(context, widgetID)
+            if (dzenNoch) {
+                updateViews?.setTextColor(R.id.Mun_widget, ContextCompat.getColor(context, R.color.colorWhite))
+                updateViews?.setInt(R.id.root, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorbackground_material_dark))
+                updateViews?.setImageViewResource(R.id.imageButton, R.drawable.levo_catedra_31)
+                updateViews?.setImageViewResource(R.id.imageButton2, R.drawable.pravo_catedra_31)
+            } else {
+                updateViews?.setTextColor(R.id.Mun_widget, ContextCompat.getColor(context, R.color.colorPrimary_text))
+                updateViews?.setInt(R.id.root, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorWhite))
+                updateViews?.setImageViewResource(R.id.imageButton, R.drawable.levo_catedra_blak_31)
+                updateViews?.setImageViewResource(R.id.imageButton2, R.drawable.pravo_catedra_blak_31)
+            }
+        }
         val updateIntent = Intent(context, WidgetMun::class.java)
         updateIntent.action = munPlus
         updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
@@ -153,6 +213,10 @@ class WidgetMun : AppWidgetProvider() {
         super.onReceive(context, intent)
         val c = Calendar.getInstance()
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        val widgetID = intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+        if (widgetID != AppWidgetManager.INVALID_APPWIDGET_ID) {
+            updateWidget(context, AppWidgetManager.getInstance(context), widgetID)
+        }
         if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
             val thisAppWidget = ComponentName(context.packageName, javaClass.name)
             val appWidgetManager = AppWidgetManager.getInstance(context)

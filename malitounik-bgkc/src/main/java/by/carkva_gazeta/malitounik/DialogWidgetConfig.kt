@@ -14,6 +14,7 @@ import by.carkva_gazeta.malitounik.databinding.DialogDzenNochSettingsBinding
 
 class DialogWidgetConfig : DialogFragment() {
     private var widgetID = AppWidgetManager.INVALID_APPWIDGET_ID
+    private var isWidgetMun = false
     private var mListener: DialogWidgetConfigListener? = null
     private lateinit var alert: AlertDialog
     private var _binding: DialogDzenNochSettingsBinding? = null
@@ -26,6 +27,7 @@ class DialogWidgetConfig : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         widgetID = arguments?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+        isWidgetMun = arguments?.getBoolean("isWidgetMun", false) ?: false
     }
 
     override fun onAttach(activity: Context) {
@@ -53,7 +55,8 @@ class DialogWidgetConfig : DialogFragment() {
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             _binding = DialogDzenNochSettingsBinding.inflate(layoutInflater)
-            val nightMode = k.getInt("mode_night_widget_day$widgetID", SettingsActivity.MODE_NIGHT_SYSTEM)
+            val nightMode = if (isWidgetMun) k.getInt("mode_night_widget_mun$widgetID", SettingsActivity.MODE_NIGHT_SYSTEM)
+            else k.getInt("mode_night_widget_day$widgetID", SettingsActivity.MODE_NIGHT_SYSTEM)
             binding.system.isChecked = nightMode == SettingsActivity.MODE_NIGHT_SYSTEM
             binding.day.isChecked = nightMode == SettingsActivity.MODE_NIGHT_NO
             binding.night.isChecked = nightMode == SettingsActivity.MODE_NIGHT_YES
@@ -67,26 +70,30 @@ class DialogWidgetConfig : DialogFragment() {
                 if (binding.night.isChecked) result = SettingsActivity.MODE_NIGHT_YES
                 if (widgetID != AppWidgetManager.INVALID_APPWIDGET_ID) {
                     val prefEditor = k.edit()
-                    prefEditor.putInt("mode_night_widget_day$widgetID", result)
+                    if (isWidgetMun) prefEditor.putInt("mode_night_widget_mun$widgetID", result)
+                    else prefEditor.putInt("mode_night_widget_day$widgetID", result)
                     prefEditor.apply()
                 }
                 mListener?.onDialogWidgetConfigPositiveClick()
                 dialog.cancel()
             }
-            val intent = Intent(it, Widget::class.java)
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
-            intent.putExtra("actionEndLoad", true)
-            it.sendBroadcast(intent)
+            if (!isWidgetMun) {
+                val intent = Intent(it, Widget::class.java)
+                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
+                intent.putExtra("actionEndLoad", true)
+                it.sendBroadcast(intent)
+            }
             alert = ad.create()
         }
         return alert
     }
 
     companion object {
-        fun getInstance(widgetID: Int): DialogWidgetConfig {
+        fun getInstance(widgetID: Int, isWidgetMun: Boolean): DialogWidgetConfig {
             val dialogWidgetConfig = DialogWidgetConfig()
             val bundle = Bundle()
             bundle.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
+            bundle.putBoolean("isWidgetMun", isWidgetMun)
             dialogWidgetConfig.arguments = bundle
             return dialogWidgetConfig
         }

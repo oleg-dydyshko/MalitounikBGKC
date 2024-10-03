@@ -27,6 +27,7 @@ class MenuPesnyData {
         pesnyBag.add(Data("piesni_baharodz_zastupnica_duchounaja", "Заступніца духоўная"))
         pesnyBag.add(Data("piesni_bahar_lubic_maryja_mianie", "Любіць Марыя мяне"))
         pesnyBag.add(Data("piesni_bagar_radujsia_dzieva_maci", "Радуйся, Дзева Маці"))
+        pesnyBag.add(Data("piesni_bagar_maci_bozaja_u_barunach", "Маці Божая ў Барунах"))
 
         pesnyBel.add(Data("piesni_belarus_ave_maria_pazniak", "Ave Maria"))
         pesnyBel.add(Data("piesni_belarus_boza_szto_kalis_narody", "Божа, што калісь народы"))

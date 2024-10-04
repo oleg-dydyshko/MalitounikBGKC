@@ -18,7 +18,6 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 class WidgetMun : AppWidgetProvider() {
-    private var updateViews: RemoteViews? = null
     private val munPlus = "mun_plus"
     private val munMinus = "mun_minus"
     private val reset = "reset"
@@ -26,11 +25,9 @@ class WidgetMun : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
-        if (updateViews == null) updateViews = RemoteViews(context.packageName, R.layout.widget_mun)
         for (widgetID in appWidgetIds) {
-            updateWidget(context, appWidgetManager, widgetID)
+            mun(context, appWidgetManager, widgetID)
         }
-        appWidgetManager.updateAppWidget(appWidgetIds, updateViews)
     }
 
     private fun getBaseDzenNoch(context: Context, widgetID: Int): Boolean {
@@ -52,90 +49,6 @@ class WidgetMun : AppWidgetProvider() {
             }
         }
         return dzenNoch
-    }
-
-    private fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, widgetIDs: IntArray) {
-        if (updateViews == null) updateViews = RemoteViews(context.packageName, R.layout.widget_mun)
-        val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val c = Calendar.getInstance()
-        val monthName = context.resources.getStringArray(R.array.meciac2)
-        for (i in widgetIDs) {
-            val tecmun = chin.getInt("WIDGET$i", c[Calendar.MONTH])
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                val dzenNoch = getBaseDzenNoch(context, i)
-                if (dzenNoch) {
-                    updateViews?.setTextColor(R.id.Mun_widget, ContextCompat.getColor(context, R.color.colorWhite))
-                    updateViews?.setInt(R.id.root, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorbackground_material_dark))
-                    updateViews?.setImageViewResource(R.id.imageButton, R.drawable.levo_catedra_31)
-                    updateViews?.setImageViewResource(R.id.imageButton2, R.drawable.pravo_catedra_31)
-                } else {
-                    updateViews?.setTextColor(R.id.Mun_widget, ContextCompat.getColor(context, R.color.colorPrimary_text))
-                    updateViews?.setInt(R.id.root, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorWhite))
-                    updateViews?.setImageViewResource(R.id.imageButton, R.drawable.levo_catedra_blak_31)
-                    updateViews?.setImageViewResource(R.id.imageButton2, R.drawable.pravo_catedra_blak_31)
-                }
-                updateViews?.setTextViewText(R.id.Mun_widget, MainActivity.fromHtml("<strong>${monthName[tecmun]}</strong>"))
-            } else {
-                updateViews?.setTextViewText(R.id.Mun_widget, monthName[tecmun])
-            }
-            val updateIntent = Intent(context, WidgetMun::class.java)
-            updateIntent.action = munPlus
-            updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, i)
-            var pIntent = PendingIntent.getBroadcast(context, i, updateIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-            updateViews?.setOnClickPendingIntent(R.id.imageButton2, pIntent)
-            val countIntent = Intent(context, WidgetMun::class.java)
-            countIntent.action = munMinus
-            countIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, i)
-            pIntent = PendingIntent.getBroadcast(context, i, countIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-            updateViews?.setOnClickPendingIntent(R.id.imageButton, pIntent)
-            mun(context, i)
-        }
-        appWidgetManager.updateAppWidget(widgetIDs, updateViews)
-    }
-
-    private fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
-        val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val c = Calendar.getInstance()
-        val cYear = SettingsActivity.GET_CALIANDAR_YEAR_MAX
-        val tecmun = chin.getInt("WIDGET$widgetID", c[Calendar.MONTH])
-        val tecyear = chin.getInt("WIDGETYEAR$widgetID", SettingsActivity.GET_CALIANDAR_YEAR_MAX)
-        val monthName = context.resources.getStringArray(R.array.meciac2)
-        if (updateViews == null) updateViews = RemoteViews(context.packageName, R.layout.widget_mun)
-        if (tecyear == c[Calendar.YEAR]) {
-            if (tecmun == c[Calendar.MONTH] && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) updateViews?.setTextViewText(R.id.Mun_widget, MainActivity.fromHtml("<strong>${monthName[tecmun]}</strong>"))
-            else updateViews?.setTextViewText(R.id.Mun_widget, monthName[tecmun])
-        } else {
-            updateViews?.setTextViewText(R.id.Mun_widget, monthName[tecmun] + ", " + tecyear)
-        }
-        if (cYear == tecyear && tecmun == 11) updateViews?.setViewVisibility(R.id.imageButton2, View.INVISIBLE)
-        else updateViews?.setViewVisibility(R.id.imageButton2, View.VISIBLE)
-        if (SettingsActivity.GET_CALIANDAR_YEAR_MIN == tecyear && tecmun == 0) updateViews?.setViewVisibility(R.id.imageButton, View.INVISIBLE) else updateViews?.setViewVisibility(R.id.imageButton, View.VISIBLE)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val dzenNoch = getBaseDzenNoch(context, widgetID)
-            if (dzenNoch) {
-                updateViews?.setTextColor(R.id.Mun_widget, ContextCompat.getColor(context, R.color.colorWhite))
-                updateViews?.setInt(R.id.root, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorbackground_material_dark))
-                updateViews?.setImageViewResource(R.id.imageButton, R.drawable.levo_catedra_31)
-                updateViews?.setImageViewResource(R.id.imageButton2, R.drawable.pravo_catedra_31)
-            } else {
-                updateViews?.setTextColor(R.id.Mun_widget, ContextCompat.getColor(context, R.color.colorPrimary_text))
-                updateViews?.setInt(R.id.root, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorWhite))
-                updateViews?.setImageViewResource(R.id.imageButton, R.drawable.levo_catedra_blak_31)
-                updateViews?.setImageViewResource(R.id.imageButton2, R.drawable.pravo_catedra_blak_31)
-            }
-        }
-        val updateIntent = Intent(context, WidgetMun::class.java)
-        updateIntent.action = munPlus
-        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
-        var pIntent = PendingIntent.getBroadcast(context, widgetID, updateIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        updateViews?.setOnClickPendingIntent(R.id.imageButton2, pIntent)
-        val countIntent = Intent(context, WidgetMun::class.java)
-        countIntent.action = munMinus
-        countIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
-        pIntent = PendingIntent.getBroadcast(context, widgetID, countIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        updateViews?.setOnClickPendingIntent(R.id.imageButton, pIntent)
-        mun(context, widgetID)
-        appWidgetManager.updateAppWidget(widgetID, updateViews)
     }
 
     override fun onEnabled(context: Context) {
@@ -215,7 +128,7 @@ class WidgetMun : AppWidgetProvider() {
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val widgetID = intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID) ?: AppWidgetManager.INVALID_APPWIDGET_ID
         if (widgetID != AppWidgetManager.INVALID_APPWIDGET_ID) {
-            updateWidget(context, AppWidgetManager.getInstance(context), widgetID)
+            mun(context, AppWidgetManager.getInstance(context), widgetID)
         }
         if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
             val thisAppWidget = ComponentName(context.packageName, javaClass.name)
@@ -250,11 +163,11 @@ class WidgetMun : AppWidgetProvider() {
             for (i in ids) {
                 chin.edit().putInt("WIDGET$i", c[Calendar.MONTH]).apply()
                 chin.edit().putInt("WIDGETYEAR$i", c[Calendar.YEAR]).apply()
+                mun(context, appWidgetManager, i)
             }
-            updateWidget(context, AppWidgetManager.getInstance(context), ids)
         }
-        if (intent.action.equals(reset, ignoreCase = true)) { // извлекаем ID экземпляра
-            var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID //AppWidgetManager.INVALID_APPWIDGET_ID = 0
+        if (intent.action.equals(reset, ignoreCase = true)) {
+            var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
             val extras = intent.extras
             if (extras != null) {
                 mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
@@ -262,11 +175,11 @@ class WidgetMun : AppWidgetProvider() {
             if (mAppWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
                 chin.edit().putInt("WIDGET$mAppWidgetId", c[Calendar.MONTH]).apply()
                 chin.edit().putInt("WIDGETYEAR$mAppWidgetId", c[Calendar.YEAR]).apply()
-                updateWidget(context, AppWidgetManager.getInstance(context), mAppWidgetId)
+                mun(context, AppWidgetManager.getInstance(context), mAppWidgetId)
             }
         }
-        if (intent.action.equals(munPlus, ignoreCase = true) || intent.action.equals(munMinus, ignoreCase = true)) { // извлекаем ID экземпляра
-            var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID //AppWidgetManager.INVALID_APPWIDGET_ID = 0
+        if (intent.action.equals(munPlus, ignoreCase = true) || intent.action.equals(munMinus, ignoreCase = true)) {
+            var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
             val extras = intent.extras
             if (extras != null) {
                 mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
@@ -302,7 +215,7 @@ class WidgetMun : AppWidgetProvider() {
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 120000, pReset)
                     }
                 }
-                updateWidget(context, AppWidgetManager.getInstance(context), mAppWidgetId)
+                mun(context, AppWidgetManager.getInstance(context), mAppWidgetId)
             }
         }
     }
@@ -356,11 +269,49 @@ class WidgetMun : AppWidgetProvider() {
         return view
     }
 
-    private fun mun(context: Context, widgetID: Int) {
-        updateViews?.setViewVisibility(R.id.nedel5, View.VISIBLE)
-        updateViews?.setViewVisibility(R.id.nedel6, View.VISIBLE)
+    private fun mun(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
+        val updateViews = RemoteViews(context.packageName, R.layout.widget_mun)
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val c = Calendar.getInstance()
+        val cYear = SettingsActivity.GET_CALIANDAR_YEAR_MAX
+        val tecmun = chin.getInt("WIDGET$widgetID", c[Calendar.MONTH])
+        val tecyear = chin.getInt("WIDGETYEAR$widgetID", SettingsActivity.GET_CALIANDAR_YEAR_MAX)
+        val monthName = context.resources.getStringArray(R.array.meciac2)
+        if (tecyear == c[Calendar.YEAR]) {
+            if (tecmun == c[Calendar.MONTH] && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) updateViews.setTextViewText(R.id.Mun_widget, MainActivity.fromHtml("<strong>${monthName[tecmun]}</strong>"))
+            else updateViews.setTextViewText(R.id.Mun_widget, monthName[tecmun])
+        } else {
+            updateViews.setTextViewText(R.id.Mun_widget, monthName[tecmun] + ", " + tecyear)
+        }
+        if (cYear == tecyear && tecmun == 11) updateViews.setViewVisibility(R.id.imageButton2, View.INVISIBLE)
+        else updateViews.setViewVisibility(R.id.imageButton2, View.VISIBLE)
+        if (SettingsActivity.GET_CALIANDAR_YEAR_MIN == tecyear && tecmun == 0) updateViews.setViewVisibility(R.id.imageButton, View.INVISIBLE) else updateViews.setViewVisibility(R.id.imageButton, View.VISIBLE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val dzenNoch = getBaseDzenNoch(context, widgetID)
+            if (dzenNoch) {
+                updateViews.setTextColor(R.id.Mun_widget, ContextCompat.getColor(context, R.color.colorWhite))
+                updateViews.setInt(R.id.root, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorbackground_material_dark))
+                updateViews.setImageViewResource(R.id.imageButton, R.drawable.levo_catedra_31)
+                updateViews.setImageViewResource(R.id.imageButton2, R.drawable.pravo_catedra_31)
+            } else {
+                updateViews.setTextColor(R.id.Mun_widget, ContextCompat.getColor(context, R.color.colorPrimary_text))
+                updateViews.setInt(R.id.root, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorWhite))
+                updateViews.setImageViewResource(R.id.imageButton, R.drawable.levo_catedra_blak_31)
+                updateViews.setImageViewResource(R.id.imageButton2, R.drawable.pravo_catedra_blak_31)
+            }
+        }
+        val updateIntent = Intent(context, WidgetMun::class.java)
+        updateIntent.action = munPlus
+        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
+        val pIntentButton2 = PendingIntent.getBroadcast(context, widgetID, updateIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        updateViews.setOnClickPendingIntent(R.id.imageButton2, pIntentButton2)
+        val countIntent = Intent(context, WidgetMun::class.java)
+        countIntent.action = munMinus
+        countIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
+        val pIntentButton = PendingIntent.getBroadcast(context, widgetID, countIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        updateViews.setOnClickPendingIntent(R.id.imageButton, pIntentButton)
+        updateViews.setViewVisibility(R.id.nedel5, View.VISIBLE)
+        updateViews.setViewVisibility(R.id.nedel6, View.VISIBLE)
         var calendarPost: GregorianCalendar
         val month = chin.getInt("WIDGET$widgetID", c[Calendar.MONTH])
         val year = chin.getInt("WIDGETYEAR$widgetID", c[Calendar.YEAR])
@@ -402,10 +353,10 @@ class WidgetMun : AppWidgetProvider() {
                 day = "end"
             }
             if (42 - (munAll + wik) >= 6) {
-                updateViews?.setViewVisibility(R.id.nedel6, View.GONE)
+                updateViews.setViewVisibility(R.id.nedel6, View.GONE)
             }
             if (munAll + wik == 29) {
-                updateViews?.setViewVisibility(R.id.nedel5, View.GONE)
+                updateViews.setViewVisibility(R.id.nedel5, View.GONE)
             }
             calendarPost = GregorianCalendar(year, month, i)
             val widgetMun = "widget_mun"
@@ -418,11 +369,11 @@ class WidgetMun : AppWidgetProvider() {
                     dayIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                     val code = year.toString() + "" + mouthOld + "" + oldDay
                     val pIntent = PendingIntent.getActivity(context, code.toInt(), dayIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-                    updateViews?.setOnClickPendingIntent(idView(e), pIntent)
-                    updateViews?.setTextViewText(idView(e), oldDay.toString())
-                    if (e == 1) updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_bez_posta)
-                    else updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_day)
-                    updateViews?.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorSecondary_text))
+                    updateViews.setOnClickPendingIntent(idView(e), pIntent)
+                    updateViews.setTextViewText(idView(e), oldDay.toString())
+                    if (e == 1) updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_bez_posta)
+                    else updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_day)
+                    updateViews.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorSecondary_text))
                 }
                 "end" -> {
                     val position = data[data.size - 1][25].toInt() + newDay
@@ -430,69 +381,70 @@ class WidgetMun : AppWidgetProvider() {
                     dayIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                     val code = year.toString() + "" + mouthNew + "" + newDay
                     val pIntent = PendingIntent.getActivity(context, code.toInt(), dayIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-                    updateViews?.setOnClickPendingIntent(idView(e), pIntent)
-                    updateViews?.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorSecondary_text))
-                    updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_day)
-                    updateViews?.setTextViewText(idView(e), newDay.toString())
+                    updateViews.setOnClickPendingIntent(idView(e), pIntent)
+                    updateViews.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorSecondary_text))
+                    updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_day)
+                    updateViews.setTextViewText(idView(e), newDay.toString())
                 }
                 else -> {
-                    updateViews?.setTextViewText(idView(e), i.toString())
+                    updateViews.setTextViewText(idView(e), i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) {
-                            updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_red_today)
+                            updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_red_today)
                         } else {
-                            updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_red)
+                            updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorWhite))
+                        updateViews.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorWhite))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
-                            updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_red_today)
+                            updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_red_today)
                         } else {
-                            updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_red)
+                            updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorWhite))
+                        updateViews.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
-                            if (munActual == i && munTudey) updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_bez_posta_today)
-                            else updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_bez_posta)
-                            updateViews?.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorPrimary_text))
+                            if (munActual == i && munTudey) updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_bez_posta_today)
+                            else updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_bez_posta)
+                            updateViews.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorPrimary_text))
                         }
                         if (post) {
-                            if (munActual == i && munTudey) updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_post_today)
-                            else updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_post)
-                            updateViews?.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorPrimary_text))
+                            if (munActual == i && munTudey) updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_post_today)
+                            else updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_post)
+                            updateViews.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorPrimary_text))
                         }
                         if (strogiPost) {
                             if (munActual == i && munTudey) {
-                                updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_strogi_post_today)
+                                updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_strogi_post_today)
                             } else {
-                                updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_strogi_post)
+                                updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorWhite))
+                            updateViews.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                             if (denNedeli == 1) {
-                                if (munActual == i && munTudey) updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_bez_posta_today)
-                                else updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_bez_posta)
-                                updateViews?.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorPrimary))
+                                if (munActual == i && munTudey) updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_bez_posta_today)
+                                else updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_bez_posta)
+                                updateViews.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorPrimary))
                             } else {
-                                if (munActual == i && munTudey) updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_day_today)
-                                else updateViews?.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_day)
-                                updateViews?.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorPrimary_text))
+                                if (munActual == i && munTudey) updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_day_today)
+                                else updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_day)
+                                updateViews.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorPrimary_text))
                             }
                         }
                     }
-                    if (prorok(i)) updateViews?.setTextViewText(idView(e), MainActivity.fromHtml("<strong>$i</strong>"))
+                    if (prorok(i)) updateViews.setTextViewText(idView(e), MainActivity.fromHtml("<strong>$i</strong>"))
                     val position = data[i - 1][25].toInt()
                     dayIntent.putExtra("position", position)
                     dayIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                     val code = year.toString() + "" + month + "" + i
                     val pIntent = PendingIntent.getActivity(context, code.toInt(), dayIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-                    updateViews?.setOnClickPendingIntent(idView(e), pIntent)
+                    updateViews.setOnClickPendingIntent(idView(e), pIntent)
                 }
             }
         }
+        appWidgetManager.updateAppWidget(widgetID, updateViews)
     }
 
     private fun sviatyVialikia(day: Int): Boolean {

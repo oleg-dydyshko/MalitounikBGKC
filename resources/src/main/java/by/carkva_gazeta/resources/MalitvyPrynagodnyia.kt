@@ -135,9 +135,10 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
+        by.carkva_gazeta.resources.R.raw.mltv_za_naszuju_ziamlu
         data.add(MenuListData("Малітва аб блаславеньні", "prynagodnyia_0"))
         data.add(MenuListData("Малітва аб дапамозе ў выбары жыцьцёвай дарогі дзіцяці", "prynagodnyia_1"))
-        data.add(MenuListData("Малітва аб еднасьці", "prynagodnyia_2"))
+        data.add(MenuListData("Малітва аб еднасьці", "mltv_ab_jednasci"))
         data.add(MenuListData("Малітва бацькоў за дзяцей («Божа, у Тройцы Адзіны...»)", "mltv_backou_za_dziaciej_boza_u_trojcy_adziny"))
         data.add(MenuListData("Малітва бацькоў за дзяцей", "prynagodnyia_4"))
         data.add(MenuListData("Малітва кіроўцы", "mltv_kiroucy"))
@@ -195,6 +196,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         data.add(MenuListData("Малітва да ўкрыжаванага Хрыста (Францішак Скарына)", "mltv_da_ukryzavanaha_chrysta_skaryna"))
         data.add(MenuListData("Малітва перад пачаткам і пасьля кожнай справы", "mltv_pierad_i_pasla_koznaj_spravy"))
         data.add(MenuListData("Малітва ў дзень нараджэньня", "mltv_dzien_naradzennia"))
+        data.add(MenuListData("Малітва за нашую зямлю", "mltv_za_naszuju_ziamlu"))
         data.sort()
         adapter = MenuListAdaprer(this, data)
         binding.ListView.adapter = adapter

@@ -10,7 +10,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
-import android.os.SystemClock
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
@@ -57,21 +56,17 @@ class WidgetMun : AppWidgetProvider() {
         chin.edit().putBoolean("WIDGET_MUN_ENABLED", true).apply()
         val intent = Intent(context, WidgetMun::class.java)
         intent.action = "android.appwidget.action.APPWIDGET_UPDATE_OPTIONS"
-        val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pIntent = PendingIntent.getBroadcast(context, 50, intent, PendingIntent.FLAG_IMMUTABLE or 0)
+        val pIntent = PendingIntent.getBroadcast(context, 60, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms() -> {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(), pIntent)
-                alarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
             }
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(), pIntent)
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
             }
             else -> {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, mkTime(), pIntent)
-                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
             }
         }
     }
@@ -90,15 +85,15 @@ class WidgetMun : AppWidgetProvider() {
         edit.putBoolean("WIDGET_MUN_ENABLED", false)
         edit.apply()
         val intent = Intent(context, WidgetMun::class.java)
-        intent.action = "android.appwidget.action.APPWIDGET_UPDATE_OPTIONS"
-        val pIntent = PendingIntent.getBroadcast(context, 52, intent, PendingIntent.FLAG_IMMUTABLE or 0)
-        val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, PendingIntent.FLAG_IMMUTABLE or 0)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        val pIntent = PendingIntent.getBroadcast(context, 60, intent, PendingIntent.FLAG_IMMUTABLE or 0)
+        //val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val reset = Intent(context, WidgetMun::class.java)
         reset.action = this.reset
         val pReset = PendingIntent.getBroadcast(context, 257, reset, PendingIntent.FLAG_IMMUTABLE or 0)
         alarmManager.cancel(pIntent)
-        alarmManager.cancel(pIntentBoot)
+        //alarmManager.cancel(pIntentBoot)
         alarmManager.cancel(pReset)
     }
 
@@ -142,7 +137,7 @@ class WidgetMun : AppWidgetProvider() {
             val intentUpdate = Intent(context, WidgetMun::class.java)
             intentUpdate.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val pIntent = PendingIntent.getBroadcast(context, 51, intentUpdate, PendingIntent.FLAG_IMMUTABLE or 0)
+            val pIntent = PendingIntent.getBroadcast(context, 60, intentUpdate, PendingIntent.FLAG_IMMUTABLE or 0)
             when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms() -> {
                     alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(1), pIntent)

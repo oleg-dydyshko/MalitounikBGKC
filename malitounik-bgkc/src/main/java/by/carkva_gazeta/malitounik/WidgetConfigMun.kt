@@ -15,7 +15,7 @@ class WidgetConfigMun : BaseActivity(), DialogWidgetConfig.DialogWidgetConfigLis
         if (widgetID == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish()
         }
-        setResult(Activity.RESULT_CANCELED)
+        setResult(Activity.RESULT_OK)
         val config = DialogWidgetConfig.getInstance(widgetID, true)
         config.show(supportFragmentManager, "config")
     }
@@ -23,7 +23,7 @@ class WidgetConfigMun : BaseActivity(), DialogWidgetConfig.DialogWidgetConfigLis
     override fun onDialogWidgetConfigPositiveClick() {
         val resultValue = Intent(this, WidgetMun::class.java)
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
-        sendBroadcast(resultValue)
+        setResult(Activity.RESULT_OK, resultValue)
         finish()
     }
 

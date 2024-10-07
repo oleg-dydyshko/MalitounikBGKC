@@ -30,20 +30,16 @@ class Widget : AppWidgetProvider() {
         sp.edit().putBoolean("WIDGET_ENABLED", true).apply()
         val intent = Intent(context, Widget::class.java)
         intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-        //val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pIntent = PendingIntent.getBroadcast(context, 50, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms() -> {
-                //alarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(), pIntent)
             }
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                //alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(), pIntent)
             }
             else -> {
-                //alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, mkTime(), pIntent)
             }
         }
@@ -72,10 +68,8 @@ class Widget : AppWidgetProvider() {
         val intent = Intent(context, Widget::class.java)
         intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         val pIntent = PendingIntent.getBroadcast(context, 50, intent, PendingIntent.FLAG_IMMUTABLE or 0)
-        //val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pIntent)
-        //alarmManager.cancel(pIntentBoot)
     }
 
     private fun mkTime(addDate: Int = 0): Long {

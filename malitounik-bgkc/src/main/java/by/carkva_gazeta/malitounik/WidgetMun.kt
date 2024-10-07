@@ -9,7 +9,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.graphics.Typeface
 import android.os.Build
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
@@ -19,8 +23,6 @@ import java.util.GregorianCalendar
 class WidgetMun : AppWidgetProvider() {
     private val munPlus = "mun_plus"
     private val munMinus = "mun_minus"
-    private val reset = "reset"
-    private lateinit var data: ArrayList<ArrayList<String>>
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
@@ -55,7 +57,7 @@ class WidgetMun : AppWidgetProvider() {
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         chin.edit().putBoolean("WIDGET_MUN_ENABLED", true).apply()
         val intent = Intent(context, WidgetMun::class.java)
-        intent.action = "android.appwidget.action.APPWIDGET_UPDATE_OPTIONS"
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pIntent = PendingIntent.getBroadcast(context, 60, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         when {
@@ -87,13 +89,11 @@ class WidgetMun : AppWidgetProvider() {
         val intent = Intent(context, WidgetMun::class.java)
         intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         val pIntent = PendingIntent.getBroadcast(context, 60, intent, PendingIntent.FLAG_IMMUTABLE or 0)
-        //val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, PendingIntent.FLAG_IMMUTABLE or 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val reset = Intent(context, WidgetMun::class.java)
-        reset.action = this.reset
+        reset.action = SettingsActivity.RESET_WIDGET_MUN
         val pReset = PendingIntent.getBroadcast(context, 257, reset, PendingIntent.FLAG_IMMUTABLE or 0)
         alarmManager.cancel(pIntent)
-        //alarmManager.cancel(pIntentBoot)
         alarmManager.cancel(pReset)
     }
 
@@ -129,10 +129,12 @@ class WidgetMun : AppWidgetProvider() {
             val thisAppWidget = ComponentName(context.packageName, javaClass.name)
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val ids = appWidgetManager.getAppWidgetIds(thisAppWidget)
+            val edit = chin.edit()
             for (i in ids) {
-                chin.edit().putInt("WIDGET$i", c[Calendar.MONTH]).apply()
-                chin.edit().putInt("WIDGETYEAR$i", c[Calendar.YEAR]).apply()
+                edit.putInt("WIDGET$i", c[Calendar.MONTH])
+                edit.putInt("WIDGETYEAR$i", c[Calendar.YEAR])
             }
+            edit.apply()
             onUpdate(context, appWidgetManager, ids)
             val intentUpdate = Intent(context, WidgetMun::class.java)
             intentUpdate.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
@@ -150,51 +152,40 @@ class WidgetMun : AppWidgetProvider() {
                 }
             }
         }
-        val resetMain = SettingsActivity.RESET_MAIN
-        if (intent.action.equals(resetMain, ignoreCase = true)) {
+        if (intent.action == SettingsActivity.RESET_WIDGET_MUN) {
             val thisAppWidget = ComponentName(context.packageName, javaClass.name)
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val ids = appWidgetManager.getAppWidgetIds(thisAppWidget)
+            val edit = chin.edit()
             for (i in ids) {
-                chin.edit().putInt("WIDGET$i", c[Calendar.MONTH]).apply()
-                chin.edit().putInt("WIDGETYEAR$i", c[Calendar.YEAR]).apply()
-                mun(context, appWidgetManager, i)
+                edit.putInt("WIDGET$i", c[Calendar.MONTH])
+                edit.putInt("WIDGETYEAR$i", c[Calendar.YEAR])
             }
+            edit.apply()
+            onUpdate(context, appWidgetManager, ids)
         }
-        if (intent.action.equals(reset, ignoreCase = true)) {
-            var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-            val extras = intent.extras
-            if (extras != null) {
-                mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-            }
-            if (mAppWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-                chin.edit().putInt("WIDGET$mAppWidgetId", c[Calendar.MONTH]).apply()
-                chin.edit().putInt("WIDGETYEAR$mAppWidgetId", c[Calendar.YEAR]).apply()
-                mun(context, AppWidgetManager.getInstance(context), mAppWidgetId)
-            }
-        }
-        if (intent.action.equals(munPlus, ignoreCase = true) || intent.action.equals(munMinus, ignoreCase = true)) {
-            var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-            val extras = intent.extras
-            if (extras != null) {
-                mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-            }
+        if (intent.action == munPlus || intent.action == munMinus) {
+            val mAppWidgetId = intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID) ?: AppWidgetManager.INVALID_APPWIDGET_ID
             if (mAppWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
                 var tekmun = chin.getInt("WIDGET$mAppWidgetId", c[Calendar.MONTH])
                 var tekyear = chin.getInt("WIDGETYEAR$mAppWidgetId", c[Calendar.YEAR])
-                if (intent.action.equals(munPlus, ignoreCase = true)) {
-                    if (tekmun < 11) chin.edit().putInt("WIDGET$mAppWidgetId", ++tekmun).apply() else {
-                        chin.edit().putInt("WIDGET$mAppWidgetId", 0).apply()
-                        chin.edit().putInt("WIDGETYEAR$mAppWidgetId", ++tekyear).apply()
+                val edit = chin.edit()
+                if (intent.action == munPlus) {
+                    if (tekmun < 11) edit.putInt("WIDGET$mAppWidgetId", ++tekmun)
+                    else {
+                        edit.putInt("WIDGET$mAppWidgetId", 0)
+                        edit.putInt("WIDGETYEAR$mAppWidgetId", ++tekyear)
                     }
                 } else {
-                    if (tekmun > 0) chin.edit().putInt("WIDGET$mAppWidgetId", --tekmun).apply() else {
-                        chin.edit().putInt("WIDGET$mAppWidgetId", 11).apply()
-                        chin.edit().putInt("WIDGETYEAR$mAppWidgetId", --tekyear).apply()
+                    if (tekmun > 0) edit.putInt("WIDGET$mAppWidgetId", --tekmun)
+                    else {
+                        edit.putInt("WIDGET$mAppWidgetId", 11)
+                        edit.putInt("WIDGETYEAR$mAppWidgetId", --tekyear)
                     }
                 }
+                edit.apply()
                 val reset = Intent(context, WidgetMun::class.java)
-                reset.action = this.reset
+                reset.action = SettingsActivity.RESET_WIDGET_MUN
                 reset.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
                 val pReset = PendingIntent.getBroadcast(context, 257, reset, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                 val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -273,14 +264,17 @@ class WidgetMun : AppWidgetProvider() {
         val tecyear = chin.getInt("WIDGETYEAR$widgetID", SettingsActivity.GET_CALIANDAR_YEAR_MAX)
         val monthName = context.resources.getStringArray(R.array.meciac2)
         if (tecyear == c[Calendar.YEAR]) {
-            if (tecmun == c[Calendar.MONTH] && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) updateViews.setTextViewText(R.id.Mun_widget, MainActivity.fromHtml("<strong>${monthName[tecmun]}</strong>"))
+            val spannableString = SpannableString(monthName[tecmun])
+            spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            if (tecmun == c[Calendar.MONTH] && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) updateViews.setTextViewText(R.id.Mun_widget, spannableString)
             else updateViews.setTextViewText(R.id.Mun_widget, monthName[tecmun])
         } else {
             updateViews.setTextViewText(R.id.Mun_widget, monthName[tecmun] + ", " + tecyear)
         }
         if (cYear == tecyear && tecmun == 11) updateViews.setViewVisibility(R.id.imageButton2, View.INVISIBLE)
         else updateViews.setViewVisibility(R.id.imageButton2, View.VISIBLE)
-        if (SettingsActivity.GET_CALIANDAR_YEAR_MIN == tecyear && tecmun == 0) updateViews.setViewVisibility(R.id.imageButton, View.INVISIBLE) else updateViews.setViewVisibility(R.id.imageButton, View.VISIBLE)
+        if (SettingsActivity.GET_CALIANDAR_YEAR_MIN == tecyear && tecmun == 0) updateViews.setViewVisibility(R.id.imageButton, View.INVISIBLE)
+        else updateViews.setViewVisibility(R.id.imageButton, View.VISIBLE)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val dzenNoch = getBaseDzenNoch(context, widgetID)
             if (dzenNoch) {
@@ -307,10 +301,9 @@ class WidgetMun : AppWidgetProvider() {
         updateViews.setOnClickPendingIntent(R.id.imageButton, pIntentButton)
         updateViews.setViewVisibility(R.id.nedel5, View.VISIBLE)
         updateViews.setViewVisibility(R.id.nedel6, View.VISIBLE)
-        var calendarPost: GregorianCalendar
         val month = chin.getInt("WIDGET$widgetID", c[Calendar.MONTH])
         val year = chin.getInt("WIDGETYEAR$widgetID", c[Calendar.YEAR])
-        data = MenuCaliandar.getDataCalaindar(mun = month, year = year)
+        val data = MenuCaliandar.getDataCalaindar(mun = month, year = year)
         val calendarFull = GregorianCalendar(year, month, 1)
         var munTudey = false
         if (month == c[Calendar.MONTH] && year == c[Calendar.YEAR]) munTudey = true
@@ -337,7 +330,7 @@ class WidgetMun : AppWidgetProvider() {
             } else if (e < munAll + wik) {
                 i++
                 day = i.toString()
-                calendarPost = GregorianCalendar(year, month, i)
+                val calendarPost = GregorianCalendar(year, month, i)
                 denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                 nopost = data[i - 1][7].contains("1")
                 post = data[i - 1][7].contains("2")
@@ -353,7 +346,7 @@ class WidgetMun : AppWidgetProvider() {
             if (munAll + wik == 29) {
                 updateViews.setViewVisibility(R.id.nedel5, View.GONE)
             }
-            calendarPost = GregorianCalendar(year, month, i)
+            val calendarPost = GregorianCalendar(year, month, i)
             val widgetMun = "widget_mun"
             val dayIntent = Intent(context, SplashActivity::class.java)
             dayIntent.putExtra(widgetMun, true)
@@ -383,14 +376,14 @@ class WidgetMun : AppWidgetProvider() {
                 }
                 else -> {
                     updateViews.setTextViewText(idView(e), i.toString())
-                    if (sviatyDvunadesiatya(i)) {
+                    if (data[i - 1][5].contains("1")) {
                         if (munActual == i && munTudey) {
                             updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_red_today)
                         } else {
                             updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_red)
                         }
                         updateViews.setTextColor(idView(e), ContextCompat.getColor(context, R.color.colorWhite))
-                    } else if (sviatyVialikia(i)) {
+                    } else if (data[i - 1][5].contains("2")) {
                         if (munActual == i && munTudey) {
                             updateViews.setInt(idView(e), "setBackgroundResource", R.drawable.calendar_red_today)
                         } else {
@@ -429,7 +422,11 @@ class WidgetMun : AppWidgetProvider() {
                             }
                         }
                     }
-                    if (prorok(i)) updateViews.setTextViewText(idView(e), MainActivity.fromHtml("<strong>$i</strong>"))
+                    if (data[i - 1][4].contains("<font color=#d00505><strong>")) {
+                        val spannableString = SpannableString(i.toString())
+                        spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        updateViews.setTextViewText(idView(e), spannableString)
+                    }
                     val position = data[i - 1][25].toInt()
                     dayIntent.putExtra("position", position)
                     dayIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -440,17 +437,5 @@ class WidgetMun : AppWidgetProvider() {
             }
         }
         appWidgetManager.updateAppWidget(widgetID, updateViews)
-    }
-
-    private fun sviatyVialikia(day: Int): Boolean {
-        return data[day - 1][5].contains("2")
-    }
-
-    private fun sviatyDvunadesiatya(day: Int): Boolean {
-        return data[day - 1][5].contains("1")
-    }
-
-    private fun prorok(day: Int): Boolean { // когда выпадают Прарокі
-        return data[day - 1][4].contains("<font color=#d00505><strong>")
     }
 }

@@ -79,7 +79,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
     }
 
     companion object {
-        const val RESET_MAIN = "reset_main"
+        const val RESET_WIDGET_MUN = "reset_widget_mun"
         const val GET_FONT_SIZE_DEFAULT = 22F
         const val GET_FONT_SIZE_TOOLBAR = 18f
         const val GET_FONT_SIZE_MIN = 14F
@@ -246,7 +246,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
                 }
                 if (resetWid) {
                     val reset = Intent(context, WidgetMun::class.java)
-                    reset.action = RESET_MAIN
+                    reset.action = RESET_WIDGET_MUN
                     val pReset = PendingIntent.getBroadcast(context, 257, reset, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                     setAlarm(System.currentTimeMillis() + 120000L, pReset)
                 }

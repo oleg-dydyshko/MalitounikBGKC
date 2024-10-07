@@ -21,12 +21,10 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:contentDescription="@string/empty"
-            android:src="@drawable/levo_catedra_blak_31"
-            tools:ignore="RtlHardcoded" />
+            android:src="@drawable/levo_catedra_blak_31" />
 
         <TextView
             android:id="@+id/Mun_widget"

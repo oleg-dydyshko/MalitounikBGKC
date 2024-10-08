@@ -155,7 +155,7 @@ class Widget : AppWidgetProvider() {
     private fun kaliandar(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
         val updateViews = RemoteViews(context.packageName, R.layout.widget)
         val g = Calendar.getInstance()
-        val data = MenuCaliandar.getDataCalaindar(1)
+        val data = MenuCaliandar.getDataCalaindar(g[Calendar.DATE])
         val dzenNoch = getBaseDzenNoch(context, widgetID)
         val rColorColorPrimaryText: Int
         val rColorColorPrimary: Int

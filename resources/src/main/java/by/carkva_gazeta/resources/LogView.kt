@@ -86,6 +86,8 @@ class LogView : BaseActivity() {
         checkResources()
         if (log.isEmpty()) {
             binding.textView.text = getString(by.carkva_gazeta.malitounik.R.string.admin_upload_contine)
+            val zip = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "MalitounikResource.zip")
+            if (zip.exists()) sendAndClearLogFile(zip, isSendLogFile = false)
         } else {
             val strB = StringBuilder()
             log.forEach {
@@ -274,18 +276,19 @@ class LogView : BaseActivity() {
             addItems(path, name, checkList, count + 1)
             return
         }
+        val md5Sum = meta.md5Hash ?: 0
         sb.append("<name>")
         sb.append(name)
         sb.append("</name>")
-        sb.append("<meta>")
-        sb.append(meta.updatedTimeMillis)
-        sb.append("</meta>\n")
+        sb.append("<md5>")
+        sb.append(md5Sum)
+        sb.append("</md5>\n")
         if (checkList.contains("<name>$name</name>")) {
             val t1 = checkList.indexOf("<name>$name</name>")
-            val t2 = checkList.indexOf("<meta>", t1)
-            val t3 = checkList.indexOf("</meta>", t2)
-            val fileLastUpdate = checkList.substring(t2 + 6, t3).toLong()
-            if (fileLastUpdate < meta.updatedTimeMillis) {
+            val t2 = checkList.indexOf("<md5>", t1)
+            val t3 = checkList.indexOf("</md5>", t2)
+            val filemd5Sum = checkList.substring(t2 + 5, t3)
+            if (filemd5Sum != md5Sum) {
                 log.add(path)
             }
         } else {
@@ -366,12 +369,14 @@ class LogView : BaseActivity() {
         }
     }
 
-    private fun sendAndClearLogFile(zip: File, isClearLogFile: Boolean = true) {
-        val sendIntent = Intent(Intent.ACTION_SEND)
-        sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@LogView, "by.carkva_gazeta.malitounik.fileprovider", zip))
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(by.carkva_gazeta.malitounik.R.string.set_log_file))
-        sendIntent.type = "application/zip"
-        startActivity(Intent.createChooser(sendIntent, getString(by.carkva_gazeta.malitounik.R.string.set_log_file)))
+    private fun sendAndClearLogFile(zip: File, isClearLogFile: Boolean = true, isSendLogFile: Boolean = true) {
+        if (isSendLogFile) {
+            val sendIntent = Intent(Intent.ACTION_SEND)
+            sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@LogView, "by.carkva_gazeta.malitounik.fileprovider", zip))
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(by.carkva_gazeta.malitounik.R.string.set_log_file))
+            sendIntent.type = "application/zip"
+            startActivity(Intent.createChooser(sendIntent, getString(by.carkva_gazeta.malitounik.R.string.set_log_file)))
+        }
         if (isClearLogFile && MainActivity.isNetworkAvailable() && sb.toString().isNotEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
                 val logFile = File("$filesDir/cache/log.txt")

@@ -24,6 +24,7 @@ class WidgetConfigMun : BaseActivity(), DialogWidgetConfig.DialogWidgetConfigLis
         val resultValue = Intent(this, WidgetMun::class.java)
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
         setResult(Activity.RESULT_OK, resultValue)
+        sendBroadcast(resultValue)
         finish()
     }
 

@@ -197,6 +197,8 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         data.add(MenuListData("Малітва перад пачаткам і пасьля кожнай справы", "mltv_pierad_i_pasla_koznaj_spravy"))
         data.add(MenuListData("Малітва ў дзень нараджэньня", "mltv_dzien_naradzennia"))
         data.add(MenuListData("Малітва за нашую зямлю", "mltv_za_naszuju_ziamlu"))
+        data.add(MenuListData("Малітва да Божае Маці перад іконай Ейнай Менскай", "mltv_mb_mienskaja"))
+        data.add(MenuListData("Малітва аб духу любові", "mltv_ab_duchu_lubovi_sv_franciszak"))
         data.sort()
         adapter = MenuListAdaprer(this, data)
         binding.ListView.adapter = adapter

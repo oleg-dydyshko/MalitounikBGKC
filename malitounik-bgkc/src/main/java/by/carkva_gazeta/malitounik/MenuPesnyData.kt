@@ -72,6 +72,8 @@ class MenuPesnyData {
         pesnyKal.add(Data("piesni_kalady_o_zyvatvorny_tvorca_zor", "O, жыватворны Творца зор"))
         pesnyKal.add(Data("piesni_kalady_u_horadzie_cara_davida", "У горадзе цара Давіда"))
         pesnyKal.add(Data("piesni_kalady_zbauca_svietu", "Збаўца сьвету"))
+        pesnyKal.add(Data("piesni_kalady_ci_znala_ty_maryja", "Ці знала Ты, Марыя?"))
+        pesnyKal.add(Data("piesni_kalady_najpiersz_pra_rastvo_first_noel", "Найперш пра Раство"))
 
         pesnyPrasl.add(Data("pesny_prasl_0", "Ён паўсюль"))
         pesnyPrasl.add(Data("pesny_prasl_1", "Ісус вызваліў мяне"))

@@ -1088,5 +1088,11 @@
     <string name="print">Раздрукаваць</string>
     <string name="system">Сістэмны</string>
     <string name="dzen_noch">Дзень-ноч</string>
+    <string name="prynad_1">Малітвы да Багародзіцы</string>
+    <string name="prynad_2">Малітвы за Царкву</string>
+    <string name="prynad_3">Малітвы за Беларусь</string>
+    <string name="prynad_4">Малітвы за Сям\'ю</string>
+    <string name="prynad_5">Малітвы Прынагодныя</string>
+    <string name="prynad_search">Вынікі</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

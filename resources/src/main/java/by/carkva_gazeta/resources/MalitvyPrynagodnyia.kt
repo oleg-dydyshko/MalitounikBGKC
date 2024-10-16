@@ -16,18 +16,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
-import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.BaseExpandableListAdapter
+import android.widget.ExpandableListView
 import android.widget.Filter
+import android.widget.Filterable
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.DialogClearHishory
+import by.carkva_gazeta.malitounik.HistoryAdapter
+import by.carkva_gazeta.malitounik.MenuListData
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
-import by.carkva_gazeta.resources.databinding.AkafistListBibleBinding
+import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
+import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
+import by.carkva_gazeta.resources.databinding.MalitvyPrynagodnyiaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -38,8 +43,8 @@ import kotlinx.coroutines.launch
 
 class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistoryListener {
 
-    private val data = ArrayList<MenuListData>()
-    private lateinit var adapter: MenuListAdaprer
+    private val data = ArrayList<ArrayList<MenuListData>>()
+    private lateinit var adapter: PrynagodnyiaAdaprer
     private var searchView: SearchView? = null
     private lateinit var chin: SharedPreferences
     private var mLastClickTime: Long = 0
@@ -48,7 +53,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = false
-    private lateinit var binding: AkafistListBibleBinding
+    private lateinit var binding: MalitvyPrynagodnyiaBinding
     private var resetTollbarJob: Job? = null
 
     private fun addHistory(item: String) {
@@ -93,9 +98,11 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
     private fun findTypeResource(findText: String): String {
         var type = ""
         for (i in 0 until data.size) {
-            if (data[i].title == findText) {
-                type = data[i].resurs
-                break
+            for (subI in data[i]) {
+                if (subI.title == findText) {
+                    type = subI.resurs
+                    break
+                }
             }
         }
         return type
@@ -105,7 +112,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", MODE_PRIVATE)
         val dzenNoch = getBaseDzenNoch()
-        binding = AkafistListBibleBinding.inflate(layoutInflater)
+        binding = MalitvyPrynagodnyiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -135,73 +142,86 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
-        by.carkva_gazeta.resources.R.raw.mltv_za_naszuju_ziamlu
-        data.add(MenuListData("Малітва аб блаславеньні", "prynagodnyia_0"))
-        data.add(MenuListData("Малітва аб дапамозе ў выбары жыцьцёвай дарогі дзіцяці", "prynagodnyia_1"))
-        data.add(MenuListData("Малітва аб еднасьці", "mltv_ab_jednasci"))
-        data.add(MenuListData("Малітва бацькоў за дзяцей («Божа, у Тройцы Адзіны...»)", "mltv_backou_za_dziaciej_boza_u_trojcy_adziny"))
-        data.add(MenuListData("Малітва бацькоў за дзяцей", "prynagodnyia_4"))
-        data.add(MenuListData("Малітва кіроўцы", "mltv_kiroucy"))
-        data.add(MenuListData("Малітва вучня", "prynagodnyia_6"))
-        data.add(MenuListData("Малітва да Маці Божай Браслаўскай, Валадаркі Азёраў", "prynagodnyia_7"))
-        data.add(MenuListData("Малітва да Маці Божай Будслаўскай, Апякункі Беларусі", "prynagodnyia_8"))
-        data.add(MenuListData("Малітва да Маці Божай Нястомнай Дапамогі", "prynagodnyia_9"))
-        data.add(MenuListData("Малітва за Беларусь", "prynagodnyia_10"))
-        data.add(MenuListData("Малітва за дарослых дзяцей", "prynagodnyia_11"))
-        data.add(MenuListData("Малітва за дзяцей перад пачаткам навукі", "prynagodnyia_12"))
-        data.add(MenuListData("Малітва за парафію", "prynagodnyia_13"))
-        data.add(MenuListData("Малітва за хворага («Міласэрны Божа»)", "mltv_za_chvoraha_milaserny_boza"))
-        data.add(MenuListData("Малітва за хворае дзіця", "prynagodnyia_15"))
-        data.add(MenuListData("Малітва за хрысьціянскую еднасьць", "prynagodnyia_16"))
-        data.add(MenuListData("Малітва за ўмацаваньне ў любові", "prynagodnyia_17"))
-        data.add(MenuListData("Малітва маладога чалавека", "prynagodnyia_18"))
-        data.add(MenuListData("Малітва на ўсякую патрэбу", "prynagodnyia_19"))
-        data.add(MenuListData("Малітва падзякі за атрыманыя дабрадзействы", "prynagodnyia_20"))
-        data.add(MenuListData("Малітва перад пачаткам навучаньня", "prynagodnyia_21"))
-        data.add(MenuListData("Малітва перад іспытамі", "prynagodnyia_22"))
-        data.add(MenuListData("Малітва ранішняга намеру (Опціных старцаў)", "prynagodnyia_23"))
-        data.add(MenuListData("Малітвы за сьвятароў і сьвятарскія пакліканьні", "prynagodnyia_24"))
-        data.add(MenuListData("Намер ісьці за Хрыстом", "prynagodnyia_26"))
-        data.add(MenuListData("Цябе, Бога, хвалім", "pesny_prasl_70"))
-        data.add(MenuListData("Малітва падчас згубнай пошасьці", "prynagodnyia_28"))
-        data.add(MenuListData("Малітва вучняў перад навучаньнем", "prynagodnyia_29"))
-        data.add(MenuListData("Малітва да Маці Божай Берасьцейскай", "prynagodnyia_30"))
-        data.add(MenuListData("Малітва да Маці Божай Лагішынскай", "prynagodnyia_31"))
-        data.add(MenuListData("Малітва пілігрыма", "prynagodnyia_32"))
-        data.add(MenuListData("Малітва сям’і аб Божым бласлаўленьні на час адпачынку і вакацыяў", "prynagodnyia_33"))
-        data.add(MenuListData("Малітва ў час адпачынку", "prynagodnyia_34"))
-        data.add(MenuListData("Малітва за бязьвінных ахвяраў перасьледу", "prynagodnyia_35"))
-        data.add(MenuListData("Малітва за Айчыну - Ян Павел II", "prynagodnyia_36"))
-        data.add(MenuListData("Малітва да сьв. Язэпа", "prynagodnyia_37"))
-        data.add(MenuListData("Малітва мужа і бацькі да сьв. Язэпа", "prynagodnyia_38"))
-        data.add(MenuListData("Малітва да сьв. Язэпа за мужчынаў", "prynagodnyia_39"))
-        data.add(MenuListData("Блаславеньне маці (Матчына малітва)", "prynagodnyia_40"))
-        data.add(MenuListData("Малітва за ўсіх, што пацярпелі за Беларусь", "mltv_paciarpieli_za_bielarus"))
-        data.add(MenuListData("Малітвы перад ядою і пасьля яды", "mltv_pierad_jadoj_i_pasla"))
-        data.add(MenuListData("Малітва за бацькоў", "mltv_za_backou"))
-        data.add(MenuListData("Малітвы за памерлых", "mltv_za_pamierlych"))
-        data.add(MenuListData("Малітва да Багародзіцы, праслаўленай у цудатворнай Жыровіцкай іконе", "mltv_mb_zyrovickaja"))
-        data.add(MenuListData("Малітва за Царкву", "mltv_za_carkvu"))
-        data.add(MenuListData("Малітва да Маці Божай Будслаўскай", "mltv_mb_budslauskaja"))
-        data.add(MenuListData("Малітва за хросьнікаў", "mltv_za_chrosnikau"))
-        data.add(MenuListData("Малітва да Найсьвяцейшай Дзевы Марыі Барунскай", "mltv_mb_barunskaja"))
-        data.add(MenuListData("Малітва за Царкву 2", "mltv_za_carkvu_2"))
-        data.add(MenuListData("Малітва за ўсіх і за ўсё", "mltv_za_usich_i_za_usio"))
-        data.add(MenuListData("Малітва ў часе хваробы", "mltv_u_czasie_chvaroby"))
-        data.add(MenuListData("Малітва за хворага («Лекару душ і целаў»)", "mltv_za_chvoraha_lekaru_dush_cielau"))
-        data.add(MenuListData("Малітва за вязьняў", "mltv_za_viazniau"))
-        data.add(MenuListData("Малітва за царкоўную еднасьць", "mltv_za_carkounuju_jednasc"))
-        data.add(MenuListData("Малітва разам з Падляшскімі мучанікамі аб еднасьці", "mltv_razam_z_padlaszskimi_muczanikami_ab_jednasci"))
-        data.add(MenuListData("Малітва аб еднасьці царквы (Экзарха Леаніда Фёдарава)", "mltv_ab_jednasci_carkvy_leanida_fiodarava"))
-        data.add(MenuListData("Малітва да ўкрыжаванага Хрыста (Францішак Скарына)", "mltv_da_ukryzavanaha_chrysta_skaryna"))
-        data.add(MenuListData("Малітва перад пачаткам і пасьля кожнай справы", "mltv_pierad_i_pasla_koznaj_spravy"))
-        data.add(MenuListData("Малітва ў дзень нараджэньня", "mltv_dzien_naradzennia"))
-        data.add(MenuListData("Малітва за нашую зямлю", "mltv_za_naszuju_ziamlu"))
-        data.add(MenuListData("Малітва да Божае Маці перад іконай Ейнай Менскай", "mltv_mb_mienskaja"))
-        data.add(MenuListData("Малітва аб духу любові", "mltv_ab_duchu_lubovi_sv_franciszak"))
-        data.sort()
-        adapter = MenuListAdaprer(this, data)
-        binding.ListView.adapter = adapter
+        val sub1 = ArrayList<MenuListData>()
+        sub1.add(MenuListData("Малітва да Маці Божай Браслаўскай, Валадаркі Азёраў", "prynagodnyia_7"))
+        sub1.add(MenuListData("Малітва да Маці Божай Будслаўскай, Апякункі Беларусі", "prynagodnyia_8"))
+        sub1.add(MenuListData("Малітва да Маці Божай Нястомнай Дапамогі", "prynagodnyia_9"))
+        sub1.add(MenuListData("Малітва да Маці Божай Берасьцейскай", "prynagodnyia_30"))
+        sub1.add(MenuListData("Малітва да Маці Божай Лагішынскай", "prynagodnyia_31"))
+        sub1.add(MenuListData("Малітва да Маці Божай Будслаўскай", "mltv_mb_budslauskaja"))
+        sub1.add(MenuListData("Малітва да Божае Маці перад іконай Ейнай Менскай", "mltv_mb_mienskaja"))
+        sub1.add(MenuListData("Малітва да Найсьвяцейшай Дзевы Марыі Барунскай", "mltv_mb_barunskaja"))
+        sub1.add(MenuListData("Малітва да Багародзіцы, праслаўленай у цудатворнай Жыровіцкай іконе", "mltv_mb_zyrovickaja"))
+        sub1.sort()
+        data.add(sub1)
+        val sub3 = ArrayList<MenuListData>()
+        sub3.add(MenuListData("Малітва аб еднасьці", "mltv_ab_jednasci"))
+        sub3.add(MenuListData("Малітва за парафію", "prynagodnyia_13"))
+        sub3.add(MenuListData("Малітва за хрысьціянскую еднасьць", "prynagodnyia_16"))
+        sub3.add(MenuListData("Малітвы за сьвятароў і сьвятарскія пакліканьні", "prynagodnyia_24"))
+        sub3.add(MenuListData("Намер ісьці за Хрыстом", "prynagodnyia_26"))
+        sub3.add(MenuListData("Цябе, Бога, хвалім", "pesny_prasl_70"))
+        sub3.add(MenuListData("Малітва пілігрыма", "prynagodnyia_32"))
+        sub3.add(MenuListData("Малітва за Царкву", "mltv_za_carkvu"))
+        sub3.add(MenuListData("Малітва за Царкву 2", "mltv_za_carkvu_2"))
+        sub3.add(MenuListData("Малітва за царкоўную еднасьць", "mltv_za_carkounuju_jednasc"))
+        sub3.add(MenuListData("Малітва разам з Падляшскімі мучанікамі аб еднасьці", "mltv_razam_z_padlaszskimi_muczanikami_ab_jednasci"))
+        sub3.add(MenuListData("Малітва аб еднасьці царквы (Экзарха Леаніда Фёдарава)", "mltv_ab_jednasci_carkvy_leanida_fiodarava"))
+        sub3.add(MenuListData("Малітва за хросьнікаў", "mltv_za_chrosnikau"))
+        sub3.add(MenuListData("Малітвы за памерлых", "mltv_za_pamierlych"))
+        sub3.add(MenuListData("Малітва да ўкрыжаванага Хрыста (Францішак Скарына)", "mltv_da_ukryzavanaha_chrysta_skaryna"))
+        sub3.sort()
+        data.add(sub3)
+        val sub4 = ArrayList<MenuListData>()
+        sub4.add(MenuListData("Малітва за Беларусь", "prynagodnyia_10"))
+        sub4.add(MenuListData("Малітва за Айчыну - Ян Павел II", "prynagodnyia_36"))
+        sub4.add(MenuListData("Малітва за ўсіх, што пацярпелі за Беларусь", "mltv_paciarpieli_za_bielarus"))
+        sub4.sort()
+        data.add(sub4)
+        val sub5 = ArrayList<MenuListData>()
+        sub5.add(MenuListData("Малітва аб дапамозе ў выбары жыцьцёвай дарогі дзіцяці", "prynagodnyia_1"))
+        sub5.add(MenuListData("Малітва бацькоў за дзяцей («Божа, у Тройцы Адзіны...»)", "mltv_backou_za_dziaciej_boza_u_trojcy_adziny"))
+        sub5.add(MenuListData("Малітва бацькоў за дзяцей", "prynagodnyia_4"))
+        sub5.add(MenuListData("Малітва вучня", "prynagodnyia_6"))
+        sub5.add(MenuListData("Малітва за дарослых дзяцей", "prynagodnyia_11"))
+        sub5.add(MenuListData("Малітва за дзяцей перад пачаткам навукі", "prynagodnyia_12"))
+        sub5.add(MenuListData("Малітва за бацькоў", "mltv_za_backou"))
+        sub5.add(MenuListData("Малітва за хворае дзіця", "prynagodnyia_15"))
+        sub5.add(MenuListData("Малітва перад пачаткам навучаньня", "prynagodnyia_21"))
+        sub5.add(MenuListData("Малітва вучняў перад навучаньнем", "prynagodnyia_29"))
+        sub5.add(MenuListData("Малітва сям’і аб Божым бласлаўленьні на час адпачынку і вакацыяў", "prynagodnyia_33"))
+        sub5.add(MenuListData("Блаславеньне маці (Матчына малітва)", "prynagodnyia_40"))
+        sub5.sort()
+        data.add(sub5)
+        val sub2 = ArrayList<MenuListData>()
+        sub2.add(MenuListData("Малітва аб блаславеньні", "prynagodnyia_0"))
+        sub2.add(MenuListData("Малітва кіроўцы", "mltv_kiroucy"))
+        sub2.add(MenuListData("Малітва за хворага («Міласэрны Божа»)", "mltv_za_chvoraha_milaserny_boza"))
+        sub2.add(MenuListData("Малітва за ўмацаваньне ў любові", "prynagodnyia_17"))
+        sub2.add(MenuListData("Малітва маладога чалавека", "prynagodnyia_18"))
+        sub2.add(MenuListData("Малітва на ўсякую патрэбу", "prynagodnyia_19"))
+        sub2.add(MenuListData("Малітва падзякі за атрыманыя дабрадзействы", "prynagodnyia_20"))
+        sub2.add(MenuListData("Малітва перад іспытамі", "prynagodnyia_22"))
+        sub2.add(MenuListData("Малітва ранішняга намеру (Опціных старцаў)", "prynagodnyia_23"))
+        sub2.add(MenuListData("Малітва падчас згубнай пошасьці", "prynagodnyia_28"))
+        sub2.add(MenuListData("Малітва ў час адпачынку", "prynagodnyia_34"))
+        sub2.add(MenuListData("Малітва за бязьвінных ахвяраў перасьледу", "prynagodnyia_35"))
+        sub2.add(MenuListData("Малітва да сьв. Язэпа", "prynagodnyia_37"))
+        sub2.add(MenuListData("Малітва мужа і бацькі да сьв. Язэпа", "prynagodnyia_38"))
+        sub2.add(MenuListData("Малітва да сьв. Язэпа за мужчынаў", "prynagodnyia_39"))
+        sub2.add(MenuListData("Малітвы перад ядою і пасьля яды", "mltv_pierad_jadoj_i_pasla"))
+        sub2.add(MenuListData("Малітва за ўсіх і за ўсё", "mltv_za_usich_i_za_usio"))
+        sub2.add(MenuListData("Малітва ў часе хваробы", "mltv_u_czasie_chvaroby"))
+        sub2.add(MenuListData("Малітва за хворага («Лекару душ і целаў»)", "mltv_za_chvoraha_lekaru_dush_cielau"))
+        sub2.add(MenuListData("Малітва за вязьняў", "mltv_za_viazniau"))
+        sub2.add(MenuListData("Малітва перад пачаткам і пасьля кожнай справы", "mltv_pierad_i_pasla_koznaj_spravy"))
+        sub2.add(MenuListData("Малітва ў дзень нараджэньня", "mltv_dzien_naradzennia"))
+        sub2.add(MenuListData("Малітва за нашую зямлю", "mltv_za_naszuju_ziamlu"))
+        sub2.add(MenuListData("Малітва аб духу любові", "mltv_ab_duchu_lubovi_sv_franciszak"))
+        sub2.sort()
+        data.add(sub2)
+        adapter = PrynagodnyiaAdaprer()
+        binding.ListView.setAdapter(adapter)
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
@@ -217,22 +237,23 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             }
 
         })
-        binding.ListView.setOnItemClickListener { _, _, position, _ ->
+        binding.ListView.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnItemClickListener
+                return@setOnChildClickListener true
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             val intent = Intent(this@MalitvyPrynagodnyia, Bogashlugbovya::class.java)
-            intent.putExtra("title", data[position].title)
-            intent.putExtra("resurs", data[position].resurs)
+            intent.putExtra("title", data[groupPosition][childPosition].title)
+            intent.putExtra("resurs", data[groupPosition][childPosition].resurs)
             startActivity(intent)
             val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.ListView.windowToken, 0)
             if (autoCompleteTextView?.text.toString() != "") {
-                addHistory(data[position].title)
+                addHistory(data[groupPosition][childPosition].title)
                 saveHistopy()
             }
             actionExpandOn = false
+            return@setOnChildClickListener false
         }
         if (chin.getString("history_prynagodnyia", "") != "") {
             val gson = Gson()
@@ -262,6 +283,9 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
             return@setOnItemLongClickListener true
+        }
+        for (i in 0 until data.size) {
+            binding.ListView.expandGroup(i)
         }
     }
 
@@ -343,6 +367,9 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 actionExpandOn = false
+                for (i in 0 until data.size) {
+                    binding.ListView.expandGroup(i)
+                }
                 return true
             }
         })
@@ -401,25 +428,65 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         }
     }
 
-    private class MenuListAdaprer(private val context: Activity, private val data: List<MenuListData>) : ArrayAdapter<MenuListData>(context, R.layout.simple_list_item_2, R.id.label, data) {
-        private val origData = ArrayList<MenuListData>(data)
+    private inner class PrynagodnyiaAdaprer : BaseExpandableListAdapter(), Filterable {
+        private val origData = ArrayList<ArrayList<MenuListData>>(data)
 
-        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolder
-            if (mView == null) {
-                val binding = SimpleListItem2Binding.inflate(context.layoutInflater, parent, false)
-                rootView = binding.root
-                viewHolder = ViewHolder(binding.label)
-                rootView.tag = viewHolder
+        override fun getGroupCount(): Int {
+            return data.size
+        }
+
+        override fun getChildrenCount(groupPosition: Int): Int {
+            return data[groupPosition].size
+        }
+
+        override fun getGroup(groupPosition: Int): Any {
+            return data[groupPosition]
+        }
+
+        override fun getChild(groupPosition: Int, childPosition: Int): Any {
+            return data[groupPosition][childPosition]
+        }
+
+        override fun getGroupId(groupPosition: Int): Long {
+            return groupPosition.toLong()
+        }
+
+        override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+            return childPosition.toLong()
+        }
+
+        override fun hasStableIds(): Boolean {
+            return true
+        }
+
+        override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
+            val rootView = GroupViewBinding.inflate(layoutInflater, parent, false)
+            if (actionExpandOn) {
+                rootView.textGroup.text = getString(R.string.prynad_search)
+                binding.ListView.expandGroup(0)
+                binding.ListView.setSelectedGroup(0)
             } else {
-                rootView = mView
-                viewHolder = rootView.tag as ViewHolder
+                when (groupPosition) {
+                    0 -> rootView.textGroup.text = getString(R.string.prynad_1)
+                    1 -> rootView.textGroup.text = getString(R.string.prynad_2)
+                    2 -> rootView.textGroup.text = getString(R.string.prynad_3)
+                    3 -> rootView.textGroup.text = getString(R.string.prynad_4)
+                    4 -> rootView.textGroup.text = getString(R.string.prynad_5)
+                }
             }
-            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
-            viewHolder.text.text = data[position].title
-            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            return rootView
+            return rootView.root
+        }
+
+        override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
+            val rootView = ChildViewBinding.inflate(layoutInflater, parent, false)
+            val dzenNoch = getBaseDzenNoch()
+            if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            rootView.textChild.text = data[groupPosition][childPosition].title
+            return rootView.root
+        }
+
+        override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+            return true
         }
 
         override fun getFilter(): Filter {
@@ -429,12 +496,16 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                     constraint1 = constraint1.toString()
                     val result = FilterResults()
                     if (constraint1.isNotEmpty()) {
-                        val founded = ArrayList<MenuListData>()
+                        val founded = ArrayList<ArrayList<MenuListData>>()
+                        val subFounded = ArrayList<MenuListData>()
                         for (item in origData) {
-                            if (item.title.contains(constraint1, true)) {
-                                founded.add(item)
+                            for (subItem in item) {
+                                if (subItem.title.contains(constraint1, true)) {
+                                    subFounded.add(subItem)
+                                }
                             }
                         }
+                        founded.add(subFounded)
                         result.values = founded
                         result.count = founded.size
                     } else {
@@ -445,15 +516,14 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                 }
 
                 override fun publishResults(constraint: CharSequence?, results: FilterResults) {
-                    clear()
-                    for (item in results.values as ArrayList<*>) {
-                        add(item as MenuListData)
+                    data.clear()
+                    @Suppress("UNCHECKED_CAST")
+                    for (item in results.values as ArrayList<ArrayList<MenuListData>>) {
+                        data.add(item)
                     }
                     notifyDataSetChanged()
                 }
             }
         }
     }
-
-    private class ViewHolder(var text: TextView)
 }

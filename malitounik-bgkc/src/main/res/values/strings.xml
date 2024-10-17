@@ -394,6 +394,11 @@
     <string-array name="malitvy">
         <item>Ранішняя малітвы</item>
         <item>Вячэрнія малітвы</item>
+        <item>Малітвы да Багародзіцы</item>
+        <item>Малітвы бацькоў і дзяцей</item>
+        <item>Малітвы за Беларусь і беларускі народ</item>
+        <item>Малітвы за Царкву і царкоўную еднасьць</item>
+        <item>Малітвы за здароўе</item>
         <item>Прынагодныя малітвы</item>
     </string-array>
     <string-array name="ruzanec">

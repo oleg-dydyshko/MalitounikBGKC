@@ -31,30 +31,28 @@ class MenuMalitvy : BaseListFragment() {
         mLastClickTime = SystemClock.elapsedRealtime()
         (activity as? BaseActivity)?.let {
             if (it.checkmoduleResources()) {
+                val intent = Intent()
+                if (position == 0 || position == 1) {
+                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                } else {
+                    intent.setClassName(it, MainActivity.MALITVYPRYNAGODNYIA)
+                }
                 when (position) {
                     0 -> {
-                        val intent = Intent()
-                        intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "malitvy_ranisznija")
-                        startActivity(intent)
                     }
 
                     1 -> {
-                        val intent = Intent()
-                        intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "malitvy_viaczernija")
-                        startActivity(intent)
                     }
 
-                    2 -> {
-                        val intent = Intent()
-                        intent.setClassName(it, MainActivity.MALITVYPRYNAGODNYIA)
-                        startActivity(intent)
-                        return
+                    else -> {
+                        intent.putExtra("pybrika", position - 1)
                     }
                 }
+                startActivity(intent)
             } else {
                 it.installFullMalitounik()
             }

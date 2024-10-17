@@ -16,12 +16,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
+import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.BaseExpandableListAdapter
-import android.widget.ExpandableListView
 import android.widget.Filter
-import android.widget.Filterable
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
@@ -30,9 +29,8 @@ import by.carkva_gazeta.malitounik.DialogClearHishory
 import by.carkva_gazeta.malitounik.HistoryAdapter
 import by.carkva_gazeta.malitounik.MenuListData
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
-import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
-import by.carkva_gazeta.resources.databinding.MalitvyPrynagodnyiaBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
+import by.carkva_gazeta.resources.databinding.AkafistListBibleBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -43,7 +41,7 @@ import kotlinx.coroutines.launch
 
 class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistoryListener {
 
-    private val data = ArrayList<ArrayList<MenuListData>>()
+    private val data = ArrayList<MenuListData>()
     private lateinit var adapter: PrynagodnyiaAdaprer
     private var searchView: SearchView? = null
     private lateinit var chin: SharedPreferences
@@ -53,7 +51,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = false
-    private lateinit var binding: MalitvyPrynagodnyiaBinding
+    private lateinit var binding: AkafistListBibleBinding
     private var resetTollbarJob: Job? = null
 
     private fun addHistory(item: String) {
@@ -98,11 +96,9 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
     private fun findTypeResource(findText: String): String {
         var type = ""
         for (i in 0 until data.size) {
-            for (subI in data[i]) {
-                if (subI.title == findText) {
-                    type = subI.resurs
-                    break
-                }
+            if (data[i].title == findText) {
+                type = data[i].resurs
+                break
             }
         }
         return type
@@ -112,7 +108,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         super.onCreate(savedInstanceState)
         chin = getSharedPreferences("biblia", MODE_PRIVATE)
         val dzenNoch = getBaseDzenNoch()
-        binding = MalitvyPrynagodnyiaBinding.inflate(layoutInflater)
+        binding = AkafistListBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -153,31 +149,23 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         sub1.add(MenuListData("Малітва да Найсьвяцейшай Дзевы Марыі Барунскай", "mltv_mb_barunskaja"))
         sub1.add(MenuListData("Малітва да Багародзіцы, праслаўленай у цудатворнай Жыровіцкай іконе", "mltv_mb_zyrovickaja"))
         sub1.sort()
-        data.add(sub1)
         val sub3 = ArrayList<MenuListData>()
         sub3.add(MenuListData("Малітва аб еднасьці", "mltv_ab_jednasci"))
         sub3.add(MenuListData("Малітва за парафію", "prynagodnyia_13"))
         sub3.add(MenuListData("Малітва за хрысьціянскую еднасьць", "prynagodnyia_16"))
         sub3.add(MenuListData("Малітвы за сьвятароў і сьвятарскія пакліканьні", "prynagodnyia_24"))
-        sub3.add(MenuListData("Намер ісьці за Хрыстом", "prynagodnyia_26"))
         sub3.add(MenuListData("Цябе, Бога, хвалім", "pesny_prasl_70"))
-        sub3.add(MenuListData("Малітва пілігрыма", "prynagodnyia_32"))
         sub3.add(MenuListData("Малітва за Царкву", "mltv_za_carkvu"))
         sub3.add(MenuListData("Малітва за Царкву 2", "mltv_za_carkvu_2"))
         sub3.add(MenuListData("Малітва за царкоўную еднасьць", "mltv_za_carkounuju_jednasc"))
         sub3.add(MenuListData("Малітва разам з Падляшскімі мучанікамі аб еднасьці", "mltv_razam_z_padlaszskimi_muczanikami_ab_jednasci"))
         sub3.add(MenuListData("Малітва аб еднасьці царквы (Экзарха Леаніда Фёдарава)", "mltv_ab_jednasci_carkvy_leanida_fiodarava"))
-        sub3.add(MenuListData("Малітва за хросьнікаў", "mltv_za_chrosnikau"))
-        sub3.add(MenuListData("Малітвы за памерлых", "mltv_za_pamierlych"))
-        sub3.add(MenuListData("Малітва да ўкрыжаванага Хрыста (Францішак Скарына)", "mltv_da_ukryzavanaha_chrysta_skaryna"))
         sub3.sort()
-        data.add(sub3)
         val sub4 = ArrayList<MenuListData>()
         sub4.add(MenuListData("Малітва за Беларусь", "prynagodnyia_10"))
         sub4.add(MenuListData("Малітва за Айчыну - Ян Павел II", "prynagodnyia_36"))
         sub4.add(MenuListData("Малітва за ўсіх, што пацярпелі за Беларусь", "mltv_paciarpieli_za_bielarus"))
         sub4.sort()
-        data.add(sub4)
         val sub5 = ArrayList<MenuListData>()
         sub5.add(MenuListData("Малітва аб дапамозе ў выбары жыцьцёвай дарогі дзіцяці", "prynagodnyia_1"))
         sub5.add(MenuListData("Малітва бацькоў за дзяцей («Божа, у Тройцы Адзіны...»)", "mltv_backou_za_dziaciej_boza_u_trojcy_adziny"))
@@ -192,8 +180,12 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         sub5.add(MenuListData("Малітва сям’і аб Божым бласлаўленьні на час адпачынку і вакацыяў", "prynagodnyia_33"))
         sub5.add(MenuListData("Блаславеньне маці (Матчына малітва)", "prynagodnyia_40"))
         sub5.sort()
-        data.add(sub5)
         val sub2 = ArrayList<MenuListData>()
+        sub2.add(MenuListData("Малітвы за памерлых", "mltv_za_pamierlych"))
+        sub2.add(MenuListData("Намер ісьці за Хрыстом", "prynagodnyia_26"))
+        sub2.add(MenuListData("Малітва пілігрыма", "prynagodnyia_32"))
+        sub2.add(MenuListData("Малітва за хросьнікаў", "mltv_za_chrosnikau"))
+        sub2.add(MenuListData("Малітва да ўкрыжаванага Хрыста (Францішак Скарына)", "mltv_da_ukryzavanaha_chrysta_skaryna"))
         sub2.add(MenuListData("Малітва аб блаславеньні", "prynagodnyia_0"))
         sub2.add(MenuListData("Малітва кіроўцы", "mltv_kiroucy"))
         sub2.add(MenuListData("Малітва за хворага («Міласэрны Божа»)", "mltv_za_chvoraha_milaserny_boza"))
@@ -219,8 +211,12 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         sub2.add(MenuListData("Малітва за нашую зямлю", "mltv_za_naszuju_ziamlu"))
         sub2.add(MenuListData("Малітва аб духу любові", "mltv_ab_duchu_lubovi_sv_franciszak"))
         sub2.sort()
-        data.add(sub2)
-        adapter = PrynagodnyiaAdaprer()
+        data.addAll(sub1)
+        data.addAll(sub3)
+        data.addAll(sub4)
+        data.addAll(sub5)
+        data.addAll(sub2)
+        adapter = PrynagodnyiaAdaprer(this, data)
         binding.ListView.setAdapter(adapter)
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
@@ -237,23 +233,22 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             }
 
         })
-        binding.ListView.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
+        binding.ListView.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnChildClickListener true
+                return@setOnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             val intent = Intent(this@MalitvyPrynagodnyia, Bogashlugbovya::class.java)
-            intent.putExtra("title", data[groupPosition][childPosition].title)
-            intent.putExtra("resurs", data[groupPosition][childPosition].resurs)
+            intent.putExtra("title", data[position].title)
+            intent.putExtra("resurs", data[position].resurs)
             startActivity(intent)
             val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.ListView.windowToken, 0)
             if (autoCompleteTextView?.text.toString() != "") {
-                addHistory(data[groupPosition][childPosition].title)
+                addHistory(data[position].title)
                 saveHistopy()
             }
             actionExpandOn = false
-            return@setOnChildClickListener false
         }
         if (chin.getString("history_prynagodnyia", "") != "") {
             val gson = Gson()
@@ -283,9 +278,6 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
             return@setOnItemLongClickListener true
-        }
-        for (i in 0 until data.size) {
-            binding.ListView.expandGroup(i)
         }
     }
 
@@ -367,9 +359,6 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 actionExpandOn = false
-                for (i in 0 until data.size) {
-                    binding.ListView.expandGroup(i)
-                }
                 return true
             }
         })
@@ -428,65 +417,25 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         }
     }
 
-    private inner class PrynagodnyiaAdaprer : BaseExpandableListAdapter(), Filterable {
-        private val origData = ArrayList<ArrayList<MenuListData>>(data)
+    private class PrynagodnyiaAdaprer(private val context: Activity, private val data: List<MenuListData>) : ArrayAdapter<MenuListData>(context, R.layout.simple_list_item_2, R.id.label, data) {
+        private val origData = ArrayList<MenuListData>(data)
 
-        override fun getGroupCount(): Int {
-            return data.size
-        }
-
-        override fun getChildrenCount(groupPosition: Int): Int {
-            return data[groupPosition].size
-        }
-
-        override fun getGroup(groupPosition: Int): Any {
-            return data[groupPosition]
-        }
-
-        override fun getChild(groupPosition: Int, childPosition: Int): Any {
-            return data[groupPosition][childPosition]
-        }
-
-        override fun getGroupId(groupPosition: Int): Long {
-            return groupPosition.toLong()
-        }
-
-        override fun getChildId(groupPosition: Int, childPosition: Int): Long {
-            return childPosition.toLong()
-        }
-
-        override fun hasStableIds(): Boolean {
-            return true
-        }
-
-        override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = GroupViewBinding.inflate(layoutInflater, parent, false)
-            if (actionExpandOn) {
-                rootView.textGroup.text = getString(R.string.prynad_search)
-                binding.ListView.expandGroup(0)
-                binding.ListView.setSelectedGroup(0)
+        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (mView == null) {
+                val binding = SimpleListItem2Binding.inflate(context.layoutInflater, parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.label)
+                rootView.tag = viewHolder
             } else {
-                when (groupPosition) {
-                    0 -> rootView.textGroup.text = getString(R.string.prynad_1)
-                    1 -> rootView.textGroup.text = getString(R.string.prynad_2)
-                    2 -> rootView.textGroup.text = getString(R.string.prynad_3)
-                    3 -> rootView.textGroup.text = getString(R.string.prynad_4)
-                    4 -> rootView.textGroup.text = getString(R.string.prynad_5)
-                }
+                rootView = mView
+                viewHolder = rootView.tag as ViewHolder
             }
-            return rootView.root
-        }
-
-        override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = ChildViewBinding.inflate(layoutInflater, parent, false)
-            val dzenNoch = getBaseDzenNoch()
-            if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            rootView.textChild.text = data[groupPosition][childPosition].title
-            return rootView.root
-        }
-
-        override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
-            return true
+            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
+            viewHolder.text.text = data[position].title
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            return rootView
         }
 
         override fun getFilter(): Filter {
@@ -496,16 +445,12 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                     constraint1 = constraint1.toString()
                     val result = FilterResults()
                     if (constraint1.isNotEmpty()) {
-                        val founded = ArrayList<ArrayList<MenuListData>>()
-                        val subFounded = ArrayList<MenuListData>()
+                        val founded = ArrayList<MenuListData>()
                         for (item in origData) {
-                            for (subItem in item) {
-                                if (subItem.title.contains(constraint1, true)) {
-                                    subFounded.add(subItem)
-                                }
+                            if (item.title.contains(constraint1, true)) {
+                                founded.add(item)
                             }
                         }
-                        founded.add(subFounded)
                         result.values = founded
                         result.count = founded.size
                     } else {
@@ -516,14 +461,15 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                 }
 
                 override fun publishResults(constraint: CharSequence?, results: FilterResults) {
-                    data.clear()
-                    @Suppress("UNCHECKED_CAST")
-                    for (item in results.values as ArrayList<ArrayList<MenuListData>>) {
-                        data.add(item)
+                    clear()
+                    for (item in results.values as ArrayList<*>) {
+                        add(item as MenuListData)
                     }
                     notifyDataSetChanged()
                 }
             }
         }
     }
+
+    private class ViewHolder(var text: TextView)
 }

@@ -39,6 +39,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Calendar
@@ -50,6 +51,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     private var checkDzenNoch = false
     private var mLastClickTime: Long = 0
     private var startTimeJob: Job? = null
+    private var myTimer: Job? = null
     private var downloadDynamicModuleListener: DownloadDynamicModuleListener? = null
     private var ferstStart = false
 
@@ -195,13 +197,14 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
     override fun onPause() {
         super.onPause()
         startTimeJob?.cancel()
+        myTimer?.cancel()
         removelightSensor()
     }
 
     override fun onResume() {
         super.onResume()
         dzenNoch = getBaseDzenNoch()
-        if (k.getInt("mode_night", SettingsActivity.MODE_NIGHT_SYSTEM) == SettingsActivity.MODE_NIGHT_AUTO ) {
+        if (k.getInt("mode_night", SettingsActivity.MODE_NIGHT_SYSTEM) == SettingsActivity.MODE_NIGHT_AUTO) {
             setlightSensor()
         }
         if (checkDzenNoch != getBaseDzenNoch()) {
@@ -227,22 +230,27 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                 return
             }
         }
-        when {
-            sensorValue <= 4f -> {
-                if (!dzenNoch && !checkDzenNoch) {
-                    timeJob(true)
-                }
-            }
+        if (myTimer?.isActive != true) {
+            myTimer = CoroutineScope(Dispatchers.Main).launch {
+                if (!ferstStart) delay(1000)
+                when {
+                    sensorValue <= 4f -> {
+                        if (!dzenNoch && !checkDzenNoch) {
+                            timeJob(true)
+                        }
+                    }
 
-            sensorValue >= 21f -> {
-                if (dzenNoch && checkDzenNoch) {
-                    timeJob(false)
-                }
-            }
+                    sensorValue >= 21f -> {
+                        if (dzenNoch && checkDzenNoch) {
+                            timeJob(false)
+                        }
+                    }
 
-            else -> {
-                if (dzenNoch != checkDzenNoch) {
-                    timeJob(!dzenNoch)
+                    else -> {
+                        if (dzenNoch != checkDzenNoch) {
+                            timeJob(!dzenNoch)
+                        }
+                    }
                 }
             }
         }

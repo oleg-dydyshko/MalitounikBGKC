@@ -254,6 +254,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                 addHistory(data[position].title)
                 saveHistopy()
             }
+            setRubrika()
             actionExpandOn = false
         }
         if (chin.getString("history_prynagodnyia", "") != "") {
@@ -278,6 +279,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             startActivity(intent)
             addHistory(edit)
             saveHistopy()
+            setRubrika()
             actionExpandOn = false
         }
         binding.History.setOnItemLongClickListener { _, _, position, _ ->
@@ -375,18 +377,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 actionExpandOn = false
-                data.clear()
-                when (pubryka) {
-                    1 -> data.addAll(rub1)
-                    2 -> data.addAll(rub2)
-                    3 -> data.addAll(rub3)
-                    4 -> data.addAll(rub4)
-                    5 -> data.addAll(rub5)
-                    6 -> data.addAll(rub6)
-                }
-                data.sort()
-                adapter.setOrigData()
-                adapter.notifyDataSetChanged()
+                setRubrika()
                 return true
             }
         })
@@ -396,6 +387,21 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             searchViewItem.expandActionView()
             autoCompleteTextView?.setText(searchViewQwery)
         }
+    }
+
+    private fun setRubrika() {
+        data.clear()
+        when (pubryka) {
+            1 -> data.addAll(rub1)
+            2 -> data.addAll(rub2)
+            3 -> data.addAll(rub3)
+            4 -> data.addAll(rub4)
+            5 -> data.addAll(rub5)
+            6 -> data.addAll(rub6)
+        }
+        data.sort()
+        adapter.setOrigData()
+        adapter.notifyDataSetChanged()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

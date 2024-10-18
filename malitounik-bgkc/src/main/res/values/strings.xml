@@ -394,11 +394,6 @@
     <string-array name="malitvy">
         <item>Ранішняя малітвы</item>
         <item>Вячэрнія малітвы</item>
-        <item>Малітвы да Багародзіцы</item>
-        <item>Малітвы бацькоў і дзяцей</item>
-        <item>Малітвы за Беларусь і беларускі народ</item>
-        <item>Малітвы за Царкву і царкоўную еднасьць</item>
-        <item>Малітвы за здароўе</item>
         <item>Прынагодныя малітвы</item>
     </string-array>
     <string-array name="ruzanec">
@@ -1093,5 +1088,12 @@
     <string name="print">Раздрукаваць</string>
     <string name="system">Сістэмны</string>
     <string name="dzen_noch">Дзень-ноч</string>
+    <string name="prynad_1">МАЛІТВЫ ДА БАГАРОДЗІЦЫ</string>
+    <string name="prynad_2">МАЛІТВЫ БАЦЬКОЎ І ДЗЯЦЕЙ</string>
+    <string name="prynad_3">МАЛІТВЫ ЗА БЕЛАРУСЬ І БЕЛАРУСКІ НАРОД</string>
+    <string name="prynad_4">МАЛІТВЫ ЗА ЦАРКВУ І ЦАРКОЎНУЮ ЕДНАСЬЦЬ</string>
+    <string name="prynad_5">МАЛІТВЫ ЗА ЗДАРОЎЕ</string>
+    <string name="prynad_6">МАЛІТВЫ Ў РОЗНЫХ ПАТРЭБАХ</string>
+    <string name="prynad_search">ВЫНІКІ</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

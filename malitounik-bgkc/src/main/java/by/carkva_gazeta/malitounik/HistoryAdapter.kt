@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -9,7 +8,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemHistoryBinding
 
-class HistoryAdapter(private var context: Activity, private var history: ArrayList<String>, private var spannable: Boolean = false) : ArrayAdapter<String>(context, R.layout.simple_list_item_history, history) {
+class HistoryAdapter(private var context: BaseActivity, private var history: ArrayList<String>, private var spannable: Boolean = false) : ArrayAdapter<String>(context, R.layout.simple_list_item_history, history) {
     override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
         val rootView: View
         val viewHolder: ViewHolderHistory
@@ -22,7 +21,7 @@ class HistoryAdapter(private var context: Activity, private var history: ArrayLi
             rootView = mView
             viewHolder = rootView.tag as ViewHolderHistory
         }
-        val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
+        val dzenNoch = context.getBaseDzenNoch()
         if (spannable)
             viewHolder.text.text = MainActivity.fromHtml(history[position])
         else

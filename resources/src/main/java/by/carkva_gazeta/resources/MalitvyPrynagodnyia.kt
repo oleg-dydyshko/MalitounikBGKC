@@ -16,12 +16,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
+import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.BaseExpandableListAdapter
 import android.widget.ExpandableListView
 import android.widget.Filter
-import android.widget.Filterable
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
@@ -32,6 +33,7 @@ import by.carkva_gazeta.malitounik.MenuListData
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.resources.databinding.MalitvyPrynagodnyiaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -58,6 +60,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
     private var searchViewQwery = ""
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
+    private lateinit var searchAdapter: SearchAdaprer
     private var actionExpandOn = false
     private lateinit var binding: MalitvyPrynagodnyiaBinding
     private var resetTollbarJob: Job? = null
@@ -226,15 +229,25 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         data.add(rub5)
         data.add(rub6)
         adapter = PrynagodnyiaAdaprer()
-        binding.ListView.setAdapter(adapter)
+        binding.ExpandableListView.setAdapter(adapter)
+        val serchData = ArrayList<MenuListData>()
+        serchData.addAll(rub1)
+        serchData.addAll(rub2)
+        serchData.addAll(rub3)
+        serchData.addAll(rub4)
+        serchData.addAll(rub5)
+        serchData.addAll(rub6)
+        serchData.sort()
+        searchAdapter = SearchAdaprer(this, serchData)
+        binding.SearchView.adapter = searchAdapter
         binding.titleToolbar.text = resources.getText(R.string.prynagodnyia)
-        if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
-        else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
-        binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+        if (dzenNoch) binding.ExpandableListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else binding.ExpandableListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+        binding.ExpandableListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
                 if (firstVisibleItem == 1) {
                     val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm1.hideSoftInputFromWindow(binding.ListView.windowToken, 0)
+                    imm1.hideSoftInputFromWindow(binding.ExpandableListView.windowToken, 0)
                     searchView?.clearFocus()
                 }
             }
@@ -243,7 +256,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             }
 
         })
-        binding.ListView.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
+        binding.ExpandableListView.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnChildClickListener true
             }
@@ -253,14 +266,12 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             intent.putExtra("resurs", data[groupPosition][childPosition].resurs)
             startActivity(intent)
             val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(binding.ListView.windowToken, 0)
+            imm.hideSoftInputFromWindow(binding.ExpandableListView.windowToken, 0)
             if (autoCompleteTextView?.text.toString() != "") {
                 addHistory(data[groupPosition][childPosition].title)
                 saveHistopy()
             }
-            if (actionExpandOn) binding.ListView.collapseGroup(0)
             actionExpandOn = false
-
             return@setOnChildClickListener false
         }
         if (chin.getString("history_prynagodnyia", "") != "") {
@@ -285,13 +296,25 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             startActivity(intent)
             addHistory(edit)
             saveHistopy()
-            if (actionExpandOn) binding.ListView.collapseGroup(0)
             actionExpandOn = false
         }
         binding.History.setOnItemLongClickListener { _, _, position, _ ->
             val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
             return@setOnItemLongClickListener true
+        }
+        binding.SearchView.setOnItemClickListener { _, _, position, _ ->
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return@setOnItemClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime()
+            val intent = Intent(this@MalitvyPrynagodnyia, Bogashlugbovya::class.java)
+            intent.putExtra("title", serchData[position].title)
+            intent.putExtra("resurs", serchData[position].resurs)
+            startActivity(intent)
+            addHistory(serchData[position].title)
+            saveHistopy()
+            actionExpandOn = false
         }
     }
 
@@ -360,10 +383,9 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         searchView = searchViewItem.actionView as SearchView
         if (actionExpandOn) {
             searchViewItem.expandActionView()
-            if (history.size > 0) {
-                binding.History.visibility = View.VISIBLE
-                binding.ListView.visibility = View.GONE
-            }
+            binding.History.visibility = View.VISIBLE
+            binding.SearchView.visibility = View.GONE
+            binding.ExpandableListView.visibility = View.GONE
         }
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
@@ -373,7 +395,9 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 actionExpandOn = false
-                binding.ListView.collapseGroup(0)
+                binding.ExpandableListView.visibility = View.VISIBLE
+                binding.SearchView.visibility = View.GONE
+                binding.History.visibility = View.GONE
                 return true
             }
         })
@@ -421,19 +445,26 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                     autoCompleteTextView?.addTextChangedListener(this)
                 }
             }
-            if (editPosition == 0 && actionExpandOn) {
-                binding.History.visibility = View.VISIBLE
-                binding.ListView.visibility = View.GONE
+            if (actionExpandOn) {
+                if (editPosition == 0) {
+                    binding.History.visibility = View.VISIBLE
+                    binding.ExpandableListView.visibility = View.GONE
+                    binding.SearchView.visibility = View.GONE
+                } else {
+                    binding.History.visibility = View.GONE
+                    binding.ExpandableListView.visibility = View.GONE
+                    binding.SearchView.visibility = View.VISIBLE
+                }
             } else {
                 binding.History.visibility = View.GONE
-                binding.ListView.visibility = View.VISIBLE
+                binding.ExpandableListView.visibility = View.VISIBLE
+                binding.SearchView.visibility = View.GONE
             }
-            adapter.filter.filter(edit)
+            searchAdapter.filter.filter(edit)
         }
     }
 
-    private inner class PrynagodnyiaAdaprer : BaseExpandableListAdapter(), Filterable {
-        private val origData = ArrayList<ArrayList<MenuListData>>(data)
+    private inner class PrynagodnyiaAdaprer : BaseExpandableListAdapter() {
 
         override fun getGroupCount(): Int {
             return data.size
@@ -467,8 +498,8 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
             val rootView = GroupViewBinding.inflate(layoutInflater, parent, false)
             if (actionExpandOn) {
                 rootView.textGroup.text = getString(R.string.prynad_search)
-                binding.ListView.expandGroup(0)
-                binding.ListView.setSelectedGroup(0)
+                binding.ExpandableListView.expandGroup(0)
+                binding.ExpandableListView.setSelectedGroup(0)
             } else {
                 when (groupPosition) {
                     0 -> rootView.textGroup.text = getString(R.string.prynad_1)
@@ -493,6 +524,28 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
             return true
         }
+    }
+
+    private class SearchAdaprer(private val context: Activity, private val data: List<MenuListData>) : ArrayAdapter<MenuListData>(context, R.layout.simple_list_item_2, R.id.label, data) {
+        private val origData = ArrayList<MenuListData>(data)
+
+        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (mView == null) {
+                val binding = SimpleListItem2Binding.inflate(context.layoutInflater, parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.label)
+                rootView.tag = viewHolder
+            } else {
+                rootView = mView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            val dzenNoch = (context as BaseActivity).getBaseDzenNoch()
+            viewHolder.text.text = data[position].title
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            return rootView
+        }
 
         override fun getFilter(): Filter {
             return object : Filter() {
@@ -501,16 +554,12 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                     constraint1 = constraint1.toString()
                     val result = FilterResults()
                     if (constraint1.isNotEmpty()) {
-                        val founded = ArrayList<ArrayList<MenuListData>>()
-                        val subFounded = ArrayList<MenuListData>()
+                        val founded = ArrayList<MenuListData>()
                         for (item in origData) {
-                            for (subItem in item) {
-                                if (subItem.title.contains(constraint1, true)) {
-                                    subFounded.add(subItem)
-                                }
+                            if (item.title.contains(constraint1, true)) {
+                                founded.add(item)
                             }
                         }
-                        founded.add(subFounded)
                         result.values = founded
                         result.count = founded.size
                     } else {
@@ -521,14 +570,15 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                 }
 
                 override fun publishResults(constraint: CharSequence?, results: FilterResults) {
-                    data.clear()
-                    @Suppress("UNCHECKED_CAST")
-                    for (item in results.values as ArrayList<ArrayList<MenuListData>>) {
-                        data.add(item)
+                    clear()
+                    for (item in results.values as ArrayList<*>) {
+                        add(item as MenuListData)
                     }
                     notifyDataSetChanged()
                 }
             }
         }
     }
+
+    private class ViewHolder(var text: TextView)
 }

@@ -36,10 +36,22 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <ExpandableListView
-        android:id="@+id/ListView"
+        android:id="@+id/ExpandableListView"
         android:layout_width="0sp"
         android:layout_height="0sp"
         android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <ListView
+        android:id="@+id/SearchView"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:scrollbars="none"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

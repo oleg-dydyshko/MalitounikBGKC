@@ -11,8 +11,8 @@ android {
         applicationId =  "by.carkva_gazeta.malitounik"
         minSdk = 21
         targetSdk = 35
-        versionCode = 442358
-        versionName = "5.0.3.7"
+        versionCode = 442359
+        versionName = "5.0.3.8"
 
         //multiDexEnabled = true
 
@@ -63,7 +63,7 @@ dependencies {
     api ("androidx.gridlayout:gridlayout:1.0.0")
     api ("com.google.android.play:feature-delivery:2.1.0")
     implementation ("com.google.android.play:app-update-ktx:2.1.0")
-    implementation ("com.google.android.play:review-ktx:2.0.1")
+    implementation ("com.google.android.play:review-ktx:2.0.2")
     implementation ("com.google.android.gms:play-services-instantapps:18.1.0")
     api ("com.google.code.gson:gson:2.11.0")
     //api ("androidx.webkit:webkit:1.10.0")

@@ -556,7 +556,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             vybranoePosition = intent.extras?.getInt("vybranaePos", -1) ?: -1
         }
-        if (resurs.isDigitsOnly() && resurs.toInt() < 10) {
+        if (resurs.isNotEmpty() && resurs.isDigitsOnly() && resurs.toInt() < 10) {
             val text = SpannableString(title)
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
@@ -689,7 +689,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         invalidateOptionsMenu()
         val duration: Long = 1000
         ObjectAnimator.ofInt(binding.scrollView2, "scrollY", 0).setDuration(duration).start()
-        if (resurs.isDigitsOnly() && resurs.toInt() < 10) {
+        if (resurs.isNotEmpty() && resurs.isDigitsOnly() && resurs.toInt() < 10) {
             val intent = Intent(this, VybranoeBibleList::class.java)
             intent.putExtra("perevod", resurs)
             menuVybranoeLauncher.launch(intent)

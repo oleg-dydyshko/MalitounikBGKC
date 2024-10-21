@@ -285,13 +285,18 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
                 return@setOnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val intent = Intent(this@MalitvyPrynagodnyia, Bogashlugbovya::class.java)
             val edit = history[position]
-            intent.putExtra("title", edit)
-            intent.putExtra("resurs", findTypeResource(edit))
-            startActivity(intent)
-            addHistory(edit)
-            saveHistopy()
+            val find = findTypeResource(edit)
+            if (find.isEmpty()) {
+                cleanHistory(position)
+            } else {
+                val intent = Intent(this@MalitvyPrynagodnyia, Bogashlugbovya::class.java)
+                intent.putExtra("title", edit)
+                intent.putExtra("resurs", find)
+                startActivity(intent)
+                addHistory(edit)
+                saveHistopy()
+            }
             actionExpandOn = false
         }
         binding.History.setOnItemLongClickListener { _, _, position, _ ->

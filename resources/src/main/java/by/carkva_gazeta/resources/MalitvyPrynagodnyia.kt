@@ -395,9 +395,6 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 actionExpandOn = false
-                binding.ExpandableListView.visibility = View.VISIBLE
-                binding.SearchView.visibility = View.GONE
-                binding.History.visibility = View.GONE
                 return true
             }
         })
@@ -496,19 +493,13 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = GroupViewBinding.inflate(layoutInflater, parent, false)
-            if (actionExpandOn) {
-                rootView.textGroup.text = getString(R.string.prynad_search)
-                binding.ExpandableListView.expandGroup(0)
-                binding.ExpandableListView.setSelectedGroup(0)
-            } else {
-                when (groupPosition) {
-                    0 -> rootView.textGroup.text = getString(R.string.prynad_1)
-                    1 -> rootView.textGroup.text = getString(R.string.prynad_2)
-                    2 -> rootView.textGroup.text = getString(R.string.prynad_3)
-                    3 -> rootView.textGroup.text = getString(R.string.prynad_4)
-                    4 -> rootView.textGroup.text = getString(R.string.prynad_5)
-                    5 -> rootView.textGroup.text = getString(R.string.prynad_6)
-                }
+            when (groupPosition) {
+                0 -> rootView.textGroup.text = getString(R.string.prynad_1)
+                1 -> rootView.textGroup.text = getString(R.string.prynad_2)
+                2 -> rootView.textGroup.text = getString(R.string.prynad_3)
+                3 -> rootView.textGroup.text = getString(R.string.prynad_4)
+                4 -> rootView.textGroup.text = getString(R.string.prynad_5)
+                5 -> rootView.textGroup.text = getString(R.string.prynad_6)
             }
             return rootView.root
         }

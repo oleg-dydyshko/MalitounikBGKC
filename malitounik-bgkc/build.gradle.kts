@@ -11,8 +11,8 @@ android {
         applicationId =  "by.carkva_gazeta.malitounik"
         minSdk = 21
         targetSdk = 35
-        versionCode = 442359
-        versionName = "5.0.3.8"
+        versionCode = 442360
+        versionName = "5.0.3.9"
 
         //multiDexEnabled = true
 
@@ -69,7 +69,7 @@ dependencies {
     //api ("androidx.webkit:webkit:1.10.0")
     api ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     api ("com.github.woxthebox:draglistview:1.7.3")
-    api (platform("com.google.firebase:firebase-bom:33.4.0"))
+    api (platform("com.google.firebase:firebase-bom:33.5.0"))
     //api ("com.google.firebase:firebase-core:21.1.1")
     api ("com.google.firebase:firebase-storage-ktx")
     api ("com.google.firebase:firebase-appcheck-playintegrity")

@@ -76,7 +76,7 @@ class MineiaAgulnaia : BaseActivity() {
         } else {
             binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         }
-        data.addAll(MenuBogashlugbovya.getTextViacherniaList())
+        data.addAll(MenuBogashlugbovya.getTextMineiaAgulnaiaList())
         binding.ListView.adapter = MenuListAdaprer(this)
         binding.ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {

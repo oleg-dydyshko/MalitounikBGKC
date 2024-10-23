@@ -597,7 +597,7 @@
         <item>Малітва на асьвячэньне памятнай табліцы Слузе Божаму, які пацярпеў за Беларусь</item>
         <item>Малітва на асьвячэньне памятнай табліцы ўсім бязьвінным ахвярам, якія пацярпелі за Беларусь</item>
     </string-array>
-    <string-array name="viachernia_list">
+    <string-array name="mineia_agulnaia_list">
         <item>Вячэрня агульная Найсьвяцейшай Багародзіцы</item>
         <item>Вячэрня агульная Яну Хрысьціцелю</item>
         <item>Вячэрня агульная прароку</item>
@@ -622,6 +622,10 @@
         <item>Вячэрня агульная сьвятой жанчыне</item>
         <item>Вячэрня агульная сьвятым жанчынам</item>
         <item>Вячэрня агульная бескарысьлівым лекарам і цудатворцам</item>
+        <item>Служба Апосталу або Апосталам</item>
+        <item>Служба Настаўніку царкоўнаму і Вызнаўцу</item>
+        <item>Служба Сьвятаначальнікам</item>
+        <item>Служба Сьвятаначальніку</item>
         <item>Трапары і кандакі штодзённыя - на кожны дзень тыдня</item>
     </string-array>
     <string name="title_dynamicfeature">Admin</string>
@@ -1098,5 +1102,56 @@
     <string name="prynad_4">МАЛІТВЫ ЗА ЦАРКВУ І ЦАРКОЎНУЮ ЕДНАСЬЦЬ</string>
     <string name="prynad_5">МАЛІТВЫ ЗА ЗДАРОЎЕ</string>
     <string name="prynad_6">МАЛІТВЫ Ў РОЗНЫХ ПАТРЭБАХ</string>
+    <string name="paslia_prychascia">\nМалітвы пасьля сьвятога прычасьця</string>
+    <array name="paslia_prychascia_list">
+        <item>Малітва падзякі</item>
+        <item>Малітва сьв. Васіля Вялікага</item>
+        <item>Малітва Сымона Мэтафраста</item>
+        <item>Iншая малітва</item>
+        <item>Малітва да Найсьвяцейшай Багародзіцы</item>
+    </array>
+    <string name="vichernia">\nВячэрня</string>
+    <string name="aктоіх">\nАктоіх</string>
+    <string name="trebnik_n">\nТрэбнік</string>
+    <string name="ton_na_kozny_dzen_list">\nМінэя агульная -> Трапары і кандакі штодзённыя - на кожны дзень тыдня</string>
+    <string name="mineia_agulnaia_n">\nМінэя агульная</string>
+    <string name="bogaslugbovyia">\nБогаслужбовыя тэксты</string>
+    <array name="bogaslugbovyia_list">
+        <item>Боская Літургія сьв. Яна Залатавуснага</item>
+        <item>Боская Літургія ў Велікодны перыяд</item>
+        <item>Боская Літургія сьв. Васіля Вялікага</item>
+        <item>Літургія раней асьвячаных дароў</item>
+        <item>Набажэнства ў гонар Маці Божай Нястомнай Дапамогі</item>
+        <item>Ютрань нядзельная (у скароце)</item>
+        <item>Абедніца</item>
+        <item>Малебны канон Найсьвяцейшай Багародзіцы</item>
+        <item>Вялікі пакаянны канон сьвятога Андрэя Крыцкага</item>
+        <item>Малебен сьв. Кірылу і Мятоду, настаўнікам славянскім</item>
+        <item>Служба за памерлых на кожны дзень тыдня</item>
+        <item>Служба Найсьвяцейшай Багародзіцы</item>
+        <item>Павячэрніца малая</item>
+        <item>Вялікі пакаянны канон сьвятога Андрэя Крыцкага(у 4-х частках)</item>
+    </array>
+    <array name="bogaslugbovyia_folder_list">
+        <item>МАЛІТВЫ ПАСЬЛЯ СЬВЯТОГА ПРЫЧАСЬЦЯ</item>
+        <item>ВЯЧЭРНЯ</item>
+        <item>ТРАПАРЫ І КАНДАКІ НЯДЗЕЛЬНЫЯ ВАСЬМІ ТОНАЎ</item>
+        <item>МІНЭЯ МЕСЯЧНАЯ</item>
+        <item>ТРЫЁДЗЬ</item>
+        <item>МІНЭЯ АГУЛЬНАЯ</item>
+        <item>АКТОІХ</item>
+        <item>ТРЭБНІК</item>
+    </array>
+    <string name="ton_na_niadzelu">\nТрапары і кандакі нядзельныя васьмі тонаў</string>
+    <string name="mineia_mesiachnaia">\nМінэя месячная</string>
+    <string name="tryedz_1">\nТрыёдзь -> Службы Вялікага тыдня</string>
+    <string name="tryedz_2">\nТрыёдзь -> Службы Сьветлага тыдня</string>
+    <string name="tryedz_3">\nТрыёдзь -> Трыёдзь сьвяточная</string>
+    <string name="tryedz_4">\nТрыёдзь -> Трыёдзь посная -> Службы 1-га тыдня Вялікага пост</string>
+    <string name="tryedz_5">\nТрыёдзь -> Трыёдзь посная -> Службы 2-га тыдня Вялікага посту</string>
+    <string name="tryedz_6">\nТрыёдзь -> Трыёдзь посная -> Службы 3-га тыдня Вялікага посту</string>
+    <string name="tryedz_7">\nТрыёдзь -> Трыёдзь посная -> Службы 4-га тыдня Вялікага посту</string>
+    <string name="tryedz_8">\nТрыёдзь -> Трыёдзь посная -> Службы 5-га тыдня Вялікага посту</string>
+    <string name="tryedz_9">\nТрыёдзь -> Трыёдзь посная -> Службы 6-га тыдня Вялікага посту</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

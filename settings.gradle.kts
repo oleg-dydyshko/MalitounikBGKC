@@ -18,5 +18,4 @@ dependencyResolutionManagement {
 rootProject.name = "Malitounik"
 include(":malitounik-bgkc")
 include(":resources")
-include(":biblijateka")
 include(":admin")

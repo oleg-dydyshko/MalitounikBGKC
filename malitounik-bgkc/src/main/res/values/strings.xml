@@ -209,10 +209,7 @@
     <string name="download_bibliateka_file">Спампаваць %1$s</string>
     <string name="pkc">Урачыстасьці і сьвяты ў рыма-католікаў Беларусі</string>
     <string name="search_svityia">Пошук сьвятых і сьвятаў</string>
-    <string name="inversion">Інверсія</string>
     <string name="set_page_bibliateka">Выбраць старонку</string>
-    <string name="zmest">Зьмест</string>
-    <string name="pdf_error">Файл не ў фармаце %1$s або пашкоджаны</string>
     <string name="str_short_label1">Выбранае</string>
     <string name="str_disable_message">Выключана</string>
     <string name="sabytie_check_mun">Больш не паказваць</string>
@@ -261,7 +258,6 @@
     <string name="sort_alf">Сартаваць паводле алфавіту</string>
     <string name="sort_time">Сартаваць паводле часу</string>
     <string name="title_biblijateka">Бібліятэка Царквы</string>
-    <string name="title_download_module">СПАМПОЎВАЕМ \"БІБЛІЯТЭКУ ЦАРКВЫ\"</string>
     <string name="title_download_module2">СПАМПОЎВАЕМ \"КІРАВАНЬНЕ РЭСУРСАМІ ПРАГРАМЫ\"</string>
     <string name="title_resources">Рэсурсы Дадатка</string>
     <string name="settings_notifi_sviata">Налады апавяшчэньня сьвятаў</string>
@@ -280,7 +276,6 @@
     <string name="default_font">Па змаўчаньні</string>
     <string name="notifi_fix">Рамонт апавяшчэньняў</string>
     <string name="sviaty_under">ІНШЫЯ СЬВЯТЫ:</string>
-    <string name="security_error">Файл ня бясьпечны</string>
     <string name="pamerlyia">Памінаньне памерлых</string>
     <string name="bibliateka_carkvy">БІБЛІЯТЭКА ЦАРКВЫ</string>
     <string name="bibliateka_niadaunia">Нядаўна прагледжанае</string>
@@ -596,6 +591,8 @@
         <item>Малітва на асьвячэньне памятнай табліцы Слузе Божаму</item>
         <item>Малітва на асьвячэньне памятнай табліцы Слузе Божаму, які пацярпеў за Беларусь</item>
         <item>Малітва на асьвячэньне памятнай табліцы ўсім бязьвінным ахвярам, якія пацярпелі за Беларусь</item>
+        <item>Служба посьнікам, манахам і пустэльнікам</item>
+        <item>Служба посьніку / аскету, манаху і пустэльніку</item>
     </string-array>
     <string-array name="mineia_agulnaia_list">
         <item>Вячэрня агульная Найсьвяцейшай Багародзіцы</item>
@@ -1153,5 +1150,7 @@
     <string name="tryedz_7">\nТрыёдзь -> Трыёдзь посная -> Службы 4-га тыдня Вялікага посту</string>
     <string name="tryedz_8">\nТрыёдзь -> Трыёдзь посная -> Службы 5-га тыдня Вялікага посту</string>
     <string name="tryedz_9">\nТрыёдзь -> Трыёдзь посная -> Службы 6-га тыдня Вялікага посту</string>
+    <string name="open_in">Адчыніць у&#8230;</string>
+    <string name="pdfView_page_no" >%1$s із %2$s</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

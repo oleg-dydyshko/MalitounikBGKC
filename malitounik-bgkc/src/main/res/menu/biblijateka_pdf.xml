@@ -2,12 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_title"
-        android:icon="@drawable/list"
+        android:id="@+id/action_open"
         android:orderInCategory="100"
-        android:title="@string/zmest"
-        android:visible="false"
-        app:showAsAction="ifRoom" />
+        android:title="@string/open_in"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_bright"
         android:orderInCategory="100"
@@ -17,12 +15,6 @@
         android:id="@+id/action_set_page"
         android:orderInCategory="100"
         android:title="@string/set_page_bibliateka"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_inversion"
-        android:checkable="true"
-        android:orderInCategory="100"
-        android:title="@string/inversion"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_print"

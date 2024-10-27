@@ -89,6 +89,7 @@
         <item name="android:textCursorDrawable">@drawable/cursor</item>
     </style>
 
-    <style name="SplashTheme" parent="AppTheme">
-    </style>
+    <style name="SplashTheme" parent="AppTheme" />
+
+    <style name="Theme.PdfView.SelectedTheme" parent="AppTheme" />
 </resources>

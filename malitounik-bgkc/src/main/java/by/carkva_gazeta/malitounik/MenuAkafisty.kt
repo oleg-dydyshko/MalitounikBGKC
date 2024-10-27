@@ -77,7 +77,7 @@ class MenuAkafisty : BaseListFragment() {
 
                     8 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "akafist8")
+                        intent.putExtra("resurs", "akafist_praviednamu_jazepu")
                     }
 
                     9 -> {

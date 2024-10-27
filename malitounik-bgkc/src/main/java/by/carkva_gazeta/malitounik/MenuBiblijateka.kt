@@ -44,14 +44,14 @@ import java.io.FileOutputStream
 import java.io.InputStream
 
 
-class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListener {
+class MenuBiblijateka : BaseFragment() {
 
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
     private val dzenNoch get() = (activity as BaseActivity).getBaseDzenNoch()
     private var filePath = ""
     private var fileName = ""
-    private var isLoad = false
+    private var fileTitle = ""
     private val arrayList = ArrayList<ArrayList<String>>()
     private var width = 0
     private lateinit var adapter: BibliotekaAdapter
@@ -113,7 +113,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     }
                 }
                 val gson = Gson()
-                val temp = java.util.ArrayList<String>()
+                val temp = ArrayList<String>()
                 temp.add(titleNew)
                 temp.add(filePath)
                 val image = if (position != -1) {
@@ -128,7 +128,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 if (imageTemp.exists()) temp.add("${it.filesDir}/image_temp/$image")
                 else temp.add("")
                 naidaunia.add(temp)
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                 val prefEditor = k.edit()
                 prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
                 prefEditor.apply()
@@ -192,7 +192,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         adapter.notifyDataSetChanged()
         val gson = Gson()
         val prefEditor = k.edit()
-        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
         prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
         prefEditor.apply()
         munuBiblijatekaListener?.munuBiblijatekaUpdate(false)
@@ -246,7 +246,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 naidaunia.removeAt(position1)
                 val gson = Gson()
                 val prefEditor = k.edit()
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                 prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
                 prefEditor.apply()
                 munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
@@ -400,6 +400,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     if (file.exists()) {
                         filePath = file.absolutePath
                         fileName = file.name
+                        fileTitle = arrayList[position][0]
                         loadComplete(false, isPrint = false)
                     } else {
                         arrayList.removeAt(position)
@@ -407,7 +408,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                         naidaunia.addAll(arrayList)
                         adapter.notifyDataSetChanged()
                         val gson = Gson()
-                        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                         val prefEditor = k.edit()
                         prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
                         prefEditor.apply()
@@ -419,6 +420,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                     if (file.exists()) {
                         filePath = file.absolutePath
                         fileName = file.name
+                        fileTitle = arrayList[position][0]
                         loadComplete(false, isPrint = false)
                     } else {
                         var opisanie = arrayList[position][1]
@@ -433,12 +435,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                 filePath = savedInstanceState.getString("filePath") ?: ""
                 fileName = savedInstanceState.getString("fileName") ?: ""
                 idSelect = savedInstanceState.getInt("idSelect")
-                isLoad = savedInstanceState.getBoolean("isLoad")
                 saveindep = false
-            } else {
-                fileName = arguments?.getString("fileName", "") ?: ""
-                filePath = arguments?.getString("filePath", "") ?: ""
-                isLoad = arguments?.getBoolean("isLoad", false) ?: false
             }
             loadNiadaunia(false)
             munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
@@ -481,7 +478,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             }
             naidaunia.clear()
             if (!json.equals("")) {
-                val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                 naidaunia.addAll(gson.fromJson(json, type))
             }
             if (isUpdate) {
@@ -496,56 +493,30 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
 
     private fun loadComplete(isShare: Boolean, isPrint: Boolean) {
         (activity as? BaseActivity)?.let {
-            if (it.checkmoduleResources()) {
-                if (it.checkmodulesBiblijateka()) {
-                    when {
-                        isPrint -> {
-                            val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
-                            val printAdapter = PdfDocumentAdapter(file.absolutePath)
-                            val printManager = it.getSystemService(Context.PRINT_SERVICE) as PrintManager
-                            val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
-                            printManager.print(file.name, printAdapter, printAttributes)
-                        }
-
-                        isShare -> {
-                            val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
-                            val sendIntent = Intent(Intent.ACTION_SEND)
-                            sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(it, "by.carkva_gazeta.malitounik.fileprovider", file))
-                            sendIntent.putExtra(Intent.EXTRA_SUBJECT, it.getString(R.string.set_log_file))
-                            sendIntent.type = "text/html"
-                            startActivity(Intent.createChooser(sendIntent, it.getString(R.string.set_log_file)))
-                        }
-
-                        else -> dynamicModuleInstalled()
-                    }
-                } else {
-                    val dialog = DialogUpdateMalitounik.getInstance(it.getString(R.string.title_download_module))
-                    dialog.isCancelable = false
-                    dialog.show(childFragmentManager, "DialogUpdateMalitounik")
-                    it.setDownloadDynamicModuleListener(this)
-                    it.downloadDynamicModule("biblijateka")
+            when {
+                isPrint -> {
+                    val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
+                    val printAdapter = PdfDocumentAdapter(file.absolutePath)
+                    val printManager = it.getSystemService(Context.PRINT_SERVICE) as PrintManager
+                    val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+                    printManager.print(file.name, printAdapter, printAttributes)
                 }
-            } else {
-                it.installFullMalitounik()
-            }
-        }
-    }
 
-    override fun dynamicModuleDownloading(totalBytesToDownload: Double, bytesDownloaded: Double) {
-        val dialog = childFragmentManager.findFragmentByTag("DialogUpdateMalitounik") as? DialogUpdateMalitounik
-        dialog?.updateProgress(totalBytesToDownload, bytesDownloaded)
-    }
+                isShare -> {
+                    val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
+                    val sendIntent = Intent(Intent.ACTION_SEND)
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(it, "by.carkva_gazeta.malitounik.fileprovider", file))
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, it.getString(R.string.set_log_file))
+                    sendIntent.type = "text/html"
+                    startActivity(Intent.createChooser(sendIntent, it.getString(R.string.set_log_file)))
+                }
 
-    override fun dynamicModuleInstalled() {
-        activity?.let { activity ->
-            val dialog = childFragmentManager.findFragmentByTag("DialogUpdateMalitounik") as? DialogUpdateMalitounik
-            dialog?.updateComplete()
-            if (!isLoad) {
-                val intent = Intent()
-                intent.setClassName(activity, MainActivity.BIBLIJATEKAPDF)
-                intent.putExtra("filePath", filePath)
-                intent.putExtra("fileName", fileName)
-                mBiblijatekaPdfResult.launch(intent)
+                else -> {
+                    val intent = Intent(activity, BiblijatekaPdf::class.java)
+                    intent.putExtra("filePath", filePath)
+                    intent.putExtra("fileTitle", fileTitle)
+                    mBiblijatekaPdfResult.launch(intent)
+                }
             }
         }
     }
@@ -595,7 +566,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
             idSelect = rubryka
         }
         val gson = Gson()
-        val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
         val jsonB = k.getString("Biblioteka", "") ?: ""
         if (jsonB.isNotEmpty()) {
             arrayList.clear()
@@ -693,13 +664,6 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         return false
     }
 
-    override fun onPause() {
-        super.onPause()
-        sqlJob?.cancel()
-        setRubrikaJob?.cancel()
-        bitmapJob?.cancel()
-    }
-
     private suspend fun getSql() {
         activity?.let { activity ->
             withContext(Dispatchers.IO) {
@@ -719,7 +683,7 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                         }
                         if (sb != "") {
                             val gson = Gson()
-                            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
+                            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                             val biblioteka: ArrayList<ArrayList<String>> = gson.fromJson(sb, type)
                             for (i in 0 until biblioteka.size) {
                                 val mySqlList = ArrayList<String>()
@@ -772,9 +736,10 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
 
     private suspend fun saveImagePdf(imageFile: File, image: String): Boolean {
         var error = false
-        Malitounik.referens.child("/images/bibliateka/$image").getFile(imageFile).addOnFailureListener {
-            error = true
-        }.await()
+        Malitounik.referens.child("/images/bibliateka/$image").getFile(imageFile)
+            .addOnFailureListener {
+                error = true
+            }.await()
         return error
     }
 
@@ -783,7 +748,6 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         outState.putString("filePath", filePath)
         outState.putString("fileName", fileName)
         outState.putInt("idSelect", idSelect)
-        outState.putBoolean("isLoad", isLoad)
     }
 
     private fun showPopupMenu(view: View, position: Int, name: String) {
@@ -831,7 +795,8 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
                         if (file.exists()) {
                             val printAdapter = PdfDocumentAdapter(file.absolutePath)
                             val printManager = it.getSystemService(Context.PRINT_SERVICE) as PrintManager
-                            val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+                            val printAttributes = PrintAttributes.Builder()
+                                .setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
                             printManager.print(file.name, printAdapter, printAttributes)
                         } else {
                             if (it.checkmoduleResources()) {
@@ -952,12 +917,9 @@ class MenuBiblijateka : BaseFragment(), BaseActivity.DownloadDynamicModuleListen
         private const val ERROR = 1
         private const val UPDATE = 2
 
-        fun getInstance(rub: Int, isLoad: Boolean, fileName: String = "", filePath: String = ""): MenuBiblijateka {
+        fun getInstance(rub: Int): MenuBiblijateka {
             val bundle = Bundle()
             bundle.putInt("rub", rub)
-            bundle.putString("fileName", fileName)
-            bundle.putString("filePath", filePath)
-            bundle.putBoolean("isLoad", isLoad)
             val menuPesny = MenuBiblijateka()
             menuPesny.arguments = bundle
             return menuPesny

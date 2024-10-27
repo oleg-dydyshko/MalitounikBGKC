@@ -2170,7 +2170,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             builder.append(line)
         }
         webView.loadDataWithBaseURL(null, builder.toString(), "text/HTML", "UTF-8", null)
-        webView.setWebViewClient(object : WebViewClient() {
+        webView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 binding.progressBar2.visibility = View.VISIBLE
             }
@@ -2182,7 +2182,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 printManager.print(resurs, printAdapter, printAttributes)
                 binding.progressBar2.visibility = View.GONE
             }
-        })
+        }
     }
 
     override fun dialogHelpFullScreenSettingsClose() {

@@ -111,35 +111,33 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         dzenNoch = savedInstanceState?.getBoolean("dzenNoch", false) ?: getBaseDzenNoch()
         checkDzenNoch = dzenNoch
         setMyTheme()
-        if (checkmodulesBiblijateka()) {
-            val c = Calendar.getInstance()
-            var useTime = k.getLong("BiblijatekaUseTime", 0)
-            if (useTime == 0L) {
-                val edit = k.edit()
-                edit.putLong("BiblijatekaUseTime", c.timeInMillis)
-                edit.apply()
-                useTime = c.timeInMillis
+        val c = Calendar.getInstance()
+        var useTime = k.getLong("BiblijatekaUseTime", 0)
+        if (useTime == 0L) {
+            val edit = k.edit()
+            edit.putLong("BiblijatekaUseTime", c.timeInMillis)
+            edit.apply()
+            useTime = c.timeInMillis
+        }
+        c.add(Calendar.DATE, 7)
+        if (c.timeInMillis > useTime) {
+            removeDynamicModule()
+        }
+        c.add(Calendar.DATE, 23)
+        if (useTime > c.timeInMillis) {
+            val file = File("$filesDir/image_temp")
+            if (file.exists()) file.deleteRecursively()
+            val file1 = File("$filesDir/BookCache")
+            if (file1.exists()) file1.deleteRecursively()
+            val file2 = File("$filesDir/Book")
+            if (file2.exists()) file2.deleteRecursively()
+            val list = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString()).listFiles()
+            list?.forEach {
+                if (it.exists()) it.delete()
             }
-            c.add(Calendar.DATE, 7)
-            if (c.timeInMillis > useTime) {
-                removeDynamicModule()
-            }
-            c.add(Calendar.DATE, 23)
-            if (useTime > c.timeInMillis) {
-                val file = File("$filesDir/image_temp")
-                if (file.exists()) file.deleteRecursively()
-                val file1 = File("$filesDir/BookCache")
-                if (file1.exists()) file1.deleteRecursively()
-                val file2 = File("$filesDir/Book")
-                if (file2.exists()) file2.deleteRecursively()
-                val list = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString()).listFiles()
-                list?.forEach {
-                    if (it.exists()) it.delete()
-                }
-                val edit = k.edit()
-                edit.remove("Biblioteka")
-                edit.apply()
-            }
+            val edit = k.edit()
+            edit.remove("Biblioteka")
+            edit.apply()
         }
     }
 
@@ -313,16 +311,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         return false
     }
 
-    fun checkmodulesBiblijateka(): Boolean {
-        val muduls = SplitInstallManagerFactory.create(this).installedModules
-        for (mod in muduls) {
-            if (mod == "biblijateka") {
-                return true
-            }
-        }
-        return false
-    }
-
     fun checkmoduleResources(): Boolean {
         val muduls = SplitInstallManagerFactory.create(this).installedModules
         for (mod in muduls) {
@@ -360,7 +348,8 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                     }
 
                     SplitInstallSessionStatus.DOWNLOADING -> {
-                        downloadDynamicModuleListener?.dynamicModuleDownloading(state.totalBytesToDownload().toDouble(), state.bytesDownloaded().toDouble())
+                        downloadDynamicModuleListener?.dynamicModuleDownloading(state.totalBytesToDownload()
+                            .toDouble(), state.bytesDownloaded().toDouble())
                     }
 
                     SplitInstallSessionStatus.INSTALLED -> {

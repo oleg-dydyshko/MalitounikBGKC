@@ -32,3 +32,4 @@
 -keepclassmembers class **.R$* {
     public static <fields>;
 }
+-keep class com.shockwave.**

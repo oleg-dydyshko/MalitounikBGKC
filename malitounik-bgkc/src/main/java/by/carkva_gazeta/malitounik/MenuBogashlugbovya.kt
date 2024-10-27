@@ -108,6 +108,8 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.add(MenuListData(r1[5] + opisanie, "mltv_asviacz_pamiatnaj_tablicy"))
             dataSearch.add(MenuListData(r1[6] + opisanie, "mltv_asviacz_pamiatnaj_tablicy_paciarpieu_za_bielarus1"))
             dataSearch.add(MenuListData(r1[7] + opisanie, "mltv_asviacz_pamiatnaj_tablicy_biazvinnym_achviaram_paciarpieli_za_bielarus"))
+            dataSearch.add(MenuListData(r1[8] + opisanie, "sluzba_posnikam_manacham_pustelnikam"))
+            dataSearch.add(MenuListData(r1[9] + opisanie, "sluzba_posniku_manachu_pustelniku"))
             return dataSearch
         }
 

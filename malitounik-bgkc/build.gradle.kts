@@ -11,8 +11,8 @@ android {
         applicationId =  "by.carkva_gazeta.malitounik"
         minSdk = 21
         targetSdk = 35
-        versionCode = 442360
-        versionName = "5.0.3.9"
+        versionCode = 442361
+        versionName = "5.0.3.10"
 
         //multiDexEnabled = true
 
@@ -51,37 +51,37 @@ android {
         viewBinding = true
         buildConfig = true
     }
-
-    dynamicFeatures += setOf(":resources", ":biblijateka", ":admin")
+    dynamicFeatures += setOf(":resources", ":admin")
 }
 
 dependencies {
     //implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation ("com.google.android.material:material:1.12.0")
-    api ("androidx.appcompat:appcompat:1.7.0")
-    api ("androidx.gridlayout:gridlayout:1.0.0")
-    api ("com.google.android.play:feature-delivery:2.1.0")
-    implementation ("com.google.android.play:app-update-ktx:2.1.0")
-    implementation ("com.google.android.play:review-ktx:2.0.2")
-    implementation ("com.google.android.gms:play-services-instantapps:18.1.0")
-    api ("com.google.code.gson:gson:2.11.0")
+    implementation (libs.androidx.constraintlayout)
+    implementation (libs.material)
+    api (libs.androidx.appcompat)
+    api (libs.androidx.gridlayout)
+    api (libs.feature.delivery)
+    implementation (libs.app.update.ktx)
+    implementation (libs.review.ktx)
+    implementation (libs.play.services.instantapps)
+    api (libs.gson)
+    api (libs.pdf.viewer)
     //api ("androidx.webkit:webkit:1.10.0")
-    api ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    api ("com.github.woxthebox:draglistview:1.7.3")
-    api (platform("com.google.firebase:firebase-bom:33.5.0"))
+    api (libs.androidx.swiperefreshlayout)
+    api (libs.draglistview)
+    api (platform(libs.firebase.bom))
     //api ("com.google.firebase:firebase-core:21.1.1")
-    api ("com.google.firebase:firebase-storage-ktx")
-    api ("com.google.firebase:firebase-appcheck-playintegrity")
-    implementation ("com.squareup.picasso:picasso:2.71828")
-    implementation ("androidx.media3:media3-exoplayer:1.4.1")
-    implementation ("androidx.media3:media3-exoplayer-smoothstreaming:1.4.1")
-    implementation ("androidx.media:media:1.7.0")
-    implementation ("androidx.core:core-ktx:1.13.1")
+    api (libs.firebase.storage.ktx)
+    api (libs.firebase.appcheck.playintegrity)
+    implementation (libs.picasso)
+    implementation (libs.androidx.media3.exoplayer)
+    implementation (libs.androidx.media3.exoplayer.smoothstreaming)
+    implementation (libs.androidx.media)
+    implementation (libs.androidx.core.ktx)
     //implementation ("androidx.multidex:multidex:2.0.1")
-    testImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.6.1")
+    testImplementation (libs.junit)
+    androidTestImplementation (libs.androidx.junit)
+    androidTestImplementation (libs.androidx.espresso.core)
 }
 
 apply(plugin = "com.google.gms.google-services")

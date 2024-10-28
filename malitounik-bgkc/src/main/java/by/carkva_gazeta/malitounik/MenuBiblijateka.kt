@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -70,21 +71,7 @@ class MenuBiblijateka : BaseFragment() {
     }
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
-            activity?.let { activity ->
-                val dir = File("${activity.filesDir}/BookCache")
-                if (!dir.exists()) dir.mkdir()
-                val fileUri = it.data?.data
-                val path = fileUri?.path ?: ""
-                val t1 = path.lastIndexOf("/")
-                var mime = "Bibliateka.file"
-                if (t1 != -1) {
-                    mime = path.substring(t1 + 1)
-                }
-                fileUri?.let { uri ->
-                    copyInputStreamToFile(activity.contentResolver.openInputStream(uri), mime)
-                }
-                onDialogFile(File("${activity.filesDir}/BookCache/$mime"))
-            }
+            loadComplete(false, isPrint = false, uri = it.data?.data)
         }
     }
 
@@ -491,7 +478,7 @@ class MenuBiblijateka : BaseFragment() {
         }
     }
 
-    private fun loadComplete(isShare: Boolean, isPrint: Boolean) {
+    private fun loadComplete(isShare: Boolean, isPrint: Boolean, uri: Uri? = null) {
         (activity as? BaseActivity)?.let {
             when {
                 isPrint -> {
@@ -509,6 +496,12 @@ class MenuBiblijateka : BaseFragment() {
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT, it.getString(R.string.set_log_file))
                     sendIntent.type = "text/html"
                     startActivity(Intent.createChooser(sendIntent, it.getString(R.string.set_log_file)))
+                }
+
+                uri != null -> {
+                    val intent = Intent(activity, BiblijatekaPdf::class.java)
+                    intent.data = uri
+                    mBiblijatekaPdfResult.launch(intent)
                 }
 
                 else -> {

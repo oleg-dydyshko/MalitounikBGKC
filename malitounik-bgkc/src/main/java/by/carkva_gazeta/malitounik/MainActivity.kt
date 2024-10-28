@@ -1836,7 +1836,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         if (uri != null) {
             val intent = Intent(this, BiblijatekaPdf::class.java)
             intent.data = uri
-            intent.putExtra("filePath", uri)
             setFileBiblijatekaLauncher.launch(intent)
         }
         var rubNew = if (rub == SETFILE) {
@@ -1844,12 +1843,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             else MALITOUNIKI
         } else rub
         if (rub == NIADAUNIA && !isNiadaunia()) rubNew = MALITOUNIKI
-        val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$rubNew") as? MenuBiblijateka
+        var fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$rubNew") as? MenuBiblijateka
         if (fragment == null) {
             val ftrans = supportFragmentManager.beginTransaction()
             ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
-            val vybranoe = MenuBiblijateka.getInstance(rubNew)
-            ftrans.replace(R.id.conteiner, vybranoe, "MenuBiblijateka$rubNew")
+            fragment = MenuBiblijateka.getInstance(rubNew)
+            ftrans.replace(R.id.conteiner, fragment, "MenuBiblijateka$rubNew")
             if (start) {
                 ftrans.commit()
             } else {
@@ -1858,7 +1857,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }, 300)
             }
         }
-        if (fragment != null && rub == SETFILE) {
+        if (rub == SETFILE) {
             CoroutineScope(Dispatchers.Main).launch {
                 fragment.setRubrika(rub)
             }

@@ -73,7 +73,18 @@ import java.util.Calendar
 import kotlin.random.Random
 
 
-class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener, MenuBiblijateka.MunuBiblijatekaListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
+class MainActivity : BaseActivity(), View.OnClickListener,
+    DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener,
+    DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner,
+    DialogFontSize.DialogFontSizeListener, DialogPrazdnik.DialogPrazdnikListener,
+    DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener,
+    DialogClearHishory.DialogClearHistoryListener,
+    DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener,
+    DialogDeliteNiadaunia.DialogDeliteNiadauniaListener,
+    DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, MyNatatki.MyNatatkiListener,
+    ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener,
+    MenuBiblijateka.MunuBiblijatekaListener,
+    DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
 
     private val c = Calendar.getInstance()
     private lateinit var k: SharedPreferences
@@ -128,10 +139,16 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             selectFragment(binding.label140, true)
         }
     }
+    private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val intent = Intent(this, BiblijatekaPdf::class.java)
+            intent.data = it.data?.data
+            setFileBiblijatekaLauncher.launch(intent)
+        }
+    }
     val listBibliaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 500) {
-            val myPerevod = result.data?.extras?.getString("perevod")
-                ?: VybranoeBibleList.PEREVODSEMUXI
+            val myPerevod = result.data?.extras?.getString("perevod") ?: VybranoeBibleList.PEREVODSEMUXI
             when (myPerevod) {
                 VybranoeBibleList.PEREVODSEMUXI -> {
                     val fragment = supportFragmentManager.findFragmentByTag("semuxa")
@@ -396,16 +413,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain
         bindingcontent = binding.appBarMain.contentMain
-        setContentView(binding.root)
-        // Удаление старого выделения
+        setContentView(binding.root) // Удаление старого выделения
         val dirMaranAtaBel = File("$filesDir/MaranAtaBel")
         if (dirMaranAtaBel.exists()) dirMaranAtaBel.deleteRecursively()
         val dirMaranAta = File("$filesDir/MaranAta")
-        if (dirMaranAta.exists()) dirMaranAta.deleteRecursively()
-        // Удаление кеша интернета
+        if (dirMaranAta.exists()) dirMaranAta.deleteRecursively() // Удаление кеша интернета
         val fileSite = File("$filesDir/Site")
-        if (fileSite.exists()) fileSite.deleteRecursively()
-        // Создание нового формата нататок
+        if (fileSite.exists()) fileSite.deleteRecursively() // Создание нового формата нататок
         val fileNatatki = File("$filesDir/Natatki.json")
         if (!fileNatatki.exists()) {
             File(filesDir.toString().plus("/Malitva")).walk().forEach { file ->
@@ -783,8 +797,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         CoroutineScope(Dispatchers.IO).launch {
             if (k.getBoolean("admin", false) && isNetworkAvailable()) {
                 val localFile = File("$filesDir/cache/cache.txt")
-                Malitounik.referens.child("/admin/log.txt").getFile(localFile)
-                    .addOnFailureListener {
+                Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
                         toastView(this@MainActivity, getString(R.string.error))
                     }.await()
                 val log = localFile.readText()
@@ -808,7 +821,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 prefEditors.apply()
             }
         }
-        if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
+        if (scroll) binding.scrollView.post {
+            binding.scrollView.smoothScrollBy(0, binding.scrollView.height)
+        }
 
         if (checkASztoNovagaMD5Sum()) {
             val dialog = DialogSztoHovaha()
@@ -1053,13 +1068,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
                 if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
                     if (isNetworkAvailable(TRANSPORT_CELLULAR)) {
-                        val dialog = DialogUpdateWIFI.getInstance(appUpdateInfo.totalBytesToDownload()
-                            .toFloat())
+                        val dialog = DialogUpdateWIFI.getInstance(appUpdateInfo.totalBytesToDownload().toFloat())
                         dialog.show(supportFragmentManager, "DialogUpdateWIFI")
                     } else {
                         appUpdateManager.registerListener(installStateUpdatedListener)
-                        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateMalitounikLauncher, AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE)
-                            .build())
+                        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateMalitounikLauncher, AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build())
                     }
                 }
             }
@@ -1764,18 +1777,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             R.id.citata -> {
                 startActivity(Intent(this, Cytaty::class.java))
             }
-
-            /*else -> {
-                val fragment = supportFragmentManager.findFragmentByTag("menuCaliandar")
-                if (fragment == null) {
-                    val caliandar = MenuCaliandar.newInstance(setDataCalendar)
-                    ftrans.replace(R.id.conteiner, caliandar, "menuCaliandar")
-                    prefEditors.putInt("id", idSelect)
-                    tolbarTitle = getString(R.string.kaliandar2)
-                    if (dzenNoch) binding.label1.setBackgroundResource(R.drawable.selector_dark_maranata)
-                    else binding.label1.setBackgroundResource(R.drawable.selector_gray)
-                }
-            }*/
         }
         if (start) {
             ftrans.commit()
@@ -1858,9 +1859,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             }
         }
         if (rub == SETFILE) {
-            CoroutineScope(Dispatchers.Main).launch {
-                fragment.setRubrika(rub)
-            }
+            val intent = Intent()
+            intent.type = "*/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf"))
+            mActivityResultFile.launch(Intent.createChooser(intent, getString(R.string.vybrac_file)))
         }
         when (rubNew) {
             NIADAUNIA -> {
@@ -1958,15 +1961,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     invalidateOptionsMenu()
                     if (updateCount < 3 || c.timeInMillis > k.getLong("updateTime", c.timeInMillis)) {
                         if (isNetworkAvailable(TRANSPORT_CELLULAR)) {
-                            val dialog = DialogUpdateWIFI.getInstance(appUpdateInfo.totalBytesToDownload()
-                                .toFloat())
+                            val dialog = DialogUpdateWIFI.getInstance(appUpdateInfo.totalBytesToDownload().toFloat())
                             dialog.show(supportFragmentManager, "DialogUpdateWIFI")
                         } else {
                             val dialog = DialogUpdateMalitounik.getInstance(getString(R.string.update_title))
                             dialog.show(supportFragmentManager, "DialogUpdateMalitounik")
                             appUpdateManager.registerListener(installStateUpdatedListener)
-                            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateMalitounikLauncher, AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE)
-                                .build())
+                            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateMalitounikLauncher, AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build())
                         }
                     }
                 }
@@ -1980,8 +1981,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
                 appUpdateManager.registerListener(installStateUpdatedListener)
-                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateMalitounikLauncher, AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE)
-                    .build())
+                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateMalitounikLauncher, AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build())
             }
         }
     }
@@ -2299,16 +2299,13 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             mes.show()
         }
 
-        fun fromHtml(html: String, mode: Int = HtmlCompat.FROM_HTML_MODE_LEGACY) =
-            HtmlCompat.fromHtml(html, mode)
+        fun fromHtml(html: String, mode: Int = HtmlCompat.FROM_HTML_MODE_LEGACY) = HtmlCompat.fromHtml(html, mode)
 
-        fun toHtml(html: Spannable) =
-            HtmlCompat.toHtml(html, HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)
+        fun toHtml(html: Spannable) = HtmlCompat.toHtml(html, HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)
 
         @Suppress("DEPRECATION")
         fun isNetworkAvailable(typeTransport: Int = TRANSPORT_ALL): Boolean {
-            val connectivityManager = Malitounik.applicationContext()
-                .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val connectivityManager = Malitounik.applicationContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val nw = connectivityManager.activeNetwork ?: return false
                 val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false

@@ -2,7 +2,6 @@ package by.carkva_gazeta.malitounik
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.print.PrintAttributes
@@ -16,7 +15,6 @@ import android.view.ViewGroup
 import androidx.core.content.FileProvider
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.BiblijatekaPdfBinding
-import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -36,11 +34,6 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     private var totalPage = 1
     private val dzenNoch get() = getBaseDzenNoch()
     private var resetTollbarJob: Job? = null
-
-    override fun attachBaseContext(context: Context) {
-        super.attachBaseContext(context)
-        SplitCompat.installActivity(context)
-    }
 
     private fun getFileName(uri: Uri): String {
         var result: String? = null
@@ -67,15 +60,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = BiblijatekaPdfBinding.inflate(layoutInflater)
-        try {
-            setContentView(binding.root)
-        } catch (t: Resources.NotFoundException) {
-            super.onBack()
-            val i = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
-            i?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            i?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(i)
-        }
+        setContentView(binding.root)
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         filePath = intent.extras?.getString("filePath", "") ?: ""
         fileTitle = intent.extras?.getString("fileTitle", "") ?: ""

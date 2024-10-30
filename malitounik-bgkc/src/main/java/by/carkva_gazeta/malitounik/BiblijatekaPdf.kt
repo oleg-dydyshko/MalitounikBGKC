@@ -167,20 +167,28 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         binding.pdfView.jumpToPage(page - 1)
     }
 
+    override fun onPrepareMenu(menu: Menu) {
+        menu.findItem(R.id.action_share).isVisible = intent.data == null
+    }
+
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
             return true
         }
+        if (id == R.id.action_share) {
+            val sendIntent = Intent(Intent.ACTION_SEND)
+            sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, "by.carkva_gazeta.malitounik.fileprovider", File(filePath)))
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
+            sendIntent.type = "text/html"
+            startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
+        }
         if (id == R.id.action_open) {
-            try {
-                val fileProvider = FileProvider.getUriForFile(this, "$packageName.fileprovider", File(filePath))
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(fileProvider, "application/pdf")
-                startActivity(intent)
-            } catch (_: Throwable) {
-            }
+            val fileProvider = FileProvider.getUriForFile(this, "$packageName.fileprovider", File(filePath))
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(fileProvider, "application/pdf")
+            startActivity(intent)
             return true
         }
         if (id == R.id.action_set_page) {
@@ -196,8 +204,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         if (id == R.id.menu_print) {
             val printAdapter = PdfDocumentAdapter(filePath)
             val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
-            val printAttributes = PrintAttributes.Builder()
-                .setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+            val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
             printManager.print(File(filePath).name, printAdapter, printAttributes)
         }
         return false

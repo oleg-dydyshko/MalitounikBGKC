@@ -161,6 +161,7 @@ class MenuPesnyData {
         pesnyPrasl.add(Data("piesni_prasl_pachvala_sviatomu_jazafatu", "Пахвала сьвятому Язафату"))
         pesnyPrasl.add(Data("piesni_prasl_nie_cviki_ciabie_trymali", "Не цьвікі Цябе трымалі, а мой грэх"))
         pesnyPrasl.add(Data("piesni_prasl_kryzu_chrystovy", "Крыжу Хрыстовы"))
+        pesnyPrasl.add(Data("piesni_prasl_tvoj_chram", "Твой хpам"))
 
         pesnyTaize.add(Data("pesny_taize_0", "Magnifikat"))
         pesnyTaize.add(Data("pesny_taize_1", "Ostende nobis"))

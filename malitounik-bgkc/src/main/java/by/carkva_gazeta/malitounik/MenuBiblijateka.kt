@@ -14,9 +14,6 @@ import android.os.Environment
 import android.os.SystemClock
 import android.print.PrintAttributes
 import android.print.PrintManager
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.AbsoluteSizeSpan
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -25,7 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -375,7 +371,12 @@ class MenuBiblijateka : BaseFragment() {
                         var opisanie = arrayList[position][1]
                         val t1 = opisanie.indexOf("</span><br>")
                         if (t1 != -1) opisanie = opisanie.substring(t1 + 11)
-                        val dialogBibliateka = DialogBibliateka.getInstance(arrayList[position][2], opisanie, arrayList[position][0], arrayList[position][3])
+                        val list = ArrayList<String>()
+                        list.add(arrayList[position][0])
+                        list.add(opisanie)
+                        list.add(arrayList[position][2])
+                        list.add(arrayList[position][3])
+                        val dialogBibliateka = DialogBibliateka.getInstance(list)
                         dialogBibliateka.show(childFragmentManager, "dialog_bibliateka")
                     }
                 }
@@ -506,7 +507,7 @@ class MenuBiblijateka : BaseFragment() {
         }
     }
 
-    suspend fun setRubrika(rub: Int): Int {
+    private suspend fun setRubrika(rub: Int): Int {
         binding.progressBar2.visibility = View.VISIBLE
         var isUbdate = NOUPDATE
         var rubryka = rub
@@ -687,8 +688,8 @@ class MenuBiblijateka : BaseFragment() {
     private suspend fun saveImagePdf(imageFile: File, image: String): Boolean {
         var error = false
         Malitounik.referens.child("/images/bibliateka/$image").getFile(imageFile).addOnFailureListener {
-                error = true
-            }.await()
+            error = true
+        }.await()
         return error
     }
 
@@ -699,105 +700,14 @@ class MenuBiblijateka : BaseFragment() {
         outState.putInt("idSelect", idSelect)
     }
 
-    private fun showPopupMenu(view: View, position: Int, name: String) {
-        (activity as? BaseActivity)?.let {
-            val popup = PopupMenu(it, view)
-            val infl = popup.menuInflater
-            infl.inflate(R.menu.popup_biblioteka, popup.menu)
-            val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
-            if (file.exists()) {
-                popup.menu.getItem(1).isVisible = false
-            } else {
-                popup.menu.getItem(2).isVisible = false
-                if (!MainActivity.isNetworkAvailable()) popup.menu.getItem(1).isVisible = false
-            }
-            for (i in 0 until popup.menu.size()) {
-                val item = popup.menu.getItem(i)
-                val spanString = SpannableString(popup.menu.getItem(i).title.toString())
-                val end = spanString.length
-                var itemFontSize = it.setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
-                if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
-                spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                item.title = spanString
-            }
-            popup.setOnMenuItemClickListener { menuItem: MenuItem ->
-                popup.dismiss()
-                when (menuItem.itemId) {
-                    R.id.menu_opisanie -> {
-                        val dialogBibliateka = DialogBibliateka.getInstance(arrayList[position][2], arrayList[position][1], arrayList[position][0], arrayList[position][3])
-                        dialogBibliateka.show(childFragmentManager, "dialog_bibliateka")
-                        return@setOnMenuItemClickListener true
-                    }
-
-                    R.id.menu_download -> {
-                        onDialogbibliatekaPositiveClick(arrayList[position][2], name)
-                        return@setOnMenuItemClickListener true
-                    }
-
-                    R.id.menu_delite -> {
-                        val dd = DialogDelite.getInstance(0, arrayList[position][2], "з бібліятэкі", name)
-                        dd.show(childFragmentManager, "dialog_delite")
-                        return@setOnMenuItemClickListener true
-                    }
-
-                    R.id.menu_print -> {
-                        if (file.exists()) {
-                            val printAdapter = PdfDocumentAdapter(file.absolutePath)
-                            val printManager = it.getSystemService(Context.PRINT_SERVICE) as PrintManager
-                            val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
-                            printManager.print(file.name, printAdapter, printAttributes)
-                        } else {
-                            if (it.checkmoduleResources()) {
-                                if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
-                                    val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(arrayList[position][2], false, isPrint = true)
-                                    bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
-                                } else {
-                                    writeFile(arrayList[position][2], false, isPrint = true)
-                                }
-                            } else {
-                                it.installFullMalitounik()
-                            }
-                        }
-                        return@setOnMenuItemClickListener true
-                    }
-
-                    R.id.menu_share -> {
-                        if (file.exists()) {
-                            val sendIntent = Intent(Intent.ACTION_SEND)
-                            sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(it, "by.carkva_gazeta.malitounik.fileprovider", file))
-                            sendIntent.putExtra(Intent.EXTRA_SUBJECT, it.getString(R.string.set_log_file))
-                            sendIntent.type = "text/html"
-                            startActivity(Intent.createChooser(sendIntent, it.getString(R.string.set_log_file)))
-                        } else {
-                            if (it.checkmoduleResources()) {
-                                if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
-                                    val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(arrayList[position][2], true, isPrint = false)
-                                    bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
-                                } else {
-                                    writeFile(arrayList[position][2], true, isPrint = false)
-                                }
-                            } else {
-                                it.installFullMalitounik()
-                            }
-                        }
-                        return@setOnMenuItemClickListener true
-                    }
-                }
-                false
-            }
-            popup.show()
-        }
-    }
-
-    internal inner class BibliotekaAdapter(context: Activity) :
-        ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
+    private inner class BibliotekaAdapter(context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
                 val binding = SimpleListItemBibliotekaBinding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
-                viewHolder = ViewHolder(binding.label, binding.imageView2, binding.buttonPopup)
+                viewHolder = ViewHolder(binding.label, binding.imageView2, binding.opisanie)
                 rootView.tag = viewHolder
             } else {
                 rootView = convertView
@@ -808,7 +718,6 @@ class MenuBiblijateka : BaseFragment() {
             viewHolder.imageView.requestLayout()
             activity?.let { activity ->
                 if (arrayList[position].size == 3) {
-                    viewHolder.buttonPopup.visibility = View.GONE
                     if (arrayList[position][2] != "") {
                         bitmapJob = CoroutineScope(Dispatchers.Main).launch {
                             val bitmap = withContext(Dispatchers.IO) {
@@ -822,16 +731,32 @@ class MenuBiblijateka : BaseFragment() {
                     } else {
                         viewHolder.imageView.visibility = View.GONE
                     }
+                    viewHolder.opisanie.visibility = View.GONE
                 } else {
-                    viewHolder.buttonPopup.visibility = View.VISIBLE
-                    viewHolder.buttonPopup.let {
-                        viewHolder.buttonPopup.setOnClickListener {
-                            showPopupMenu(it, position, arrayList[position][0])
-                        }
+                    var opisanie = arrayList[position][1]
+                    val t1 = opisanie.indexOf("</span><br>")
+                    if (t1 != -1) opisanie = opisanie.substring(t1 + 11)
+                    var opisanieNew = MainActivity.fromHtml(opisanie).toString()
+                    opisanieNew = opisanieNew.replace("\n\n\n", "\n\n")
+                    val t3 = opisanieNew.indexOf("\n\n")
+                    val t4 = opisanieNew.indexOf("\n\n", t3 + 2)
+                    var opisanieSmoll = opisanieNew
+                    if (t3 != -1 && t4 != -1) opisanieSmoll = opisanieNew.substring(t3 + 2, t4) + " ..."
+                    else if (t3 != -1) opisanieSmoll = opisanieNew.substring(0, t3) + " ..."
+                    viewHolder.opisanie.visibility = View.VISIBLE
+                    viewHolder.opisanie.text = opisanieSmoll
+                    viewHolder.opisanie.setOnClickListener {
+                        val list = ArrayList<String>()
+                        list.add(arrayList[position][0])
+                        list.add(opisanie)
+                        list.add(arrayList[position][2])
+                        list.add(arrayList[position][3])
+                        val dialogBibliateka = DialogBibliateka.getInstance(list)
+                        dialogBibliateka.show(childFragmentManager, "dialog_bibliateka")
                     }
                     bitmapJob = CoroutineScope(Dispatchers.Main).launch {
-                        val t1 = arrayList[position][5].lastIndexOf("/")
-                        val image = arrayList[position][5].substring(t1 + 1)
+                        val t2 = arrayList[position][5].lastIndexOf("/")
+                        val image = arrayList[position][5].substring(t2 + 1)
                         val file = File("${activity.filesDir}/image_temp/$image")
                         if (!file.exists() && MainActivity.isNetworkAvailable()) {
                             for (e in 0..2) {
@@ -859,7 +784,7 @@ class MenuBiblijateka : BaseFragment() {
         }
     }
 
-    private class ViewHolder(var text: TextView, var imageView: ImageView, var buttonPopup: ImageView)
+    private class ViewHolder(var text: TextView, var imageView: ImageView, var opisanie: TextView)
 
     companion object {
         private const val NOUPDATE = 0

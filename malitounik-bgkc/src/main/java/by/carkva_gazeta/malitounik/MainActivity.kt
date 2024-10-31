@@ -798,8 +798,8 @@ class MainActivity : BaseActivity(), View.OnClickListener,
             if (k.getBoolean("admin", false) && isNetworkAvailable()) {
                 val localFile = File("$filesDir/cache/cache.txt")
                 Malitounik.referens.child("/admin/log.txt").getFile(localFile).addOnFailureListener {
-                        toastView(this@MainActivity, getString(R.string.error))
-                    }.await()
+                    toastView(this@MainActivity, getString(R.string.error))
+                }.await()
                 val log = localFile.readText()
                 if (log != "") {
                     withContext(Dispatchers.Main) {

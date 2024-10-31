@@ -11,6 +11,7 @@ import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.TypedValue
 import android.view.Menu
@@ -225,8 +226,13 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
                         out.close()
                     }
                     saveBibliatekaJson()
-                    if (binding.pdfTextView.text.toString() != "") Malitounik.referens.child("/data/bibliateka/$pdf").putFile(Uri.fromFile(File(binding.pdfTextView.text.toString()))).await()
-                    Malitounik.referens.child("/images/bibliateka/" + file.name).putFile(Uri.fromFile(file)).await()
+                    val filePdf = File(binding.pdfTextView.text.toString())
+                    if (filePdf.exists()) {
+                        if (binding.pdfTextView.text.toString() != "") Malitounik.referens.child("/data/bibliateka/$pdf").putFile(Uri.fromFile(filePdf)).await()
+                    }
+                    if (file.exists()) {
+                        Malitounik.referens.child("/images/bibliateka/" + file.name).putFile(Uri.fromFile(file)).await()
+                    }
                 }
                 adapter.notifyDataSetChanged()
                 MainActivity.toastView(this@BibliatekaList, getString(by.carkva_gazeta.malitounik.R.string.save))
@@ -321,7 +327,7 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
     private suspend fun saveImagePdf(pdf: String, image: String) {
         val t1 = pdf.lastIndexOf(".")
         val imageTempFile = File("$filesDir/image_temp/" + pdf.substring(0, t1) + ".png")
-        Malitounik.referens.child(image).getFile(imageTempFile).addOnFailureListener {
+        Malitounik.referens.child("/images/bibliateka/$image").getFile(imageTempFile).addOnFailureListener {
             MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
         }.await()
     }

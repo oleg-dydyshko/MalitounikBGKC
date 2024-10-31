@@ -15,22 +15,10 @@
         android:gravity="center_vertical"
         android:padding="10sp"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/barrier"
-        app:layout_constraintEnd_toStartOf="@+id/button_popup"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:drawableLeftCompat="@drawable/stiker"
         app:drawableStartCompat="@drawable/stiker"
-        app:drawableLeftCompat="@drawable/stiker" />
-
-    <ImageView
-        android:id="@+id/button_popup"
-        android:layout_width="24sp"
-        android:layout_height="match_parent"
-        android:background="@drawable/btn_drawable"
-        android:contentDescription="@string/content_open_popup"
-        android:src="@drawable/button_with_three_dots"
-        app:layout_constraintBottom_toTopOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -38,17 +26,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:visibility="gone"
+        android:contentDescription="@string/empty"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/barrier"
-        android:contentDescription="@string/empty" />
+        app:layout_constraintTop_toBottomOf="@+id/label" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier"
-        android:layout_width="wrap_content"
+    <by.carkva_gazeta.malitounik.TextViewCustom
+        android:id="@+id/opisanie"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="label,button_popup" />
-
+        android:layout_weight="1"
+        android:drawablePadding="10sp"
+        android:gravity="center_vertical"
+        android:padding="10sp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

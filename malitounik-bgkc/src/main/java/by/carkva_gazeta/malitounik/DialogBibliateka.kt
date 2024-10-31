@@ -22,10 +22,7 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 
 class DialogBibliateka : DialogFragment() {
-    private var listPosition = "0"
-    private var title = "0"
-    private var listStr = "0"
-    private var size = "0"
+    private lateinit var list: ArrayList<String>
     private var mListener: DialogBibliatekaListener? = null
     private lateinit var builder: AlertDialog.Builder
     private var _binding: DialogTextviewDisplayBinding? = null
@@ -42,10 +39,7 @@ class DialogBibliateka : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        listPosition = arguments?.getString("listPosition") ?: "0"
-        listStr = arguments?.getString("listStr") ?: "0"
-        title = arguments?.getString("title") ?: "0"
-        size = arguments?.getString("size") ?: "0"
+        list = arguments?.getStringArrayList("list") ?: ArrayList()
     }
 
     override fun onAttach(context: Context) {
@@ -66,7 +60,7 @@ class DialogBibliateka : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             builder = AlertDialog.Builder(it, style)
-            val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), listPosition)
+            val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), list[2])
             if (file.exists()) {
                 binding.title.text = getString(R.string.opisanie).uppercase()
             } else {
@@ -89,10 +83,10 @@ class DialogBibliateka : DialogFragment() {
                     }
                 }
             }
-            binding.content.text = MainActivity.fromHtml(listStr)
+            binding.content.text = MainActivity.fromHtml(list[1])
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-            val dirCount = size.toInt()
+            val dirCount = list[3].toInt()
             val izm = if (dirCount / 1024 > 1000) {
                 formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024 / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()) + " Мб"
             } else {
@@ -103,7 +97,7 @@ class DialogBibliateka : DialogFragment() {
             } else {
                 if (MainActivity.isNetworkAvailable()) {
                     builder.setPositiveButton(getString(R.string.download_bibliateka_file, izm)) { dialog: DialogInterface, _: Int ->
-                        mListener?.onDialogbibliatekaPositiveClick(listPosition, title)
+                        mListener?.onDialogbibliatekaPositiveClick(list[2], list[0])
                         dialog.cancel()
                     }
                     builder.setNegativeButton(R.string.cansel) { dialog: DialogInterface, _: Int -> dialog.cancel() }
@@ -122,13 +116,10 @@ class DialogBibliateka : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(listPosition: String, listStr: String, title: String, size: String): DialogBibliateka {
+        fun getInstance(list: ArrayList<String>): DialogBibliateka {
             val instance = DialogBibliateka()
             val args = Bundle()
-            args.putString("listPosition", listPosition)
-            args.putString("listStr", listStr)
-            args.putString("title", title)
-            args.putString("size", size)
+            args.putStringArrayList("list", list)
             instance.arguments = args
             return instance
         }

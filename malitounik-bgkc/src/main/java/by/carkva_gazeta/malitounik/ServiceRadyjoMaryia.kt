@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,16 +8,15 @@ import android.app.Service
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Binder
 import android.os.Build
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.ServiceCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -91,7 +89,6 @@ class ServiceRadyjoMaryia : Service() {
 
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     if (playbackState == Player.STATE_READY) {
-                        setRadioNotification()
                         listener?.playingRadioMariaStateReady()
                         val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
                         if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
@@ -135,7 +132,6 @@ class ServiceRadyjoMaryia : Service() {
         } else {
             player?.play()
         }
-        setRadioNotification()
     }
 
     fun isPlayingRadioMaria() = isPlaying
@@ -170,6 +166,12 @@ class ServiceRadyjoMaryia : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val notification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+        } else {
+            0
+        }
+        ServiceCompat.startForeground(this, 300, setRadioNotification(), notification)
         val action = intent?.extras?.getInt("action") ?: PLAY_PAUSE
         if (action == PLAY_PAUSE) {
             playOrPause()
@@ -214,7 +216,6 @@ class ServiceRadyjoMaryia : Service() {
                                 if (titleRadyjoMaryia != text.trim()) {
                                     titleRadyjoMaryia = text.trim()
                                     withContext(Dispatchers.Main) {
-                                        setRadioNotification()
                                         val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
                                         if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
                                             sendBroadcast(Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java))
@@ -231,34 +232,31 @@ class ServiceRadyjoMaryia : Service() {
         }
     }
 
-    private fun setRadioNotification() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            val mediaSession = MediaSessionCompat(this, "Radyjo Maryia session")
-            val name = getString(R.string.padie_maryia_s)
-            mediaSession.setMetadata(MediaMetadataCompat.Builder().putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, BitmapFactory.decodeResource(resources, R.drawable.maria)).putString(MediaMetadataCompat.METADATA_KEY_TITLE, name).putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, titleRadyjoMaryia).build())
-            mediaSession.isActive = true
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val channel = NotificationChannel(SettingsActivity.NOTIFICATION_CHANNEL_ID_RADIO_MARYIA, name, NotificationManager.IMPORTANCE_LOW)
-                channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-                channel.description = name
-                val notificationManager = getSystemService(NotificationManager::class.java)
-                notificationManager.createNotificationChannel(channel)
-            }
-            val notifi = NotificationCompat.Builder(this, SettingsActivity.NOTIFICATION_CHANNEL_ID_RADIO_MARYIA)
-            notifi.setShowWhen(false)
-            notifi.setStyle(androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession.sessionToken).setShowActionsInCompactView(0, 1))
-            notifi.setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.maria))
-            notifi.setSmallIcon(R.drawable.krest)
-            notifi.setContentTitle(getString(R.string.padie_maryia_s))
-            notifi.setContentText(titleRadyjoMaryia)
-            notifi.setOngoing(true)
-            if (isPlaying) notifi.addAction(R.drawable.pause3, "pause", retreivePlaybackAction(PLAY_PAUSE))
-            else notifi.addAction(R.drawable.play3, "play", retreivePlaybackAction(PLAY_PAUSE))
-            notifi.addAction(R.drawable.stop3, "stop", retreivePlaybackAction(STOP))
-            val notification = notifi.build()
-            val notificationManager = NotificationManagerCompat.from(this)
-            notificationManager.notify(100, notification)
+    private fun setRadioNotification(): Notification {
+        val mediaSession = MediaSessionCompat(this, "Radyjo Maryia session")
+        val name = getString(R.string.padie_maryia_s)
+        mediaSession.setMetadata(MediaMetadataCompat.Builder().putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, BitmapFactory.decodeResource(resources, R.drawable.maria)).putString(MediaMetadataCompat.METADATA_KEY_TITLE, name).putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, titleRadyjoMaryia).build())
+        mediaSession.isActive = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(SettingsActivity.NOTIFICATION_CHANNEL_ID_RADIO_MARYIA, name, NotificationManager.IMPORTANCE_LOW)
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            channel.description = name
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
         }
+        val notifi = NotificationCompat.Builder(this, SettingsActivity.NOTIFICATION_CHANNEL_ID_RADIO_MARYIA)
+        notifi.setShowWhen(false)
+        notifi.setStyle(androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession.sessionToken).setShowActionsInCompactView(0, 1))
+        notifi.setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.maria))
+        notifi.setSmallIcon(R.drawable.krest)
+        notifi.setContentTitle(getString(R.string.padie_maryia_s))
+        notifi.setContentText(titleRadyjoMaryia)
+        notifi.setOngoing(true)
+        if (isPlaying) notifi.addAction(R.drawable.pause3, "pause", retreivePlaybackAction(PLAY_PAUSE))
+        else notifi.addAction(R.drawable.play3, "play", retreivePlaybackAction(PLAY_PAUSE))
+        notifi.addAction(R.drawable.stop3, "stop", retreivePlaybackAction(STOP))
+        val notification = notifi.build()
+        return notification
     }
 
     private fun retreivePlaybackAction(which: Int): PendingIntent? {

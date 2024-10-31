@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
+import androidx.core.content.ContextCompat
 
 
 class WidgetRadyjoMaryia : AppWidgetProvider() {
@@ -38,7 +39,7 @@ class WidgetRadyjoMaryia : AppWidgetProvider() {
         if (ServiceRadyjoMaryia.isServiceRadioMaryiaRun && extra == ServiceRadyjoMaryia.STOP) {
             val intent2 = Intent(context, ServiceRadyjoMaryia::class.java)
             intent2.putExtra("action", ServiceRadyjoMaryia.STOP)
-            context.startService(intent2)
+            ContextCompat.startForegroundService(context, intent2)
         }
         val isInternet = MainActivity.isNetworkAvailable()
         if (extra == ServiceRadyjoMaryia.PLAY_PAUSE) {
@@ -48,7 +49,7 @@ class WidgetRadyjoMaryia : AppWidgetProvider() {
                 }
                 val intent2 = Intent(context, ServiceRadyjoMaryia::class.java)
                 intent2.putExtra("action", ServiceRadyjoMaryia.PLAY_PAUSE)
-                context.startService(intent2)
+                ContextCompat.startForegroundService(context, intent2)
             } else {
                 val intent3 = Intent(context, WidgetRadyjoMaryiaProgram::class.java)
                 intent3.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

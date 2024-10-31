@@ -1731,7 +1731,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
                         binding.image5.visibility = View.INVISIBLE
                         binding.progressbar.visibility = View.VISIBLE
                         val intent = Intent(this, ServiceRadyjoMaryia::class.java)
-                        startService(intent)
+                        ContextCompat.startForegroundService(this, intent)
                         bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
                         binding.image5.setImageResource(R.drawable.pause2)
                         binding.image5.contentDescription = getString(R.string.pause)

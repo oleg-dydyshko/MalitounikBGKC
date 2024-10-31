@@ -89,6 +89,12 @@ class ServiceRadyjoMaryia : Service() {
 
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     if (playbackState == Player.STATE_READY) {
+                        val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+                        } else {
+                            0
+                        }
+                        ServiceCompat.startForeground(this@ServiceRadyjoMaryia, 300, setRadioNotification(), flag)
                         listener?.playingRadioMariaStateReady()
                         val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
                         if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
@@ -132,6 +138,12 @@ class ServiceRadyjoMaryia : Service() {
         } else {
             player?.play()
         }
+        val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+        } else {
+            0
+        }
+        ServiceCompat.startForeground(this, 300, setRadioNotification(), flag)
     }
 
     fun isPlayingRadioMaria() = isPlaying
@@ -147,6 +159,12 @@ class ServiceRadyjoMaryia : Service() {
         stopTimer()
         isServiceRadioMaryiaRun = false
         stopPlay()
+        val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+        } else {
+            0
+        }
+        ServiceCompat.stopForeground(this, flag)
     }
 
     private fun startTimer() {
@@ -166,12 +184,12 @@ class ServiceRadyjoMaryia : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
         } else {
             0
         }
-        ServiceCompat.startForeground(this, 300, setRadioNotification(), notification)
+        ServiceCompat.startForeground(this, 300, setRadioNotification(), flag)
         val action = intent?.extras?.getInt("action") ?: PLAY_PAUSE
         if (action == PLAY_PAUSE) {
             playOrPause()
@@ -216,6 +234,12 @@ class ServiceRadyjoMaryia : Service() {
                                 if (titleRadyjoMaryia != text.trim()) {
                                     titleRadyjoMaryia = text.trim()
                                     withContext(Dispatchers.Main) {
+                                        val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+                                        } else {
+                                            0
+                                        }
+                                        ServiceCompat.startForeground(this@ServiceRadyjoMaryia, 300, setRadioNotification(), flag)
                                         val sp = getSharedPreferences("biblia", Context.MODE_PRIVATE)
                                         if (sp.getBoolean("WIDGET_RADYJO_MARYIA_ENABLED", false)) {
                                             sendBroadcast(Intent(this@ServiceRadyjoMaryia, WidgetRadyjoMaryia::class.java))

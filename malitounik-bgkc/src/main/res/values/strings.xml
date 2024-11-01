@@ -205,7 +205,7 @@
     <string name="delite">Выдаліць</string>
     <string name="widget_settings">НАЛАДЫ ВІДЖЭТУ</string>
     <string name="opisanie">Апісаньне</string>
-    <string name="download_bibliateka_file">Спампаваць %1$s</string>
+    <string name="download_bibliateka_file">Праглядзець (%1$s)</string>
     <string name="pkc">Урачыстасьці і сьвяты ў рыма-католікаў Беларусі</string>
     <string name="search_svityia">Пошук сьвятых і сьвятаў</string>
     <string name="set_page_bibliateka">Выбраць старонку</string>
@@ -622,7 +622,18 @@
         <item>Служба настаўніку царкоўнаму і вызнаўцу</item>
         <item>Служба сьвятаначальнікам</item>
         <item>Служба сьвятаначальніку</item>
-        <item>Трапары і кандакі штодзённыя - на кожны дзень тыдня</item>
+        <item>Служба Найсьвяцейшай Багародзіцы</item>
+        <item>Служба за памерлых на кожны дзень тыдня</item>
+        <item>Служба бескарысьлівым лекарам і цудатворцам</item>
+        <item>Служба мучаніцам</item>
+        <item>Служба мучаніцы</item>
+        <item>Служба мучанікам</item>
+        <item>Служба мучанікам сьвятарам і манахам</item>
+        <item>Служба мучаніку</item>
+        <item>Служба мучаніку сьвятару і манаху</item>
+        <item>Служба сьвятой жанчыне</item>
+        <item>Служба сьвятым жанчынам</item>
+        <item>ТРАПАРЫ І КАНДАКІ ШТОДЗЁННЫЯ - НА КОЖНЫ ДЗЕНЬ ТЫДНЯ</item>
     </string-array>
     <string name="title_dynamicfeature">Admin</string>
     <string name="left_caliandar">Лева календаря</string>
@@ -1123,8 +1134,6 @@
         <item>Малебны канон Найсьвяцейшай Багародзіцы</item>
         <item>Вялікі пакаянны канон сьвятога Андрэя Крыцкага</item>
         <item>Малебен сьв. Кірылу і Мятоду, настаўнікам славянскім</item>
-        <item>Служба за памерлых на кожны дзень тыдня</item>
-        <item>Служба Найсьвяцейшай Багародзіцы</item>
         <item>Павячэрніца малая</item>
         <item>Вялікі пакаянны канон сьвятога Андрэя Крыцкага(у 4-х частках)</item>
     </array>

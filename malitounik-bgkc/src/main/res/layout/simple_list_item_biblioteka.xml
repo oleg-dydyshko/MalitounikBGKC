@@ -27,21 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:contentDescription="@string/empty"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/label" />
-
-    <by.carkva_gazeta.malitounik.TextViewCustom
-        android:id="@+id/opisanie"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawablePadding="10sp"
-        android:gravity="center_vertical"
-        android:padding="10sp"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

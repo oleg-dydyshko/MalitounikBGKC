@@ -354,7 +354,7 @@ class MenuBiblijateka : BaseFragment() {
                         filePath = file.absolutePath
                         fileName = file.name
                         fileTitle = arrayList[position][0]
-                        loadComplete(false, isPrint = false)
+                        loadComplete(false, isPrint = false, position = position)
                     } else {
                         arrayList.removeAt(position)
                         naidaunia.clear()
@@ -374,7 +374,7 @@ class MenuBiblijateka : BaseFragment() {
                         filePath = file.absolutePath
                         fileName = file.name
                         fileTitle = arrayList[position][0]
-                        loadComplete(false, isPrint = false)
+                        loadComplete(false, isPrint = false, position = position)
                     } else {
                         var opisanie = arrayList[position][1]
                         val t1 = opisanie.indexOf("</span><br>")
@@ -449,7 +449,7 @@ class MenuBiblijateka : BaseFragment() {
         }
     }
 
-    private fun loadComplete(isShare: Boolean, isPrint: Boolean, uri: Uri? = null) {
+    private fun loadComplete(isShare: Boolean, isPrint: Boolean, uri: Uri? = null, position: Int = -1) {
         (activity as? BaseActivity)?.let {
             when {
                 isPrint -> {
@@ -479,6 +479,17 @@ class MenuBiblijateka : BaseFragment() {
                     val intent = Intent(activity, BiblijatekaPdf::class.java)
                     intent.putExtra("filePath", filePath)
                     intent.putExtra("fileTitle", fileTitle)
+                    if (position != -1) {
+                        var opisanie = arrayList[position][1]
+                        val t1 = opisanie.indexOf("</span><br>")
+                        if (t1 != -1) opisanie = opisanie.substring(t1 + 11)
+                        val list = ArrayList<String>()
+                        list.add(arrayList[position][0])
+                        list.add(opisanie)
+                        list.add(arrayList[position][2])
+                        list.add(arrayList[position][3])
+                        intent.putStringArrayListExtra("list", list)
+                    }
                     mBiblijatekaPdfResult.launch(intent)
                 }
             }
@@ -715,7 +726,7 @@ class MenuBiblijateka : BaseFragment() {
             if (convertView == null) {
                 val binding = SimpleListItemBibliotekaBinding.inflate(layoutInflater, parent, false)
                 rootView = binding.root
-                viewHolder = ViewHolder(binding.label, binding.imageView2, binding.opisanie)
+                viewHolder = ViewHolder(binding.label, binding.imageView2)
                 rootView.tag = viewHolder
             } else {
                 rootView = convertView
@@ -739,30 +750,7 @@ class MenuBiblijateka : BaseFragment() {
                     } else {
                         viewHolder.imageView.visibility = View.GONE
                     }
-                    viewHolder.opisanie.visibility = View.GONE
                 } else {
-                    var opisanie = arrayList[position][1]
-                    val t1 = opisanie.indexOf("</span><br>")
-                    if (t1 != -1) opisanie = opisanie.substring(t1 + 11)
-                    var opisanieNew = MainActivity.fromHtml(opisanie).toString()
-                    opisanieNew = opisanieNew.replace("\n\n\n", "\n\n")
-                    val t3 = opisanieNew.indexOf("\n\n")
-                    val t4 = opisanieNew.indexOf("\n\n", t3 + 2)
-                    val opisanieSmoll = if (t3 != -1 && t4 != -1) opisanieNew.substring(t3 + 2, t4) + " ..."
-                    else if (t3 != -1) opisanieNew.substring(0, t3) + " ..."
-                    else ""
-                    if (opisanieSmoll != "") viewHolder.opisanie.visibility = View.VISIBLE
-                    else viewHolder.opisanie.visibility = View.GONE
-                    viewHolder.opisanie.text = opisanieSmoll
-                    viewHolder.opisanie.setOnClickListener {
-                        val list = ArrayList<String>()
-                        list.add(arrayList[position][0])
-                        list.add(opisanie)
-                        list.add(arrayList[position][2])
-                        list.add(arrayList[position][3])
-                        val dialogBibliateka = DialogBibliateka.getInstance(list)
-                        dialogBibliateka.show(childFragmentManager, "dialog_bibliateka")
-                    }
                     bitmapJob = CoroutineScope(Dispatchers.Main).launch {
                         val t2 = arrayList[position][5].lastIndexOf("/")
                         val image = arrayList[position][5].substring(t2 + 1)
@@ -793,7 +781,7 @@ class MenuBiblijateka : BaseFragment() {
         }
     }
 
-    private class ViewHolder(var text: TextView, var imageView: ImageView, var opisanie: TextView)
+    private class ViewHolder(var text: TextView, var imageView: ImageView)
 
     companion object {
         private const val NOUPDATE = 0

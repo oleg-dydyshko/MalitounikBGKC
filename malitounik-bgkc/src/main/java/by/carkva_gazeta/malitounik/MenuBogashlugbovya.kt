@@ -160,7 +160,18 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.add(MenuListData(r1[25] + opisanie, "sluzba_nastauniku_cark_vyznaucu"))
             dataSearch.add(MenuListData(r1[26] + opisanie, "sluzba_sviatanaczalnikam"))
             dataSearch.add(MenuListData(r1[27] + opisanie, "sluzba_sviatanaczalniku"))
-            if (!isSearch) dataSearch.add(MenuListData(r1[28], "1"))
+            dataSearch.add(MenuListData(r1[28] + opisanie, "sluzba_najsviaciejszaj_baharodzicy"))
+            dataSearch.add(MenuListData(r1[29] + opisanie, "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
+            dataSearch.add(MenuListData(r1[30] + opisanie, "sluzba_bieskaryslivym_lekaram_cudatvorcam"))
+            dataSearch.add(MenuListData(r1[31] + opisanie, "sluzba_muczanicam"))
+            dataSearch.add(MenuListData(r1[32] + opisanie, "sluzba_muczanicy"))
+            dataSearch.add(MenuListData(r1[33] + opisanie, "sluzba_muczanikam"))
+            dataSearch.add(MenuListData(r1[34] + opisanie, "sluzba_muczanikam_sviataram_i_manacham"))
+            dataSearch.add(MenuListData(r1[35] + opisanie, "sluzba_muczaniku"))
+            dataSearch.add(MenuListData(r1[36] + opisanie, "sluzba_muczaniku_sviataru_i_manachu"))
+            dataSearch.add(MenuListData(r1[37] + opisanie, "sluzba_sviatoj_zanczynie"))
+            dataSearch.add(MenuListData(r1[38] + opisanie, "sluzba_sviatym_zanczynam"))
+            if (!isSearch) dataSearch.add(MenuListData(r1[39], "1"))
             return dataSearch
         }
 
@@ -179,10 +190,8 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.add(MenuListData(list[7] + opisanie, "kanon_malebny_baharodzicy"))
             dataSearch.add(MenuListData(list[8] + opisanie, "kanon_andreja_kryckaha"))
             dataSearch.add(MenuListData(list[9] + opisanie, "malebien_kiryla_miatod"))
-            dataSearch.add(MenuListData(list[10] + opisanie, "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
-            dataSearch.add(MenuListData(list[11] + opisanie, "sluzba_najsviaciejszaj_baharodzicy"))
-            dataSearch.add(MenuListData(list[12] + opisanie, "paviaczernica_malaja"))
-            dataSearch.add(MenuListData(list[13] + opisanie, "kanon_andreja_kryckaha_4_czastki"))
+            dataSearch.add(MenuListData(list[10] + opisanie, "paviaczernica_malaja"))
+            dataSearch.add(MenuListData(list[11] + opisanie, "kanon_andreja_kryckaha_4_czastki"))
             dataSearch.sort()
             return dataSearch
         }

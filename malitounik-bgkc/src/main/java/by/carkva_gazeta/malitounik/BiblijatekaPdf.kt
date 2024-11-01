@@ -26,7 +26,7 @@ import java.io.File
 import java.util.Calendar
 
 
-class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener {
+class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogBibliateka.DialogBibliatekaListener {
 
     private lateinit var binding: BiblijatekaPdfBinding
     private var filePath = ""
@@ -34,6 +34,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     private var totalPage = 1
     private val dzenNoch get() = getBaseDzenNoch()
     private var resetTollbarJob: Job? = null
+    private lateinit var arrayList: ArrayList<String>
 
     private fun getFileName(uri: Uri): String {
         var result: String? = null
@@ -64,6 +65,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         filePath = intent.extras?.getString("filePath", "") ?: ""
         fileTitle = intent.extras?.getString("fileTitle", "") ?: ""
+        arrayList = intent.extras?.getStringArrayList("list") ?: ArrayList()
         val c = Calendar.getInstance()
         val edit = k.edit()
         edit.putLong("BiblijatekaUseTime", c.timeInMillis)
@@ -167,8 +169,12 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         binding.pdfView.jumpToPage(page - 1)
     }
 
+    override fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) {
+    }
+
     override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_share).isVisible = intent.data == null
+        menu.findItem(R.id.action_apisane).isVisible = arrayList.size != 0
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
@@ -177,12 +183,18 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
             onBack()
             return true
         }
+        if (id == R.id.action_apisane) {
+            val dialogBibliateka = DialogBibliateka.getInstance(arrayList)
+            dialogBibliateka.show(supportFragmentManager, "dialog_bibliateka")
+            return true
+        }
         if (id == R.id.action_share) {
             val sendIntent = Intent(Intent.ACTION_SEND)
             sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, "by.carkva_gazeta.malitounik.fileprovider", File(filePath)))
             sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
             sendIntent.type = "text/html"
             startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
+            return true
         }
         if (id == R.id.action_open) {
             val fileProvider = FileProvider.getUriForFile(this, "$packageName.fileprovider", File(filePath))

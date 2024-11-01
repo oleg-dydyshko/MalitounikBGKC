@@ -8,7 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogContextDisplayBinding
 
-class DialogPiarlinyContextMenu : DialogFragment() {
+class DialogBiblijatekaContextMenu : DialogFragment() {
     private var position = 0
     private var name: String = ""
     private lateinit var mListener: DialogPiarlinyContextMenuListener
@@ -67,8 +67,8 @@ class DialogPiarlinyContextMenu : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(position: Int, name: String): DialogPiarlinyContextMenu {
-            val dialogContextMenu = DialogPiarlinyContextMenu()
+        fun getInstance(position: Int, name: String): DialogBiblijatekaContextMenu {
+            val dialogContextMenu = DialogBiblijatekaContextMenu()
             val args = Bundle()
             args.putInt("position", position)
             args.putString("name", name)

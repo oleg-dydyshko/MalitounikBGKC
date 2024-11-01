@@ -330,8 +330,16 @@ class MenuBiblijateka : BaseFragment() {
                 binding.swipeRefreshLayout.isRefreshing = false
             }
             binding.listView.setOnItemLongClickListener { _, _, position, _ ->
-                val dd = DialogDeliteNiadaunia.getInstance(position, arrayList[position][1], arrayList[position][0])
-                dd.show(childFragmentManager, "dialog_delite_niadaunia")
+                if (arrayList[position].size == 3) {
+                    val dd = DialogDeliteNiadaunia.getInstance(position, arrayList[position][1], arrayList[position][0])
+                    dd.show(childFragmentManager, "dialog_delite_niadaunia")
+                } else {
+                    val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
+                    if (file.exists()) {
+                        val dd = DialogDelite.getInstance(0, arrayList[position][2], "з бібліятэкі", arrayList[position][0])
+                        dd.show(childFragmentManager, "dialog_delite")
+                    }
+                }
                 return@setOnItemLongClickListener true
             }
             binding.listView.setOnItemClickListener { _, _, position, _ ->
@@ -740,10 +748,11 @@ class MenuBiblijateka : BaseFragment() {
                     opisanieNew = opisanieNew.replace("\n\n\n", "\n\n")
                     val t3 = opisanieNew.indexOf("\n\n")
                     val t4 = opisanieNew.indexOf("\n\n", t3 + 2)
-                    var opisanieSmoll = opisanieNew
-                    if (t3 != -1 && t4 != -1) opisanieSmoll = opisanieNew.substring(t3 + 2, t4) + " ..."
-                    else if (t3 != -1) opisanieSmoll = opisanieNew.substring(0, t3) + " ..."
-                    viewHolder.opisanie.visibility = View.VISIBLE
+                    val opisanieSmoll = if (t3 != -1 && t4 != -1) opisanieNew.substring(t3 + 2, t4) + " ..."
+                    else if (t3 != -1) opisanieNew.substring(0, t3) + " ..."
+                    else ""
+                    if (opisanieSmoll != "") viewHolder.opisanie.visibility = View.VISIBLE
+                    else viewHolder.opisanie.visibility = View.GONE
                     viewHolder.opisanie.text = opisanieSmoll
                     viewHolder.opisanie.setOnClickListener {
                         val list = ArrayList<String>()

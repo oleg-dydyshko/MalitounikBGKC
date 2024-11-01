@@ -11,7 +11,6 @@ import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.util.TypedValue
 import android.view.Menu
@@ -45,7 +44,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener {
+class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener {
 
     private lateinit var binding: AdminBibliatekaListBinding
     private var sqlJob: Job? = null
@@ -359,9 +358,12 @@ class BibliatekaList : BaseActivity(), DialogPiarlinyContextMenu.DialogPiarlinyC
         binding = AdminBibliatekaListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.listView.setOnItemLongClickListener { _, _, position, _ ->
-            val dialog = DialogPiarlinyContextMenu.getInstance(position, arrayList[position][0])
+            val dialog = DialogBiblijatekaContextMenu.getInstance(position, arrayList[position][0])
             dialog.show(supportFragmentManager, "DialogPiarlinyContextMenu")
             return@setOnItemLongClickListener true
+        }
+        binding.listView.setOnItemClickListener { _, _, position, _ ->
+            onDialogEditClick(position)
         }
         val array = arrayOf(getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy), getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki), getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki), getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura), getString(by.carkva_gazeta.malitounik.R.string.arx_num_gaz))
         rubrikaAdapter = RubrikaAdapter(this, array)

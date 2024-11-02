@@ -354,7 +354,7 @@ class MenuBiblijateka : BaseFragment() {
                         filePath = file.absolutePath
                         fileName = file.name
                         fileTitle = arrayList[position][0]
-                        loadComplete(false, isPrint = false, position = position)
+                        loadComplete(false, isPrint = false)
                     } else {
                         arrayList.removeAt(position)
                         naidaunia.clear()

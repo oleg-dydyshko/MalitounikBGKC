@@ -512,7 +512,7 @@ class MenuBiblijateka : BaseFragment() {
             tempList.addAll(gson.fromJson(jsonB, type))
             for (i in 0 until tempList.size) {
                 val rtemp2 = tempList[i][4].toInt()
-                if (rtemp2 != rubryka) arrayList.add(tempList[i])
+                if (rtemp2 == rubryka) arrayList.add(tempList[i])
             }
             if (rubryka != MainActivity.NIADAUNIA) {
                 adapter.notifyDataSetChanged()

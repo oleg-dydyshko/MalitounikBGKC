@@ -76,6 +76,7 @@ class MenuPesnyData {
         pesnyKal.add(Data("piesni_kalady_najpiersz_pra_rastvo_first_noel", "Найперш пра Раство"))
         pesnyKal.add(Data("piesni_kalady_maryja_ci_ty_viedala", "Марыя, ці Ты ведала?"))
         pesnyKal.add(Data("piesni_kalady_pryjdzicie_paklanicca_adeste_fideles", "Прыйдзіце пакланіцца"))
+        pesnyKal.add(Data("piesni_kalady_piesni_kalady_nam_isus_naradziusia", "Нам Ісус нарадзіўся"))
 
         pesnyPrasl.add(Data("pesny_prasl_0", "Ён паўсюль"))
         pesnyPrasl.add(Data("pesny_prasl_1", "Ісус вызваліў мяне"))

@@ -129,8 +129,8 @@ class MenuBiblijateka : BaseFragment() {
         fun menuMainloadNiadaunia()
     }
 
-    fun deliteNiadaunia(position: Int, file: String) {
-        deliteCashe(position, file)
+    fun deliteNiadaunia(position: Int) {
+        deliteCashe(position)
     }
 
     fun fileDelite(position: Int, file: String) {
@@ -139,7 +139,7 @@ class MenuBiblijateka : BaseFragment() {
             if (file1.exists()) {
                 file1.delete()
             }
-            deliteCashe(position, file)
+            deliteCashe(position)
         }
     }
 
@@ -153,40 +153,10 @@ class MenuBiblijateka : BaseFragment() {
         prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
         prefEditor.apply()
         munuBiblijatekaListener?.munuBiblijatekaUpdate(false)
-        binding.progressBar2.visibility = View.VISIBLE
-        activity?.let {
-            CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    val dir = File("${it.filesDir}/Book")
-                    if (dir.exists()) {
-                        dir.deleteRecursively()
-                    }
-                    val dir2 = File("${it.filesDir}/BookCache")
-                    if (dir2.exists()) {
-                        dir2.deleteRecursively()
-                    }
-                }
-                binding.progressBar2.visibility = View.GONE
-            }
-        }
     }
 
-    private fun deliteCashe(position: Int, file: String) {
+    private fun deliteCashe(position: Int) {
         activity?.let {
-            val t1 = file.lastIndexOf(".")
-            val dirName = if (t1 == -1) file
-            else file.substring(0, t1)
-            var t2 = dirName.lastIndexOf("/")
-            var patch = "${it.filesDir}/Book/" + dirName.substring(t2 + 1)
-            var file1 = File(patch)
-            if (file1.exists() && file1.isDirectory) {
-                file1.deleteRecursively()
-            } else {
-                t2 = file.lastIndexOf("/")
-                patch = "${it.filesDir}/Book/" + file.substring(t2 + 1)
-                file1 = File(patch)
-                if (file1.exists()) file1.delete()
-            }
             var position1 = -1
             naidaunia.forEachIndexed { index, arrayList1 ->
                 if (arrayList1[1] == arrayList[position][1]) {
@@ -331,7 +301,7 @@ class MenuBiblijateka : BaseFragment() {
             }
             binding.listView.setOnItemLongClickListener { _, _, position, _ ->
                 if (arrayList[position].size == 3) {
-                    val dd = DialogDeliteNiadaunia.getInstance(position, arrayList[position][1], arrayList[position][0])
+                    val dd = DialogDeliteNiadaunia.getInstance(position, arrayList[position][0])
                     dd.show(childFragmentManager, "dialog_delite_niadaunia")
                 } else {
                     val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
@@ -415,10 +385,9 @@ class MenuBiblijateka : BaseFragment() {
                     MainActivity.SETFILE -> setRubrika(MainActivity.SETFILE)
                 }
             }
-            if (fileName != "" && filePath != "") {
-                loadComplete(false, isPrint = false)
+            if ((fileName != "" && filePath != "") || it.intent.data != null) {
+                loadComplete(false, isPrint = false, uri = it.intent.data)
             }
-            setTitleBibliateka(idSelect)
         }
     }
 
@@ -426,22 +395,21 @@ class MenuBiblijateka : BaseFragment() {
         activity?.let {
             val gson = Gson()
             val json = k.getString("bibliateka_naidaunia", "")
-            if (json == "") {
-                CoroutineScope(Dispatchers.Main).launch {
-                    withContext(Dispatchers.IO) {
-                        val dir = File("${it.filesDir}/Book")
-                        if (dir.exists()) dir.deleteRecursively()
-                    }
-                }
-            }
-            naidaunia.clear()
             if (!json.equals("")) {
+                naidaunia.clear()
                 val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                 naidaunia.addAll(gson.fromJson(json, type))
             }
             if (isUpdate) {
+                val temp = ArrayList<ArrayList<String>>()
+                for (i in 0 until naidaunia.size) {
+                    val rtemp2 = File(naidaunia[i][1]).name
+                    for (e in 0 until arrayList.size) {
+                        if (rtemp2 == arrayList[e][2]) temp.add(arrayList[e])
+                    }
+                }
                 arrayList.clear()
-                arrayList.addAll(naidaunia)
+                arrayList.addAll(temp)
                 arrayList.reverse()
                 munuBiblijatekaListener?.menuMainloadNiadaunia()
                 adapter.notifyDataSetChanged()
@@ -540,17 +508,18 @@ class MenuBiblijateka : BaseFragment() {
         val jsonB = k.getString("Biblioteka", "") ?: ""
         if (jsonB.isNotEmpty()) {
             arrayList.clear()
-            arrayList.addAll(gson.fromJson(jsonB, type))
-            val temp = ArrayList<ArrayList<String>>()
-            for (i in 0 until arrayList.size) {
-                val rtemp2 = arrayList[i][4].toInt()
-                if (rtemp2 != rubryka) temp.add(arrayList[i])
+            val tempList = ArrayList<ArrayList<String>>()
+            tempList.addAll(gson.fromJson(jsonB, type))
+            for (i in 0 until tempList.size) {
+                val rtemp2 = tempList[i][4].toInt()
+                if (rtemp2 != rubryka) arrayList.add(tempList[i])
             }
-            arrayList.removeAll(temp.toSet())
-            adapter.notifyDataSetChanged()
+            if (rubryka != MainActivity.NIADAUNIA) {
+                adapter.notifyDataSetChanged()
+            }
             binding.progressBar2.visibility = View.GONE
         }
-        if (!k.getBoolean("BibliotekaUpdate", false) && rubryka != MainActivity.NIADAUNIA) {
+        if (!k.getBoolean("BibliotekaUpdate", false)) {
             var sb = ""
             if (MainActivity.isNetworkAvailable()) {
                 for (i in 0..2) {
@@ -586,7 +555,7 @@ class MenuBiblijateka : BaseFragment() {
                 }
                 isUbdate = if (arrayList.size == 0) ERROR
                 else UPDATE
-            } else {
+            } else if (rubryka != MainActivity.NIADAUNIA) {
                 val temp = ArrayList<ArrayList<String>>()
                 for (i in 0 until arrayList.size) {
                     val rtemp2 = arrayList[i][4].toInt()
@@ -719,7 +688,8 @@ class MenuBiblijateka : BaseFragment() {
         outState.putInt("idSelect", idSelect)
     }
 
-    private inner class BibliotekaAdapter(context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
+    private inner class BibliotekaAdapter(context: Activity) :
+        ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder

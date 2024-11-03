@@ -325,9 +325,9 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         fragment?.delAllNiadaunia()
     }
 
-    override fun deliteNiadaunia(position: Int, file: String) {
+    override fun deliteNiadaunia(position: Int) {
         val fragment = findMenuBiblijateka()
-        fragment?.deliteNiadaunia(position, file)
+        fragment?.deliteNiadaunia(position)
     }
 
     private fun findMenuBiblijateka(): MenuBiblijateka? {

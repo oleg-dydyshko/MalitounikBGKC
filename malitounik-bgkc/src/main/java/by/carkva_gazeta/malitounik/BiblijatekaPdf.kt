@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -170,6 +171,11 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     }
 
     override fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) {
+    }
+
+    override fun onBack() {
+        setResult(Activity.RESULT_OK)
+        super.onBack()
     }
 
     override fun onPrepareMenu(menu: Menu) {

@@ -2029,7 +2029,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                         printManager.print(file.name, printAdapter, printAttributes)
                     } else {
                         if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
-                            val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(printFile, false, isPrint = true)
+                            val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(printFile)
                             bibliotekaWiFi.show(supportFragmentManager, "biblioteka_WI_FI")
                         } else {
                             writeFile(printFile)
@@ -2131,7 +2131,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         printManager.print(file.name, printAdapter, printAttributes)
     }
 
-    override fun onDialogPositiveClick(listPosition: String, isShare: Boolean, isPrint: Boolean) {
+    override fun onDialogPositiveClick(listPosition: String) {
         if (!MainActivity.isNetworkAvailable()) {
             printResours()
         } else {

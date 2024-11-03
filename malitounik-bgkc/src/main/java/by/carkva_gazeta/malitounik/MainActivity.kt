@@ -312,9 +312,9 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         fragment?.onDialogbibliatekaPositiveClick(listPosition, title)
     }
 
-    override fun onDialogPositiveClick(listPosition: String, isShare: Boolean, isPrint: Boolean) {
+    override fun onDialogPositiveClick(listPosition: String) {
         val fragment = findMenuBiblijateka()
-        fragment?.onDialogPositiveClick(listPosition, isShare, isPrint)
+        fragment?.onDialogPositiveClick(listPosition)
     }
 
     override fun onDialogNegativeClick() {

@@ -1,0 +1,50 @@
+[versions]
+appcompat = "1.7.0"
+commonsText = "1.12.0"
+constraintlayout = "2.2.0"
+draglistview = "1.7.3"
+featureDelivery = "2.1.0"
+firebaseBom = "33.5.1"
+gridlayout = "1.0.0"
+gson = "2.11.0"
+jsoup = "1.18.1"
+coreKtx = "1.15.0"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+material = "1.12.0"
+media = "1.7.0"
+media3Exoplayer = "1.4.1"
+pdfViewerVersion = "2.1.1"
+picasso = "2.71828"
+playServicesInstantapps = "18.1.0"
+reviewKtx = "2.0.2"
+swiperefreshlayout = "1.1.0"
+
+[libraries]
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-gridlayout = { module = "androidx.gridlayout:gridlayout", version.ref = "gridlayout" }
+androidx-media = { module = "androidx.media:media", version.ref = "media" }
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3Exoplayer" }
+androidx-media3-exoplayer-smoothstreaming = { module = "androidx.media3:media3-exoplayer-smoothstreaming", version.ref = "media3Exoplayer" }
+androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
+app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "featureDelivery" }
+commons-text = { module = "org.apache.commons:commons-text", version.ref = "commonsText" }
+draglistview = { module = "com.github.woxthebox:draglistview", version.ref = "draglistview" }
+feature-delivery = { module = "com.google.android.play:feature-delivery", version.ref = "featureDelivery" }
+firebase-appcheck-playintegrity = { module = "com.google.firebase:firebase-appcheck-playintegrity" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+pdf-viewer = { module = "io.github.afreakyelf:Pdf-Viewer", version.ref = "pdfViewerVersion" }
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
+play-services-instantapps = { module = "com.google.android.gms:play-services-instantapps", version.ref = "playServicesInstantapps" }
+review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "reviewKtx" }
+

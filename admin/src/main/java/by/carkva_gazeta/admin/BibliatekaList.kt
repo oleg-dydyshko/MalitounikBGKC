@@ -11,6 +11,7 @@ import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.TypedValue
 import android.view.Menu
@@ -44,7 +45,9 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener {
+class BibliatekaList : BaseActivity(),
+    DialogBiblijatekaContextMenu.DialogPiarlinyContextMenuListener,
+    DialogDelite.DialogDeliteListener {
 
     private lateinit var binding: AdminBibliatekaListBinding
     private var sqlJob: Job? = null
@@ -76,7 +79,7 @@ class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarli
             }
         }
     }
-    
+
     override fun attachBaseContext(context: Context) {
         super.attachBaseContext(context)
         SplitCompat.installActivity(context)
@@ -109,6 +112,9 @@ class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarli
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
             invalidateOptionsMenu()
         } else {
+            val intent = Intent()
+            intent.putExtra("rubrika", intent.extras?.getInt("rubrika", MainActivity.MALITOUNIKI) ?: MainActivity.MALITOUNIKI)
+            setResult(Activity.RESULT_OK, intent)
             super.onBack()
         }
     }
@@ -153,8 +159,19 @@ class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarli
                     }
                 }
             }
-            binding.pdfTextView.text = arrayList[position][2]
-            binding.opisanie.setText(arrayList[position][1])
+            val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
+            if (file.exists()) {
+                binding.pdfTextView.text = arrayList[position][2]
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    downloadPdfFile(arrayList[position][2])
+                    binding.pdfTextView.text = arrayList[position][2]
+                }
+            }
+            var edit = arrayList[position][1]
+            edit = edit.replace("<div style=\"font-family: Arial,sans-serif; font-size: 15px; text-align: justify;\">", "")
+            edit = edit.replace("</div>", "")
+            binding.opisanie.setText(edit)
         } else {
             binding.imagePdf.setImageDrawable(null)
             binding.textViewTitle.text?.clear()
@@ -176,6 +193,18 @@ class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarli
             intent.action = Intent.ACTION_GET_CONTENT
             intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf"))
             mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
+        }
+    }
+
+    private suspend fun downloadPdfFile(url: String, count: Int = 0) {
+        var error = false
+        val pathReference = Malitounik.referens.child("/data/bibliateka/$url")
+        val localFile = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
+        pathReference.getFile(localFile).addOnFailureListener {
+            error = true
+        }.await()
+        if (error && count < 3) {
+            downloadPdfFile(url, count + 1)
         }
     }
 
@@ -202,7 +231,7 @@ class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarli
                         mySqlList.add(link)
                         mySqlList.add(str)
                         mySqlList.add(pdf)
-                        mySqlList.add(File(binding.pdfTextView.text.toString()).length().toString())
+                        mySqlList.add(File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), binding.pdfTextView.text.toString()).length().toString())
                         mySqlList.add(rubrika)
                         mySqlList.add(imageLocal)
                         arrayList.add(0, mySqlList)
@@ -210,7 +239,7 @@ class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarli
                         arrayList[position][0] = link
                         arrayList[position][1] = str
                         arrayList[position][2] = pdf
-                        if (binding.pdfTextView.text.toString() != "") arrayList[position][3] = File(binding.pdfTextView.text.toString()).length().toString()
+                        if (binding.pdfTextView.text.toString() != "") arrayList[position][3] = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), binding.pdfTextView.text.toString()).length().toString()
                         arrayList[position][4] = rubrika
                         arrayList[position][5] = imageLocal
                     }
@@ -449,7 +478,8 @@ class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarli
         super.onCreateMenu(menu, menuInflater)
     }
 
-    internal inner class BibliotekaAdapter(context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.admin_simple_list_item_biblioteka, arrayList) {
+    internal inner class BibliotekaAdapter(context: Activity) :
+        ArrayAdapter<ArrayList<String>>(context, R.layout.admin_simple_list_item_biblioteka, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -508,7 +538,8 @@ class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarli
 
     private class ViewHolder(var text: TextView, var imageView: ImageView, var rubrika: TextView)
 
-    private class RubrikaAdapter(private val activity: Activity, private val dataRubrika: Array<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, dataRubrika) {
+    private class RubrikaAdapter(private val activity: Activity, private val dataRubrika: Array<String>) :
+        ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, dataRubrika) {
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)

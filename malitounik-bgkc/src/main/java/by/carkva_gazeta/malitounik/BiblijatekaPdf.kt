@@ -13,7 +13,9 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.BiblijatekaPdfBinding
 import com.google.gson.Gson
@@ -23,11 +25,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
 import java.io.File
+import java.io.FileInputStream
 import java.util.Calendar
 
 
-class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogBibliateka.DialogBibliatekaListener {
+class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener,
+    DialogBibliateka.DialogBibliatekaListener {
 
     private lateinit var binding: BiblijatekaPdfBinding
     private var filePath = ""
@@ -36,6 +42,40 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     private val dzenNoch get() = getBaseDzenNoch()
     private var resetTollbarJob: Job? = null
     private lateinit var arrayList: ArrayList<String>
+    private val mSavePdfFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            it.data?.data?.let { data ->
+                var bis: BufferedInputStream? = null
+                var bos: BufferedOutputStream? = null
+                try {
+                    val input = FileInputStream(File(filePath))
+                    val originalSize = input.available()
+                    bis = BufferedInputStream(input)
+                    bos = BufferedOutputStream(contentResolver.openOutputStream(data))
+                    val buf = ByteArray(originalSize)
+                    bis.read(buf)
+                    do {
+                        bos.write(buf)
+                    } while (bis.read(buf) != -1)
+                } catch (_: Throwable) {
+                } finally {
+                    bis?.close()
+                    bos?.flush()
+                    bos?.close()
+                }
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val layoutManager = binding.pdfView.recyclerView.layoutManager as? LinearLayoutManager
+        val page = layoutManager?.findFirstVisibleItemPosition() ?: 0
+        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        val edit = k.edit()
+        edit.putInt("Bibliateka_" + File(filePath).name, page)
+        edit.apply()
+    }
 
     private fun getFileName(uri: Uri): String {
         var result: String? = null
@@ -90,6 +130,11 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
             }
         }
         setTollbarTheme()
+        binding.pdfView.post {
+            val page = k.getInt("Bibliateka_" + File(filePath).name, 0)
+            binding.pdfView.recyclerView.layoutManager = LinearLayoutManager(this)
+            binding.pdfView.recyclerView.scrollToPosition(page)
+        }
     }
 
     private fun saveNiadaunia() {
@@ -188,6 +233,13 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         if (id == android.R.id.home) {
             onBack()
             return true
+        }
+        if (id == R.id.action_save_as) {
+            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = "application/pdf"
+            intent.putExtra(Intent.EXTRA_TITLE, File(filePath).name)
+            mSavePdfFile.launch(intent)
         }
         if (id == R.id.action_apisane) {
             val dialogBibliateka = DialogBibliateka.getInstance(arrayList)

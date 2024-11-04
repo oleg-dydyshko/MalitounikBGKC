@@ -8,24 +8,29 @@
         android:title="@string/share"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_open"
-        android:orderInCategory="100"
-        android:title="@string/open_in"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_apisane"
         android:orderInCategory="100"
         android:title="@string/opisanie"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_bright"
-        android:orderInCategory="100"
-        android:title="@string/Bright"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_set_page"
         android:orderInCategory="100"
         android:title="@string/set_page_bibliateka"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_save_as"
+        android:orderInCategory="100"
+        android:title="@string/save_as"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_open"
+        android:orderInCategory="100"
+        android:title="@string/open_in"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_bright"
+        android:orderInCategory="100"
+        android:title="@string/Bright"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_print"

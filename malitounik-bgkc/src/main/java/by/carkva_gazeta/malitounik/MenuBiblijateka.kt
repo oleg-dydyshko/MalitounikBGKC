@@ -50,7 +50,6 @@ class MenuBiblijateka : BaseFragment() {
     private var idSelect = MainActivity.MALITOUNIKI
     private val naidaunia = ArrayList<ArrayList<String>>()
     private var saveindep = true
-    private var sqlJob: Job? = null
     private var setRubrikaJob: Job? = null
     private var bitmapJob: Job? = null
     private lateinit var binding: BiblijatekaBinding
@@ -58,6 +57,29 @@ class MenuBiblijateka : BaseFragment() {
     private val mBiblijatekaPdfResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             loadNiadaunia()
+        }
+    }
+    private val mBiblijatekaUpdateList = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            if (MainActivity.isNetworkAvailable()) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    getSql()
+                    val arrayTemp = getListBiliateka()
+                    val jsonC = k.getString("Biblioteka", "") ?: ""
+                    if (jsonC.isNotEmpty()) {
+                        val temp = ArrayList<ArrayList<String>>()
+                        val rubryka = it.data?.extras?.getInt("rubrika") ?: MainActivity.MALITOUNIKI
+                        for (i in 0 until arrayTemp.size) {
+                            val rtemp2 = arrayTemp[i][4].toInt()
+                            if (rtemp2 != rubryka) temp.add(arrayTemp[i])
+                        }
+                        arrayTemp.removeAll(temp.toSet())
+                        arrayList.clear()
+                        arrayList.addAll(arrayTemp)
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+            }
         }
     }
 
@@ -156,7 +178,7 @@ class MenuBiblijateka : BaseFragment() {
         activity?.let {
             var position1 = -1
             naidaunia.forEachIndexed { index, arrayList1 ->
-                if (arrayList1[1] == arrayList[position][1]) {
+                if (File(arrayList1[1]).name == arrayList[position][2]) {
                     position1 = index
                 }
             }
@@ -183,9 +205,7 @@ class MenuBiblijateka : BaseFragment() {
             val dialogNoInternet = DialogNoInternet()
             dialogNoInternet.show(childFragmentManager, "no_internet")
         } else {
-            activity?.let {
-                writeFile(listPosition)
-            }
+            writeFile(listPosition)
         }
     }
 
@@ -299,7 +319,7 @@ class MenuBiblijateka : BaseFragment() {
                 } else {
                     val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
                     if (file.exists()) {
-                        val dd = DialogDelite.getInstance(0, arrayList[position][2], "з бібліятэкі", arrayList[position][0])
+                        val dd = DialogDelite.getInstance(position, arrayList[position][2], "з бібліятэкі", arrayList[position][0])
                         dd.show(childFragmentManager, "dialog_delite")
                     }
                 }
@@ -490,7 +510,7 @@ class MenuBiblijateka : BaseFragment() {
             }
         }
         saveindep = true
-        if (sqlJob?.isActive != true) binding.progressBar2.visibility = View.GONE
+        if (setRubrikaJob?.isActive != true) binding.progressBar2.visibility = View.GONE
         if (isUbdate != ERROR) {
             val prefEditors = k.edit()
             prefEditors.putBoolean("BibliotekaUpdate", true)
@@ -520,7 +540,8 @@ class MenuBiblijateka : BaseFragment() {
             activity?.let {
                 val intent = Intent()
                 intent.setClassName(it, MainActivity.BIBLIATEKALIST)
-                startActivity(intent)
+                intent.putExtra("rubrika", idSelect)
+                mBiblijatekaUpdateList.launch(intent)
             }
         }
         return false
@@ -533,50 +554,48 @@ class MenuBiblijateka : BaseFragment() {
                     binding.progressBar2.visibility = View.VISIBLE
                 }
                 try {
-                    sqlJob = CoroutineScope(Dispatchers.Main).launch {
-                        val temp = ArrayList<ArrayList<String>>()
-                        var sb = ""
-                        for (i in 0..2) {
-                            sb = getBibliatekaJson()
-                            if (sb != "") break
+                    val temp = ArrayList<ArrayList<String>>()
+                    var sb = ""
+                    for (i in 0..2) {
+                        sb = getBibliatekaJson()
+                        if (sb != "") break
+                    }
+                    if (sb == "") {
+                        sb = k.getString("Biblioteka", "") ?: ""
+                    }
+                    if (sb != "") {
+                        val gson = Gson()
+                        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                        val biblioteka: ArrayList<ArrayList<String>> = gson.fromJson(sb, type)
+                        for (i in 0 until biblioteka.size) {
+                            val mySqlList = ArrayList<String>()
+                            val kniga = biblioteka[i]
+                            val rubrika = kniga[4]
+                            val link = kniga[0]
+                            val str = kniga[1]
+                            val pdf = kniga[2]
+                            val pdfFileSize = kniga[3]
+                            mySqlList.add(link)
+                            mySqlList.add(str)
+                            mySqlList.add(pdf)
+                            mySqlList.add(pdfFileSize)
+                            mySqlList.add(rubrika)
+                            val t1 = pdf.lastIndexOf(".")
+                            val imageName = pdf.substring(0, t1) + ".png"
+                            mySqlList.add(imageName)
+                            temp.add(mySqlList)
                         }
-                        if (sb == "") {
-                            sb = k.getString("Biblioteka", "") ?: ""
-                        }
-                        if (sb != "") {
-                            val gson = Gson()
-                            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-                            val biblioteka: ArrayList<ArrayList<String>> = gson.fromJson(sb, type)
-                            for (i in 0 until biblioteka.size) {
-                                val mySqlList = ArrayList<String>()
-                                val kniga = biblioteka[i]
-                                val rubrika = kniga[4]
-                                val link = kniga[0]
-                                val str = kniga[1]
-                                val pdf = kniga[2]
-                                val pdfFileSize = kniga[3]
-                                mySqlList.add(link)
-                                mySqlList.add(str)
-                                mySqlList.add(pdf)
-                                mySqlList.add(pdfFileSize)
-                                mySqlList.add(rubrika)
-                                val t1 = pdf.lastIndexOf(".")
-                                val imageName = pdf.substring(0, t1) + ".png"
-                                mySqlList.add(imageName)
-                                temp.add(mySqlList)
-                            }
-                            val json = gson.toJson(temp, type)
-                            val prefEditors = k.edit()
-                            prefEditors.putString("Biblioteka", json)
-                            prefEditors.apply()
-                        } else {
-                            withContext(Dispatchers.Main) {
-                                MainActivity.toastView(activity, activity.getString(R.string.error))
-                            }
-                        }
+                        val json = gson.toJson(temp, type)
+                        val prefEditors = k.edit()
+                        prefEditors.putString("Biblioteka", json)
+                        prefEditors.apply()
+                    } else {
                         withContext(Dispatchers.Main) {
-                            binding.progressBar2.visibility = View.GONE
+                            MainActivity.toastView(activity, activity.getString(R.string.error))
                         }
+                    }
+                    withContext(Dispatchers.Main) {
+                        binding.progressBar2.visibility = View.GONE
                     }
                 } catch (_: Throwable) {
                 }

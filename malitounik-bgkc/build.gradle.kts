@@ -12,7 +12,7 @@ android {
         minSdk = 21
         targetSdk = 35
         versionCode = 442369
-        versionName = "5.0.3.18"
+        versionName = "5.1.0"
 
         //multiDexEnabled = true
 

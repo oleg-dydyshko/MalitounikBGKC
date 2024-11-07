@@ -43,6 +43,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.text.toSpannable
 import androidx.core.view.GravityCompat
+import androidx.documentfile.provider.DocumentFile
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.ActivityMainBinding
 import by.carkva_gazeta.malitounik.databinding.AppBarMainBinding
@@ -1902,11 +1903,19 @@ class MainActivity : BaseActivity(), View.OnClickListener,
     private fun startBiblioteka(rub: Int, start: Boolean, id: Int, uri: Uri? = null) {
         if (uri != null) {
             val intent = Intent(this, BiblijatekaPdf::class.java)
-            intent.data = uri
             val fileName = getFileName(uri)
-            intent.putExtra("fileTitle", getTitle(fileName))
+            val title = getTitle(fileName)
+            if (title != fileName) {
+                val list = contentResolver.persistedUriPermissions
+                val documentsTree = DocumentFile.fromTreeUri(this, list[list.size - 1].uri)
+                intent.data = documentsTree?.findFile(fileName)?.uri
+                intent.putExtra("isPrint", true)
+            } else {
+                intent.data = uri
+                intent.putExtra("isPrint", false)
+            }
+            intent.putExtra("fileTitle", title)
             intent.putExtra("fileName", fileName)
-            intent.putExtra("isPrint", false)
             saveNaidauniaBiblijateka(fileName)
             setFileBiblijatekaLauncher.launch(intent)
         }

@@ -2142,7 +2142,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     override fun onDialogNegativeClick() {
         printResours()
-        R.raw.sluzba_muczaniku_sviataru_i_manachu
     }
 
     private fun printResours() {

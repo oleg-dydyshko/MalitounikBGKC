@@ -38,9 +38,9 @@ import androidx.core.graphics.drawable.DrawableCompat
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.DialogClearHishory
-import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.HistoryAdapter
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
 import com.google.gson.Gson
@@ -82,7 +82,6 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             VybranoeBibleList.PEREVODCARNIAUSKI -> super<BibliaPerakvadCarniauski>.addZakladka(color, knigaBible, bible)
             VybranoeBibleList.PEREVODSINOIDAL -> super<BibliaPerakvadSinaidal>.addZakladka(color, knigaBible, bible)
         }
-        R.raw.mm_30_08_pasviaccie_adsiaczennia_bisk_alaksandra_jana_paula_novaha_viaczernia
     }
 
     override fun getFileZavet(novyZapaviet: Boolean, kniga: Int): File {

@@ -62,7 +62,6 @@ class MenuPesny : BaseFragment(), AdapterView.OnItemClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        R.raw.piesni_bahar_lubic_maryja_mianie
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

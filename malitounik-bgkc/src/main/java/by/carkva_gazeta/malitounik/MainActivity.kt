@@ -17,6 +17,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.os.SystemClock
+import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
@@ -134,8 +135,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
     private val setFileBiblijatekaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val title = result.data?.extras?.getString("title", "") ?: ""
-            val fragment = findMenuBiblijateka()
-            fragment?.saveNaidauniaBiblijateka(title)
+            saveNaidauniaBiblijateka(title)
             selectFragment(binding.label140, true)
         }
     }
@@ -289,7 +289,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         val menuCaliandar = supportFragmentManager.findFragmentByTag("menuCaliandar") as? MenuCaliandar
         menuCaliandar?.delitePadzeia(position)
         val menuBiblijateka = findMenuBiblijateka()
-        menuBiblijateka?.fileDelite(position, file)
+        menuBiblijateka?.fileDelite(file)
     }
 
     override fun deliteAllVybranoe() {
@@ -307,9 +307,9 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         menuNatatki?.onDialogDeliteClick(position, name)
     }
 
-    override fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) {
+    override fun onDialogbibliatekaPositiveClick(listPosition: String) {
         val fragment = findMenuBiblijateka()
-        fragment?.onDialogbibliatekaPositiveClick(listPosition, title)
+        fragment?.onDialogbibliatekaPositiveClick(listPosition)
     }
 
     override fun onDialogPositiveClick(listPosition: String) {
@@ -325,9 +325,9 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         fragment?.delAllNiadaunia()
     }
 
-    override fun deliteNiadaunia(position: Int) {
+    override fun deliteNiadaunia(fileName: String) {
         val fragment = findMenuBiblijateka()
-        fragment?.deliteNiadaunia(position)
+        fragment?.deliteNiadaunia(fileName)
     }
 
     private fun findMenuBiblijateka(): MenuBiblijateka? {
@@ -1833,10 +1833,81 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         selectFragment(view)
     }
 
+    fun getListBiliateka(): ArrayList<ArrayList<String>> {
+        val gson = Gson()
+        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+        val jsonB = k.getString("Biblioteka", "") ?: ""
+        val tempList = ArrayList<ArrayList<String>>()
+        if (jsonB.isNotEmpty()) {
+            tempList.addAll(gson.fromJson(jsonB, type))
+        }
+        return tempList
+    }
+
+    fun getFileName(uri: Uri): String {
+        var result: String? = null
+            val cursor = contentResolver.query(uri, null, null, null, null)
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    if (index != -1) result = cursor.getString(index)
+                }
+            } catch (_: Throwable) {
+            } finally {
+                cursor?.close()
+            }
+            if (result == null) {
+                result = uri.path ?: ""
+                val cut = result.lastIndexOf('/')
+                if (cut != -1) {
+                    result = result.substring(cut + 1)
+                }
+            }
+        return result
+    }
+
+    fun getTitle(fileName: String): String {
+        val arrayList = getListBiliateka()
+        var result = fileName
+        for (i in 0 until arrayList.size) {
+            if (fileName == arrayList[i][2]) {
+                result = arrayList[i][0]
+                break
+            }
+        }
+        return result
+    }
+
+    fun saveNaidauniaBiblijateka(fileName: String) {
+        val naidaunia = ArrayList<String>()
+        val gson = Gson()
+        val json = k.getString("bibliateka_latest", "")
+        if (!json.equals("")) {
+            val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+            naidaunia.addAll(gson.fromJson(json, type))
+        }
+        for (i in 0 until naidaunia.size) {
+            if (fileName == naidaunia[i]) {
+                naidaunia.removeAt(i)
+                break
+            }
+        }
+        naidaunia.add(0, fileName)
+        val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+        val prefEditor = k.edit()
+        prefEditor.putString("bibliateka_latest", gson.toJson(naidaunia, type))
+        prefEditor.apply()
+    }
+
     private fun startBiblioteka(rub: Int, start: Boolean, id: Int, uri: Uri? = null) {
         if (uri != null) {
             val intent = Intent(this, BiblijatekaPdf::class.java)
             intent.data = uri
+            val fileName = getFileName(uri)
+            intent.putExtra("fileTitle", getTitle(fileName))
+            intent.putExtra("fileName", fileName)
+            intent.putExtra("isPrint", false)
+            saveNaidauniaBiblijateka(fileName)
             setFileBiblijatekaLauncher.launch(intent)
         }
         var rubNew = if (rub == SETFILE) {
@@ -1929,11 +2000,11 @@ class MainActivity : BaseActivity(), View.OnClickListener,
     }
 
     private fun isNiadaunia(): Boolean {
-        val naidaunia = ArrayList<ArrayList<String>>()
+        val naidaunia = ArrayList<String>()
         val gson = Gson()
-        val json = k.getString("bibliateka_naidaunia", "")
+        val json = k.getString("bibliateka_latest", "")
         if (json != "") {
-            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+            val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
             naidaunia.addAll(gson.fromJson(json, type))
         }
         return naidaunia.size > 0

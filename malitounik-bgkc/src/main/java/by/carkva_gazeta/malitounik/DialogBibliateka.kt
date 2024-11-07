@@ -34,7 +34,7 @@ class DialogBibliateka : DialogFragment() {
     }
 
     internal interface DialogBibliatekaListener {
-        fun onDialogbibliatekaPositiveClick(listPosition: String, title: String)
+        fun onDialogbibliatekaPositiveClick(listPosition: String)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,7 +97,7 @@ class DialogBibliateka : DialogFragment() {
             } else {
                 if (MainActivity.isNetworkAvailable()) {
                     builder.setPositiveButton(getString(R.string.download_bibliateka_file, izm)) { dialog: DialogInterface, _: Int ->
-                        mListener?.onDialogbibliatekaPositiveClick(list[2], list[0])
+                        mListener?.onDialogbibliatekaPositiveClick(list[2])
                         dialog.cancel()
                     }
                     builder.setNegativeButton(R.string.cansel) { dialog: DialogInterface, _: Int -> dialog.cancel() }

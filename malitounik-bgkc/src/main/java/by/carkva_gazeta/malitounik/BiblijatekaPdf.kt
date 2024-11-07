@@ -7,65 +7,33 @@ import android.net.Uri
 import android.os.Bundle
 import android.print.PrintAttributes
 import android.print.PrintManager
-import android.provider.OpenableColumns
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.BiblijatekaPdfBinding
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
-import java.io.File
-import java.io.FileInputStream
 import java.util.Calendar
 
 
-class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener,
-    DialogBibliateka.DialogBibliatekaListener {
+class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogBibliateka.DialogBibliatekaListener {
 
     private lateinit var binding: BiblijatekaPdfBinding
-    private var filePath = ""
+    private var fileName = ""
     private var fileTitle = ""
+    private var uri: Uri? = null
+    private var isPrint = false
     private var totalPage = 1
     private val dzenNoch get() = getBaseDzenNoch()
     private var resetTollbarJob: Job? = null
     private lateinit var arrayList: ArrayList<String>
-    private val mSavePdfFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == Activity.RESULT_OK) {
-            it.data?.data?.let { data ->
-                var bis: BufferedInputStream? = null
-                var bos: BufferedOutputStream? = null
-                try {
-                    val input = FileInputStream(File(filePath))
-                    val originalSize = input.available()
-                    bis = BufferedInputStream(input)
-                    bos = BufferedOutputStream(contentResolver.openOutputStream(data))
-                    val buf = ByteArray(originalSize)
-                    bis.read(buf)
-                    do {
-                        bos.write(buf)
-                    } while (bis.read(buf) != -1)
-                } catch (_: Throwable) {
-                } finally {
-                    bis?.close()
-                    bos?.flush()
-                    bos?.close()
-                }
-            }
-        }
-    }
 
     override fun onPause() {
         super.onPause()
@@ -73,30 +41,8 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         val page = layoutManager?.findFirstVisibleItemPosition() ?: 0
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val edit = k.edit()
-        edit.putInt("Bibliateka_" + File(filePath).name, page)
+        edit.putInt("Bibliateka_$fileName", page)
         edit.apply()
-    }
-
-    private fun getFileName(uri: Uri): String {
-        var result: String? = null
-        val cursor = contentResolver.query(uri, null, null, null, null)
-        try {
-            if (cursor != null && cursor.moveToFirst()) {
-                val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                if (index != -1) result = cursor.getString(index)
-            }
-        } catch (_: Throwable) {
-        } finally {
-            cursor?.close()
-        }
-        if (result == null) {
-            result = uri.path ?: ""
-            val cut = result.lastIndexOf('/')
-            if (cut != -1) {
-                result = result.substring(cut + 1)
-            }
-        }
-        return result
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,75 +50,29 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         binding = BiblijatekaPdfBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        filePath = intent.extras?.getString("filePath", "") ?: ""
+        uri = intent.data
         fileTitle = intent.extras?.getString("fileTitle", "") ?: ""
         arrayList = intent.extras?.getStringArrayList("list") ?: ArrayList()
+        fileName = intent.extras?.getString("fileName", "") ?: ""
+        isPrint = intent.extras?.getBoolean("isPrint", false) ?: false
         val c = Calendar.getInstance()
         val edit = k.edit()
         edit.putLong("BiblijatekaUseTime", c.timeInMillis)
         edit.apply()
-        val data = intent.data
-        val file = File(filePath)
-        when {
-            data != null -> {
-                binding.pdfView.initWithUri(data)
+        try {
+            if (uri != null) {
+                binding.pdfView.initWithUri(uri!!)
                 totalPage = binding.pdfView.totalPageCount
-                fileTitle = getFileName(data)
-            }
-
-            file.exists() -> {
-                binding.pdfView.initWithFile(file)
-                totalPage = binding.pdfView.totalPageCount
-                if (fileTitle == "") {
-                    fileTitle = file.name
+                binding.pdfView.post {
+                    val page = k.getInt("Bibliateka_$fileName", 0)
+                    binding.pdfView.recyclerView.layoutManager = LinearLayoutManager(this)
+                    binding.pdfView.recyclerView.scrollToPosition(page)
                 }
-                saveNiadaunia()
             }
+        } catch (_: Throwable) {
+            MainActivity.toastView(this, getString(R.string.error_ch))
         }
         setTollbarTheme()
-        binding.pdfView.post {
-            val page = k.getInt("Bibliateka_" + File(filePath).name, 0)
-            binding.pdfView.recyclerView.layoutManager = LinearLayoutManager(this)
-            binding.pdfView.recyclerView.scrollToPosition(page)
-        }
-    }
-
-    private fun saveNiadaunia() {
-        val naidaunia = ArrayList<ArrayList<String>>()
-        val gson = Gson()
-        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val json = k.getString("bibliateka_naidaunia", "")
-        if (json != "") {
-            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-            naidaunia.addAll(gson.fromJson(json, type))
-        }
-        if (filePath != "") {
-            for (i in 0 until naidaunia.size) {
-                if (naidaunia[i][1].contains(filePath)) {
-                    naidaunia.removeAt(i)
-                    break
-                }
-            }
-            val temp = ArrayList<String>()
-            temp.add(fileTitle)
-            temp.add(filePath)
-            val t2 = filePath.lastIndexOf("/")
-            val img = filePath.substring(t2 + 1)
-            val t1 = img.lastIndexOf(".")
-            if (t1 != -1) {
-                val image = img.substring(0, t1) + ".png"
-                val imageTemp = File("$filesDir/image_temp/$image")
-                if (imageTemp.exists()) temp.add("$filesDir/image_temp/$image")
-                else temp.add("")
-            } else {
-                temp.add("")
-            }
-            naidaunia.add(temp)
-            val type = TypeToken.getParameterized(java.util.ArrayList::class.java, TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type).type
-            val prefEditor = k.edit()
-            prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
-            prefEditor.apply()
-        }
     }
 
     private fun setTollbarTheme() {
@@ -215,7 +115,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         binding.pdfView.jumpToPage(page - 1)
     }
 
-    override fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) {
+    override fun onDialogbibliatekaPositiveClick(listPosition: String) {
     }
 
     override fun onBack() {
@@ -226,6 +126,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_share).isVisible = intent.data == null
         menu.findItem(R.id.action_apisane).isVisible = arrayList.size != 0
+        menu.findItem(R.id.action_print).isVisible = isPrint
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
@@ -234,13 +135,6 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
             onBack()
             return true
         }
-        if (id == R.id.action_save_as) {
-            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.type = "application/pdf"
-            intent.putExtra(Intent.EXTRA_TITLE, File(filePath).name)
-            mSavePdfFile.launch(intent)
-        }
         if (id == R.id.action_apisane) {
             val dialogBibliateka = DialogBibliateka.getInstance(arrayList)
             dialogBibliateka.show(supportFragmentManager, "dialog_bibliateka")
@@ -248,16 +142,15 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         }
         if (id == R.id.action_share) {
             val sendIntent = Intent(Intent.ACTION_SEND)
-            sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, "by.carkva_gazeta.malitounik.fileprovider", File(filePath)))
+            sendIntent.putExtra(Intent.EXTRA_STREAM, uri)
             sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
             sendIntent.type = "text/html"
             startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
             return true
         }
         if (id == R.id.action_open) {
-            val fileProvider = FileProvider.getUriForFile(this, "$packageName.fileprovider", File(filePath))
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.setDataAndType(fileProvider, "application/pdf")
+            intent.setDataAndType(uri, "application/pdf")
             startActivity(intent)
             return true
         }
@@ -271,11 +164,13 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
             dialogBrightness.show(supportFragmentManager, "brightness")
             return true
         }
-        if (id == R.id.menu_print) {
-            val printAdapter = PdfDocumentAdapter(filePath)
-            val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
-            val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
-            printManager.print(File(filePath).name, printAdapter, printAttributes)
+        if (id == R.id.action_print) {
+            if (uri != null) {
+                val printAdapter = PdfDocumentAdapter(this, fileName, uri!!)
+                val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+                val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+                printManager.print(fileName, printAdapter, printAttributes)
+            }
         }
         return false
     }

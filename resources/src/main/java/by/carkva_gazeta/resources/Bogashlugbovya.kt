@@ -45,6 +45,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.net.toUri
 import androidx.core.text.isDigitsOnly
 import androidx.core.text.toSpannable
 import androidx.core.view.WindowCompat
@@ -2023,7 +2024,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 if (printFile != "" && MainActivity.isNetworkAvailable()) {
                     val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), printFile)
                     if (file.exists()) {
-                        val printAdapter = PdfDocumentAdapter(file.absolutePath)
+                        val printAdapter = PdfDocumentAdapter(this@Bogashlugbovya, file.name, file.toUri())
                         val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
                         val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
                         printManager.print(file.name, printAdapter, printAttributes)
@@ -2125,7 +2126,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     private fun loadComplete(fileName: String) {
         val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
-        val printAdapter = PdfDocumentAdapter(file.absolutePath)
+        val printAdapter = PdfDocumentAdapter(this, file.name, file.toUri())
         val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
         val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
         printManager.print(file.name, printAdapter, printAttributes)

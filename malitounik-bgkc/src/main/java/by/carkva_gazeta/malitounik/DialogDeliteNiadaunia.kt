@@ -12,14 +12,14 @@ import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 
 class DialogDeliteNiadaunia : DialogFragment() {
     private var mListener: DialogDeliteNiadauniaListener? = null
-    private var position = 0
+    private var fileName = ""
     private var massege = ""
     private lateinit var alert: AlertDialog
     private var _binding: DialogTextviewDisplayBinding? = null
     private val binding get() = _binding!!
 
     interface DialogDeliteNiadauniaListener {
-        fun deliteNiadaunia(position: Int)
+        fun deliteNiadaunia(fileName: String)
     }
 
     override fun onDestroy() {
@@ -29,7 +29,7 @@ class DialogDeliteNiadaunia : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        position = arguments?.getInt("position") ?: 0
+        fileName = arguments?.getString("fileName") ?: ""
         massege = arguments?.getString("massege") ?: ""
     }
 
@@ -55,7 +55,7 @@ class DialogDeliteNiadaunia : DialogFragment() {
             binding.content.text = getString(R.string.delite_niadaunia, massege)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-            builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener?.deliteNiadaunia(position) }
+            builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener?.deliteNiadaunia(fileName) }
             builder.setNegativeButton(resources.getString(R.string.cansel)) { dialod: DialogInterface, _: Int -> dialod.cancel() }
             builder.setView(binding.root)
             alert = builder.create()
@@ -64,10 +64,10 @@ class DialogDeliteNiadaunia : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(position: Int, massege: String): DialogDeliteNiadaunia {
+        fun getInstance(fileName: String, massege: String): DialogDeliteNiadaunia {
             val dialogDeliteNiadaunia = DialogDeliteNiadaunia()
             val bundle = Bundle()
-            bundle.putInt("position", position)
+            bundle.putString("fileName", fileName)
             bundle.putString("massege", massege)
             dialogDeliteNiadaunia.arguments = bundle
             return dialogDeliteNiadaunia

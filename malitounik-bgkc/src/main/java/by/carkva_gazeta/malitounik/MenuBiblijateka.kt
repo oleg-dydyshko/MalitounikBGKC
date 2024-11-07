@@ -23,6 +23,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.documentfile.provider.DocumentFile
 import by.carkva_gazeta.malitounik.databinding.BiblijatekaBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibliotekaBinding
 import com.google.gson.Gson
@@ -33,7 +34,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
 import java.io.File
+import java.io.FileInputStream
 
 
 class MenuBiblijateka : BaseFragment() {
@@ -41,19 +45,17 @@ class MenuBiblijateka : BaseFragment() {
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
     private val dzenNoch get() = (activity as BaseActivity).getBaseDzenNoch()
-    private var filePath = ""
-    private var fileName = ""
-    private var fileTitle = ""
     private val arrayList = ArrayList<ArrayList<String>>()
     private var width = 0
     private lateinit var adapter: BibliotekaAdapter
     private var idSelect = MainActivity.MALITOUNIKI
-    private val naidaunia = ArrayList<ArrayList<String>>()
+    private val naidaunia = ArrayList<String>()
     private var saveindep = true
     private var setRubrikaJob: Job? = null
     private var bitmapJob: Job? = null
     private lateinit var binding: BiblijatekaBinding
     private var munuBiblijatekaListener: MunuBiblijatekaListener? = null
+    private var fileName = ""
     private val mBiblijatekaPdfResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             loadNiadaunia()
@@ -64,70 +66,35 @@ class MenuBiblijateka : BaseFragment() {
             if (MainActivity.isNetworkAvailable()) {
                 CoroutineScope(Dispatchers.Main).launch {
                     getSql()
-                    val arrayTemp = getListBiliateka()
-                    val jsonC = k.getString("Biblioteka", "") ?: ""
-                    if (jsonC.isNotEmpty()) {
-                        val temp = ArrayList<ArrayList<String>>()
-                        val rubryka = it.data?.extras?.getInt("rubrika") ?: MainActivity.MALITOUNIKI
-                        for (i in 0 until arrayTemp.size) {
-                            val rtemp2 = arrayTemp[i][4].toInt()
-                            if (rtemp2 != rubryka) temp.add(arrayTemp[i])
+                    (activity as? MainActivity)?.let { activity ->
+                        val arrayTemp = activity.getListBiliateka()
+                        val jsonC = k.getString("Biblioteka", "") ?: ""
+                        if (jsonC.isNotEmpty()) {
+                            val temp = ArrayList<ArrayList<String>>()
+                            val rubryka = it.data?.extras?.getInt("rubrika") ?: MainActivity.MALITOUNIKI
+                            for (i in 0 until arrayTemp.size) {
+                                val rtemp2 = arrayTemp[i][4].toInt()
+                                if (rtemp2 != rubryka) temp.add(arrayTemp[i])
+                            }
+                            arrayTemp.removeAll(temp.toSet())
+                            arrayList.clear()
+                            arrayList.addAll(arrayTemp)
+                            adapter.notifyDataSetChanged()
                         }
-                        arrayTemp.removeAll(temp.toSet())
-                        arrayList.clear()
-                        arrayList.addAll(arrayTemp)
-                        adapter.notifyDataSetChanged()
                     }
                 }
             }
         }
     }
-
-    fun saveNaidauniaBiblijateka(title: String) {
-        var titleNew = title
-        var position = -1
-        if (titleNew == "") {
-            arrayList.forEachIndexed { index, kniga ->
-                if (kniga[2] == fileName) {
-                    position = index
-                    titleNew = kniga[0]
-                    return@forEachIndexed
+    private val mTreeUserPdfDir = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            activity?.let { activity ->
+                it.data?.data?.let { data ->
+                    val contentResolver = activity.contentResolver
+                    val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    contentResolver.takePersistableUriPermission(data, takeFlags)
+                    writeFile(fileName)
                 }
-            }
-        }
-        if (titleNew == "" && filePath != "") {
-            val t1 = filePath.lastIndexOf("/")
-            titleNew = filePath.substring(t1 + 1)
-        }
-        if (filePath != "") {
-            activity?.let {
-                for (i in 0 until naidaunia.size) {
-                    if (naidaunia[i][1].contains(filePath)) {
-                        naidaunia.removeAt(i)
-                        break
-                    }
-                }
-                val gson = Gson()
-                val temp = ArrayList<String>()
-                temp.add(titleNew)
-                temp.add(filePath)
-                val image = if (position != -1) {
-                    File(arrayList[position][5]).name
-                } else {
-                    val t2 = filePath.lastIndexOf("/")
-                    val img = filePath.substring(t2 + 1)
-                    val t1 = img.lastIndexOf(".")
-                    img.substring(0, t1) + ".png"
-                }
-                val imageTemp = File("${it.filesDir}/image_temp/$image")
-                if (imageTemp.exists()) temp.add("${it.filesDir}/image_temp/$image")
-                else temp.add("")
-                naidaunia.add(temp)
-                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-                val prefEditor = k.edit()
-                prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
-                prefEditor.apply()
-                munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
             }
         }
     }
@@ -148,17 +115,15 @@ class MenuBiblijateka : BaseFragment() {
         fun menuMainloadNiadaunia()
     }
 
-    fun deliteNiadaunia(position: Int) {
-        deliteCashe(position)
+    fun deliteNiadaunia(fileName: String) {
+        deliteCashe(fileName)
     }
 
-    fun fileDelite(position: Int, file: String) {
+    fun fileDelite(file: String) {
         activity?.let {
-            val file1 = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), file)
-            if (file1.exists()) {
-                file1.delete()
-            }
-            deliteCashe(position)
+            val list = it.contentResolver.persistedUriPermissions
+            val documentsTree = DocumentFile.fromTreeUri(it, list[list.size - 1].uri)
+            if (documentsTree?.findFile(file)?.delete() == true) deliteCashe(file)
         }
     }
 
@@ -166,40 +131,29 @@ class MenuBiblijateka : BaseFragment() {
         naidaunia.clear()
         arrayList.clear()
         adapter.notifyDataSetChanged()
-        val gson = Gson()
         val prefEditor = k.edit()
-        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
+        prefEditor.remove("bibliateka_latest")
         prefEditor.apply()
         munuBiblijatekaListener?.munuBiblijatekaUpdate(false)
     }
 
-    private fun deliteCashe(position: Int) {
-        activity?.let {
-            var position1 = -1
-            naidaunia.forEachIndexed { index, arrayList1 ->
-                if (File(arrayList1[1]).name == arrayList[position][2]) {
-                    position1 = index
-                }
-            }
-            if (position1 != -1) {
-                if (idSelect == MainActivity.NIADAUNIA) {
-                    arrayList.removeAt(position)
-                    adapter.notifyDataSetChanged()
-                }
-                val fileChech = File(naidaunia[position1][1])
-                if (fileChech.exists() && !naidaunia[position1][1].contains("PiasochnicaBackCopy")) fileChech.delete()
-                naidaunia.removeAt(position1)
-                val gson = Gson()
-                val prefEditor = k.edit()
-                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-                prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia, type))
-                prefEditor.apply()
-                munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
+    private fun deliteCashe(fileName: String) {
+        for (i in 0 until naidaunia.size) {
+            if (fileName == naidaunia[i]) {
+                naidaunia.removeAt(i)
+                break
             }
         }
+        val gson = Gson()
+        val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+        val prefEditor = k.edit()
+        if (naidaunia.size == 0) prefEditor.remove("bibliateka_latest")
+        else prefEditor.putString("bibliateka_latest", gson.toJson(naidaunia, type))
+        prefEditor.apply()
+        munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
     }
 
+    //no wi-fi
     fun onDialogPositiveClick(listPosition: String) {
         if (!MainActivity.isNetworkAvailable()) {
             val dialogNoInternet = DialogNoInternet()
@@ -209,20 +163,23 @@ class MenuBiblijateka : BaseFragment() {
         }
     }
 
-    fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) {
+    //biblijteka
+    fun onDialogbibliatekaPositiveClick(listPosition: String) {
         (activity as? BaseActivity)?.let {
-            val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), listPosition)
-            if (file.exists()) {
-                filePath = file.path
-                fileName = title
-                loadComplete()
-            } else {
-                if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
-                    val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition)
-                    bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
-                } else {
-                    writeFile(listPosition)
+            val list = it.contentResolver.persistedUriPermissions
+            if (list.size > 0) {
+                if (!fileExists(listPosition)) {
+                    if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
+                        val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition)
+                        bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
+                    } else {
+                        writeFile(listPosition)
+                    }
                 }
+            } else {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                mTreeUserPdfDir.launch(intent)
+                fileName = listPosition
             }
         }
     }
@@ -232,22 +189,24 @@ class MenuBiblijateka : BaseFragment() {
         CoroutineScope(Dispatchers.Main).launch {
             var error = false
             try {
-                activity?.let {
-                    val dir = it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                    if (dir?.exists() != true) {
-                        dir?.mkdir()
-                    }
-                    for (i in 0..2) {
-                        error = downloadPdfFile(url)
-                        if (!error) break
-                    }
+                for (i in 0..2) {
+                    error = downloadPdfFile(url)
+                    if (!error) break
                 }
-            } catch (t: Throwable) {
+            } catch (_: Throwable) {
                 error = true
             }
             if (!error) {
-                adapter.notifyDataSetChanged()
-                loadComplete()
+                activity?.let {
+                    if (saveFile(url)) {
+                        val list = it.contentResolver.persistedUriPermissions
+                        val documentsTree = DocumentFile.fromTreeUri(it, list[list.size - 1].uri)
+                        val uriFile = documentsTree?.findFile(url)?.uri
+                        uriFile?.let { uri ->
+                            loadComplete(uri)
+                        }
+                    }
+                }
             } else {
                 DialogNoInternet().show(childFragmentManager, "no_internet")
             }
@@ -255,16 +214,77 @@ class MenuBiblijateka : BaseFragment() {
         }
     }
 
+    private fun fileExists(fileName: String): Boolean {
+        var exitsFile = false
+        activity?.let {
+            val list = it.contentResolver.persistedUriPermissions
+            if (list.size > 0) {
+                val documentsTree = DocumentFile.fromTreeUri(it, list[list.size - 1].uri)
+                val childDocuments = documentsTree?.listFiles()
+                childDocuments?.let { document ->
+                    for (i in document.indices) {
+                        if (document[i].name == fileName) {
+                            exitsFile = true
+                            break
+                        }
+                    }
+                }
+            }
+        }
+        return exitsFile
+    }
+
+    private fun saveFile(fileName: String): Boolean {
+        var result = true
+        activity?.let { activity ->
+            val list = activity.contentResolver.persistedUriPermissions
+            val documentsTree = DocumentFile.fromTreeUri(activity, list[list.size - 1].uri)
+            if (documentsTree?.exists() == true) {
+                val uri = documentsTree.createFile("application/pdf", fileName)?.uri
+                uri?.let {
+                    var bis: BufferedInputStream? = null
+                    var bos: BufferedOutputStream? = null
+                    try {
+                        val file = File("${activity.filesDir}/cache/$fileName")
+                        val input = FileInputStream(file)
+                        val originalSize = input.available()
+                        bis = BufferedInputStream(input)
+                        bos = BufferedOutputStream(activity.contentResolver.openOutputStream(it))
+                        val buf = ByteArray(originalSize)
+                        bis.read(buf)
+                        do {
+                            bos.write(buf)
+                        } while (bis.read(buf) != -1)
+                        file.delete()
+                    } catch (_: Throwable) {
+                    } finally {
+                        bis?.close()
+                        bos?.flush()
+                        bos?.close()
+                    }
+                }
+            } else {
+                if (list.size > 0) {
+                    val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    activity.contentResolver.releasePersistableUriPermission(list[list.size - 1].uri, takeFlags)
+                }
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                mTreeUserPdfDir.launch(intent)
+                this.fileName = fileName
+                result = false
+            }
+        }
+        return result
+    }
+
     private suspend fun downloadPdfFile(url: String): Boolean {
         var error = false
         activity?.let { activity ->
             val pathReference = Malitounik.referens.child("/data/bibliateka/$url")
-            val localFile = File(activity.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
+            val localFile = File("${activity.filesDir}/cache/$url")
             pathReference.getFile(localFile).addOnFailureListener {
                 error = true
             }.await()
-            filePath = localFile.path
-            fileName = url
         }
         return error
     }
@@ -314,7 +334,7 @@ class MenuBiblijateka : BaseFragment() {
             }
             binding.listView.setOnItemLongClickListener { _, _, position, _ ->
                 if (idSelect == MainActivity.NIADAUNIA) {
-                    val dd = DialogDeliteNiadaunia.getInstance(position, arrayList[position][0])
+                    val dd = DialogDeliteNiadaunia.getInstance(arrayList[position][2], arrayList[position][0])
                     dd.show(childFragmentManager, "dialog_delite_niadaunia")
                 } else {
                     val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
@@ -330,12 +350,13 @@ class MenuBiblijateka : BaseFragment() {
                     return@setOnItemClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
-                if (file.exists()) {
-                    filePath = file.absolutePath
-                    fileName = file.name
-                    fileTitle = arrayList[position][0]
-                    loadComplete(position = position)
+                if (fileExists(arrayList[position][2])) {
+                    val list = it.contentResolver.persistedUriPermissions
+                    val documentsTree = DocumentFile.fromTreeUri(it, list[list.size - 1].uri)
+                    val uriFile = documentsTree?.findFile(arrayList[position][2])?.uri
+                    uriFile?.let { uri ->
+                        loadComplete(uri)
+                    }
                 } else {
                     var opisanie = arrayList[position][1]
                     val t1 = opisanie.indexOf("</span><br>")
@@ -346,12 +367,10 @@ class MenuBiblijateka : BaseFragment() {
                     list.add(arrayList[position][2])
                     list.add(arrayList[position][3])
                     val dialogBibliateka = DialogBibliateka.getInstance(list)
-                    dialogBibliateka.show(childFragmentManager, "dialog_bibliateka")
+                    dialogBibliateka.show(childFragmentManager, "dialog_bibliateka") //}
                 }
             }
             if (savedInstanceState != null) {
-                filePath = savedInstanceState.getString("filePath") ?: ""
-                fileName = savedInstanceState.getString("fileName") ?: ""
                 idSelect = savedInstanceState.getInt("idSelect")
                 saveindep = false
             }
@@ -375,141 +394,117 @@ class MenuBiblijateka : BaseFragment() {
                     MainActivity.SETFILE -> setRubrika(MainActivity.SETFILE)
                 }
             }
-            if ((fileName != "" && filePath != "") || it.intent.data != null) {
-                loadComplete(it.intent.data)
+            it.intent.data?.let { data ->
+                loadComplete(data)
             }
         }
-    }
-
-    private fun getListBiliateka(): ArrayList<ArrayList<String>> {
-        val gson = Gson()
-        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-        val jsonB = k.getString("Biblioteka", "") ?: ""
-        val tempList = ArrayList<ArrayList<String>>()
-        if (jsonB.isNotEmpty()) {
-            tempList.addAll(gson.fromJson(jsonB, type))
-        }
-        return tempList
     }
 
     private fun loadNiadaunia(isUpdate: Boolean = true) {
-        activity?.let {
-            arrayList.clear()
+        (activity as? MainActivity)?.let {
             val gson = Gson()
-            val json = k.getString("bibliateka_naidaunia", "")
+            val json = k.getString("bibliateka_latest", "")
             if (!json.equals("")) {
                 naidaunia.clear()
-                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
                 naidaunia.addAll(gson.fromJson(json, type))
             }
             if (isUpdate) {
-                val listBiliateka = getListBiliateka()
+                arrayList.clear()
+                val listBiliateka = it.getListBiliateka()
                 for (i in 0 until naidaunia.size) {
-                    val rtemp2 = File(naidaunia[i][1]).name
+                    val rtemp2 = naidaunia[i]
                     for (e in 0 until listBiliateka.size) {
                         if (rtemp2 == listBiliateka[e][2]) arrayList.add(listBiliateka[e])
                     }
                 }
-                arrayList.reverse()
                 munuBiblijatekaListener?.menuMainloadNiadaunia()
                 adapter.notifyDataSetChanged()
             }
         }
     }
 
-    private fun loadComplete(uri: Uri? = null, position: Int = -1) {
-        (activity as? BaseActivity)?.let {
-            if (uri != null) {
-                val intent = Intent(activity, BiblijatekaPdf::class.java)
-                intent.data = uri
-                mBiblijatekaPdfResult.launch(intent)
-            } else {
-                val intent = Intent(activity, BiblijatekaPdf::class.java)
-                intent.putExtra("filePath", filePath)
-                intent.putExtra("fileTitle", fileTitle)
-                if (position != -1) {
-                    var opisanie = arrayList[position][1]
-                    val t1 = opisanie.indexOf("</span><br>")
-                    if (t1 != -1) opisanie = opisanie.substring(t1 + 11)
-                    val list = ArrayList<String>()
-                    list.add(arrayList[position][0])
-                    list.add(opisanie)
-                    list.add(arrayList[position][2])
-                    list.add(arrayList[position][3])
-                    intent.putStringArrayListExtra("list", list)
-                }
-                mBiblijatekaPdfResult.launch(intent)
-            }
-
+    private fun loadComplete(uri: Uri) {
+        (activity as? MainActivity)?.let {
+            val intent = Intent(it, BiblijatekaPdf::class.java)
+            intent.data = uri
+            val fileName = it.getFileName(uri)
+            intent.putExtra("fileTitle", it.getTitle(fileName))
+            intent.putExtra("fileName", fileName)
+            intent.putExtra("isPrint", true)
+            it.saveNaidauniaBiblijateka(fileName)
+            mBiblijatekaPdfResult.launch(intent)
         }
     }
 
     private suspend fun setRubrika(rub: Int): Int {
         binding.progressBar2.visibility = View.VISIBLE
         var isUbdate = NOUPDATE
-        var rubryka = rub
-        if (rubryka == MainActivity.SETFILE) {
-            rubryka = if (naidaunia.size > 0) MainActivity.NIADAUNIA
-            else MainActivity.MALITOUNIKI
-            idSelect = rubryka
-        }
-        arrayList.clear()
-        val tempList = getListBiliateka()
-        if (rubryka != MainActivity.NIADAUNIA) {
-            for (i in 0 until tempList.size) {
-                val rtemp2 = tempList[i][4].toInt()
-                if (rtemp2 == rubryka) arrayList.add(tempList[i])
+        (activity as? MainActivity)?.let {
+            var rubryka = rub
+            if (rubryka == MainActivity.SETFILE) {
+                rubryka = if (naidaunia.size > 0) MainActivity.NIADAUNIA
+                else MainActivity.MALITOUNIKI
+                idSelect = rubryka
             }
-            adapter.notifyDataSetChanged()
-        } else {
-            loadNiadaunia()
-        }
-        binding.progressBar2.visibility = View.GONE
-        if (!k.getBoolean("BibliotekaUpdate", false)) {
-            var sb = ""
-            if (MainActivity.isNetworkAvailable()) {
-                for (i in 0..2) {
-                    sb = getBibliatekaJson()
-                    if (sb.isNotEmpty()) break
-                }
-            }
+            arrayList.clear()
+            val tempList = it.getListBiliateka()
             if (rubryka != MainActivity.NIADAUNIA) {
-                val arrayTemp = getListBiliateka()
-                if (sb.isEmpty()) {
-                    isUbdate = ERROR
+                for (i in 0 until tempList.size) {
+                    val rtemp2 = tempList[i][4].toInt()
+                    if (rtemp2 == rubryka) arrayList.add(tempList[i])
                 }
-                if (arrayTemp.size > arrayList.size || arrayList.size == 0) {
-                    if (MainActivity.isNetworkAvailable()) {
-                        getSql()
+                adapter.notifyDataSetChanged()
+            } else {
+                loadNiadaunia()
+            }
+            binding.progressBar2.visibility = View.GONE
+            if (!k.getBoolean("BibliotekaUpdate", false)) {
+                var sb = ""
+                if (MainActivity.isNetworkAvailable()) {
+                    for (i in 0..2) {
+                        sb = getBibliatekaJson()
+                        if (sb.isNotEmpty()) break
                     }
-                    val jsonC = k.getString("Biblioteka", "") ?: ""
-                    if (jsonC.isNotEmpty()) {
+                }
+                if (rubryka != MainActivity.NIADAUNIA) {
+                    val arrayTemp = it.getListBiliateka()
+                    if (sb.isEmpty()) {
+                        isUbdate = ERROR
+                    }
+                    if (arrayTemp.size > arrayList.size || arrayList.size == 0) {
+                        if (MainActivity.isNetworkAvailable()) {
+                            getSql()
+                        }
+                        val jsonC = k.getString("Biblioteka", "") ?: ""
+                        if (jsonC.isNotEmpty()) {
+                            val temp = ArrayList<ArrayList<String>>()
+                            for (i in 0 until arrayTemp.size) {
+                                val rtemp2 = arrayTemp[i][4].toInt()
+                                if (rtemp2 != rubryka) temp.add(arrayTemp[i])
+                            }
+                            arrayTemp.removeAll(temp.toSet())
+                            if (arrayTemp.size != arrayList.size) {
+                                arrayList.clear()
+                                arrayList.addAll(arrayTemp)
+                                adapter.notifyDataSetChanged()
+                            }
+                        }
+                        isUbdate = if (arrayList.size == 0) ERROR
+                        else UPDATE
+                    } else {
                         val temp = ArrayList<ArrayList<String>>()
-                        for (i in 0 until arrayTemp.size) {
-                            val rtemp2 = arrayTemp[i][4].toInt()
-                            if (rtemp2 != rubryka) temp.add(arrayTemp[i])
+                        for (i in 0 until arrayList.size) {
+                            val rtemp2 = arrayList[i][4].toInt()
+                            if (rtemp2 != rubryka) temp.add(arrayList[i])
                         }
-                        arrayTemp.removeAll(temp.toSet())
-                        if (arrayTemp.size != arrayList.size) {
-                            arrayList.clear()
-                            arrayList.addAll(arrayTemp)
-                            adapter.notifyDataSetChanged()
-                        }
+                        arrayList.removeAll(temp.toSet())
+                        adapter.notifyDataSetChanged()
                     }
-                    isUbdate = if (arrayList.size == 0) ERROR
-                    else UPDATE
-                } else {
-                    val temp = ArrayList<ArrayList<String>>()
-                    for (i in 0 until arrayList.size) {
-                        val rtemp2 = arrayList[i][4].toInt()
-                        if (rtemp2 != rubryka) temp.add(arrayList[i])
-                    }
-                    arrayList.removeAll(temp.toSet())
-                    adapter.notifyDataSetChanged()
                 }
             }
+            saveindep = true
         }
-        saveindep = true
         if (setRubrikaJob?.isActive != true) binding.progressBar2.visibility = View.GONE
         if (isUbdate != ERROR) {
             val prefEditors = k.edit()
@@ -625,8 +620,6 @@ class MenuBiblijateka : BaseFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("filePath", filePath)
-        outState.putString("fileName", fileName)
         outState.putInt("idSelect", idSelect)
     }
 

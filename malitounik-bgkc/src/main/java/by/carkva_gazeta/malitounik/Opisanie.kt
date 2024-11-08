@@ -33,7 +33,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
 import java.io.File
+import java.io.FileInputStream
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -56,6 +59,30 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         if (result.resultCode == 700) {
             viewSviaryiaIIcon()
             startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
+        }
+    }
+    private val mSavePdfFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            it.data?.data?.let { data ->
+                var bis: BufferedInputStream? = null
+                var bos: BufferedOutputStream? = null
+                try {
+                    val input = FileInputStream(File(fullImagePathVisable))
+                    val originalSize = input.available()
+                    bis = BufferedInputStream(input)
+                    bos = BufferedOutputStream(contentResolver.openOutputStream(data))
+                    val buf = ByteArray(originalSize)
+                    bis.read(buf)
+                    do {
+                        bos.write(buf)
+                    } while (bis.read(buf) != -1)
+                } catch (_: Throwable) {
+                } finally {
+                    bis?.close()
+                    bos?.flush()
+                    bos?.close()
+                }
+            }
         }
     }
 
@@ -599,6 +626,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             binding.listview.visibility = View.VISIBLE
             viewSviaryiaIIcon()
             binding.titleToolbar.text = resources.getText(R.string.zmiest)
+            invalidateOptionsMenu()
         } else {
             super.onBack()
         }
@@ -613,6 +641,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         if (checkParliny()) menu.findItem(R.id.action_piarliny).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         else menu.findItem(R.id.action_piarliny).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         menu.findItem(R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
+        menu.findItem(R.id.action_save_as).isVisible = binding.imageViewFull.visibility == View.VISIBLE
+        menu.findItem(R.id.action_share).isVisible = binding.imageViewFull.visibility == View.VISIBLE
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -626,6 +656,22 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == R.id.action_share) {
+            val sendIntent = Intent(Intent.ACTION_SEND)
+            sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, "by.carkva_gazeta.malitounik.fileprovider", File(fullImagePathVisable)))
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
+            sendIntent.type = "text/html"
+            startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
+            return true
+        }
+        if (id == R.id.action_save_as) {
+            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = "image/*"
+            intent.putExtra(Intent.EXTRA_TITLE, File(fullImagePathVisable).name)
+            mSavePdfFile.launch(intent)
             return true
         }
         if (id == R.id.action_piarliny) {
@@ -740,6 +786,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                         fullImagePathVisable = file2.absolutePath
                         binding.progressBar2.visibility = View.INVISIBLE
                         binding.titleToolbar.text = arrayList[position].title.trim()
+                        invalidateOptionsMenu()
                     }
                 }
                 viewHolder.textApisanne.text = arrayList[position].textApisanne

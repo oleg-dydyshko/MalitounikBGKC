@@ -156,7 +156,7 @@ class MenuBibleCarniauski : Fragment() {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
                     intent.putExtra("perevod", VybranoeBibleList.PEREVODCARNIAUSKI)
-                    startActivity(intent)
+                    (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
                 }

@@ -156,7 +156,7 @@ class MenuBibleSemuxa : BaseFragment() {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
                     intent.putExtra("perevod", VybranoeBibleList.PEREVODSEMUXI)
-                    startActivity(intent)
+                    (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
                 }

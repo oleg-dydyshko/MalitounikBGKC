@@ -156,7 +156,7 @@ class MenuBibleSinoidal : Fragment() {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
                     intent.putExtra("perevod", VybranoeBibleList.PEREVODSINOIDAL)
-                    startActivity(intent)
+                    (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
                 }

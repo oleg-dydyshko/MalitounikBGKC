@@ -619,22 +619,22 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFont
                 else res.append(spl.substring(desN, desK))
                 var result2 = res.toString()
                 if (polstixaA) {
-                    val t2 = result2.indexOf(knigaK)
-                    val t3 = result2.indexOf(".", t2)
+                    val t2 = result2.lastIndexOf(knigaK)
                     var t1 = result2.indexOf(":", t2)
-                    if (t1 == -1) t1 = result2.indexOf(";", t3 + 1)
-                    if (t1 == -1) t1 = result2.indexOf(".", t3 + 1)
+                    if (t1 == -1) t1 = result2.indexOf(";", t2 + 1)
+                    if (t1 == -1) t1 = result2.indexOf(".", t2 + 1)
                     if (t1 != -1) result2 = result2.substring(0, t1 + 1) + "<s>" + result2.substring(t1 + 1, result2.length) + "</s>"
                 }
                 if (polstixaB) {
-                    val t2 = result2.indexOf("\n")
-                    val textPol = result2.substring(0, t2 + 1)
-                    val t4 = textPol.indexOf("</strong><br>")
-                    val t3 = textPol.indexOf(".", t4 + 13)
+                    val t4 = result2.indexOf("\n")
+                    val t2 = result2.indexOf("\n", t4 + 1)
+                    val t5 = result2.indexOf(" ", t4 + 1)
+                    val textPol = result2.substring(t5 + 1, t2)
                     var t1 = textPol.indexOf(":")
-                    if (t1 == -1) t1 = textPol.indexOf(";", t3 + 1)
-                    if (t1 == -1) t1 = textPol.indexOf(".", t3 + 1)
-                    if (t1 != -1) result2 = result2.substring(0, t3 + 1) + "<s>" + result2.substring(t3 + 1, t1 + 1) + "</s>" + result2.substring(t1 + 1, result2.length)
+                    if (t1 == -1) t1 = textPol.indexOf(";")
+                    if (t1 == -1) t1 = textPol.indexOf(".")
+                    val lStart = result2.substring(0, t5 + 1).length
+                    if (t1 != -1) result2 = result2.substring(0, t5 + 1) + "<s>" + result2.substring(t5 + 1, t1 + 1 + lStart) + "</s>" + result2.substring(t1 + 1 + lStart, result2.length)
                 }
                 result = result2
                 this.perevod = perevodSave

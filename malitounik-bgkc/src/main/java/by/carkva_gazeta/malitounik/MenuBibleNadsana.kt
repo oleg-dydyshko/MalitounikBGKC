@@ -80,7 +80,7 @@ class MenuBibleNadsana : BaseFragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
                     intent.putExtra("perevod", VybranoeBibleList.PEREVODNADSAN)
-                    startActivity(intent)
+                    (activity as MainActivity).listBibliaLauncher.launch(intent)
                 } else {
                     activity.installFullMalitounik()
                 }

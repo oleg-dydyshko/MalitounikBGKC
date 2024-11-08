@@ -60,12 +60,12 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         edit.putLong("BiblijatekaUseTime", c.timeInMillis)
         edit.apply()
         try {
-            if (uri != null) {
-                binding.pdfView.initWithUri(uri!!)
+            uri?.let {
+                binding.pdfView.initWithUri(it)
                 totalPage = binding.pdfView.totalPageCount
+                binding.pdfView.recyclerView.layoutManager = LinearLayoutManager(this)
                 binding.pdfView.post {
                     val page = k.getInt("Bibliateka_$fileName", 0)
-                    binding.pdfView.recyclerView.layoutManager = LinearLayoutManager(this)
                     binding.pdfView.recyclerView.scrollToPosition(page)
                 }
             }
@@ -165,8 +165,8 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
             return true
         }
         if (id == R.id.action_print) {
-            if (uri != null) {
-                val printAdapter = PdfDocumentAdapter(this, fileName, uri!!)
+            uri?.let {
+                val printAdapter = PdfDocumentAdapter(this, fileName, it)
                 val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
                 val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
                 printManager.print(fileName, printAdapter, printAttributes)

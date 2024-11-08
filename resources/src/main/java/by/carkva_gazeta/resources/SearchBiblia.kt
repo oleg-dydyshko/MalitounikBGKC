@@ -200,29 +200,9 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
         prefEditors.apply()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        prefEditors = chin.edit()
-        binding = SearchBibliaBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        binding.filterGrup.visibility = View.VISIBLE
-        binding.buttonx2.setOnClickListener {
-            binding.editText2.text?.clear()
-        }
-        DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-        if (dzenNoch) {
-            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            binding.buttonx2.setImageResource(by.carkva_gazeta.malitounik.R.drawable.cancel)
-        }
-        if ((intent.getStringExtra("perevod") ?: VybranoeBibleList.PEREVODSEMUXI) != perevod) {
-            prefEditors.putString("search_string", "")
-            prefEditors.putString("search_string_filter", "")
-            prefEditors.apply()
-        }
+    private fun loadHistory() {
+        history.clear()
         var biblia = "semuxa"
-        perevod = intent.getStringExtra("perevod") ?: VybranoeBibleList.PEREVODSEMUXI
         when (perevod) {
             VybranoeBibleList.PEREVODSEMUXI -> {
                 title = getString(by.carkva_gazeta.malitounik.R.string.poshuk_semuxa)
@@ -251,6 +231,31 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             val type = TypeToken.getParameterized(java.util.ArrayList::class.java, String::class.java).type
             history.addAll(gson.fromJson(json, type))
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        prefEditors = chin.edit()
+        binding = SearchBibliaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.filterGrup.visibility = View.VISIBLE
+        binding.buttonx2.setOnClickListener {
+            binding.editText2.text?.clear()
+        }
+        DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+        if (dzenNoch) {
+            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
+            DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            binding.buttonx2.setImageResource(by.carkva_gazeta.malitounik.R.drawable.cancel)
+        }
+        if ((intent.getStringExtra("perevod") ?: VybranoeBibleList.PEREVODSEMUXI) != perevod) {
+            prefEditors.putString("search_string", "")
+            prefEditors.putString("search_string_filter", "")
+            prefEditors.apply()
+        }
+        perevod = intent.getStringExtra("perevod") ?: VybranoeBibleList.PEREVODSEMUXI
+        loadHistory()
         adapter = SearchBibliaActivityAdaprer(this, ArrayList())
         binding.ListView.adapter = adapter
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
@@ -483,6 +488,7 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
 
     override fun setBiblePeraklad(peraklad: String) {
         perevod = peraklad
+        loadHistory()
         autoCompleteTextView?.let {
             val edit = it.text.toString()
             execute(edit, true)
@@ -520,6 +526,13 @@ class SearchBiblia : BaseActivity(), DialogClearHishory.DialogClearHistoryListen
             onPostExecute(ArrayList())
         }
         changeSearchViewElements(searchView)
+    }
+
+    override fun onBack() {
+        val intent = Intent()
+        intent.putExtra("perevod", perevod)
+        setResult(500, intent)
+        super.onBack()
     }
 
     override fun onPrepareMenu(menu: Menu) {

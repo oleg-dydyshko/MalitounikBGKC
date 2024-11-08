@@ -55,6 +55,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private val arrayList = ArrayList<OpisanieData>()
     private lateinit var adapter: OpisanieAdapter
     private var fullImagePathVisable = ""
+    private var fullPosition = 0
     private val carkvaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 700) {
             viewSviaryiaIIcon()
@@ -267,6 +268,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         svity = intent.extras?.getBoolean("glavnyia", false) ?: false
         if (savedInstanceState?.getBoolean("imageViewFullVisable") == true) {
             fullImagePathVisable = savedInstanceState.getString("filePach") ?: ""
+            fullPosition = savedInstanceState.getInt("fullPosition") ?: 0
             val file2 = File(fullImagePathVisable)
             Picasso.get().load(file2).into(binding.imageViewFull)
             binding.imageViewFull.visibility = View.VISIBLE
@@ -648,6 +650,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("filePach", fullImagePathVisable)
+        outState.putInt("filePach", fullPosition)
         outState.putString("tollbarText", binding.titleToolbar.text.toString())
         outState.putBoolean("imageViewFullVisable", binding.imageViewFull.visibility == View.VISIBLE)
     }
@@ -659,10 +662,18 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             return true
         }
         if (id == R.id.action_share) {
+            val sb = StringBuilder()
+            sb.append(arrayList[fullPosition].title.trim())
+            sb.append(arrayList[fullPosition].text.trim())
+            val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText(getString(R.string.copy_text), sb.toString())
+            clipboard.setPrimaryClip(clip)
+            MainActivity.toastView(this@Opisanie, getString(R.string.copy_text), Toast.LENGTH_LONG)
             val sendIntent = Intent(Intent.ACTION_SEND)
             sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, "by.carkva_gazeta.malitounik.fileprovider", File(fullImagePathVisable)))
-            sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.set_log_file))
-            sendIntent.type = "text/html"
+            sendIntent.putExtra(Intent.EXTRA_TEXT, arrayList[fullPosition].title.trim())
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT, arrayList[fullPosition].title.trim())
+            sendIntent.type = "image/*"
             startActivity(Intent.createChooser(sendIntent, getString(R.string.set_log_file)))
             return true
         }
@@ -761,8 +772,8 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                     if (file2.exists()) {
                         val sendIntent = Intent(Intent.ACTION_SEND)
                         sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@Opisanie, "by.carkva_gazeta.malitounik.fileprovider", file2))
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString())
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.zmiest))
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, viewHolder.textTitle.text)
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, viewHolder.textTitle.text)
                         sendIntent.type = "image/*"
                         startActivity(Intent.createChooser(sendIntent, getString(R.string.zmiest)))
                     } else {
@@ -784,6 +795,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                         binding.imageViewFull.visibility = View.VISIBLE
                         binding.listview.visibility = View.GONE
                         fullImagePathVisable = file2.absolutePath
+                        fullPosition = position
                         binding.progressBar2.visibility = View.INVISIBLE
                         binding.titleToolbar.text = arrayList[position].title.trim()
                         invalidateOptionsMenu()

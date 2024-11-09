@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.storage.StorageManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -16,13 +15,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
 class DialogBibliateka : DialogFragment() {
     private lateinit var list: ArrayList<String>
+    private var fileExists = false
     private var mListener: DialogBibliatekaListener? = null
     private lateinit var builder: AlertDialog.Builder
     private var _binding: DialogTextviewDisplayBinding? = null
@@ -40,6 +39,7 @@ class DialogBibliateka : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         list = arguments?.getStringArrayList("list") ?: ArrayList()
+        fileExists = arguments?.getBoolean("fileExists", false) ?: false
     }
 
     override fun onAttach(context: Context) {
@@ -60,8 +60,7 @@ class DialogBibliateka : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             builder = AlertDialog.Builder(it, style)
-            val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), list[2])
-            if (file.exists()) {
+            if (fileExists) {
                 binding.title.text = getString(R.string.opisanie).uppercase()
             } else {
                 binding.title.text = getString(R.string.download_file, "")
@@ -92,7 +91,7 @@ class DialogBibliateka : DialogFragment() {
             } else {
                 formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()) + " Кб"
             }
-            if (file.exists()) {
+            if (fileExists) {
                 builder.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             } else {
                 if (MainActivity.isNetworkAvailable()) {
@@ -116,10 +115,11 @@ class DialogBibliateka : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(list: ArrayList<String>): DialogBibliateka {
+        fun getInstance(list: ArrayList<String>, fileExists: Boolean): DialogBibliateka {
             val instance = DialogBibliateka()
             val args = Bundle()
             args.putStringArrayList("list", list)
+            args.putBoolean("fileExists", fileExists)
             instance.arguments = args
             return instance
         }

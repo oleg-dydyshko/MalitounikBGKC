@@ -136,7 +136,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
             return true
         }
         if (id == R.id.action_apisane) {
-            val dialogBibliateka = DialogBibliateka.getInstance(arrayList)
+            val dialogBibliateka = DialogBibliateka.getInstance(arrayList, true)
             dialogBibliateka.show(supportFragmentManager, "dialog_bibliateka")
             return true
         }

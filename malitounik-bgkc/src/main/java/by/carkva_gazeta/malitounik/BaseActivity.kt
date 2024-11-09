@@ -42,7 +42,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
-import java.util.Calendar
 
 abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProvider {
 
@@ -111,33 +110,13 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         dzenNoch = savedInstanceState?.getBoolean("dzenNoch", false) ?: getBaseDzenNoch()
         checkDzenNoch = dzenNoch
         setMyTheme()
-        val c = Calendar.getInstance()
-        var useTime = k.getLong("BiblijatekaUseTime", 0)
-        if (useTime == 0L) {
-            val edit = k.edit()
-            edit.putLong("BiblijatekaUseTime", c.timeInMillis)
-            edit.apply()
-            useTime = c.timeInMillis
-        }
-        c.add(Calendar.DATE, 7)
-        if (c.timeInMillis > useTime) {
-            removeDynamicModule()
-        }
-        c.add(Calendar.DATE, 23)
-        if (useTime > c.timeInMillis) {
-            val file = File("$filesDir/image_temp")
-            if (file.exists()) file.deleteRecursively()
-            val file1 = File("$filesDir/BookCache")
-            if (file1.exists()) file1.deleteRecursively()
-            val file2 = File("$filesDir/Book")
-            if (file2.exists()) file2.deleteRecursively()
-            val list = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString()).listFiles()
-            list?.forEach {
-                if (it.exists()) it.delete()
-            }
-            val edit = k.edit()
-            edit.remove("Biblioteka")
-            edit.apply()
+        val file1 = File("$filesDir/BookCache")
+        if (file1.exists()) file1.deleteRecursively()
+        val file2 = File("$filesDir/Book")
+        if (file2.exists()) file2.deleteRecursively()
+        val list = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString()).listFiles()
+        list?.forEach {
+            if (it.exists() && it.name.contains("pdf", ignoreCase = true)) it.delete()
         }
     }
 
@@ -321,11 +300,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         return false
     }
 
-    private fun removeDynamicModule() {
-        val splitInstallManager = SplitInstallManagerFactory.create(this)
-        splitInstallManager.deferredUninstall(listOf("biblijateka"))
-    }
-
     fun downloadDynamicModule(moduleName: String) {
         val splitInstallManager = SplitInstallManagerFactory.create(this)
 
@@ -348,8 +322,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
                     }
 
                     SplitInstallSessionStatus.DOWNLOADING -> {
-                        downloadDynamicModuleListener?.dynamicModuleDownloading(state.totalBytesToDownload()
-                            .toDouble(), state.bytesDownloaded().toDouble())
+                        downloadDynamicModuleListener?.dynamicModuleDownloading(state.totalBytesToDownload().toDouble(), state.bytesDownloaded().toDouble())
                     }
 
                     SplitInstallSessionStatus.INSTALLED -> {

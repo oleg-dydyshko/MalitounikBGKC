@@ -10,7 +10,6 @@ import android.graphics.Point
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.Menu
@@ -153,7 +152,6 @@ class MenuBiblijateka : BaseFragment() {
         munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
     }
 
-    //no wi-fi
     fun onDialogPositiveClick(listPosition: String) {
         if (!MainActivity.isNetworkAvailable()) {
             val dialogNoInternet = DialogNoInternet()
@@ -163,7 +161,6 @@ class MenuBiblijateka : BaseFragment() {
         }
     }
 
-    //biblijteka
     fun onDialogbibliatekaPositiveClick(listPosition: String) {
         (activity as? BaseActivity)?.let {
             val list = it.contentResolver.persistedUriPermissions
@@ -337,8 +334,7 @@ class MenuBiblijateka : BaseFragment() {
                     val dd = DialogDeliteNiadaunia.getInstance(arrayList[position][2], arrayList[position][0])
                     dd.show(childFragmentManager, "dialog_delite_niadaunia")
                 } else {
-                    val file = File(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
-                    if (file.exists()) {
+                    if (fileExists(arrayList[position][2])) {
                         val dd = DialogDelite.getInstance(position, arrayList[position][2], "з бібліятэкі", arrayList[position][0])
                         dd.show(childFragmentManager, "dialog_delite")
                     }
@@ -366,8 +362,8 @@ class MenuBiblijateka : BaseFragment() {
                     list.add(opisanie)
                     list.add(arrayList[position][2])
                     list.add(arrayList[position][3])
-                    val dialogBibliateka = DialogBibliateka.getInstance(list)
-                    dialogBibliateka.show(childFragmentManager, "dialog_bibliateka") //}
+                    val dialogBibliateka = DialogBibliateka.getInstance(list, false)
+                    dialogBibliateka.show(childFragmentManager, "dialog_bibliateka")
                 }
             }
             if (savedInstanceState != null) {

@@ -12,8 +12,8 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.print.PrintAttributes
 import android.print.PrintManager
 import android.provider.Settings
@@ -45,12 +45,12 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.net.toUri
 import androidx.core.text.isDigitsOnly
 import androidx.core.text.toSpannable
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.documentfile.provider.DocumentFile
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.CaliandarMun
 import by.carkva_gazeta.malitounik.DialogBibliotekaWIFI
@@ -83,8 +83,11 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -2022,12 +2025,16 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 if (resurs == "akafist6") printFile = "Akafist da Ducha Sviatoha.pdf"
                 if (resurs == "vialikaja_piatnica_jutran_12jevanhellau") printFile = "Vial-Piatnica-jutran-12-Evang.pdf"
                 if (printFile != "" && MainActivity.isNetworkAvailable()) {
-                    val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), printFile)
-                    if (file.exists()) {
-                        val printAdapter = PdfDocumentAdapter(this@Bogashlugbovya, file.name, file.toUri())
-                        val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
-                        val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
-                        printManager.print(file.name, printAdapter, printAttributes)
+                    if (fileExists(printFile)) {
+                        val list = contentResolver.persistedUriPermissions
+                        val documentsTree = DocumentFile.fromTreeUri(this@Bogashlugbovya, list[list.size - 1].uri)
+                        val uriFile = documentsTree?.findFile(printFile)?.uri
+                        uriFile?.let {
+                            val printAdapter = PdfDocumentAdapter(this@Bogashlugbovya, printFile, it)
+                            val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+                            val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
+                            printManager.print(printFile, printAdapter, printAttributes)
+                        }
                     } else {
                         if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
                             val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(printFile)
@@ -2089,10 +2096,28 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         return false
     }
 
+    private fun fileExists(fileName: String): Boolean {
+        var exitsFile = false
+        val list = contentResolver.persistedUriPermissions
+        if (list.size > 0) {
+            val documentsTree = DocumentFile.fromTreeUri(this, list[list.size - 1].uri)
+            val childDocuments = documentsTree?.listFiles()
+            childDocuments?.let { document ->
+                for (i in document.indices) {
+                    if (document[i].name == fileName) {
+                        exitsFile = true
+                        break
+                    }
+                }
+            }
+        }
+        return exitsFile
+    }
+
     private suspend fun downloadPdfFile(url: String): Boolean {
         var error = false
         val pathReference = Malitounik.referens.child("/data/bibliateka/$url")
-        val localFile = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
+        val localFile = File("$filesDir/cache/$url")
         pathReference.getFile(localFile).addOnFailureListener {
             error = true
         }.await()
@@ -2104,19 +2129,22 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         CoroutineScope(Dispatchers.Main).launch {
             var error = false
             try {
-                val dir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                if (dir?.exists() != true) {
-                    dir?.mkdir()
-                }
                 for (i in 0..2) {
                     error = downloadPdfFile(url)
                     if (!error) break
                 }
-            } catch (t: Throwable) {
+            } catch (_: Throwable) {
                 error = true
             }
             if (!error) {
-                loadComplete(url)
+                if (saveFile(url)) {
+                    val list = contentResolver.persistedUriPermissions
+                    val documentsTree = DocumentFile.fromTreeUri(this@Bogashlugbovya, list[list.size - 1].uri)
+                    val uriFile = documentsTree?.findFile(url)?.uri
+                    uriFile?.let { uri ->
+                        loadComplete(url, uri)
+                    }
+                }
             } else {
                 printResours()
             }
@@ -2124,12 +2152,43 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         }
     }
 
-    private fun loadComplete(fileName: String) {
-        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
-        val printAdapter = PdfDocumentAdapter(this, file.name, file.toUri())
+    private fun saveFile(fileName: String): Boolean {
+        var result = true
+        val list = contentResolver.persistedUriPermissions
+        val documentsTree = DocumentFile.fromTreeUri(this, list[list.size - 1].uri)
+        if (documentsTree?.exists() == true) {
+            val uri = documentsTree.createFile("application/pdf", fileName)?.uri
+            uri?.let {
+                var bis: BufferedInputStream? = null
+                var bos: BufferedOutputStream? = null
+                try {
+                    val file = File("$filesDir/cache/$fileName")
+                    val input = FileInputStream(file)
+                    val originalSize = input.available()
+                    bis = BufferedInputStream(input)
+                    bos = BufferedOutputStream(contentResolver.openOutputStream(it))
+                    val buf = ByteArray(originalSize)
+                    bis.read(buf)
+                    do {
+                        bos.write(buf)
+                    } while (bis.read(buf) != -1)
+                    file.delete()
+                } catch (_: Throwable) {
+                } finally {
+                    bis?.close()
+                    bos?.flush()
+                    bos?.close()
+                }
+            }
+        } else result = false
+        return result
+    }
+
+    private fun loadComplete(fileName: String, uri: Uri) {
+        val printAdapter = PdfDocumentAdapter(this, fileName, uri)
         val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
         val printAttributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build()
-        printManager.print(file.name, printAdapter, printAttributes)
+        printManager.print(fileName, printAdapter, printAttributes)
     }
 
     override fun onDialogPositiveClick(listPosition: String) {

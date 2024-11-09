@@ -982,10 +982,8 @@ class MainActivity : BaseActivity(), View.OnClickListener,
                 checkBrightness = true
                 val dir = File("$filesDir/cache")
                 val list = dir.listFiles()
-                list?.let { listfales ->
-                    for (file in listfales) {
-                        file.delete()
-                    }
+                list?.forEach {
+                    it.delete()
                 }
                 super.onBack()
             } else {

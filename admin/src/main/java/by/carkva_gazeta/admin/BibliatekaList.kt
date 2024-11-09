@@ -11,7 +11,6 @@ import android.hardware.SensorEvent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.util.TypedValue
 import android.view.Menu
@@ -45,9 +44,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-class BibliatekaList : BaseActivity(),
-    DialogBiblijatekaContextMenu.DialogPiarlinyContextMenuListener,
-    DialogDelite.DialogDeliteListener {
+class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener {
 
     private lateinit var binding: AdminBibliatekaListBinding
     private var sqlJob: Job? = null
@@ -159,15 +156,7 @@ class BibliatekaList : BaseActivity(),
                     }
                 }
             }
-            val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
-            if (file.exists()) {
-                binding.pdfTextView.text = arrayList[position][2]
-            } else {
-                CoroutineScope(Dispatchers.Main).launch {
-                    downloadPdfFile(arrayList[position][2])
-                    binding.pdfTextView.text = arrayList[position][2]
-                }
-            }
+            binding.pdfTextView.text = arrayList[position][2]
             var edit = arrayList[position][1]
             edit = edit.replace("<div style=\"font-family: Arial,sans-serif; font-size: 15px; text-align: justify;\">", "")
             edit = edit.replace("</div>", "")
@@ -196,16 +185,17 @@ class BibliatekaList : BaseActivity(),
         }
     }
 
-    private suspend fun downloadPdfFile(url: String, count: Int = 0) {
+    private suspend fun getPdfFileLength(url: String, count: Int = 0): String {
         var error = false
         val pathReference = Malitounik.referens.child("/data/bibliateka/$url")
-        val localFile = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), url)
-        pathReference.getFile(localFile).addOnFailureListener {
+        val metaData = pathReference.metadata.addOnFailureListener {
             error = true
         }.await()
+        val size = metaData.sizeBytes
         if (error && count < 3) {
-            downloadPdfFile(url, count + 1)
+            getPdfFileLength(url, count + 1)
         }
+        return size.toString()
     }
 
     private fun saveBibliateka() {
@@ -231,7 +221,7 @@ class BibliatekaList : BaseActivity(),
                         mySqlList.add(link)
                         mySqlList.add(str)
                         mySqlList.add(pdf)
-                        mySqlList.add(File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), binding.pdfTextView.text.toString()).length().toString())
+                        mySqlList.add(getPdfFileLength(binding.pdfTextView.text.toString()))
                         mySqlList.add(rubrika)
                         mySqlList.add(imageLocal)
                         arrayList.add(0, mySqlList)
@@ -239,7 +229,7 @@ class BibliatekaList : BaseActivity(),
                         arrayList[position][0] = link
                         arrayList[position][1] = str
                         arrayList[position][2] = pdf
-                        if (binding.pdfTextView.text.toString() != "") arrayList[position][3] = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), binding.pdfTextView.text.toString()).length().toString()
+                        if (binding.pdfTextView.text.toString() != "") arrayList[position][3] = getPdfFileLength(binding.pdfTextView.text.toString())
                         arrayList[position][4] = rubrika
                         arrayList[position][5] = imageLocal
                     }
@@ -478,8 +468,7 @@ class BibliatekaList : BaseActivity(),
         super.onCreateMenu(menu, menuInflater)
     }
 
-    internal inner class BibliotekaAdapter(context: Activity) :
-        ArrayAdapter<ArrayList<String>>(context, R.layout.admin_simple_list_item_biblioteka, arrayList) {
+    internal inner class BibliotekaAdapter(context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.admin_simple_list_item_biblioteka, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -538,8 +527,7 @@ class BibliatekaList : BaseActivity(),
 
     private class ViewHolder(var text: TextView, var imageView: ImageView, var rubrika: TextView)
 
-    private class RubrikaAdapter(private val activity: Activity, private val dataRubrika: Array<String>) :
-        ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, dataRubrika) {
+    private class RubrikaAdapter(private val activity: Activity, private val dataRubrika: Array<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, dataRubrika) {
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)

@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 
 
-class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogBibliateka.DialogBibliatekaListener {
+class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogBibliateka.DialogBibliatekaListener, PdfRendererView.StatusCallBack {
 
     private lateinit var binding: BiblijatekaPdfBinding
     private var fileName = ""
@@ -63,16 +63,17 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
             uri?.let {
                 binding.pdfView.initWithUri(it)
                 totalPage = binding.pdfView.totalPageCount
-                binding.pdfView.recyclerView.layoutManager = LinearLayoutManager(this)
-                binding.pdfView.post {
-                    val page = k.getInt("Bibliateka_$fileName", 0)
-                    binding.pdfView.recyclerView.scrollToPosition(page)
-                }
+                val page = k.getInt("Bibliateka_$fileName", 0)
+                binding.pdfView.recyclerView.scrollToPosition(page)
             }
         } catch (_: Throwable) {
             MainActivity.toastView(this, getString(R.string.error_ch))
         }
         setTollbarTheme()
+    }
+
+    override fun onPageChanged(currentPage: Int, totalPage: Int) {
+        binding.pageToolbar.text = getString(R.string.pdfView_page_no, currentPage, totalPage)
     }
 
     private fun setTollbarTheme() {
@@ -112,7 +113,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     }
 
     override fun onDialogSetPage(page: Int) {
-        binding.pdfView.jumpToPage(page - 1)
+        binding.pdfView.recyclerView.scrollToPosition(page - 1)//binding.pdfView.jumpToPage(page - 1)
     }
 
     override fun onDialogbibliatekaPositiveClick(listPosition: String) {

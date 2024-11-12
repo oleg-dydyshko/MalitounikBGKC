@@ -1160,6 +1160,6 @@
     <string name="tryedz_8">\nТрыёдзь -> Трыёдзь посная -> Службы 5-га тыдня Вялікага посту</string>
     <string name="tryedz_9">\nТрыёдзь -> Трыёдзь посная -> Службы 6-га тыдня Вялікага посту</string>
     <string name="open_in">Адчыніць у&#8230;</string>
-    <string name="pdfView_page_no" >%1$s із %2$s</string>
+    <string name="pdfView_page_no" >%1$d/%2$d</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

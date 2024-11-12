@@ -52,7 +52,7 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.rajat.pdfviewer.PdfRendererView
+    <by.carkva_gazeta.malitounik.PdfRendererView
         android:id="@+id/pdfView"
         android:layout_width="0sp"
         android:layout_height="0sp"

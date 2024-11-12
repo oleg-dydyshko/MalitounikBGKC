@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -11,8 +12,8 @@ android {
         applicationId =  "by.carkva_gazeta.malitounik"
         minSdk = 21
         targetSdk = 35
-        versionCode = 442372
-        versionName = "5.1.0.3"
+        versionCode = 442373
+        versionName = "5.1.0.4"
 
         //multiDexEnabled = true
 
@@ -65,7 +66,7 @@ dependencies {
     implementation (libs.review.ktx)
     implementation (libs.play.services.instantapps)
     api (libs.gson)
-    api (libs.pdf.viewer)
+    //api (libs.pdf.viewer)
     //api ("androidx.webkit:webkit:1.10.0")
     api (libs.androidx.swiperefreshlayout)
     api (libs.draglistview)

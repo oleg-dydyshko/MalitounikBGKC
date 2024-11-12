@@ -268,7 +268,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         svity = intent.extras?.getBoolean("glavnyia", false) ?: false
         if (savedInstanceState?.getBoolean("imageViewFullVisable") == true) {
             fullImagePathVisable = savedInstanceState.getString("filePach") ?: ""
-            fullPosition = savedInstanceState.getInt("fullPosition") ?: 0
+            fullPosition = savedInstanceState.getInt("fullPosition")
             val file2 = File(fullImagePathVisable)
             Picasso.get().load(file2).into(binding.imageViewFull)
             binding.imageViewFull.visibility = View.VISIBLE

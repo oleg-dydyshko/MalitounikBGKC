@@ -15,7 +15,6 @@ espressoCore = "3.6.1"
 material = "1.12.0"
 media = "1.7.0"
 media3Exoplayer = "1.4.1"
-pdfViewerVersion = "2.1.1"
 picasso = "2.71828"
 playServicesInstantapps = "18.1.0"
 reviewKtx = "2.0.2"
@@ -43,7 +42,6 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
-pdf-viewer = { module = "io.github.afreakyelf:Pdf-Viewer", version.ref = "pdfViewerVersion" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 play-services-instantapps = { module = "com.google.android.gms:play-services-instantapps", version.ref = "playServicesInstantapps" }
 review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "reviewKtx" }

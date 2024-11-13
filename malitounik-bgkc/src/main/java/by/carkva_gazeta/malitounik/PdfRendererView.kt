@@ -22,8 +22,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
-import com.rajat.pdfviewer.util.PdfEngine
-import java.io.FileNotFoundException
+import by.carkva_gazeta.malitounik.util.PdfEngine
 
 class PdfRendererView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr), LifecycleObserver {
     lateinit var recyclerView: RecyclerView
@@ -53,8 +52,7 @@ class PdfRendererView @JvmOverloads constructor(context: Context, attrs: Attribu
     interface StatusCallBack {
         fun onPageChanged(currentPage: Int, totalPage: Int) {}
     }
-
-    @Throws(FileNotFoundException::class)
+    
     fun initWithUri(uri: Uri) {
         val fileDescriptor = context.contentResolver.openFileDescriptor(uri, "r") ?: return
         init(fileDescriptor)

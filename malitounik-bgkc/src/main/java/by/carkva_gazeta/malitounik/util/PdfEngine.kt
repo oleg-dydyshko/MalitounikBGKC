@@ -1,5 +1,4 @@
-package com.rajat.pdfviewer.util
-
+package by.carkva_gazeta.malitounik.util
 
 enum class PdfEngine(val value: Int) {
     INTERNAL(100),

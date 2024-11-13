@@ -2,7 +2,6 @@ package by.carkva_gazeta.malitounik
 
 import android.content.Context
 import android.graphics.Rect
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +27,6 @@ internal class PdfViewAdapter(
     override fun getItemCount(): Int = renderer.getPageCount()
 
     override fun onBindViewHolder(holder: PdfPageViewHolder, position: Int) {
-        Log.d("Oleg2", position.toString())
         holder.bind(position)
     }
 

@@ -6,7 +6,6 @@ import android.graphics.Bitmap.CompressFormat
 import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
-import android.util.Log
 import android.util.Size
 import by.carkva_gazeta.malitounik.util.CacheManager
 import by.carkva_gazeta.malitounik.util.CacheManager.Companion.CACHE_PATH
@@ -40,10 +39,9 @@ internal class PdfRendererCore(private val context: Context, fileDescriptor: Par
             try {
                 val savePath = File(File(context.cacheDir, CACHE_PATH), pageNo.toString())
                 FileOutputStream(savePath).use { fos ->
-                    bitmap.compress(CompressFormat.JPEG, 75, fos) // Compress as JPEG
+                    bitmap.compress(CompressFormat.JPEG, 90, fos) // Compress as JPEG
                 }
-            } catch (e: Exception) {
-                Log.e("PdfRendererCore", "Error writing bitmap to cache: ${e.message}")
+            } catch (_: Exception) {
             }
         }
     }
@@ -128,8 +126,7 @@ internal class PdfRendererCore(private val context: Context, fileDescriptor: Par
             openPages.values.forEach { page ->
                 try {
                     page.close()
-                } catch (e: IllegalStateException) {
-                    Log.e("PDFRendererCore", "Page was already closed")
+                } catch (_: IllegalStateException) {
                 }
             }
             openPages.clear() // Clear the map after closing all pages.

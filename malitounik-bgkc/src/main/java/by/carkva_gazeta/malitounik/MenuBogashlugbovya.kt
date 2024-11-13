@@ -108,8 +108,6 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.add(MenuListData(r1[5] + opisanie, "mltv_asviacz_pamiatnaj_tablicy"))
             dataSearch.add(MenuListData(r1[6] + opisanie, "mltv_asviacz_pamiatnaj_tablicy_paciarpieu_za_bielarus1"))
             dataSearch.add(MenuListData(r1[7] + opisanie, "mltv_asviacz_pamiatnaj_tablicy_biazvinnym_achviaram_paciarpieli_za_bielarus"))
-            dataSearch.add(MenuListData(r1[8] + opisanie, "sluzba_posnikam_manacham_pustelnikam"))
-            dataSearch.add(MenuListData(r1[9] + opisanie, "sluzba_posniku_manachu_pustelniku"))
             return dataSearch
         }
 
@@ -171,7 +169,9 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.add(MenuListData(r1[36] + opisanie, "sluzba_muczaniku_sviataru_i_manachu"))
             dataSearch.add(MenuListData(r1[37] + opisanie, "sluzba_sviatoj_zanczynie"))
             dataSearch.add(MenuListData(r1[38] + opisanie, "sluzba_sviatym_zanczynam"))
-            if (!isSearch) dataSearch.add(MenuListData(r1[39], "1"))
+            dataSearch.add(MenuListData(r1[39] + opisanie, "sluzba_posnikam_manacham_pustelnikam"))
+            dataSearch.add(MenuListData(r1[40] + opisanie, "sluzba_posniku_manachu_pustelniku"))
+            if (!isSearch) dataSearch.add(MenuListData(r1[41], "1"))
             return dataSearch
         }
 

@@ -7,6 +7,7 @@ featureDelivery = "2.1.0"
 firebaseBom = "33.5.1"
 gridlayout = "1.0.0"
 gson = "2.11.0"
+#itextg = "5.5.10"
 jsoup = "1.18.1"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -19,6 +20,7 @@ picasso = "2.71828"
 playServicesInstantapps = "18.1.0"
 reviewKtx = "2.0.2"
 swiperefreshlayout = "1.1.0"
+#pdfViewer = "1.0.0-alpha04"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -37,6 +39,7 @@ firebase-appcheck-playintegrity = { module = "com.google.firebase:firebase-appch
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+#itextg = { module = "com.itextpdf:itextg", version.ref = "itextg" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -45,4 +48,5 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 play-services-instantapps = { module = "com.google.android.gms:play-services-instantapps", version.ref = "playServicesInstantapps" }
 review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "reviewKtx" }
+#androidx-pdf-viewer = { group = "androidx.pdf", name = "pdf-viewer", version.ref = "pdfViewer" }
 

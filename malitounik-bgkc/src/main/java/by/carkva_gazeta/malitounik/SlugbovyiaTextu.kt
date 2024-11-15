@@ -281,6 +281,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(326, "Уваход у храм Найсьвяцейшай Багародзіцы", "mm_21_11_uvachod_u_sviatyniu_baharodzicy_jutran", JUTRAN))
         datMinALL.add(SlugbovyiaTextuData(326, "Уваход у храм Найсьвяцейшай Багародзіцы", "mm_21_11_uvachod_u_sviatyniu_baharodzicy_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(328, "Пасьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы і між сьвятымі айцоў нашых Амфілёха і Рыгора", "mm_23_11_pasviaccie_uvachodu_baharodzicy_amfilocha_ryhora_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(328, "Пасьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы і між сьвятымі айцоў нашых Амфілёха і Рыгора", "mm_23_11_pasviaccie_uvachodu_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(329, "Пасьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы, сьвятой вялікамучаніцы Кацярыны і сьвятога мучаніка Мяркура", "mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_vialikamuczanika_miarkura_miarkura_smalenskaha_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(329, "Пасьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы, сьвятой вялікамучаніцы Кацярыны і сьвятога мучаніка Мяркура", "mm_24_11_pasviaccie_uvachodu_baharodzicy_vialikamuczanicy_kaciaryny_vialikamuczanika_miarkura_miarkura_smalenskaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "mm_06_01_bohazjaulennie_liturhija", LITURHIJA))
@@ -404,6 +405,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(336, "Сьвятога прарока Навума", "mm_01_12_praroka_navuma_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(337, "Сьвятога прарока Абакума", "mm_02_12_praroka_abakuma_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(327, "Пасьвяцьце Ўводзінаў Найсьвяцейшай Багародзіцы і сьвятога апостала Халімона і інш.", "mm_22_11_pasviaccie_uvachodu_baharodzicy_apostala_chalimona_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(327, "Пасьвяцьце Ўводзінаў Найсьвяцейшай Багародзіцы і сьвятога апостала Халімона і інш.", "mm_22_11_pasviaccie_uvachodu_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(335, "Сьвятога апостала Андрэя Першапакліканага", "mm_30_11_apostala_andreja_pierszapaklikanaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(338, "Сьвятога прарока Сафоніі", "mm_03_12_praroka_safonii_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(339, "Сьв. мучаніцы Барбары і пачэснага айца нашага Яна Дамаскіна", "mm_04_12_muczanicy_barbary_paczesnaha_jana_damaskina_viaczernia", VIACZERNIA))
@@ -455,6 +457,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(250, "Успамін цуду сьвятога арханёла Міхаіла ў Калосах", "mm_06_09_cud_archaniola_michala_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(265, "Адданьне сьвята Ўзвышэньня Пачэснага Крыжа", "mm_21_09_addannie_kryzauzvyszennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(325, "Перадсьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы і сьвятых Рыгора і Прокла", "mm_20_11_pieradsviaccie_uvachodu_u_sviatyniu_baharodzicy_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(325, "Перадсьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы і сьвятых Рыгора і Прокла", "mm_20_11_pieradsviaccie_uvachodu_ryhora_prokla_liturhija", LITURHIJA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

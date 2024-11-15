@@ -28,6 +28,7 @@ class MenuPesnyData {
         pesnyBag.add(Data("piesni_bahar_lubic_maryja_mianie", "Любіць Марыя мяне"))
         pesnyBag.add(Data("piesni_bagar_radujsia_dzieva_maci", "Радуйся, Дзева Маці"))
         pesnyBag.add(Data("piesni_bagar_maci_bozaja_u_barunach", "Маці Божая ў Барунах"))
+        pesnyBag.add(Data("piesni_bagar_maci_bozaja", "Маці Божая"))
 
         pesnyBel.add(Data("piesni_belarus_ave_maria_pazniak", "Ave Maria"))
         pesnyBel.add(Data("piesni_belarus_boza_szto_kalis_narody", "Божа, што калісь народы"))
@@ -77,6 +78,7 @@ class MenuPesnyData {
         pesnyKal.add(Data("piesni_kalady_maryja_ci_ty_viedala", "Марыя, ці Ты ведала?"))
         pesnyKal.add(Data("piesni_kalady_pryjdzicie_paklanicca_adeste_fideles", "Прыйдзіце пакланіцца"))
         pesnyKal.add(Data("piesni_kalady_piesni_kalady_nam_isus_naradziusia", "Нам Ісус нарадзіўся"))
+        pesnyKal.add(Data("piesni_kalady_na_rastvo", "На Раство"))
 
         pesnyPrasl.add(Data("pesny_prasl_0", "Ён паўсюль"))
         pesnyPrasl.add(Data("pesny_prasl_1", "Ісус вызваліў мяне"))
@@ -164,6 +166,7 @@ class MenuPesnyData {
         pesnyPrasl.add(Data("piesni_prasl_nie_cviki_ciabie_trymali", "Не цьвікі Цябе трымалі, а мой грэх"))
         pesnyPrasl.add(Data("piesni_prasl_kryzu_chrystovy", "Крыжу Хрыстовы"))
         pesnyPrasl.add(Data("piesni_prasl_tvoj_chram", "Твой хpам"))
+        pesnyPrasl.add(Data("piesni_prasl_za_usio_tabie_ja_dziakuju", "За ўсё Табе я дзякую"))
 
         pesnyTaize.add(Data("pesny_taize_0", "Magnifikat"))
         pesnyTaize.add(Data("pesny_taize_1", "Ostende nobis"))

@@ -836,7 +836,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         var result = false
         if (resours != "") {
             for (i in 0 until PasochnicaList.findDirAsSave.size) {
-                if (PasochnicaList.findDirAsSave[i].contains(resours)) {
+                if (PasochnicaList.findDirAsSave[i].contains("$resours.")) {
                     result = true
                     break
                 }
@@ -849,7 +849,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         var result = ""
         if (resours != "") {
             for (i in 0 until PasochnicaList.findDirAsSave.size) {
-                if (PasochnicaList.findDirAsSave[i].contains(resours)) {
+                if (PasochnicaList.findDirAsSave[i].contains("$resours.")) {
                     result = PasochnicaList.findDirAsSave[i]
                     break
                 }

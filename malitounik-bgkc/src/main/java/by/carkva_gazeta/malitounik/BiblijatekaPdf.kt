@@ -70,6 +70,18 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
             MainActivity.toastView(this, getString(R.string.error_ch))
         }
         setTollbarTheme()
+        /*try {
+            var parsedText = ""
+            val reader = PdfReader(contentResolver.openInputStream(uri!!))
+            val n = reader.numberOfPages
+            for (i in 0 until n) {
+                parsedText = parsedText + PdfTextExtractor.getTextFromPage(reader, i + 1).trim { it <= ' ' } + "\n" //Extracting the content from the different pages
+            }
+            //println(parsedText)
+            reader.close()
+        } catch (e: Exception) {
+            //println(e)
+        }*/
     }
 
     override fun onPageChanged(currentPage: Int, totalPage: Int) {
@@ -125,7 +137,6 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     }
 
     override fun onPrepareMenu(menu: Menu) {
-        menu.findItem(R.id.action_share).isVisible = intent.data == null
         menu.findItem(R.id.action_apisane).isVisible = arrayList.size != 0
         menu.findItem(R.id.action_print).isVisible = isPrint
     }

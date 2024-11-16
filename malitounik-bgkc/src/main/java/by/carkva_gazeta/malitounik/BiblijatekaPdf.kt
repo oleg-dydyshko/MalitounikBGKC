@@ -15,15 +15,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.BiblijatekaPdfBinding
+import com.itextpdf.text.pdf.PdfReader
+import com.itextpdf.text.pdf.SimpleBookmark
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 
-class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogBibliateka.DialogBibliatekaListener, PdfRendererView.StatusCallBack {
+class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogBibliateka.DialogBibliatekaListener, PdfRendererView.StatusCallBack, DialogTitleBiblijatekaPdf.DialogTitleBibliotekaListener {
 
     private lateinit var binding: BiblijatekaPdfBinding
     private var fileName = ""
@@ -34,6 +37,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     private val dzenNoch get() = getBaseDzenNoch()
     private var resetTollbarJob: Job? = null
     private lateinit var arrayList: ArrayList<String>
+    private val pdfTitleList = ArrayList<String>()
 
     override fun onPause() {
         super.onPause()
@@ -70,18 +74,39 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
             MainActivity.toastView(this, getString(R.string.error_ch))
         }
         setTollbarTheme()
-        /*try {
-            var parsedText = ""
-            val reader = PdfReader(contentResolver.openInputStream(uri!!))
-            val n = reader.numberOfPages
-            for (i in 0 until n) {
-                parsedText = parsedText + PdfTextExtractor.getTextFromPage(reader, i + 1).trim { it <= ' ' } + "\n" //Extracting the content from the different pages
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                printBookmarksTree()
             }
-            //println(parsedText)
+            invalidateOptionsMenu()
+        }
+    }
+
+    private fun printBookmarksTree() {
+        uri?.let { uri ->
+            val reader = PdfReader(contentResolver.openInputStream(uri))
+            val bookmarks = SimpleBookmark.getBookmark(reader)
+            bookmarks?.let {
+                for (i in bookmarks.indices) {
+                    showTitle(bookmarks[i])
+                }
+            }
             reader.close()
-        } catch (e: Exception) {
-            //println(e)
-        }*/
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun showTitle(bm: HashMap<String, Any>) {
+        val kids = bm["Kids"] as? List<HashMap<String, Any>>
+        var page = bm["Page"].toString()
+        val t1 = page.indexOf(" ")
+        if (t1 != -1) page = page.substring(0, t1)
+        pdfTitleList.add("$page<>${bm["Title"]}")
+        if (kids != null) {
+            for (i in kids.indices) {
+                showTitle(kids[i])
+            }
+        }
     }
 
     override fun onPageChanged(currentPage: Int, totalPage: Int) {
@@ -125,7 +150,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     }
 
     override fun onDialogSetPage(page: Int) {
-        binding.pdfView.recyclerView.scrollToPosition(page - 1)//binding.pdfView.jumpToPage(page - 1)
+        binding.pdfView.recyclerView.scrollToPosition(page - 1)
     }
 
     override fun onDialogbibliatekaPositiveClick(listPosition: String) {
@@ -136,15 +161,25 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         super.onBack()
     }
 
+    override fun onDialogTitle(page: Int) {
+        onDialogSetPage(page)
+    }
+
     override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_apisane).isVisible = arrayList.size != 0
         menu.findItem(R.id.action_print).isVisible = isPrint
+        menu.findItem(R.id.action_title).isVisible = pdfTitleList.isNotEmpty()
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == R.id.action_title) {
+            val titleBiblioteka = DialogTitleBiblijatekaPdf.getInstance(pdfTitleList)
+            titleBiblioteka.show(supportFragmentManager, "title_biblioteka")
             return true
         }
         if (id == R.id.action_apisane) {

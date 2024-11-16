@@ -2,22 +2,18 @@ package by.carkva_gazeta.malitounik
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Bitmap.CompressFormat
 import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import android.util.Size
 import by.carkva_gazeta.malitounik.util.CacheManager
-import by.carkva_gazeta.malitounik.util.CacheManager.Companion.CACHE_PATH
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
 import java.util.concurrent.ConcurrentHashMap
 
-internal class PdfRendererCore(private val context: Context, fileDescriptor: ParcelFileDescriptor) {
+internal class PdfRendererCore(context: Context, fileDescriptor: ParcelFileDescriptor) {
 
     private var isRendererOpen = false
     private val openPages = ConcurrentHashMap<Int, PdfRenderer.Page>()
@@ -32,19 +28,6 @@ internal class PdfRendererCore(private val context: Context, fileDescriptor: Par
     private fun getBitmapFromCache(pageNo: Int): Bitmap? = cacheManager.getBitmapFromCache(pageNo)
 
     private fun addBitmapToMemoryCache(pageNo: Int, bitmap: Bitmap) = cacheManager.addBitmapToCache(pageNo, bitmap)
-
-    private fun writeBitmapToCache(pageNo: Int, bitmap: Bitmap, shouldCache: Boolean = true) {
-        if (!shouldCache) return
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val savePath = File(File(context.cacheDir, CACHE_PATH), pageNo.toString())
-                FileOutputStream(savePath).use { fos ->
-                    bitmap.compress(CompressFormat.JPEG, 90, fos) // Compress as JPEG
-                }
-            } catch (_: Exception) {
-            }
-        }
-    }
 
     fun getPageCount(): Int {
         synchronized(this) {
@@ -68,10 +51,9 @@ internal class PdfRendererCore(private val context: Context, fileDescriptor: Par
                 if (!isRendererOpen) return@launch
                 openPageSafely(pageNo)?.use { pdfPage ->
                     try {
-                        bitmap.eraseColor(Color.WHITE) // Clear the bitmap with white color
+                        bitmap.eraseColor(Color.WHITE)
                         pdfPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
                         addBitmapToMemoryCache(pageNo, bitmap)
-                        CoroutineScope(Dispatchers.IO).launch { writeBitmapToCache(pageNo, bitmap) }
                         CoroutineScope(Dispatchers.Main).launch { onBitmapReady?.invoke(true, pageNo, bitmap) }
                     } catch (e: Exception) {
                         CoroutineScope(Dispatchers.Main).launch { onBitmapReady?.invoke(false, pageNo, null) }
@@ -103,7 +85,7 @@ internal class PdfRendererCore(private val context: Context, fileDescriptor: Par
                 Size(page.width, page.height).also { pageSize ->
                     pageDimensionCache[pageNo] = pageSize
                 }
-            } ?: Size(1, 1) // Fallback to a default minimal size
+            } ?: Size(1, 1)
 
             withContext(Dispatchers.Main) {
                 callback(size)
@@ -129,7 +111,7 @@ internal class PdfRendererCore(private val context: Context, fileDescriptor: Par
                 } catch (_: IllegalStateException) {
                 }
             }
-            openPages.clear() // Clear the map after closing all pages.
+            openPages.clear()
         }
     }
 }

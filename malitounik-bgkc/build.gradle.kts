@@ -12,8 +12,8 @@ android {
         applicationId =  "by.carkva_gazeta.malitounik"
         minSdk = 21
         targetSdk = 35
-        versionCode = 442375
-        versionName = "5.1.0.6"
+        versionCode = 442376
+        versionName = "5.1.0.7"
 
         //multiDexEnabled = true
 
@@ -80,7 +80,9 @@ dependencies {
     implementation (libs.androidx.media)
     implementation (libs.androidx.core.ktx)
     //implementation(libs.androidx.pdf.viewer)
-    //implementation (libs.itextg)
+    implementation (libs.itextg)
+    implementation (libs.core)
+    //implementation(libs.itext7.core)
     //implementation ("androidx.multidex:multidex:2.0.1")
     testImplementation (libs.junit)
     androidTestImplementation (libs.androidx.junit)

@@ -2,12 +2,13 @@
 appcompat = "1.7.0"
 commonsText = "1.12.0"
 constraintlayout = "2.2.0"
+core = "1.58.0.0"
 draglistview = "1.7.3"
 featureDelivery = "2.1.0"
-firebaseBom = "33.5.1"
+firebaseBom = "33.6.0"
 gridlayout = "1.0.0"
 gson = "2.11.0"
-#itextg = "5.5.10"
+itextg = "5.5.10"
 jsoup = "1.18.1"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -20,6 +21,7 @@ picasso = "2.71828"
 playServicesInstantapps = "18.1.0"
 reviewKtx = "2.0.2"
 swiperefreshlayout = "1.1.0"
+#itext7Core = "8.0.5"
 #pdfViewer = "1.0.0-alpha04"
 
 [libraries]
@@ -33,13 +35,14 @@ androidx-media3-exoplayer-smoothstreaming = { module = "androidx.media3:media3-e
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "featureDelivery" }
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "commonsText" }
+core = { module = "com.madgag.spongycastle:core", version.ref = "core" }
 draglistview = { module = "com.github.woxthebox:draglistview", version.ref = "draglistview" }
 feature-delivery = { module = "com.google.android.play:feature-delivery", version.ref = "featureDelivery" }
 firebase-appcheck-playintegrity = { module = "com.google.firebase:firebase-appcheck-playintegrity" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-#itextg = { module = "com.itextpdf:itextg", version.ref = "itextg" }
+itextg = { module = "com.itextpdf:itextg", version.ref = "itextg" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -48,5 +51,6 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 play-services-instantapps = { module = "com.google.android.gms:play-services-instantapps", version.ref = "playServicesInstantapps" }
 review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "reviewKtx" }
+#itext7-core = { group = "com.itextpdf", name = "itext7-core", version.ref = "itext7Core" }
 #androidx-pdf-viewer = { group = "androidx.pdf", name = "pdf-viewer", version.ref = "pdfViewer" }
 

@@ -33,3 +33,12 @@
     public static <fields>;
 }
 -keep class com.shockwave.**
+
+-dontwarn org.spongycastle.cert.X509CertificateHolder
+-dontwarn org.spongycastle.cms.CMSEnvelopedData
+-dontwarn org.spongycastle.cms.Recipient
+-dontwarn org.spongycastle.cms.RecipientId
+-dontwarn org.spongycastle.cms.RecipientInformation
+-dontwarn org.spongycastle.cms.RecipientInformationStore
+-dontwarn org.spongycastle.cms.jcajce.JceKeyTransEnvelopedRecipient
+-dontwarn org.spongycastle.cms.jcajce.JceKeyTransRecipient

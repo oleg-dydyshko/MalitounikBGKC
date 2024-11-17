@@ -68,7 +68,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
                 binding.pdfView.initWithUri(it)
                 totalPage = binding.pdfView.totalPageCount
                 val page = k.getInt("Bibliateka_$fileName", 0)
-                binding.pdfView.recyclerView.scrollToPosition(page)
+                onDialogSetPage(page + 1)
             }
         } catch (_: Throwable) {
             MainActivity.toastView(this, getString(R.string.error_ch))
@@ -150,7 +150,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     }
 
     override fun onDialogSetPage(page: Int) {
-        binding.pdfView.recyclerView.scrollToPosition(page - 1)
+        binding.pdfView.recyclerView.smoothScrollToPosition(page - 1)
     }
 
     override fun onDialogbibliatekaPositiveClick(listPosition: String) {

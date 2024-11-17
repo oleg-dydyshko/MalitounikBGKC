@@ -48,11 +48,10 @@ class PdfRendererView @JvmOverloads constructor(context: Context, attrs: Attribu
         getAttrs(attrs, defStyleAttr)
     }
 
-
     interface StatusCallBack {
         fun onPageChanged(currentPage: Int, totalPage: Int) {}
     }
-    
+
     fun initWithUri(uri: Uri) {
         val fileDescriptor = context.contentResolver.openFileDescriptor(uri, "r") ?: return
         init(fileDescriptor)
@@ -86,7 +85,7 @@ class PdfRendererView @JvmOverloads constructor(context: Context, attrs: Attribu
         if (context is StatusCallBack) {
             statusListener = context as StatusCallBack
         }
-        pdfRendererCore = PdfRendererCore(context, fileDescriptor)
+        pdfRendererCore = PdfRendererCore(fileDescriptor)
         pdfRendererCoreInitialised = true
         pdfViewAdapter = PdfViewAdapter(context, pdfRendererCore, pageMargin, enableLoadingForPages)
         val v = LayoutInflater.from(context).inflate(R.layout.pdf_rendererview, this, false)

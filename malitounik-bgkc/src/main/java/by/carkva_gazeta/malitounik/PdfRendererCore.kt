@@ -1,33 +1,25 @@
 package by.carkva_gazeta.malitounik
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import android.util.Size
-import by.carkva_gazeta.malitounik.util.CacheManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.ConcurrentHashMap
 
-internal class PdfRendererCore(context: Context, fileDescriptor: ParcelFileDescriptor) {
+internal class PdfRendererCore(fileDescriptor: ParcelFileDescriptor) {
 
     private var isRendererOpen = false
     private val openPages = ConcurrentHashMap<Int, PdfRenderer.Page>()
     private var pdfRenderer: PdfRenderer? = null
-    private val cacheManager = CacheManager(context)
 
     init {
         pdfRenderer = PdfRenderer(fileDescriptor).also { isRendererOpen = true }
-        cacheManager.initCache()
     }
-
-    private fun getBitmapFromCache(pageNo: Int): Bitmap? = cacheManager.getBitmapFromCache(pageNo)
-
-    private fun addBitmapToMemoryCache(pageNo: Int, bitmap: Bitmap) = cacheManager.addBitmapToCache(pageNo, bitmap)
 
     fun getPageCount(): Int {
         synchronized(this) {
@@ -41,11 +33,6 @@ internal class PdfRendererCore(context: Context, fileDescriptor: ParcelFileDescr
             onBitmapReady?.invoke(false, pageNo, null)
             return
         }
-        val cachedBitmap = getBitmapFromCache(pageNo)
-        if (cachedBitmap != null) {
-            CoroutineScope(Dispatchers.Main).launch { onBitmapReady?.invoke(true, pageNo, cachedBitmap) }
-            return
-        }
         CoroutineScope(Dispatchers.IO).launch {
             synchronized(this@PdfRendererCore) {
                 if (!isRendererOpen) return@launch
@@ -53,7 +40,6 @@ internal class PdfRendererCore(context: Context, fileDescriptor: ParcelFileDescr
                     try {
                         bitmap.eraseColor(Color.WHITE)
                         pdfPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                        addBitmapToMemoryCache(pageNo, bitmap)
                         CoroutineScope(Dispatchers.Main).launch { onBitmapReady?.invoke(true, pageNo, bitmap) }
                     } catch (e: Exception) {
                         CoroutineScope(Dispatchers.Main).launch { onBitmapReady?.invoke(false, pageNo, null) }

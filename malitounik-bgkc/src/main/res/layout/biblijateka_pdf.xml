@@ -46,19 +46,21 @@
                     android:singleLine="true"
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <by.carkva_gazeta.malitounik.PdfRendererView
+    <by.carkva_gazeta.malitounik.PinchZoomRecyclerView
         android:id="@+id/pdfView"
         android:layout_width="0sp"
         android:layout_height="0sp"
-        app:pdfView_showDivider="false"
+        android:background="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        app:pdfView_showDivider="false" />
 </androidx.constraintlayout.widget.ConstraintLayout>

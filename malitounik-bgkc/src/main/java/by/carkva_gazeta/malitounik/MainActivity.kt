@@ -142,9 +142,16 @@ class MainActivity : BaseActivity(), View.OnClickListener,
     }
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
-            val intent = Intent(this, BiblijatekaPdf::class.java)
-            intent.data = it.data?.data
-            setFileBiblijatekaLauncher.launch(intent)
+            val uri = it.data?.data
+            if (uri != null) {
+                val intent = Intent(this, BiblijatekaPdf::class.java)
+                intent.data = uri
+                val fileName = getFileName(uri)
+                val title = getTitle(fileName)
+                intent.putExtra("fileTitle", title)
+                intent.putExtra("fileName", fileName)
+                setFileBiblijatekaLauncher.launch(intent)
+            }
         }
     }
     val listBibliaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

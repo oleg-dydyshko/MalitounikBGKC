@@ -416,6 +416,7 @@ class MenuBiblijateka : BaseFragment() {
                 }
                 munuBiblijatekaListener?.menuMainloadNiadaunia()
                 adapter.notifyDataSetChanged()
+                binding.listView.smoothScrollToPosition(0)
             }
         }
     }

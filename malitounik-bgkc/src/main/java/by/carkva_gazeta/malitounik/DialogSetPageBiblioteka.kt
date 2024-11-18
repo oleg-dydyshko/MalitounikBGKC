@@ -66,7 +66,7 @@ class DialogSetPageBiblioteka : DialogFragment() {
                         1
                     }
                     if (value in 1..pageCount) {
-                        mListener?.onDialogSetPage(value)
+                        mListener?.onDialogSetPage(value - 1)
                     } else {
                         MainActivity.toastView(it, getString(R.string.error))
                     }

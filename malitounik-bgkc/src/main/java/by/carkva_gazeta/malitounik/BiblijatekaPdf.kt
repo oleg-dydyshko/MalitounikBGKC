@@ -3,6 +3,8 @@ package by.carkva_gazeta.malitounik
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Bundle
 import android.print.PrintAttributes
@@ -11,10 +13,14 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.BiblijatekaPdfBinding
+import by.carkva_gazeta.malitounik.databinding.BiblijatekaPdfItemBinding
 import com.itextpdf.text.pdf.PdfReader
 import com.itextpdf.text.pdf.SimpleBookmark
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +32,7 @@ import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 
-class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogBibliateka.DialogBibliatekaListener, PdfRendererView.StatusCallBack, DialogTitleBiblijatekaPdf.DialogTitleBibliotekaListener {
+class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogBibliateka.DialogBibliatekaListener, DialogTitleBiblijatekaPdf.DialogTitleBibliotekaListener {
 
     private lateinit var binding: BiblijatekaPdfBinding
     private var fileName = ""
@@ -41,8 +47,10 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
 
     override fun onPause() {
         super.onPause()
-        val layoutManager = binding.pdfView.recyclerView.layoutManager as? LinearLayoutManager
-        val page = layoutManager?.findFirstVisibleItemPosition() ?: 0
+        val layoutManager = binding.pdfView.layoutManager as LinearLayoutManager
+        val firstCompletelyVisiblePosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+        val page = if (firstCompletelyVisiblePosition != RecyclerView.NO_POSITION) firstCompletelyVisiblePosition
+        else layoutManager.findFirstVisibleItemPosition()
         val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val edit = k.edit()
         edit.putInt("Bibliateka_$fileName", page)
@@ -63,22 +71,56 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         val edit = k.edit()
         edit.putLong("BiblijatekaUseTime", c.timeInMillis)
         edit.apply()
-        try {
-            uri?.let {
-                binding.pdfView.initWithUri(it)
-                totalPage = binding.pdfView.totalPageCount
-                val page = k.getInt("Bibliateka_$fileName", 0)
-                onDialogSetPage(page + 1)
+        uri?.let { uri ->
+            val fileReader = contentResolver.openFileDescriptor(uri, "r")
+            fileReader?.let {
+                binding.pdfView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                val pdfRenderer = PdfRenderer(it)
+                binding.pdfView.adapter = PdfAdapter(pdfRenderer)
+                totalPage = pdfRenderer.pageCount
+                val page = savedInstanceState?.getInt("scrollPosition") ?: k.getInt("Bibliateka_$fileName", 0)
+                onDialogSetPage(page)
             }
-        } catch (_: Throwable) {
-            MainActivity.toastView(this, getString(R.string.error_ch))
         }
+        binding.pdfView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            private var lastFirstVisiblePosition = RecyclerView.NO_POSITION
+            private var lastCompletelyVisiblePosition = RecyclerView.NO_POSITION
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val firstVisiblePosition = layoutManager.findFirstVisibleItemPosition()
+                val firstCompletelyVisiblePosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+                val isPositionChanged = firstVisiblePosition != lastFirstVisiblePosition || firstCompletelyVisiblePosition != lastCompletelyVisiblePosition
+                if (isPositionChanged) {
+                    val positionToUse = if (firstCompletelyVisiblePosition != RecyclerView.NO_POSITION) {
+                        firstCompletelyVisiblePosition
+                    } else {
+                        firstVisiblePosition
+                    }
+                    binding.pageToolbar.text = getString(R.string.pdfView_page_no, positionToUse + 1, totalPage)
+                    lastFirstVisiblePosition = firstVisiblePosition
+                    lastCompletelyVisiblePosition = firstCompletelyVisiblePosition
+                }
+            }
+        })
         setTollbarTheme()
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 printBookmarksTree()
             }
             invalidateOptionsMenu()
+        }
+    }
+
+    private fun LinearLayoutManager.accurateScrollToPosition(position: Int) {
+        this.scrollToPosition(position)
+        this.postOnAnimation {
+            val realPosition = this.findFirstCompletelyVisibleItemPosition()
+            if (position != realPosition) {
+                this.accurateScrollToPosition(position)
+            } else {
+                this.scrollToPosition(position)
+            }
         }
     }
 
@@ -107,10 +149,6 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
                 showTitle(kids[i])
             }
         }
-    }
-
-    override fun onPageChanged(currentPage: Int, totalPage: Int) {
-        binding.pageToolbar.text = getString(R.string.pdfView_page_no, currentPage, totalPage)
     }
 
     private fun setTollbarTheme() {
@@ -150,7 +188,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     }
 
     override fun onDialogSetPage(page: Int) {
-        binding.pdfView.recyclerView.smoothScrollToPosition(page - 1)
+        (binding.pdfView.layoutManager as? LinearLayoutManager)?.accurateScrollToPosition(page)
     }
 
     override fun onDialogbibliatekaPositiveClick(listPosition: String) {
@@ -166,9 +204,15 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     }
 
     override fun onPrepareMenu(menu: Menu) {
+        if (pdfTitleList.isNotEmpty()) {
+            menu.findItem(R.id.action_title).isVisible = true
+            menu.findItem(R.id.action_set_page).isVisible = false
+        } else {
+            menu.findItem(R.id.action_title).isVisible = false
+            menu.findItem(R.id.action_set_page).isVisible = true
+        }
         menu.findItem(R.id.action_apisane).isVisible = arrayList.size != 0
         menu.findItem(R.id.action_print).isVisible = isPrint
-        menu.findItem(R.id.action_title).isVisible = pdfTitleList.isNotEmpty()
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
@@ -225,5 +269,51 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.biblijateka_pdf, menu)
         super.onCreateMenu(menu, menuInflater)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val layoutManager = binding.pdfView.layoutManager as LinearLayoutManager
+        val firstCompletelyVisiblePosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+        val page = if (firstCompletelyVisiblePosition != RecyclerView.NO_POSITION) firstCompletelyVisiblePosition
+        else layoutManager.findFirstVisibleItemPosition()
+        outState.putInt("scrollPosition", page)
+    }
+
+    private inner class PdfAdapter(val pdfRenderer: PdfRenderer) : RecyclerView.Adapter<PdfAdapter.MyViewHolder>() {
+
+        inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val image: ImageView = itemView.findViewById(R.id.image_view)
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+            val itemView = BiblijatekaPdfItemBinding.inflate(layoutInflater, parent, false)
+            return MyViewHolder(itemView.root)
+        }
+
+        override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+            CoroutineScope(Dispatchers.Main).launch {
+                val width = binding.pdfView.width
+                var bitmap: Bitmap? = null
+                withContext(Dispatchers.IO) {
+                    var page: PdfRenderer.Page? = null
+                    try {
+                        page = pdfRenderer.openPage(position)
+                        val aspectRatio = page.width.toFloat() / page.height.toFloat()
+                        val height = (width / aspectRatio).toInt()
+                        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                        bitmap?.let {
+                            page.render(it, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                        }
+                    } catch (_: Throwable) {
+                    } finally {
+                        page?.close()
+                    }
+                }
+                holder.image.setImageBitmap(bitmap)
+            }
+        }
+
+        override fun getItemCount() = pdfRenderer.pageCount
     }
 }

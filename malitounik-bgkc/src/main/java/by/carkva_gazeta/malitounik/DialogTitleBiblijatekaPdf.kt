@@ -68,7 +68,7 @@ class DialogTitleBiblijatekaPdf : DialogFragment() {
                 val t1 = bookmarks[i].indexOf("<>")
                 if (t1 != -1) {
                     val t2 = bookmarks[i].substring(0, t1).toInt()
-                    mListener?.onDialogTitle(t2)
+                    mListener?.onDialogTitle(t2 - 1)
                 }
                 alert.cancel()
             }

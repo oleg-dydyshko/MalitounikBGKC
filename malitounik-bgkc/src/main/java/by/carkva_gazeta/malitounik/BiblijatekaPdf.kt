@@ -51,10 +51,12 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         val firstCompletelyVisiblePosition = layoutManager.findFirstCompletelyVisibleItemPosition()
         val page = if (firstCompletelyVisiblePosition != RecyclerView.NO_POSITION) firstCompletelyVisiblePosition
         else layoutManager.findFirstVisibleItemPosition()
-        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val edit = k.edit()
-        edit.putInt("Bibliateka_$fileName", page)
-        edit.apply()
+        if (isPrint) {
+            val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val edit = k.edit()
+            edit.putInt("Bibliateka_$fileName", page)
+            edit.apply()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

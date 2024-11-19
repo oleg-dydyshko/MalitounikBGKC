@@ -48,7 +48,7 @@ class MenuBiblijateka : BaseFragment() {
     private var width = 0
     private lateinit var adapter: BibliotekaAdapter
     private var idSelect = MainActivity.MALITOUNIKI
-    private val naidaunia = ArrayList<String>()
+    private val naidaunia = ArrayList<ArrayList<String>>()
     private var saveindep = true
     private var setRubrikaJob: Job? = null
     private var bitmapJob: Job? = null
@@ -120,36 +120,57 @@ class MenuBiblijateka : BaseFragment() {
 
     fun fileDelite(file: String) {
         activity?.let {
-            val list = it.contentResolver.persistedUriPermissions
-            val documentsTree = DocumentFile.fromTreeUri(it, list[list.size - 1].uri)
-            if (documentsTree?.findFile(file)?.delete() == true) deliteCashe(file)
+            val uriTree = getTreeUri()
+            if (uriTree != null) {
+                val documentsTree = DocumentFile.fromTreeUri(it, uriTree)
+                if (documentsTree?.findFile(file)?.delete() == true) deliteCashe(file)
+            }
         }
     }
 
     fun delAllNiadaunia() {
-        naidaunia.clear()
-        arrayList.clear()
-        adapter.notifyDataSetChanged()
-        val prefEditor = k.edit()
-        prefEditor.remove("bibliateka_latest")
-        prefEditor.apply()
-        munuBiblijatekaListener?.munuBiblijatekaUpdate(false)
+        activity?.let {
+            val edit = k.edit()
+            for (i in 0 until naidaunia.size) {
+                if (naidaunia[i][0] == "") {
+                    it.contentResolver.releasePersistableUriPermission(Uri.parse(naidaunia[i][6]), Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+                edit.remove("Bibliateka_${naidaunia[i][2]}")
+            }
+            edit.apply()
+            naidaunia.clear()
+            arrayList.clear()
+            adapter.notifyDataSetChanged()
+            val prefEditor = k.edit()
+            prefEditor.remove("biblijatekaLatest")
+            prefEditor.apply()
+            munuBiblijatekaListener?.munuBiblijatekaUpdate(false)
+        }
     }
 
     private fun deliteCashe(fileName: String) {
-        for (i in 0 until naidaunia.size) {
-            if (fileName == naidaunia[i]) {
-                naidaunia.removeAt(i)
-                break
+        activity?.let {
+            for (i in 0 until naidaunia.size) {
+                if (fileName == naidaunia[i][2]) {
+                    if (naidaunia[i][0] == "") {
+                        it.contentResolver.releasePersistableUriPermission(Uri.parse(naidaunia[i][6]), Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    naidaunia.removeAt(i)
+                    val edit = k.edit()
+                    edit.remove("Bibliateka_$fileName")
+                    edit.apply()
+                    break
+                }
             }
+            val gson = Gson()
+            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+            val prefEditor = k.edit()
+            if (naidaunia.size == 0) prefEditor.remove("biblijatekaLatest")
+            else prefEditor.putString("biblijatekaLatest", gson.toJson(naidaunia, type))
+            prefEditor.apply()
+            munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
+            loadNiadaunia()
         }
-        val gson = Gson()
-        val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
-        val prefEditor = k.edit()
-        if (naidaunia.size == 0) prefEditor.remove("bibliateka_latest")
-        else prefEditor.putString("bibliateka_latest", gson.toJson(naidaunia, type))
-        prefEditor.apply()
-        munuBiblijatekaListener?.munuBiblijatekaUpdate(naidaunia.size > 0)
     }
 
     fun onDialogPositiveClick(listPosition: String) {
@@ -196,11 +217,13 @@ class MenuBiblijateka : BaseFragment() {
             if (!error) {
                 activity?.let {
                     if (saveFile(url)) {
-                        val list = it.contentResolver.persistedUriPermissions
-                        val documentsTree = DocumentFile.fromTreeUri(it, list[list.size - 1].uri)
-                        val uriFile = documentsTree?.findFile(url)?.uri
-                        uriFile?.let { uri ->
-                            loadComplete(uri)
+                        val uriTree = getTreeUri()
+                        if (uriTree != null) {
+                            val documentsTree = DocumentFile.fromTreeUri(it, uriTree)
+                            val uriFile = documentsTree?.findFile(url)?.uri
+                            uriFile?.let { uri ->
+                                loadComplete(uri)
+                            }
                         }
                     }
                 }
@@ -211,12 +234,26 @@ class MenuBiblijateka : BaseFragment() {
         }
     }
 
-    private fun fileExists(fileName: String): Boolean {
-        var exitsFile = false
+    private fun getTreeUri(): Uri? {
         activity?.let {
             val list = it.contentResolver.persistedUriPermissions
             if (list.size > 0) {
-                val documentsTree = DocumentFile.fromTreeUri(it, list[list.size - 1].uri)
+                for (i in 0 until list.size) {
+                    if (list[i].uri.path?.contains("tree") == true) {
+                        return list[i].uri
+                    }
+                }
+            }
+        }
+        return null
+    }
+
+    private fun fileExists(fileName: String): Boolean {
+        var exitsFile = false
+        activity?.let {
+            val uriTree = getTreeUri()
+            if (uriTree != null) {
+                val documentsTree = DocumentFile.fromTreeUri(it, uriTree)
                 val childDocuments = documentsTree?.listFiles()
                 childDocuments?.let { document ->
                     for (i in document.indices) {
@@ -234,41 +271,41 @@ class MenuBiblijateka : BaseFragment() {
     private fun saveFile(fileName: String): Boolean {
         var result = true
         activity?.let { activity ->
-            val list = activity.contentResolver.persistedUriPermissions
-            val documentsTree = DocumentFile.fromTreeUri(activity, list[list.size - 1].uri)
-            if (documentsTree?.exists() == true) {
-                val uri = documentsTree.createFile("application/pdf", fileName)?.uri
-                uri?.let {
-                    var bis: BufferedInputStream? = null
-                    var bos: BufferedOutputStream? = null
-                    try {
-                        val file = File("${activity.filesDir}/cache/$fileName")
-                        val input = FileInputStream(file)
-                        val originalSize = input.available()
-                        bis = BufferedInputStream(input)
-                        bos = BufferedOutputStream(activity.contentResolver.openOutputStream(it))
-                        val buf = ByteArray(originalSize)
-                        bis.read(buf)
-                        do {
-                            bos.write(buf)
-                        } while (bis.read(buf) != -1)
-                        file.delete()
-                    } catch (_: Throwable) {
-                    } finally {
-                        bis?.close()
-                        bos?.flush()
-                        bos?.close()
+            val uriTree = getTreeUri()
+            if (uriTree != null) {
+                val documentsTree = DocumentFile.fromTreeUri(activity, uriTree)
+                if (documentsTree?.exists() == true) {
+                    val uri = documentsTree.createFile("application/pdf", fileName)?.uri
+                    uri?.let {
+                        var bis: BufferedInputStream? = null
+                        var bos: BufferedOutputStream? = null
+                        try {
+                            val file = File("${activity.filesDir}/cache/$fileName")
+                            val input = FileInputStream(file)
+                            val originalSize = input.available()
+                            bis = BufferedInputStream(input)
+                            bos = BufferedOutputStream(activity.contentResolver.openOutputStream(it))
+                            val buf = ByteArray(originalSize)
+                            bis.read(buf)
+                            do {
+                                bos.write(buf)
+                            } while (bis.read(buf) != -1)
+                            file.delete()
+                        } catch (_: Throwable) {
+                        } finally {
+                            bis?.close()
+                            bos?.flush()
+                            bos?.close()
+                        }
                     }
-                }
-            } else {
-                if (list.size > 0) {
+                } else {
                     val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                    activity.contentResolver.releasePersistableUriPermission(list[list.size - 1].uri, takeFlags)
+                    activity.contentResolver.releasePersistableUriPermission(uriTree, takeFlags)
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                    mTreeUserPdfDir.launch(intent)
+                    this.fileName = fileName
+                    result = false
                 }
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                mTreeUserPdfDir.launch(intent)
-                this.fileName = fileName
-                result = false
             }
         }
         return result
@@ -331,10 +368,12 @@ class MenuBiblijateka : BaseFragment() {
             }
             binding.listView.setOnItemLongClickListener { _, _, position, _ ->
                 if (idSelect == MainActivity.NIADAUNIA) {
-                    val dd = DialogDeliteNiadaunia.getInstance(arrayList[position][2], arrayList[position][0])
+                    val title = if (arrayList[position][0] == "") arrayList[position][2]
+                    else arrayList[position][0]
+                    val dd = DialogDeliteNiadaunia.getInstance(arrayList[position][2], title)
                     dd.show(childFragmentManager, "dialog_delite_niadaunia")
                 } else {
-                    if (fileExists(arrayList[position][2])) {
+                    if (arrayList[position][0] != "" && fileExists(arrayList[position][2])) {
                         val dd = DialogDelite.getInstance(position, arrayList[position][2], "з бібліятэкі", arrayList[position][0])
                         dd.show(childFragmentManager, "dialog_delite")
                     }
@@ -347,12 +386,16 @@ class MenuBiblijateka : BaseFragment() {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (fileExists(arrayList[position][2])) {
-                    val list = it.contentResolver.persistedUriPermissions
-                    val documentsTree = DocumentFile.fromTreeUri(it, list[list.size - 1].uri)
-                    val uriFile = documentsTree?.findFile(arrayList[position][2])?.uri
-                    uriFile?.let { uri ->
-                        loadComplete(uri)
+                    val uriTree = getTreeUri()
+                    if (uriTree != null) {
+                        val documentsTree = DocumentFile.fromTreeUri(it, uriTree)
+                        val uriFile = documentsTree?.findFile(arrayList[position][2])?.uri
+                        uriFile?.let { uriFileS ->
+                            loadComplete(uriFileS)
+                        }
                     }
+                } else if (arrayList[position][0] == "") {
+                    loadComplete(Uri.parse(arrayList[position][6]))
                 } else {
                     var opisanie = arrayList[position][1]
                     val t1 = opisanie.indexOf("</span><br>")
@@ -396,23 +439,19 @@ class MenuBiblijateka : BaseFragment() {
         }
     }
 
-    private fun loadNiadaunia(isUpdate: Boolean = true) {
+    fun loadNiadaunia(isUpdate: Boolean = true) {
         (activity as? MainActivity)?.let {
             val gson = Gson()
-            val json = k.getString("bibliateka_latest", "")
+            val json = k.getString("biblijatekaLatest", "")
             if (!json.equals("")) {
                 naidaunia.clear()
-                val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
                 naidaunia.addAll(gson.fromJson(json, type))
             }
             if (isUpdate) {
                 arrayList.clear()
-                val listBiliateka = it.getListBiliateka()
                 for (i in 0 until naidaunia.size) {
-                    val rtemp2 = naidaunia[i]
-                    for (e in 0 until listBiliateka.size) {
-                        if (rtemp2 == listBiliateka[e][2]) arrayList.add(listBiliateka[e])
-                    }
+                    arrayList.add(naidaunia[i])
                 }
                 munuBiblijatekaListener?.menuMainloadNiadaunia()
                 adapter.notifyDataSetChanged()
@@ -429,7 +468,7 @@ class MenuBiblijateka : BaseFragment() {
             intent.putExtra("fileTitle", it.getTitle(fileName))
             intent.putExtra("fileName", fileName)
             intent.putExtra("isPrint", true)
-            it.saveNaidauniaBiblijateka(fileName)
+            it.saveNaidauniaBiblijateka(fileName, uri)
             mBiblijatekaPdfResult.launch(intent)
         }
     }
@@ -620,8 +659,7 @@ class MenuBiblijateka : BaseFragment() {
         outState.putInt("idSelect", idSelect)
     }
 
-    private inner class BibliotekaAdapter(context: Activity) :
-        ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
+    private inner class BibliotekaAdapter(context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -639,22 +677,25 @@ class MenuBiblijateka : BaseFragment() {
             viewHolder.imageView.requestLayout()
             activity?.let { activity ->
                 bitmapJob = CoroutineScope(Dispatchers.Main).launch {
-                    val t2 = arrayList[position][5].lastIndexOf("/")
-                    val image = arrayList[position][5].substring(t2 + 1)
-                    val file = File("${activity.filesDir}/image_temp/$image")
-                    if (!file.exists() && MainActivity.isNetworkAvailable()) {
-                        for (e in 0..2) {
-                            if (!saveImagePdf(file, image)) break
+                    if (arrayList[position][5] != "") {
+                        val image = arrayList[position][5]
+                        val file = File("${activity.filesDir}/image_temp/$image")
+                        if (!file.exists() && MainActivity.isNetworkAvailable()) {
+                            for (e in 0..2) {
+                                if (!saveImagePdf(file, image)) break
+                            }
                         }
-                    }
-                    if (file.exists()) {
-                        val bitmap = withContext(Dispatchers.IO) {
-                            val options = BitmapFactory.Options()
-                            options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                            return@withContext BitmapFactory.decodeFile("${activity.filesDir}/image_temp/$image", options)
+                        if (file.exists()) {
+                            val bitmap = withContext(Dispatchers.IO) {
+                                val options = BitmapFactory.Options()
+                                options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                                return@withContext BitmapFactory.decodeFile("${activity.filesDir}/image_temp/$image", options)
+                            }
+                            viewHolder.imageView.setImageBitmap(bitmap)
+                            viewHolder.imageView.visibility = View.VISIBLE
                         }
-                        viewHolder.imageView.setImageBitmap(bitmap)
-                        viewHolder.imageView.visibility = View.VISIBLE
+                    } else {
+                        viewHolder.imageView.visibility = View.GONE
                     }
                 }
                 if (dzenNoch) {
@@ -662,7 +703,8 @@ class MenuBiblijateka : BaseFragment() {
                     viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
                 }
             }
-            viewHolder.text.text = arrayList[position][0]
+            viewHolder.text.text = if (arrayList[position][0] != "") arrayList[position][0]
+            else arrayList[position][2]
             return rootView
         }
     }

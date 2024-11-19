@@ -75,18 +75,7 @@ import java.util.Calendar
 import kotlin.random.Random
 
 
-class MainActivity : BaseActivity(), View.OnClickListener,
-    DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener,
-    DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner,
-    DialogFontSize.DialogFontSizeListener, DialogPrazdnik.DialogPrazdnikListener,
-    DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener,
-    DialogClearHishory.DialogClearHistoryListener,
-    DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener,
-    DialogDeliteNiadaunia.DialogDeliteNiadauniaListener,
-    DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, MyNatatki.MyNatatkiListener,
-    ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener,
-    MenuBiblijateka.MunuBiblijatekaListener,
-    DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
+class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener, MenuBiblijateka.MunuBiblijatekaListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
 
     private val c = Calendar.getInstance()
     private lateinit var k: SharedPreferences
@@ -135,21 +124,23 @@ class MainActivity : BaseActivity(), View.OnClickListener,
     }
     private val setFileBiblijatekaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val title = result.data?.extras?.getString("title", "") ?: ""
-            saveNaidauniaBiblijateka(title)
             selectFragment(binding.label140, true)
+            val fragment = supportFragmentManager.findFragmentByTag("MenuBiblijateka$NIADAUNIA") as? MenuBiblijateka
+            fragment?.loadNiadaunia()
         }
     }
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             val uri = it.data?.data
             if (uri != null) {
+                contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 val intent = Intent(this, BiblijatekaPdf::class.java)
                 intent.data = uri
                 val fileName = getFileName(uri)
                 val title = getTitle(fileName)
                 intent.putExtra("fileTitle", title)
                 intent.putExtra("fileName", fileName)
+                saveNaidauniaBiblijateka(fileName, uri)
                 setFileBiblijatekaLauncher.launch(intent)
             }
         }
@@ -409,7 +400,8 @@ class MainActivity : BaseActivity(), View.OnClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", MODE_PRIVATE)
-        prefEditors = k.edit() // Удаление "фантомных" виджетов
+        prefEditors = k.edit()
+        // Удаление "фантомных" виджетов
         /*val appWidgetManager = AppWidgetManager.getInstance(this)
         val thisAppWidget = ComponentName(packageName, Widget::class.java.name)
         val host = AppWidgetHost(this, 0)
@@ -1852,23 +1844,23 @@ class MainActivity : BaseActivity(), View.OnClickListener,
 
     fun getFileName(uri: Uri): String {
         var result: String? = null
-            val cursor = contentResolver.query(uri, null, null, null, null)
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                    if (index != -1) result = cursor.getString(index)
-                }
-            } catch (_: Throwable) {
-            } finally {
-                cursor?.close()
+        val cursor = contentResolver.query(uri, null, null, null, null)
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (index != -1) result = cursor.getString(index)
             }
-            if (result == null) {
-                result = uri.path ?: ""
-                val cut = result.lastIndexOf('/')
-                if (cut != -1) {
-                    result = result.substring(cut + 1)
-                }
+        } catch (_: Throwable) {
+        } finally {
+            cursor?.close()
+        }
+        if (result == null) {
+            result = uri.path ?: ""
+            val cut = result.lastIndexOf('/')
+            if (cut != -1) {
+                result = result.substring(cut + 1)
             }
+        }
         return result
     }
 
@@ -1884,24 +1876,44 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         return result
     }
 
-    fun saveNaidauniaBiblijateka(fileName: String) {
-        val naidaunia = ArrayList<String>()
+    fun saveNaidauniaBiblijateka(fileName: String, uri: Uri) {
+        val naidaunia = ArrayList<ArrayList<String>>()
         val gson = Gson()
-        val json = k.getString("bibliateka_latest", "")
+        val json = k.getString("biblijatekaLatest", "")
         if (!json.equals("")) {
-            val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
             naidaunia.addAll(gson.fromJson(json, type))
         }
         for (i in 0 until naidaunia.size) {
-            if (fileName == naidaunia[i]) {
+            if (fileName == naidaunia[i][2]) {
                 naidaunia.removeAt(i)
                 break
             }
         }
-        naidaunia.add(0, fileName)
-        val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+        var isAddN = false
+        val listBiliateka = getListBiliateka()
+        for (e in 0 until listBiliateka.size) {
+            if (fileName == listBiliateka[e][2]) {
+                val subList = listBiliateka[e]
+                subList.add(uri.toString())
+                naidaunia.add(0, subList)
+                isAddN = true
+            }
+        }
+        if (!isAddN) {
+            val list = ArrayList<String>()
+            list.add("")
+            list.add("")
+            list.add(fileName)
+            list.add("0")
+            list.add("0")
+            list.add("")
+            list.add(uri.toString())
+            naidaunia.add(0, list)
+        }
+        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
         val prefEditor = k.edit()
-        prefEditor.putString("bibliateka_latest", gson.toJson(naidaunia, type))
+        prefEditor.putString("biblijatekaLatest", gson.toJson(naidaunia, type))
         prefEditor.apply()
     }
 
@@ -1915,13 +1927,13 @@ class MainActivity : BaseActivity(), View.OnClickListener,
                 val documentsTree = DocumentFile.fromTreeUri(this, list[list.size - 1].uri)
                 intent.data = documentsTree?.findFile(fileName)?.uri
                 intent.putExtra("isPrint", true)
+                saveNaidauniaBiblijateka(fileName, uri)
             } else {
                 intent.data = uri
                 intent.putExtra("isPrint", false)
             }
             intent.putExtra("fileTitle", title)
             intent.putExtra("fileName", fileName)
-            saveNaidauniaBiblijateka(fileName)
             setFileBiblijatekaLauncher.launch(intent)
         }
         var rubNew = if (rub == SETFILE) {
@@ -1944,10 +1956,11 @@ class MainActivity : BaseActivity(), View.OnClickListener,
             }
         }
         if (rub == SETFILE) {
-            val intent = Intent()
-            intent.type = "*/*"
-            intent.action = Intent.ACTION_GET_CONTENT
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf"))
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = "application/pdf"
+            intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             mActivityResultFile.launch(Intent.createChooser(intent, getString(R.string.vybrac_file)))
         }
         when (rubNew) {
@@ -2014,11 +2027,11 @@ class MainActivity : BaseActivity(), View.OnClickListener,
     }
 
     private fun isNiadaunia(): Boolean {
-        val naidaunia = ArrayList<String>()
+        val naidaunia = ArrayList<ArrayList<String>>()
         val gson = Gson()
-        val json = k.getString("bibliateka_latest", "")
+        val json = k.getString("biblijatekaLatest", "")
         if (json != "") {
-            val type = TypeToken.getParameterized(ArrayList::class.java, String::class.java).type
+            val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
             naidaunia.addAll(gson.fromJson(json, type))
         }
         return naidaunia.size > 0

@@ -78,6 +78,7 @@ class Chytanne : ZmenyiaChastki() {
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
         binding.textView.textSize = fontBiblia
+        R.raw.mm_08_01_pasviaccie_bohazjaulennia_juryja_chazevita_daminiki_viaczernia
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -421,6 +421,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(292, "Сьвятога апостала і евангеліста Лукі", "mm_18_10_apostala_luki_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(264, "Пасьвяцьце Ўзвышэньня і сьвятога мучаніка Астапа, жонкі яго Тэапістыі і сыноў іхніх Агапа і Тэапіста", "mm_20_09_pasviaccie_uzvyszennia_muczanika_astapa_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "mm_06_01_bohazjauliennie_viaczernia_liturhija_asviaczennie_vady", VIACZERNIA_Z_LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(8, "Пасьвяцьце Богазьяўленьня. Пачэснага Юрыя Хазэвіта; пачэснае Дамінікі", "mm_08_01_pasviaccie_bohazjaulennia_juryja_chazevita_daminiki_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(11, "Пасьвяцьце Богазьяўленьня. Пачэснага Тэадосія Вялікага", "mm_11_01_pasviaccie_bohazjaulennia_teadosija_vialikaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(12, "Пасьвяцьце Богазьяўленьня. Мучаніцы Тацяны", "mm_12_01_pasviaccie_bohazjaulennia_muczanicy_taciany_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(13, "Пасьвяцьце Богазьяўленьня. Мучанікаў Ярміла і Стратоніка", "mm_13_01_pasviaccie_bohazjaulennia_mucz_jarmila_stratonika_viaczernia", VIACZERNIA))

@@ -8,8 +8,10 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.graphics.pdf.PdfRenderer
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -65,8 +67,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.io.BufferedOutputStream
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileOutputStream
 import java.io.FileReader
 import java.io.InputStreamReader
 import java.math.BigInteger
@@ -1842,6 +1846,18 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         return tempList
     }
 
+    fun getTreeUri(): Uri? {
+        val list = contentResolver.persistedUriPermissions
+        if (list.size > 0) {
+            for (i in 0 until list.size) {
+                if (list[i].uri.path?.contains("tree") == true) {
+                    return list[i].uri
+                }
+            }
+        }
+        return null
+    }
+
     fun getFileName(uri: Uri): String {
         var result: String? = null
         val cursor = contentResolver.query(uri, null, null, null, null)
@@ -1876,7 +1892,26 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         return result
     }
 
-    fun saveNaidauniaBiblijateka(fileName: String, uri: Uri) {
+    fun fileExistsBiblijateka(fileName: String): Boolean {
+        var exitsFile = false
+        val uriTree = getTreeUri()
+        if (uriTree != null) {
+            val documentsTree = DocumentFile.fromTreeUri(this, uriTree)
+            val childDocuments = documentsTree?.listFiles()
+            childDocuments?.let { document ->
+                for (i in document.indices) {
+                    if (document[i].name == fileName) {
+                        exitsFile = true
+                        break
+                    }
+                }
+            }
+        }
+        return exitsFile
+    }
+
+    private fun fileExistsUnder(fileName: String): Boolean {
+        var exitsFile = false
         val naidaunia = ArrayList<ArrayList<String>>()
         val gson = Gson()
         val json = k.getString("biblijatekaLatest", "")
@@ -1885,36 +1920,79 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             naidaunia.addAll(gson.fromJson(json, type))
         }
         for (i in 0 until naidaunia.size) {
-            if (fileName == naidaunia[i][2]) {
-                naidaunia.removeAt(i)
+            if (naidaunia[i][0] == "" && fileName == naidaunia[i][2]) {
+                exitsFile = true
                 break
             }
         }
-        var isAddN = false
-        val listBiliateka = getListBiliateka()
-        for (e in 0 until listBiliateka.size) {
-            if (fileName == listBiliateka[e][2]) {
-                val subList = listBiliateka[e]
-                subList.add(uri.toString())
-                naidaunia.add(0, subList)
-                isAddN = true
+        return exitsFile
+    }
+
+    fun saveNaidauniaBiblijateka(fileName: String, uri: Uri) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val width = bindingcontent.conteiner.width
+            withContext(Dispatchers.IO) {
+                val naidaunia = ArrayList<ArrayList<String>>()
+                val gson = Gson()
+                val json = k.getString("biblijatekaLatest", "")
+                if (!json.equals("")) {
+                    val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                    naidaunia.addAll(gson.fromJson(json, type))
+                }
+                for (i in 0 until naidaunia.size) {
+                    if (fileName == naidaunia[i][2]) {
+                        naidaunia.removeAt(i)
+                        break
+                    }
+                }
+                var isAddN = false
+                val listBiliateka = getListBiliateka()
+                for (e in 0 until listBiliateka.size) {
+                    if (fileName == listBiliateka[e][2]) {
+                        val subList = listBiliateka[e]
+                        subList.add(uri.toString())
+                        naidaunia.add(0, subList)
+                        isAddN = true
+                    }
+                }
+                if (!isAddN) {
+                    val file = File("$filesDir/image_temp/$fileName.png")
+                    var page: PdfRenderer.Page? = null
+                    try {
+                        val fileReader = contentResolver.openFileDescriptor(uri, "r")
+                        fileReader?.let {
+                            val pdfRenderer = PdfRenderer(it)
+                            page = pdfRenderer.openPage(0)
+                            page?.let { pageS ->
+                                val aspectRatio = pageS.width.toFloat() / pageS.height.toFloat()
+                                val height = (width / aspectRatio).toInt()
+                                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                                pageS.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                                val os = BufferedOutputStream(FileOutputStream(file))
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, os)
+                                os.close()
+                            }
+                        }
+                    } catch (_: Throwable) {
+                    } finally {
+                        page?.close()
+                    }
+                    val list = ArrayList<String>()
+                    list.add("")
+                    list.add("")
+                    list.add(fileName)
+                    list.add("0")
+                    list.add("0")
+                    list.add(file.name)
+                    list.add(uri.toString())
+                    naidaunia.add(0, list)
+                }
+                val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                val prefEditor = k.edit()
+                prefEditor.putString("biblijatekaLatest", gson.toJson(naidaunia, type))
+                prefEditor.apply()
             }
         }
-        if (!isAddN) {
-            val list = ArrayList<String>()
-            list.add("")
-            list.add("")
-            list.add(fileName)
-            list.add("0")
-            list.add("0")
-            list.add("")
-            list.add(uri.toString())
-            naidaunia.add(0, list)
-        }
-        val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
-        val prefEditor = k.edit()
-        prefEditor.putString("biblijatekaLatest", gson.toJson(naidaunia, type))
-        prefEditor.apply()
     }
 
     private fun startBiblioteka(rub: Int, start: Boolean, id: Int, uri: Uri? = null) {
@@ -1922,12 +2000,34 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             val intent = Intent(this, BiblijatekaPdf::class.java)
             val fileName = getFileName(uri)
             val title = getTitle(fileName)
-            if (title != fileName) {
-                val list = contentResolver.persistedUriPermissions
-                val documentsTree = DocumentFile.fromTreeUri(this, list[list.size - 1].uri)
-                intent.data = documentsTree?.findFile(fileName)?.uri
-                intent.putExtra("isPrint", true)
-                saveNaidauniaBiblijateka(fileName, uri)
+            if (fileExistsBiblijateka(fileName)) {
+                val treeUri = getTreeUri()
+                treeUri?.let { uri1 ->
+                    val documentsTree = DocumentFile.fromTreeUri(this, uri1)
+                    val newUri = documentsTree?.findFile(fileName)?.uri
+                    newUri?.let {
+                        intent.data = newUri
+                        intent.putExtra("isPrint", true)
+                        saveNaidauniaBiblijateka(fileName, it)
+                    }
+                }
+            } else if (fileExistsUnder(fileName)) {
+                val naidaunia = ArrayList<ArrayList<String>>()
+                val gson = Gson()
+                val json = k.getString("biblijatekaLatest", "")
+                if (!json.equals("")) {
+                    val type = TypeToken.getParameterized(ArrayList::class.java, TypeToken.getParameterized(ArrayList::class.java, String::class.java).type).type
+                    naidaunia.addAll(gson.fromJson(json, type))
+                }
+                for (i in 0 until naidaunia.size) {
+                    if (naidaunia[i][0] == "" && fileName == naidaunia[i][2]) {
+                        val newUri = Uri.parse(naidaunia[i][6])
+                        intent.data = newUri
+                        intent.putExtra("isPrint", true)
+                        saveNaidauniaBiblijateka(fileName, newUri)
+                        break
+                    }
+                }
             } else {
                 intent.data = uri
                 intent.putExtra("isPrint", false)

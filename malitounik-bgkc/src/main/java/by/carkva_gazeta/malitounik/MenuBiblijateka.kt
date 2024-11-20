@@ -119,8 +119,8 @@ class MenuBiblijateka : BaseFragment() {
     }
 
     fun fileDelite(file: String) {
-        activity?.let {
-            val uriTree = getTreeUri()
+        (activity as? MainActivity)?.let {
+            val uriTree = it.getTreeUri()
             if (uriTree != null) {
                 val documentsTree = DocumentFile.fromTreeUri(it, uriTree)
                 if (documentsTree?.findFile(file)?.delete() == true) deliteCashe(file)
@@ -134,6 +134,8 @@ class MenuBiblijateka : BaseFragment() {
             for (i in 0 until naidaunia.size) {
                 if (naidaunia[i][0] == "") {
                     it.contentResolver.releasePersistableUriPermission(Uri.parse(naidaunia[i][6]), Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    val file = File("${it.filesDir}/image_temp/${naidaunia[i][2]}")
+                    if (file.exists()) file.delete()
                 }
                 edit.remove("Bibliateka_${naidaunia[i][2]}")
             }
@@ -154,6 +156,8 @@ class MenuBiblijateka : BaseFragment() {
                 if (fileName == naidaunia[i][2]) {
                     if (naidaunia[i][0] == "") {
                         it.contentResolver.releasePersistableUriPermission(Uri.parse(naidaunia[i][6]), Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        val file = File("${it.filesDir}/image_temp/$fileName.png")
+                        if (file.exists()) file.delete()
                     }
                     naidaunia.removeAt(i)
                     val edit = k.edit()
@@ -183,10 +187,10 @@ class MenuBiblijateka : BaseFragment() {
     }
 
     fun onDialogbibliatekaPositiveClick(listPosition: String) {
-        (activity as? BaseActivity)?.let {
+        (activity as? MainActivity)?.let {
             val list = it.contentResolver.persistedUriPermissions
             if (list.size > 0) {
-                if (!fileExists(listPosition)) {
+                if (!it.fileExistsBiblijateka(listPosition)) {
                     if (MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_CELLULAR)) {
                         val bibliotekaWiFi = DialogBibliotekaWIFI.getInstance(listPosition)
                         bibliotekaWiFi.show(childFragmentManager, "biblioteka_WI_FI")
@@ -215,9 +219,9 @@ class MenuBiblijateka : BaseFragment() {
                 error = true
             }
             if (!error) {
-                activity?.let {
+                (activity as? MainActivity)?.let {
                     if (saveFile(url)) {
-                        val uriTree = getTreeUri()
+                        val uriTree = it.getTreeUri()
                         if (uriTree != null) {
                             val documentsTree = DocumentFile.fromTreeUri(it, uriTree)
                             val uriFile = documentsTree?.findFile(url)?.uri
@@ -234,44 +238,10 @@ class MenuBiblijateka : BaseFragment() {
         }
     }
 
-    private fun getTreeUri(): Uri? {
-        activity?.let {
-            val list = it.contentResolver.persistedUriPermissions
-            if (list.size > 0) {
-                for (i in 0 until list.size) {
-                    if (list[i].uri.path?.contains("tree") == true) {
-                        return list[i].uri
-                    }
-                }
-            }
-        }
-        return null
-    }
-
-    private fun fileExists(fileName: String): Boolean {
-        var exitsFile = false
-        activity?.let {
-            val uriTree = getTreeUri()
-            if (uriTree != null) {
-                val documentsTree = DocumentFile.fromTreeUri(it, uriTree)
-                val childDocuments = documentsTree?.listFiles()
-                childDocuments?.let { document ->
-                    for (i in document.indices) {
-                        if (document[i].name == fileName) {
-                            exitsFile = true
-                            break
-                        }
-                    }
-                }
-            }
-        }
-        return exitsFile
-    }
-
     private fun saveFile(fileName: String): Boolean {
         var result = true
-        activity?.let { activity ->
-            val uriTree = getTreeUri()
+        (activity as? MainActivity)?.let { activity ->
+            val uriTree = activity.getTreeUri()
             if (uriTree != null) {
                 val documentsTree = DocumentFile.fromTreeUri(activity, uriTree)
                 if (documentsTree?.exists() == true) {
@@ -330,7 +300,7 @@ class MenuBiblijateka : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.let {
+        (activity as? MainActivity)?.let {
             width = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 val display = it.windowManager.currentWindowMetrics
                 val bounds = display.bounds
@@ -373,7 +343,7 @@ class MenuBiblijateka : BaseFragment() {
                     val dd = DialogDeliteNiadaunia.getInstance(arrayList[position][2], title)
                     dd.show(childFragmentManager, "dialog_delite_niadaunia")
                 } else {
-                    if (arrayList[position][0] != "" && fileExists(arrayList[position][2])) {
+                    if (arrayList[position][0] != "" && it.fileExistsBiblijateka(arrayList[position][2])) {
                         val dd = DialogDelite.getInstance(position, arrayList[position][2], "з бібліятэкі", arrayList[position][0])
                         dd.show(childFragmentManager, "dialog_delite")
                     }
@@ -385,8 +355,8 @@ class MenuBiblijateka : BaseFragment() {
                     return@setOnItemClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (fileExists(arrayList[position][2])) {
-                    val uriTree = getTreeUri()
+                if (it.fileExistsBiblijateka(arrayList[position][2])) {
+                    val uriTree = it.getTreeUri()
                     if (uriTree != null) {
                         val documentsTree = DocumentFile.fromTreeUri(it, uriTree)
                         val uriFile = documentsTree?.findFile(arrayList[position][2])?.uri

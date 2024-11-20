@@ -3,6 +3,7 @@ package by.carkva_gazeta.malitounik
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
@@ -34,6 +35,7 @@ import java.util.Calendar
 
 class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogBibliateka.DialogBibliatekaListener, DialogTitleBiblijatekaPdf.DialogTitleBibliotekaListener {
 
+    private lateinit var k: SharedPreferences
     private lateinit var binding: BiblijatekaPdfBinding
     private var fileName = ""
     private var fileTitle = ""
@@ -63,7 +65,7 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         super.onCreate(savedInstanceState)
         binding = BiblijatekaPdfBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         uri = intent.data
         fileTitle = intent.extras?.getString("fileTitle", "") ?: ""
         arrayList = intent.extras?.getStringArrayList("list") ?: ArrayList()

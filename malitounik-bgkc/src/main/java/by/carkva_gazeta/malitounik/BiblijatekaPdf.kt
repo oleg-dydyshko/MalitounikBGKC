@@ -300,18 +300,20 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
                 val width = binding.pdfView.width
                 var bitmap: Bitmap? = null
                 withContext(Dispatchers.IO) {
-                    var page: PdfRenderer.Page? = null
-                    try {
-                        page = pdfRenderer.openPage(position)
-                        val aspectRatio = page.width.toFloat() / page.height.toFloat()
-                        val height = (width / aspectRatio).toInt()
-                        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-                        bitmap?.let {
-                            page.render(it, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                    synchronized(this@PdfAdapter) {
+                        var page: PdfRenderer.Page? = null
+                        try {
+                            page = pdfRenderer.openPage(position)
+                            val aspectRatio = page.width.toFloat() / page.height.toFloat()
+                            val height = (width / aspectRatio).toInt()
+                            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                            bitmap?.let {
+                                page.render(it, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                            }
+                        } catch (_: Throwable) {
+                        } finally {
+                            page?.close()
                         }
-                    } catch (_: Throwable) {
-                    } finally {
-                        page?.close()
                     }
                 }
                 holder.image.setImageBitmap(bitmap)

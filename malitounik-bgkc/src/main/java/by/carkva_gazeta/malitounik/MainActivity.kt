@@ -1957,25 +1957,27 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 }
                 if (!isAddN) {
                     val file = File("$filesDir/image_temp/$fileName.png")
-                    var page: PdfRenderer.Page? = null
-                    try {
-                        val fileReader = contentResolver.openFileDescriptor(uri, "r")
-                        fileReader?.let {
-                            val pdfRenderer = PdfRenderer(it)
-                            page = pdfRenderer.openPage(0)
-                            page?.let { pageS ->
-                                val aspectRatio = pageS.width.toFloat() / pageS.height.toFloat()
-                                val height = (width / aspectRatio).toInt()
-                                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-                                pageS.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                                val os = BufferedOutputStream(FileOutputStream(file))
-                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, os)
-                                os.close()
+                    if (!file.exists()) {
+                        var page: PdfRenderer.Page? = null
+                        try {
+                            val fileReader = contentResolver.openFileDescriptor(uri, "r")
+                            fileReader?.let {
+                                val pdfRenderer = PdfRenderer(it)
+                                page = pdfRenderer.openPage(0)
+                                page?.let { pageS ->
+                                    val aspectRatio = pageS.width.toFloat() / pageS.height.toFloat()
+                                    val height = (width / aspectRatio).toInt()
+                                    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                                    pageS.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                                    val os = BufferedOutputStream(FileOutputStream(file))
+                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, os)
+                                    os.close()
+                                }
                             }
+                        } catch (_: Throwable) {
+                        } finally {
+                            page?.close()
                         }
-                    } catch (_: Throwable) {
-                    } finally {
-                        page?.close()
                     }
                     val list = ArrayList<String>()
                     list.add("")

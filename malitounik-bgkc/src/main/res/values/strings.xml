@@ -564,9 +564,6 @@
     <string name="set_file_dir">ВЫБЯРЫЦЕ ІМЯ КАТАЛОГА</string>
     <string name="image_upload">Загрузіць ікону</string>
     <string name="image_help_ok">Уставіць</string>
-    <string name="add_pesny">Дадаць песьню</string>
-    <string name="add_pesny_title">ДАДАЦЬ НОВУЮ ПЕСЬНЮ</string>
-    <string name="hint_pesny_title">Імя песьні як у сказах</string>
     <string name="zmena_chastki">Зьменныя часткі</string>
     <string name="add_piarliny">Дадаць пярліну</string>
     <string name="mineia_agulnaia">Мінэя агульная</string>

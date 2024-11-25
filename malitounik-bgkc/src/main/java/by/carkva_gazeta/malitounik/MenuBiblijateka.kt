@@ -134,7 +134,7 @@ class MenuBiblijateka : BaseFragment() {
             for (i in 0 until naidaunia.size) {
                 if (naidaunia[i][0] == "") {
                     it.contentResolver.releasePersistableUriPermission(Uri.parse(naidaunia[i][6]), Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    val file = File("${it.filesDir}/image_temp/${naidaunia[i][2]}")
+                    val file = File("${it.filesDir}/image_temp/${naidaunia[i][5]}")
                     if (file.exists()) file.delete()
                 }
                 edit.remove("Bibliateka_${naidaunia[i][2]}")
@@ -156,7 +156,7 @@ class MenuBiblijateka : BaseFragment() {
                 if (fileName == naidaunia[i][2]) {
                     if (naidaunia[i][0] == "") {
                         it.contentResolver.releasePersistableUriPermission(Uri.parse(naidaunia[i][6]), Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                        val file = File("${it.filesDir}/image_temp/$fileName.png")
+                        val file = File("${it.filesDir}/image_temp/${naidaunia[i][5]}")
                         if (file.exists()) file.delete()
                     }
                     naidaunia.removeAt(i)
@@ -645,14 +645,20 @@ class MenuBiblijateka : BaseFragment() {
             viewHolder.imageView.layoutParams?.width = width / 2
             viewHolder.imageView.layoutParams?.height = (width / 2 * 1.4F).toInt()
             viewHolder.imageView.requestLayout()
-            activity?.let { activity ->
+            (activity as? MainActivity)?.let { activity ->
                 bitmapJob = CoroutineScope(Dispatchers.Main).launch {
                     if (arrayList[position][5] != "") {
                         val image = arrayList[position][5]
                         val file = File("${activity.filesDir}/image_temp/$image")
-                        if (!file.exists() && MainActivity.isNetworkAvailable()) {
-                            for (e in 0..2) {
-                                if (!saveImagePdf(file, image)) break
+                        if (!file.exists()) {
+                            if (arrayList[position][0] == "") {
+                                activity.creteUnderImage(file, Uri.parse(arrayList[position][6]))
+                            } else {
+                                if (MainActivity.isNetworkAvailable()) {
+                                    for (e in 0..2) {
+                                        if (!saveImagePdf(file, image)) break
+                                    }
+                                }
                             }
                         }
                         if (file.exists()) {

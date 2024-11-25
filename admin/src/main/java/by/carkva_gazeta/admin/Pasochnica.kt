@@ -47,7 +47,7 @@ import org.apache.commons.text.StringEscapeUtils
 import java.io.File
 
 
-class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener, DialogIsHtml.DialogIsHtmlListener, DialogFileNameError.DialogFileNameErrorListener {
+class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener, DialogIsHtml.DialogIsHtmlListener, DialogFileNameError.DialogFileNameErrorListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
@@ -539,10 +539,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         }
     }
 
-    override fun addPesny(title: String, pesny: String, fileName: String) {
-        sendSaveAsAddNewPesnyPostRequest(title, pesny, fileName)
-    }
-
     private suspend fun saveLogFile(count: Int = 0) {
         val logFile = File("$filesDir/cache/log.txt")
         var error = false
@@ -755,7 +751,15 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                                 PasochnicaList.getFindFileListAsSave()
                                 if (isSaveAs) {
                                     if (saveAs) {
-                                        if (!findDirAsSave()) {
+                                        var error = false
+                                        var t1 = resours.indexOf(")")
+                                        t1 = if (t1 != -1) 1
+                                        else 0
+                                        if (resours[t1].isDigit()) error = true
+                                        for (c in resours) {
+                                            if (c.isUpperCase()) error = true
+                                        }
+                                        if (error || !findDirAsSave()) {
                                             val dialogSaveAsFileExplorer = DialogSaveAsFileExplorer.getInstance(fileName)
                                             dialogSaveAsFileExplorer.show(supportFragmentManager, "dialogSaveAsFileExplorer")
                                             Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {

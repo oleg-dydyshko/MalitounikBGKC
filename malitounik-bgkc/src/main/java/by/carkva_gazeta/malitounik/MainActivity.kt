@@ -9,6 +9,8 @@ import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.graphics.pdf.PdfRenderer
@@ -1930,7 +1932,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     fun saveNaidauniaBiblijateka(fileName: String, uri: Uri) {
         CoroutineScope(Dispatchers.Main).launch {
-            val width = bindingcontent.conteiner.width
             withContext(Dispatchers.IO) {
                 val naidaunia = ArrayList<ArrayList<String>>()
                 val gson = Gson()
@@ -1958,26 +1959,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 if (!isAddN) {
                     val file = File("$filesDir/image_temp/$fileName.png")
                     if (!file.exists()) {
-                        var page: PdfRenderer.Page? = null
-                        try {
-                            val fileReader = contentResolver.openFileDescriptor(uri, "r")
-                            fileReader?.let {
-                                val pdfRenderer = PdfRenderer(it)
-                                page = pdfRenderer.openPage(0)
-                                page?.let { pageS ->
-                                    val aspectRatio = pageS.width.toFloat() / pageS.height.toFloat()
-                                    val height = (width / aspectRatio).toInt()
-                                    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-                                    pageS.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                                    val os = BufferedOutputStream(FileOutputStream(file))
-                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, os)
-                                    os.close()
-                                }
-                            }
-                        } catch (_: Throwable) {
-                        } finally {
-                            page?.close()
-                        }
+                        creteUnderImage(file, uri)
                     }
                     val list = ArrayList<String>()
                     list.add("")
@@ -1994,6 +1976,35 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 prefEditor.putString("biblijatekaLatest", gson.toJson(naidaunia, type))
                 prefEditor.apply()
             }
+        }
+    }
+
+    fun creteUnderImage(file: File, uri: Uri) {
+        val width = bindingcontent.conteiner.width
+        var page: PdfRenderer.Page? = null
+        try {
+            val fileReader = contentResolver.openFileDescriptor(uri, "r")
+            fileReader?.let {
+                val pdfRenderer = PdfRenderer(it)
+                page = pdfRenderer.openPage(0)
+                page?.let { pageS ->
+                    val aspectRatio = pageS.width.toFloat() / pageS.height.toFloat()
+                    val height = (width / aspectRatio).toInt()
+                    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                    pageS.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                    val imageWithBG = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888) // Create another image the same size
+                    imageWithBG.eraseColor(Color.WHITE) // set its background to white, or whatever color you want
+                    val canvas = Canvas(imageWithBG) // create a canvas to draw on the new image
+                    canvas.drawBitmap(bitmap, 0f, 0f, null) // draw old image on the background
+                    bitmap.recycle() // clear out old image
+                    val os = BufferedOutputStream(FileOutputStream(file))
+                    imageWithBG.compress(Bitmap.CompressFormat.PNG, 100, os)
+                    os.close()
+                }
+            }
+        } catch (_: Throwable) {
+        } finally {
+            page?.close()
         }
     }
 

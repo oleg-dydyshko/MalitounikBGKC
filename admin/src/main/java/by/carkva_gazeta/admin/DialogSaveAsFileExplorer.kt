@@ -175,24 +175,19 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     }
 
     private fun setFileName() {
-        if (dir == "/admin/pesny") {
-            val dialogAddPesny = DialogAddPesny.getInstance(oldName)
-            dialogAddPesny.show(childFragmentManager, "dialogAddPesny")
-        } else {
-            var error = false
-            val editText = binding?.edittext?.text.toString()
-            if (editText[0].isDigit()) error = true
-            for (c in editText) {
-                if (c.isUpperCase()) error = true
-            }
-            if (error) {
-                val dialogFileNameError = DialogFileNameError()
-                dialogFileNameError.show(childFragmentManager, "DialogFileNameError")
-                return
-            }
-            mListener?.onDialogSaveAsFile(dir, oldName, editText)
-            dialog?.cancel()
+        var error = false
+        val editText = binding?.edittext?.text.toString()
+        if (editText[0].isDigit()) error = true
+        for (c in editText) {
+            if (c.isUpperCase()) error = true
         }
+        if (error) {
+            val dialogFileNameError = DialogFileNameError()
+            dialogFileNameError.show(childFragmentManager, "DialogFileNameError")
+            return
+        }
+        mListener?.onDialogSaveAsFile(dir, oldName, editText)
+        dialog?.cancel()
     }
 
     private fun getDirListRequest(dir: String) {

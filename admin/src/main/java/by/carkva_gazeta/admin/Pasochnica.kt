@@ -47,7 +47,7 @@ import org.apache.commons.text.StringEscapeUtils
 import java.io.File
 
 
-class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener, DialogIsHtml.DialogIsHtmlListener, DialogFileNameError.DialogFileNameErrorListener {
+class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener, DialogIsHtml.DialogIsHtmlListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
@@ -84,13 +84,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     override fun attachBaseContext(context: Context) {
         super.attachBaseContext(context)
         SplitCompat.installActivity(context)
-    }
-
-    override fun renameFileName() {
-        val dialogPasochnicaFileName = supportFragmentManager.findFragmentByTag("dialogPasochnicaFileName") as? DialogPasochnicaFileName
-        dialogPasochnicaFileName?.vypraulenneFilename()
-        val dialogSaveAsFileExplorer = supportFragmentManager.findFragmentByTag("dialogSaveAsFileExplorer") as? DialogSaveAsFileExplorer
-        dialogSaveAsFileExplorer?.vypraulenneFilename()
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -551,51 +544,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         }.await()
         if (error && count < 3) {
             saveLogFile(count + 1)
-        }
-    }
-
-    private fun sendSaveAsAddNewPesnyPostRequest(title: String, pesny: String, fileName: String) {
-        if (MainActivity.isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.Main).launch {
-                binding.progressBar2.visibility = View.VISIBLE
-                val dialog = supportFragmentManager.findFragmentByTag("dialogSaveAsFileExplorer") as? DialogSaveAsFileExplorer
-                dialog?.dismiss()
-                try {
-                    val localFile2 = File("$filesDir/cache/cache2.txt")
-                    val t1 = fileName.indexOf(".")
-                    val nawFileName = if (t1 != -1) fileName.substring(0, t1)
-                    else fileName
-                    Malitounik.referens.child("/admin/piasochnica/$fileName").getFile(localFile2).addOnFailureListener {
-                        MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
-                    }.await()
-                    Malitounik.referens.child("/admin/piasochnica/($pesny$nawFileName) $title").putFile(Uri.fromFile(localFile2)).await()
-                    Malitounik.referens.child("/admin/piasochnica/$fileName").delete().await()
-                    Malitounik.referens.child("/admin/pesny/$pesny$fileName").putFile(Uri.fromFile(localFile2)).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
-                                setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
-                                setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
-                                setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-                                show()
-                            }
-                        } else {
-                            Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.error), Snackbar.LENGTH_LONG).apply {
-                                setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
-                                setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
-                                setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-                                show()
-                            }
-                        }
-                    }.await()
-                    PasochnicaList.getFindFileListAsSave()
-                } catch (e: Throwable) {
-                    MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
-                }
-                saveLogFile()
-                binding.progressBar2.visibility = View.GONE
-            }
-        } else {
-            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_internet))
         }
     }
 

@@ -642,9 +642,6 @@ class MenuBiblijateka : BaseFragment() {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.imageView.layoutParams?.width = width / 2
-            viewHolder.imageView.layoutParams?.height = (width / 2 * 1.4F).toInt()
-            viewHolder.imageView.requestLayout()
             (activity as? MainActivity)?.let { activity ->
                 bitmapJob = CoroutineScope(Dispatchers.Main).launch {
                     if (arrayList[position][5] != "") {
@@ -667,8 +664,16 @@ class MenuBiblijateka : BaseFragment() {
                                 options.inPreferredConfig = Bitmap.Config.ARGB_8888
                                 return@withContext BitmapFactory.decodeFile("${activity.filesDir}/image_temp/$image", options)
                             }
-                            viewHolder.imageView.setImageBitmap(bitmap)
-                            viewHolder.imageView.visibility = View.VISIBLE
+                            if (bitmap == null) {
+                                file.delete()
+                            } else {
+                                val aspectRatio = bitmap.width.toFloat() / bitmap.height.toFloat()
+                                viewHolder.imageView.layoutParams?.width = width / 2
+                                viewHolder.imageView.layoutParams?.height = (width / 2 / aspectRatio).toInt()
+                                viewHolder.imageView.requestLayout()
+                                viewHolder.imageView.setImageBitmap(bitmap)
+                                viewHolder.imageView.visibility = View.VISIBLE
+                            }
                         }
                     } else {
                         viewHolder.imageView.visibility = View.GONE

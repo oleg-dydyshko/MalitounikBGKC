@@ -1992,11 +1992,11 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     val height = (width / aspectRatio).toInt()
                     val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                     pageS.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                    val imageWithBG = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888) // Create another image the same size
-                    imageWithBG.eraseColor(Color.WHITE) // set its background to white, or whatever color you want
-                    val canvas = Canvas(imageWithBG) // create a canvas to draw on the new image
-                    canvas.drawBitmap(bitmap, 0f, 0f, null) // draw old image on the background
-                    bitmap.recycle() // clear out old image
+                    val imageWithBG = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                    imageWithBG.eraseColor(Color.WHITE)
+                    val canvas = Canvas(imageWithBG)
+                    canvas.drawBitmap(bitmap, 0f, 0f, null)
+                    bitmap.recycle()
                     val os = BufferedOutputStream(FileOutputStream(file))
                     imageWithBG.compress(Bitmap.CompressFormat.PNG, 100, os)
                     os.close()

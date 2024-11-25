@@ -41,7 +41,7 @@ class DialogPasochnicaFileName : DialogFragment() {
         }
     }
 
-    fun vypraulenneFilename() {
+    private fun vypraulenneFilename() {
         var fileNameOld = binding.content.text.toString()
         var fileName = getResourceFileName(fileNameOld)
         if (!fileName.contains(".php", true)) {
@@ -141,8 +141,7 @@ class DialogPasochnicaFileName : DialogFragment() {
                 if (c.isUpperCase()) error = true
             }
             if (error) {
-                val dialog = DialogFileNameError()
-                dialog.show(childFragmentManager, "DialogFileNameError")
+                vypraulenneFilename()
                 return
             }
         }

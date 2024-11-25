@@ -105,7 +105,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
         }
     }
 
-    fun vypraulenneFilename() {
+    private fun vypraulenneFilename() {
         var fileName = binding?.edittext?.text.toString()
         if (!fileName.contains(".php", true)) {
             fileName = fileName.replace("-", "_")
@@ -182,8 +182,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             if (c.isUpperCase()) error = true
         }
         if (error) {
-            val dialogFileNameError = DialogFileNameError()
-            dialogFileNameError.show(childFragmentManager, "DialogFileNameError")
+            vypraulenneFilename()
             return
         }
         mListener?.onDialogSaveAsFile(dir, oldName, editText)

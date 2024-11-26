@@ -700,12 +700,14 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                                 if (isSaveAs) {
                                     if (saveAs) {
                                         var error = false
-                                        var t1 = resours.indexOf(")")
-                                        t1 = if (t1 != -1) 1
-                                        else 0
-                                        if (resours[t1].isDigit()) error = true
-                                        for (c in resours) {
-                                            if (c.isUpperCase()) error = true
+                                        if (resours != "") {
+                                            var t1 = resours.indexOf(")")
+                                            t1 = if (t1 != -1) 1
+                                            else 0
+                                            if (resours[t1].isDigit()) error = true
+                                            for (c in resours) {
+                                                if (c.isUpperCase()) error = true
+                                            }
                                         }
                                         if (error || !findDirAsSave()) {
                                             val dialogSaveAsFileExplorer = DialogSaveAsFileExplorer.getInstance(fileName)

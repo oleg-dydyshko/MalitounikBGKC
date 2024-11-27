@@ -708,8 +708,17 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                                             for (c in resours) {
                                                 if (c.isUpperCase()) error = true
                                             }
+                                            if (error) {
+                                                if (!resours.contains(".php", true)) {
+                                                    resours = resours.replace("-", "_")
+                                                }
+                                                resours = resours.replace(" ", "_").lowercase()
+                                                val mm = if (resours[0].isDigit()) "mm_"
+                                                else ""
+                                                resours = "$mm$resours"
+                                            }
                                         }
-                                        if (error || !findDirAsSave()) {
+                                        if (!findDirAsSave()) {
                                             val dialogSaveAsFileExplorer = DialogSaveAsFileExplorer.getInstance(fileName)
                                             dialogSaveAsFileExplorer.show(supportFragmentManager, "dialogSaveAsFileExplorer")
                                             Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {

@@ -45,6 +45,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.apache.commons.text.StringEscapeUtils
 import java.io.File
+import java.lang.Character.UnicodeBlock
 
 
 class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener, DialogIsHtml.DialogIsHtmlListener {
@@ -699,24 +700,27 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                                 PasochnicaList.getFindFileListAsSave()
                                 if (isSaveAs) {
                                     if (saveAs) {
-                                        var error = false
                                         if (resours != "") {
                                             var t1 = resours.indexOf(")")
                                             t1 = if (t1 != -1) 1
                                             else 0
-                                            if (resours[t1].isDigit()) error = true
+                                            val sb = StringBuilder()
                                             for (c in resours) {
-                                                if (c.isUpperCase()) error = true
-                                            }
-                                            if (error) {
-                                                if (!resours.contains(".php", true)) {
-                                                    resours = resours.replace("-", "_")
+                                                val unicode = UnicodeBlock.of(c)
+                                                unicode?.let {
+                                                    if (!(unicode.equals(UnicodeBlock.CYRILLIC) || unicode.equals(UnicodeBlock.CYRILLIC_SUPPLEMENTARY) || unicode.equals(UnicodeBlock.CYRILLIC_EXTENDED_A) || unicode.equals(UnicodeBlock.CYRILLIC_EXTENDED_B))) {
+                                                        sb.append(c)
+                                                    }
                                                 }
-                                                resours = resours.replace(" ", "_").lowercase()
-                                                val mm = if (resours[0].isDigit()) "mm_"
-                                                else ""
-                                                resours = "$mm$resours"
                                             }
+                                            resours = sb.toString()
+                                            if (!resours.contains(".php", true)) {
+                                                resours = resours.replace("-", "_")
+                                            }
+                                            resours = resours.replace(" ", "_").lowercase()
+                                            val mm = if (resours[t1].isDigit()) "mm_"
+                                            else ""
+                                            resours = "$mm$resours"
                                         }
                                         if (!findDirAsSave()) {
                                             val dialogSaveAsFileExplorer = DialogSaveAsFileExplorer.getInstance(fileName)

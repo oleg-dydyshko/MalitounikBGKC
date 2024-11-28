@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
+import java.lang.Character.UnicodeBlock
 import java.util.Calendar
 
 class DialogPasochnicaFileName : DialogFragment() {
@@ -44,6 +45,16 @@ class DialogPasochnicaFileName : DialogFragment() {
     private fun vypraulenneFilename() {
         var fileNameOld = binding.content.text.toString()
         var fileName = getResourceFileName(fileNameOld)
+        val sb = StringBuilder()
+        for (c in fileName) {
+            val unicode = UnicodeBlock.of(c)
+            unicode?.let {
+                if (!(unicode.equals(UnicodeBlock.CYRILLIC) || unicode.equals(UnicodeBlock.CYRILLIC_SUPPLEMENTARY) || unicode.equals(UnicodeBlock.CYRILLIC_EXTENDED_A) || unicode.equals(UnicodeBlock.CYRILLIC_EXTENDED_B))) {
+                    sb.append(c)
+                }
+            }
+        }
+        fileName = sb.toString()
         if (!fileName.contains(".php", true)) {
             fileName = fileName.replace("-", "_")
         }

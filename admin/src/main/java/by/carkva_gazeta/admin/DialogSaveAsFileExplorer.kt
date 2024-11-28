@@ -24,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.lang.Character.UnicodeBlock
 
 class DialogSaveAsFileExplorer : DialogFragment() {
 
@@ -107,6 +108,16 @@ class DialogSaveAsFileExplorer : DialogFragment() {
 
     private fun vypraulenneFilename() {
         var fileName = binding?.edittext?.text.toString()
+        val sb = StringBuilder()
+        for (c in fileName) {
+            val unicode = UnicodeBlock.of(c)
+            unicode?.let {
+                if (!(unicode.equals(UnicodeBlock.CYRILLIC) || unicode.equals(UnicodeBlock.CYRILLIC_SUPPLEMENTARY) || unicode.equals(UnicodeBlock.CYRILLIC_EXTENDED_A) || unicode.equals(UnicodeBlock.CYRILLIC_EXTENDED_B))) {
+                    sb.append(c)
+                }
+            }
+        }
+        fileName = sb.toString()
         if (!fileName.contains(".php", true)) {
             fileName = fileName.replace("-", "_")
         }

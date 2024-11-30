@@ -55,6 +55,11 @@ class DialogSaveAsFileExplorer : DialogFragment() {
         override fun afterTextChanged(s: Editable?) {
             if (editch) {
                 var edit = s.toString()
+                val newEdit = checkCyrilic(edit)
+                if (newEdit != edit) {
+                    editPosition -= 1
+                    edit = newEdit
+                }
                 if (!edit.contains(".php", true)) {
                     edit = edit.replace("-", "_")
                 }
@@ -106,27 +111,17 @@ class DialogSaveAsFileExplorer : DialogFragment() {
         }
     }
 
-    private fun vypraulenneFilename() {
-        var fileName = binding?.edittext?.text.toString()
+    private fun checkCyrilic(fileName: String): String {
         val sb = StringBuilder()
         for (c in fileName) {
             val unicode = UnicodeBlock.of(c)
             unicode?.let {
-                if (!(unicode.equals(UnicodeBlock.CYRILLIC) || unicode.equals(UnicodeBlock.CYRILLIC_SUPPLEMENTARY) || unicode.equals(UnicodeBlock.CYRILLIC_EXTENDED_A) || unicode.equals(UnicodeBlock.CYRILLIC_EXTENDED_B))) {
+                if (!(it == UnicodeBlock.CYRILLIC || it == UnicodeBlock.CYRILLIC_SUPPLEMENTARY || it == UnicodeBlock.CYRILLIC_EXTENDED_A || it == UnicodeBlock.CYRILLIC_EXTENDED_B)) {
                     sb.append(c)
                 }
             }
         }
-        fileName = sb.toString()
-        if (!fileName.contains(".php", true)) {
-            fileName = fileName.replace("-", "_")
-        }
-        fileName = fileName.replace(" ", "_").lowercase()
-        val mm = if (fileName[0].isDigit()) "mm_"
-        else ""
-        fileName = "$mm$fileName"
-        binding?.edittext?.setText(fileName)
-        setFileName()
+        return sb.toString()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -186,16 +181,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     }
 
     private fun setFileName() {
-        var error = false
         val editText = binding?.edittext?.text.toString()
-        if (editText[0].isDigit()) error = true
-        for (c in editText) {
-            if (c.isUpperCase()) error = true
-        }
-        if (error) {
-            vypraulenneFilename()
-            return
-        }
         mListener?.onDialogSaveAsFile(dir, oldName, editText)
         dialog?.cancel()
     }
@@ -203,6 +189,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     private fun getDirListRequest(dir: String) {
         if (MainActivity.isNetworkAvailable()) {
             saveAsFileJob = CoroutineScope(Dispatchers.Main).launch {
+                binding?.progressBar2?.visibility = View.VISIBLE
                 try {
                     fileList.clear()
                     val temp = ArrayList<MyNetFile>()
@@ -231,6 +218,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                         MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                 }
+                binding?.progressBar2?.visibility = View.GONE
                 adapter.notifyDataSetChanged()
             }
         } else {

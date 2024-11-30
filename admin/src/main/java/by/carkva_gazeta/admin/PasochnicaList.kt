@@ -37,6 +37,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.File
+import java.lang.Character.UnicodeBlock
 import java.net.URLEncoder
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -93,8 +94,8 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
         startActivity(intent)
     }
 
-    override fun onDialogNetFile(dirToFile: String, fileName: String) {
-        getFileCopyPostRequest(dirToFile, fileName)
+    override fun onDialogNetFile(dirToFile: String) {
+        getFileCopyPostRequest(dirToFile)
     }
 
     override fun deliteAllBackCopy() {
@@ -261,10 +262,32 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
         setTollbarTheme()
     }
 
-    private fun getFileCopyPostRequest(dirToFile: String, fileName: String) {
+    private fun getFileCopyPostRequest(dirToFile: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
+                val t5 = dirToFile.lastIndexOf("/")
+                var fileName = dirToFile.substring(t5 + 1)
+                val sb = StringBuilder()
+                for (c in fileName) {
+                    val unicode = UnicodeBlock.of(c)
+                    unicode?.let {
+                        if (!(it == UnicodeBlock.CYRILLIC || it == UnicodeBlock.CYRILLIC_SUPPLEMENTARY || it == UnicodeBlock.CYRILLIC_EXTENDED_A || it == UnicodeBlock.CYRILLIC_EXTENDED_B)) {
+                            sb.append(c)
+                        }
+                    }
+                }
+                fileName = sb.toString()
+                if (!fileName.contains(".php", true)) {
+                    fileName = fileName.replace("-", "_")
+                }
+                fileName = fileName.replace(" ", "_").lowercase()
+                val mm = if (fileName[0].isDigit()) "mm_"
+                else ""
+                fileName = "$mm$fileName"
+                if (dirToFile != fileName) {
+                    getFileRenamePostRequest(dirToFile, dirToFile.substring(0, t5 + 1) + fileName, true)
+                }
                 var resourse = ""
                 val localFile = File("$filesDir/cache/cache.txt")
                 try {

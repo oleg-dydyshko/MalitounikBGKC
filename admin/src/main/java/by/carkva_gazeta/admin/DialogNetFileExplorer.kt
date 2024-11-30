@@ -13,9 +13,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminSimpleListItemBinding
+import by.carkva_gazeta.admin.databinding.DialogNetFileExplorerBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.Malitounik
-import by.carkva_gazeta.malitounik.databinding.DialogListviewDisplayBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,7 +29,7 @@ class DialogNetFileExplorer : DialogFragment() {
     private lateinit var adapter: TitleListAdaprer
     private val fileList = ArrayList<MyNetFile>()
     private var dir = ""
-    private var binding: DialogListviewDisplayBinding? = null
+    private var binding: DialogNetFileExplorerBinding? = null
     private var netFileJob: Job? = null
 
     override fun onDestroyView() {
@@ -43,7 +43,7 @@ class DialogNetFileExplorer : DialogFragment() {
     }
 
     internal interface DialogNetFileExplorerListener {
-        fun onDialogNetFile(dirToFile: String, fileName: String)
+        fun onDialogNetFile(dirToFile: String)
     }
 
     override fun onAttach(context: Context) {
@@ -60,7 +60,7 @@ class DialogNetFileExplorer : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            binding = DialogListviewDisplayBinding.inflate(layoutInflater)
+            binding = DialogNetFileExplorerBinding.inflate(layoutInflater)
             binding?.let { binding ->
                 binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)
                 binding.content.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
@@ -89,7 +89,7 @@ class DialogNetFileExplorer : DialogFragment() {
                         }
 
                         else -> {
-                            mListener?.onDialogNetFile(dir + "/" + fileList[position].title, fileList[position].title)
+                            mListener?.onDialogNetFile(dir + "/" + fileList[position].title)
                             dialog?.cancel()
                         }
                     }
@@ -108,6 +108,7 @@ class DialogNetFileExplorer : DialogFragment() {
     private fun getDirListRequest(dir: String) {
         if (MainActivity.isNetworkAvailable()) {
             netFileJob = CoroutineScope(Dispatchers.Main).launch {
+                binding?.progressBar2?.visibility = View.VISIBLE
                 try {
                     fileList.clear()
                     val temp = ArrayList<MyNetFile>()
@@ -137,6 +138,7 @@ class DialogNetFileExplorer : DialogFragment() {
                         MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                     }
                 }
+                binding?.progressBar2?.visibility = View.GONE
             }
         } else {
             activity?.let {

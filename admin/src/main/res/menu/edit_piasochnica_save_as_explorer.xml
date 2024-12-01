@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu  xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_save"
+        android:icon="@drawable/save"
+        android:orderInCategory="100"
+        android:title="@string/save_sabytie"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_mk_dir"
+        android:icon="@drawable/add_folder"
+        android:orderInCategory="100"
+        android:title="@string/mk_dir"
+        app:showAsAction="always" />
+</menu>

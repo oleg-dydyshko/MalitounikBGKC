@@ -35,7 +35,7 @@ class DialogPasochnicaMkDir : DialogFragment() {
     }
 
     internal interface DialogPasochnicaMkDirListener {
-        fun setDir()
+        fun setDir(dir: String, oldName: String, newName: String)
     }
 
     override fun onAttach(context: Context) {
@@ -108,7 +108,7 @@ class DialogPasochnicaMkDir : DialogFragment() {
                                 MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                             }
                         }
-                        mListener?.setDir()
+                        mListener?.setDir("/$dir/$dirName/", oldName, newName)
                     }
                 } else {
                     MainActivity.toastView(fragmentActivity, getString(by.carkva_gazeta.malitounik.R.string.no_internet))

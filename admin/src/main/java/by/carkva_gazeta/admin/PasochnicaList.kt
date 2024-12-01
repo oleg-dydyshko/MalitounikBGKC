@@ -52,11 +52,9 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
     private lateinit var adapter: PasochnicaListAdaprer
     private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                val imageUri = it.data?.data
-                imageUri?.let { image ->
-                    onDialogFile(File(URLEncoder.encode(image.path, "UTF-8")))
-                }
+            val imageUri = it.data?.data
+            imageUri?.let { image ->
+                onDialogFile(File(URLEncoder.encode(image.path, "UTF-8")))
             }
         }
     }

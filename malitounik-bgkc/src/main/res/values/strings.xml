@@ -1158,5 +1158,6 @@
     <string name="pdfView_page_no" >%1$d/%2$d</string>
     <string name="zmest">ЗЬМЕСТ</string>
     <string name="zmest_smoll">Зьмест</string>
+    <string name="admin_cyrylic_no_support">Кірыліца не падтрымліваецца</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

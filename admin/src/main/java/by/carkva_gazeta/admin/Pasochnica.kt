@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.hardware.SensorEvent
@@ -25,6 +26,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.text.toSpannable
@@ -48,7 +50,7 @@ import java.io.File
 import java.lang.Character.UnicodeBlock
 
 
-class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener, DialogIsHtml.DialogIsHtmlListener {
+class Pasochnica : BaseActivity(), View.OnClickListener, DialogFileExists.DialogFileExistsListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener, DialogIsHtml.DialogIsHtmlListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
@@ -62,6 +64,15 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
     private var findPosition = 0
     private val findListSpans = ArrayList<SpanStr>()
     private var animatopRun = false
+    private val mActivityResultFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val dir = it.data?.extras?.getString("dir") ?: "/"
+            val oldFileName = it.data?.extras?.getString("oldFileName") ?: ""
+            val fileName = it.data?.extras?.getString("fileName") ?: ""
+            val setDir = it.data?.extras?.getBoolean("setDir", false) ?: false
+            getFileIssetPostRequest(dir, oldFileName, fileName, setDir)
+        }
+    }
     private val textWatcher = object : TextWatcher {
         private var editPosition = 0
 
@@ -509,28 +520,8 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         }
     }
 
-    override fun onDialogSaveAsFile(dir: String, oldFileName: String, fileName: String) {
-        getFileIssetPostRequest(dir, oldFileName, fileName)
-    }
-
-    override fun setFileName(oldFileName: String, fileName: String, isSite: Boolean, saveAs: Boolean) {
-        this.fileName = fileName
-        saveResult(saveAs)
-    }
-
     override fun fileExists(dir: String, oldFileName: String, fileName: String, saveAs: Boolean) {
         if (saveAs) sendSaveAsPostRequest("$dir/$fileName", oldFileName)
-    }
-
-    override fun setDir() {
-        val dialogSaveAsFileExplorer = supportFragmentManager.findFragmentByTag("dialogSaveAsFileExplorer") as? DialogSaveAsFileExplorer
-        dialogSaveAsFileExplorer?.dismiss()
-        Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
-            setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-            show()
-        }
     }
 
     private suspend fun saveLogFile(count: Int = 0) {
@@ -548,18 +539,22 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
         }
     }
 
-    private fun getFileIssetPostRequest(dir: String, oldFileName: String, fileName: String) {
+    private fun getFileIssetPostRequest(dir: String, oldFileName: String, fileName: String, setDir: Boolean) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 try {
-                    Malitounik.referens.child("/$dir/" + fileName.replace("\n", " ")).downloadUrl.addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            val dialogFileExists = DialogFileExists.getInstance(dir, oldFileName, fileName, true)
-                            dialogFileExists.show(supportFragmentManager, "dialogFileExists")
-                        } else {
-                            sendSaveAsPostRequest("$dir/$fileName", oldFileName)
+                    if (!setDir) {
+                        Malitounik.referens.child("/$dir/" + fileName.replace("\n", " ")).downloadUrl.addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                val dialogFileExists = DialogFileExists.getInstance(dir, oldFileName, fileName, true)
+                                dialogFileExists.show(supportFragmentManager, "dialogFileExists")
+                            } else {
+                                sendSaveAsPostRequest("$dir/$fileName", oldFileName)
+                            }
                         }
+                    } else {
+                        sendSaveAsPostRequest("$dir/$fileName", oldFileName)
                     }
                 } catch (e: Throwable) {
                     MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
@@ -723,8 +718,9 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
                                             resours = "$mm$resours"
                                         }
                                         if (!findDirAsSave()) {
-                                            val dialogSaveAsFileExplorer = DialogSaveAsFileExplorer.getInstance(fileName)
-                                            dialogSaveAsFileExplorer.show(supportFragmentManager, "dialogSaveAsFileExplorer")
+                                            val intent = Intent(this@Pasochnica, PiasochnicaSaveAsFileExplorer::class.java)
+                                            intent.putExtra("fileName", fileName)
+                                            mActivityResultFile.launch(intent)
                                             Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
                                                 setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
                                                 setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
@@ -1045,12 +1041,7 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogPasochnicaFileNam
             convertToHtml()
         }
         binding.apisanne.removeTextChangedListener(textWatcher)
-        if (fileName == "new_file.html") {
-            val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance("new_file.html", false, saveAs)
-            dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
-        } else {
-            saveResult(saveAs)
-        }
+        saveResult(saveAs)
         binding.apisanne.addTextChangedListener(textWatcher)
     }
 

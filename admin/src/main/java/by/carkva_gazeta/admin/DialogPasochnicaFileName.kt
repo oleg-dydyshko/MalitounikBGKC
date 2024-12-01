@@ -5,11 +5,14 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
 import java.lang.Character.UnicodeBlock
 import java.util.Calendar
@@ -21,6 +24,45 @@ class DialogPasochnicaFileName : DialogFragment() {
     private lateinit var builder: AlertDialog.Builder
     private var _binding: DialogEditviewDisplayBinding? = null
     private val binding get() = _binding!!
+    private val textWatcher = object : TextWatcher {
+        private var editPosition = 0
+        private var check = 0
+        private var editch = true
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            editch = count != after
+            check = after
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            editPosition = start + count
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            if (editch) {
+                var edit = s.toString()
+                val newEdit = checkCyrilic(edit)
+                if (newEdit != edit) {
+                    editPosition -= 1
+                    edit = newEdit
+                    activity?.let {
+                        MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.admin_cyrylic_no_support))
+                    }
+                }
+                if (!edit.contains(".php", true)) {
+                    edit = edit.replace("-", "_")
+                }
+                edit = edit.replace(" ", "_").lowercase()
+                if (edit[0].isDigit()) edit = "mm_$edit"
+                if (check != 0) {
+                    binding.content.removeTextChangedListener(this)
+                    binding.content.setText(edit)
+                    binding.content.setSelection(editPosition)
+                    binding.content.addTextChangedListener(this)
+                }
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -40,41 +82,6 @@ class DialogPasochnicaFileName : DialogFragment() {
                 throw ClassCastException("$context must implement DialogPasochnicaFileNameListener")
             }
         }
-    }
-
-    private fun vypraulenneFilename() {
-        var fileNameOld = binding.content.text.toString()
-        var fileName = getResourceFileName(fileNameOld)
-        val sb = StringBuilder()
-        for (c in fileName) {
-            val unicode = UnicodeBlock.of(c)
-            unicode?.let {
-                if (!(unicode.equals(UnicodeBlock.CYRILLIC) || unicode.equals(UnicodeBlock.CYRILLIC_SUPPLEMENTARY) || unicode.equals(UnicodeBlock.CYRILLIC_EXTENDED_A) || unicode.equals(UnicodeBlock.CYRILLIC_EXTENDED_B))) {
-                    sb.append(c)
-                }
-            }
-        }
-        fileName = sb.toString()
-        if (!fileName.contains(".php", true)) {
-            fileName = fileName.replace("-", "_")
-        }
-        fileName = fileName.replace(" ", "_").lowercase()
-        val t1 = fileNameOld.indexOf(")")
-        var t2 = fileNameOld.lastIndexOf("/")
-        val prefix = if (t2 != -1) {
-            t2++
-            fileNameOld.substring(0, t2)
-        } else {
-            t2 = if (t1 != -1) 1
-            else 0
-            ""
-        }
-        val mm = if (fileNameOld[t2].isDigit()) "mm_"
-        else ""
-        if (t1 != -1) fileNameOld = "($mm" + fileName + ") " + fileNameOld.substring(t1 + 2)
-        if (prefix != "") fileNameOld = "$prefix$mm$fileName"
-        binding.content.setText(fileNameOld)
-        setFileName()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -97,11 +104,25 @@ class DialogPasochnicaFileName : DialogFragment() {
         }
     }
 
+    private fun checkCyrilic(fileName: String): String {
+        val sb = StringBuilder()
+        for (c in fileName) {
+            val unicode = UnicodeBlock.of(c)
+            unicode?.let {
+                if (!(it == UnicodeBlock.CYRILLIC || it == UnicodeBlock.CYRILLIC_SUPPLEMENTARY || it == UnicodeBlock.CYRILLIC_EXTENDED_A || it == UnicodeBlock.CYRILLIC_EXTENDED_B)) {
+                    sb.append(c)
+                }
+            }
+        }
+        return sb.toString()
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogEditviewDisplayBinding.inflate(layoutInflater)
             builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.set_file_name)
+            if (arguments?.getBoolean("saveAs") == true) binding.content.addTextChangedListener(textWatcher)
             val text = if (savedInstanceState != null) {
                 binding.content.setText(savedInstanceState.getString("fileName"))
                 savedInstanceState.getString("fileName") ?: "new_file.html"
@@ -141,36 +162,9 @@ class DialogPasochnicaFileName : DialogFragment() {
             val gc = Calendar.getInstance()
             val mun = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
             fileName = gc[Calendar.DATE].toString() + "_" + mun[gc[Calendar.MONTH]] + "_" + gc[Calendar.YEAR] + "_" + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
-        } else if (saveAs) {
-            var error = false
-            val checkFileName = getResourceFileName(fileName)
-            var t1 = checkFileName.indexOf(")")
-            t1 = if (t1 != -1) 1
-            else 0
-            if (checkFileName[t1].isDigit()) error = true
-            for (c in checkFileName) {
-                if (c.isUpperCase()) error = true
-            }
-            if (error) {
-                vypraulenneFilename()
-                return
-            }
         }
         mListener?.setFileName(oldFileName, fileName, isSite, saveAs)
         dialog?.cancel()
-    }
-
-    private fun getResourceFileName(fullResourceFileName: String): String {
-        var checkFileName = fullResourceFileName
-        val t2 = checkFileName.lastIndexOf("/")
-        if (t2 != -1) {
-            checkFileName = checkFileName.substring(t2 + 1)
-        }
-        val t1 = checkFileName.indexOf(")")
-        if (t1 != -1) {
-            checkFileName = checkFileName.substring(1, t1)
-        }
-        return checkFileName
     }
 
     companion object {

@@ -135,7 +135,10 @@ class PiasochnicaSaveAsFileExplorer : BaseActivity(), DialogPasochnicaMkDir.Dial
         binding.listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
         adapter = TitleListAdaprer(this)
         binding.listView.adapter = adapter
-        getDirListRequest("")
+        if (savedInstanceState != null) {
+            dir = savedInstanceState.getString("dir") ?: ""
+        }
+        getDirListRequest(dir)
         binding.listView.setOnItemClickListener { _, _, position, _ ->
             when (fileList[position].resources) {
                 R.drawable.directory_up -> {
@@ -273,6 +276,11 @@ class PiasochnicaSaveAsFileExplorer : BaseActivity(), DialogPasochnicaMkDir.Dial
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.edit_piasochnica_save_as_explorer, menu)
         super.onCreateMenu(menu, menuInflater)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("dir", dir)
     }
 
     private inner class TitleListAdaprer(private val mContext: Activity) : ArrayAdapter<MyNetFile>(mContext, R.layout.admin_simple_list_item, fileList) {

@@ -43,7 +43,7 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener, DialogDeliteAllPasochnica.DialogDeliteAllPasochnicaListener {
+class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener, DialogDeliteAllPasochnica.DialogDeliteAllPasochnicaListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaListBinding
@@ -56,6 +56,12 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             imageUri?.let { image ->
                 onDialogFile(File(URLEncoder.encode(image.path, "UTF-8")))
             }
+        }
+    }
+    private val mActivityResultNetFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val dirToFile = it.data?.extras?.getString("dirToFile") ?: "/"
+            getFileCopyPostRequest(dirToFile)
         }
     }
 
@@ -90,10 +96,6 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
         intent.putExtra("exits", exits)
         intent.putExtra("title", title)
         startActivity(intent)
-    }
-
-    override fun onDialogNetFile(dirToFile: String) {
-        getFileCopyPostRequest(dirToFile)
     }
 
     override fun deliteAllBackCopy() {
@@ -351,8 +353,6 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 }
                 if (isSite) saveLogFile()
                 binding.progressBar2.visibility = View.GONE
-                val fragment = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
-                fragment?.update()
                 getDirPostRequest()
             }
         } else {
@@ -399,8 +399,6 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
                 }
                 if (isSite) saveLogFile()
                 binding.progressBar2.visibility = View.GONE
-                val fragment = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
-                fragment?.update()
                 getDirPostRequest()
             }
         } else {
@@ -508,8 +506,7 @@ class PasochnicaList : BaseActivity(), DialogPasochnicaFileName.DialogPasochnica
             return true
         }
         if (id == R.id.action_open_net_file) {
-            val dialogNetFileExplorer = DialogNetFileExplorer()
-            dialogNetFileExplorer.show(supportFragmentManager, "dialogNetFileExplorer")
+            mActivityResultNetFile.launch(Intent(this, PiasochnicaNetFileExplorer::class.java))
             return true
         }
         if (id == R.id.action_open_file) {

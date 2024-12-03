@@ -5,8 +5,8 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.BibleZakladkiData
-import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
@@ -87,81 +87,16 @@ interface BibliaPerakvadBokuna {
 
     fun getInputStream(novyZapaviet: Boolean, kniga: Int): InputStream {
         this as BaseActivity
-        var inputStream = resources.openRawResource(R.raw.bokunan1)
-        if (novyZapaviet) {
-            when (kniga) {
-                0 -> inputStream = resources.openRawResource(R.raw.bokunan1)
-                1 -> inputStream = resources.openRawResource(R.raw.bokunan2)
-                2 -> inputStream = resources.openRawResource(R.raw.bokunan3)
-                3 -> inputStream = resources.openRawResource(R.raw.bokunan4)
-                4 -> inputStream = resources.openRawResource(R.raw.bokunan5)
-                5 -> inputStream = resources.openRawResource(R.raw.bokunan6)
-                6 -> inputStream = resources.openRawResource(R.raw.bokunan7)
-                7 -> inputStream = resources.openRawResource(R.raw.bokunan8)
-                8 -> inputStream = resources.openRawResource(R.raw.bokunan9)
-                9 -> inputStream = resources.openRawResource(R.raw.bokunan10)
-                10 -> inputStream = resources.openRawResource(R.raw.bokunan11)
-                11 -> inputStream = resources.openRawResource(R.raw.bokunan12)
-                12 -> inputStream = resources.openRawResource(R.raw.bokunan13)
-                13 -> inputStream = resources.openRawResource(R.raw.bokunan14)
-                14 -> inputStream = resources.openRawResource(R.raw.bokunan15)
-                15 -> inputStream = resources.openRawResource(R.raw.bokunan16)
-                16 -> inputStream = resources.openRawResource(R.raw.bokunan17)
-                17 -> inputStream = resources.openRawResource(R.raw.bokunan18)
-                18 -> inputStream = resources.openRawResource(R.raw.bokunan19)
-                19 -> inputStream = resources.openRawResource(R.raw.bokunan20)
-                20 -> inputStream = resources.openRawResource(R.raw.bokunan21)
-                21 -> inputStream = resources.openRawResource(R.raw.bokunan22)
-                22 -> inputStream = resources.openRawResource(R.raw.bokunan23)
-                23 -> inputStream = resources.openRawResource(R.raw.bokunan24)
-                24 -> inputStream = resources.openRawResource(R.raw.bokunan25)
-                25 -> inputStream = resources.openRawResource(R.raw.bokunan26)
-                26 -> inputStream = resources.openRawResource(R.raw.bokunan27)
-            }
-        } else {
-            when (kniga) {
-                0 -> inputStream = resources.openRawResource(R.raw.bokunas1)
-                1 -> inputStream = resources.openRawResource(R.raw.bokunas2)
-                2 -> inputStream = resources.openRawResource(R.raw.bokunas3)
-                3 -> inputStream = resources.openRawResource(R.raw.bokunas4)
-                4 -> inputStream = resources.openRawResource(R.raw.bokunas5)
-                5 -> inputStream = resources.openRawResource(R.raw.bokunas6)
-                6 -> inputStream = resources.openRawResource(R.raw.bokunas7)
-                7 -> inputStream = resources.openRawResource(R.raw.bokunas8)
-                8 -> inputStream = resources.openRawResource(R.raw.bokunas9)
-                9 -> inputStream = resources.openRawResource(R.raw.bokunas10)
-                10 -> inputStream = resources.openRawResource(R.raw.bokunas11)
-                11 -> inputStream = resources.openRawResource(R.raw.bokunas12)
-                12 -> inputStream = resources.openRawResource(R.raw.bokunas13)
-                13 -> inputStream = resources.openRawResource(R.raw.bokunas14)
-                14 -> inputStream = resources.openRawResource(R.raw.bokunas15)
-                15 -> inputStream = resources.openRawResource(R.raw.bokunas16)
-                16 -> inputStream = resources.openRawResource(R.raw.bokunas17)
-                17 -> inputStream = resources.openRawResource(R.raw.bokunas18)
-                18 -> inputStream = resources.openRawResource(R.raw.bokunas19)
-                19 -> inputStream = resources.openRawResource(R.raw.bokunas20)
-                20 -> inputStream = resources.openRawResource(R.raw.bokunas21)
-                21 -> inputStream = resources.openRawResource(R.raw.bokunas22)
-                22 -> inputStream = resources.openRawResource(R.raw.bokunas23)
-                23 -> inputStream = resources.openRawResource(R.raw.bokunas24)
-                24 -> inputStream = resources.openRawResource(R.raw.bokunas25)
-                25 -> inputStream = resources.openRawResource(R.raw.bokunas26)
-                26 -> inputStream = resources.openRawResource(R.raw.bokunas27)
-                27 -> inputStream = resources.openRawResource(R.raw.bokunas28)
-                28 -> inputStream = resources.openRawResource(R.raw.bokunas29)
-                29 -> inputStream = resources.openRawResource(R.raw.bokunas30)
-                30 -> inputStream = resources.openRawResource(R.raw.bokunas31)
-                31 -> inputStream = resources.openRawResource(R.raw.bokunas32)
-                32 -> inputStream = resources.openRawResource(R.raw.bokunas33)
-                33 -> inputStream = resources.openRawResource(R.raw.bokunas34)
-                34 -> inputStream = resources.openRawResource(R.raw.bokunas35)
-                35 -> inputStream = resources.openRawResource(R.raw.bokunas36)
-                36 -> inputStream = resources.openRawResource(R.raw.bokunas37)
-                37 -> inputStream = resources.openRawResource(R.raw.bokunas38)
-                38 -> inputStream = resources.openRawResource(R.raw.bokunas39)
+        val fields = R.raw::class.java.fields
+        val zavet = if (novyZapaviet) "n"
+        else "s"
+        for (element in fields) {
+            val name = element.name
+            if (name == "bokuna$zavet${kniga + 1}") {
+                return resources.openRawResource(element.getInt(name))
             }
         }
-        return inputStream
+        return resources.openRawResource(by.carkva_gazeta.malitounik.R.raw.biblia_error)
     }
 
     fun saveVydelenieZakladkiNtanki(novyZapaviet: Boolean, kniga: Int, glava: Int, stix: Int) {

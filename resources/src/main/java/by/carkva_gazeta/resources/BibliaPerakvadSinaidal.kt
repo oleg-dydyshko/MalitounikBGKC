@@ -93,11 +93,11 @@ interface BibliaPerakvadSinaidal {
         else "s"
         for (element in fields) {
             val name = element.name
-            if (name.contains("sinaidal$zavet${kniga + 1}.txt")) {
+            if (name == "sinaidal$zavet${kniga + 1}") {
                 return resources.openRawResource(element.getInt(name))
             }
         }
-        return resources.openRawResource(R.raw.sinaidaln1)
+        return resources.openRawResource(by.carkva_gazeta.malitounik.R.raw.biblia_error)
     }
 
     fun saveVydelenieZakladkiNtanki(novyZapaviet: Boolean, kniga: Int, glava: Int, stix: Int) {

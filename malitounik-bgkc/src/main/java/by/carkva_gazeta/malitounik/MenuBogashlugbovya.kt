@@ -171,7 +171,9 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             dataSearch.add(MenuListData(r1[38] + opisanie, "sluzba_sviatym_zanczynam"))
             dataSearch.add(MenuListData(r1[39] + opisanie, "sluzba_posnikam_manacham_pustelnikam"))
             dataSearch.add(MenuListData(r1[40] + opisanie, "sluzba_posniku_manachu_pustelniku"))
-            if (!isSearch) dataSearch.add(MenuListData(r1[41], "1"))
+            dataSearch.add(MenuListData(r1[41] + opisanie, "sluzba_janu_chryscicielu"))
+            dataSearch.add(MenuListData(r1[42] + opisanie, "sluzba_praroku"))
+            if (!isSearch) dataSearch.add(MenuListData(r1[43], "1"))
             return dataSearch
         }
 

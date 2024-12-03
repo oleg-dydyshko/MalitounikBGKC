@@ -5,8 +5,8 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.BibleZakladkiData
-import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
@@ -88,81 +88,16 @@ interface BibliaPerakvadSemuxi {
 
     fun getInputStream(novyZapaviet: Boolean, kniga: Int): InputStream {
         this as BaseActivity
-        var inputStream = resources.openRawResource(R.raw.biblian1)
-        if (novyZapaviet) {
-            when (kniga) {
-                0 -> inputStream = resources.openRawResource(R.raw.biblian1)
-                1 -> inputStream = resources.openRawResource(R.raw.biblian2)
-                2 -> inputStream = resources.openRawResource(R.raw.biblian3)
-                3 -> inputStream = resources.openRawResource(R.raw.biblian4)
-                4 -> inputStream = resources.openRawResource(R.raw.biblian5)
-                5 -> inputStream = resources.openRawResource(R.raw.biblian6)
-                6 -> inputStream = resources.openRawResource(R.raw.biblian7)
-                7 -> inputStream = resources.openRawResource(R.raw.biblian8)
-                8 -> inputStream = resources.openRawResource(R.raw.biblian9)
-                9 -> inputStream = resources.openRawResource(R.raw.biblian10)
-                10 -> inputStream = resources.openRawResource(R.raw.biblian11)
-                11 -> inputStream = resources.openRawResource(R.raw.biblian12)
-                12 -> inputStream = resources.openRawResource(R.raw.biblian13)
-                13 -> inputStream = resources.openRawResource(R.raw.biblian14)
-                14 -> inputStream = resources.openRawResource(R.raw.biblian15)
-                15 -> inputStream = resources.openRawResource(R.raw.biblian16)
-                16 -> inputStream = resources.openRawResource(R.raw.biblian17)
-                17 -> inputStream = resources.openRawResource(R.raw.biblian18)
-                18 -> inputStream = resources.openRawResource(R.raw.biblian19)
-                19 -> inputStream = resources.openRawResource(R.raw.biblian20)
-                20 -> inputStream = resources.openRawResource(R.raw.biblian21)
-                21 -> inputStream = resources.openRawResource(R.raw.biblian22)
-                22 -> inputStream = resources.openRawResource(R.raw.biblian23)
-                23 -> inputStream = resources.openRawResource(R.raw.biblian24)
-                24 -> inputStream = resources.openRawResource(R.raw.biblian25)
-                25 -> inputStream = resources.openRawResource(R.raw.biblian26)
-                26 -> inputStream = resources.openRawResource(R.raw.biblian27)
-            }
-        } else {
-            when (kniga) {
-                0 -> inputStream = resources.openRawResource(R.raw.biblias1)
-                1 -> inputStream = resources.openRawResource(R.raw.biblias2)
-                2 -> inputStream = resources.openRawResource(R.raw.biblias3)
-                3 -> inputStream = resources.openRawResource(R.raw.biblias4)
-                4 -> inputStream = resources.openRawResource(R.raw.biblias5)
-                5 -> inputStream = resources.openRawResource(R.raw.biblias6)
-                6 -> inputStream = resources.openRawResource(R.raw.biblias7)
-                7 -> inputStream = resources.openRawResource(R.raw.biblias8)
-                8 -> inputStream = resources.openRawResource(R.raw.biblias9)
-                9 -> inputStream = resources.openRawResource(R.raw.biblias10)
-                10 -> inputStream = resources.openRawResource(R.raw.biblias11)
-                11 -> inputStream = resources.openRawResource(R.raw.biblias12)
-                12 -> inputStream = resources.openRawResource(R.raw.biblias13)
-                13 -> inputStream = resources.openRawResource(R.raw.biblias14)
-                14 -> inputStream = resources.openRawResource(R.raw.biblias15)
-                15 -> inputStream = resources.openRawResource(R.raw.biblias16)
-                16 -> inputStream = resources.openRawResource(R.raw.biblias17)
-                17 -> inputStream = resources.openRawResource(R.raw.biblias18)
-                18 -> inputStream = resources.openRawResource(R.raw.biblias19)
-                19 -> inputStream = resources.openRawResource(R.raw.biblias20)
-                20 -> inputStream = resources.openRawResource(R.raw.biblias21)
-                21 -> inputStream = resources.openRawResource(R.raw.biblias22)
-                22 -> inputStream = resources.openRawResource(R.raw.biblias23)
-                23 -> inputStream = resources.openRawResource(R.raw.biblias24)
-                24 -> inputStream = resources.openRawResource(R.raw.biblias25)
-                25 -> inputStream = resources.openRawResource(R.raw.biblias26)
-                26 -> inputStream = resources.openRawResource(R.raw.biblias27)
-                27 -> inputStream = resources.openRawResource(R.raw.biblias28)
-                28 -> inputStream = resources.openRawResource(R.raw.biblias29)
-                29 -> inputStream = resources.openRawResource(R.raw.biblias30)
-                30 -> inputStream = resources.openRawResource(R.raw.biblias31)
-                31 -> inputStream = resources.openRawResource(R.raw.biblias32)
-                32 -> inputStream = resources.openRawResource(R.raw.biblias33)
-                33 -> inputStream = resources.openRawResource(R.raw.biblias34)
-                34 -> inputStream = resources.openRawResource(R.raw.biblias35)
-                35 -> inputStream = resources.openRawResource(R.raw.biblias36)
-                36 -> inputStream = resources.openRawResource(R.raw.biblias37)
-                37 -> inputStream = resources.openRawResource(R.raw.biblias38)
-                38 -> inputStream = resources.openRawResource(R.raw.biblias39)
+        val fields = R.raw::class.java.fields
+        val zavet = if (novyZapaviet) "n"
+        else "s"
+        for (element in fields) {
+            val name = element.name
+            if (name == "biblia$zavet${kniga + 1}") {
+                return resources.openRawResource(element.getInt(name))
             }
         }
-        return inputStream
+        return resources.openRawResource(by.carkva_gazeta.malitounik.R.raw.biblia_error)
     }
 
     fun saveVydelenieZakladkiNtanki(novyZapaviet: Boolean, kniga: Int, glava: Int, stix: Int) {

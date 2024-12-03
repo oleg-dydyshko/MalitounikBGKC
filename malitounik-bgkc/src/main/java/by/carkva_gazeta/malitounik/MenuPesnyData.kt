@@ -29,6 +29,7 @@ class MenuPesnyData {
         pesnyBag.add(Data("piesni_bahar_radujsia_dzieva_maci", "Радуйся, Дзева Маці"))
         pesnyBag.add(Data("piesni_bahar_maci_bozaja_u_barunach", "Маці Божая ў Барунах"))
         pesnyBag.add(Data("piesni_bahar_maci_bozaja", "Маці Божая"))
+        pesnyBag.add(Data("piesni_bahar_himn_da_imia_maryi", "Гімн да імя Марыі"))
 
         pesnyBel.add(Data("piesni_belarus_ave_maria_pazniak", "Ave Maria"))
         pesnyBel.add(Data("piesni_belarus_boza_szto_kalis_narody", "Божа, што калісь народы"))
@@ -144,7 +145,6 @@ class MenuPesnyData {
         pesnyPrasl.add(Data("pesny_prasl_61", "Хвала Табе, вялікі Бог"))
         pesnyPrasl.add(Data("pesny_prasl_62", "Хвалім Цябе, Божа!"))
         pesnyPrasl.add(Data("pesny_prasl_63", "Хрыстос уваскрос! (Resucito)"))
-        pesnyPrasl.add(Data("pesny_prasl_64", "Ці ты быў на Галгофе"))
         pesnyPrasl.add(Data("pesny_prasl_65", "Шалом алэхем (Мір вам)"))
         pesnyPrasl.add(Data("pesny_prasl_66", "Я люблю Цябе, Ойча міласэрны"))
         pesnyPrasl.add(Data("piesni_prasl_ja_ustanu_rana_kab_spiavac", "Я ўстану рана, каб сьпяваць"))
@@ -170,6 +170,7 @@ class MenuPesnyData {
         pesnyPrasl.add(Data("piesni_prasl_himn_na_uszanavannie_sviatych", "Гімн на ўшанаваньне сьвятых"))
         pesnyPrasl.add(Data("piesni_prasl_addac_z_lubovi_usio", "Аддаць з любові ўсё"))
         pesnyPrasl.add(Data("piesni_prasl_sionniaszni_dzien", "Сёньняшні дзень"))
+        pesnyPrasl.add(Data("piesni_prasl_ci_ty_byu_na_halhofie", "Ці ты быў на Галгофе"))
 
         pesnyTaize.add(Data("pesny_taize_0", "Magnifikat"))
         pesnyTaize.add(Data("pesny_taize_1", "Ostende nobis"))

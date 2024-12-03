@@ -5,8 +5,8 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.BibleZakladkiData
-import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
@@ -88,92 +88,16 @@ interface BibliaPerakvadSinaidal {
 
     fun getInputStream(novyZapaviet: Boolean, kniga: Int): InputStream {
         this as BaseActivity
-        var inputStream = resources.openRawResource(R.raw.sinaidaln1)
-        if (novyZapaviet) {
-            when (kniga) {
-                0 -> inputStream = resources.openRawResource(R.raw.sinaidaln1)
-                1 -> inputStream = resources.openRawResource(R.raw.sinaidaln2)
-                2 -> inputStream = resources.openRawResource(R.raw.sinaidaln3)
-                3 -> inputStream = resources.openRawResource(R.raw.sinaidaln4)
-                4 -> inputStream = resources.openRawResource(R.raw.sinaidaln5)
-                5 -> inputStream = resources.openRawResource(R.raw.sinaidaln6)
-                6 -> inputStream = resources.openRawResource(R.raw.sinaidaln7)
-                7 -> inputStream = resources.openRawResource(R.raw.sinaidaln8)
-                8 -> inputStream = resources.openRawResource(R.raw.sinaidaln9)
-                9 -> inputStream = resources.openRawResource(R.raw.sinaidaln10)
-                10 -> inputStream = resources.openRawResource(R.raw.sinaidaln11)
-                11 -> inputStream = resources.openRawResource(R.raw.sinaidaln12)
-                12 -> inputStream = resources.openRawResource(R.raw.sinaidaln13)
-                13 -> inputStream = resources.openRawResource(R.raw.sinaidaln14)
-                14 -> inputStream = resources.openRawResource(R.raw.sinaidaln15)
-                15 -> inputStream = resources.openRawResource(R.raw.sinaidaln16)
-                16 -> inputStream = resources.openRawResource(R.raw.sinaidaln17)
-                17 -> inputStream = resources.openRawResource(R.raw.sinaidaln18)
-                18 -> inputStream = resources.openRawResource(R.raw.sinaidaln19)
-                19 -> inputStream = resources.openRawResource(R.raw.sinaidaln20)
-                20 -> inputStream = resources.openRawResource(R.raw.sinaidaln21)
-                21 -> inputStream = resources.openRawResource(R.raw.sinaidaln22)
-                22 -> inputStream = resources.openRawResource(R.raw.sinaidaln23)
-                23 -> inputStream = resources.openRawResource(R.raw.sinaidaln24)
-                24 -> inputStream = resources.openRawResource(R.raw.sinaidaln25)
-                25 -> inputStream = resources.openRawResource(R.raw.sinaidaln26)
-                26 -> inputStream = resources.openRawResource(R.raw.sinaidaln27)
-            }
-        } else {
-            when (kniga) {
-                0 -> inputStream = resources.openRawResource(R.raw.sinaidals1)
-                1 -> inputStream = resources.openRawResource(R.raw.sinaidals2)
-                2 -> inputStream = resources.openRawResource(R.raw.sinaidals3)
-                3 -> inputStream = resources.openRawResource(R.raw.sinaidals4)
-                4 -> inputStream = resources.openRawResource(R.raw.sinaidals5)
-                5 -> inputStream = resources.openRawResource(R.raw.sinaidals6)
-                6 -> inputStream = resources.openRawResource(R.raw.sinaidals7)
-                7 -> inputStream = resources.openRawResource(R.raw.sinaidals8)
-                8 -> inputStream = resources.openRawResource(R.raw.sinaidals9)
-                9 -> inputStream = resources.openRawResource(R.raw.sinaidals10)
-                10 -> inputStream = resources.openRawResource(R.raw.sinaidals11)
-                11 -> inputStream = resources.openRawResource(R.raw.sinaidals12)
-                12 -> inputStream = resources.openRawResource(R.raw.sinaidals13)
-                13 -> inputStream = resources.openRawResource(R.raw.sinaidals14)
-                14 -> inputStream = resources.openRawResource(R.raw.sinaidals15)
-                15 -> inputStream = resources.openRawResource(R.raw.sinaidals16)
-                16 -> inputStream = resources.openRawResource(R.raw.sinaidals17)
-                17 -> inputStream = resources.openRawResource(R.raw.sinaidals18)
-                18 -> inputStream = resources.openRawResource(R.raw.sinaidals19)
-                19 -> inputStream = resources.openRawResource(R.raw.sinaidals20)
-                20 -> inputStream = resources.openRawResource(R.raw.sinaidals21)
-                21 -> inputStream = resources.openRawResource(R.raw.sinaidals22)
-                22 -> inputStream = resources.openRawResource(R.raw.sinaidals23)
-                23 -> inputStream = resources.openRawResource(R.raw.sinaidals24)
-                24 -> inputStream = resources.openRawResource(R.raw.sinaidals25)
-                25 -> inputStream = resources.openRawResource(R.raw.sinaidals26)
-                26 -> inputStream = resources.openRawResource(R.raw.sinaidals27)
-                27 -> inputStream = resources.openRawResource(R.raw.sinaidals28)
-                28 -> inputStream = resources.openRawResource(R.raw.sinaidals29)
-                29 -> inputStream = resources.openRawResource(R.raw.sinaidals30)
-                30 -> inputStream = resources.openRawResource(R.raw.sinaidals31)
-                31 -> inputStream = resources.openRawResource(R.raw.sinaidals32)
-                32 -> inputStream = resources.openRawResource(R.raw.sinaidals33)
-                33 -> inputStream = resources.openRawResource(R.raw.sinaidals34)
-                34 -> inputStream = resources.openRawResource(R.raw.sinaidals35)
-                35 -> inputStream = resources.openRawResource(R.raw.sinaidals36)
-                36 -> inputStream = resources.openRawResource(R.raw.sinaidals37)
-                37 -> inputStream = resources.openRawResource(R.raw.sinaidals38)
-                38 -> inputStream = resources.openRawResource(R.raw.sinaidals39)
-                39 -> inputStream = resources.openRawResource(R.raw.sinaidals39)
-                40 -> inputStream = resources.openRawResource(R.raw.sinaidals40)
-                41 -> inputStream = resources.openRawResource(R.raw.sinaidals42)
-                42 -> inputStream = resources.openRawResource(R.raw.sinaidals43)
-                43 -> inputStream = resources.openRawResource(R.raw.sinaidals44)
-                44 -> inputStream = resources.openRawResource(R.raw.sinaidals45)
-                45 -> inputStream = resources.openRawResource(R.raw.sinaidals46)
-                46 -> inputStream = resources.openRawResource(R.raw.sinaidals47)
-                47 -> inputStream = resources.openRawResource(R.raw.sinaidals48)
-                48 -> inputStream = resources.openRawResource(R.raw.sinaidals49)
-                49 -> inputStream = resources.openRawResource(R.raw.sinaidals50)
+        val fields = R.raw::class.java.fields
+        val zavet = if (novyZapaviet) "n"
+        else "s"
+        for (element in fields) {
+            val name = element.name
+            if (name.contains("sinaidal$zavet${kniga + 1}.txt")) {
+                return resources.openRawResource(element.getInt(name))
             }
         }
-        return inputStream
+        return resources.openRawResource(R.raw.sinaidaln1)
     }
 
     fun saveVydelenieZakladkiNtanki(novyZapaviet: Boolean, kniga: Int, glava: Int, stix: Int) {

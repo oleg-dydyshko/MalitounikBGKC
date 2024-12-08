@@ -89,16 +89,16 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
             val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
             viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorDivider))
-            viewHolder.textSviat.visibility = View.VISIBLE
-            viewHolder.textPraz.visibility = View.GONE
-            viewHolder.textPostS.visibility = View.GONE
-            viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-            viewHolder.textPraz.typeface = MainActivity.createFont(Typeface.BOLD)
+            viewHolder.textSviatyia.visibility = View.VISIBLE
+            viewHolder.textCviatyGlavnyia.visibility = View.GONE
+            viewHolder.textPost.visibility = View.GONE
+            viewHolder.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+            viewHolder.textCviatyGlavnyia.typeface = MainActivity.createFont(Typeface.BOLD)
             viewHolder.textSviatyGosud.visibility = View.GONE
             viewHolder.textSviatyRKC.visibility = View.GONE
             if (dzenNoch) {
-                viewHolder.textSviat.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
-                viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
+                viewHolder.textSviatyia.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
+                viewHolder.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
                 viewHolder.textSviatyGosud.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
             }
             val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -111,11 +111,11 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
                 viewHolder.textSviatyGosud.visibility = View.VISIBLE
             }
             if (c[Calendar.YEAR] == niadzelia[position][3].toInt() && c[Calendar.DATE] == niadzelia[position][1].toInt() && c[Calendar.MONTH] == niadzelia[position][2].toInt()) {
-                if (dzenNoch) viewHolder.linearLayout.setBackgroundResource(R.drawable.calendar_nedel_today_black)
-                else viewHolder.linearLayout.setBackgroundResource(R.drawable.calendar_nedel_today)
+                if (dzenNoch) viewHolder.linearView.setBackgroundResource(R.drawable.calendar_nedel_today_black)
+                else viewHolder.linearView.setBackgroundResource(R.drawable.calendar_nedel_today)
             } else {
-                if (dzenNoch) viewHolder.linearLayout.setBackgroundResource(R.drawable.selector_dark)
-                else viewHolder.linearLayout.setBackgroundResource(R.drawable.selector_default)
+                if (dzenNoch) viewHolder.linearView.setBackgroundResource(R.drawable.selector_dark)
+                else viewHolder.linearView.setBackgroundResource(R.drawable.selector_default)
             }
             if (niadzelia[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar.text = mContext.getString(R.string.tydzen_name3, nedelName[niadzelia[position][0].toInt()], niadzelia[position][1], munName[niadzelia[position][2].toInt()], niadzelia[position][3])
             else viewHolder.textCalendar.text = mContext.getString(R.string.tydzen_name2, nedelName[niadzelia[position][0].toInt()], niadzelia[position][1], munName[niadzelia[position][2].toInt()])
@@ -123,29 +123,29 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
             if (dzenNoch) {
                 sviatyia = sviatyia.replace("#d00505", "#ff6666")
             }
-            viewHolder.textSviat.text = MainActivity.fromHtml(sviatyia)
-            if (niadzelia[position][4].contains("no_sviatyia")) viewHolder.textSviat.visibility = View.GONE
-            viewHolder.textPraz.text = MainActivity.fromHtml(niadzelia[position][6])
-            if (!niadzelia[position][6].contains("no_sviaty")) viewHolder.textPraz.visibility = View.VISIBLE // убот = субота
+            viewHolder.textSviatyia.text = MainActivity.fromHtml(sviatyia)
+            if (niadzelia[position][4].contains("no_sviatyia")) viewHolder.textSviatyia.visibility = View.GONE
+            viewHolder.textCviatyGlavnyia.text = niadzelia[position][6]
+            if (!niadzelia[position][6].contains("no_sviaty")) viewHolder.textCviatyGlavnyia.visibility = View.VISIBLE // убот = субота
             if (niadzelia[position][6].contains("Пачатак") || niadzelia[position][6].contains("Вялікі") || niadzelia[position][6].contains("Вялікая") || niadzelia[position][6].contains("убот") || niadzelia[position][6].contains("ВЕЧАР") || niadzelia[position][6].contains("Палова")) {
-                if (dzenNoch) viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
-                else viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                viewHolder.textPraz.typeface = MainActivity.createFont(Typeface.NORMAL)
+                if (dzenNoch) viewHolder.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
+                else viewHolder.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                viewHolder.textCviatyGlavnyia.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
             when (niadzelia[position][7].toInt()) {
                 1 -> {
                     viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
                     viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
-                    viewHolder.textPostS.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                    viewHolder.textPostS.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
-                    viewHolder.textPostS.text = mContext.resources.getString(R.string.No_post_n)
+                    viewHolder.textPost.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                    viewHolder.textPost.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
+                    viewHolder.textPost.text = mContext.resources.getString(R.string.No_post_n)
                 }
                 2 -> {
                     viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
                     viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
-                    viewHolder.textPostS.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                    viewHolder.textPostS.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
-                    viewHolder.textPostS.text = mContext.resources.getString(R.string.Post)
+                    viewHolder.textPost.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                    viewHolder.textPost.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
+                    viewHolder.textPost.text = mContext.resources.getString(R.string.Post)
                 }
                 3 -> {
                     viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
@@ -157,21 +157,21 @@ class CaliandarNedzel : BaseFragment(), AdapterView.OnItemClickListener {
                 viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
             }
             if (niadzelia[position][5].contains("2")) {
-                viewHolder.textPraz.typeface = MainActivity.createFont(Typeface.NORMAL)
+                viewHolder.textCviatyGlavnyia.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
             if (niadzelia[position][7].contains("3")) {
-                viewHolder.textPostS.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
-                viewHolder.textPostS.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
-                viewHolder.textPostS.text = mContext.resources.getString(R.string.Strogi_post_n)
-                viewHolder.textPostS.visibility = View.VISIBLE
+                viewHolder.textPost.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
+                viewHolder.textPost.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
+                viewHolder.textPost.text = mContext.resources.getString(R.string.Strogi_post_n)
+                viewHolder.textPost.visibility = View.VISIBLE
             } else if (niadzelia[position][0].contains("6") && !(niadzelia[position][5].contains("1") || niadzelia[position][5].contains("2"))) { // Пятница
-                viewHolder.textPostS.visibility = View.VISIBLE
+                viewHolder.textPost.visibility = View.VISIBLE
             }
             return view
         }
     }
 
-    private class ViewHolder(var textCalendar: TextView, var textPraz: TextView, var textSviat: TextView, var textPostS: TextView, var linearLayout: LinearLayout, var textSviatyGosud: TextView, var textSviatyRKC: TextView)
+    private class ViewHolder(var textCalendar: TextView, var textCviatyGlavnyia: TextView, var textSviatyia: TextView, var textPost: TextView, var linearView: LinearLayout, var textSviatyGosud: TextView, var textSviatyRKC: TextView)
 
     companion object {
         fun newInstance(year: Int, mun: Int, date: Int): CaliandarNedzel {

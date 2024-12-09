@@ -460,6 +460,9 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(325, "Перадсьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы і сьвятых Рыгора і Прокла", "mm_20_11_pieradsviaccie_uvachodu_u_sviatyniu_baharodzicy_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(325, "Перадсьвяцьце Ўваходу ў сьвятыню Найсьвяцейшай Багародзіцы і сьвятых Рыгора і Прокла", "mm_20_11_pieradsviaccie_uvachodu_ryhora_prokla_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(340, "Сьвятога і баганоснага айца нашага Савы Асьвячанага", "mm_05_12_savy_asviaczanaha", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(342, "Сьвятога Амбражэя, біскупа Міланскага", "mm_07_12_ambrazeja_biskupa_milanskaha_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(343, "Пачэснага айца нашага Патапа", "mm_08_12_paczesnaha_patapa_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(347, "Сьвятога айца нашага Сьпірыдона Трымітунцкага", "mm_12_12_spirydona_trymitunckaha_viaczernia", VIACZERNIA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

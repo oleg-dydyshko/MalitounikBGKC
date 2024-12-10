@@ -651,7 +651,7 @@
     <string name="admin_update_all">Абнаўленьне павінна існаваць у Google Play.\nНапішыце нумар %1$s версіі:</string>
     <string name="admin_update_ok">Апублікаваць</string>
     <string name="mineia_shtodzennaia">Мінэя месячная</string>
-    <string name="mineia_sviatochnaia">Трыёдзь сьвяточная</string>
+    <string name="mineia_sviatochnaia">Трыёдзь Кветная</string>
     <string-array name="admin_svity">
         <item>Чырвоны</item>
         <item>Чырвоны тоўсты</item>
@@ -1149,7 +1149,7 @@
     <string name="mineia_mesiachnaia">\nМінэя месячная</string>
     <string name="tryedz_1">\nТрыёдзь -> Службы Вялікага тыдня</string>
     <string name="tryedz_2">\nТрыёдзь -> Службы Сьветлага тыдня</string>
-    <string name="tryedz_3">\nТрыёдзь -> Трыёдзь сьвяточная</string>
+    <string name="tryedz_3">\nТрыёдзь -> Трыёдзь Кветная</string>
     <string name="tryedz_4">\nТрыёдзь -> Трыёдзь посная -> Службы 1-га тыдня Вялікага пост</string>
     <string name="tryedz_5">\nТрыёдзь -> Трыёдзь посная -> Службы 2-га тыдня Вялікага посту</string>
     <string name="tryedz_6">\nТрыёдзь -> Трыёдзь посная -> Службы 3-га тыдня Вялікага посту</string>

@@ -88,6 +88,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста", "uzniasienne_jutran", JUTRAN, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста", "uzniasienne_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(42, "Нядзеля сьвятых айцоў I-га Сусьветнага Сабору", "ndz_ajcou_1susviet_saboru_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
+        datMinALL.add(SlugbovyiaTextuData(42, "Нядзеля сьвятых айцоў I-га Сусьветнага Сабору", "ndz_ajcou_1susvietnaha_saboru_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(48, "Зыход Сьвятога Духа (Сёмуха)", "zychod_sv_ducha_viaczernia_u_subotu", VIACZERNIA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(49, "Зыход Сьвятога Духа (Сёмуха)", "zychod_sv_ducha_jutran", JUTRAN, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
         datMinALL.add(SlugbovyiaTextuData(49, "Зыход Сьвятога Духа (Сёмуха)", "zychod_sv_ducha_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_SVIATOCHNAIA))
@@ -749,14 +750,14 @@ class SlugbovyiaTextu {
         }
         datMinALL.forEach {
             if (it.pasxa) {
-                if (day == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
+                if (day == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA || it.sluzba == VIACZERNIA_Z_LITURHIJA)) {
                     return true
                 }
             } else {
                 if (checkSunDay && getFictionalDay(dayOfYear) == it.day && it.sluzba == VIACZERNIA_SUNDAY_2412) {
                     return true
                 }
-                if (getFictionalDay(dayOfYear) == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
+                if (getFictionalDay(dayOfYear) == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA || it.sluzba == VIACZERNIA_Z_LITURHIJA)) {
                     return true
                 }
             }

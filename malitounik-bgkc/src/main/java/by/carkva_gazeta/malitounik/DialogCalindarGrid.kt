@@ -20,7 +20,6 @@ import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
 import java.util.Calendar
-import java.util.GregorianCalendar
 
 class DialogCalindarGrid : DialogFragment() {
 
@@ -402,24 +401,7 @@ class DialogCalindarGrid : DialogFragment() {
                     }
 
                     6 -> {
-                        val c = GregorianCalendar()
-                        val dabraveshchanne = if (c.isLeapYear(year)) 85
-                        else 84
                         when {
-                            dayOfYear.toInt() == dabraveshchanne -> {
-                                val resours = if (denNedzeli == Calendar.SUNDAY || denNedzeli == Calendar.SATURDAY) {
-                                    slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
-                                } else {
-                                    slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)
-                                }
-                                val intent = Intent()
-                                intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("resurs", resours)
-                                intent.putExtra("zmena_chastki", true)
-                                intent.putExtra("title", slugba.getTitle(resours))
-                                startActivity(intent)
-                            }
-
                             slugba.checkLiturgia(raznicia, dayOfYear.toInt(), year) -> {
                                 val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.LITURHIJA, year)
                                 val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.LITURHIJA, year)

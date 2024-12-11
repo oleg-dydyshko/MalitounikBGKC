@@ -405,12 +405,15 @@ class DialogCalindarGrid : DialogFragment() {
                             slugba.checkLiturgia(raznicia, dayOfYear.toInt(), year) -> {
                                 val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.LITURHIJA, year)
                                 val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.LITURHIJA, year)
+                                val resours3 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.MALEBEN_NA_NOVY_GOD, year)
                                 val listResource = ArrayList<String>()
                                 if (resours != "0") listResource.add(resours)
                                 if (resours2 != "0") listResource.add(resours2)
+                                if (resours3 != "0") listResource.add(resours3)
                                 val listTitle = ArrayList<String>()
                                 if (resours != "0") listTitle.add(slugba.getTitle(resours))
                                 if (resours2 != "0") listTitle.add(slugba.getTitle(resours2))
+                                if (resours3 != "0") listTitle.add(slugba.getTitle(resours3))
                                 if (ton != 0 || listResource.size > 1) {
                                     val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(listTitle, ton, listResource, denNedzeli)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")

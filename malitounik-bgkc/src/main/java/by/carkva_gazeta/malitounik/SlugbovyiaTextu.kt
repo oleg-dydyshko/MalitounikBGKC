@@ -33,6 +33,7 @@ class SlugbovyiaTextu {
         const val LITURHIJA_SUNDAY_2412 = 12
         const val JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX = 13
         const val VIACZERNIA_BEZ_SVIATARA = 14
+        const val MALEBEN_NA_NOVY_GOD = 15
         const val AICOU_VII_SUSVETNAGA_SABORY = 1000
         const val NIADZELIA_PRA_AICOU = 1001
         const val NIADZELIA_AICOU_VI_SABORY = 1002
@@ -222,7 +223,8 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(313, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "mm_08_11_sabor_archaniola_michaila_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(318, "Між сьвятымі айца нашага Яна Залатавуснага", "mm_13_11_jana_zalatavusnaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(318, "Між сьвятымі айца нашага Яна Залатавуснага", "mm_13_11_jana_zalatavusnaha_liturhija", LITURHIJA))
-        datMinALL.add(SlugbovyiaTextuData(1, "Малебен на Новы год", "mm_01_01_malebien_novy_hod", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе. Сьвятаначальніка Васіля Вялікага, архібіскупа Кесарыі Кападакійскай", "mm_01_01_abrezannie_vasila_vialikaha_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(1, "Малебен на Новы год", "mm_01_01_malebien_novy_hod", MALEBEN_NA_NOVY_GOD))
         datMinALL.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня; сьвятаначальніка Сільвестра, папы Рымскага", "mm_02_01_pieradsv_bohazjaulennia_silviestra_papy_rymskaha_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня; Сабор 70-ці апосталаў, пачэснага Тэактыста", "mm_04_01_pieradsv_bohazjaulennia_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(128, "Жырoвiцкaй iкoны Maцi Бoжae", "mm_07_05_zyrovickaj_ikony_maci_bozaj_liturhija", LITURHIJA))
@@ -480,6 +482,7 @@ class SlugbovyiaTextu {
             PAUNOCHNICA -> "Паўночніца"
             VIACZERNIA_SUNDAY_2412 -> "Вячэрня"
             LITURHIJA_SUNDAY_2412 -> "Літургія"
+            MALEBEN_NA_NOVY_GOD -> ""
             JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX -> "Ютрань (12 Евангельляў Мукаў Хрыстовых)"
             VIACZERNIA_BEZ_SVIATARA -> "Вячэрня (без сьвятара)"
             else -> "Іншае"
@@ -732,7 +735,7 @@ class SlugbovyiaTextu {
                 if (checkSunDay && getFictionalDay(dayOfYear) == it.day && it.sluzba == LITURHIJA_SUNDAY_2412) {
                     return true
                 }
-                if (getFictionalDay(dayOfYear) == it.day && it.sluzba == LITURHIJA) {
+                if (getFictionalDay(dayOfYear) == it.day && (it.sluzba == LITURHIJA || it.sluzba == MALEBEN_NA_NOVY_GOD)) {
                     return true
                 }
             }

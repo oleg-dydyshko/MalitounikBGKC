@@ -666,6 +666,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
                     checkDiff = true
                     autoscroll = false
+                    stopAutoStartScroll()
                     stopAutoScroll()
                     invalidateOptionsMenu()
                 }

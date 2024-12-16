@@ -1008,11 +1008,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         } else {
             binding.autoNight.visibility = View.GONE
         }
-        val autoscrollAutostart = k.getBoolean("autoscrollAutostart", false)
-        if (dzenNoch) binding.checkBox6.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        if (autoscrollAutostart) {
-            binding.checkBox6.isChecked = true
-        }
         val scrinOn = k.getBoolean("scrinOn", false)
         if (dzenNoch) binding.checkBox7.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         if (scrinOn) {
@@ -1095,7 +1090,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.day.isChecked = false
             binding.night.isChecked = false
             binding.autoNight.isChecked = false
-            binding.checkBox6.isChecked = false
             binding.checkBox7.isChecked = false
             binding.checkBox8.isChecked = false
             binding.checkBox9.isChecked = false
@@ -1197,10 +1191,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             }
             prefEditor.apply()
         }
-        binding.checkBox6.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            prefEditor.putBoolean("autoscrollAutostart", isChecked)
-            prefEditor.apply()
-        }
         binding.checkBox7.setOnCheckedChangeListener { _, isChecked: Boolean ->
             val check = k.getBoolean("scrinOn", false)
             prefEditor.putBoolean("scrinOn", isChecked)
@@ -1258,7 +1248,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         binding.dzair.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.praf.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.day.typeface = MainActivity.createFont(Typeface.NORMAL)
-        binding.checkBox6.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.checkBox7.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.checkBox8.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.checkBox9.typeface = MainActivity.createFont(Typeface.NORMAL)

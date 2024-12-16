@@ -167,18 +167,6 @@
                 android:background="@color/colorPrimary" />
 
             <by.carkva_gazeta.malitounik.SwitchCompatCustom
-                android:id="@+id/checkBox6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp"
-                android:drawableStart="@drawable/stiker"
-                android:drawablePadding="10sp"
-                android:paddingTop="5sp"
-                android:paddingBottom="5sp"
-                android:text="@string/autoprag" />
-
-            <by.carkva_gazeta.malitounik.SwitchCompatCustom
                 android:id="@+id/checkBox7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

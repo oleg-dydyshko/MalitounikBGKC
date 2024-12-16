@@ -1946,6 +1946,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
+            prefEditor.putBoolean("autoscrollAutostart", !autoscroll)
+            prefEditor.apply()
             if (autoscroll) {
                 isAutoStartScroll = false
                 stopAutoScroll()

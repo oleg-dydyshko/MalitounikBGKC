@@ -1923,6 +1923,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
+            prefEditor.putBoolean("autoscrollAutostart", !autoscroll)
+            prefEditor.apply()
             if (autoscroll) {
                 Bogashlugbovya.isAutoStartScroll = false
                 stopAutoScroll()

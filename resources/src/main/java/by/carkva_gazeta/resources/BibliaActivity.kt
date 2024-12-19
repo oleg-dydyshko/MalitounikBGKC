@@ -4,14 +4,20 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -35,6 +41,7 @@ import by.carkva_gazeta.malitounik.MenuBibleSemuxa
 import by.carkva_gazeta.malitounik.MenuBibleSinoidal
 import by.carkva_gazeta.malitounik.MenuVybranoe
 import by.carkva_gazeta.malitounik.R
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.VybranoeData
 import by.carkva_gazeta.resources.databinding.ActivityBibleBinding
@@ -45,6 +52,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.File
@@ -70,6 +78,14 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     private lateinit var adapter: MyPagerAdapter
     private var perevod = VybranoeBibleList.PEREVODSEMUXI
     private var isSetPerevod = false
+    private var spid = 60
+    private var autoScrollJob: Job? = null
+    private var autoStartScrollJob: Job? = null
+    private var resetScreenJob: Job? = null
+    private var mActionDown = false
+    private var orientation = Configuration.ORIENTATION_PORTRAIT
+    private var autoscroll = false
+    private var mAutoScroll = true
 
     override fun addZakladka(color: Int, knigaBible: String, bible: String) {
         when (perevod) {
@@ -231,10 +247,27 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         fierstPosition = position
     }
 
+    override fun isListEndPosition(page: Int) {
+        autoscroll = false
+        stopAutoScroll()
+        invalidateOptionsMenu()
+    }
+
+    override fun getmActionDown(mActionDown: Boolean) {
+        this.mActionDown = mActionDown
+    }
+
+    private fun getListDiffScroll(): Boolean {
+        val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+        return (fragment?.getDiffScroll() ?: -1) == 0
+    }
+
     override fun addZakladka(color: Int) {
         val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
         fragment?.addZakladka(color)
     }
+
+    fun getAutoScroll() = autoscroll
 
     override fun addNatatka() {
         val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
@@ -290,6 +323,17 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         }.attach()
         binding.pager.offscreenPageLimit = 1
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrollStateChanged(state: Int) {
+                if (state == ViewPager2.SCREEN_STATE_ON) {
+                    val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+                    fragment?.removeOnScrollListener()
+                }
+                if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                    val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+                    fragment?.addOnScrollListener()
+                }
+            }
+
             override fun onPageSelected(position: Int) {
                 if (perevod == VybranoeBibleList.PEREVODNADSAN) {
                     binding.titleToolbar.text = getSubTitlePerevod(position)
@@ -297,6 +341,17 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 BibleGlobalList.mListGlava = position
                 men = VybranoeBibleList.checkVybranoe(title2.substring(t2 + 1).toInt(), position, getNamePerevod())
                 if (glava != position && !isSetPerevod) fierstPosition = 0
+                val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+                fragment?.addOnScrollListener()
+                mAutoScroll = fragment?.getListEndPosition() ?: true
+                if (mAutoScroll) {
+                    if (k.getBoolean("autoscrollAutostart", false) && !getListDiffScroll()) {
+                        stopAutoScroll()
+                        autoStartScroll()
+                    }
+                } else {
+                    isListEndPosition(binding.pager.currentItem)
+                }
                 invalidateOptionsMenu()
             }
         })
@@ -315,6 +370,11 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         } else {
             binding.titleToolbar.text = savedInstanceState?.getString("title") ?: title
             binding.subtitleToolbar.text = getSubTitlePerevod(0)
+        }
+        binding.pager.post {
+            val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+            fragment?.addOnScrollListener()
+            mAutoScroll = fragment?.getListEndPosition() ?: true
         }
         setTollbarTheme()
     }
@@ -436,11 +496,39 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     }
 
     override fun onPrepareMenu(menu: Menu) {
+        autoscroll = k.getBoolean("autoscroll", false)
+        val itemAuto = menu.findItem(R.id.action_auto)
+        val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+        if (fragment?.islinearLayout4Visable() == true || !mAutoScroll) {
+            itemAuto.isVisible = false
+        } else {
+            if (paralel) {
+                binding.subtitleToolbar.visibility = View.GONE
+                itemAuto.isVisible = false
+            } else {
+                binding.subtitleToolbar.visibility = View.VISIBLE
+                itemAuto.isVisible = true
+            }
+            mActionDown = false
+        }
+        when {
+            autoscroll -> itemAuto.setIcon(R.drawable.scroll_icon_on)
+            getListDiffScroll() -> itemAuto.setIcon(R.drawable.scroll_icon_up)
+            else -> itemAuto.setIcon(R.drawable.scroll_icon)
+        }
+        val spanString = SpannableString(itemAuto.title.toString())
+        val end = spanString.length
+        var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+        if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        itemAuto.title = spanString
         menu.findItem(R.id.action_glava).isVisible = !paralel && adapter.itemCount > 1
         menu.findItem(R.id.action_vybranoe).isVisible = !paralel
         menu.findItem(R.id.action_font).isVisible = !paralel
         menu.findItem(R.id.action_bright).isVisible = !paralel
         menu.findItem(R.id.action_dzen_noch).isVisible = !paralel
+        menu.findItem(R.id.action_paralel).isChecked = k.getBoolean("paralel_maranata", true)
+        menu.findItem(R.id.action_paralel).isVisible = perevod != VybranoeBibleList.PEREVODNADSAN
         val itemVybranoe = menu.findItem(R.id.action_vybranoe)
         if (men) {
             itemVybranoe.icon = ContextCompat.getDrawable(this, R.drawable.star_big_on)
@@ -607,10 +695,37 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         isSetPerevod = false
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == R.id.action_paralel) {
+            val prefEditor = k.edit()
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                prefEditor.putBoolean("paralel_maranata", true)
+            } else {
+                prefEditor.putBoolean("paralel_maranata", false)
+            }
+            prefEditor.apply()
+            adapter.notifyDataSetChanged()
+            return true
+        }
+        if (id == R.id.action_auto) {
+            val prefEditor = k.edit()
+            autoscroll = k.getBoolean("autoscroll", false)
+            prefEditor.putBoolean("autoscrollAutostart", !autoscroll)
+            prefEditor.apply()
+            if (autoscroll) {
+                Bogashlugbovya.isAutoStartScroll = false
+                stopAutoScroll()
+            } else {
+                startAutoScroll()
+            }
+            invalidateOptionsMenu()
             return true
         }
         if (id == R.id.action_perevod) {
@@ -710,6 +825,122 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 hide()
             }
         }
+        autoscroll = k.getBoolean("autoscroll", false)
+        spid = k.getInt("autoscrollSpid", 60)
+        if (autoscroll) {
+            when {
+                Bogashlugbovya.isAutoStartScroll -> autoStartScroll()
+                resources.configuration.orientation == orientation -> startAutoScroll()
+                else -> autoStartScroll()
+            }
+        }
+    }
+
+    private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
+        if (autoScrollJob?.isActive == true) {
+            if (saveAutoScroll) {
+                val prefEditor = k.edit()
+                prefEditor.putBoolean("autoscroll", false)
+                prefEditor.apply()
+            }
+            spid = k.getInt("autoscrollSpid", 60)
+            binding.actionMinus.visibility = View.GONE
+            binding.actionPlus.visibility = View.GONE
+            val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+            binding.actionMinus.animation = animation
+            binding.actionPlus.animation = animation
+            if (fullscreenPage && binding.actionBack.visibility == View.GONE) {
+                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
+                binding.actionBack.visibility = View.VISIBLE
+                binding.actionBack.animation = animation2
+            }
+            autoScrollJob?.cancel()
+            stopAutoStartScroll()
+            if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
+                resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(60000)
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                }
+            }
+        }
+    }
+
+    private fun startAutoScroll() {
+        if (!getListDiffScroll()) {
+            spid = k.getInt("autoscrollSpid", 60)
+            if (binding.actionMinus.visibility == View.GONE) {
+                binding.actionMinus.visibility = View.VISIBLE
+                binding.actionPlus.visibility = View.VISIBLE
+                val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
+                binding.actionMinus.animation = animation
+                binding.actionPlus.animation = animation
+                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+                binding.actionBack.visibility = View.GONE
+                binding.actionBack.animation = animation2
+            }
+            resetScreenJob?.cancel()
+            stopAutoStartScroll()
+            autoScroll()
+        } else {
+            val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+            fragment?.onSmoothScrollToTop()
+            if (mAutoScroll) autoStartScroll()
+        }
+    }
+
+    private fun autoScroll() {
+        if (autoScrollJob?.isActive != true) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            autoscroll = true
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("autoscroll", true)
+            prefEditor.apply()
+            invalidateOptionsMenu()
+            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                while (isActive) {
+                    delay(spid.toLong())
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+                        fragment?.onAutoScrollList()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun autoStartScroll() {
+        if (autoScrollJob?.isActive != true) {
+            if (spid < 166) {
+                val autoTime = (230 - spid) / 10
+                var count = 0
+                if (autoStartScrollJob?.isActive != true) {
+                    autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                        Bogashlugbovya.isAutoStartScroll = true
+                        delay(1000L)
+                        spid = 230
+                        autoScroll()
+                        while (true) {
+                            delay(1000L)
+                            if (!mActionDown && !MainActivity.dialogVisable) {
+                                spid -= autoTime
+                                count++
+                            }
+                            if (count == 10) {
+                                break
+                            }
+                        }
+                        Bogashlugbovya.isAutoStartScroll = false
+                        startAutoScroll()
+                    }
+                }
+            } else {
+                startAutoScroll()
+            }
+        }
+    }
+
+    private fun stopAutoStartScroll() {
+        autoStartScrollJob?.cancel()
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -760,6 +991,19 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         binding.actionFullscreen.animation = animation
         binding.actionBack.visibility = View.GONE
         binding.actionBack.animation = animation
+    }
+
+    override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = true
+        }
+        return super.onMenuOpened(featureId, menu)
+    }
+
+    override fun onPanelClosed(featureId: Int, menu: Menu) {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = false
+        }
     }
 
     private inner class MyPagerAdapter(private val items: ArrayList<String>, activity: BibliaActivity) : FragmentStateAdapter(activity) {

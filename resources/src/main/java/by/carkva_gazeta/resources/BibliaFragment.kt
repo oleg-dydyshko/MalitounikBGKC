@@ -1,12 +1,15 @@
 package by.carkva_gazeta.resources
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -19,8 +22,12 @@ import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.resources.databinding.ActivityBiblePageFragmentBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
+
 
 class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
     private var kniga = 0
@@ -33,6 +40,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
     private var _binding: ActivityBiblePageFragmentBinding? = null
     private val binding get() = _binding!!
     private var novyZapavet = false
+    private var diffScroll = -1
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -82,6 +90,21 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
         }
     }
 
+    fun islinearLayout4Visable() = binding.linearLayout4.visibility == View.VISIBLE
+
+    fun onAutoScrollList() {
+        binding.listView.scrollListBy(2)
+    }
+
+    fun onSmoothScrollToTop() {
+        CoroutineScope(Dispatchers.Main).launch {
+            binding.listView.smoothScrollToPosition(0)
+            binding.listView.post {
+                activity?.invalidateOptionsMenu()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         knigaBible = arguments?.getString("title") ?: ""
@@ -92,26 +115,28 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
     }
 
     override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
-        BibleGlobalList.mPedakVisable = true
         (activity as? BibliaActivity)?.let { activity ->
-            if (binding.linearLayout4.visibility == View.GONE) {
-                binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_top)
-                binding.linearLayout4.visibility = View.VISIBLE
-                binding.linearLayout4.post {
-                    val width = binding.linearLayout4.width
-                    bibleListiner?.isPanelVisible(width)
+            if (!activity.getAutoScroll()) {
+                BibleGlobalList.mPedakVisable = true
+                if (binding.linearLayout4.visibility == View.GONE) {
+                    binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_top)
+                    binding.linearLayout4.visibility = View.VISIBLE
+                    binding.linearLayout4.post {
+                        val width = binding.linearLayout4.width
+                        bibleListiner?.isPanelVisible(width)
+                    }
                 }
+                var find = false
+                BibleGlobalList.bibleCopyList.forEach {
+                    if (it == position) find = true
+                }
+                if (find) {
+                    BibleGlobalList.bibleCopyList.remove(position)
+                } else {
+                    BibleGlobalList.bibleCopyList.add(position)
+                }
+                adapter.notifyDataSetChanged()
             }
-            var find = false
-            BibleGlobalList.bibleCopyList.forEach {
-                if (it == position) find = true
-            }
-            if (find) {
-                BibleGlobalList.bibleCopyList.remove(position)
-            } else {
-                BibleGlobalList.bibleCopyList.add(position)
-            }
-            adapter.notifyDataSetChanged()
             if (BibleGlobalList.bibleCopyList.size > 1) {
                 binding.view.visibility = View.GONE
                 binding.yelloy.visibility = View.GONE
@@ -135,332 +160,334 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
         (activity as? BibliaActivity)?.let { bibliaActyvity ->
             if (!BibleGlobalList.mPedakVisable) {
                 BibleGlobalList.bibleCopyList.clear()
-                val parallel = BibliaParallelChtenia()
-                var res = "+-+"
-                var clic = false
-                var knigaReal = kniga
-                if (novyZapavet) {
-                    if (knigaReal == 0) {
-                        res = parallel.kniga51(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
+                if (!bibliaActyvity.getAutoScroll()) {
+                    val parallel = BibliaParallelChtenia()
+                    var res = "+-+"
+                    var clic = false
+                    var knigaReal = kniga
+                    if (novyZapavet) {
+                        if (knigaReal == 0) {
+                            res = parallel.kniga51(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 1) {
+                            res = parallel.kniga52(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 2) {
+                            res = parallel.kniga53(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 3) {
+                            res = parallel.kniga54(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 4) {
+                            res = parallel.kniga55(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 5) {
+                            res = parallel.kniga56(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 6) {
+                            res = parallel.kniga57(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 7) {
+                            res = parallel.kniga58(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 8) {
+                            res = parallel.kniga59(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 9) {
+                            res = parallel.kniga60(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 10) {
+                            res = parallel.kniga61(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 11) {
+                            res = parallel.kniga62(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 12) {
+                            res = parallel.kniga63(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 13) {
+                            res = parallel.kniga64(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 14) {
+                            res = parallel.kniga65(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 15) {
+                            res = parallel.kniga66(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 16) {
+                            res = parallel.kniga67(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 17) {
+                            res = parallel.kniga68(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 18) {
+                            res = parallel.kniga69(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 19) {
+                            res = parallel.kniga70(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 20) {
+                            res = parallel.kniga71(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 21) {
+                            res = parallel.kniga72(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 22) {
+                            res = parallel.kniga73(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 23) {
+                            res = parallel.kniga74(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 24) {
+                            res = parallel.kniga75(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 25) {
+                            res = parallel.kniga76(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 26) {
+                            res = parallel.kniga77(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                    } else {
+                        val list = bibliaActyvity.getSpisKnig(false)[kniga]
+                        val t1 = list.indexOf("#")
+                        val t2 = list.indexOf("#", t1 + 1)
+                        val myKniga = list.substring(t2 + 1).toInt()
+                        knigaReal = myKniga
+                        if (knigaReal == 0) {
+                            res = parallel.kniga1(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 1) {
+                            res = parallel.kniga2(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 2) {
+                            res = parallel.kniga3(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 3) {
+                            res = parallel.kniga4(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 4) {
+                            res = parallel.kniga5(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 5) {
+                            res = parallel.kniga6(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 6) {
+                            res = parallel.kniga7(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 7) {
+                            res = parallel.kniga8(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 8) {
+                            res = parallel.kniga9(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 9) {
+                            res = parallel.kniga10(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 10) {
+                            res = parallel.kniga11(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 11) {
+                            res = parallel.kniga12(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 12) {
+                            res = parallel.kniga13(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 13) {
+                            res = parallel.kniga14(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 14) {
+                            res = parallel.kniga15(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 15) {
+                            res = parallel.kniga16(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 16) {
+                            res = parallel.kniga17(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 17) {
+                            res = parallel.kniga18(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 18) {
+                            res = parallel.kniga19(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 19) {
+                            res = parallel.kniga20(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 20) {
+                            res = parallel.kniga21(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 21) {
+                            res = if (bibliaActyvity.isPsaltyrGreek()) parallel.kniga22(page + 1, position + 1)
+                            else parallel.kniga22Masoretskaya(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 22) {
+                            res = parallel.kniga23(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 23) {
+                            res = parallel.kniga24(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 24) {
+                            res = parallel.kniga25(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 25) {
+                            res = parallel.kniga26(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 26) {
+                            res = parallel.kniga27(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 27) {
+                            res = parallel.kniga28(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 28) {
+                            res = parallel.kniga29(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 29) {
+                            res = parallel.kniga30(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 30) {
+                            res = parallel.kniga31(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 31) {
+                            res = parallel.kniga32(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 32) {
+                            res = parallel.kniga33(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 33) {
+                            res = parallel.kniga34(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 34) {
+                            res = parallel.kniga35(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 35) {
+                            res = parallel.kniga36(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 36) {
+                            res = parallel.kniga37(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 37) {
+                            res = parallel.kniga38(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 38) {
+                            res = parallel.kniga39(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 39) {
+                            res = parallel.kniga40(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 40) {
+                            res = parallel.kniga41(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 41) {
+                            res = parallel.kniga42(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 42) {
+                            res = parallel.kniga43(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 43) {
+                            res = parallel.kniga44(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 44) {
+                            res = parallel.kniga45(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 45) {
+                            res = parallel.kniga46(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 46) {
+                            res = parallel.kniga47(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 47) {
+                            res = parallel.kniga48(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 48) {
+                            res = parallel.kniga49(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                        if (knigaReal == 49) {
+                            res = parallel.kniga50(page + 1, position + 1)
+                            if (!res.contains("+-+")) clic = true
+                        }
+                    }
+                    if (clic) {
+                        var cytanneSours = bibliaActyvity.getSpisKnig(novyZapavet)[kniga]
+                        val t1 = cytanneSours.indexOf("#")
+                        cytanneSours = cytanneSours.substring(0, t1)
+                        bibleListiner?.setOnClic(res, cytanneSours + " " + (page + 1) + ":" + (position + 1))
                     }
-                    if (knigaReal == 1) {
-                        res = parallel.kniga52(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 2) {
-                        res = parallel.kniga53(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 3) {
-                        res = parallel.kniga54(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 4) {
-                        res = parallel.kniga55(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 5) {
-                        res = parallel.kniga56(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 6) {
-                        res = parallel.kniga57(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 7) {
-                        res = parallel.kniga58(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 8) {
-                        res = parallel.kniga59(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 9) {
-                        res = parallel.kniga60(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 10) {
-                        res = parallel.kniga61(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 11) {
-                        res = parallel.kniga62(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 12) {
-                        res = parallel.kniga63(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 13) {
-                        res = parallel.kniga64(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 14) {
-                        res = parallel.kniga65(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 15) {
-                        res = parallel.kniga66(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 16) {
-                        res = parallel.kniga67(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 17) {
-                        res = parallel.kniga68(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 18) {
-                        res = parallel.kniga69(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 19) {
-                        res = parallel.kniga70(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 20) {
-                        res = parallel.kniga71(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 21) {
-                        res = parallel.kniga72(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 22) {
-                        res = parallel.kniga73(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 23) {
-                        res = parallel.kniga74(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 24) {
-                        res = parallel.kniga75(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 25) {
-                        res = parallel.kniga76(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 26) {
-                        res = parallel.kniga77(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                } else {
-                    val list = bibliaActyvity.getSpisKnig(false)[kniga]
-                    val t1 = list.indexOf("#")
-                    val t2 = list.indexOf("#", t1 + 1)
-                    val myKniga = list.substring(t2 + 1).toInt()
-                    knigaReal = myKniga
-                    if (knigaReal == 0) {
-                        res = parallel.kniga1(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 1) {
-                        res = parallel.kniga2(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 2) {
-                        res = parallel.kniga3(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 3) {
-                        res = parallel.kniga4(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 4) {
-                        res = parallel.kniga5(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 5) {
-                        res = parallel.kniga6(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 6) {
-                        res = parallel.kniga7(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 7) {
-                        res = parallel.kniga8(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 8) {
-                        res = parallel.kniga9(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 9) {
-                        res = parallel.kniga10(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 10) {
-                        res = parallel.kniga11(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 11) {
-                        res = parallel.kniga12(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 12) {
-                        res = parallel.kniga13(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 13) {
-                        res = parallel.kniga14(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 14) {
-                        res = parallel.kniga15(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 15) {
-                        res = parallel.kniga16(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 16) {
-                        res = parallel.kniga17(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 17) {
-                        res = parallel.kniga18(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 18) {
-                        res = parallel.kniga19(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 19) {
-                        res = parallel.kniga20(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 20) {
-                        res = parallel.kniga21(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 21) {
-                        res = if (bibliaActyvity.isPsaltyrGreek()) parallel.kniga22(page + 1, position + 1)
-                        else parallel.kniga22Masoretskaya(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 22) {
-                        res = parallel.kniga23(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 23) {
-                        res = parallel.kniga24(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 24) {
-                        res = parallel.kniga25(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 25) {
-                        res = parallel.kniga26(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 26) {
-                        res = parallel.kniga27(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 27) {
-                        res = parallel.kniga28(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 28) {
-                        res = parallel.kniga29(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 29) {
-                        res = parallel.kniga30(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 30) {
-                        res = parallel.kniga31(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 31) {
-                        res = parallel.kniga32(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 32) {
-                        res = parallel.kniga33(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 33) {
-                        res = parallel.kniga34(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 34) {
-                        res = parallel.kniga35(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 35) {
-                        res = parallel.kniga36(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 36) {
-                        res = parallel.kniga37(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 37) {
-                        res = parallel.kniga38(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 38) {
-                        res = parallel.kniga39(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 39) {
-                        res = parallel.kniga40(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 40) {
-                        res = parallel.kniga41(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 41) {
-                        res = parallel.kniga42(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 42) {
-                        res = parallel.kniga43(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 43) {
-                        res = parallel.kniga44(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 44) {
-                        res = parallel.kniga45(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 45) {
-                        res = parallel.kniga46(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 46) {
-                        res = parallel.kniga47(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 47) {
-                        res = parallel.kniga48(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 48) {
-                        res = parallel.kniga49(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                    if (knigaReal == 49) {
-                        res = parallel.kniga50(page + 1, position + 1)
-                        if (!res.contains("+-+")) clic = true
-                    }
-                }
-                if (clic) {
-                    var cytanneSours = bibliaActyvity.getSpisKnig(novyZapavet)[kniga]
-                    val t1 = cytanneSours.indexOf("#")
-                    cytanneSours = cytanneSours.substring(0, t1)
-                    bibleListiner?.setOnClic(res, cytanneSours + " " + (page + 1) + ":" + (position + 1))
                 }
             } else {
                 var find = false
@@ -541,19 +568,54 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
         }
     }
 
+    fun getDiffScroll() = diffScroll
+
+    fun addOnScrollListener() {
+        binding.listView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            private var checkDiff = false
+
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+                bibleListiner?.getListPosition(view.firstVisiblePosition)
+                bibleListiner?.getmActionDown(scrollState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE)
+            }
+
+            override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+                if (list.adapter == null || list.getChildAt(0) == null) return
+                (activity as? BibliaActivity)?.let {
+                    /*var firstPosition = list.firstVisiblePosition
+                    if (firstPosition > bible.size - 1) firstPosition = bible.size - 1
+                    if (firstPosition == 0 && scrolltosatrt) {
+                        it.autoStartScroll()
+                        scrolltosatrt = false
+                        it.invalidateOptionsMenu()
+                    }*/
+                    diffScroll = if (list.lastVisiblePosition == list.adapter.count - 1) list.getChildAt(list.childCount - 1).bottom - list.height
+                    else -1
+                    if (checkDiff && diffScroll > 0) {
+                        checkDiff = false
+                        it.invalidateOptionsMenu()
+                    }
+                    Log.d("Oleg", "${list.lastVisiblePosition == list.adapter.count - 1} && ${list.getChildAt(list.childCount - 1).bottom <= list.height}")
+                    if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
+                        checkDiff = true
+                        bibleListiner?.isListEndPosition(page)
+                    }
+                }
+            }
+        })
+    }
+
+    fun removeOnScrollListener() {
+        binding.listView.setOnScrollListener(null)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as? BibliaActivity)?.let { activity ->
             BibleGlobalList.bibleCopyList.clear()
             binding.listView.onItemLongClickListener = this
             binding.listView.onItemClickListener = this
-            binding.listView.setOnScrollListener(object : AbsListView.OnScrollListener {
-                override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                    bibleListiner?.getListPosition(view.firstVisiblePosition)
-                }
-
-                override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {}
-            })
             loadBibleList(kniga, page)
             val list = activity.getSpisKnig(novyZapavet)[kniga]
             val t1 = list.indexOf("#")
@@ -763,6 +825,24 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
                 }
             }
         }
+        binding.listView.setOnTouchListener { v, motionEvent ->
+            if (binding.linearLayout4.visibility == View.VISIBLE) {
+                return@setOnTouchListener false
+            }
+            val id = v?.id ?: 0
+            if (id == R.id.listView) {
+                when (motionEvent?.action ?: MotionEvent.ACTION_CANCEL) {
+                    MotionEvent.ACTION_DOWN -> bibleListiner?.getmActionDown(true)
+                    MotionEvent.ACTION_UP -> bibleListiner?.getmActionDown(false)
+                }
+                return@setOnTouchListener false
+            }
+            return@setOnTouchListener true
+        }
+    }
+
+    fun getListEndPosition(): Boolean {
+        return !(binding.listView.lastVisiblePosition == binding.listView.adapter.count - 1 && binding.listView.getChildAt(binding.listView.childCount - 1).bottom <= binding.listView.height)
     }
 
     companion object {

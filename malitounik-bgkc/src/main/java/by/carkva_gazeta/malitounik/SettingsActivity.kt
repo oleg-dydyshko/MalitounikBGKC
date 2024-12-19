@@ -1072,6 +1072,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("biblia_seash", 0)
             prefEditor.putBoolean("pegistrbukv", true)
             prefEditor.putInt("slovocalkam", 0)
+            prefEditor.putBoolean("autoscrollAutostart", false)
             prefEditor.putBoolean("AdminDialogSaveAsHelp", true)
             prefEditor.putBoolean("dialogHelpShare", true)
             prefEditor.putBoolean("help_fullscreen", true)

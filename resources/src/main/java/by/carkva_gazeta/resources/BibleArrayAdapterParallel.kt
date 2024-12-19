@@ -1,6 +1,5 @@
 package by.carkva_gazeta.resources
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Typeface
 import android.text.Spannable
@@ -21,19 +20,25 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.isDigitsOnly
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
-import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibleBinding
 
-internal class BibleArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val knigaBiblii: Int, private val glava: Int, private val novyZapavet: Boolean, private var perevod: String) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) {
+internal class BibleArrayAdapterParallel(private val context: BibliaActivity, private val stixi: ArrayList<String>, private val kniga: Int, private val knigaBiblii: Int, private val glava: Int, private val novyZapavet: Boolean, private var perevod: String) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) {
     // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана, 4-Бокуна, 5-Чарняўскага
     private val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     private val dzenNoch get() = (context as BaseActivity).getBaseDzenNoch()
 
     fun setPerevod(perevod: String) {
         this.perevod = perevod
+    }
+
+    override fun isEnabled(position: Int): Boolean {
+        val autoscroll = context.getAutoScroll()
+        return if (autoscroll) false
+        else super.isEnabled(position)
     }
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup): View {
@@ -52,7 +57,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
         val parallel = BibliaParallelChtenia()
         var res = "+-+"
-        if (perevod != VybranoeBibleList.PEREVODNADSAN) {
+        if (k.getBoolean("paralel_maranata", true) && perevod != VybranoeBibleList.PEREVODNADSAN) {
             if (novyZapavet) {
                 if (knigaBiblii == 0) {
                     res = parallel.kniga51(glava + 1, position + 1)
@@ -200,7 +205,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                     res = parallel.kniga21(glava + 1, position + 1)
                 }
                 if (knigaBiblii == 21) {
-                    res = if ((context as BibliaActivity).isPsaltyrGreek()) parallel.kniga22(glava + 1, position + 1)
+                    res = if (context.isPsaltyrGreek()) parallel.kniga22(glava + 1, position + 1)
                     else parallel.kniga22Masoretskaya(glava + 1, position + 1)
                 }
                 if (knigaBiblii == 22) {

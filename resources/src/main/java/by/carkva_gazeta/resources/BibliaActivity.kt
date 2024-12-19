@@ -45,6 +45,7 @@ import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.VybranoeData
 import by.carkva_gazeta.resources.databinding.ActivityBibleBinding
+import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -72,6 +73,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     private var title = ""
     private var men = true
     private lateinit var binding: ActivityBibleBinding
+    private lateinit var bindingprogress: ProgressBinding
     private var resetTollbarJob: Job? = null
     private var fierstPosition = 0
     private var novyZapavet = false
@@ -82,6 +84,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     private var autoScrollJob: Job? = null
     private var autoStartScrollJob: Job? = null
     private var resetScreenJob: Job? = null
+    private var procentJobAuto: Job? = null
     private var mActionDown = false
     private var orientation = Configuration.ORIENTATION_PORTRAIT
     private var autoscroll = false
@@ -225,6 +228,8 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         clearEmptyPosition()
         saveVydelenieZakladkiNtanki(novyZapavet, kniga, binding.pager.currentItem, fierstPosition)
         resetTollbarJob?.cancel()
+        stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
+        stopAutoStartScroll()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -278,6 +283,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = ActivityBibleBinding.inflate(layoutInflater)
+        bindingprogress = binding.progressView
         setContentView(binding.root)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
@@ -358,6 +364,28 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         men = VybranoeBibleList.checkVybranoe(kniga, glava, getNamePerevod())
         binding.pager.setCurrentItem(glava, false)
         loadVydelenie()
+        binding.actionPlus.setOnClickListener {
+            if (spid in 20..235) {
+                spid -= 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                bindingprogress.progressAuto.text = resources.getString(R.string.procent, proc)
+                startProcent(MainActivity.PROGRESSACTIONAUTORIGHT)
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
+        binding.actionMinus.setOnClickListener {
+            if (spid in 10..225) {
+                spid += 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                bindingprogress.progressAuto.text = resources.getString(R.string.procent, proc)
+                startProcent(MainActivity.PROGRESSACTIONAUTOLEFT)
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
         binding.actionFullscreen.setOnClickListener {
             show()
         }
@@ -377,6 +405,24 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             mAutoScroll = fragment?.getListEndPosition() ?: true
         }
         setTollbarTheme()
+    }
+
+    private fun startProcent(progressAction: Int) {
+        if (progressAction == MainActivity.PROGRESSACTIONAUTOLEFT || progressAction == MainActivity.PROGRESSACTIONAUTORIGHT) {
+            procentJobAuto?.cancel()
+            bindingprogress.progressAuto.visibility = View.VISIBLE
+            if (progressAction == MainActivity.PROGRESSACTIONAUTOLEFT) {
+                bindingprogress.progressAuto.background = ContextCompat.getDrawable(this@BibliaActivity, R.drawable.selector_progress_auto_left)
+                bindingprogress.progressAuto.setTextColor(ContextCompat.getColor(this@BibliaActivity, R.color.colorPrimary_text))
+            } else {
+                bindingprogress.progressAuto.background = ContextCompat.getDrawable(this@BibliaActivity, R.drawable.selector_progress_red)
+                bindingprogress.progressAuto.setTextColor(ContextCompat.getColor(this@BibliaActivity, R.color.colorWhite))
+            }
+            procentJobAuto = CoroutineScope(Dispatchers.Main).launch {
+                delay(2000)
+                bindingprogress.progressAuto.visibility = View.GONE
+            }
+        }
     }
 
     private fun loadVydelenie() {

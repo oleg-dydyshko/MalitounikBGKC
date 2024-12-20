@@ -333,10 +333,12 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 if (state == ViewPager2.SCREEN_STATE_ON) {
                     val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
                     fragment?.removeOnScrollListener()
+                    mActionDown = true
                 }
                 if (state == ViewPager2.SCROLL_STATE_IDLE) {
                     val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
                     fragment?.addOnScrollListener()
+                    mActionDown = false
                 }
             }
 

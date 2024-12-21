@@ -648,6 +648,8 @@ class SlugbovyiaTextu {
     }
 
     fun getTitle(resource: String): String {
+        if (resource == "mm_ndz_pierad_rastvom_sviatych_ajcou_18_19_12_viaczernia") return "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 18-19 сьнежня"
+        if (resource == "mm_ndz_pierad_rastvom_sviatych_ajcou_20_23_12_viaczernia") return "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 20-23 сьнежня"
         datMinALL.forEach {
             if (resource == it.resource) return it.title
         }

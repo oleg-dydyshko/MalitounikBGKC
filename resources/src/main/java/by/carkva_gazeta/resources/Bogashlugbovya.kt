@@ -770,6 +770,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             var nochenia = false
             val inputStream = resources.openRawResource(id)
             val dayOfWeek = c.get(Calendar.DAY_OF_WEEK)
+            val year = c.get(Calendar.YEAR)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val color = if (dzenNoch) "<font color=\"#ff6666\">"
@@ -785,7 +786,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             else slugbovyiaTextu.checkViachernia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt(), getYear())
             if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, getYear()))) {
                 chechZmena = true
-                val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
+                val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA, year)
                 val idZmenyiaChastki = resursMap[resours] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
                 zmennyiaCastkiTitle = slugbovyiaTextu.getTitle(resours)
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
@@ -1587,7 +1588,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 override fun onClick(widget: View) {
                     val slugbovyiaTextu = SlugbovyiaTextu()
                     val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
-                    val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
+                    val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA, c[Calendar.YEAR])
                     intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
@@ -1911,8 +1912,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 }
 
                 checkDayOfYear -> {
-                    val resours = if (checkLiturgia == 0) slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
-                    else slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.VIACZERNIA)
+                    val resours = if (checkLiturgia == 0) slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA, c[Calendar.YEAR])
+                    else slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.VIACZERNIA, c[Calendar.YEAR])
                     intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
@@ -1920,7 +1921,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 }
 
                 else -> {
-                    val resours = slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA)
+                    val resours = slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA, c[Calendar.YEAR])
                     intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)

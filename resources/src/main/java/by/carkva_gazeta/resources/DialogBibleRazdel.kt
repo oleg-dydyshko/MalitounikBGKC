@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import by.carkva_gazeta.malitounik.BaseActivity
+import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.DialogBibleRazdelBinding
 import by.carkva_gazeta.malitounik.databinding.DialogBibleRazdelItemBinding
@@ -30,6 +31,11 @@ class DialogBibleRazdel : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        MainActivity.dialogVisable = false
     }
 
     internal interface DialogBibleRazdelListener {
@@ -63,6 +69,7 @@ class DialogBibleRazdel : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            MainActivity.dialogVisable = true
             binding = DialogBibleRazdelBinding.inflate(layoutInflater)
             binding?.let { binding ->
                 val dzenNoch = (it as BaseActivity).getBaseDzenNoch()

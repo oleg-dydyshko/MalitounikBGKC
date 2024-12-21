@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
+import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -349,18 +350,21 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 BibleGlobalList.mListGlava = position
                 men = VybranoeBibleList.checkVybranoe(title2.substring(t2 + 1).toInt(), position, getNamePerevod())
                 if (glava != position && !isSetPerevod) fierstPosition = 0
-                val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
-                fragment?.addOnScrollListener()
-                mAutoScroll = fragment?.getListEndPosition() ?: true
-                if (mAutoScroll) {
-                    if (k.getBoolean("autoscrollAutostart", false) && !getListDiffScroll()) {
-                        stopAutoScroll()
-                        autoStartScroll()
+                binding.pager.post {
+                    val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+                    fragment?.addOnScrollListener()
+                    mAutoScroll = fragment?.getListEndPosition() ?: true
+                    Log.d("Oleg", fragment.toString() + " " + mAutoScroll.toString())
+                    if (mAutoScroll) {
+                        if (k.getBoolean("autoscrollAutostart", false) && !getListDiffScroll()) {
+                            stopAutoScroll()
+                            autoStartScroll()
+                        }
+                    } else {
+                        isListEndPosition(binding.pager.currentItem)
                     }
-                } else {
-                    isListEndPosition(binding.pager.currentItem)
+                    invalidateOptionsMenu()
                 }
-                invalidateOptionsMenu()
             }
         })
         men = VybranoeBibleList.checkVybranoe(kniga, glava, getNamePerevod())
@@ -405,6 +409,15 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
             fragment?.addOnScrollListener()
             mAutoScroll = fragment?.getListEndPosition() ?: true
+            invalidateOptionsMenu()
+            if (mAutoScroll) {
+                if (k.getBoolean("autoscrollAutostart", false) && !getListDiffScroll()) {
+                    stopAutoScroll()
+                    autoStartScroll()
+                }
+            } else {
+                isListEndPosition(binding.pager.currentItem)
+            }
         }
         setTollbarTheme()
     }

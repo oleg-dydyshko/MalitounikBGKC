@@ -1458,6 +1458,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
         }
         perevod = savePerevod
+        R.raw.mm_17_12_praroka_danily_troch_junakou_liturhija
         return MainActivity.fromHtml(builder.toString()).split("===")[konec]
     }
 

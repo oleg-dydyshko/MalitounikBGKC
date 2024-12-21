@@ -231,7 +231,7 @@ class DialogCalindarGrid : DialogFragment() {
             holder.mImage.contentDescription = text
             holder.itemView.tag = mItemList[position]
             when {
-                mItemList[position] == 4 && !(slugba.checkUtran(raznicia, dayOfYear.toInt()) || denNedzeliUtran == Calendar.SUNDAY) -> {
+                mItemList[position] == 4 && !(slugba.checkUtran(raznicia, dayOfYear.toInt(), year) || denNedzeliUtran == Calendar.SUNDAY) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
@@ -251,7 +251,7 @@ class DialogCalindarGrid : DialogFragment() {
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
 
-                mItemList[position] == 3 && !(slugba.checkPaunochnica(raznicia, dayOfYear.toInt())) -> {
+                mItemList[position] == 3 && !(slugba.checkPaunochnica(raznicia, dayOfYear.toInt(), year)) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
@@ -351,9 +351,9 @@ class DialogCalindarGrid : DialogFragment() {
 
                     2 -> {
                         when {
-                            slugba.checkPavichrrnica(raznicia, dayOfYear.toInt()) -> {
+                            slugba.checkPavichrrnica(raznicia, dayOfYear.toInt(), year) -> {
                                 val intent = Intent()
-                                val resours = slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.PAVIACHERNICA)
+                                val resours = slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.PAVIACHERNICA, year)
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("resurs", resours)
                                 intent.putExtra("zmena_chastki", true)
@@ -374,9 +374,9 @@ class DialogCalindarGrid : DialogFragment() {
 
                     3 -> {
                         when {
-                            slugba.checkPaunochnica(raznicia, dayOfYear.toInt()) -> {
+                            slugba.checkPaunochnica(raznicia, dayOfYear.toInt(), year) -> {
                                 val intent = Intent()
-                                val resours = slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.PAUNOCHNICA)
+                                val resours = slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.PAUNOCHNICA, year)
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("resurs", resours)
                                 intent.putExtra("zmena_chastki", true)
@@ -390,7 +390,7 @@ class DialogCalindarGrid : DialogFragment() {
                         when {
                             slugba.checkVialikiaGadziny(raznicia, dayOfYear.toInt(), year) -> {
                                 val intent = Intent()
-                                val resours = slugba.getResource(raznicia, slugba.getDayVialikiaGadziny(dayOfYear.toInt(), year), SlugbovyiaTextu.VIALHADZINY)
+                                val resours = slugba.getResource(raznicia, slugba.getDayVialikiaGadziny(dayOfYear.toInt(), year), SlugbovyiaTextu.VIALHADZINY, year)
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("resurs", resours)
                                 intent.putExtra("zmena_chastki", true)
@@ -451,7 +451,7 @@ class DialogCalindarGrid : DialogFragment() {
 
                     4 -> {
                         when {
-                            slugba.checkUtran(raznicia, dayOfYear.toInt()) -> {
+                            slugba.checkUtran(raznicia, dayOfYear.toInt(), year) -> {
                                 val resours = slugba.getResource(raznicia, true, SlugbovyiaTextu.JUTRAN, year)
                                 val resours2 = slugba.getResource(dayOfYear.toInt(), false, SlugbovyiaTextu.JUTRAN, year)
                                 val listResource = ArrayList<String>()

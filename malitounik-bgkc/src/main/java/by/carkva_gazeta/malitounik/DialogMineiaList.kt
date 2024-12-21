@@ -2,10 +2,8 @@ package by.carkva_gazeta.malitounik
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context.MODE_PRIVATE
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -24,18 +22,10 @@ class DialogMineiaList : DialogFragment() {
     private lateinit var binding: DialogListviewDisplayBinding
     private lateinit var alert: AlertDialog
     private var resetTollbarJob: Job? = null
-    private lateinit var k: SharedPreferences
 
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        val prefEditors = k.edit()
-        prefEditors.putInt("sortMineiaList", 0)
-        prefEditors.apply()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -46,20 +36,7 @@ class DialogMineiaList : DialogFragment() {
             val builder = AlertDialog.Builder(it, style)
             binding = DialogListviewDisplayBinding.inflate(layoutInflater)
             builder.setView(binding.root)
-            val fileList = ArrayList<SlugbovyiaTextuData>()
-            val dayOfYear = arguments?.getString("dayOfYear") ?: "1"
-            val pasxa = arguments?.getBoolean("pasxa") ?: false
-            val slugba = SlugbovyiaTextu()
-            val mineia = slugba.getMineiaMesiachnaia()
-            mineia.forEach { data ->
-                if (data.day == dayOfYear.toInt() && data.pasxa == pasxa) {
-                    fileList.add(data)
-                }
-            }
-            k = it.getSharedPreferences("biblia", MODE_PRIVATE)
-            val prefEditors = k.edit()
-            prefEditors.putInt("sortMineiaList", 1)
-            prefEditors.apply()
+            val fileList = (activity as? MineiaMesiachnaia)?.getMineiaListDialog() ?: ArrayList()
             fileList.sort()
             binding.content.setOnItemClickListener { _, _, position, _ ->
                 if (it.checkmoduleResources()) {
@@ -76,8 +53,7 @@ class DialogMineiaList : DialogFragment() {
             }
             val adapter = ListAdaprer(it, fileList)
             binding.content.adapter = adapter
-            binding.title.text = if (arguments?.getBoolean("isSvity", false) == true) getString(R.string.mineia_sviatochnaia)
-            else getString(R.string.mineia_shtodzennaia)
+            binding.title.text = getString(R.string.mineia_shtodzennaia)
             if (dzenNoch) {
                 binding.content.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
             } else {
@@ -89,7 +65,7 @@ class DialogMineiaList : DialogFragment() {
         return alert
     }
 
-    private class ListAdaprer(private val context: Activity, private val fileList: ArrayList<SlugbovyiaTextuData>) : ArrayAdapter<SlugbovyiaTextuData>(context, R.layout.simple_list_item_2, R.id.label, fileList) {
+    private class ListAdaprer(private val context: Activity, private val fileList: ArrayList<MineiaMesiachnaia.MineiaList>) : ArrayAdapter<MineiaMesiachnaia.MineiaList>(context, R.layout.simple_list_item_2, R.id.label, fileList) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -112,15 +88,4 @@ class DialogMineiaList : DialogFragment() {
     }
 
     private class ViewHolder(var text: TextView)
-
-    companion object {
-        fun getInstance(dayOfYear: String, pasxa: Boolean): DialogMineiaList {
-            val bundle = Bundle()
-            bundle.putString("dayOfYear", dayOfYear)
-            bundle.putBoolean("pasxa", pasxa)
-            val dialog = DialogMineiaList()
-            dialog.arguments = bundle
-            return dialog
-        }
-    }
 }

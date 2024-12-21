@@ -841,7 +841,7 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
 
     fun getListEndPosition(): Boolean {
         binding?.let { binding ->
-            return !(binding.listView.lastVisiblePosition == binding.listView.adapter.count - 1 && binding.listView.getChildAt(binding.listView.childCount - 1).bottom <= binding.listView.height)
+            return !(binding.listView.firstVisiblePosition == 0 && binding.listView.lastVisiblePosition == binding.listView.adapter.count - 1 && binding.listView.getChildAt(binding.listView.childCount - 1).bottom <= binding.listView.height)
         }
         return false
     }

@@ -1,16 +1,13 @@
 package by.carkva_gazeta.malitounik
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ExpandableListView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
@@ -28,26 +25,28 @@ class MineiaMesiachnaia : BaseActivity() {
     private lateinit var adapter: MineiaExpListAdapter
     private val groups = ArrayList<ArrayList<MineiaDay>>()
     private var mLastClickTime: Long = 0
+    private var mineiaListDialog = ArrayList<MineiaList>()
+    private val sluzba = SlugbovyiaTextu()
 
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
     }
 
-    private fun getMineiaDayCount(list: List<SlugbovyiaTextuData>, day: Int, slugba: Int, pasxa: Boolean): Int {
-        var count = 0
-        var errorCount = 0
+    private fun getMineiaDayList(list: List<SlugbovyiaTextuData>, day: Int): List<SlugbovyiaTextuData> {
+        val listResult = ArrayList<SlugbovyiaTextuData>()
         for (i in list.indices) {
-            if (day == list[i].day && slugba == list[i].sluzba && pasxa == list[i].pasxa) {
-                errorCount++
-            }
-            if (day == list[i].day && pasxa == list[i].pasxa) {
-                count++
+            if (day == sluzba.getRealDay(list[i].day) && list[i].pasxa) {
+                listResult.add(list[i])
             }
         }
-        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (k.getBoolean("admin", false) && errorCount > 1) MainActivity.toastView(this, getString(R.string.admin_resourse_error, day), Toast.LENGTH_LONG)
-        return count
+        if (listResult.size > 0) return listResult
+        for (i in list.indices) {
+            if (day == sluzba.getRealDay(list[i].day) && !list[i].pasxa) {
+                listResult.add(list[i])
+            }
+        }
+        return listResult
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +56,7 @@ class MineiaMesiachnaia : BaseActivity() {
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setTollbarTheme()
-        val slugba = SlugbovyiaTextu()
-        val mineiaList = slugba.getMineiaMesiachnaia()
+        val mineiaList = sluzba.getMineiaMesiachnaia()
         val calendar = Calendar.getInstance()
         var dayOfYear = 1
         val child0 = ArrayList<MineiaDay>()
@@ -73,37 +71,34 @@ class MineiaMesiachnaia : BaseActivity() {
         val child9 = ArrayList<MineiaDay>()
         val child10 = ArrayList<MineiaDay>()
         val child11 = ArrayList<MineiaDay>()
-        var day = -777
-        var pasxa = false
-        for (i in mineiaList.indices) {
-            val count = getMineiaDayCount(mineiaList, mineiaList[i].day, mineiaList[i].sluzba, mineiaList[i].pasxa)
+        var day: Int
+        for (i in -77..366) {
+            val mineiaDayList = getMineiaDayList(mineiaList, i)
+            if (mineiaDayList.isEmpty()) continue
             var opisanie = ""
-            if (count == 1) {
-                opisanie = ". " + slugba.getNazouSluzby(mineiaList[i].sluzba)
+            if (mineiaDayList.size == 1) {
+                opisanie = ". " + sluzba.getNazouSluzby(mineiaDayList[0].sluzba)
             }
-            if (day == mineiaList[i].day && pasxa == mineiaList[i].pasxa) {
-                day = mineiaList[i].day
-                pasxa = mineiaList[i].pasxa
-                continue
-            } else {
-                day = mineiaList[i].day
-                pasxa = mineiaList[i].pasxa
-            }
+            day = mineiaDayList[0].day
             when {
                 //Айцоў VII Сусьветнага Сабору
-                mineiaList[i].day == SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY -> {
-                    dayOfYear = SlugbovyiaTextu().getRealDay(SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY)
+                mineiaDayList[0].day == SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY -> {
+                    dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY)
                 }
                 //Нядзеля праайцоў
-                mineiaList[i].day == SlugbovyiaTextu.NIADZELIA_PRA_AICOU -> {
-                    dayOfYear = SlugbovyiaTextu().getRealDay(SlugbovyiaTextu.NIADZELIA_PRA_AICOU)
+                mineiaDayList[0].day == SlugbovyiaTextu.NIADZELIA_PRA_AICOU -> {
+                    dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.NIADZELIA_PRA_AICOU)
                 }
                 //Нядзеля сьвятых Айцоў першых шасьці Сабораў
-                mineiaList[i].day == SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY -> {
-                    dayOfYear = SlugbovyiaTextu().getRealDay(SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY)
+                mineiaDayList[0].day == SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY -> {
+                    dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY)
+                }
+                //Нядзеля прерад Раством, сьвятых Айцоў
+                mineiaDayList[0].day == SlugbovyiaTextu.NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU -> {
+                    dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU)
                 }
 
-                mineiaList[i].pasxa -> {
+                mineiaDayList[0].pasxa -> {
                     MenuCaliandar.getDataCalaindar(year = Calendar.getInstance()[Calendar.YEAR]).forEach {
                         if (it[22].toInt() == day) {
                             dayOfYear = it[24].toInt()
@@ -123,22 +118,23 @@ class MineiaMesiachnaia : BaseActivity() {
                 adminDayOfYear = " ($dayOfYear (${c[22]}))"
             }
             val dayOfMonth = c[1]
-
-            Log.d("Oleg", "$id, $month, $day, $dayOfMonth, " + mineiaList[i].title)
+            val year = calendar[Calendar.YEAR]
 
             when (val month = c[2].toInt()) {
-                Calendar.JANUARY -> child0.add(MineiaDay(id, mineiaList[i].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaList[i].title + opisanie, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.JUTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURHIJA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABIEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALHADZINY), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)))
-                Calendar.FEBRUARY -> child1.add(MineiaDay(id, mineiaList[i].pasxa,month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaList[i].title + opisanie, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.JUTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURHIJA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABIEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALHADZINY), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)))
-                Calendar.MARCH -> child2.add(MineiaDay(id, mineiaList[i].pasxa,month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaList[i].title + opisanie, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.JUTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURHIJA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABIEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALHADZINY), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)))
-                Calendar.APRIL -> child3.add(MineiaDay(id, mineiaList[i].pasxa,month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaList[i].title + opisanie, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.JUTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURHIJA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABIEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALHADZINY), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)))
-                Calendar.MAY -> child4.add(MineiaDay(id, mineiaList[i].pasxa,month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaList[i].title + opisanie, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.JUTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURHIJA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABIEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALHADZINY), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)))
-                Calendar.JUNE -> child5.add(MineiaDay(id, mineiaList[i].pasxa,month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaList[i].title + opisanie, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.JUTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURHIJA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABIEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALHADZINY), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)))
-                Calendar.JULY -> child6.add(MineiaDay(id, mineiaList[i].pasxa,month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaList[i].title + opisanie, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.JUTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURHIJA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABIEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALHADZINY), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)))
-                Calendar.AUGUST -> child7.add(MineiaDay(id, mineiaList[i].pasxa,month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaList[i].title + opisanie, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.JUTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURHIJA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABIEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALHADZINY), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)))
-                Calendar.SEPTEMBER -> child8.add(MineiaDay(id, mineiaList[i].pasxa,month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaList[i].title + opisanie, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.JUTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURHIJA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABIEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALHADZINY), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)))
-                Calendar.OCTOBER -> child9.add(MineiaDay(id, mineiaList[i].pasxa,month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaList[i].title + opisanie, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.JUTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURHIJA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABIEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALHADZINY), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)))
-                Calendar.NOVEMBER -> child10.add(MineiaDay(id, mineiaList[i].pasxa,month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaList[i].title + opisanie, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.JUTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURHIJA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABIEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALHADZINY), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)))
-                Calendar.DECEMBER -> child11.add(MineiaDay(id, mineiaList[i].pasxa,month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaList[i].title + opisanie, mineiaList[i].title, slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.JUTRAN), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURHIJA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABIEDNICA), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALHADZINY), slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA)))
+                Calendar.JANUARY -> child0.add(MineiaDay(id, mineiaDayList[0].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaDayList[0].title + opisanie, mineiaDayList[0].title, sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.JUTRAN, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.LITURHIJA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.ABIEDNICA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIALHADZINY, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA, year)))
+                Calendar.FEBRUARY -> child1.add(MineiaDay(id, mineiaDayList[0].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaDayList[0].title + opisanie, mineiaDayList[0].title, sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.JUTRAN, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.LITURHIJA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.ABIEDNICA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIALHADZINY, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA, year)))
+                Calendar.MARCH -> child2.add(MineiaDay(id, mineiaDayList[0].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaDayList[0].title + opisanie, mineiaDayList[0].title, sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.JUTRAN, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.LITURHIJA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.ABIEDNICA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIALHADZINY, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA, year)))
+                Calendar.APRIL -> child3.add(MineiaDay(id, mineiaDayList[0].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaDayList[0].title + opisanie, mineiaDayList[0].title, sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.JUTRAN, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.LITURHIJA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.ABIEDNICA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIALHADZINY, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA, year)))
+                Calendar.MAY -> child4.add(MineiaDay(id, mineiaDayList[0].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaDayList[0].title + opisanie, mineiaDayList[0].title, sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.JUTRAN, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.LITURHIJA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.ABIEDNICA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIALHADZINY, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA, year)))
+                Calendar.JUNE -> child5.add(MineiaDay(id, mineiaDayList[0].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaDayList[0].title + opisanie, mineiaDayList[0].title, sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.JUTRAN, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.LITURHIJA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.ABIEDNICA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIALHADZINY, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA, year)))
+                Calendar.JULY -> child6.add(MineiaDay(id, mineiaDayList[0].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaDayList[0].title + opisanie, mineiaDayList[0].title, sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.JUTRAN, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.LITURHIJA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.ABIEDNICA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIALHADZINY, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA, year)))
+                Calendar.AUGUST -> child7.add(MineiaDay(id, mineiaDayList[0].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaDayList[0].title + opisanie, mineiaDayList[0].title, sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.JUTRAN, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.LITURHIJA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.ABIEDNICA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIALHADZINY, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA, year)))
+                Calendar.SEPTEMBER -> child8.add(MineiaDay(id, mineiaDayList[0].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaDayList[0].title + opisanie, mineiaDayList[0].title, sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.JUTRAN, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.LITURHIJA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.ABIEDNICA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIALHADZINY, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA, year)))
+                Calendar.OCTOBER -> child9.add(MineiaDay(id, mineiaDayList[0].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaDayList[0].title + opisanie, mineiaDayList[0].title, sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.JUTRAN, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.LITURHIJA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.ABIEDNICA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIALHADZINY, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA, year)))
+                Calendar.NOVEMBER -> child10.add(MineiaDay(id, mineiaDayList[0].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaDayList[0].title + opisanie, mineiaDayList[0].title, sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.JUTRAN, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.LITURHIJA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.ABIEDNICA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIALHADZINY, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA, year)))
+                Calendar.DECEMBER -> {
+                    child11.add(MineiaDay(id, mineiaDayList[0].pasxa, month, day.toString(), dayOfMonth + " " + resources.getStringArray(R.array.meciac_smoll)[month] + "$adminDayOfYear: " + mineiaDayList[0].title + opisanie, mineiaDayList[0].title, sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.JUTRAN, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.LITURHIJA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.ABIEDNICA, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIALHADZINY, year), sluzba.getResource(day, mineiaDayList[0].pasxa, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA, year)))
+                }
             }
         }
         child0.sort()
@@ -177,14 +173,33 @@ class MineiaMesiachnaia : BaseActivity() {
             val resourceVialikiaGadziny = groups[groupPosition][childPosition].resourceVialikiaGadziny
             val resourceViacherniaZLiturgia = groups[groupPosition][childPosition].resourceViacherniaZLiturgia
             var count = 0
-            if (resourceUtran != "0") count++
-            if (resourceLiturgia != "0") count++
-            if (resourceViachernia != "0") count++
-            if (resourceAbednica != "0") count++
-            if (resourceVialikiaGadziny != "0") count++
-            if (resourceViacherniaZLiturgia != "0") count++
+            mineiaListDialog.clear()
+            if (resourceUtran != "0") {
+                count++
+                mineiaListDialog.add(MineiaList(groups[groupPosition][childPosition].titleResource, groups[groupPosition][childPosition].resourceUtran, SlugbovyiaTextu.JUTRAN))
+            }
+            if (resourceLiturgia != "0") {
+                count++
+                mineiaListDialog.add(MineiaList(groups[groupPosition][childPosition].titleResource, groups[groupPosition][childPosition].resourceLiturgia, SlugbovyiaTextu.LITURHIJA))
+            }
+            if (resourceViachernia != "0") {
+                count++
+                mineiaListDialog.add(MineiaList(groups[groupPosition][childPosition].titleResource, groups[groupPosition][childPosition].resourceViachernia, SlugbovyiaTextu.VIACZERNIA))
+            }
+            if (resourceAbednica != "0") {
+                count++
+                mineiaListDialog.add(MineiaList(groups[groupPosition][childPosition].titleResource, groups[groupPosition][childPosition].resourceAbednica, SlugbovyiaTextu.ABIEDNICA))
+            }
+            if (resourceVialikiaGadziny != "0") {
+                count++
+                mineiaListDialog.add(MineiaList(groups[groupPosition][childPosition].titleResource, groups[groupPosition][childPosition].resourceVialikiaGadziny, SlugbovyiaTextu.VELIKODNYIAHADZINY))
+            }
+            if (resourceViacherniaZLiturgia != "0") {
+                count++
+                mineiaListDialog.add(MineiaList(groups[groupPosition][childPosition].titleResource, groups[groupPosition][childPosition].resourceViacherniaZLiturgia, SlugbovyiaTextu.VIACZERNIA_Z_LITURHIJA))
+            }
             if (count > 1) {
-                val dialog = DialogMineiaList.getInstance(groups[groupPosition][childPosition].day, groups[groupPosition][childPosition].pasxa)
+                val dialog = DialogMineiaList()
                 dialog.show(supportFragmentManager, "dialogMineiaList")
             } else {
                 if (checkmoduleResources()) {
@@ -212,10 +227,13 @@ class MineiaMesiachnaia : BaseActivity() {
         }
     }
 
+    fun getMineiaListDialog() = mineiaListDialog
+
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
             fullTextTollbar()
         }
+        binding.subTitleToolbar.visibility = View.GONE
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         adapter = MineiaExpListAdapter(this, groups)
@@ -278,6 +296,17 @@ class MineiaMesiachnaia : BaseActivity() {
             return true
         }
         return false
+    }
+
+    class MineiaList(val title: String, val resource: String, val sluzba: Int) : Comparable<MineiaList> {
+        override fun compareTo(other: MineiaList): Int {
+            if (this.sluzba > other.sluzba) {
+                return 1
+            } else if (this.sluzba < other.sluzba) {
+                return -1
+            }
+            return 0
+        }
     }
 
     companion object {

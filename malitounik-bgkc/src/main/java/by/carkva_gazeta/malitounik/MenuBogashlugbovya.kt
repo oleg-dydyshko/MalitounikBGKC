@@ -469,7 +469,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                     startActivity(intent)
                 }
                 "4" -> {
-                    val intent = Intent(it, MineiaMesiachnaia::class.java)
+                    val intent = Intent(it, MineiaMesiachnaiaMonth::class.java)
                     startActivity(intent)
                 }
                 "5" -> {

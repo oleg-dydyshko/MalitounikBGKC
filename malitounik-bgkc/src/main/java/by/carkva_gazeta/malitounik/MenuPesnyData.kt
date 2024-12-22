@@ -142,7 +142,7 @@ class MenuPesnyData {
         pesnyPrasl.add(Data("pesny_prasl_58", "Ты ведаеш сэрца маё"))
         pesnyPrasl.add(Data("pesny_prasl_59", "Ты ведаеш..."))
         pesnyPrasl.add(Data("pesny_prasl_60", "Ты — Госпад мой"))
-        pesnyPrasl.add(Data("pesny_prasl_61", "Хвала Табе, вялікі Бог"))
+        pesnyPrasl.add(Data("piesni_prasl_chvala_tabie_vialiki_boh", "Хвала Табе, вялікі Бог"))
         pesnyPrasl.add(Data("pesny_prasl_62", "Хвалім Цябе, Божа!"))
         pesnyPrasl.add(Data("pesny_prasl_63", "Хрыстос уваскрос! (Resucito)"))
         pesnyPrasl.add(Data("pesny_prasl_65", "Шалом алэхем (Мір вам)"))

@@ -36,6 +36,7 @@ class SlugbovyiaTextu {
         const val NIADZELIA_PRA_AICOU = 1001
         const val NIADZELIA_AICOU_VI_SABORY = 1002
         const val NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU = 1003
+        const val SUBOTA_PERAD_RASTVOM = 1004
         const val MINEIA_SVIATOCHNAIA = 100
         const val MINEIA_VIALIKI_POST_1 = 101
         const val MINEIA_VIALIKI_POST_2 = 102
@@ -470,6 +471,9 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(356, "Перадсьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста і сьвятой мучаніцы Юльяны", "mm_21_12_pieradsviaccia_rastva_muczanicy_juljany_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(352, "Сьвятога прарока Данілы і трох юнакоў Ананіі, Азарыі і Місаіла", "mm_17_12_praroka_danily_troch_junakou_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(352, "Сьвятога прарока Данілы і трох юнакоў Ананіі, Азарыі і Місаіла", "mm_17_12_praroka_danily_troch_junakou_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(362, "Пасьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста, памяць сьвятога першамучаніка і дыякана Сьцяпана", "mm_27_12_pasviaccie_rastva_pierszamuczanika_sciapana_ajca_todara_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(362, "Пасьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста, памяць сьвятога першамучаніка і дыякана Сьцяпана", "mm_27_12_pasviaccie_rastva_pierszamuczanika_sciapana_ajca_todara_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(SUBOTA_PERAD_RASTVOM, "Субота перад Раством Хрыстовым", "mm_18_24_12_subota_pierad_rastvom_liturhija", LITURHIJA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {
@@ -871,6 +875,17 @@ class SlugbovyiaTextu {
                 }
             }
 
+            SUBOTA_PERAD_RASTVOM -> {
+                //Субота прерад Раством
+                for (i in 18..24) {
+                    calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
+                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                    if (wik == Calendar.SATURDAY) {
+                        realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
+                    }
+                }
+            }
+
             NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU -> {
                 //Нядзеля прерад Раством, сьвятых Айцоў
                 for (i in 18..24) {
@@ -926,6 +941,16 @@ class SlugbovyiaTextu {
             val wik = calendar.get(Calendar.DAY_OF_WEEK)
             if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR] + addDay) {
                 fictionalDay = NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU
+            }
+        }
+        //Субота прерад Раством
+        for (i in 18..24) {
+            calendar.set(year, Calendar.DECEMBER, i)
+            var addDay = 0
+            if (!calendar.isLeapYear(year)) addDay = 1
+            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+            if (wik == Calendar.SATURDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR] + addDay) {
+                fictionalDay = SUBOTA_PERAD_RASTVOM
             }
         }
         return fictionalDay

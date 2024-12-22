@@ -36,7 +36,11 @@ class DialogMineiaList : DialogFragment() {
             val builder = AlertDialog.Builder(it, style)
             binding = DialogListviewDisplayBinding.inflate(layoutInflater)
             builder.setView(binding.root)
-            val fileList = (activity as? MineiaMesiachnaia)?.getMineiaListDialog() ?: ArrayList()
+            val dayOfYear = arguments?.getInt("dayOfYear", 0) ?: 0
+            val dayOfMonth = arguments?.getInt("dayOfMonth", 0) ?: 0
+            val pasxa = arguments?.getBoolean("pasxa", true) ?: true
+            val fileList = (activity as? MineiaMesiachnaia)?.getMineiaListDialog(dayOfYear, dayOfMonth, pasxa) ?: ArrayList()
+            MineiaMesiachnaia.sortedMineia = MineiaMesiachnaia.SORTED_SLUZBA
             fileList.sort()
             binding.content.setOnItemClickListener { _, _, position, _ ->
                 if (it.checkmoduleResources()) {
@@ -88,4 +92,16 @@ class DialogMineiaList : DialogFragment() {
     }
 
     private class ViewHolder(var text: TextView)
+
+    companion object {
+        fun getInstance(dayOfYear: Int,  dayOfMonth: Int, pasxa: Boolean): DialogMineiaList {
+            val bundle = Bundle()
+            bundle.putInt("dayOfYear", dayOfYear)
+            bundle.putInt("dayOfMonth", dayOfMonth)
+            bundle.putBoolean("pasxa", pasxa)
+            val dialog = DialogMineiaList()
+            dialog.arguments = bundle
+            return dialog
+        }
+    }
 }

@@ -307,12 +307,20 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".MineiaMesiachnaia"
+            android:name=".MineiaMesiachnaiaMonth"
             android:label="@string/mineia_shtodzennaia"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
+            android:name=".MineiaMesiachnaia"
+            android:label="@string/mineia_shtodzennaia"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MineiaMesiachnaiaMonth" />
         </activity>
         <activity
             android:name=".Aktoix"

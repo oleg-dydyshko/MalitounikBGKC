@@ -793,7 +793,10 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             val list = getSpisKnig(false)[kniga]
             val t1 = list.indexOf("#")
             val t2 = list.indexOf("#", t1 + 1)
-            val dialog = DialogPerevodBiblii.getInstance(true, list.substring(t2 + 1).toInt() == 21, perevod)
+            val isNadsan = if (novyZapavet) false
+            else list.substring(t2 + 1).toInt() == 21
+            val isSinodal = k.getInt("sinoidal", 0) == 1
+            val dialog = DialogPerevodBiblii.getInstance(isSinodal, isNadsan, perevod)
             dialog.show(supportFragmentManager, "DialogPerevodBiblii")
             return true
         }

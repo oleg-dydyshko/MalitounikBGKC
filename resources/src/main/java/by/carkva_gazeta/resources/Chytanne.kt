@@ -364,6 +364,7 @@ class Chytanne : ZmenyiaChastki() {
                 }
             }
         } catch (t: Throwable) {
+            t.printStackTrace()
             binding.textView.text = error()
         }
     }

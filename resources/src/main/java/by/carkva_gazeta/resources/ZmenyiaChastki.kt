@@ -462,15 +462,14 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFont
         return bible
     }
 
-    private fun findIndex(chtenie: String): Int {
-        val bibliaNew = bibliaNew(chtenie)
+    private fun findIndex(kniga: Int): Int {
         val list = getSpisKnig(novyZapavet)
         var indexListBible = -1
         for (e in list.indices) {
             val t1 = list[e].indexOf("#")
             val t2 = list[e].indexOf("#", t1 + 1)
             val indexBible = list[e].substring(t2 + 1).toInt()
-            if (indexBible == bibliaNew) {
+            if (indexBible == kniga) {
                 indexListBible = e
                 break
             }
@@ -554,12 +553,13 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFont
                     polstixaB = true
                     knigaN = knigaN.replace("б", "", true)
                 }
-                var indexBiblii = findIndex(zagl)
+                val kniga = bibliaNew(zagl)
+                var indexBiblii = findIndex(kniga)
                 if (indexBiblii == -1) {
                     this.perevod = VybranoeBibleList.PEREVODCARNIAUSKI
-                    indexBiblii = findIndex(zagl)
+                    indexBiblii = findIndex(kniga)
                 }
-                val inputStream = getInputStream(novyZapavet, indexBiblii)
+                val inputStream = getInputStream(novyZapavet, kniga)
                 val title = if (e == 0) {
                     val spis = getSpisKnig(novyZapavet)[indexBiblii]
                     val t1 = spis.indexOf("#")

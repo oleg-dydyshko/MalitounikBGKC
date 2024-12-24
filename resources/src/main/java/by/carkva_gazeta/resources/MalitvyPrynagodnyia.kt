@@ -159,6 +159,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         rub1.add(MenuListData("Малітва да Божае Маці перад іконай Ейнай Менскай", "mltv_mb_mienskaja"))
         rub1.add(MenuListData("Малітва да Найсьвяцейшай Дзевы Марыі Барунскай", "mltv_mb_barunskaja"))
         rub1.add(MenuListData("Малітва да Багародзіцы, праслаўленай у цудатворнай Жыровіцкай іконе", "mltv_mb_zyrovickaja"))
+        rub1.add(MenuListData("Малітва да Маці Божай Бялыніцкай", "mltv_mb_bialynickaja"))
         rub1.sort()
         rub2.add(MenuListData("Малітва аб дапамозе ў выбары жыцьцёвай дарогі дзіцяці", "prynagodnyia_1"))
         rub2.add(MenuListData("Малітва бацькоў за дзяцей («Божа, у Тройцы Адзіны...»)", "mltv_backou_za_dziaciej_boza_u_trojcy_adziny"))

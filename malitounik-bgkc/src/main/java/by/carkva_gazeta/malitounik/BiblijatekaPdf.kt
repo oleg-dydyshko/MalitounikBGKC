@@ -134,39 +134,41 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
                 onDialogSetPage(page)
             }
         }
-        binding.pdfView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            private var lastFirstVisiblePosition = RecyclerView.NO_POSITION
-            private var lastCompletelyVisiblePosition = RecyclerView.NO_POSITION
+        binding.pdfView.post {
+            binding.pdfView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                private var lastFirstVisiblePosition = RecyclerView.NO_POSITION
+                private var lastCompletelyVisiblePosition = RecyclerView.NO_POSITION
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView, scrollState: Int) {
-                mActionDown = scrollState != RecyclerView.SCROLL_STATE_IDLE
-            }
+                override fun onScrollStateChanged(recyclerView: RecyclerView, scrollState: Int) {
+                    mActionDown = scrollState != RecyclerView.SCROLL_STATE_IDLE
+                }
 
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val firstVisiblePosition = layoutManager.findFirstVisibleItemPosition()
-                val firstCompletelyVisiblePosition = layoutManager.findFirstCompletelyVisibleItemPosition()
-                val isPositionChanged = firstVisiblePosition != lastFirstVisiblePosition || firstCompletelyVisiblePosition != lastCompletelyVisiblePosition
-                if (isPositionChanged) {
-                    val positionToUse = if (firstCompletelyVisiblePosition != RecyclerView.NO_POSITION) {
-                        firstCompletelyVisiblePosition
-                    } else {
-                        firstVisiblePosition
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val firstVisiblePosition = layoutManager.findFirstVisibleItemPosition()
+                    val firstCompletelyVisiblePosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+                    val isPositionChanged = firstVisiblePosition != lastFirstVisiblePosition || firstCompletelyVisiblePosition != lastCompletelyVisiblePosition
+                    if (isPositionChanged) {
+                        val positionToUse = if (firstCompletelyVisiblePosition != RecyclerView.NO_POSITION) {
+                            firstCompletelyVisiblePosition
+                        } else {
+                            firstVisiblePosition
+                        }
+                        binding.pageToolbar.text = getString(R.string.pdfView_page_no, positionToUse + 1, totalPage)
+                        lastFirstVisiblePosition = firstVisiblePosition
+                        lastCompletelyVisiblePosition = firstCompletelyVisiblePosition
                     }
-                    binding.pageToolbar.text = getString(R.string.pdfView_page_no, positionToUse + 1, totalPage)
-                    lastFirstVisiblePosition = firstVisiblePosition
-                    lastCompletelyVisiblePosition = firstCompletelyVisiblePosition
+                    val findLastCompletelyVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition() + 1
+                    isEndList = findLastCompletelyVisibleItemPosition == adapter.itemCount
+                    if (isEndList) {
+                        autoscroll = false
+                        stopAutoStartScroll()
+                        stopAutoScroll()
+                        invalidateOptionsMenu()
+                    }
                 }
-                val findLastCompletelyVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition() + 1
-                isEndList = findLastCompletelyVisibleItemPosition == adapter.itemCount
-                if (isEndList) {
-                    autoscroll = false
-                    stopAutoStartScroll()
-                    stopAutoScroll()
-                    invalidateOptionsMenu()
-                }
-            }
-        })
+            })
+        }
         binding.actionPlus.setOnClickListener {
             if (spid in 20..235) {
                 spid -= 5
@@ -347,7 +349,7 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
             autoScroll()
         } else {
             CoroutineScope(Dispatchers.Main).launch {
-                binding.pdfView.smoothScrollToPosition(0)
+                onDialogSetPage(0)
                 autoStartScroll()
             }
         }

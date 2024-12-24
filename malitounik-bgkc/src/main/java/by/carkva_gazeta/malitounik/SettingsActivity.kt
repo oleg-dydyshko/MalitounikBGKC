@@ -1082,6 +1082,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("trafic", 0)
             prefEditor.putBoolean("admin", false)
             prefEditor.putBoolean("adminDayInYear", false)
+            prefEditor.putBoolean("paralel_biblia", true)
+            prefEditor.putBoolean("paralel_maranata", true)
             prefEditor.apply()
             binding.vibro.isClickable = true
             binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))

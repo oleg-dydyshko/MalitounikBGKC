@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -10,33 +11,45 @@ import android.net.Uri
 import android.os.Bundle
 import android.print.PrintAttributes
 import android.print.PrintManager
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.BiblijatekaPdfBinding
 import by.carkva_gazeta.malitounik.databinding.BiblijatekaPdfItemBinding
+import by.carkva_gazeta.malitounik.databinding.ProgressMainBinding
 import com.itextpdf.text.pdf.PdfReader
 import com.itextpdf.text.pdf.SimpleBookmark
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 
-class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogBibliateka.DialogBibliatekaListener, DialogTitleBiblijatekaPdf.DialogTitleBibliotekaListener {
+class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogBibliateka.DialogBibliatekaListener, DialogTitleBiblijatekaPdf.DialogTitleBibliotekaListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: BiblijatekaPdfBinding
+    private lateinit var bindingprogress: ProgressMainBinding
+    private lateinit var adapter: PdfAdapter
     private var fileName = ""
     private var fileTitle = ""
     private var uri: Uri? = null
@@ -46,6 +59,14 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
     private var resetTollbarJob: Job? = null
     private lateinit var arrayList: ArrayList<String>
     private val pdfTitleList = ArrayList<String>()
+    private var autoScrollJob: Job? = null
+    private var autoStartScrollJob: Job? = null
+    private var resetScreenJob: Job? = null
+    private var procentJobAuto: Job? = null
+    private var spid = 60
+    private var mActionDown = false
+    private var autoscroll = false
+    private var isEndList = false
 
     override fun onPause() {
         super.onPause()
@@ -59,11 +80,37 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
             edit.putInt("Bibliateka_$fileName", page)
             edit.apply()
         }
+        stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
+        stopAutoStartScroll()
     }
 
+    override fun onResume() {
+        super.onResume()
+        autoscroll = k.getBoolean("autoscroll", false)
+        spid = k.getInt("autoscrollSpid", 60)
+        if (autoscroll) {
+            autoStartScroll()
+        }
+    }
+
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        v?.performClick()
+        val id = v?.id ?: 0
+        if (id == R.id.pdfView) {
+            when (event?.action ?: MotionEvent.ACTION_CANCEL) {
+                MotionEvent.ACTION_DOWN -> mActionDown = true
+                MotionEvent.ACTION_UP -> mActionDown = false
+            }
+            return false
+        }
+        return true
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = BiblijatekaPdfBinding.inflate(layoutInflater)
+        bindingprogress = binding.progressView
         setContentView(binding.root)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         uri = intent.data
@@ -80,7 +127,8 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
             fileReader?.let {
                 binding.pdfView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                 val pdfRenderer = PdfRenderer(it)
-                binding.pdfView.adapter = PdfAdapter(pdfRenderer)
+                adapter = PdfAdapter(pdfRenderer)
+                binding.pdfView.adapter = adapter
                 totalPage = pdfRenderer.pageCount
                 val page = savedInstanceState?.getInt("scrollPosition") ?: k.getInt("Bibliateka_$fileName", 0)
                 onDialogSetPage(page)
@@ -89,6 +137,10 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         binding.pdfView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             private var lastFirstVisiblePosition = RecyclerView.NO_POSITION
             private var lastCompletelyVisiblePosition = RecyclerView.NO_POSITION
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, scrollState: Int) {
+                mActionDown = scrollState != RecyclerView.SCROLL_STATE_IDLE
+            }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
@@ -105,8 +157,39 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
                     lastFirstVisiblePosition = firstVisiblePosition
                     lastCompletelyVisiblePosition = firstCompletelyVisiblePosition
                 }
+                val findLastCompletelyVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition() + 1
+                isEndList = findLastCompletelyVisibleItemPosition == adapter.itemCount
+                if (isEndList) {
+                    autoscroll = false
+                    stopAutoStartScroll()
+                    stopAutoScroll()
+                    invalidateOptionsMenu()
+                }
             }
         })
+        binding.actionPlus.setOnClickListener {
+            if (spid in 20..235) {
+                spid -= 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                bindingprogress.progressAuto.text = resources.getString(R.string.procent, proc)
+                startProcent(MainActivity.PROGRESSACTIONAUTORIGHT)
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
+        binding.actionMinus.setOnClickListener {
+            if (spid in 10..225) {
+                spid += 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                bindingprogress.progressAuto.text = resources.getString(R.string.procent, proc)
+                startProcent(MainActivity.PROGRESSACTIONAUTOLEFT)
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
+        binding.pdfView.setOnTouchListener(this)
         setTollbarTheme()
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
@@ -207,6 +290,123 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         onDialogSetPage(page)
     }
 
+    private fun startProcent(progressAction: Int) {
+        if (progressAction == MainActivity.PROGRESSACTIONAUTOLEFT || progressAction == MainActivity.PROGRESSACTIONAUTORIGHT) {
+            procentJobAuto?.cancel()
+            bindingprogress.progressAuto.visibility = View.VISIBLE
+            if (progressAction == MainActivity.PROGRESSACTIONAUTOLEFT) {
+                bindingprogress.progressAuto.background = ContextCompat.getDrawable(this@BiblijatekaPdf, R.drawable.selector_progress_auto_left)
+                bindingprogress.progressAuto.setTextColor(ContextCompat.getColor(this@BiblijatekaPdf, R.color.colorPrimary_text))
+            } else {
+                bindingprogress.progressAuto.background = ContextCompat.getDrawable(this@BiblijatekaPdf, R.drawable.selector_progress_red)
+                bindingprogress.progressAuto.setTextColor(ContextCompat.getColor(this@BiblijatekaPdf, R.color.colorWhite))
+            }
+            procentJobAuto = CoroutineScope(Dispatchers.Main).launch {
+                delay(2000)
+                bindingprogress.progressAuto.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
+        if (autoScrollJob?.isActive == true) {
+            if (saveAutoScroll) {
+                val prefEditor = k.edit()
+                prefEditor.putBoolean("autoscroll", false)
+                prefEditor.apply()
+            }
+            spid = k.getInt("autoscrollSpid", 60)
+            binding.actionMinus.visibility = View.GONE
+            binding.actionPlus.visibility = View.GONE
+            val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+            binding.actionMinus.animation = animation
+            binding.actionPlus.animation = animation
+            autoScrollJob?.cancel()
+            stopAutoStartScroll()
+            if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
+                resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(60000)
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                }
+            }
+        }
+    }
+
+    private fun startAutoScroll() {
+        if (!isEndList) {
+            spid = k.getInt("autoscrollSpid", 60)
+            if (binding.actionMinus.visibility == View.GONE) {
+                binding.actionMinus.visibility = View.VISIBLE
+                binding.actionPlus.visibility = View.VISIBLE
+                val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
+                binding.actionMinus.animation = animation
+                binding.actionPlus.animation = animation
+            }
+            resetScreenJob?.cancel()
+            stopAutoStartScroll()
+            autoScroll()
+        } else {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.pdfView.smoothScrollToPosition(0)
+                autoStartScroll()
+            }
+        }
+    }
+
+    private fun autoScroll() {
+        if (autoScrollJob?.isActive != true) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            autoscroll = true
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("autoscroll", true)
+            prefEditor.apply()
+            invalidateOptionsMenu()
+            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                while (isActive) {
+                    delay(spid.toLong())
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        binding.pdfView.scrollBy(0, 2)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun autoStartScroll() {
+        if (autoScrollJob?.isActive != true) {
+            if (spid < 166) {
+                val autoTime = (230 - spid) / 10
+                var count = 0
+                if (autoStartScrollJob?.isActive != true) {
+                    autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                        isAutoStartScroll = true
+                        delay(1000L)
+                        spid = 230
+                        autoScroll()
+                        while (true) {
+                            delay(1000L)
+                            if (!mActionDown && !MainActivity.dialogVisable) {
+                                spid -= autoTime
+                                count++
+                            }
+                            if (count == 10) {
+                                break
+                            }
+                        }
+                        isAutoStartScroll = false
+                        startAutoScroll()
+                    }
+                }
+            } else {
+                startAutoScroll()
+            }
+        }
+    }
+
+    private fun stopAutoStartScroll() {
+        autoStartScrollJob?.cancel()
+    }
+
     override fun onPrepareMenu(menu: Menu) {
         if (pdfTitleList.isNotEmpty()) {
             menu.findItem(R.id.action_title).isVisible = true
@@ -217,12 +417,52 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         }
         menu.findItem(R.id.action_apisane).isVisible = arrayList.size != 0
         menu.findItem(R.id.action_print).isVisible = isPrint
+        autoscroll = k.getBoolean("autoscroll", false)
+        val itemAuto = menu.findItem(R.id.action_auto)
+        when {
+            autoscroll -> itemAuto.setIcon(R.drawable.scroll_icon_on)
+            isEndList -> itemAuto.setIcon(R.drawable.scroll_icon_up)
+            else -> itemAuto.setIcon(R.drawable.scroll_icon)
+        }
+        val spanString = SpannableString(itemAuto.title.toString())
+        val end = spanString.length
+        var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+        if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        itemAuto.title = spanString
+    }
+
+    override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = true
+        }
+        return super.onMenuOpened(featureId, menu)
+    }
+
+    override fun onPanelClosed(featureId: Int, menu: Menu) {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = false
+        }
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == R.id.action_auto) {
+            autoscroll = k.getBoolean("autoscroll", false)
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("autoscrollAutostart", !autoscroll)
+            prefEditor.apply()
+            if (autoscroll) {
+                isAutoStartScroll = false
+                stopAutoScroll()
+            } else {
+                startAutoScroll()
+            }
+            invalidateOptionsMenu()
             return true
         }
         if (id == R.id.action_title) {
@@ -321,5 +561,9 @@ class BiblijatekaPdf : BaseActivity(), DialogSetPageBiblioteka.DialogSetPageBibl
         }
 
         override fun getItemCount() = pdfRenderer.pageCount
+    }
+
+    companion object {
+        var isAutoStartScroll = false
     }
 }

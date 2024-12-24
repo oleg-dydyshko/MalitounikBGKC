@@ -32,6 +32,11 @@ class DialogTitleBiblijatekaPdf : DialogFragment() {
         fun onDialogTitle(page: Int)
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        MainActivity.dialogVisable = false
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is Activity) {
@@ -51,6 +56,7 @@ class DialogTitleBiblijatekaPdf : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogListviewDisplayBinding.inflate(layoutInflater)
+            MainActivity.dialogVisable = true
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack

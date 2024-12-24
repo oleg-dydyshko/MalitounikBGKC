@@ -588,7 +588,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         menu.findItem(R.id.action_font).isVisible = !paralel
         menu.findItem(R.id.action_bright).isVisible = !paralel
         menu.findItem(R.id.action_dzen_noch).isVisible = !paralel
-        menu.findItem(R.id.action_paralel).isChecked = k.getBoolean("paralel_maranata", true)
+        menu.findItem(R.id.action_paralel).isChecked = k.getBoolean("paralel_biblia", true)
         menu.findItem(R.id.action_paralel).isVisible = perevod != VybranoeBibleList.PEREVODNADSAN
         val itemVybranoe = menu.findItem(R.id.action_vybranoe)
         if (men) {
@@ -767,9 +767,9 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             val prefEditor = k.edit()
             item.isChecked = !item.isChecked
             if (item.isChecked) {
-                prefEditor.putBoolean("paralel_maranata", true)
+                prefEditor.putBoolean("paralel_biblia", true)
             } else {
-                prefEditor.putBoolean("paralel_maranata", false)
+                prefEditor.putBoolean("paralel_biblia", false)
             }
             prefEditor.apply()
             adapter.notifyDataSetChanged()

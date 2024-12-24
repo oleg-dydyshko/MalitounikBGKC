@@ -27,6 +27,11 @@ class DialogSetPageBiblioteka : DialogFragment() {
         fun onDialogSetPage(page: Int)
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        MainActivity.dialogVisable = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageCount = arguments?.getInt("pageCount") ?: 0
@@ -46,6 +51,7 @@ class DialogSetPageBiblioteka : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             _binding = DialogEditviewDisplayBinding.inflate(layoutInflater)
+            MainActivity.dialogVisable = true
             val dzenNoch = (it as BaseActivity).getBaseDzenNoch()
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack

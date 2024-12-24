@@ -103,7 +103,7 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
             val c = MenuCaliandar.getPositionCaliandar(dayOfYear, Calendar.getInstance()[Calendar.YEAR])
             var adminDayOfYear = ""
             if (k.getBoolean("adminDayInYear", false)) {
-                adminDayOfYear = " ($dayOfYear (${c[22]}))"
+                adminDayOfYear = "$dayOfYear (${c[22]}): "
             }
             val dayOfMonth = c[1].toInt()
             if (c[2].toInt() == mun) groups.add(MineiaList(adminDayOfYear + mineiaListDay[0].title + opisanie, mineiaListDay[0].resource, mineiaListDay[0].sluzba, mineiaListDay[0].pasxa, day, dayOfMonth))

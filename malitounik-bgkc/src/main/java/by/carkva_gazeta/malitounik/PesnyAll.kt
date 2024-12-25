@@ -164,8 +164,8 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         binding = PesnyBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
-        binding.constraint.setOnTouchListener(this)
         fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
+        if (fullscreenPage) binding.constraint.setOnTouchListener(this)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
@@ -402,6 +402,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             dialogBrightness.show(supportFragmentManager, "brightness")
             return true
         }
+        @SuppressLint("ClickableViewAccessibility")
         if (id == R.id.action_fullscreen) {
             if (!k.getBoolean("fullscreenPage", false)) {
                 var fullscreenCount = k.getInt("fullscreenCount", 0)
@@ -415,8 +416,10 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                 }
                 prefEditor.putInt("fullscreenCount", fullscreenCount)
                 prefEditor.apply()
+                binding.constraint.setOnTouchListener(this)
             } else {
                 hide()
+                binding.constraint.setOnTouchListener(null)
             }
             return true
         }

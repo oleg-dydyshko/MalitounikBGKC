@@ -7,7 +7,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.provider.Settings
@@ -111,11 +110,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     private var resetScreenJob: Job? = null
     private var resetTitleJob: Job? = null
     private var diffScroll = -1
-    private var scrolltosatrt = false
-    private var orientation = Configuration.ORIENTATION_PORTRAIT
     private var mun = 0
     private var day = 1
-    private var isSmoothScrollToPosition = false
     private var vybranae = false
     private var prodoljyt = false
     private var title = ""
@@ -302,7 +298,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
             binding.subtitleToolbar.text = savedInstanceState.getString("subTollBarText", "") ?: ""
             paralel = savedInstanceState.getBoolean("paralel", paralel)
-            orientation = savedInstanceState.getInt("orientation")
             if (paralel) {
                 paralelPosition = savedInstanceState.getInt("paralelPosition")
                 parralelMestaView(paralelPosition)
@@ -318,7 +313,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 autoStartScroll()
             }
         }
-        setMaranata(orientation, savedInstanceState)
+        setMaranata(savedInstanceState)
         checkDay()
         bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -386,7 +381,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         binding.actionBack.setOnClickListener {
             onBack()
         }
-        binding.constraint.setOnTouchListener(this)
+        if (fullscreenPage) binding.constraint.setOnTouchListener(this)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             binding.textViewTitle.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
@@ -609,82 +604,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         adapter.notifyDataSetChanged()
     }
 
-    private fun smoothScrollToPosition(orientation: Int, position: Int, positionY: Int = 0) {
-        binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
-            private var checkDiff = false
-
-            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                mActionDown = scrollState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE
-                if (view.firstVisiblePosition != position) {
-                    isSmoothScrollToPosition = false
-                }
-                if (isSmoothScrollToPosition && scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                    isSmoothScrollToPosition = false
-                    CoroutineScope(Dispatchers.Main).launch {
-                        view.setSelection(position)
-                    }
-                }
-            }
-
-            override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
-                if (list.adapter == null || list.getChildAt(0) == null) return
-                var firstPosition = list.firstVisiblePosition
-                if (firstPosition > maranAta.size - 1) firstPosition = maranAta.size - 1
-                val nazva = maranAta[firstPosition].title
-                if (fullscreenPage) {
-                    if (firstPosition <= maranAtaScrollPosition) {
-                        if (binding.textViewTitle.visibility == View.GONE) {
-                            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-                            binding.textViewTitle.visibility = View.VISIBLE
-                            binding.textViewTitle.animation = animation
-                        }
-                        if (resetTitleJob?.isActive == true) resetTitleJob?.cancel()
-                        if (resetTitleJob?.isActive != true) {
-                            resetTitleJob = CoroutineScope(Dispatchers.Main).launch {
-                                delay(3000L)
-                                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
-                                binding.textViewTitle.visibility = View.GONE
-                                binding.textViewTitle.animation = animation2
-                            }
-                        }
-                    }
-                    binding.textViewTitle.text = nazva
-                }
-                maranAtaScrollPosition = firstPosition
-                maranAtaScrollPositionY = list.getChildAt(0).top
-                if (firstPosition == 0 && scrolltosatrt) {
-                    autoStartScroll()
-                    scrolltosatrt = false
-                    invalidateOptionsMenu()
-                }
-                diffScroll = if (list.lastVisiblePosition == list.adapter.count - 1) list.getChildAt(list.childCount - 1).bottom - list.height
-                else -1
-                if (checkDiff && diffScroll > 0) {
-                    checkDiff = false
-                    invalidateOptionsMenu()
-                }
-                if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
-                    checkDiff = true
-                    autoscroll = false
-                    stopAutoStartScroll()
-                    stopAutoScroll()
-                    invalidateOptionsMenu()
-                }
-                val nazvaView = binding.subtitleToolbar.text.toString()
-                if (nazva != nazvaView || nazvaView == "") {
-                    binding.subtitleToolbar.text = nazva
-                }
-            }
-        })
-        if (isSmoothScrollToPosition) {
-            CoroutineScope(Dispatchers.Main).launch {
-                val y = if (orientation == this@MaranAta.orientation) positionY
-                else 0
-                binding.ListView.smoothScrollToPositionFromTop(position, y, 0)
-            }
-        }
-    }
-
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
             fullTextTollbar()
@@ -808,7 +727,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         edit.apply()
         if (this.perevod != perevod) {
             this.perevod = perevod
-            setMaranata(orientation, Bundle())
+            setMaranata(Bundle())
         }
     }
 
@@ -1147,7 +1066,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         return indexListBible
     }
 
-    private fun setMaranata(orientation: Int, savedInstanceState: Bundle?) {
+    private fun setMaranata(savedInstanceState: Bundle?) {
         maranAta.clear()
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         val chten = cytanne.split(";")
@@ -1415,12 +1334,64 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             perevod = savePerevod
         }
         adapter.notifyDataSetChanged()
-        isSmoothScrollToPosition = true
-        if (vybranae && !prodoljyt && savedInstanceState == null) {
-            smoothScrollToPosition(orientation, findTitle())
-        } else {
-            smoothScrollToPosition(orientation, maranAtaScrollPosition, maranAtaScrollPositionY)
+        val position = if (vybranae && !prodoljyt && savedInstanceState == null) {
+            findTitle()
+        } else maranAtaScrollPosition
+        CoroutineScope(Dispatchers.Main).launch {
+            binding.ListView.setSelection(position)
         }
+        binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            private var checkDiff = false
+
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+                mActionDown = scrollState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+            }
+
+            override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+                if (list.adapter == null || list.getChildAt(0) == null) return
+                var firstPosition = list.firstVisiblePosition
+                if (firstPosition > maranAta.size - 1) firstPosition = maranAta.size - 1
+                val nazva = maranAta[firstPosition].title
+                if (fullscreenPage) {
+                    if (firstPosition <= maranAtaScrollPosition) {
+                        if (binding.textViewTitle.visibility == View.GONE) {
+                            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                            binding.textViewTitle.visibility = View.VISIBLE
+                            binding.textViewTitle.animation = animation
+                        }
+                        if (resetTitleJob?.isActive == true) resetTitleJob?.cancel()
+                        if (resetTitleJob?.isActive != true) {
+                            resetTitleJob = CoroutineScope(Dispatchers.Main).launch {
+                                delay(3000L)
+                                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+                                binding.textViewTitle.visibility = View.GONE
+                                binding.textViewTitle.animation = animation2
+                            }
+                        }
+                    }
+                    binding.textViewTitle.text = nazva
+                }
+                maranAtaScrollPosition = firstPosition
+                maranAtaScrollPositionY = list.getChildAt(0).top
+                diffScroll = if (list.lastVisiblePosition == list.adapter.count - 1) list.getChildAt(list.childCount - 1).bottom - list.height
+                else -1
+                if (checkDiff && diffScroll > 0) {
+                    checkDiff = false
+                    invalidateOptionsMenu()
+                }
+                if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
+                    checkDiff = true
+                    autoscroll = false
+                    stopAutoStartScroll()
+                    stopAutoScroll()
+                    invalidateOptionsMenu()
+                }
+                val nazvaView = binding.subtitleToolbar.text.toString()
+                if (nazva != nazvaView || nazvaView == "") {
+                    binding.subtitleToolbar.text = nazva
+                }
+            }
+        })
     }
 
     private fun findTitle(): Int {
@@ -1508,9 +1479,11 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             stopAutoStartScroll()
             autoScroll()
         } else {
-            isSmoothScrollToPosition = true
-            smoothScrollToPosition(orientation, 0)
-            scrolltosatrt = true
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.ListView.setSelection(0)
+            }
+            autoStartScroll()
+            invalidateOptionsMenu()
         }
     }
 
@@ -1540,7 +1513,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 var count = 0
                 if (autoStartScrollJob?.isActive != true) {
                     autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                        Bogashlugbovya.isAutoStartScroll = true
                         delay(1000L)
                         spid = 230
                         autoScroll()
@@ -1554,7 +1526,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                                 break
                             }
                         }
-                        Bogashlugbovya.isAutoStartScroll = false
                         startAutoScroll()
                     }
                 }
@@ -1838,13 +1809,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
-            when {
-                Bogashlugbovya.isAutoStartScroll -> autoStartScroll()
-                resources.configuration.orientation == orientation -> startAutoScroll()
-                else -> autoStartScroll()
-            }
+            autoStartScroll()
         }
-        orientation = resources.configuration.orientation
         bindingprogress.progressBrighess.visibility = View.GONE
         bindingprogress.progressFont.visibility = View.GONE
         bindingprogress.progressAuto.visibility = View.GONE
@@ -1927,7 +1893,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             prefEditor.putBoolean("autoscrollAutostart", !autoscroll)
             prefEditor.apply()
             if (autoscroll) {
-                Bogashlugbovya.isAutoStartScroll = false
                 stopAutoScroll()
             } else {
                 startAutoScroll()
@@ -1945,7 +1910,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             dialogBrightness.show(supportFragmentManager, "brightness")
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
+        @SuppressLint("ClickableViewAccessibility") if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
             if (!k.getBoolean("fullscreenPage", false)) {
                 var fullscreenCount = k.getInt("fullscreenCount", 0)
                 if (fullscreenCount > 3) {
@@ -1958,8 +1923,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 }
                 prefEditor.putInt("fullscreenCount", fullscreenCount)
                 prefEditor.apply()
+                binding.constraint.setOnTouchListener(this)
             } else {
                 hideHelp()
+                binding.constraint.setOnTouchListener(null)
             }
             return true
         }
@@ -2020,7 +1987,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putString("tollBarText", binding.titleToolbar.text.toString())
         outState.putString("subTollBarText", binding.subtitleToolbar.text.toString())

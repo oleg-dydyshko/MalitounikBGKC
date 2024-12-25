@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
-import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.provider.Settings
@@ -69,7 +68,6 @@ class Chytanne : ZmenyiaChastki() {
     private var diffScroll = false
     private var titleTwo = ""
     private var firstTextPosition = 0
-    private var orientation = Configuration.ORIENTATION_UNDEFINED
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
     private var mun = 0
     private var day = 1
@@ -93,7 +91,6 @@ class Chytanne : ZmenyiaChastki() {
         if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            orientation = savedInstanceState.getInt("orientation")
             binding.titleToolbar.text = savedInstanceState.getString("tollBarText", getString(by.carkva_gazeta.malitounik.R.string.czytanne3, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])) ?: getString(by.carkva_gazeta.malitounik.R.string.czytanne3, day, resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[mun])
         } else {
             fullscreenPage = k.getBoolean("fullscreenPage", false)
@@ -111,7 +108,7 @@ class Chytanne : ZmenyiaChastki() {
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        binding.constraint.setOnTouchListener(this)
+        if (fullscreenPage) binding.constraint.setOnTouchListener(this)
         binding.InteractiveScroll.setOnBottomReachedListener(object : OnBottomReachedListener {
             override fun onBottomReached(checkDiff: Boolean) {
                 diffScroll = checkDiff
@@ -407,7 +404,6 @@ class Chytanne : ZmenyiaChastki() {
                 var count = 0
                 if (autoStartScrollJob?.isActive != true) {
                     autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                        Bogashlugbovya.isAutoStartScroll = true
                         delay(1000L)
                         spid = 230
                         autoScroll()
@@ -421,7 +417,6 @@ class Chytanne : ZmenyiaChastki() {
                                 break
                             }
                         }
-                        Bogashlugbovya.isAutoStartScroll = false
                         startAutoScroll()
                     }
                 }
@@ -606,13 +601,8 @@ class Chytanne : ZmenyiaChastki() {
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
         if (autoscroll) {
-            when {
-                Bogashlugbovya.isAutoStartScroll -> autoStartScroll()
-                resources.configuration.orientation == orientation -> startAutoScroll()
-                else -> autoStartScroll()
-            }
+            autoStartScroll()
         }
-        orientation = resources.configuration.orientation
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
@@ -647,7 +637,6 @@ class Chytanne : ZmenyiaChastki() {
             prefEditor.putBoolean("autoscrollAutostart", !autoscroll)
             prefEditor.apply()
             if (autoscroll) {
-                Bogashlugbovya.isAutoStartScroll = false
                 stopAutoScroll()
             } else {
                 startAutoScroll()
@@ -665,6 +654,7 @@ class Chytanne : ZmenyiaChastki() {
             dialogBrightness.show(supportFragmentManager, "brightness")
             return true
         }
+        @SuppressLint("ClickableViewAccessibility")
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
             if (!k.getBoolean("fullscreenPage", false)) {
                 var fullscreenCount = k.getInt("fullscreenCount", 0)
@@ -678,8 +668,10 @@ class Chytanne : ZmenyiaChastki() {
                 }
                 prefEditor.putInt("fullscreenCount", fullscreenCount)
                 prefEditor.apply()
+                binding.constraint.setOnTouchListener(this)
             } else {
                 hideHelp()
+                binding.constraint.setOnTouchListener(null)
             }
             return true
         }
@@ -748,7 +740,6 @@ class Chytanne : ZmenyiaChastki() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putInt("textLine", firstTextPosition)
     }

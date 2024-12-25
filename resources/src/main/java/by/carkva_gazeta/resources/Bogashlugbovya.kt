@@ -9,7 +9,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.net.Uri
@@ -132,11 +131,9 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     private var munsv = 0
     private var vybranoePosition = -1
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
-    private var orientation = Configuration.ORIENTATION_PORTRAIT
     private val c = Calendar.getInstance()
     private var startSearchString = ""
     private var liturgia = false
-    private var isLoaded = false
     private var perevod = VybranoeBibleList.PEREVODSEMUXI
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -164,7 +161,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     companion object {
         val resursMap = ArrayMap<String, Int>()
-        var isAutoStartScroll = false
 
         init {
             resursMap()
@@ -501,7 +497,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     }
 
     private fun setDatacalendar(savedInstanceState: Bundle?) {
-        isLoaded = true
         setArrayData(MenuCaliandar.getDataCalaindar(c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR]))
         val cal = Calendar.getInstance()
         val mun = cal[Calendar.MONTH]
@@ -536,12 +531,10 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             mAutoScroll = false
         }
         binding.scrollView2.setOnScrollChangedCallback(this)
-        binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {
             perevod = savedInstanceState.getString("perevod", VybranoeBibleList.PEREVODSEMUXI)
             mAutoScroll = savedInstanceState.getBoolean("mAutoScroll")
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            orientation = savedInstanceState.getInt("orientation")
             MainActivity.dialogVisable = false
             if (savedInstanceState.getBoolean("seach")) {
                 binding.find.visibility = View.VISIBLE
@@ -559,6 +552,9 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             startSearchString = intent.extras?.getString("search", "") ?: ""
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             vybranoePosition = intent.extras?.getInt("vybranaePos", -1) ?: -1
+        }
+        if (fullscreenPage) {
+            binding.constraint.setOnTouchListener(this)
         }
         if (resurs.isNotEmpty() && resurs.isDigitsOnly() && resurs.toInt() < 10) {
             val text = SpannableString(title)
@@ -1523,14 +1519,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 intent.removeExtra("search")
             }
             if (autoscroll) {
-                when {
-                    isAutoStartScroll -> autoStartScroll()
-                    resources.configuration.orientation == orientation -> startAutoScroll()
-                    else -> autoStartScroll()
-                }
-                orientation = resources.configuration.orientation
+                autoStartScroll()
             }
-            isLoaded = false
         }
         if (dzenNoch) binding.imageView6.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_up_black)
         binding.imageView6.setOnClickListener { findNext(previous = true) }
@@ -1608,7 +1598,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 var count = 0
                 if (autoStartScrollJob?.isActive != true) {
                     autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                        isAutoStartScroll = true
                         delay(1000L)
                         spid = 230
                         autoScroll()
@@ -1622,7 +1611,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                                 break
                             }
                         }
-                        isAutoStartScroll = false
                         startAutoScroll()
                     }
                 }
@@ -1950,7 +1938,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             prefEditor.putBoolean("autoscrollAutostart", !autoscroll)
             prefEditor.apply()
             if (autoscroll) {
-                isAutoStartScroll = false
                 stopAutoScroll()
             } else {
                 startAutoScroll()
@@ -1976,6 +1963,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             dialogBrightness.show(supportFragmentManager, "brightness")
             return true
         }
+        @SuppressLint("ClickableViewAccessibility")
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
             if (!k.getBoolean("fullscreenPage", false)) {
                 var fullscreenCount = k.getInt("fullscreenCount", 0)
@@ -1989,8 +1977,10 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 }
                 prefEditor.putInt("fullscreenCount", fullscreenCount)
                 prefEditor.apply()
+                binding.constraint.setOnTouchListener(this)
             } else {
                 hideHelp()
+                binding.constraint.setOnTouchListener(null)
             }
             return true
         }
@@ -2307,13 +2297,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         }
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
-        if (!isLoaded && autoscroll) {
-            when {
-                isAutoStartScroll -> autoStartScroll()
-                resources.configuration.orientation == orientation -> startAutoScroll()
-                else -> autoStartScroll()
-            }
-            orientation = resources.configuration.orientation
+        if (autoscroll) {
+            autoStartScroll()
         }
     }
 
@@ -2369,7 +2354,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("orientation", orientation)
         outState.putBoolean("fullscreen", fullscreenPage)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)

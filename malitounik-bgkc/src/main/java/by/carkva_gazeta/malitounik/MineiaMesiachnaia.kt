@@ -1,6 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -119,7 +120,7 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
         val dzenNoch = getBaseDzenNoch()
         binding = ContentMineiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        mun = intent.extras?.getInt("mun") ?: Calendar.getInstance()[Calendar.MONTH]
+        mun = savedInstanceState?.getInt("mun") ?: intent.extras?.getInt("mun") ?: Calendar.getInstance()[Calendar.MONTH]
         binding.elvMain.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
@@ -144,7 +145,7 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
                 }
             }
         }
-        adapter = MineiaListAdapter(this, groups)
+        adapter = MineiaListAdapter(this)
         binding.elvMain.adapter = adapter
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
@@ -232,7 +233,12 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
         return false
     }
 
-    private class MineiaListAdapter(val context: BaseActivity, val mineiaList: ArrayList<MineiaList>) : ArrayAdapter<MineiaList>(context, R.layout.simple_list_item_mineia, R.id.label, mineiaList) {
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("mun", mun)
+    }
+
+    private inner class MineiaListAdapter(val context: BaseActivity) : ArrayAdapter<MineiaList>(context, R.layout.simple_list_item_mineia, R.id.label, groups) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -246,8 +252,14 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = context.getBaseDzenNoch()
-            viewHolder.title.text = mineiaList[position].title
-            viewHolder.date.text = mineiaList[position].dayOfMonth.toString()
+            viewHolder.title.text = groups[position].title
+            viewHolder.date.text = groups[position].dayOfMonth.toString()
+            val caliandar = Calendar.getInstance()
+            if (groups[position].dayOfMonth == caliandar[Calendar.DATE] && mun == caliandar[Calendar.MONTH]) {
+                viewHolder.date.typeface = MainActivity.createFont(Typeface.BOLD)
+            } else {
+                viewHolder.date.typeface = MainActivity.createFont(Typeface.NORMAL)
+            }
             if (dzenNoch) viewHolder.date.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary_black))
             return rootView
         }

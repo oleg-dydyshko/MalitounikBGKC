@@ -381,7 +381,6 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
                 var count = 0
                 if (autoStartScrollJob?.isActive != true) {
                     autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                        isAutoStartScroll = true
                         delay(1000L)
                         spid = 230
                         autoScroll()
@@ -395,7 +394,6 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
                                 break
                             }
                         }
-                        isAutoStartScroll = false
                         startAutoScroll()
                     }
                 }
@@ -459,7 +457,6 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
             prefEditor.putBoolean("autoscrollAutostart", !autoscroll)
             prefEditor.apply()
             if (autoscroll) {
-                isAutoStartScroll = false
                 stopAutoScroll()
             } else {
                 startAutoScroll()
@@ -563,9 +560,5 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
         }
 
         override fun getItemCount() = pdfRenderer.pageCount
-    }
-
-    companion object {
-        var isAutoStartScroll = false
     }
 }

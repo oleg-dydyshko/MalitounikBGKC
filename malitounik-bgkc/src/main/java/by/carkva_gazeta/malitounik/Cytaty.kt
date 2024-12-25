@@ -85,7 +85,6 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         bindingprogress = binding.progressView
         setContentView(binding.root)
         pasliaPrychascia = savedInstanceState?.getInt("pasliaPrychascia") ?: (intent.extras?.getInt("paslia_prychascia") ?: 0)
-        binding.constraint.setOnTouchListener(this)
         val inputStream = resources.openRawResource(R.raw.citata)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
@@ -100,6 +99,7 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         binding.pager.offscreenPageLimit = 1
         binding.pager.setCurrentItem(pasliaPrychascia, false)
         fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
+        if (fullscreenPage) binding.constraint.setOnTouchListener(this)
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 pasliaPrychascia = position
@@ -224,6 +224,7 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
             dialogBrightness.show(supportFragmentManager, "brightness")
             return true
         }
+        @SuppressLint("ClickableViewAccessibility")
         if (id == R.id.action_fullscreen) {
             if (!k.getBoolean("fullscreenPage", false)) {
                 var fullscreenCount = k.getInt("fullscreenCount", 0)
@@ -237,8 +238,10 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
                 }
                 prefEditor.putInt("fullscreenCount", fullscreenCount)
                 prefEditor.apply()
+                binding.constraint.setOnTouchListener(this)
             } else {
                 hide()
+                binding.constraint.setOnTouchListener(null)
             }
             return true
         }

@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -7,22 +8,31 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.animation.AnimationUtils
+import android.widget.AbsListView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.OpisanieBinding
+import by.carkva_gazeta.malitounik.databinding.ProgressMainBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemOpisanieBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -31,6 +41,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.BufferedInputStream
@@ -41,14 +52,15 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener, DialogHelpShare.DialogHelpShareListener {
+class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener, DialogHelpShare.DialogHelpShareListener {
     private val dzenNoch get() = getBaseDzenNoch()
     private var mun = 1
     private var day = 1
     private var year = 2022
     private var svity = false
     private lateinit var binding: OpisanieBinding
-    private lateinit var chin: SharedPreferences
+    private lateinit var bindingprogress: ProgressMainBinding
+    private lateinit var k: SharedPreferences
     private var resetTollbarJob: Job? = null
     private var loadIconsJob: Job? = null
     private val dirList = ArrayList<DirList>()
@@ -56,6 +68,14 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     private lateinit var adapter: OpisanieAdapter
     private var fullImagePathVisable = ""
     private var fullPosition = 0
+    private var autoScrollJob: Job? = null
+    private var autoStartScrollJob: Job? = null
+    private var procentJobAuto: Job? = null
+    private var resetScreenJob: Job? = null
+    private var spid = 60
+    private var mActionDown = false
+    private var autoscroll = false
+    private var diffScroll = -1
     private val carkvaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 700) {
             viewSviaryiaIIcon()
@@ -89,8 +109,32 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
 
     override fun onPause() {
         super.onPause()
+        stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
+        stopAutoStartScroll()
         resetTollbarJob?.cancel()
         loadIconsJob?.cancel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        autoscroll = k.getBoolean("autoscroll", false)
+        spid = k.getInt("autoscrollSpid", 60)
+        if (autoscroll) {
+            autoStartScroll()
+        }
+    }
+
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        v?.performClick()
+        val id = v?.id ?: 0
+        if (id == R.id.listview) {
+            when (event?.action ?: MotionEvent.ACTION_CANCEL) {
+                MotionEvent.ACTION_DOWN -> mActionDown = true
+                MotionEvent.ACTION_UP -> mActionDown = false
+            }
+            return false
+        }
+        return true
     }
 
     private fun viewSviaryiaIIcon() {
@@ -256,10 +300,12 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         binding = OpisanieBinding.inflate(layoutInflater)
+        bindingprogress = binding.progressView
         setContentView(binding.root)
         val c = Calendar.getInstance()
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: (c[Calendar.MONTH] + 1)
@@ -281,12 +327,59 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         adapter = OpisanieAdapter(this)
         binding.listview.adapter = adapter
         binding.listview.divider = null
+        binding.listview.setOnTouchListener(this)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.imageViewFull.background = ContextCompat.getDrawable(this, R.color.colorbackground_material_dark)
         }
         viewSviaryiaIIcon()
         if (savedInstanceState == null) startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))
+        binding.actionPlus.setOnClickListener {
+            if (spid in 20..235) {
+                spid -= 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                bindingprogress.progressAuto.text = resources.getString(R.string.procent, proc)
+                startProcent(MainActivity.PROGRESSACTIONAUTORIGHT)
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
+        binding.actionMinus.setOnClickListener {
+            if (spid in 10..225) {
+                spid += 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                bindingprogress.progressAuto.text = resources.getString(R.string.procent, proc)
+                startProcent(MainActivity.PROGRESSACTIONAUTOLEFT)
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
+        binding.listview.setOnScrollListener(object : AbsListView.OnScrollListener {
+            private var checkDiff = false
+
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+                mActionDown = scrollState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+            }
+
+            override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+                if (list.adapter == null || list.getChildAt(0) == null) return
+                diffScroll = if (list.lastVisiblePosition == list.adapter.count - 1) list.getChildAt(list.childCount - 1).bottom - list.height
+                else -1
+                if (checkDiff && diffScroll > 0) {
+                    checkDiff = false
+                    invalidateOptionsMenu()
+                }
+                if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
+                    checkDiff = true
+                    autoscroll = false
+                    stopAutoStartScroll()
+                    stopAutoScroll()
+                    invalidateOptionsMenu()
+                }
+            }
+        })
         setTollbarTheme()
     }
 
@@ -622,6 +715,124 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         binding.titleToolbar.isSingleLine = true
     }
 
+    private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
+        if (autoScrollJob?.isActive == true) {
+            if (saveAutoScroll) {
+                val prefEditor = k.edit()
+                prefEditor.putBoolean("autoscroll", false)
+                prefEditor.apply()
+            }
+            spid = k.getInt("autoscrollSpid", 60)
+            binding.actionMinus.visibility = View.GONE
+            binding.actionPlus.visibility = View.GONE
+            val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+            binding.actionMinus.animation = animation
+            binding.actionPlus.animation = animation
+            autoScrollJob?.cancel()
+            stopAutoStartScroll()
+            adapter.notifyDataSetChanged()
+            if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
+                resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(60000)
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                }
+            }
+        }
+    }
+
+    private fun startAutoScroll() {
+        if (diffScroll != 0) {
+            spid = k.getInt("autoscrollSpid", 60)
+            if (binding.actionMinus.visibility == View.GONE) {
+                binding.actionMinus.visibility = View.VISIBLE
+                binding.actionPlus.visibility = View.VISIBLE
+                val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
+                binding.actionMinus.animation = animation
+                binding.actionPlus.animation = animation
+            }
+            resetScreenJob?.cancel()
+            stopAutoStartScroll()
+            autoScroll()
+        } else {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.listview.setSelection(0)
+            }
+            autoStartScroll()
+            invalidateOptionsMenu()
+        }
+    }
+
+    private fun autoScroll() {
+        if (autoScrollJob?.isActive != true) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            autoscroll = true
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("autoscroll", true)
+            prefEditor.apply()
+            adapter.notifyDataSetChanged()
+            invalidateOptionsMenu()
+            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                while (isActive) {
+                    delay(spid.toLong())
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        binding.listview.scrollListBy(2)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun autoStartScroll() {
+        if (autoScrollJob?.isActive != true) {
+            if (spid < 166) {
+                val autoTime = (230 - spid) / 10
+                var count = 0
+                if (autoStartScrollJob?.isActive != true) {
+                    autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                        delay(1000L)
+                        spid = 230
+                        autoScroll()
+                        while (true) {
+                            delay(1000L)
+                            if (!mActionDown && !MainActivity.dialogVisable) {
+                                spid -= autoTime
+                                count++
+                            }
+                            if (count == 10) {
+                                break
+                            }
+                        }
+                        startAutoScroll()
+                    }
+                }
+            } else {
+                startAutoScroll()
+            }
+        }
+    }
+
+    private fun stopAutoStartScroll() {
+        autoStartScrollJob?.cancel()
+    }
+
+    private fun startProcent(progressAction: Int) {
+        if (progressAction == MainActivity.PROGRESSACTIONAUTOLEFT || progressAction == MainActivity.PROGRESSACTIONAUTORIGHT) {
+            procentJobAuto?.cancel()
+            bindingprogress.progressAuto.visibility = View.VISIBLE
+            if (progressAction == MainActivity.PROGRESSACTIONAUTOLEFT) {
+                bindingprogress.progressAuto.background = ContextCompat.getDrawable(this@Opisanie, R.drawable.selector_progress_auto_left)
+                bindingprogress.progressAuto.setTextColor(ContextCompat.getColor(this@Opisanie, R.color.colorPrimary_text))
+            } else {
+                bindingprogress.progressAuto.background = ContextCompat.getDrawable(this@Opisanie, R.drawable.selector_progress_red)
+                bindingprogress.progressAuto.setTextColor(ContextCompat.getColor(this@Opisanie, R.color.colorWhite))
+            }
+            procentJobAuto = CoroutineScope(Dispatchers.Main).launch {
+                delay(2000)
+                bindingprogress.progressAuto.visibility = View.GONE
+            }
+        }
+    }
+
     override fun onBack() {
         if (binding.imageViewFull.visibility == View.VISIBLE) {
             binding.imageViewFull.visibility = View.GONE
@@ -642,9 +853,24 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     override fun onPrepareMenu(menu: Menu) {
         if (checkParliny()) menu.findItem(R.id.action_piarliny).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         else menu.findItem(R.id.action_piarliny).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-        menu.findItem(R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
+        menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         menu.findItem(R.id.action_save_as).isVisible = binding.imageViewFull.visibility == View.VISIBLE
         menu.findItem(R.id.action_share).isVisible = binding.imageViewFull.visibility == View.VISIBLE
+        autoscroll = k.getBoolean("autoscroll", false)
+        val itemAuto = menu.findItem(R.id.action_auto)
+        itemAuto.isVisible = true
+        when {
+            diffScroll < 0 -> itemAuto.isVisible = false
+            autoscroll -> itemAuto.setIcon(R.drawable.scroll_icon_on)
+            diffScroll == 0 -> itemAuto.setIcon(R.drawable.scroll_icon_up)
+            else -> itemAuto.setIcon(R.drawable.scroll_icon)
+        }
+        val spanString = SpannableString(itemAuto.title.toString())
+        val end = spanString.length
+        var itemFontSize = setFontInterface(SettingsActivity.GET_FONT_SIZE_MIN, true)
+        if (itemFontSize > SettingsActivity.GET_FONT_SIZE_DEFAULT) itemFontSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
+        spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        itemAuto.title = spanString
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -655,10 +881,36 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
         outState.putBoolean("imageViewFullVisable", binding.imageViewFull.visibility == View.VISIBLE)
     }
 
+    override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = true
+        }
+        return super.onMenuOpened(featureId, menu)
+    }
+
+    override fun onPanelClosed(featureId: Int, menu: Menu) {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = false
+        }
+    }
+
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == R.id.action_auto) {
+            autoscroll = k.getBoolean("autoscroll", false)
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("autoscrollAutostart", !autoscroll)
+            prefEditor.apply()
+            if (autoscroll) {
+                stopAutoScroll()
+            } else {
+                startAutoScroll()
+            }
+            invalidateOptionsMenu()
             return true
         }
         if (id == R.id.action_share) {
@@ -746,6 +998,11 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
     }
 
     private inner class OpisanieAdapter(context: Activity) : ArrayAdapter<OpisanieData>(context, R.layout.simple_list_item_opisanie, arrayList) {
+        override fun isEnabled(position: Int): Boolean {
+            return if (!autoscroll) super.isEnabled(position)
+            else false
+        }
+
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -777,7 +1034,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                         sendIntent.type = "image/*"
                         startActivity(Intent.createChooser(sendIntent, getString(R.string.zmiest)))
                     } else {
-                        if (chin.getBoolean("dialogHelpShare", true)) {
+                        if (k.getBoolean("dialogHelpShare", true)) {
                             val dialog = DialogHelpShare.getInstance(sb.toString())
                             dialog.show(supportFragmentManager, "DialogHelpShare")
                         } else {
@@ -813,7 +1070,7 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
             if (dzenNoch) {
                 viewHolder.text.setTextColor(ContextCompat.getColor(this@Opisanie, R.color.colorWhite))
             }
-            val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+            val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             viewHolder.textTitle.textSize = fontBiblia
             viewHolder.textApisanne.textSize = fontBiblia
             viewHolder.textTitle.text = arrayList[position].title.trim()
@@ -822,6 +1079,12 @@ class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOp
                 viewHolder.text.textSize = fontBiblia
                 viewHolder.text.text = text
                 viewHolder.text.visibility = View.VISIBLE
+                if (autoscroll) {
+                    viewHolder.text.clearFocus()
+                    viewHolder.text.setTextIsSelectable(false)
+                } else {
+                    viewHolder.text.setTextIsSelectable(true)
+                }
             } else {
                 viewHolder.text.visibility = View.GONE
             }

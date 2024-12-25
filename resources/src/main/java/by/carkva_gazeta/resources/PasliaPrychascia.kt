@@ -99,7 +99,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         malitvy.addAll(MenuBogashlugbovya.getTextPasliaPrychascia())
         pasliaPrychascia = savedInstanceState?.getInt("pasliaPrychascia") ?: (intent.extras?.getInt("paslia_prychascia") ?: 0)
         men = Bogashlugbovya.checkVybranoe(this, malitvy[pasliaPrychascia].resurs)
-        binding.constraint.setOnTouchListener(this)
         val adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
@@ -112,6 +111,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         binding.pager.offscreenPageLimit = 1
         binding.pager.setCurrentItem(pasliaPrychascia, false)
         fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
+        if (fullscreenPage) binding.constraint.setOnTouchListener(this)
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 men = Bogashlugbovya.checkVybranoe(this@PasliaPrychascia, malitvy[position].resurs)
@@ -242,7 +242,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             dialogBrightness.show(supportFragmentManager, "brightness")
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
+        @SuppressLint("ClickableViewAccessibility") if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
             if (!k.getBoolean("fullscreenPage", false)) {
                 var fullscreenCount = k.getInt("fullscreenCount", 0)
                 if (fullscreenCount > 3) {
@@ -255,8 +255,10 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
                 }
                 prefEditor.putInt("fullscreenCount", fullscreenCount)
                 prefEditor.apply()
+                binding.constraint.setOnTouchListener(this)
             } else {
                 hide()
+                binding.constraint.setOnTouchListener(null)
             }
             return true
         }

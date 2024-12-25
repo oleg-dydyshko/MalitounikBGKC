@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -87,7 +86,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     private var resetScreenJob: Job? = null
     private var procentJobAuto: Job? = null
     private var mActionDown = false
-    private var orientation = Configuration.ORIENTATION_PORTRAIT
     private var autoscroll = false
     private var mAutoScroll = true
 
@@ -781,7 +779,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             prefEditor.putBoolean("autoscrollAutostart", !autoscroll)
             prefEditor.apply()
             if (autoscroll) {
-                Bogashlugbovya.isAutoStartScroll = false
                 stopAutoScroll()
             } else {
                 startAutoScroll()
@@ -892,11 +889,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
-            when {
-                Bogashlugbovya.isAutoStartScroll -> autoStartScroll()
-                resources.configuration.orientation == orientation -> startAutoScroll()
-                else -> autoStartScroll()
-            }
+            autoStartScroll()
         }
     }
 
@@ -979,7 +972,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 var count = 0
                 if (autoStartScrollJob?.isActive != true) {
                     autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                        Bogashlugbovya.isAutoStartScroll = true
                         delay(1000L)
                         spid = 230
                         autoScroll()
@@ -993,7 +985,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                                 break
                             }
                         }
-                        Bogashlugbovya.isAutoStartScroll = false
                         startAutoScroll()
                     }
                 }

@@ -64,7 +64,7 @@ class MineiaMesiachnaiaMonth : BaseActivity() {
             }
             TransitionManager.beginDelayedTransition(binding.toolbar)
         }
-        binding.titleToolbar.text = resources.getText(R.string.mineia_mesiachnaia)
+        binding.titleToolbar.text = resources.getText(R.string.mineia_shtodzennaia)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = R.style.AppCompatDark

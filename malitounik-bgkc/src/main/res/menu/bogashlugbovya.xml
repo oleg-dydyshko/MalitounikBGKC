@@ -42,11 +42,6 @@
         android:title="@string/menu_font_size_app"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_bright"
-        android:orderInCategory="100"
-        android:title="@string/Bright"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/menu_print"
         android:orderInCategory="100"
         android:title="@string/print"

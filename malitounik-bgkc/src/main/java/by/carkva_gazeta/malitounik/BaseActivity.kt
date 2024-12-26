@@ -194,11 +194,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
             @Suppress("DEPRECATION") overridePendingTransition(R.anim.alphain, R.anim.alphaout)
         }
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
     }
 
     private fun sensorChangeDzenNoch(sensorValue: Float) {

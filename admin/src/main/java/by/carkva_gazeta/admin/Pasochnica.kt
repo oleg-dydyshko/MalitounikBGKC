@@ -335,11 +335,6 @@ class Pasochnica : BaseActivity(), View.OnClickListener, DialogFileExists.Dialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         binding = AdminPasochnicaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.apisanne.addTextChangedListener(textWatcher)

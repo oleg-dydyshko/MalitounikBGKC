@@ -30,11 +30,6 @@ class MenuPadryxtoukaDaSpovedzi : BaseListFragment() {
             dialogFontSize.show(childFragmentManager, "font")
             return true
         }
-        if (id == R.id.action_bright) {
-            val dialogBrightness = DialogBrightness()
-            dialogBrightness.show(childFragmentManager, "brightness")
-            return true
-        }
         if (id == R.id.action_dzen_noch) {
             val dialogDzenNochSettings = DialogDzenNochSettings()
             dialogDzenNochSettings.show(childFragmentManager, "DialogDzenNochSettings")

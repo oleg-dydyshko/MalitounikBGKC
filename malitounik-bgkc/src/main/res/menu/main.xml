@@ -74,11 +74,6 @@
         android:title="@string/Trash"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_bright"
-        android:orderInCategory="100"
-        android:title="@string/Bright"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_font"
         android:orderInCategory="100"
         android:title="@string/menu_font_size_app"

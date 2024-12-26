@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
@@ -43,7 +42,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 
-class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
+class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -56,7 +55,6 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
     private var resurs = ""
     private lateinit var binding: PesnyBinding
     private lateinit var bindingprogress: ProgressMainBinding
-    private var procentJobBrightness: Job? = null
     private var procentJobFont: Job? = null
     private var resetTollbarJob: Job? = null
 
@@ -140,6 +138,9 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
+        val prefEditors = k.edit()
+        prefEditors.putBoolean("fullscreenPage", fullscreenPage)
+        prefEditors.apply()
     }
 
     override fun onResume() {
@@ -171,7 +172,6 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
             bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
         }
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
@@ -208,26 +208,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                     prefEditor.apply()
                     onDialogFontSize(fontBiblia)
                 }
-                startProcent(MainActivity.PROGRESSACTIONFONT)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        })
-        bindingprogress.seekBarBrighess.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (MainActivity.brightness != progress) {
-                    MainActivity.brightness = progress
-                    val lp = window.attributes
-                    lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                    window.attributes = lp
-                    bindingprogress.progressBrighess.text = getString(R.string.procent, MainActivity.brightness)
-                    MainActivity.checkBrightness = false
-                }
-                startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
+                startProcent()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -281,31 +262,16 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         binding.titleToolbar.isSingleLine = true
     }
 
-    private fun startProcent(progressAction: Int) {
-        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) {
-            procentJobBrightness?.cancel()
-            bindingprogress.progressBrighess.visibility = View.VISIBLE
-            procentJobBrightness = CoroutineScope(Dispatchers.Main).launch {
-                delay(2000)
-                bindingprogress.progressBrighess.visibility = View.GONE
-                delay(3000)
-                if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
-                    bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@PesnyAll, R.anim.slide_out_left)
-                    bindingprogress.seekBarBrighess.visibility = View.GONE
-                }
-            }
-        }
-        if (progressAction == MainActivity.PROGRESSACTIONFONT) {
-            procentJobFont?.cancel()
-            bindingprogress.progressFont.visibility = View.VISIBLE
-            procentJobFont = CoroutineScope(Dispatchers.Main).launch {
-                delay(2000)
-                bindingprogress.progressFont.visibility = View.GONE
-                delay(3000)
-                if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
-                    bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@PesnyAll, R.anim.slide_out_right)
-                    bindingprogress.seekBarFontSize.visibility = View.GONE
-                }
+    private fun startProcent() {
+        procentJobFont?.cancel()
+        bindingprogress.progressFont.visibility = View.VISIBLE
+        procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+            delay(2000)
+            bindingprogress.progressFont.visibility = View.GONE
+            delay(3000)
+            if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
+                bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@PesnyAll, R.anim.slide_out_right)
+                bindingprogress.seekBarFontSize.visibility = View.GONE
             }
         }
     }
@@ -317,21 +283,9 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         val x = event?.x?.toInt() ?: 0
         val id = v?.id ?: 0
         if (id == R.id.constraint) {
-            if (MainActivity.checkBrightness) {
-                MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
-            }
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
-                    if (x < otstup) {
-                        bindingprogress.seekBarBrighess.progress = MainActivity.brightness
-                        bindingprogress.progressBrighess.text = getString(R.string.procent, MainActivity.brightness)
-                        if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
-                            bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
-                            bindingprogress.seekBarBrighess.visibility = View.VISIBLE
-                        }
-                        startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
-                    }
                     if (x > widthConstraintLayout - otstup) {
                         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
                         bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
@@ -339,7 +293,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                             bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
                             bindingprogress.seekBarFontSize.visibility = View.VISIBLE
                         }
-                        startProcent(MainActivity.PROGRESSACTIONFONT)
+                        startProcent()
                     }
                 }
             }
@@ -397,30 +351,13 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             dialogFontSize.show(supportFragmentManager, "font")
             return true
         }
-        if (id == R.id.action_bright) {
-            val dialogBrightness = DialogBrightness()
-            dialogBrightness.show(supportFragmentManager, "brightness")
-            return true
-        }
-        @SuppressLint("ClickableViewAccessibility")
-        if (id == R.id.action_fullscreen) {
+        @SuppressLint("ClickableViewAccessibility") if (id == R.id.action_fullscreen) {
             if (!k.getBoolean("fullscreenPage", false)) {
-                var fullscreenCount = k.getInt("fullscreenCount", 0)
-                if (fullscreenCount > 3) {
-                    val dialogFullscreen = DialogHelpFullScreenSettings()
-                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
-                    fullscreenCount = 0
-                } else {
-                    fullscreenCount++
-                    hide()
-                }
-                prefEditor.putInt("fullscreenCount", fullscreenCount)
-                prefEditor.apply()
                 binding.constraint.setOnTouchListener(this)
             } else {
-                hide()
                 binding.constraint.setOnTouchListener(null)
             }
+            hide()
             return true
         }
         if (id == R.id.action_share) {
@@ -470,10 +407,6 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         return false
     }
 
-    override fun dialogHelpFullScreenSettingsClose() {
-        hide()
-    }
-
     override fun sentShareText(shareText: String) {
         val sendIntent = Intent(Intent.ACTION_SEND)
         sendIntent.putExtra(Intent.EXTRA_TEXT, shareText)
@@ -515,7 +448,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         binding.actionBack.visibility = View.GONE
         binding.actionBack.animation = animation
     }
-    
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)

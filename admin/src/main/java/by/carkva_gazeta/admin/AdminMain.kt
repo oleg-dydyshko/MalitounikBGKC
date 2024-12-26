@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.admin.databinding.AdminMainBinding
 import by.carkva_gazeta.malitounik.BaseActivity
-import by.carkva_gazeta.malitounik.MainActivity
 import com.google.android.play.core.splitcompat.SplitCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,15 +31,6 @@ class AdminMain : BaseActivity() {
     }
 
     override fun setMyTheme() {
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

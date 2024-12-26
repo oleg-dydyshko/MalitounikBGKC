@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.provider.Settings
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -38,7 +37,7 @@ import java.io.InputStreamReader
 import kotlin.math.ceil
 
 
-class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
+class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -49,7 +48,6 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
     private lateinit var binding: CytatyActivityBinding
     private lateinit var bindingprogress: ProgressMainBinding
     private lateinit var adapterViewPager: MyPagerAdapter
-    private var procentJobBrightness: Job? = null
     private var procentJobFont: Job? = null
     private var resetTollbarJob: Job? = null
 
@@ -111,7 +109,6 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
             binding.tabLayout.setTabTextColors(Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.colorSecondary_text))), Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.colorPrimary_black))))
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
             bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
         }
         bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -124,26 +121,7 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
                     prefEditor.apply()
                     onDialogFontSize(fontBiblia)
                 }
-                startProcent(MainActivity.PROGRESSACTIONFONT)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        })
-        bindingprogress.seekBarBrighess.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (MainActivity.brightness != progress) {
-                    MainActivity.brightness = progress
-                    val lp = window.attributes
-                    lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                    window.attributes = lp
-                    bindingprogress.progressBrighess.text = getString(R.string.procent, MainActivity.brightness)
-                    MainActivity.checkBrightness = false
-                }
-                startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
+                startProcent()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -203,7 +181,6 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
-        val prefEditor = k.edit()
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
@@ -219,30 +196,13 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
             dialogFontSize.show(supportFragmentManager, "font")
             return true
         }
-        if (id == R.id.action_bright) {
-            val dialogBrightness = DialogBrightness()
-            dialogBrightness.show(supportFragmentManager, "brightness")
-            return true
-        }
-        @SuppressLint("ClickableViewAccessibility")
-        if (id == R.id.action_fullscreen) {
+        @SuppressLint("ClickableViewAccessibility") if (id == R.id.action_fullscreen) {
             if (!k.getBoolean("fullscreenPage", false)) {
-                var fullscreenCount = k.getInt("fullscreenCount", 0)
-                if (fullscreenCount > 3) {
-                    val dialogFullscreen = DialogHelpFullScreenSettings()
-                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
-                    fullscreenCount = 0
-                } else {
-                    fullscreenCount++
-                    hide()
-                }
-                prefEditor.putInt("fullscreenCount", fullscreenCount)
-                prefEditor.apply()
                 binding.constraint.setOnTouchListener(this)
             } else {
-                hide()
                 binding.constraint.setOnTouchListener(null)
             }
+            hide()
             return true
         }
         if (id == R.id.action_carkva) {
@@ -266,10 +226,6 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         return false
     }
 
-    override fun dialogHelpFullScreenSettingsClose() {
-        hide()
-    }
-
     override fun onPrepareMenu(menu: Menu) {
         menu.findItem(R.id.action_auto).isVisible = false
         menu.findItem(R.id.action_find).isVisible = false
@@ -285,20 +241,8 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         val x = event?.x?.toInt() ?: 0
         val id = v?.id ?: 0
         if (id == R.id.constraint) {
-            if (MainActivity.checkBrightness) {
-                MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
-            }
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
-                    if (x < otstup) {
-                        bindingprogress.seekBarBrighess.progress = MainActivity.brightness
-                        bindingprogress.progressBrighess.text = getString(R.string.procent, MainActivity.brightness)
-                        if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
-                            bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
-                            bindingprogress.seekBarBrighess.visibility = View.VISIBLE
-                        }
-                        startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
-                    }
                     if (x > widthConstraintLayout - otstup) {
                         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
                         bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
@@ -306,7 +250,7 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
                             bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
                             bindingprogress.seekBarFontSize.visibility = View.VISIBLE
                         }
-                        startProcent(MainActivity.PROGRESSACTIONFONT)
+                        startProcent()
                     }
                 }
             }
@@ -314,31 +258,16 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         return true
     }
 
-    private fun startProcent(progressAction: Int) {
-        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) {
-            procentJobBrightness?.cancel()
-            bindingprogress.progressBrighess.visibility = View.VISIBLE
-            procentJobBrightness = CoroutineScope(Dispatchers.Main).launch {
-                delay(2000)
-                bindingprogress.progressBrighess.visibility = View.GONE
-                delay(3000)
-                if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
-                    bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@Cytaty, R.anim.slide_out_left)
-                    bindingprogress.seekBarBrighess.visibility = View.GONE
-                }
-            }
-        }
-        if (progressAction == MainActivity.PROGRESSACTIONFONT) {
-            procentJobFont?.cancel()
-            bindingprogress.progressFont.visibility = View.VISIBLE
-            procentJobFont = CoroutineScope(Dispatchers.Main).launch {
-                delay(2000)
-                bindingprogress.progressFont.visibility = View.GONE
-                delay(3000)
-                if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
-                    bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@Cytaty, R.anim.slide_out_right)
-                    bindingprogress.seekBarFontSize.visibility = View.GONE
-                }
+    private fun startProcent() {
+        procentJobFont?.cancel()
+        bindingprogress.progressFont.visibility = View.VISIBLE
+        procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+            delay(2000)
+            bindingprogress.progressFont.visibility = View.GONE
+            delay(3000)
+            if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
+                bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@Cytaty, R.anim.slide_out_right)
+                bindingprogress.seekBarFontSize.visibility = View.GONE
             }
         }
     }

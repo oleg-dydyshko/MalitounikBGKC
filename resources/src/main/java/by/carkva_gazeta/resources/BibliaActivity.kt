@@ -30,10 +30,8 @@ import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleZakladkiData
-import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogDzenNochSettings
 import by.carkva_gazeta.malitounik.DialogFontSize
-import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuBibleBokuna
 import by.carkva_gazeta.malitounik.MenuBibleCarniauski
@@ -60,7 +58,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.InputStream
 
-class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSinaidal, DialogFontSize.DialogFontSizeListener, DialogBibleRazdel.DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener, DialogPerevodBiblii.DialogPerevodBibliiListener, ParalelnyeMesta {
+class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSinaidal, DialogFontSize.DialogFontSizeListener, DialogBibleRazdel.DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogPerevodBiblii.DialogPerevodBibliiListener, ParalelnyeMesta {
     private var fullscreenPage = false
     private var paralel = false
     private var kniga = 0
@@ -229,6 +227,9 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         resetTollbarJob?.cancel()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         stopAutoStartScroll()
+        val prefEditors = k.edit()
+        prefEditors.putBoolean("fullscreenPage", fullscreenPage)
+        prefEditors.apply()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -467,6 +468,8 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         if (dzenNoch) {
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
+            binding.actionPlus.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
+            binding.actionMinus.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
             binding.linealLayoutTitle.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
@@ -584,7 +587,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         menu.findItem(R.id.action_glava).isVisible = !paralel && adapter.itemCount > 1
         menu.findItem(R.id.action_vybranoe).isVisible = !paralel
         menu.findItem(R.id.action_font).isVisible = !paralel
-        menu.findItem(R.id.action_bright).isVisible = !paralel
         menu.findItem(R.id.action_dzen_noch).isVisible = !paralel
         menu.findItem(R.id.action_paralel).isChecked = k.getBoolean("paralel_biblia", true)
         menu.findItem(R.id.action_paralel).isVisible = perevod != VybranoeBibleList.PEREVODNADSAN
@@ -835,11 +837,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             dialogFontSize.show(supportFragmentManager, "font")
             return true
         }
-        if (id == R.id.action_bright) {
-            val dialogBrightness = DialogBrightness()
-            dialogBrightness.show(supportFragmentManager, "brightness")
-            return true
-        }
         if (id == R.id.action_carkva) {
             val intent = Intent()
             if (novyZapavet) intent.setClassName(this, MainActivity.ADMINNOVYZAPAVIETSEMUXA)
@@ -850,29 +847,10 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             return true
         }
         if (id == R.id.action_fullscreen) {
-            if (!k.getBoolean("fullscreenPage", false)) {
-                var fullscreenCount = k.getInt("fullscreenCount", 0)
-                if (fullscreenCount > 3) {
-                    val dialogFullscreen = DialogHelpFullScreenSettings()
-                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
-                    fullscreenCount = 0
-                } else {
-                    fullscreenCount++
-                    hide()
-                }
-                val prefEditor = k.edit()
-                prefEditor.putInt("fullscreenCount", fullscreenCount)
-                prefEditor.apply()
-            } else {
-                hide()
-            }
+            hide()
             return true
         }
         return false
-    }
-
-    override fun dialogHelpFullScreenSettingsClose() {
-        hide()
     }
 
     override fun onResume() {
@@ -931,9 +909,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
                 binding.actionMinus.animation = animation
                 binding.actionPlus.animation = animation
-                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
-                binding.actionBack.visibility = View.GONE
-                binding.actionBack.animation = animation2
             }
             resetScreenJob?.cancel()
             stopAutoStartScroll()

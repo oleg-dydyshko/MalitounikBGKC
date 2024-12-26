@@ -493,11 +493,6 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
             biblioteka.show(supportFragmentManager, "set_page_biblioteka")
             return true
         }
-        if (id == R.id.action_bright) {
-            val dialogBrightness = DialogBrightness()
-            dialogBrightness.show(supportFragmentManager, "brightness")
-            return true
-        }
         if (id == R.id.action_print) {
             uri?.let {
                 val printAdapter = PdfDocumentAdapter(this, fileName, it)

@@ -355,17 +355,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
 
     override fun onResume() {
         super.onResume()
-        if (checkBrightness) {
-            brightness = try {
-                Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
-            } catch (e: Settings.SettingNotFoundException) {
-                15
-            }
-        } else {
-            val lp = window.attributes
-            lp.screenBrightness = brightness.toFloat() / 100
-            window.attributes = lp
-        }
         val appUpdateManager = AppUpdateManagerFactory.create(this)
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
@@ -984,7 +973,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 prefEditors.putBoolean("autoscroll", false)
                 prefEditors.putBoolean("setAlarm", true)
                 prefEditors.apply()
-                checkBrightness = true
                 val dir = File("$filesDir/cache")
                 val list = dir.listFiles()
                 list?.forEach {
@@ -1101,7 +1089,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         menu.findItem(R.id.sortdate).isVisible = false
         menu.findItem(R.id.sorttime).isVisible = false
         menu.findItem(R.id.action_font).isVisible = false
-        menu.findItem(R.id.action_bright).isVisible = false
         menu.findItem(R.id.action_dzen_noch).isVisible = false
         menu.findItem(R.id.action_carkva).isVisible = false
         if (updateAvailable) {
@@ -1132,7 +1119,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
         if (idSelect == R.id.label101 || idSelect == R.id.label102) {
             menu.findItem(R.id.action_font).isVisible = true
-            menu.findItem(R.id.action_bright).isVisible = true
             menu.findItem(R.id.action_dzen_noch).isVisible = true
         }
         if (idSelect == R.id.label103) menu.findItem(R.id.prazdnik).isVisible = true
@@ -2241,17 +2227,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         const val RELLITARATURA = 4
         const val PDF = 5
         const val SETFILE = 6
-        const val PROGRESSACTIONBRIGHESS = 1
-        const val PROGRESSACTIONFONT = 2
-        const val PROGRESSACTIONAUTOLEFT = 3
-        const val PROGRESSACTIONAUTORIGHT = 4
+        const val PROGRESSACTIONFONT = 1
+        const val PROGRESSACTIONAUTOLEFT = 2
+        const val PROGRESSACTIONAUTORIGHT = 3
         private const val TRANSPORT_ALL = 100
         const val TRANSPORT_WIFI = 101
         const val TRANSPORT_CELLULAR = 102
         var padzeia = ArrayList<Padzeia>()
         var setDataCalendar = MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE])[0][25].toInt()
-        var checkBrightness = true
-        var brightness = 15
         var dialogVisable = false
         var updateAvailable = false
         fun setListPadzeia() {

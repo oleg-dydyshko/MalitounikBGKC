@@ -40,11 +40,6 @@
         android:title="@string/menu_font_size_app"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_bright"
-        android:orderInCategory="100"
-        android:title="@string/Bright"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_dzen_noch"
         android:orderInCategory="100"
         android:title="@string/dzen_noch"

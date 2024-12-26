@@ -101,8 +101,6 @@
     <string name="Sv2">Сьвята</string>
     <string name="Sv3">Заўтра абавязковае сьвята</string>
     <string name="Sv4">Абавязковае сьвята</string>
-    <string name="Bright">Яркасьць</string>
-    <string name="Bright3">ЯРКАСЬЦЬ</string>
     <string name="spovedz">Падрыхтоўка да споведзі</string>
     <string name="pesny1">Песьні праслаўленьня</string>
     <string name="pesny2">З малітвай за Беларусь</string>
@@ -342,7 +340,7 @@
     <string name="sabytie_bez_kanca">Без канца</string>
     <string name="dvuna_i_vial">Двунадзясятыя\nі вялікія сьвяты</string>
     <string name="help_davedka">ДАВЕДКА</string>
-    <string name="help_full_screen">Па краях экрана:\nЗьлева - Рэгуляваньне яркасьці\nСправа - рэгуляваньне памеру шрыфту\nУнізе - уключэньне аўтапрагорткі</string>
+    <string name="help_full_screen">Па краях экрана:\nСправа - рэгуляваньне памеру шрыфту\nУнізе - уключэньне аўтапрагорткі</string>
     <string-array name="malitvy_pasli_prychastia">
         <item>Малітва падзякі</item>
         <item>Малітва сьв. Васіля Вялікага</item>
@@ -733,7 +731,6 @@
     <string name="update_program_progress">%1$s з %2$s</string>
     <string name="update_no_biblijateka">Абнаўленьняў няма</string>
     <string name="day">Дзённы</string>
-    <string name="full_screen_opis">Захаваць выбар?\nМожна пазней зьмяніць у наладах.</string>
     <string name="gallery">Галерэя</string>
     <string name="gallery_search">Шукаем выявы ікон:\n%1$s</string>
     <string name="gallery_download">Спампоўваем выявы ікон:\n%1$s</string>

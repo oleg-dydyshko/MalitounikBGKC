@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -38,9 +39,9 @@
         android:id="@+id/scrollView2"
         android:layout_width="0sp"
         android:layout_height="0sp"
-        android:layout_marginStart="10sp"
         android:layout_marginEnd="10sp"
         android:layout_marginBottom="10sp"
+        android:paddingStart="10dp"
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/find"
         app:layout_constraintEnd_toEndOf="parent"
@@ -172,7 +173,7 @@
         android:id="@+id/action_back"
         android:layout_width="40sp"
         android:layout_height="40sp"
-        android:layout_marginEnd="10sp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
         android:contentDescription="@string/go_back"
@@ -181,7 +182,7 @@
         android:paddingRight="5sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/action_minus"
+        app:layout_constraintEnd_toStartOf="@+id/action_fullscreen"
         app:srcCompat="@drawable/full_screen_back" />
 
     <ImageView
@@ -189,7 +190,7 @@
         android:layout_width="40sp"
         android:layout_height="40sp"
         android:layout_marginEnd="10sp"
-        android:layout_marginBottom="10sp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/selector_red_maran_ata"
         android:contentDescription="@string/fullscreen"
         android:gravity="center"
@@ -220,7 +221,7 @@
         android:id="@+id/action_plus"
         android:layout_width="40sp"
         android:layout_height="40sp"
-        android:layout_marginEnd="10sp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10sp"
         android:background="@drawable/selector_red_maran_ata"
         android:contentDescription="@string/action_plus"
@@ -229,7 +230,7 @@
         android:paddingRight="5sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/action_fullscreen"
+        app:layout_constraintEnd_toStartOf="@+id/action_back"
         app:srcCompat="@drawable/plus_auto_scroll" />
 
     <ProgressBar

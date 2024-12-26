@@ -1013,11 +1013,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         if (scrinOn) {
             binding.checkBox7.isChecked = true
         }
-        val fullScreen = k.getBoolean("fullscreenPage", false)
-        if (dzenNoch) binding.checkBox9.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        if (fullScreen) {
-            binding.checkBox9.isChecked = true
-        }
         val adminDayInYear = k.getBoolean("adminDayInYear", false)
         if (dzenNoch) binding.checkBox8.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         if (adminDayInYear) {
@@ -1076,7 +1071,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putBoolean("AdminDialogSaveAsHelp", true)
             prefEditor.putBoolean("dialogHelpShare", true)
             prefEditor.putBoolean("help_fullscreen", true)
-            prefEditor.putInt("fullscreenCount", 0)
             prefEditor.putInt("menuPiarlinyPage", 0)
             prefEditor.putInt("menuCitatyPage", 0)
             prefEditor.putInt("trafic", 0)
@@ -1095,7 +1089,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.autoNight.isChecked = false
             binding.checkBox7.isChecked = false
             binding.checkBox8.isChecked = false
-            binding.checkBox9.isChecked = false
             binding.maranata.isChecked = false
             binding.sinoidal.isChecked = false
             binding.notificationOnly.isChecked = false
@@ -1211,10 +1204,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.apply()
             if (check != k.getBoolean("adminDayInYear", false)) edit = true
         }
-        binding.checkBox9.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            prefEditor.putBoolean("fullscreenPage", isChecked)
-            prefEditor.apply()
-        }
         binding.nightGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
                 R.id.system -> {
@@ -1253,7 +1242,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         binding.day.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.checkBox7.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.checkBox8.typeface = MainActivity.createFont(Typeface.NORMAL)
-        binding.checkBox9.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.night.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.autoNight.typeface = MainActivity.createFont(Typeface.NORMAL)
         if (k.getBoolean("help_check_notifi", true) && Build.MANUFACTURER.contains("huawei", true) && (notification == NOTIFICATION_SVIATY_ONLY || notification == NOTIFICATION_SVIATY_FULL)) {

@@ -88,11 +88,6 @@ class Sviatyia : BaseActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         binding.apisanne.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 binding.linearLayout2.visibility = View.VISIBLE

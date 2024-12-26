@@ -76,6 +76,7 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
     private var mActionDown = false
     private var autoscroll = false
     private var diffScroll = -1
+    private var isEndScroll = false
     private val carkvaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 700) {
             viewSviaryiaIIcon()
@@ -371,6 +372,7 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
                     checkDiff = false
                     invalidateOptionsMenu()
                 }
+                isEndScroll = list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height
                 if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
                     checkDiff = true
                     autoscroll = false
@@ -380,6 +382,11 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
                 }
             }
         })
+        binding.listview.post {
+            if (k.getBoolean("autoscrollAutostart", false) && !isEndScroll) {
+                autoStartScroll()
+            }
+        }
         setTollbarTheme()
     }
 
@@ -860,7 +867,7 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
         val itemAuto = menu.findItem(R.id.action_auto)
         itemAuto.isVisible = true
         when {
-            diffScroll < 0 -> itemAuto.isVisible = false
+            isEndScroll -> itemAuto.isVisible = false
             autoscroll -> itemAuto.setIcon(R.drawable.scroll_icon_on)
             diffScroll == 0 -> itemAuto.setIcon(R.drawable.scroll_icon_up)
             else -> itemAuto.setIcon(R.drawable.scroll_icon)

@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
@@ -32,11 +31,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
 import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.BaseActivity
-import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogDzenNochSettings
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
-import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.DialogHelpShare
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuBogashlugbovya
@@ -54,7 +51,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 
-class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener, DialogHelpFullScreenSettings.DialogHelpFullScreenSettingsListener {
+class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -71,6 +68,9 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
+        val prefEditors = k.edit()
+        prefEditors.putBoolean("fullscreenPage", fullscreenPage)
+        prefEditors.apply()
     }
 
     override fun onResume() {
@@ -122,7 +122,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         if (dzenNoch) {
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
-            bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
             bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
         }
         bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -135,26 +134,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
                     prefEditor.apply()
                     onDialogFontSize(fontBiblia)
                 }
-                startProcent(MainActivity.PROGRESSACTIONFONT)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        })
-        bindingprogress.seekBarBrighess.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (MainActivity.brightness != progress) {
-                    MainActivity.brightness = progress
-                    val lp = window.attributes
-                    lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                    window.attributes = lp
-                    bindingprogress.progressBrighess.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                    MainActivity.checkBrightness = false
-                }
-                startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
+                startProcent()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -213,7 +193,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
-        val prefEditor = k.edit()
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
@@ -237,29 +216,13 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
             dialogFontSize.show(supportFragmentManager, "font")
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_bright) {
-            val dialogBrightness = DialogBrightness()
-            dialogBrightness.show(supportFragmentManager, "brightness")
-            return true
-        }
         @SuppressLint("ClickableViewAccessibility") if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
             if (!k.getBoolean("fullscreenPage", false)) {
-                var fullscreenCount = k.getInt("fullscreenCount", 0)
-                if (fullscreenCount > 3) {
-                    val dialogFullscreen = DialogHelpFullScreenSettings()
-                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
-                    fullscreenCount = 0
-                } else {
-                    fullscreenCount++
-                    hide()
-                }
-                prefEditor.putInt("fullscreenCount", fullscreenCount)
-                prefEditor.apply()
                 binding.constraint.setOnTouchListener(this)
             } else {
-                hide()
                 binding.constraint.setOnTouchListener(null)
             }
+            hide()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
@@ -308,10 +271,6 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         return false
     }
 
-    override fun dialogHelpFullScreenSettingsClose() {
-        hide()
-    }
-
     override fun sentShareText(shareText: String) {
         val sendIntent = Intent(Intent.ACTION_SEND)
         sendIntent.putExtra(Intent.EXTRA_TEXT, shareText)
@@ -347,20 +306,8 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         val x = event?.x?.toInt() ?: 0
         val id = v?.id ?: 0
         if (id == R.id.constraint) {
-            if (MainActivity.checkBrightness) {
-                MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
-            }
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
-                    if (x < otstup) {
-                        bindingprogress.seekBarBrighess.progress = MainActivity.brightness
-                        bindingprogress.progressBrighess.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                        if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
-                            bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
-                            bindingprogress.seekBarBrighess.visibility = View.VISIBLE
-                        }
-                        startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
-                    }
                     if (x > widthConstraintLayout - otstup) {
                         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
                         bindingprogress.progressFont.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
@@ -368,7 +315,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
                             bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
                             bindingprogress.seekBarFontSize.visibility = View.VISIBLE
                         }
-                        startProcent(MainActivity.PROGRESSACTIONFONT)
+                        startProcent()
                     }
                 }
             }
@@ -376,19 +323,13 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogFontSizeLis
         return true
     }
 
-    private fun startProcent(progressAction: Int) {
+    private fun startProcent() {
         procentJob?.cancel()
-        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) bindingprogress.progressBrighess.visibility = View.VISIBLE
-        if (progressAction == MainActivity.PROGRESSACTIONFONT) bindingprogress.progressFont.visibility = View.VISIBLE
+        bindingprogress.progressFont.visibility = View.VISIBLE
         procentJob = CoroutineScope(Dispatchers.Main).launch {
             delay(2000)
-            bindingprogress.progressBrighess.visibility = View.GONE
             bindingprogress.progressFont.visibility = View.GONE
             delay(3000)
-            if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
-                bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@PasliaPrychascia, by.carkva_gazeta.malitounik.R.anim.slide_out_left)
-                bindingprogress.seekBarBrighess.visibility = View.GONE
-            }
             if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
                 bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@PasliaPrychascia, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
                 bindingprogress.seekBarFontSize.visibility = View.GONE

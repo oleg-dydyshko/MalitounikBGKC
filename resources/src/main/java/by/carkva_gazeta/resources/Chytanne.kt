@@ -7,7 +7,6 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.graphics.Typeface
 import android.os.Bundle
-import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -28,10 +27,8 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.transition.TransitionManager
-import by.carkva_gazeta.malitounik.DialogBrightness
 import by.carkva_gazeta.malitounik.DialogDzenNochSettings
 import by.carkva_gazeta.malitounik.DialogFontSize
-import by.carkva_gazeta.malitounik.DialogHelpFullScreenSettings
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -60,7 +57,6 @@ class Chytanne : ZmenyiaChastki() {
     private lateinit var bindingprogress: ProgressBinding
     private var autoScrollJob: Job? = null
     private var autoStartScrollJob: Job? = null
-    private var procentJobBrightness: Job? = null
     private var procentJobFont: Job? = null
     private var procentJobAuto: Job? = null
     private var resetTollbarJob: Job? = null
@@ -125,11 +121,9 @@ class Chytanne : ZmenyiaChastki() {
         })
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            bindingprogress.seekBarBrighess.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
             bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
         }
         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-        bindingprogress.seekBarBrighess.progress = MainActivity.brightness
         perevod = k.getString("perevodChytanne", VybranoeBibleList.PEREVODSEMUXI) ?: VybranoeBibleList.PEREVODSEMUXI
         checkDay()
         setChtenia(savedInstanceState)
@@ -144,25 +138,6 @@ class Chytanne : ZmenyiaChastki() {
                     onDialogFontSize(fontBiblia)
                 }
                 startProcent(MainActivity.PROGRESSACTIONFONT)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        })
-        bindingprogress.seekBarBrighess.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (MainActivity.brightness != progress) {
-                    MainActivity.brightness = progress
-                    val lp = window.attributes
-                    lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                    window.attributes = lp
-                    bindingprogress.progressBrighess.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                    MainActivity.checkBrightness = false
-                }
-                startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -268,22 +243,10 @@ class Chytanne : ZmenyiaChastki() {
         val x = event?.x?.toInt() ?: 0
         val id = v?.id ?: 0
         if (id == R.id.constraint) {
-            if (MainActivity.checkBrightness) {
-                MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
-            }
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
                     val proc: Int
-                    if (x < otstup) {
-                        bindingprogress.seekBarBrighess.progress = MainActivity.brightness
-                        bindingprogress.progressBrighess.text = getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                        if (bindingprogress.seekBarBrighess.visibility == View.GONE) {
-                            bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
-                            bindingprogress.seekBarBrighess.visibility = View.VISIBLE
-                        }
-                        startProcent(MainActivity.PROGRESSACTIONBRIGHESS)
-                    }
                     if (x > widthConstraintLayout - otstup && y < heightConstraintLayout - otstup2) {
                         bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
                         bindingprogress.progressFont.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
@@ -431,19 +394,6 @@ class Chytanne : ZmenyiaChastki() {
     }
 
     private fun startProcent(progressAction: Int) {
-        if (progressAction == MainActivity.PROGRESSACTIONBRIGHESS) {
-            procentJobBrightness?.cancel()
-            bindingprogress.progressBrighess.visibility = View.VISIBLE
-            procentJobBrightness = CoroutineScope(Dispatchers.Main).launch {
-                delay(2000)
-                bindingprogress.progressBrighess.visibility = View.GONE
-                delay(3000)
-                if (bindingprogress.seekBarBrighess.visibility == View.VISIBLE) {
-                    bindingprogress.seekBarBrighess.animation = AnimationUtils.loadAnimation(this@Chytanne, by.carkva_gazeta.malitounik.R.anim.slide_out_left)
-                    bindingprogress.seekBarBrighess.visibility = View.GONE
-                }
-            }
-        }
         if (progressAction == MainActivity.PROGRESSACTIONFONT) {
             procentJobFont?.cancel()
             bindingprogress.progressFont.visibility = View.VISIBLE
@@ -514,9 +464,6 @@ class Chytanne : ZmenyiaChastki() {
                 val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
                 binding.actionMinus.animation = animation
                 binding.actionPlus.animation = animation
-                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
-                binding.actionBack.visibility = View.GONE
-                binding.actionBack.animation = animation2
             }
             resetScreenJob?.cancel()
             stopAutoStartScroll()
@@ -588,6 +535,9 @@ class Chytanne : ZmenyiaChastki() {
         super.onPause()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         stopAutoStartScroll()
+        val prefEditors = k.edit()
+        prefEditors.putBoolean("fullscreenPage", fullscreenPage)
+        prefEditors.apply()
     }
 
     override fun onResume() {
@@ -649,37 +599,17 @@ class Chytanne : ZmenyiaChastki() {
             dialogFontSize.show(supportFragmentManager, "font")
             return true
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_bright) {
-            val dialogBrightness = DialogBrightness()
-            dialogBrightness.show(supportFragmentManager, "brightness")
-            return true
-        }
         @SuppressLint("ClickableViewAccessibility")
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
             if (!k.getBoolean("fullscreenPage", false)) {
-                var fullscreenCount = k.getInt("fullscreenCount", 0)
-                if (fullscreenCount > 3) {
-                    val dialogFullscreen = DialogHelpFullScreenSettings()
-                    dialogFullscreen.show(supportFragmentManager, "DialogHelpFullScreenSettings")
-                    fullscreenCount = 0
-                } else {
-                    fullscreenCount++
-                    hideHelp()
-                }
-                prefEditor.putInt("fullscreenCount", fullscreenCount)
-                prefEditor.apply()
                 binding.constraint.setOnTouchListener(this)
             } else {
-                hideHelp()
                 binding.constraint.setOnTouchListener(null)
             }
+            hideHelp()
             return true
         }
         return false
-    }
-
-    override fun dialogHelpFullScreenSettingsClose() {
-        hideHelp()
     }
 
     override fun onDialogFullScreenHelpClose() {

@@ -361,7 +361,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         if (fullscreenPage) binding.constraint.setOnTouchListener(this)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            binding.textViewTitle.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
         }
         TooltipCompat.setTooltipText(binding.copyBig, getString(by.carkva_gazeta.malitounik.R.string.copy_big))
@@ -1323,14 +1322,12 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                             binding.textViewTitle.visibility = View.VISIBLE
                             binding.textViewTitle.animation = animation
                         }
-                        if (resetTitleJob?.isActive == true) resetTitleJob?.cancel()
-                        if (resetTitleJob?.isActive != true) {
-                            resetTitleJob = CoroutineScope(Dispatchers.Main).launch {
-                                delay(3000L)
-                                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
-                                binding.textViewTitle.visibility = View.GONE
-                                binding.textViewTitle.animation = animation2
-                            }
+                        resetTitleJob?.cancel()
+                        resetTitleJob = CoroutineScope(Dispatchers.Main).launch {
+                            delay(3000L)
+                            val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+                            binding.textViewTitle.visibility = View.GONE
+                            binding.textViewTitle.animation = animation2
                         }
                     }
                     binding.textViewTitle.text = nazva
@@ -1575,7 +1572,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         prefEditors.putBoolean("fullscreenPage", fullscreenPage)
         prefEditors.apply()
         stopAutoStartScroll()
-
+        resetTitleJob?.cancel()
     }
 
     private fun saveVydelenieNatatkiZakladki() {

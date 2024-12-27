@@ -891,7 +891,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             }
             autoScrollJob?.cancel()
             stopAutoStartScroll()
-            if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
+            if (delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
                     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.transition.TransitionManager
@@ -103,6 +104,7 @@ class LogView : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = LogBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         upDate()
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)

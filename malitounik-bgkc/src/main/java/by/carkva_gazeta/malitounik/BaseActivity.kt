@@ -20,7 +20,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
@@ -193,7 +192,6 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
         } else {
             @Suppress("DEPRECATION") overridePendingTransition(R.anim.alphain, R.anim.alphaout)
         }
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun sensorChangeDzenNoch(sensorValue: Float) {

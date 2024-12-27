@@ -31,7 +31,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
@@ -866,7 +865,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.textView14.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.textView15.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            binding.textView16.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.pavedamic3.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.notificationView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.secret.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
@@ -874,9 +872,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.line1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            binding.line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
         }
-        binding.textView16.setOnClickListener {
+        binding.textView14.setOnClickListener {
             if (SystemClock.elapsedRealtime() - adminClickTime < 2000) {
                 adminItemCount++
             } else {
@@ -1008,11 +1005,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         } else {
             binding.autoNight.visibility = View.GONE
         }
-        val scrinOn = k.getBoolean("scrinOn", false)
-        if (dzenNoch) binding.checkBox7.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        if (scrinOn) {
-            binding.checkBox7.isChecked = true
-        }
         val adminDayInYear = k.getBoolean("adminDayInYear", false)
         if (dzenNoch) binding.checkBox8.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         if (adminDayInYear) {
@@ -1053,7 +1045,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putInt("gosud", 0)
             prefEditor.putInt("pafesii", 0)
             prefEditor.putInt("notification", NOTIFICATION_SVIATY_FULL)
-            prefEditor.putInt("power", 1)
             prefEditor.putInt("vibra", 1)
             prefEditor.putInt("guk", 1)
             prefEditor.putInt("sinoidal", 0)
@@ -1068,16 +1059,15 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             prefEditor.putBoolean("pegistrbukv", true)
             prefEditor.putInt("slovocalkam", 0)
             prefEditor.putBoolean("autoscrollAutostart", false)
-            prefEditor.putBoolean("AdminDialogSaveAsHelp", true)
             prefEditor.putBoolean("dialogHelpShare", true)
             prefEditor.putBoolean("help_fullscreen", true)
             prefEditor.putInt("menuPiarlinyPage", 0)
             prefEditor.putInt("menuCitatyPage", 0)
-            prefEditor.putInt("trafic", 0)
             prefEditor.putBoolean("admin", false)
             prefEditor.putBoolean("adminDayInYear", false)
             prefEditor.putBoolean("paralel_biblia", true)
             prefEditor.putBoolean("paralel_maranata", true)
+            prefEditor.putBoolean("scrinOn", true)
             prefEditor.apply()
             binding.vibro.isClickable = true
             binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
@@ -1087,7 +1077,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             binding.day.isChecked = false
             binding.night.isChecked = false
             binding.autoNight.isChecked = false
-            binding.checkBox7.isChecked = false
             binding.checkBox8.isChecked = false
             binding.maranata.isChecked = false
             binding.sinoidal.isChecked = false
@@ -1187,17 +1176,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
             }
             prefEditor.apply()
         }
-        binding.checkBox7.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            val check = k.getBoolean("scrinOn", false)
-            prefEditor.putBoolean("scrinOn", isChecked)
-            if (isChecked) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            } else {
-                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            }
-            prefEditor.apply()
-            if (check != k.getBoolean("scrinOn", false)) editFull = true
-        }
         binding.checkBox8.setOnCheckedChangeListener { _, isChecked: Boolean ->
             val check = k.getBoolean("adminDayInYear", false)
             prefEditor.putBoolean("adminDayInYear", isChecked)
@@ -1240,7 +1218,6 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener, DialogHe
         binding.dzair.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.praf.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.day.typeface = MainActivity.createFont(Typeface.NORMAL)
-        binding.checkBox7.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.checkBox8.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.night.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.autoNight.typeface = MainActivity.createFont(Typeface.NORMAL)

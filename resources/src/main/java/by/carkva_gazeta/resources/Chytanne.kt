@@ -446,7 +446,7 @@ class Chytanne : ZmenyiaChastki() {
             stopAutoStartScroll()
             binding.textView.setTextIsSelectable(true)
             binding.textView.movementMethod = setLinkMovementMethodCheck()
-            if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
+            if (delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
                     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

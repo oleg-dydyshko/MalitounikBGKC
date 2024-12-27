@@ -136,37 +136,6 @@
                 android:visibility="gone" />
 
             <by.carkva_gazeta.malitounik.TextViewCustom
-                android:id="@+id/textView16"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10sp"
-                android:paddingTop="10sp"
-                android:paddingRight="10sp"
-                android:text="@string/kiravanne"
-                android:textColor="@color/colorPrimary" />
-
-            <View
-                android:id="@+id/line4"
-                android:layout_width="match_parent"
-                android:layout_height="1sp"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp"
-                android:layout_marginBottom="10sp"
-                android:background="@color/colorPrimary" />
-
-            <by.carkva_gazeta.malitounik.SwitchCompatCustom
-                android:id="@+id/checkBox7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp"
-                android:drawableStart="@drawable/stiker"
-                android:drawablePadding="10sp"
-                android:paddingTop="5sp"
-                android:paddingBottom="5sp"
-                android:text="@string/ekpan_on" />
-
-            <by.carkva_gazeta.malitounik.TextViewCustom
                 android:id="@+id/admin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -738,7 +738,7 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
             autoScrollJob?.cancel()
             stopAutoStartScroll()
             adapter.notifyDataSetChanged()
-            if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
+            if (delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
                     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

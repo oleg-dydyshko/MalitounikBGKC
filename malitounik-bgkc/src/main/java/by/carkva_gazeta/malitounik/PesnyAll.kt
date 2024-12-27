@@ -161,7 +161,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        if (k.getBoolean("scrinOn", true)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding = PesnyBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
@@ -319,6 +319,8 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         spanString.setSpan(AbsoluteSizeSpan(itemFontSize.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         item.title = spanString
         menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
+        menu.findItem(R.id.action_screen_on).isChecked = k.getBoolean("scrinOn", true)
+        menu.findItem(R.id.action_screen_on).isVisible = true
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -331,6 +333,17 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == R.id.action_screen_on) {
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            } else {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            }
+            prefEditor.putBoolean("scrinOn", item.isChecked)
+            prefEditor.apply()
             return true
         }
         if (id == R.id.action_dzen_noch) {

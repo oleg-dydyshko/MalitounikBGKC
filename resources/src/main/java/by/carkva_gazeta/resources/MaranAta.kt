@@ -650,7 +650,23 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         val id = v?.id ?: 0
         if (id == R.id.ListView) {
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
-                MotionEvent.ACTION_DOWN -> mActionDown = true
+                MotionEvent.ACTION_DOWN -> {
+                    if (fullscreenPage) {
+                        if (binding.textViewTitle.visibility == View.GONE) {
+                            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                            binding.textViewTitle.visibility = View.VISIBLE
+                            binding.textViewTitle.animation = animation
+                        }
+                        resetTitleJob?.cancel()
+                        resetTitleJob = CoroutineScope(Dispatchers.Main).launch {
+                            delay(3000L)
+                            val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+                            binding.textViewTitle.visibility = View.GONE
+                            binding.textViewTitle.animation = animation2
+                        }
+                    }
+                    mActionDown = true
+                }
                 MotionEvent.ACTION_UP -> mActionDown = false
             }
             return false
@@ -1316,20 +1332,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 if (firstPosition > maranAta.size - 1) firstPosition = maranAta.size - 1
                 val nazva = maranAta[firstPosition].title
                 if (fullscreenPage) {
-                    if (firstPosition <= maranAtaScrollPosition) {
-                        if (binding.textViewTitle.visibility == View.GONE) {
-                            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-                            binding.textViewTitle.visibility = View.VISIBLE
-                            binding.textViewTitle.animation = animation
-                        }
-                        resetTitleJob?.cancel()
-                        resetTitleJob = CoroutineScope(Dispatchers.Main).launch {
-                            delay(3000L)
-                            val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
-                            binding.textViewTitle.visibility = View.GONE
-                            binding.textViewTitle.animation = animation2
-                        }
-                    }
                     binding.textViewTitle.text = nazva
                 }
                 maranAtaScrollPosition = firstPosition

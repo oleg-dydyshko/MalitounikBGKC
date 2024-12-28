@@ -285,6 +285,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         binding = ActivityBibleBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
+        if (k.getBoolean("scrinOn", true)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             dialog = savedInstanceState.getBoolean("dialog")
@@ -599,6 +600,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             itemVybranoe.title = resources.getString(R.string.vybranoe)
         }
         menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false) && perevod == VybranoeBibleList.PEREVODSEMUXI
+        menu.findItem(R.id.action_screen_on).isChecked = k.getBoolean("scrinOn", true)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -763,6 +765,18 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             onBack()
             return true
         }
+        if (id == R.id.action_screen_on) {
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            } else {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            }
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("scrinOn", item.isChecked)
+            prefEditor.apply()
+            return true
+        }
         if (id == R.id.action_paralel) {
             val prefEditor = k.edit()
             item.isChecked = !item.isChecked
@@ -891,7 +905,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             }
             autoScrollJob?.cancel()
             stopAutoStartScroll()
-            if (delayDisplayOff) {
+            if (!k.getBoolean("scrinOn", true) && delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
                     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

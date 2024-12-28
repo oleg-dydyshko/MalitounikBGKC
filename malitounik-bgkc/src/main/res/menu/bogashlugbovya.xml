@@ -26,17 +26,17 @@
         android:title="@string/searche_text"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_perevod"
+        android:orderInCategory="100"
+        android:title="@string/perevody"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_screen_on"
         android:checkable="true"
         android:checked="true"
         android:orderInCategory="100"
         android:title="@string/ekpan_on"
-        android:visible="false"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_perevod"
-        android:orderInCategory="100"
-        android:title="@string/perevody"
         android:visible="false"
         app:showAsAction="never" />
     <item

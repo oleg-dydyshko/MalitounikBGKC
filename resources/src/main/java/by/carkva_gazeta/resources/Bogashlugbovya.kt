@@ -519,6 +519,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         binding = BogasluzbovyaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
+        if (k.getBoolean("scrinOn", true)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         resurs = intent.extras?.getString("resurs") ?: ""
         title = intent.extras?.getString("title") ?: ""
         spid = k.getInt("autoscrollSpid", 60)
@@ -1653,7 +1654,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             binding.textView.movementMethod = setLinkMovementMethodCheck()
             autoScrollJob?.cancel()
             stopAutoStartScroll()
-            if (delayDisplayOff) {
+            if (!k.getBoolean("scrinOn", true) && delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
                     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -1795,6 +1796,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_zmena).isVisible = chechZmena
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_mun).isVisible = k.getBoolean("admin", false) && liturgia
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_screen_on).isChecked = k.getBoolean("scrinOn", true)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_screen_on).isVisible = true
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
@@ -1820,6 +1823,17 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         val id = item.itemId
         if (id == android.R.id.home) {
             onBack()
+            return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_screen_on) {
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            } else {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            }
+            prefEditor.putBoolean("scrinOn", item.isChecked)
+            prefEditor.apply()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_perevod) {

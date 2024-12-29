@@ -11,10 +11,15 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.SeekBar
+import androidx.core.content.ContextCompat
 import androidx.core.text.toSpannable
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.OnasBinding
+import by.carkva_gazeta.malitounik.databinding.ProgressMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,26 +29,41 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 
-class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
+class Pasxa : BaseActivity() {
     private lateinit var binding: OnasBinding
+    private lateinit var bindingprogress: ProgressMainBinding
     private var resetTollbarJob: Job? = null
-    private lateinit var chin: SharedPreferences
+    private lateinit var k: SharedPreferences
+    private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
+    private var procentJobFont: Job? = null
 
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
     }
 
-    override fun onDialogFontSize(fontSize: Float) {
-        binding.onas.textSize = fontSize
+    private fun onDialogFontSize() {
+        binding.onas.textSize = fontBiblia
+    }
+
+    private fun setFontDialog() {
+        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
+        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
+        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
+            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+        }
+        startProcent()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = getBaseDzenNoch()
         binding = OnasBinding.inflate(layoutInflater)
+        bindingprogress = binding.progressView
         setContentView(binding.root)
+        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
@@ -61,11 +81,31 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
             }
             TransitionManager.beginDelayedTransition(binding.toolbar)
         }
+        bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fontBiblia != SettingsActivity.getFontSize(progress)) {
+                    fontBiblia = SettingsActivity.getFontSize(progress)
+                    bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
+                    val prefEditor = k.edit()
+                    prefEditor.putFloat("font_biblia", fontBiblia)
+                    prefEditor.apply()
+                    onDialogFontSize()
+                }
+                startProcent()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
         binding.titleToolbar.text = resources.getText(R.string.pascha_kaliandar_bel)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
+            bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
         }
         val inputStream = resources.openRawResource(R.raw.pasxa)
         val isr = InputStreamReader(inputStream)
@@ -78,7 +118,7 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
                 builder.append(line)
             }
         }
-        binding.onas.textSize = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+        binding.onas.textSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         val textOnas = MainActivity.fromHtml(builder.toString()).toSpannable()
         val t1 = textOnas.indexOf("IMAGE")
         val bitMap = BitmapFactory.decodeResource(resources, R.drawable.uvaskras)
@@ -97,6 +137,22 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
         binding.titleToolbar.isSingleLine = true
     }
 
+    private fun startProcent() {
+        procentJobFont?.cancel()
+        bindingprogress.progressFont.visibility = View.VISIBLE
+        procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+            MainActivity.dialogVisable = true
+            delay(2000)
+            bindingprogress.progressFont.visibility = View.GONE
+            delay(3000)
+            if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
+                bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@Pasxa, R.anim.slide_out_right)
+                bindingprogress.seekBarFontSize.visibility = View.GONE
+                MainActivity.dialogVisable = false
+            }
+        }
+    }
+
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.pasxa, menu)
         super.onCreateMenu(menu, menuInflater)
@@ -109,8 +165,7 @@ class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
             return true
         }
         if (id == R.id.action_font) {
-            val dialogFontSize = DialogFontSize()
-            dialogFontSize.show(supportFragmentManager, "font")
+            setFontDialog()
             return true
         }
         if (id == R.id.action_dzen_noch) {

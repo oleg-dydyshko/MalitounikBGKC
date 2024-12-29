@@ -335,6 +335,7 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogOpisanieWIFI.Dialog
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.imageViewFull.background = ContextCompat.getDrawable(this, R.color.colorbackground_material_dark)
+            bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
         }
         viewSviaryiaIIcon()
         if (savedInstanceState == null) startLoadIconsJob(MainActivity.isNetworkAvailable(MainActivity.TRANSPORT_WIFI))

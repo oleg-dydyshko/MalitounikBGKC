@@ -396,6 +396,9 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
+        if (dzenNoch) {
+            bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
+        }
         men = VybranoeBibleList.checkVybranoe(kniga, glava, getNamePerevod())
         binding.pager.setCurrentItem(glava, false)
         loadVydelenie()

@@ -22,7 +22,6 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.SystemClock
 import android.provider.OpenableColumns
-import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -38,6 +37,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.animation.AnimationUtils
+import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -52,6 +53,7 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.databinding.ActivityMainBinding
 import by.carkva_gazeta.malitounik.databinding.AppBarMainBinding
 import by.carkva_gazeta.malitounik.databinding.ContentMainBinding
+import by.carkva_gazeta.malitounik.databinding.ProgressMainBinding
 import by.carkva_gazeta.malitounik.databinding.ToastBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -81,7 +83,7 @@ import java.util.Calendar
 import kotlin.random.Random
 
 
-class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener, MenuBiblijateka.MunuBiblijatekaListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
+class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDeliteNiadaunia.DialogDeliteNiadauniaListener, DialogDeliteAllNiadaunia.DialogDeliteAllNiadauniaListener, MyNatatki.MyNatatkiListener, ServiceRadyjoMaryia.ServiceRadyjoMaryiaListener, DialogUpdateWIFI.DialogUpdateListener, MenuBiblijateka.MunuBiblijatekaListener, DialogHelpNotificationApi33.DialogHelpNotificationApi33Listener {
 
     private val c = Calendar.getInstance()
     private lateinit var k: SharedPreferences
@@ -89,6 +91,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private lateinit var binding: ActivityMainBinding
     private lateinit var bindingappbar: AppBarMainBinding
     private lateinit var bindingcontent: ContentMainBinding
+    private lateinit var bindingprogress: ProgressMainBinding
+    private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private var idSelect = R.id.label1
     private var backPressed: Long = 0
     private val dzenNoch get() = getBaseDzenNoch()
@@ -97,6 +101,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
     private var resetTollbarJob: Job? = null
     private var logJob: Job? = null
     private var versionCodeJob: Job? = null
+    private var procentJobFont: Job? = null
     private var snackbar: Snackbar? = null
     private var isConnectServise = false
     private var mRadyjoMaryiaService: ServiceRadyjoMaryia? = null
@@ -258,11 +263,21 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
     }
 
-    override fun onDialogFontSize(fontSize: Float) {
+    private fun onDialogFontSize() {
         val menuPadryxtoukaDaSpovedzi = supportFragmentManager.findFragmentByTag("MenuPadryxtoukaDaSpovedzi") as? MenuPadryxtoukaDaSpovedzi
         menuPadryxtoukaDaSpovedzi?.onDialogFontSize()
         val menuPamiatka = supportFragmentManager.findFragmentByTag("MenuPamiatka") as? MenuPamiatka
         menuPamiatka?.onDialogFontSize()
+    }
+
+    private fun setFontDialog() {
+        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
+        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
+        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
+            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+        }
+        startProcent()
     }
 
     override fun setPage(page: Int) {
@@ -408,6 +423,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain
         bindingcontent = binding.appBarMain.contentMain
+        bindingprogress = bindingcontent.progressView
         setContentView(binding.root) // Удаление старого выделения
         val dirMaranAtaBel = File("$filesDir/MaranAtaBel")
         if (dirMaranAtaBel.exists()) dirMaranAtaBel.deleteRecursively()
@@ -498,6 +514,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
             binding.image5.setBackgroundResource(R.drawable.selector_dark)
             binding.image6.setBackgroundResource(R.drawable.selector_dark)
             binding.image7.setBackgroundResource(R.drawable.selector_dark)
+            bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, R.drawable.selector_progress_noch)
         } else {
             setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest))
             binding.label9a.setBackgroundResource(R.drawable.selector_default)
@@ -789,6 +806,25 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                 selectFragment(binding.label1, true)
             }
         }
+        bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fontBiblia != SettingsActivity.getFontSize(progress)) {
+                    fontBiblia = SettingsActivity.getFontSize(progress)
+                    bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
+                    val prefEditor = k.edit()
+                    prefEditor.putFloat("font_biblia", fontBiblia)
+                    prefEditor.apply()
+                    onDialogFontSize()
+                }
+                startProcent()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
         CoroutineScope(Dispatchers.IO).launch {
             if (k.getBoolean("admin", false) && isNetworkAvailable()) {
                 val localFile = File("$filesDir/cache/cache.txt")
@@ -835,6 +871,22 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
                     dialogHelpNotificationApi33.isCancelable = false
                     dialogHelpNotificationApi33.show(supportFragmentManager, "dialogHelpNotificationApi33")
                 }
+            }
+        }
+    }
+
+    private fun startProcent() {
+        procentJobFont?.cancel()
+        bindingprogress.progressFont.visibility = View.VISIBLE
+        procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+            dialogVisable = true
+            delay(2000)
+            bindingprogress.progressFont.visibility = View.GONE
+            delay(3000)
+            if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
+                bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_out_right)
+                bindingprogress.seekBarFontSize.visibility = View.GONE
+                dialogVisable = false
             }
         }
     }
@@ -999,6 +1051,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
+        if (id == R.id.action_font) {
+            setFontDialog()
+            return true
+        }
         if (id == R.id.action_glava) {
             val arrayList = MenuCaliandar.getDataCalaindar(c[Calendar.DATE])
             setDataCalendar = arrayList[0][25].toInt()
@@ -1299,6 +1355,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, DialogContextMenu.Dia
         bindingappbar.subtitleToolbar.visibility = View.GONE
         if (!isNiadaunia()) {
             binding.label140.visibility = View.GONE
+        }
+        if (!(id == R.id.label101 || id == R.id.label102)) {
+            bindingprogress.progressFont.visibility = View.GONE
+            if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
+                bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_out_right)
+                bindingprogress.seekBarFontSize.visibility = View.GONE
+                dialogVisable = false
+            }
         }
         when (idOld) {
             R.id.label1 -> {

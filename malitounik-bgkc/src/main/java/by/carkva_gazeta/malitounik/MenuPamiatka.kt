@@ -25,11 +25,6 @@ class MenuPamiatka : BaseListFragment() {
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == R.id.action_font) {
-            val dialogFontSize = DialogFontSize()
-            dialogFontSize.show(childFragmentManager, "font")
-            return true
-        }
         if (id == R.id.action_dzen_noch) {
             val dialogDzenNochSettings = DialogDzenNochSettings()
             dialogDzenNochSettings.show(childFragmentManager, "DialogDzenNochSettings")

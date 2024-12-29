@@ -40,7 +40,7 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener {
+class PiarlinyAll : BaseActivity(), View.OnTouchListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -74,8 +74,18 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun onDialogFontSize(fontSize: Float) {
+    private fun onDialogFontSize() {
         binding.pager.adapter?.notifyDataSetChanged()
+    }
+
+    private fun setFontDialog() {
+        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
+        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
+        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
+            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+        }
+        startProcent()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -105,7 +115,7 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
                     val prefEditor = k.edit()
                     prefEditor.putFloat("font_biblia", fontBiblia)
                     prefEditor.apply()
-                    onDialogFontSize(fontBiblia)
+                    onDialogFontSize()
                 }
                 startProcent()
             }
@@ -234,8 +244,7 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_font) {
-            val dialogFontSize = DialogFontSize()
-            dialogFontSize.show(supportFragmentManager, "font")
+            setFontDialog()
             return true
         }
         if (id == R.id.action_dzen_noch) {
@@ -243,7 +252,13 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
             dialogDzenNochSettings.show(supportFragmentManager, "DialogDzenNochSettings")
             return true
         }
+        @SuppressLint("ClickableViewAccessibility")
         if (id == R.id.action_fullscreen) {
+            if (!k.getBoolean("fullscreenPage", false)) {
+                binding.constraint.setOnTouchListener(this)
+            } else {
+                binding.constraint.setOnTouchListener(null)
+            }
             hide()
             return true
         }
@@ -272,13 +287,7 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
                     if (x > widthConstraintLayout - otstup) {
-                        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
-                        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
-                            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
-                            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
-                        }
-                        startProcent()
+                        setFontDialog()
                     }
                 }
             }
@@ -290,12 +299,14 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogF
         procentJobFont?.cancel()
         bindingprogress.progressFont.visibility = View.VISIBLE
         procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+            MainActivity.dialogVisable = true
             delay(2000)
             bindingprogress.progressFont.visibility = View.GONE
             delay(3000)
             if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
                 bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@PiarlinyAll, R.anim.slide_out_right)
                 bindingprogress.seekBarFontSize.visibility = View.GONE
+                MainActivity.dialogVisable = false
             }
         }
     }

@@ -37,7 +37,7 @@ import java.io.InputStreamReader
 import kotlin.math.ceil
 
 
-class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener {
+class Cytaty : BaseActivity(), View.OnTouchListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -70,8 +70,18 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun onDialogFontSize(fontSize: Float) {
+    private fun onDialogFontSize() {
         binding.pager.adapter?.notifyDataSetChanged()
+    }
+
+    private fun setFontDialog() {
+        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
+        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
+        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
+            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+        }
+        startProcent()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -119,7 +129,7 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
                     val prefEditor = k.edit()
                     prefEditor.putFloat("font_biblia", fontBiblia)
                     prefEditor.apply()
-                    onDialogFontSize(fontBiblia)
+                    onDialogFontSize()
                 }
                 startProcent()
             }
@@ -192,8 +202,7 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
             return true
         }
         if (id == R.id.action_font) {
-            val dialogFontSize = DialogFontSize()
-            dialogFontSize.show(supportFragmentManager, "font")
+            setFontDialog()
             return true
         }
         @SuppressLint("ClickableViewAccessibility") if (id == R.id.action_fullscreen) {
@@ -244,13 +253,7 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
                     if (x > widthConstraintLayout - otstup) {
-                        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
-                        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
-                            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
-                            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
-                        }
-                        startProcent()
+                        setFontDialog()
                     }
                 }
             }
@@ -262,12 +265,14 @@ class Cytaty : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSi
         procentJobFont?.cancel()
         bindingprogress.progressFont.visibility = View.VISIBLE
         procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+            MainActivity.dialogVisable = true
             delay(2000)
             bindingprogress.progressFont.visibility = View.GONE
             delay(3000)
             if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
                 bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@Cytaty, R.anim.slide_out_right)
                 bindingprogress.seekBarFontSize.visibility = View.GONE
+                MainActivity.dialogVisable = false
             }
         }
     }

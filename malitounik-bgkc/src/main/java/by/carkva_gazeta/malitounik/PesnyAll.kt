@@ -42,7 +42,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 
-class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogHelpShare.DialogHelpShareListener {
+class PesnyAll : BaseActivity(), OnTouchListener, DialogHelpShare.DialogHelpShareListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -152,9 +152,18 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         }
     }
 
-    override fun onDialogFontSize(fontSize: Float) {
-        fontBiblia = fontSize
+    private fun onDialogFontSize() {
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+    }
+
+    private fun setFontDialog() {
+        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
+        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
+        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
+            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+        }
+        startProcent()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -206,7 +215,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                     val prefEditor = k.edit()
                     prefEditor.putFloat("font_biblia", fontBiblia)
                     prefEditor.apply()
-                    onDialogFontSize(fontBiblia)
+                    onDialogFontSize()
                 }
                 startProcent()
             }
@@ -266,12 +275,14 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         procentJobFont?.cancel()
         bindingprogress.progressFont.visibility = View.VISIBLE
         procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+            MainActivity.dialogVisable = true
             delay(2000)
             bindingprogress.progressFont.visibility = View.GONE
             delay(3000)
             if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
                 bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@PesnyAll, R.anim.slide_out_right)
                 bindingprogress.seekBarFontSize.visibility = View.GONE
+                MainActivity.dialogVisable = false
             }
         }
     }
@@ -287,13 +298,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
                     if (x > widthConstraintLayout - otstup) {
-                        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
-                        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
-                            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
-                            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
-                        }
-                        startProcent()
+                        setFontDialog()
                     }
                 }
             }
@@ -360,11 +365,11 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             return true
         }
         if (id == R.id.action_font) {
-            val dialogFontSize = DialogFontSize()
-            dialogFontSize.show(supportFragmentManager, "font")
+            setFontDialog()
             return true
         }
-        @SuppressLint("ClickableViewAccessibility") if (id == R.id.action_fullscreen) {
+        @SuppressLint("ClickableViewAccessibility")
+        if (id == R.id.action_fullscreen) {
             if (!k.getBoolean("fullscreenPage", false)) {
                 binding.constraint.setOnTouchListener(this)
             } else {

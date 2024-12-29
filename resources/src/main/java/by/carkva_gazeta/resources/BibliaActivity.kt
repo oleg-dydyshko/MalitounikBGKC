@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
-import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -17,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -31,7 +31,6 @@ import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.DialogDzenNochSettings
-import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuBibleBokuna
 import by.carkva_gazeta.malitounik.MenuBibleCarniauski
@@ -58,7 +57,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.InputStream
 
-class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSinaidal, DialogFontSize.DialogFontSizeListener, DialogBibleRazdel.DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogPerevodBiblii.DialogPerevodBibliiListener, ParalelnyeMesta {
+class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsana, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSinaidal, DialogBibleRazdel.DialogBibleRazdelListener, BibleListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogPerevodBiblii.DialogPerevodBibliiListener, ParalelnyeMesta {
     private var fullscreenPage = false
     private var paralel = false
     private var kniga = 0
@@ -83,9 +82,11 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     private var autoStartScrollJob: Job? = null
     private var resetScreenJob: Job? = null
     private var procentJobAuto: Job? = null
+    private var procentJobFont: Job? = null
     private var mActionDown = false
     private var autoscroll = false
     private var mAutoScroll = true
+    private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
 
     override fun addZakladka(color: Int, knigaBible: String, bible: String) {
         when (perevod) {
@@ -226,15 +227,24 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         saveVydelenieZakladkiNtanki(novyZapavet, kniga, binding.pager.currentItem, fierstPosition)
         resetTollbarJob?.cancel()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
-        stopAutoStartScroll()
         val prefEditors = k.edit()
         prefEditors.putBoolean("fullscreenPage", fullscreenPage)
         prefEditors.apply()
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun onDialogFontSize(fontSize: Float) {
+    private fun onDialogFontSize() {
         binding.pager.adapter?.notifyDataSetChanged()
+    }
+
+    private fun setFontDialog() {
+        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
+        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
+        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
+            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+        }
+        startProcent(MainActivity.PROGRESSACTIONFONT)
     }
 
     override fun onComplete(glava: Int) {
@@ -313,6 +323,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
         if (intent.extras?.containsKey("stix") == true) {
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
         }
+        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         val title2 = getSpisKnig(novyZapavet)[kniga]
         val t1 = title2.indexOf("#")
         val t2 = title2.indexOf("#", t1 + 1)
@@ -354,7 +365,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                     val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
                     fragment?.addOnScrollListener()
                     mAutoScroll = fragment?.getListEndPosition() ?: true
-                    Log.d("Oleg", fragment.toString() + " " + mAutoScroll.toString())
                     if (mAutoScroll) {
                         if (k.getBoolean("autoscrollAutostart", false) && !getListDiffScroll()) {
                             stopAutoScroll()
@@ -365,6 +375,25 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                     }
                     invalidateOptionsMenu()
                 }
+            }
+        })
+        bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fontBiblia != SettingsActivity.getFontSize(progress)) {
+                    fontBiblia = SettingsActivity.getFontSize(progress)
+                    bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
+                    val prefEditor = k.edit()
+                    prefEditor.putFloat("font_biblia", fontBiblia)
+                    prefEditor.apply()
+                    onDialogFontSize()
+                }
+                startProcent(MainActivity.PROGRESSACTIONFONT)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
         men = VybranoeBibleList.checkVybranoe(kniga, glava, getNamePerevod())
@@ -423,6 +452,21 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     }
 
     private fun startProcent(progressAction: Int) {
+        if (progressAction == MainActivity.PROGRESSACTIONFONT) {
+            procentJobFont?.cancel()
+            bindingprogress.progressFont.visibility = View.VISIBLE
+            procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+                MainActivity.dialogVisable = true
+                delay(2000)
+                bindingprogress.progressFont.visibility = View.GONE
+                delay(3000)
+                if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
+                    bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@BibliaActivity, R.anim.slide_out_right)
+                    bindingprogress.seekBarFontSize.visibility = View.GONE
+                    MainActivity.dialogVisable = false
+                }
+            }
+        }
         if (progressAction == MainActivity.PROGRESSACTIONAUTOLEFT || progressAction == MainActivity.PROGRESSACTIONAUTORIGHT) {
             procentJobAuto?.cancel()
             bindingprogress.progressAuto.visibility = View.VISIBLE
@@ -847,8 +891,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             return true
         }
         if (id == R.id.action_font) {
-            val dialogFontSize = DialogFontSize()
-            dialogFontSize.show(supportFragmentManager, "font")
+            setFontDialog()
             return true
         }
         if (id == R.id.action_carkva) {
@@ -886,6 +929,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
+        autoStartScrollJob?.cancel()
         if (autoScrollJob?.isActive == true) {
             if (saveAutoScroll) {
                 val prefEditor = k.edit()
@@ -904,7 +948,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 binding.actionBack.animation = animation2
             }
             autoScrollJob?.cancel()
-            stopAutoStartScroll()
             if (!k.getBoolean("scrinOn", true) && delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
@@ -925,7 +968,7 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 binding.actionPlus.animation = animation
             }
             resetScreenJob?.cancel()
-            stopAutoStartScroll()
+            autoStartScrollJob?.cancel()
             autoScroll()
         } else {
             val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
@@ -981,10 +1024,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 startAutoScroll()
             }
         }
-    }
-
-    private fun stopAutoStartScroll() {
-        autoStartScrollJob?.cancel()
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

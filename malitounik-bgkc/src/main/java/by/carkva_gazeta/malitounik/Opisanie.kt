@@ -24,6 +24,7 @@ import android.view.animation.AnimationUtils
 import android.widget.AbsListView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -52,7 +53,7 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener, DialogHelpShare.DialogHelpShareListener {
+class Opisanie : BaseActivity(), View.OnTouchListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener, DialogHelpShare.DialogHelpShareListener {
     private val dzenNoch get() = getBaseDzenNoch()
     private var mun = 1
     private var day = 1
@@ -72,11 +73,13 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
     private var autoStartScrollJob: Job? = null
     private var procentJobAuto: Job? = null
     private var resetScreenJob: Job? = null
+    private var procentJobFont: Job? = null
     private var spid = 60
     private var mActionDown = false
     private var autoscroll = false
     private var diffScroll = -1
     private var isEndScroll = false
+    private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private val carkvaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 700) {
             viewSviaryiaIIcon()
@@ -111,7 +114,6 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
     override fun onPause() {
         super.onPause()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
-        stopAutoStartScroll()
         resetTollbarJob?.cancel()
         loadIconsJob?.cancel()
     }
@@ -313,6 +315,7 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         year = intent.extras?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
         svity = intent.extras?.getBoolean("glavnyia", false) ?: false
+        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         if (savedInstanceState?.getBoolean("imageViewFullVisable") == true) {
             fullImagePathVisable = savedInstanceState.getString("filePach") ?: ""
             fullPosition = savedInstanceState.getInt("fullPosition")
@@ -357,6 +360,25 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
                 prefEditors.apply()
             }
         }
+        bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fontBiblia != SettingsActivity.getFontSize(progress)) {
+                    fontBiblia = SettingsActivity.getFontSize(progress)
+                    bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
+                    val prefEditor = k.edit()
+                    prefEditor.putFloat("font_biblia", fontBiblia)
+                    prefEditor.apply()
+                    onDialogFontSize()
+                }
+                startProcent(MainActivity.PROGRESSACTIONFONT)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
         binding.listview.setOnScrollListener(object : AbsListView.OnScrollListener {
             private var checkDiff = false
 
@@ -376,7 +398,6 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
                 if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
                     checkDiff = true
                     autoscroll = false
-                    stopAutoStartScroll()
                     stopAutoScroll()
                     invalidateOptionsMenu()
                 }
@@ -683,8 +704,18 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
         return false
     }
 
-    override fun onDialogFontSize(fontSize: Float) {
+    private fun onDialogFontSize() {
         adapter.notifyDataSetChanged()
+    }
+
+    private fun setFontDialog() {
+        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
+        bindingprogress.progressFont.text = getString(R.string.get_font, fontBiblia.toInt())
+        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
+            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+        }
+        startProcent(MainActivity.PROGRESSACTIONFONT)
     }
 
     private fun setTollbarTheme() {
@@ -723,6 +754,7 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
+        autoStartScrollJob?.cancel()
         if (autoScrollJob?.isActive == true) {
             if (saveAutoScroll) {
                 val prefEditor = k.edit()
@@ -736,7 +768,6 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
             autoScrollJob?.cancel()
-            stopAutoStartScroll()
             adapter.notifyDataSetChanged()
             if (delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
@@ -758,7 +789,7 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
                 binding.actionPlus.animation = animation
             }
             resetScreenJob?.cancel()
-            stopAutoStartScroll()
+            autoStartScrollJob?.cancel()
             autoScroll()
         } else {
             CoroutineScope(Dispatchers.Main).launch {
@@ -818,11 +849,22 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
         }
     }
 
-    private fun stopAutoStartScroll() {
-        autoStartScrollJob?.cancel()
-    }
-
     private fun startProcent(progressAction: Int) {
+        if (progressAction == MainActivity.PROGRESSACTIONFONT) {
+            procentJobFont?.cancel()
+            bindingprogress.progressFont.visibility = View.VISIBLE
+            procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+                MainActivity.dialogVisable = true
+                delay(2000)
+                bindingprogress.progressFont.visibility = View.GONE
+                delay(3000)
+                if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
+                    bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@Opisanie, R.anim.slide_out_right)
+                    bindingprogress.seekBarFontSize.visibility = View.GONE
+                    MainActivity.dialogVisable = false
+                }
+            }
+        }
         if (progressAction == MainActivity.PROGRESSACTIONAUTOLEFT || progressAction == MainActivity.PROGRESSACTIONAUTORIGHT) {
             procentJobAuto?.cancel()
             bindingprogress.progressAuto.visibility = View.VISIBLE
@@ -989,8 +1031,7 @@ class Opisanie : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFont
             return true
         }
         if (id == R.id.action_font) {
-            val dialogFontSize = DialogFontSize()
-            dialogFontSize.show(supportFragmentManager, "font")
+            setFontDialog()
             return true
         }
         return false

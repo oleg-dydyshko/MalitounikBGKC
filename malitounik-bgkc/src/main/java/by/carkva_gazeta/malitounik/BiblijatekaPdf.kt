@@ -81,7 +81,6 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
             edit.apply()
         }
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
-        stopAutoStartScroll()
     }
 
     override fun onResume() {
@@ -162,7 +161,6 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
                     isEndList = findLastCompletelyVisibleItemPosition == adapter.itemCount
                     if (isEndList) {
                         autoscroll = false
-                        stopAutoStartScroll()
                         stopAutoScroll()
                         invalidateOptionsMenu()
                     }
@@ -311,6 +309,7 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
+        autoStartScrollJob?.cancel()
         if (autoScrollJob?.isActive == true) {
             if (saveAutoScroll) {
                 val prefEditor = k.edit()
@@ -324,7 +323,6 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
             autoScrollJob?.cancel()
-            stopAutoStartScroll()
             if (delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
@@ -345,7 +343,7 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
                 binding.actionPlus.animation = animation
             }
             resetScreenJob?.cancel()
-            stopAutoStartScroll()
+            autoStartScrollJob?.cancel()
             autoScroll()
         } else {
             CoroutineScope(Dispatchers.Main).launch {
@@ -401,10 +399,6 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
                 startAutoScroll()
             }
         }
-    }
-
-    private fun stopAutoStartScroll() {
-        autoStartScrollJob?.cancel()
     }
 
     override fun onPrepareMenu(menu: Menu) {

@@ -4,7 +4,6 @@ import android.view.View
 import androidx.core.text.isDigitsOnly
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.BibleZakladkiData
-import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.VybranoeBibleList
@@ -13,7 +12,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
 
-abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogPerevodBiblii.DialogPerevodBibliiListener, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSemuxi {
+abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogPerevodBiblii.DialogPerevodBibliiListener, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadSemuxi {
     private val arrayData = ArrayList<ArrayList<String>>()
     private var novyZapavet = false
     private var perevod = VybranoeBibleList.PEREVODSEMUXI

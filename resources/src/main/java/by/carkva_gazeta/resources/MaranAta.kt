@@ -26,14 +26,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.AbsListView
 import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.TextView
@@ -50,8 +47,6 @@ import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.DialogDzenNochSettings
-import by.carkva_gazeta.malitounik.DialogFontSize
-import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuBibleBokuna
 import by.carkva_gazeta.malitounik.MenuBibleCarniauski
@@ -78,7 +73,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.Calendar
 
-class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogPerevodBiblii.DialogPerevodBibliiListener, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadNadsana, BibliaPerakvadSemuxi, BibliaPerakvadSinaidal, ParalelnyeMesta {
+class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, DialogHelpFullScreen.DialogFullScreenHelpListener, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner, DialogPerevodBiblii.DialogPerevodBibliiListener, BibliaPerakvadBokuna, BibliaPerakvadCarniauski, BibliaPerakvadNadsana, BibliaPerakvadSemuxi, BibliaPerakvadSinaidal, ParalelnyeMesta {
 
     private var fullscreenPage = false
     private var cytanne = ""
@@ -229,7 +224,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
     }
 
-    override fun onDialogFontSize(fontSize: Float) {
+    private fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
         binding.conteiner.textSize = fontBiblia
         adapter.notifyDataSetChanged()
@@ -677,13 +672,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     n = event?.y?.toInt() ?: 0
                     val proc: Int
                     if (x > widthConstraintLayout - otstup && y < heightConstraintLayout - otstup2) {
-                        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progressFont.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
-                        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
-                            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
-                            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
-                        }
-                        startProcent(MainActivity.PROGRESSACTIONFONT)
+                        setFontDialog()
                     }
                     if (y > heightConstraintLayout - otstup && x < widthConstraintLayout - otstup3) {
                         spid = k.getInt("autoscrollSpid", 60)
@@ -697,6 +686,16 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
         }
         return true
+    }
+
+    private fun setFontDialog() {
+        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
+        bindingprogress.progressFont.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
+        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
+            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+        }
+        startProcent(MainActivity.PROGRESSACTIONFONT)
     }
 
     override fun setPerevod(perevod: String) {
@@ -1345,7 +1344,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
                     checkDiff = true
                     autoscroll = false
-                    stopAutoStartScroll()
                     stopAutoScroll()
                     invalidateOptionsMenu()
                 }
@@ -1397,6 +1395,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
+        autoStartScrollJob?.cancel()
         if (autoScrollJob?.isActive == true) {
             if (saveAutoScroll) {
                 val prefEditor = k.edit()
@@ -1415,7 +1414,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 binding.actionBack.animation = animation2
             }
             autoScrollJob?.cancel()
-            stopAutoStartScroll()
             if (delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
@@ -1436,7 +1434,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 binding.actionPlus.animation = animation
             }
             resetScreenJob?.cancel()
-            stopAutoStartScroll()
+            autoStartScrollJob?.cancel()
             autoScroll()
         } else {
             CoroutineScope(Dispatchers.Main).launch {
@@ -1495,21 +1493,19 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         }
     }
 
-    private fun stopAutoStartScroll() {
-        autoStartScrollJob?.cancel()
-    }
-
     private fun startProcent(progressAction: Int) {
         if (progressAction == MainActivity.PROGRESSACTIONFONT) {
             procentJobFont?.cancel()
             bindingprogress.progressFont.visibility = View.VISIBLE
             procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+                MainActivity.dialogVisable = true
                 delay(2000)
                 bindingprogress.progressFont.visibility = View.GONE
                 delay(3000)
                 if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
                     bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@MaranAta, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
                     bindingprogress.seekBarFontSize.visibility = View.GONE
+                    MainActivity.dialogVisable = false
                 }
             }
         }
@@ -1573,7 +1569,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         prefEditors.putInt("maranAtaScrollPasitionY", maranAtaScrollPositionY)
         prefEditors.putBoolean("fullscreenPage", fullscreenPage)
         prefEditors.apply()
-        stopAutoStartScroll()
         resetTitleJob?.cancel()
     }
 
@@ -1849,8 +1844,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
-            val dialogFontSize = DialogFontSize()
-            dialogFontSize.show(supportFragmentManager, "font")
+            setFontDialog()
             return true
         }
         @SuppressLint("ClickableViewAccessibility") if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {

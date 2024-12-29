@@ -53,7 +53,6 @@ import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.CaliandarMun
 import by.carkva_gazeta.malitounik.DialogBibliotekaWIFI
 import by.carkva_gazeta.malitounik.DialogDzenNochSettings
-import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogHelpShare
 import by.carkva_gazeta.malitounik.EditTextCustom
 import by.carkva_gazeta.malitounik.InteractiveScrollView
@@ -445,7 +444,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         }
     }
 
-    override fun onDialogFontSize(fontSize: Float) {
+    private fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
         binding.textView.layout?.let { layout ->
             var lineForVertical = layout.getLineForVertical(positionY)
@@ -462,6 +461,16 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 binding.scrollView2.scrollTo(0, y)
             }
         }
+    }
+
+    private fun setFontDialog() {
+        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
+        bindingprogress.progressFont.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
+        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
+            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+        }
+        startProcent(MainActivity.PROGRESSACTIONFONT)
     }
 
     override fun onScroll(t: Int, oldt: Int) {
@@ -1447,7 +1456,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                     findAllAsanc()
                 }
                 mAutoScroll = if (binding.textView.bottom <= binding.scrollView2.height) {
-                    stopAutoStartScroll()
+                    stopAutoScroll()
                     false
                 } else {
                     true
@@ -1464,7 +1473,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                         binding.scrollView2.scrollTo(0, y)
                     }
                     if (binding.textView.bottom <= binding.scrollView2.height) {
-                        stopAutoStartScroll()
+                        stopAutoScroll()
                         mAutoScroll = false
                         invalidateOptionsMenu()
                     } else if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
@@ -1472,7 +1481,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                     }
                 } else {
                     mAutoScroll = if (binding.textView.bottom <= binding.scrollView2.height) {
-                        stopAutoStartScroll()
+                        stopAutoScroll()
                         false
                     } else {
                         true
@@ -1485,7 +1494,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 }
             }
             if (startSearchString != "") {
-                stopAutoStartScroll()
                 stopAutoScroll()
                 invalidateOptionsMenu()
                 binding.textSearch.setText(startSearchString)
@@ -1597,21 +1605,19 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         }
     }
 
-    private fun stopAutoStartScroll() {
-        autoStartScrollJob?.cancel()
-    }
-
     private fun startProcent(progressAction: Int) {
         if (progressAction == MainActivity.PROGRESSACTIONFONT) {
             procentJobFont?.cancel()
             bindingprogress.progressFont.visibility = View.VISIBLE
             procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+                MainActivity.dialogVisable = true
                 delay(2000)
                 bindingprogress.progressFont.visibility = View.GONE
                 delay(3000)
                 if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
                     bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@Bogashlugbovya, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
                     bindingprogress.seekBarFontSize.visibility = View.GONE
+                    MainActivity.dialogVisable = false
                 }
             }
         }
@@ -1633,6 +1639,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
+        autoStartScrollJob?.cancel()
         if (autoScrollJob?.isActive == true) {
             if (saveAutoScroll) {
                 val prefEditors = k.edit()
@@ -1653,7 +1660,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             binding.textView.setTextIsSelectable(true)
             binding.textView.movementMethod = setLinkMovementMethodCheck()
             autoScrollJob?.cancel()
-            stopAutoStartScroll()
             if (!k.getBoolean("scrinOn", true) && delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
@@ -1675,7 +1681,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             }
             mActionDown = false
             resetScreenJob?.cancel()
-            stopAutoStartScroll()
+            autoStartScrollJob?.cancel()
             autoScroll()
         } else {
             val duration: Long = 1000
@@ -1732,13 +1738,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                     n = event?.y?.toInt() ?: 0
                     val proc: Int
                     if (x > widthConstraintLayout - otstup && y < heightConstraintLayout - otstup2) {
-                        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progressFont.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
-                        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
-                            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
-                            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
-                        }
-                        startProcent(MainActivity.PROGRESSACTIONFONT)
+                        setFontDialog()
                     }
                     if (y > heightConstraintLayout - otstup) {
                         if (mAutoScroll && binding.find.visibility == View.GONE) {
@@ -1887,7 +1887,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_find) {
-            stopAutoStartScroll()
             stopAutoScroll()
             invalidateOptionsMenu()
             binding.find.visibility = View.VISIBLE
@@ -1916,8 +1915,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
-            val dialogFontSize = DialogFontSize()
-            dialogFontSize.show(supportFragmentManager, "font")
+            setFontDialog()
             return true
         }
         @SuppressLint("ClickableViewAccessibility")
@@ -2227,7 +2225,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             prefEditors.apply()
         }
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
-        stopAutoStartScroll()
         prefEditors.putBoolean("fullscreenPage", fullscreenPage)
         prefEditors.apply()
     }

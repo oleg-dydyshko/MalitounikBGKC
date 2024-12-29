@@ -28,7 +28,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.DialogDzenNochSettings
-import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -69,9 +68,19 @@ class Chytanne : ZmenyiaChastki() {
     private var day = 1
     private var perevod = VybranoeBibleList.PEREVODSEMUXI
 
-    override fun onDialogFontSize(fontSize: Float) {
+    private fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
         binding.textView.textSize = fontBiblia
+    }
+
+    private fun setFontDialog() {
+        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
+        bindingprogress.progressFont.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
+        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
+            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
+            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
+        }
+        startProcent(MainActivity.PROGRESSACTIONFONT)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -248,13 +257,7 @@ class Chytanne : ZmenyiaChastki() {
                     n = event?.y?.toInt() ?: 0
                     val proc: Int
                     if (x > widthConstraintLayout - otstup && y < heightConstraintLayout - otstup2) {
-                        bindingprogress.seekBarFontSize.progress = SettingsActivity.setProgressFontSize(fontBiblia.toInt())
-                        bindingprogress.progressFont.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
-                        if (bindingprogress.seekBarFontSize.visibility == View.GONE) {
-                            bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
-                            bindingprogress.seekBarFontSize.visibility = View.VISIBLE
-                        }
-                        startProcent(MainActivity.PROGRESSACTIONFONT)
+                        setFontDialog()
                     }
                     if (y > heightConstraintLayout - otstup && x < widthConstraintLayout - otstup3) {
                         spid = k.getInt("autoscrollSpid", 60)
@@ -389,21 +392,19 @@ class Chytanne : ZmenyiaChastki() {
         }
     }
 
-    private fun stopAutoStartScroll() {
-        autoStartScrollJob?.cancel()
-    }
-
     private fun startProcent(progressAction: Int) {
         if (progressAction == MainActivity.PROGRESSACTIONFONT) {
             procentJobFont?.cancel()
             bindingprogress.progressFont.visibility = View.VISIBLE
             procentJobFont = CoroutineScope(Dispatchers.Main).launch {
+                MainActivity.dialogVisable = true
                 delay(2000)
                 bindingprogress.progressFont.visibility = View.GONE
                 delay(3000)
                 if (bindingprogress.seekBarFontSize.visibility == View.VISIBLE) {
                     bindingprogress.seekBarFontSize.animation = AnimationUtils.loadAnimation(this@Chytanne, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
                     bindingprogress.seekBarFontSize.visibility = View.GONE
+                    MainActivity.dialogVisable = false
                 }
             }
         }
@@ -425,6 +426,7 @@ class Chytanne : ZmenyiaChastki() {
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
+        autoStartScrollJob?.cancel()
         if (autoScrollJob?.isActive == true) {
             if (saveAutoScroll) {
                 val prefEditor: Editor = k.edit()
@@ -443,7 +445,6 @@ class Chytanne : ZmenyiaChastki() {
                 binding.actionBack.animation = animation2
             }
             autoScrollJob?.cancel()
-            stopAutoStartScroll()
             binding.textView.setTextIsSelectable(true)
             binding.textView.movementMethod = setLinkMovementMethodCheck()
             if (delayDisplayOff) {
@@ -466,7 +467,7 @@ class Chytanne : ZmenyiaChastki() {
                 binding.actionPlus.animation = animation
             }
             resetScreenJob?.cancel()
-            stopAutoStartScroll()
+            autoStartScrollJob?.cancel()
             autoScroll()
         } else {
             val duration: Long = 1000
@@ -534,7 +535,6 @@ class Chytanne : ZmenyiaChastki() {
     override fun onPause() {
         super.onPause()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
-        stopAutoStartScroll()
         val prefEditors = k.edit()
         prefEditors.putBoolean("fullscreenPage", fullscreenPage)
         prefEditors.apply()
@@ -595,8 +595,7 @@ class Chytanne : ZmenyiaChastki() {
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
-            val dialogFontSize = DialogFontSize()
-            dialogFontSize.show(supportFragmentManager, "font")
+            setFontDialog()
             return true
         }
         @SuppressLint("ClickableViewAccessibility")

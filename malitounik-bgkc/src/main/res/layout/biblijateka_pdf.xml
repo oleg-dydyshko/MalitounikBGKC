@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -75,11 +76,43 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <ImageView
+        android:id="@+id/action_back"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10sp"
+        android:background="@drawable/selector_red_maran_ata"
+        android:contentDescription="@string/go_back"
+        android:gravity="center"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/action_fullscreen"
+        app:srcCompat="@drawable/full_screen_back" />
+
+    <ImageView
+        android:id="@+id/action_fullscreen"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/selector_red_maran_ata"
+        android:contentDescription="@string/fullscreen"
+        android:gravity="center"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/full_screen" />
+
+    <ImageView
         android:id="@+id/action_minus"
         android:layout_width="40sp"
         android:layout_height="40sp"
         android:layout_marginEnd="10sp"
-        android:layout_marginBottom="10sp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/selector_red_maran_ata"
         android:contentDescription="@string/action_minus"
         android:gravity="center"
@@ -95,7 +128,7 @@
         android:layout_width="40sp"
         android:layout_height="40sp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10sp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/selector_red_maran_ata"
         android:contentDescription="@string/action_plus"
         android:gravity="center"
@@ -103,6 +136,6 @@
         android:paddingRight="5sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/action_back"
         app:srcCompat="@drawable/plus_auto_scroll" />
 </androidx.constraintlayout.widget.ConstraintLayout>

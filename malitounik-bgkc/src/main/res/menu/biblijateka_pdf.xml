@@ -18,6 +18,11 @@
         android:title="@string/set_page_bibliateka"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_fullscreen"
+        android:orderInCategory="100"
+        android:title="@string/fullscreen"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_share"
         android:icon="@drawable/share"
         android:orderInCategory="100"

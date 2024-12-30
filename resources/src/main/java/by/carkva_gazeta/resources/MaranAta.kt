@@ -1408,11 +1408,6 @@ class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickLi
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
-            if (fullscreenPage && binding.actionBack.visibility == View.GONE) {
-                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-                binding.actionBack.visibility = View.VISIBLE
-                binding.actionBack.animation = animation2
-            }
             autoScrollJob?.cancel()
             if (delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
@@ -1888,10 +1883,8 @@ class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickLi
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
-        if (binding.actionMinus.visibility == View.GONE) {
-            binding.actionBack.visibility = View.VISIBLE
-            binding.actionBack.animation = animation
-        }
+        binding.actionBack.visibility = View.VISIBLE
+        binding.actionBack.animation = animation
     }
 
     private fun show() {

@@ -26,6 +26,9 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
@@ -67,6 +70,7 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
     private var mActionDown = false
     private var autoscroll = false
     private var isEndList = false
+    private var fullscreenPage = false
 
     override fun onPause() {
         super.onPause()
@@ -74,12 +78,13 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
         val firstCompletelyVisiblePosition = layoutManager.findFirstCompletelyVisibleItemPosition()
         val page = if (firstCompletelyVisiblePosition != RecyclerView.NO_POSITION) firstCompletelyVisiblePosition
         else layoutManager.findFirstVisibleItemPosition()
+        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        val prefEditors = k.edit()
         if (isPrint) {
-            val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val edit = k.edit()
-            edit.putInt("Bibliateka_$fileName", page)
-            edit.apply()
+            prefEditors.putInt("Bibliateka_$fileName", page)
         }
+        prefEditors.putBoolean("fullscreenPage", fullscreenPage)
+        prefEditors.apply()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
     }
 
@@ -89,6 +94,11 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
             autoStartScroll()
+        }
+        if (fullscreenPage) {
+            binding.constraint.post {
+                hide()
+            }
         }
     }
 
@@ -133,6 +143,7 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
                 onDialogSetPage(page)
             }
         }
+        fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         binding.pdfView.post {
             binding.pdfView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 private var lastFirstVisiblePosition = RecyclerView.NO_POSITION
@@ -188,6 +199,12 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
                 prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
             }
+        }
+        binding.actionFullscreen.setOnClickListener {
+            show()
+        }
+        binding.actionBack.setOnClickListener {
+            onBack()
         }
         binding.pdfView.setOnTouchListener(this)
         setTollbarTheme()
@@ -445,6 +462,10 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
             onBack()
             return true
         }
+        if (id == R.id.action_fullscreen) {
+            hide()
+            return true
+        }
         if (id == R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
             val prefEditor = k.edit()
@@ -498,6 +519,33 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
         return false
     }
 
+    private fun hide() {
+        fullscreenPage = true
+        supportActionBar?.hide()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = WindowCompat.getInsetsController(window, binding.constraint)
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+        val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
+        binding.actionFullscreen.visibility = View.VISIBLE
+        binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.VISIBLE
+        binding.actionBack.animation = animation
+    }
+
+    private fun show() {
+        fullscreenPage = false
+        supportActionBar?.show()
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        val controller = WindowCompat.getInsetsController(window, binding.constraint)
+        controller.show(WindowInsetsCompat.Type.systemBars())
+        val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+        binding.actionFullscreen.visibility = View.GONE
+        binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.GONE
+        binding.actionBack.animation = animation
+    }
+
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.biblijateka_pdf, menu)
         super.onCreateMenu(menu, menuInflater)
@@ -510,6 +558,7 @@ class BiblijatekaPdf : BaseActivity(), View.OnTouchListener, DialogSetPageBiblio
         val page = if (firstCompletelyVisiblePosition != RecyclerView.NO_POSITION) firstCompletelyVisiblePosition
         else layoutManager.findFirstVisibleItemPosition()
         outState.putInt("scrollPosition", page)
+        outState.putBoolean("fullscreen", fullscreenPage)
     }
 
     private inner class PdfAdapter(val pdfRenderer: PdfRenderer) : RecyclerView.Adapter<PdfAdapter.MyViewHolder>() {

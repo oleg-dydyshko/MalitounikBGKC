@@ -353,7 +353,7 @@ class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickLi
         binding.actionBack.setOnClickListener {
             onBack()
         }
-        if (fullscreenPage) binding.constraint.setOnTouchListener(this)
+        binding.constraint.setOnTouchListener(this)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             bindingprogress.seekBarFontSize.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_progress_noch)
@@ -1027,7 +1027,6 @@ class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickLi
 
     private fun findIndex(chtenie: String): Int {
         var bibliaNew = bibliaNew(chtenie)
-        var indexListBible = -1
         if (perevod == VybranoeBibleList.PEREVODCARNIAUSKI && bibliaNew == 30 && !novyZapavet) {
             bibliaNew = 31
         }
@@ -1037,11 +1036,10 @@ class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickLi
             val t2 = list[e].indexOf("#", t1 + 1)
             val indexBible = list[e].substring(t2 + 1).toInt()
             if (indexBible == bibliaNew) {
-                indexListBible = e
-                break
+                return e
             }
         }
-        return indexListBible
+        return -1
     }
 
     private fun setMaranata(savedInstanceState: Bundle?) {
@@ -1383,15 +1381,23 @@ class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickLi
         val nomer = findIndex(chtenie)
         val inputStream = getInputStream(novyZapavet, nomer)
         val builder = StringBuilder()
+        var line: String
         val isr = InputStreamReader(inputStream)
         BufferedReader(isr).use {
             it.forEachLine { string ->
-                builder.append(string).append("\n")
+                line = string
+                line = line.replace("\\n", "<br>")
+                if (line.contains("//")) {
+                    val t1 = line.indexOf("//")
+                    line = line.substring(0, t1).trim()
+                    if (line != "") builder.append(line).append("\n")
+                } else {
+                    builder.append(line).append("\n")
+                }
             }
         }
         perevod = savePerevod
-        R.raw.mm_17_12_praroka_danily_troch_junakou_liturhija
-        return MainActivity.fromHtml(builder.toString()).split("===")[konec]
+        return builder.toString().split("===")[konec]
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
@@ -1842,12 +1848,7 @@ class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickLi
             setFontDialog()
             return true
         }
-        @SuppressLint("ClickableViewAccessibility") if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            if (!k.getBoolean("fullscreenPage", false)) {
-                binding.constraint.setOnTouchListener(this)
-            } else {
-                binding.constraint.setOnTouchListener(null)
-            }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
             hideHelp()
             return true
         }
@@ -1876,6 +1877,11 @@ class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickLi
     private fun hide() {
         fullscreenPage = true
         supportActionBar?.hide()
+        val layoutParams = binding.ListView.layoutParams as ViewGroup.MarginLayoutParams
+        val px = (resources.displayMetrics.density * 10).toInt()
+        layoutParams.setMargins(0, 0, px, px)
+        binding.ListView.setPadding(binding.ListView.paddingLeft, binding.ListView.paddingTop, 0 , 0)
+        binding.ListView.layoutParams = layoutParams
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -1890,6 +1896,11 @@ class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickLi
     private fun show() {
         fullscreenPage = false
         supportActionBar?.show()
+        val layoutParams = binding.ListView.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(0, 0, 0, 0)
+        val px = (resources.displayMetrics.density * 10).toInt()
+        binding.ListView.setPadding(binding.ListView.paddingLeft, binding.ListView.paddingTop, px , 0)
+        binding.ListView.layoutParams = layoutParams
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.show(WindowInsetsCompat.Type.systemBars())

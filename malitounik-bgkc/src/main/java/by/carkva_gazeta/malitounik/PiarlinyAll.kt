@@ -94,10 +94,10 @@ class PiarlinyAll : BaseActivity(), View.OnTouchListener {
         binding = CytatyActivityBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
-        binding.constraint.setOnTouchListener(this)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         fullscreenPage = savedInstanceState?.getBoolean("fullscreen") ?: k.getBoolean("fullscreenPage", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+        if (fullscreenPage) binding.constraint.setOnTouchListener(this)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.tabLayout.setTabTextColors(Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.colorSecondary_text))), Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.colorPrimary_black))))

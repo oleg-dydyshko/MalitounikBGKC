@@ -559,9 +559,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             fullscreenPage = k.getBoolean("fullscreenPage", false)
             vybranoePosition = intent.extras?.getInt("vybranaePos", -1) ?: -1
         }
-        if (fullscreenPage) {
-            binding.constraint.setOnTouchListener(this)
-        }
+        binding.constraint.setOnTouchListener(this)
         if (resurs.isNotEmpty() && resurs.isDigitsOnly() && resurs.toInt() < 10) {
             val text = SpannableString(title)
             text.setSpan(object : ClickableSpan() {
@@ -1652,11 +1650,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
-            if (fullscreenPage && binding.actionBack.visibility == View.GONE) {
-                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-                binding.actionBack.visibility = View.VISIBLE
-                binding.actionBack.animation = animation2
-            }
             binding.textView.setTextIsSelectable(true)
             binding.textView.movementMethod = setLinkMovementMethodCheck()
             autoScrollJob?.cancel()
@@ -1918,13 +1911,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             setFontDialog()
             return true
         }
-        @SuppressLint("ClickableViewAccessibility")
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            if (!k.getBoolean("fullscreenPage", false)) {
-                binding.constraint.setOnTouchListener(this)
-            } else {
-                binding.constraint.setOnTouchListener(null)
-            }
             hideHelp()
             return true
         }
@@ -2267,6 +2254,11 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     private fun hide() {
         fullscreenPage = true
         supportActionBar?.hide()
+        val layoutParams = binding.scrollView2.layoutParams as ViewGroup.MarginLayoutParams
+        val px = (resources.displayMetrics.density * 10).toInt()
+        layoutParams.setMargins(0, 0, px, px)
+        binding.scrollView2.setPadding(binding.scrollView2.paddingLeft, binding.scrollView2.paddingTop, 0 , 0)
+        binding.scrollView2.layoutParams = layoutParams
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -2281,6 +2273,11 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     private fun show() {
         fullscreenPage = false
         supportActionBar?.show()
+        val layoutParams = binding.scrollView2.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(0, 0, 0, 0)
+        val px = (resources.displayMetrics.density * 10).toInt()
+        binding.scrollView2.setPadding(binding.scrollView2.paddingLeft, binding.scrollView2.paddingTop, px , 0)
+        binding.scrollView2.layoutParams = layoutParams
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.show(WindowInsetsCompat.Type.systemBars())

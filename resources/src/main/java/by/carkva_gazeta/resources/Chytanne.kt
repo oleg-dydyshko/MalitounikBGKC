@@ -113,7 +113,7 @@ class Chytanne : ZmenyiaChastki() {
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        if (fullscreenPage) binding.constraint.setOnTouchListener(this)
+        binding.constraint.setOnTouchListener(this)
         binding.InteractiveScroll.setOnBottomReachedListener(object : OnBottomReachedListener {
             override fun onBottomReached(checkDiff: Boolean) {
                 diffScroll = checkDiff
@@ -439,11 +439,6 @@ class Chytanne : ZmenyiaChastki() {
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
-            if (fullscreenPage && binding.actionBack.visibility == View.GONE) {
-                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-                binding.actionBack.visibility = View.VISIBLE
-                binding.actionBack.animation = animation2
-            }
             autoScrollJob?.cancel()
             binding.textView.setTextIsSelectable(true)
             binding.textView.movementMethod = setLinkMovementMethodCheck()
@@ -598,13 +593,7 @@ class Chytanne : ZmenyiaChastki() {
             setFontDialog()
             return true
         }
-        @SuppressLint("ClickableViewAccessibility")
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            if (!k.getBoolean("fullscreenPage", false)) {
-                binding.constraint.setOnTouchListener(this)
-            } else {
-                binding.constraint.setOnTouchListener(null)
-            }
             hideHelp()
             return true
         }
@@ -635,6 +624,11 @@ class Chytanne : ZmenyiaChastki() {
     private fun hide() {
         fullscreenPage = true
         supportActionBar?.hide()
+        val layoutParams = binding.InteractiveScroll.layoutParams as ViewGroup.MarginLayoutParams
+        val px = (resources.displayMetrics.density * 10).toInt()
+        layoutParams.setMargins(0, 0, px, px)
+        binding.InteractiveScroll.setPadding(binding.InteractiveScroll.paddingLeft, binding.InteractiveScroll.paddingTop, 0, 0)
+        binding.InteractiveScroll.layoutParams = layoutParams
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -651,6 +645,11 @@ class Chytanne : ZmenyiaChastki() {
     private fun show() {
         fullscreenPage = false
         supportActionBar?.show()
+        val layoutParams = binding.InteractiveScroll.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(0, 0, 0, 0)
+        val px = (resources.displayMetrics.density * 10).toInt()
+        binding.InteractiveScroll.setPadding(binding.InteractiveScroll.paddingLeft, binding.InteractiveScroll.paddingTop, px, 0)
+        binding.InteractiveScroll.layoutParams = layoutParams
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.show(WindowInsetsCompat.Type.systemBars())

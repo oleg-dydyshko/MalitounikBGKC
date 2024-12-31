@@ -540,7 +540,10 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
     fun loadBibleList(kniga: Int, glava: Int) {
         (activity as? BibliaActivity)?.let { activity ->
             bible.clear()
-            val inputStream = activity.getInputStream(novyZapavet, kniga)
+            val title = activity.getSpisKnig(novyZapavet)[kniga]
+            val t1 = title.indexOf("#")
+            val t2 = title.indexOf("#", t1 + 1)
+            val inputStream = activity.getInputStream(novyZapavet, title.substring(t2 + 1).toInt())
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             var line: String
@@ -548,8 +551,8 @@ class BibliaFragment : BaseFragment(), AdapterView.OnItemLongClickListener, Adap
             reader.forEachLine {
                 line = it
                 if (line.contains("//")) {
-                    val t1 = line.indexOf("//")
-                    line = line.substring(0, t1).trim()
+                    val t3 = line.indexOf("//")
+                    line = line.substring(0, t3).trim()
                     if (line != "") builder.append(line).append("\n")
                 } else {
                     builder.append(line).append("\n")

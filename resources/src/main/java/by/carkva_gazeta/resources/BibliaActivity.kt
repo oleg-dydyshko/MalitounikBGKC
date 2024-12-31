@@ -945,11 +945,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
             val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
-            if (fullscreenPage && binding.actionBack.visibility == View.GONE) {
-                val animation2 = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
-                binding.actionBack.visibility = View.VISIBLE
-                binding.actionBack.animation = animation2
-            }
             autoScrollJob?.cancel()
             if (!k.getBoolean("scrinOn", true) && delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {

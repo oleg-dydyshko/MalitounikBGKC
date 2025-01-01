@@ -361,8 +361,8 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                 BibleGlobalList.mListGlava = position
                 men = VybranoeBibleList.checkVybranoe(title2.substring(t2 + 1).toInt(), position, getNamePerevod())
                 if (glava != position && !isSetPerevod) fierstPosition = 0
-                binding.pager.post {
-                    val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(binding.pager.currentItem)) as? BibliaFragment
+                binding.pager.postDelayed({
+                    val fragment = supportFragmentManager.findFragmentByTag("f" + adapter.getItemId(position)) as? BibliaFragment
                     fragment?.addOnScrollListener()
                     mAutoScroll = fragment?.getListEndPosition() ?: true
                     if (mAutoScroll) {
@@ -371,10 +371,10 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
                             autoStartScroll()
                         }
                     } else {
-                        isListEndPosition(binding.pager.currentItem)
+                        isListEndPosition(position)
                     }
                     invalidateOptionsMenu()
-                }
+                }, 300)
             }
         })
         bindingprogress.seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {

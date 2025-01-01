@@ -2276,7 +2276,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         val layoutParams = binding.scrollView2.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.setMargins(0, 0, 0, 0)
         val px = (resources.displayMetrics.density * 10).toInt()
-        binding.scrollView2.setPadding(binding.scrollView2.paddingLeft, binding.scrollView2.paddingTop, px , 0)
+        binding.scrollView2.setPadding(binding.scrollView2.paddingLeft, binding.scrollView2.paddingTop, px , px)
         binding.scrollView2.layoutParams = layoutParams
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)

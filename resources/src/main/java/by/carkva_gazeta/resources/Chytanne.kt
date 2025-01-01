@@ -648,7 +648,7 @@ class Chytanne : ZmenyiaChastki() {
         val layoutParams = binding.InteractiveScroll.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.setMargins(0, 0, 0, 0)
         val px = (resources.displayMetrics.density * 10).toInt()
-        binding.InteractiveScroll.setPadding(binding.InteractiveScroll.paddingLeft, binding.InteractiveScroll.paddingTop, px, 0)
+        binding.InteractiveScroll.setPadding(binding.InteractiveScroll.paddingLeft, binding.InteractiveScroll.paddingTop, px, px)
         binding.InteractiveScroll.layoutParams = layoutParams
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)

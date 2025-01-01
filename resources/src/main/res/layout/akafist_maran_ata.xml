@@ -52,6 +52,8 @@
         android:layout_width="0sp"
         android:layout_height="0sp"
         android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="@+id/progressView"
         app:layout_constraintEnd_toEndOf="parent"

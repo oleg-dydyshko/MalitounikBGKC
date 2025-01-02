@@ -44,7 +44,7 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/elvMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

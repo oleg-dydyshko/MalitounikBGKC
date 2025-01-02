@@ -10,12 +10,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.widget.BaseExpandableListAdapter
+import android.widget.ExpandableListView
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
+import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.ContentMineiaBinding
-import by.carkva_gazeta.malitounik.databinding.SimpleListItemMineiaBinding
+import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -28,11 +29,12 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
     private lateinit var binding: ContentMineiaBinding
     private var resetTollbarJob: Job? = null
     private lateinit var adapter: MineiaListAdapter
-    private val groups = ArrayList<MineiaList>()
+    private val groups = ArrayList<ArrayList<MineiaList>>()
     private var mLastClickTime: Long = 0
     private val sluzba = SlugbovyiaTextu()
     private val mineiaList = sluzba.getMineiaMesiachnaia()
     private var mun = Calendar.getInstance()[Calendar.MONTH]
+    private val caliandar = Calendar.getInstance()
 
     override fun onPause() {
         super.onPause()
@@ -40,8 +42,12 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
     }
 
     private fun listFilter(day: Int, pasxa: Boolean): Boolean {
-        for (i in groups.indices) {
-            if (groups[i].dayOfYear == day && groups[i].pasxa == pasxa) return true
+        for (i in 0 until groups.size) {
+            for (e in 0 until groups[i].size) {
+                if (groups[i][e].dayOfYear == day && groups[i][e].pasxa == pasxa) {
+                    return true
+                }
+            }
         }
         return false
     }
@@ -56,63 +62,96 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
         val k = getSharedPreferences("biblia", MODE_PRIVATE)
         var dayOfYear = 1
         var day: Int
+        val c = ArrayList<String>()
+        var isAdd = false
         for (i in mineiaList.indices) {
             val mineiaListDay = mineiaList.filter {
                 it.day == mineiaList[i].day && it.pasxa == mineiaList[i].pasxa
             }
             if (listFilter(mineiaList[i].day, mineiaList[i].pasxa)) continue
-            var opisanie = ""
-            if (mineiaListDay.size == 1) {
-                opisanie = ". " + sluzba.getNazouSluzby(mineiaListDay[0].sluzba)
-            }
-            day = mineiaListDay[0].day
-            when {
-                //Айцоў VII Сусьветнага Сабору
-                mineiaListDay[0].day == SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY -> {
-                    dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY)
-                }
-                //Нядзеля праайцоў
-                mineiaListDay[0].day == SlugbovyiaTextu.NIADZELIA_PRA_AICOU -> {
-                    dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.NIADZELIA_PRA_AICOU)
-                }
-                //Нядзеля сьвятых Айцоў першых шасьці Сабораў
-                mineiaListDay[0].day == SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY -> {
-                    dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY)
-                }
-                //Нядзеля прерад Раством, сьвятых Айцоў
-                mineiaListDay[0].day == SlugbovyiaTextu.NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU -> {
-                    dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU)
-                }
-                //Субота прерад Раством
-                mineiaListDay[0].day == SlugbovyiaTextu.SUBOTA_PERAD_RASTVOM -> {
-                    dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.SUBOTA_PERAD_RASTVOM)
-                }
+            val listDay = ArrayList<MineiaList>()
+            c.clear()
+            for (e in mineiaListDay.indices) {
+                val opisanie = ". " + sluzba.getNazouSluzby(mineiaListDay[e].sluzba)
+                day = mineiaListDay[e].day
+                when {
+                    //Айцоў VII Сусьветнага Сабору
+                    mineiaListDay[e].day == SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY -> {
+                        dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY)
+                    }
+                    //Нядзеля праайцоў
+                    mineiaListDay[e].day == SlugbovyiaTextu.NIADZELIA_PRA_AICOU -> {
+                        dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.NIADZELIA_PRA_AICOU)
+                    }
+                    //Нядзеля сьвятых Айцоў першых шасьці Сабораў
+                    mineiaListDay[e].day == SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY -> {
+                        dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY)
+                    }
+                    //Нядзеля прерад Раством, сьвятых Айцоў
+                    mineiaListDay[e].day == SlugbovyiaTextu.NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU -> {
+                        dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU)
+                    }
+                    //Субота прерад Раством
+                    mineiaListDay[e].day == SlugbovyiaTextu.SUBOTA_PERAD_RASTVOM -> {
+                        dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.SUBOTA_PERAD_RASTVOM)
+                    }
 
-                mineiaListDay[0].pasxa -> {
-                    MenuCaliandar.getDataCalaindar(year = Calendar.getInstance()[Calendar.YEAR]).forEach {
-                        if (it[22].toInt() == day) {
-                            dayOfYear = it[24].toInt()
-                            return@forEach
+                    mineiaListDay[e].pasxa -> {
+                        MenuCaliandar.getDataCalaindar(year = Calendar.getInstance()[Calendar.YEAR]).forEach {
+                            if (it[22].toInt() == day) {
+                                dayOfYear = it[24].toInt()
+                                return@forEach
+                            }
                         }
                     }
-                }
 
-                else -> {
-                    dayOfYear = day
+                    else -> {
+                        dayOfYear = day
+                    }
+                }
+                c.addAll(MenuCaliandar.getPositionCaliandar(dayOfYear, Calendar.getInstance()[Calendar.YEAR]))
+                var adminDayOfYear = ""
+                if (k.getBoolean("adminDayInYear", false)) {
+                    adminDayOfYear = "$dayOfYear (${c[22]}): "
+                }
+                val dayOfMonth = c[1].toInt()
+                if (c[2].toInt() == mun) {
+                    if (!isAdd && mineiaListDay[e].day == SlugbovyiaTextu.NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU) {
+                        listDay.add(MineiaList("Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 18-19 сьнежня", "mm_ndz_pierad_rastvom_sviatych_ajcou_18_19_12_viaczernia", SlugbovyiaTextu.VIACZERNIA, mineiaListDay[e].pasxa, dayOfYear, dayOfMonth))
+                        listDay.add(MineiaList("Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 20-23 сьнежня", "mm_ndz_pierad_rastvom_sviatych_ajcou_20_23_12_viaczernia", SlugbovyiaTextu.VIACZERNIA, mineiaListDay[e].pasxa, dayOfYear, dayOfMonth))
+                        listDay.add(MineiaList("Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 24 сьнежня", "mm_ndz_pierad_rastvom_sviatych_ajcou_24_12_viaczernia", SlugbovyiaTextu.VIACZERNIA, mineiaListDay[e].pasxa, dayOfYear, dayOfMonth))
+                        if (mineiaListDay[e].sluzba != SlugbovyiaTextu.VIACZERNIA) listDay.add(MineiaList(adminDayOfYear + mineiaListDay[e].title + opisanie, mineiaListDay[e].resource, mineiaListDay[e].sluzba, mineiaListDay[e].pasxa, day, dayOfMonth))
+                        isAdd = true
+                    } else {
+                        listDay.add(MineiaList(adminDayOfYear + mineiaListDay[e].title + opisanie, mineiaListDay[e].resource, mineiaListDay[e].sluzba, mineiaListDay[e].pasxa, day, dayOfMonth))
+                    }
+                }
+                listDay.sortWith { o1, o2 ->
+                    o1.sluzba.compareTo(o2.sluzba)
                 }
             }
-            val c = MenuCaliandar.getPositionCaliandar(dayOfYear, Calendar.getInstance()[Calendar.YEAR])
-            var adminDayOfYear = ""
-            if (k.getBoolean("adminDayInYear", false)) {
-                adminDayOfYear = "$dayOfYear (${c[22]}): "
-            }
-            val dayOfMonth = c[1].toInt()
-            if (c[2].toInt() == mun) groups.add(MineiaList(adminDayOfYear + mineiaListDay[0].title + opisanie, mineiaListDay[0].resource, mineiaListDay[0].sluzba, mineiaListDay[0].pasxa, day, dayOfMonth))
+            if (c[2].toInt() == mun) groups.add(listDay)
         }
-        sortedMineia = SORTED_DATA
-        groups.sort()
+        groups.sortWith { o1, o2 ->
+            o1[0].dayOfMonth.compareTo(o2[0].dayOfMonth)
+        }
         adapter.notifyDataSetChanged()
         binding.subTitleToolbar.text = resources.getStringArray(R.array.meciac3)[mun]
+        if (mun == caliandar[Calendar.MONTH]) {
+            for (i in groups.indices) {
+                if (groups[i][0].dayOfMonth == caliandar[Calendar.DATE]) {
+                    binding.elvMain.expandGroup(i)
+                    binding.elvMain.setSelectedGroup(i)
+                    break
+                }
+            }
+        } else {
+            for (i in groups.indices) {
+                binding.elvMain.collapseGroup(i)
+                binding.elvMain.setSelectedGroup(0)
+
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,32 +160,25 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
         binding = ContentMineiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mun = savedInstanceState?.getInt("mun") ?: intent.extras?.getInt("mun") ?: Calendar.getInstance()[Calendar.MONTH]
-        binding.elvMain.setOnItemClickListener { _, _, position, _ ->
+        binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnItemClickListener
+                return@setOnChildClickListener true
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val mineiaListDay = mineiaList.filter {
-                it.day == groups[position].dayOfYear && it.pasxa == groups[position].pasxa
-            }
-            if (mineiaListDay.size > 1) {
-                val dialog = DialogMineiaList.getInstance(groups[position].dayOfYear, groups[position].dayOfMonth, groups[position].pasxa)
-                dialog.show(supportFragmentManager, "dialogMineiaList")
+            if (checkmoduleResources()) {
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
+                intent.putExtra("resurs", groups[groupPosition][childPosition].resource)
+                intent.putExtra("zmena_chastki", true)
+                intent.putExtra("title", groups[groupPosition][childPosition].title)
+                startActivity(intent)
             } else {
-                if (checkmoduleResources()) {
-                    val intent = Intent()
-                    intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
-                    intent.putExtra("resurs", groups[position].resource)
-                    intent.putExtra("zmena_chastki", true)
-                    intent.putExtra("title", groups[position].title)
-                    startActivity(intent)
-                } else {
-                    installFullMalitounik()
-                }
+                installFullMalitounik()
             }
+            false
         }
         adapter = MineiaListAdapter(this)
-        binding.elvMain.adapter = adapter
+        binding.elvMain.setAdapter(adapter)
         if (dzenNoch) {
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = R.style.AppCompatDark
@@ -156,26 +188,6 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
         }
         loadMineia()
         setTollbarTheme()
-    }
-
-    fun getMineiaListDialog(dayOfYear: Int, dayOfMonth: Int, pasxa: Boolean): ArrayList<MineiaList> {
-        val minList = mineiaList.filter {
-            it.day == dayOfYear && it.pasxa == pasxa
-        }
-        val mineiaListDialog = ArrayList<MineiaList>()
-        if (dayOfYear == SlugbovyiaTextu.NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU) {
-            mineiaListDialog.add(MineiaList("Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 18-19 сьнежня", "mm_ndz_pierad_rastvom_sviatych_ajcou_18_19_12_viaczernia", SlugbovyiaTextu.VIACZERNIA, pasxa, dayOfYear, dayOfMonth))
-            mineiaListDialog.add(MineiaList("Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 20-23 сьнежня", "mm_ndz_pierad_rastvom_sviatych_ajcou_20_23_12_viaczernia", SlugbovyiaTextu.VIACZERNIA, pasxa, dayOfYear, dayOfMonth))
-            mineiaListDialog.add(MineiaList("Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 24 сьнежня", "mm_ndz_pierad_rastvom_sviatych_ajcou_24_12_viaczernia", SlugbovyiaTextu.VIACZERNIA, pasxa, dayOfYear, dayOfMonth))
-            for (i in minList.indices) {
-                if (minList[i].sluzba != SlugbovyiaTextu.VIACZERNIA) mineiaListDialog.add(MineiaList(minList[i].title, minList[i].resource, minList[i].sluzba, pasxa, dayOfYear, dayOfMonth))
-            }
-        } else {
-            for (i in minList.indices) {
-                mineiaListDialog.add(MineiaList(minList[i].title, minList[i].resource, minList[i].sluzba, pasxa, dayOfYear, dayOfMonth))
-            }
-        }
-        return mineiaListDialog
     }
 
     private fun setTollbarTheme() {
@@ -238,57 +250,57 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
         outState.putInt("mun", mun)
     }
 
-    private inner class MineiaListAdapter(val context: BaseActivity) : ArrayAdapter<MineiaList>(context, R.layout.simple_list_item_mineia, R.id.label, groups) {
-        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolder
-            if (mView == null) {
-                val binding = SimpleListItemMineiaBinding.inflate(context.layoutInflater, parent, false)
-                rootView = binding.root
-                viewHolder = ViewHolder(binding.date, binding.title)
-                rootView.tag = viewHolder
-            } else {
-                rootView = mView
-                viewHolder = rootView.tag as ViewHolder
+    private inner class MineiaListAdapter(val context: BaseActivity) : BaseExpandableListAdapter() {
+
+        override fun getGroupCount(): Int {
+            return groups.size
+        }
+
+        override fun getChildrenCount(groupPosition: Int): Int {
+            return groups[groupPosition].size
+        }
+
+        override fun getGroup(groupPosition: Int): Any {
+            return groups[groupPosition]
+        }
+
+        override fun getChild(groupPosition: Int, childPosition: Int): Any {
+            return groups[groupPosition][childPosition]
+        }
+
+        override fun getGroupId(groupPosition: Int): Long {
+            return groupPosition.toLong()
+        }
+
+        override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+            return childPosition.toLong()
+        }
+
+        override fun hasStableIds(): Boolean {
+            return true
+        }
+
+        override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
+            val rootView = GroupViewBinding.inflate(context.layoutInflater, parent, false)
+            rootView.textGroup.text = groups[groupPosition][0].dayOfMonth.toString()
+            if (mun == caliandar[Calendar.MONTH] && groups[groupPosition][0].dayOfMonth == caliandar[Calendar.DATE]) {
+                rootView.textGroup.typeface = MainActivity.createFont(Typeface.BOLD)
             }
+            return rootView.root
+        }
+
+        override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
+            val rootView = ChildViewBinding.inflate(context.layoutInflater, parent, false)
             val dzenNoch = context.getBaseDzenNoch()
-            viewHolder.title.text = groups[position].title
-            viewHolder.date.text = groups[position].dayOfMonth.toString()
-            val caliandar = Calendar.getInstance()
-            if (groups[position].dayOfMonth == caliandar[Calendar.DATE] && mun == caliandar[Calendar.MONTH]) {
-                viewHolder.date.typeface = MainActivity.createFont(Typeface.BOLD)
-            } else {
-                viewHolder.date.typeface = MainActivity.createFont(Typeface.NORMAL)
-            }
-            if (dzenNoch) viewHolder.date.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary_black))
-            return rootView
+            if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            rootView.textChild.text = groups[groupPosition][childPosition].title
+            return rootView.root
+        }
+
+        override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+            return true
         }
     }
 
-    private class ViewHolder(var date: TextView, var title: TextView)
-
-    class MineiaList(val title: String, val resource: String, val sluzba: Int, val pasxa: Boolean, val dayOfYear: Int,  val dayOfMonth: Int) : Comparable<MineiaList> {
-        override fun compareTo(other: MineiaList): Int {
-            if (sortedMineia == SORTED_SLUZBA) {
-                if (this.sluzba > other.sluzba) {
-                    return 1
-                } else if (this.sluzba < other.sluzba) {
-                    return -1
-                }
-            } else {
-                if (this.dayOfMonth > other.dayOfMonth) {
-                    return 1
-                } else if (this.dayOfMonth < other.dayOfMonth) {
-                    return -1
-                }
-            }
-            return 0
-        }
-    }
-
-    companion object {
-        const val SORTED_SLUZBA = 1
-        const val SORTED_DATA = 2
-        var sortedMineia = SORTED_SLUZBA
-    }
+    class MineiaList(val title: String, val resource: String, val sluzba: Int, val pasxa: Boolean, val dayOfYear: Int, val dayOfMonth: Int)
 }

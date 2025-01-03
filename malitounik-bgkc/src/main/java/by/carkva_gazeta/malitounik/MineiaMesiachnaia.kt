@@ -148,8 +148,9 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
         } else {
             for (i in groups.indices) {
                 binding.elvMain.collapseGroup(i)
-                binding.elvMain.setSelectedGroup(0)
-
+                binding.elvMain.post {
+                    binding.elvMain.setSelectedGroup(0)
+                }
             }
         }
     }

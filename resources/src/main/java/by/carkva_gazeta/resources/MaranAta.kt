@@ -1899,7 +1899,7 @@ class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickLi
         val layoutParams = binding.ListView.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.setMargins(0, 0, 0, 0)
         val px = (resources.displayMetrics.density * 10).toInt()
-        binding.ListView.setPadding(binding.ListView.paddingLeft, binding.ListView.paddingTop, px , px)
+        binding.ListView.setPadding(binding.ListView.paddingLeft, binding.ListView.paddingTop, px , 0)
         binding.ListView.layoutParams = layoutParams
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)

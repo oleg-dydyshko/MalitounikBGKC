@@ -5,12 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
@@ -290,45 +286,40 @@ class Chytanne : ZmenyiaChastki() {
     }
 
     private fun setChtenia(savedInstanceState: Bundle?) {
-        try {
-            val wOld = intent.extras?.getString("cytanne") ?: ""
-            val ssb = StringBuilder()
-            val list = chtenia(wOld, perevod)
-            for (i in list.indices) {
-                ssb.append(list[i])
-                if (i == 1) {
-                    val t1 = list[i].indexOf("<strong>")
-                    val t2 = list[i].indexOf("</strong>")
-                    titleTwo = list[i].substring(t1 + 8, t2)
+        val wOld = intent.extras?.getString("cytanne") ?: ""
+        val ssb = StringBuilder()
+        val list = chtenia(wOld, perevod)
+        for (i in list.indices) {
+            ssb.append(list[i])
+            if (i == 1) {
+                val t1 = list[i].indexOf("<strong>")
+                val t2 = list[i].indexOf("</strong>")
+                titleTwo = list[i].substring(t1 + 8, t2)
+            }
+        }
+        binding.textView.text = trimSpannable(SpannableStringBuilder(MainActivity.fromHtml(ssb.toString())))
+        binding.textView.movementMethod = setLinkMovementMethodCheck()
+        if (dzenNoch) binding.textView.setLinkTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
+        if (k.getBoolean("utran", true) && wOld.contains("На ютрані:") && savedInstanceState == null) {
+            binding.textView.post {
+                binding.textView.layout?.let { layout ->
+                    val strPosition = binding.textView.text.indexOf(titleTwo, ignoreCase = true)
+                    val line = layout.getLineForOffset(strPosition)
+                    val y = layout.getLineTop(line)
+                    val anim = ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", binding.InteractiveScroll.scrollY, y)
+                    anim.setDuration(1000).start()
                 }
             }
-            binding.textView.text = trimSpannable(SpannableStringBuilder(MainActivity.fromHtml(ssb.toString())))
-            binding.textView.movementMethod = setLinkMovementMethodCheck()
-            if (dzenNoch) binding.textView.setLinkTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            if (k.getBoolean("utran", true) && wOld.contains("На ютрані:") && savedInstanceState == null) {
-                binding.textView.post {
-                    binding.textView.layout?.let { layout ->
-                        val strPosition = binding.textView.text.indexOf(titleTwo, ignoreCase = true)
-                        val line = layout.getLineForOffset(strPosition)
-                        val y = layout.getLineTop(line)
-                        val anim = ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", binding.InteractiveScroll.scrollY, y)
-                        anim.setDuration(1000).start()
-                    }
+        }
+        if (savedInstanceState != null) {
+            binding.textView.post {
+                val textline = savedInstanceState.getInt("textLine", 0)
+                binding.textView.layout?.let { layout ->
+                    val line = layout.getLineForOffset(textline)
+                    val y = layout.getLineTop(line)
+                    binding.InteractiveScroll.scrollY = y
                 }
             }
-            if (savedInstanceState != null) {
-                binding.textView.post {
-                    val textline = savedInstanceState.getInt("textLine", 0)
-                    binding.textView.layout?.let { layout ->
-                        val line = layout.getLineForOffset(textline)
-                        val y = layout.getLineTop(line)
-                        binding.InteractiveScroll.scrollY = y
-                    }
-                }
-            }
-        } catch (t: Throwable) {
-            t.printStackTrace()
-            binding.textView.text = error()
         }
     }
 
@@ -355,12 +346,6 @@ class Chytanne : ZmenyiaChastki() {
         linkMovementMethodCheck = LinkMovementMethodCheck()
         linkMovementMethodCheck?.setLinkMovementMethodCheckListener(this)
         return linkMovementMethodCheck
-    }
-
-    private fun error(): SpannableString {
-        val ssb = SpannableString(getString(by.carkva_gazeta.malitounik.R.string.error_ch))
-        ssb.setSpan(StyleSpan(Typeface.BOLD), 0, getString(by.carkva_gazeta.malitounik.R.string.error_ch).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        return ssb
     }
 
     private fun autoStartScroll() {

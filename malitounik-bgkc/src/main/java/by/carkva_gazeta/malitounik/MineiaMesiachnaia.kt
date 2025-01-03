@@ -76,23 +76,23 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
                 day = mineiaListDay[e].day
                 when {
                     //Айцоў VII Сусьветнага Сабору
-                    mineiaListDay[e].day == SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY -> {
+                    day == SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY -> {
                         dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.AICOU_VII_SUSVETNAGA_SABORY)
                     }
                     //Нядзеля праайцоў
-                    mineiaListDay[e].day == SlugbovyiaTextu.NIADZELIA_PRA_AICOU -> {
+                    day == SlugbovyiaTextu.NIADZELIA_PRA_AICOU -> {
                         dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.NIADZELIA_PRA_AICOU)
                     }
                     //Нядзеля сьвятых Айцоў першых шасьці Сабораў
-                    mineiaListDay[e].day == SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY -> {
+                    day == SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY -> {
                         dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.NIADZELIA_AICOU_VI_SABORY)
                     }
                     //Нядзеля прерад Раством, сьвятых Айцоў
-                    mineiaListDay[e].day == SlugbovyiaTextu.NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU -> {
+                    day == SlugbovyiaTextu.NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU -> {
                         dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU)
                     }
                     //Субота прерад Раством
-                    mineiaListDay[e].day == SlugbovyiaTextu.SUBOTA_PERAD_RASTVOM -> {
+                    day == SlugbovyiaTextu.SUBOTA_PERAD_RASTVOM -> {
                         dayOfYear = sluzba.getRealDay(SlugbovyiaTextu.SUBOTA_PERAD_RASTVOM)
                     }
 
@@ -189,6 +189,19 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
         loadMineia()
         setTollbarTheme()
     }
+
+    /*for (i in list.indices) {
+            var test = false
+            for (e in listResult.indices) {
+                if (listResult[e].day == list[i].day) {
+                    test = true
+                    break
+                }
+            }
+            if (!test) {
+                listResult.add(list[i])
+            }
+        }*/
 
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {

@@ -483,161 +483,165 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, Interactiv
         val split = w1.split(";")
         val list = ArrayList<String>()
         for (i in split.indices) {
-            val res = StringBuilder()
-            var knigaN: String
-            var knigaK = "0"
-            var zaglnum = 0
-            val zaglavie = split[i].split(",")
-            var zagl = ""
-            var zaglavieName = ""
-            var result = ""
-            for (e in zaglavie.indices) {
-                val perevodSave = perevod
-                val zaglav = zaglavie[e].trim()
-                val zag = zaglav.indexOf(" ", 2)
-                val zag1 = zaglav.indexOf(".")
-                val zag2 = zaglav.indexOf("-")
-                val zag3 = zaglav.indexOf(".", zag1 + 1)
-                val zagS = if (zag2 != -1) {
-                    zaglav.substring(0, zag2)
-                } else {
-                    zaglav
-                }
-                var glav = false
-                if (zag1 > zag2 && zag == -1) {
-                    glav = true
-                } else if (zag != -1) {
-                    zagl = zaglav.substring(0, zag)
-                    val zaglavieName1 = split[i].trim()
-                    zaglavieName = " " + zaglavieName1.substring(zag + 1)
-                    zaglnum = zaglav.substring(zag + 1, zag1).toInt()
-                } else if (zag1 != -1) {
-                    zaglnum = zaglav.substring(0, zag1).toInt()
-                }
-                if (glav) {
-                    val zagS1 = zagS.indexOf(".")
-                    if (zagS1 == -1) {
-                        knigaN = zagS
-                    } else {
-                        zaglnum = zagS.substring(0, zagS1).toInt()
-                        knigaN = zagS.substring(zagS1 + 1)
-                    }
-                } else if (zag2 == -1) {
-                    knigaN = if (zag1 != -1) {
-                        zaglav.substring(zag1 + 1)
+            try {
+                val res = StringBuilder()
+                var knigaN: String
+                var knigaK = "0"
+                var zaglnum = 0
+                val zaglavie = split[i].split(",")
+                var zagl = ""
+                var zaglavieName = ""
+                var result = ""
+                for (e in zaglavie.indices) {
+                    val perevodSave = perevod
+                    val zaglav = zaglavie[e].trim()
+                    val zag = zaglav.indexOf(" ", 2)
+                    val zag1 = zaglav.indexOf(".")
+                    val zag2 = zaglav.indexOf("-")
+                    val zag3 = zaglav.indexOf(".", zag1 + 1)
+                    val zagS = if (zag2 != -1) {
+                        zaglav.substring(0, zag2)
                     } else {
                         zaglav
                     }
-                    knigaK = knigaN
-                } else {
-                    knigaN = zaglav.substring(zag1 + 1, zag2)
-                }
-                if (glav) {
-                    knigaK = zaglav.substring(zag1 + 1)
-                } else if (zag2 != -1) {
-                    knigaK = if (zag3 == -1) {
-                        zaglav.substring(zag2 + 1)
+                    var glav = false
+                    if (zag1 > zag2 && zag == -1) {
+                        glav = true
+                    } else if (zag != -1) {
+                        zagl = zaglav.substring(0, zag)
+                        val zaglavieName1 = split[i].trim()
+                        zaglavieName = " " + zaglavieName1.substring(zag + 1)
+                        zaglnum = zaglav.substring(zag + 1, zag1).toInt()
+                    } else if (zag1 != -1) {
+                        zaglnum = zaglav.substring(0, zag1).toInt()
+                    }
+                    if (glav) {
+                        val zagS1 = zagS.indexOf(".")
+                        if (zagS1 == -1) {
+                            knigaN = zagS
+                        } else {
+                            zaglnum = zagS.substring(0, zagS1).toInt()
+                            knigaN = zagS.substring(zagS1 + 1)
+                        }
+                    } else if (zag2 == -1) {
+                        knigaN = if (zag1 != -1) {
+                            zaglav.substring(zag1 + 1)
+                        } else {
+                            zaglav
+                        }
+                        knigaK = knigaN
                     } else {
-                        zaglav.substring(zag3 + 1)
+                        knigaN = zaglav.substring(zag1 + 1, zag2)
                     }
-                }
-                var polstixaA = false
-                var polstixaB = false
-                if (knigaK.contains("а", true)) {
-                    polstixaA = true
-                    knigaK = knigaK.replace("а", "", true)
-                }
-                if (knigaN.contains("б", true)) {
-                    polstixaB = true
-                    knigaN = knigaN.replace("б", "", true)
-                }
-                val kniga = bibliaNew(zagl)
-                var indexBiblii = findIndex(kniga)
-                if (indexBiblii == -1) {
-                    this.perevod = VybranoeBibleList.PEREVODCARNIAUSKI
-                    indexBiblii = findIndex(kniga)
-                }
-                val inputStream = getInputStream(novyZapavet, kniga)
-                val title = if (e == 0) {
-                    val spis = getSpisKnig(novyZapavet)[indexBiblii]
-                    val t1 = spis.indexOf("#")
-                    spis.substring(0, t1) + zaglavieName
-                } else {
-                    "[&#8230;]"
-                }
-                val isr = InputStreamReader(inputStream)
-                val reader = BufferedReader(isr)
-                val builder = StringBuilder()
-                reader.use { buffer ->
-                    buffer.forEachLine {
-                        var result1 = it.trim()
-                        if (result1.contains("//")) {
-                            val t1 = result1.indexOf("//")
-                            result1 = result1.substring(0, t1).trim()
+                    if (glav) {
+                        knigaK = zaglav.substring(zag1 + 1)
+                    } else if (zag2 != -1) {
+                        knigaK = if (zag3 == -1) {
+                            zaglav.substring(zag2 + 1)
+                        } else {
+                            zaglav.substring(zag3 + 1)
                         }
-                        if (result1 != "") builder.append(result1).append("<br>\n")
                     }
-                }
-                val split2 = builder.toString().split("===<br>")
-                var spl: String
-                var desK1: Int
-                var desN: Int
-                spl = split2[zaglnum].trim()
-                desN = spl.indexOf(knigaN)
-                if (e == 0) {
-                    res.append("<strong>").append(title).append("</strong><br>\n")
-                } else {
-                    res.append("[&#8230;]<br>\n")
-                }
-                if (knigaN == knigaK) {
-                    desK1 = desN
-                } else {
-                    desK1 = spl.indexOf(knigaK)
-                    if (desK1 == -1) {
-                        val splAll = spl.split("\n").size
-                        desK1 = spl.indexOf("$splAll")
+                    var polstixaA = false
+                    var polstixaB = false
+                    if (knigaK.contains("а", true)) {
+                        polstixaA = true
+                        knigaK = knigaK.replace("а", "", true)
                     }
-                    if (zag3 != -1 || glav) {
-                        val spl1 = split2[zaglnum].trim()
-                        val spl2 = split2[zaglnum + 1].trim()
-                        val des1 = spl1.length
-                        desN = spl1.indexOf(knigaN)
-                        desK1 = spl2.indexOf(knigaK)
-                        var desN1: Int = spl2.indexOf((knigaK.toInt() + 1).toString(), desK1)
-                        if (desN1 == -1) {
-                            desN1 = spl1.length
+                    if (knigaN.contains("б", true)) {
+                        polstixaB = true
+                        knigaN = knigaN.replace("б", "", true)
+                    }
+                    val kniga = bibliaNew(zagl)
+                    var indexBiblii = findIndex(kniga)
+                    if (indexBiblii == -1) {
+                        this.perevod = VybranoeBibleList.PEREVODCARNIAUSKI
+                        indexBiblii = findIndex(kniga)
+                    }
+                    val inputStream = getInputStream(novyZapavet, indexBiblii)
+                    val title = if (e == 0) {
+                        val spis = getSpisKnig(novyZapavet)[indexBiblii]
+                        val t1 = spis.indexOf("#")
+                        spis.substring(0, t1) + zaglavieName
+                    } else {
+                        "[&#8230;]"
+                    }
+                    val isr = InputStreamReader(inputStream)
+                    val reader = BufferedReader(isr)
+                    val builder = StringBuilder()
+                    reader.use { buffer ->
+                        buffer.forEachLine {
+                            var result1 = it.trim()
+                            if (result1.contains("//")) {
+                                val t1 = result1.indexOf("//")
+                                result1 = result1.substring(0, t1).trim()
+                            }
+                            if (result1 != "") builder.append(result1).append("<br>\n")
                         }
-                        desK1 = desN1 + des1
-                        spl = spl1 + "\n" + spl2
-                        zaglnum += 1
                     }
+                    val split2 = builder.toString().split("===<br>")
+                    var spl: String
+                    var desK1: Int
+                    var desN: Int
+                    spl = split2[zaglnum].trim()
+                    desN = spl.indexOf(knigaN)
+                    if (e == 0) {
+                        res.append("<strong>").append(title).append("</strong><br>\n")
+                    } else {
+                        res.append("[&#8230;]<br>\n")
+                    }
+                    if (knigaN == knigaK) {
+                        desK1 = desN
+                    } else {
+                        desK1 = spl.indexOf(knigaK)
+                        if (desK1 == -1) {
+                            val splAll = spl.split("\n").size
+                            desK1 = spl.indexOf("$splAll")
+                        }
+                        if (zag3 != -1 || glav) {
+                            val spl1 = split2[zaglnum].trim()
+                            val spl2 = split2[zaglnum + 1].trim()
+                            val des1 = spl1.length
+                            desN = spl1.indexOf(knigaN)
+                            desK1 = spl2.indexOf(knigaK)
+                            var desN1: Int = spl2.indexOf((knigaK.toInt() + 1).toString(), desK1)
+                            if (desN1 == -1) {
+                                desN1 = spl1.length
+                            }
+                            desK1 = desN1 + des1
+                            spl = spl1 + "\n" + spl2
+                            zaglnum += 1
+                        }
+                    }
+                    val desK = spl.indexOf("\n", desK1)
+                    if (desK == -1) res.append(spl.substring(desN))
+                    else res.append(spl.substring(desN, desK))
+                    var result2 = res.toString()
+                    if (polstixaA) {
+                        val t2 = result2.lastIndexOf(knigaK)
+                        var t1 = result2.indexOf(":", t2)
+                        if (t1 == -1) t1 = result2.indexOf(";", t2 + 1)
+                        if (t1 == -1) t1 = result2.indexOf(".", t2 + 1)
+                        if (t1 != -1) result2 = result2.substring(0, t1 + 1) + "<s>" + result2.substring(t1 + 1, result2.length) + "</s>"
+                    }
+                    if (polstixaB) {
+                        val t4 = result2.indexOf("\n")
+                        val t2 = result2.indexOf("\n", t4 + 1)
+                        val t5 = result2.indexOf(" ", t4 + 1)
+                        val textPol = result2.substring(t5 + 1, t2)
+                        var t1 = textPol.indexOf(":")
+                        if (t1 == -1) t1 = textPol.indexOf(";")
+                        if (t1 == -1) t1 = textPol.indexOf(".")
+                        val lStart = result2.substring(0, t5 + 1).length
+                        if (t1 != -1) result2 = result2.substring(0, t5 + 1) + "<s>" + result2.substring(t5 + 1, t1 + 1 + lStart) + "</s>" + result2.substring(t1 + 1 + lStart, result2.length)
+                    }
+                    result = result2
+                    this.perevod = perevodSave
                 }
-                val desK = spl.indexOf("\n", desK1)
-                if (desK == -1) res.append(spl.substring(desN))
-                else res.append(spl.substring(desN, desK))
-                var result2 = res.toString()
-                if (polstixaA) {
-                    val t2 = result2.lastIndexOf(knigaK)
-                    var t1 = result2.indexOf(":", t2)
-                    if (t1 == -1) t1 = result2.indexOf(";", t2 + 1)
-                    if (t1 == -1) t1 = result2.indexOf(".", t2 + 1)
-                    if (t1 != -1) result2 = result2.substring(0, t1 + 1) + "<s>" + result2.substring(t1 + 1, result2.length) + "</s>"
-                }
-                if (polstixaB) {
-                    val t4 = result2.indexOf("\n")
-                    val t2 = result2.indexOf("\n", t4 + 1)
-                    val t5 = result2.indexOf(" ", t4 + 1)
-                    val textPol = result2.substring(t5 + 1, t2)
-                    var t1 = textPol.indexOf(":")
-                    if (t1 == -1) t1 = textPol.indexOf(";")
-                    if (t1 == -1) t1 = textPol.indexOf(".")
-                    val lStart = result2.substring(0, t5 + 1).length
-                    if (t1 != -1) result2 = result2.substring(0, t5 + 1) + "<s>" + result2.substring(t5 + 1, t1 + 1 + lStart) + "</s>" + result2.substring(t1 + 1 + lStart, result2.length)
-                }
-                result = result2
-                this.perevod = perevodSave
+                list.add(setIndexBiblii("$result<br>"))
+            } catch (t: Throwable) {
+                list.add(getString(by.carkva_gazeta.malitounik.R.string.error_ch2) + "<p>")
             }
-            list.add(setIndexBiblii("$result<br>"))
         }
         return list
     }

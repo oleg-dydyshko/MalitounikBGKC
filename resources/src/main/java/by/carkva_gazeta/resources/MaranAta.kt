@@ -1882,7 +1882,6 @@ class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickLi
         layoutParams.setMargins(0, 0, px, px)
         binding.ListView.setPadding(binding.ListView.paddingLeft, binding.ListView.paddingTop, 0 , 0)
         binding.ListView.layoutParams = layoutParams
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         controller.hide(WindowInsetsCompat.Type.systemBars())
@@ -1901,7 +1900,6 @@ class MaranAta : BaseActivity(), View.OnTouchListener, AdapterView.OnItemClickLi
         val px = (resources.displayMetrics.density * 10).toInt()
         binding.ListView.setPadding(binding.ListView.paddingLeft, binding.ListView.paddingTop, px , 0)
         binding.ListView.layoutParams = layoutParams
-        WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.show(WindowInsetsCompat.Type.systemBars())
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)

@@ -1050,7 +1050,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     private fun hide() {
         fullscreenPage = true
         supportActionBar?.hide()
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = WindowCompat.getInsetsController(window, binding.linealLayoutTitle)
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         controller.hide(WindowInsetsCompat.Type.systemBars())
@@ -1064,7 +1063,6 @@ class BibliaActivity : BaseActivity(), BibliaPerakvadSemuxi, BibliaPerakvadNadsa
     private fun show() {
         fullscreenPage = false
         supportActionBar?.show()
-        WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = WindowCompat.getInsetsController(window, binding.linealLayoutTitle)
         controller.show(WindowInsetsCompat.Type.systemBars())
         val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)

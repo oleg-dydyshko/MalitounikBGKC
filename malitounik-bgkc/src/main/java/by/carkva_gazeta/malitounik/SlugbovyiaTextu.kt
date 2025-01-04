@@ -37,6 +37,7 @@ class SlugbovyiaTextu {
         const val NIADZELIA_AICOU_VI_SABORY = 1002
         const val NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU = 1003
         const val SUBOTA_PERAD_RASTVOM = 1004
+        const val NIADZELIA_PERAD_BOHAZJAULENNEM = 1005
         const val MINEIA_SVIATOCHNAIA = 100
         const val MINEIA_VIALIKI_POST_1 = 101
         const val MINEIA_VIALIKI_POST_2 = 102
@@ -226,6 +227,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе. Сьвятаначальніка Васіля Вялікага, архібіскупа Кесарыі Кападакійскай", "mm_01_01_abrezannie_vasila_vialikaha_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(1, "Малебен на Новы год", "mm_01_01_malebien_novy_hod", MALEBEN_NA_NOVY_GOD))
         datMinALL.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня; сьвятаначальніка Сільвестра, папы Рымскага", "mm_02_01_pieradsv_bohazjaulennia_silviestra_papy_rymskaha_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня; сьвятаначальніка Сільвестра, папы Рымскага", "mm_02_01_pieradsviaccie_bohazjaulennia_silviestra_papy_rymskaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня; Сабор 70-ці апосталаў, пачэснага Тэактыста", "mm_04_01_pieradsv_bohazjaulennia_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(128, "Жырoвiцкaй iкoны Maцi Бoжae", "mm_07_05_zyrovickaj_ikony_maci_bozaj_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(142, "Сьвятых роўнаапостальных Канстанціна і Алены", "mm_21_05_liturhija", LITURHIJA))
@@ -270,10 +272,15 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(223, "Пасьвяцьце Перамяненьня і сьв. мучаніка Лаўрына", "mm_10_08_pasviaccie_pieramianiennia_muczanika_laurena_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(227, "Перадсьвяцьце Ўсьпеньня і сьв. прарока Міхея", "mm_14_08_pieradsv_uspiennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(227, "Перадсьвяцьце Ўсьпеньня і сьв. прарока Міхея", "mm_14_08_pieradsv_uspiennia_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(NIADZELIA_PERAD_BOHAZJAULENNEM, "Нядзеля перад Богазьяўленьнем", "mm_ndz_pierad_bohazjaulenniem_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(NIADZELIA_PERAD_BOHAZJAULENNEM, "Нядзеля перад Богазьяўленьнем", "mm_ndz_pierad_bohazjaulenniem_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "mm_01_01_abrezannie_vasila_vialikaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня", "mm_02_04_01_pieradsv_bohazjaulennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(3, "Перадсьвяцьце Богазьяўленьня", "mm_02_04_01_pieradsv_bohazjaulennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня", "mm_02_04_01_pieradsv_bohazjaulennia_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(3, "Перадсьвяцьце Богазьяўленьня. Прарока Малахіі, мучаніка Гардзея", "mm_03_01_pieradsv_bohazjaulennia_praroka_malachii_muczanika_hardzieja_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(3, "Перадсьвяцьце Богазьяўленьня. Прарока Малахіі, мучаніка Гардзея", "mm_03_01_pieradsv_bohazjaulennia_praroka_malachii_muczanika_hardzieja_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня. Сабор 70-ці апосталаў, пачэснага Тэактыста", "mm_04_01_pieradsviaccie_bohazjaulennia_sabor_70apostalau_paczesnaha_teaktysta_liturhija", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "mm_05_01_czakannie_bohazjauliennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "mm_07_01_pasviaccie_bohazjaulennia_sabor_jana_chrysciciela_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "mm_07_01_pasviaccie_bohazjaulennia_sabor_jana_chrysciciela_liturhija", LITURHIJA))
@@ -418,7 +425,9 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(344, "Зачацьце сьв. Ганны, калі яна зачала Найсьвяцейшую Багародзіцу", "mm_09_12_zaczaccie_baharodzicy_jutran", JUTRAN))
         datMinALL.add(SlugbovyiaTextuData(358, "Перадсьвяцьце нараджэньня Госпада нашага Ісуса Хрыста і сьвятых 10-ці мучанікаў Крыцкіх", "mm_23_12_pieradsviaccie_rastva_10muczanikau_kryckich_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU, "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста (Нядзеля айцоў)", "mm_18_24_12_ndz_pierad_rastvom_sviatych_ajcou_liturhija", LITURHIJA))
-        datMinALL.add(SlugbovyiaTextuData(NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU, "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста (Нядзеля айцоў)", "mm_ndz_pierad_rastvom_sviatych_ajcou_24_12_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU, "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 18-19 сьнежня", "mm_ndz_pierad_rastvom_sviatych_ajcou_18_19_12_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU, "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 20-23 сьнежня", "mm_ndz_pierad_rastvom_sviatych_ajcou_20_23_12_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU, "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 24 сьнежня", "mm_ndz_pierad_rastvom_sviatych_ajcou_24_12_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(363, "20 тысячаў мучанікаў Нікамедыйскіх", "mm_28_12_pasviaccie_rastva_20000_muczanikau_nikamiedyjskich_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(306, "Сьвятых бескарысьлівых лекараў і цудатворцаў Кузьмы і Дзям’яна", "mm_01_11_bieskaryslivych_lekarau_kuzmy_dziamjana_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(292, "Сьвятога апостала і евангеліста Лукі", "mm_18_10_apostala_luki_liturhija", LITURHIJA))
@@ -580,7 +589,7 @@ class SlugbovyiaTextu {
                     }
                 }
                 if (sluzba == VIACZERNIA) {
-                    if (checkDay == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
+                    if (checkDay == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
                         return it.resource
                     }
                 }
@@ -599,7 +608,7 @@ class SlugbovyiaTextu {
                     }
                 }
                 if (sluzba == VIACZERNIA) {
-                    if (dayOfYear == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
+                    if (dayOfYear == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
                         return it.resource
                     }
                 }
@@ -624,7 +633,7 @@ class SlugbovyiaTextu {
                 }
             }
             if (sluzba == VIACZERNIA) {
-                if (getFictionalDay(day, year) == it.day && pasxa == it.pasxa && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
+                if (getFictionalDay(day, year) == it.day && pasxa == it.pasxa && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
                     if (getFictionalDay(day, year) == NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU) {
                         val calendar = GregorianCalendar()
                         var findDay = 24
@@ -652,8 +661,6 @@ class SlugbovyiaTextu {
     }
 
     fun getTitle(resource: String): String {
-        if (resource == "mm_ndz_pierad_rastvom_sviatych_ajcou_18_19_12_viaczernia") return "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 18-19 сьнежня"
-        if (resource == "mm_ndz_pierad_rastvom_sviatych_ajcou_20_23_12_viaczernia") return "Нядзеля перад Нараджэньнем Госпада нашага Ісуса Хрыста – Нядзеля сьвятых айцоў, калі 20-23 сьнежня"
         datMinALL.forEach {
             if (resource == it.resource) return it.title
         }
@@ -849,6 +856,7 @@ class SlugbovyiaTextu {
                     val wik = calendar.get(Calendar.DAY_OF_WEEK)
                     if (wik == Calendar.SUNDAY) {
                         realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
+                        break
                     }
                 }
             }
@@ -860,6 +868,7 @@ class SlugbovyiaTextu {
                     val wik = calendar.get(Calendar.DAY_OF_WEEK)
                     if (wik == Calendar.SUNDAY) {
                         realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
+                        break
                     }
                 }
             }
@@ -871,6 +880,7 @@ class SlugbovyiaTextu {
                     val wik = calendar.get(Calendar.DAY_OF_WEEK)
                     if (wik == Calendar.SUNDAY) {
                         realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
+                        break
                     }
                 }
             }
@@ -882,6 +892,7 @@ class SlugbovyiaTextu {
                     val wik = calendar.get(Calendar.DAY_OF_WEEK)
                     if (wik == Calendar.SATURDAY) {
                         realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
+                        break
                     }
                 }
             }
@@ -893,7 +904,22 @@ class SlugbovyiaTextu {
                     val wik = calendar.get(Calendar.DAY_OF_WEEK)
                     if (wik == Calendar.SUNDAY) {
                         realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
+                        break
                     }
+                }
+            }
+            NIADZELIA_PERAD_BOHAZJAULENNEM -> {
+                //Нядзеля прерад Богаз'яўленнем
+                calendar.set(calendar.get(Calendar.YEAR), Calendar.JANUARY, 5)
+                for (i in 1 .. 6) {
+                    addDay = 0
+                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                    if (wik == Calendar.SUNDAY) {
+                        if (!calendar.isLeapYear(calendar.get(Calendar.YEAR)) && calendar[Calendar.MONTH] > Calendar.FEBRUARY) addDay = 1
+                        realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
+                        break
+                    }
+                    calendar.add(Calendar.DATE, -1 * i)
                 }
             }
         }
@@ -952,6 +978,17 @@ class SlugbovyiaTextu {
             if (wik == Calendar.SATURDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR] + addDay) {
                 fictionalDay = SUBOTA_PERAD_RASTVOM
             }
+        }
+        //Нядзеля прерад Богаз'яўленнем
+        calendar.set(year, Calendar.JANUARY, 5)
+        for (i in 1..6) {
+            var addDay = 0
+            if (!calendar.isLeapYear(year) && calendar[Calendar.MONTH] > Calendar.FEBRUARY) addDay = 1
+            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+            if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR] + addDay) {
+                fictionalDay = NIADZELIA_PERAD_BOHAZJAULENNEM
+            }
+            calendar.add(Calendar.DATE, -1 * i)
         }
         return fictionalDay
     }

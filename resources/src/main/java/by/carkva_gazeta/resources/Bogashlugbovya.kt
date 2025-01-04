@@ -2259,7 +2259,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         layoutParams.setMargins(0, 0, px, px)
         binding.scrollView2.setPadding(binding.scrollView2.paddingLeft, binding.scrollView2.paddingTop, 0 , 0)
         binding.scrollView2.layoutParams = layoutParams
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         controller.hide(WindowInsetsCompat.Type.systemBars())
@@ -2278,7 +2277,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         val px = (resources.displayMetrics.density * 10).toInt()
         binding.scrollView2.setPadding(binding.scrollView2.paddingLeft, binding.scrollView2.paddingTop, px , 0)
         binding.scrollView2.layoutParams = layoutParams
-        WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.show(WindowInsetsCompat.Type.systemBars())
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)

@@ -67,7 +67,7 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
             day = sluzbaList[i].day
             when {
                 day >= 1000 -> {
-                    dayOfYear = sluzba.getRealDay(day)
+                    dayOfYear = sluzba.getRealDay(day, Calendar.getInstance()[Calendar.YEAR])
                 }
 
                 sluzbaList[i].pasxa -> {

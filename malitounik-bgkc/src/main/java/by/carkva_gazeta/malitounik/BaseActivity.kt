@@ -97,6 +97,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener, MenuProv
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //enableEdgeToEdge()
         theme.applyStyle(R.style.OptOutEdgeToEdgeEnforcement, false)
         addMenuProvider(this)
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {

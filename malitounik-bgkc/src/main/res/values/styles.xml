@@ -92,4 +92,6 @@
     <style name="SplashTheme" parent="AppTheme" />
 
     <style name="Theme.PdfView.SelectedTheme" parent="AppTheme" />
+
+    <style name="OptOutEdgeToEdgeEnforcement" />
 </resources>

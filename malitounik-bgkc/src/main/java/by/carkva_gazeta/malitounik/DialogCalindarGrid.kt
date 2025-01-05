@@ -315,9 +315,9 @@ class DialogCalindarGrid : DialogFragment() {
                     1 -> {
                         when {
                             slugba.checkViachernia(raznicia, dayOfYear.toInt(), year) -> {
-                                val listResource = slugba.loadSluzbaDayList(SlugbovyiaTextu.VIACZERNIA, dayOfYear.toInt())
+                                val listResource = slugba.loadSluzbaDayList(SlugbovyiaTextu.VIACZERNIA, dayOfYear.toInt(), year)
                                 if (listResource.size > 1) {
-                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.VIACZERNIA, dayOfYear.toInt(), 0, 0)
+                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.VIACZERNIA, dayOfYear.toInt(), 0, 0, year)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 } else {
                                     val intent = Intent()
@@ -390,9 +390,9 @@ class DialogCalindarGrid : DialogFragment() {
                     6 -> {
                         when {
                             slugba.checkLiturgia(raznicia, dayOfYear.toInt(), year) -> {
-                                val listResource = slugba.loadSluzbaDayList(SlugbovyiaTextu.LITURHIJA, dayOfYear.toInt())
+                                val listResource = slugba.loadSluzbaDayList(SlugbovyiaTextu.LITURHIJA, dayOfYear.toInt(), year)
                                 if (ton != 0 || listResource.size > 1) {
-                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.LITURHIJA, dayOfYear.toInt(), ton, denNedzeli)
+                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.LITURHIJA, dayOfYear.toInt(), ton, denNedzeli, year)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 } else {
                                     val intent = Intent()
@@ -429,9 +429,9 @@ class DialogCalindarGrid : DialogFragment() {
                     4 -> {
                         when {
                             slugba.checkUtran(raznicia, dayOfYear.toInt(), year) -> {
-                                val listResource = slugba.loadSluzbaDayList(SlugbovyiaTextu.JUTRAN, dayOfYear.toInt())
+                                val listResource = slugba.loadSluzbaDayList(SlugbovyiaTextu.JUTRAN, dayOfYear.toInt(), year)
                                 if (listResource.size > 1) {
-                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.JUTRAN, dayOfYear.toInt(), 0, 0)
+                                    val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.JUTRAN, dayOfYear.toInt(), 0, 0, year)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 } else {
                                     val intent = Intent()

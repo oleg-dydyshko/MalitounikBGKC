@@ -64,7 +64,8 @@ class DialogTraparyAndKandaki : DialogFragment() {
                 startActivity(intent)
             }
             val dayOfYear = arguments?.getInt("dayOfYear", 1) ?: 1
-            val list = SlugbovyiaTextu().loadSluzbaDayList(arguments?.getInt("slugbaType", SlugbovyiaTextu.VIACZERNIA) ?: SlugbovyiaTextu.VIACZERNIA, dayOfYear)
+            val calendar = Calendar.getInstance()
+            val list = SlugbovyiaTextu().loadSluzbaDayList(arguments?.getInt("slugbaType", SlugbovyiaTextu.VIACZERNIA) ?: SlugbovyiaTextu.VIACZERNIA, dayOfYear, arguments?.getInt("year", calendar[Calendar.YEAR]) ?: calendar[Calendar.YEAR])
             for (i in list.indices) {
                 data.add(Bogaslujbovyia(list[i].title, list[i].resource))
             }
@@ -102,12 +103,13 @@ class DialogTraparyAndKandaki : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(slugbaType: Int, dayOfYear: Int, ton: Int, denNedzeli: Int): DialogTraparyAndKandaki {
+        fun getInstance(slugbaType: Int, dayOfYear: Int, ton: Int, denNedzeli: Int, year: Int): DialogTraparyAndKandaki {
             val bundle = Bundle()
              bundle.putInt("slugbaType", slugbaType)
             bundle.putInt("dayOfYear", dayOfYear)
             bundle.putInt("ton", ton)
             bundle.putInt("denNedzeli", denNedzeli)
+            bundle.putInt("year", year)
             val trapary = DialogTraparyAndKandaki()
             trapary.arguments = bundle
             return trapary

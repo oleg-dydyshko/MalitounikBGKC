@@ -29,9 +29,7 @@ class SlugbovyiaTextu {
         const val ABIEDNICA = 8
         const val PAVIACHERNICA = 9
         const val PAUNOCHNICA = 10
-        const val JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX = 11
-        const val VIACZERNIA_BEZ_SVIATARA = 12
-        const val MALEBEN_NA_NOVY_GOD = 13
+        const val MALEBEN_NA_NOVY_GOD = 11
         const val AICOU_VII_SUSVETNAGA_SABORY = 1000
         const val NIADZELIA_PRA_AICOU = 1001
         const val NIADZELIA_AICOU_VI_SABORY = 1002
@@ -183,11 +181,11 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(-4, "Вялікая серада", "vialikaja_sierada_liturhija_raniej_asviacz_darou", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-3, "Вялікі чацьвер", "vialiki_czacvier_jutran", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-3, "Вялікі чацьвер", "vialiki_czacvier_viaczernia_z_liturhijaj", VIACZERNIA_Z_LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_jutran_12jevanhellau", JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-2, "Ютрань (12 Евангельляў Мукаў Хрыстовых)", "vialikaja_piatnica_jutran_12jevanhellau", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_vialikija_hadziny", VIALHADZINY, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_mal_paviaczernica", PAVIACHERNICA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_viaczernia_biez_sviatara", VIACZERNIA_BEZ_SVIATARA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-2, "Вячэрня (без сьвятара)", "vialikaja_piatnica_viaczernia_biez_sviatara", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_paunocznica", PAUNOCHNICA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_jutran", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_viaczernia_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
@@ -228,8 +226,6 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(1, "Малебен на Новы год", "mm_01_01_malebien_novy_hod", MALEBEN_NA_NOVY_GOD))
         datMinALL.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня; сьвятаначальніка Сільвестра, папы Рымскага", "mm_02_01_pieradsv_bohazjaulennia_silviestra_papy_rymskaha_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня; сьвятаначальніка Сільвестра, папы Рымскага", "mm_02_01_pieradsviaccie_bohazjaulennia_silviestra_papy_rymskaha_viaczernia", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня; Сабор 70-ці апосталаў, пачэснага Тэактыста", "mm_04_01_pieradsv_bohazjaulennia_liturhija", LITURHIJA))
-        datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня; Сабор 70-ці апосталаў, пачэснага Тэактыста", "mm_04_01_pieradsviaccie_bohazjaulennia_sabor_70apostalau_paczesnaha_teaktysta_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(128, "Жырoвiцкaй iкoны Maцi Бoжae", "mm_07_05_zyrovickaj_ikony_maci_bozaj_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(142, "Сьвятых роўнаапостальных Канстанціна і Алены", "mm_21_05_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(142, "Сьвятых роўнаапостальных Канстанціна і Алены", "mm_21_05_viaczernia", VIACZERNIA))
@@ -281,7 +277,8 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня", "mm_02_04_01_pieradsv_bohazjaulennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(3, "Перадсьвяцьце Богазьяўленьня. Прарока Малахіі, мучаніка Гардзея", "mm_03_01_pieradsv_bohazjaulennia_praroka_malachii_muczanika_hardzieja_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(3, "Перадсьвяцьце Богазьяўленьня. Прарока Малахіі, мучаніка Гардзея", "mm_03_01_pieradsv_bohazjaulennia_praroka_malachii_muczanika_hardzieja_liturhija", LITURHIJA))
-        datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня. Сабор 70-ці апосталаў, пачэснага Тэактыста", "mm_04_01_pieradsviaccie_bohazjaulennia_sabor_70apostalau_paczesnaha_teaktysta_liturhija", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня. Сабор 70-ці апосталаў, пачэснага Тэактыста", "mm_04_01_pieradsviaccie_bohazjaulennia_sabor_70apostalau_paczesnaha_teaktysta_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня; Сабор 70-ці апосталаў, пачэснага Тэактыста", "mm_04_01_pieradsviaccie_bohazjaulennia_sabor_70apostalau_paczesnaha_teaktysta_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "mm_05_01_czakannie_bohazjauliennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня. Мучанікаў Тэапэмпта і Тэоны; пачэснае Сынклітыкі Александрыйскай", "mm_05_01_czakannie_bohazjaulennia_muczanikau_teapempta_teony_sinklityki_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "mm_07_01_pasviaccie_bohazjaulennia_sabor_jana_chrysciciela_viaczernia", VIACZERNIA))
@@ -499,10 +496,7 @@ class SlugbovyiaTextu {
             HADZINA6 -> "Шостая гадзіна"
             PAVIACHERNICA -> "Малая павячэрніца"
             PAUNOCHNICA -> "Паўночніца"
-            MALEBEN_NA_NOVY_GOD -> ""
-            JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX -> "Ютрань (12 Евангельляў Мукаў Хрыстовых)"
-            VIACZERNIA_BEZ_SVIATARA -> "Вячэрня (без сьвятара)"
-            else -> "Іншае"
+            else -> ""
         }
     }
 
@@ -576,14 +570,13 @@ class SlugbovyiaTextu {
         return list.sorted()
     }
 
-    fun loadSluzbaDayList(slugbaType: Int, dayOfYear: Int): ArrayList<SlugbovyiaTextuData> {
+    fun loadSluzbaDayList(slugbaType: Int, dayOfYear: Int, year: Int): ArrayList<SlugbovyiaTextuData> {
         var dayOfYearReal = 1
         var day: Int
         val resultSlugba = datMinALL.filter {
             when (slugbaType) {
                 VIACZERNIA -> it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA
                 LITURHIJA -> it.sluzba == LITURHIJA || it.sluzba == MALEBEN_NA_NOVY_GOD
-                JUTRAN -> it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX
                 else -> it.sluzba == slugbaType
             }
         }
@@ -592,11 +585,11 @@ class SlugbovyiaTextu {
             day = resultSlugba[i].day
             when {
                 day >= 1000 -> {
-                    dayOfYearReal = getRealDay(day)
+                    dayOfYearReal = getRealDay(day, year)
                 }
 
                 resultSlugba[i].pasxa -> {
-                    MenuCaliandar.getDataCalaindar(year = Calendar.getInstance()[Calendar.YEAR]).forEach {
+                    MenuCaliandar.getDataCalaindar(year = year).forEach {
                         if (it[22].toInt() == day) {
                             dayOfYearReal = it[24].toInt()
                             return@forEach
@@ -608,9 +601,11 @@ class SlugbovyiaTextu {
                     dayOfYearReal = day
                 }
             }
-            val c = ArrayList<String>()
-            c.addAll(MenuCaliandar.getPositionCaliandar(dayOfYearReal, Calendar.getInstance()[Calendar.YEAR]))
-            if (c[24].toInt() == dayOfYear) {
+            val calendar = GregorianCalendar()
+            calendar[Calendar.YEAR] = year
+            var addDay = 0
+            if (!calendar.isLeapYear(calendar.get(Calendar.YEAR)) && calendar[Calendar.MONTH] > Calendar.FEBRUARY) addDay = 1
+            if (dayOfYearReal + addDay == dayOfYear) {
                 resultDay.add(resultSlugba[i])
             }
         }
@@ -618,7 +613,7 @@ class SlugbovyiaTextu {
     }
 
     fun getResource(day: Int, dayOfYear: Int, sluzba: Int, year: Int): String {
-        val checkDay = getRealDay(day)
+        val checkDay = getRealDay(day, year)
         datMinALL.forEach {
             if (it.pasxa) {
                 if (sluzba == VIALHADZINY) {
@@ -627,12 +622,12 @@ class SlugbovyiaTextu {
                     }
                 }
                 if (sluzba == JUTRAN) {
-                    if (checkDay == it.day && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
+                    if (checkDay == it.day && (it.sluzba == JUTRAN)) {
                         return it.resource
                     }
                 }
                 if (sluzba == VIACZERNIA) {
-                    if (checkDay == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
+                    if (checkDay == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA)) {
                         return it.resource
                     }
                 }
@@ -646,12 +641,12 @@ class SlugbovyiaTextu {
                     }
                 }
                 if (sluzba == JUTRAN) {
-                    if (dayOfYear == it.day && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
+                    if (dayOfYear == it.day && (it.sluzba == JUTRAN)) {
                         return it.resource
                     }
                 }
                 if (sluzba == VIACZERNIA) {
-                    if (dayOfYear == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
+                    if (dayOfYear == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA)) {
                         return it.resource
                     }
                 }
@@ -662,46 +657,6 @@ class SlugbovyiaTextu {
         }
         return "0"
     }
-
-    /*fun getResource(day: Int, pasxa: Boolean, sluzba: Int, year: Int): String {
-        datMinALL.forEach {
-            if (sluzba == VIALHADZINY) {
-                if (day == it.day && pasxa == it.pasxa && (it.sluzba == VIALHADZINY || it.sluzba == VELIKODNYIAHADZINY || it.sluzba == HADZINA6)) {
-                    return it.resource
-                }
-            }
-            if (sluzba == JUTRAN) {
-                if (day == it.day && pasxa == it.pasxa && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
-                    return it.resource
-                }
-            }
-            if (sluzba == VIACZERNIA) {
-                if (getFictionalDay(day, year) == it.day && pasxa == it.pasxa && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA || it.sluzba == VIACZERNIA_BEZ_SVIATARA)) {
-                    if (getFictionalDay(day, year) == NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU) {
-                        val calendar = GregorianCalendar()
-                        var findDay = 24
-                        for (i in 18..24) {
-                            calendar.set(year, Calendar.DECEMBER, i)
-                            val wik = calendar.get(Calendar.DAY_OF_WEEK)
-                            if (wik == Calendar.SUNDAY) {
-                                findDay = i
-                                break
-                            }
-                        }
-                        if (findDay in 18..19) return "mm_ndz_pierad_rastvom_sviatych_ajcou_18_19_12_viaczernia"
-                        if (findDay in 20..23) return "mm_ndz_pierad_rastvom_sviatych_ajcou_20_23_12_viaczernia"
-                    }
-                    return it.resource
-                }
-            }
-            if (sluzba == LITURHIJA) {
-                if (getFictionalDay(day, year) == it.day && pasxa == it.pasxa && it.sluzba == LITURHIJA) {
-                    return it.resource
-                }
-            }
-        }
-        return "0"
-    }*/
 
     fun getTitle(resource: String): String {
         datMinALL.forEach {
@@ -765,11 +720,11 @@ class SlugbovyiaTextu {
     fun checkUtran(day: Int, dayOfYear: Int, year: Int): Boolean {
         datMinALL.forEach {
             if (it.pasxa) {
-                if (day == it.day && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
+                if (day == it.day && (it.sluzba == JUTRAN)) {
                     return true
                 }
             } else {
-                if (getFictionalDay(dayOfYear, year) == it.day && (it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX)) {
+                if (getFictionalDay(dayOfYear, year) == it.day && it.sluzba == JUTRAN) {
                     return true
                 }
             }
@@ -795,11 +750,11 @@ class SlugbovyiaTextu {
     fun checkViachernia(day: Int, dayOfYear: Int, year: Int): Boolean {
         datMinALL.forEach {
             if (it.pasxa) {
-                if (day == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA || it.sluzba == VIACZERNIA_Z_LITURHIJA)) {
+                if (day == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA)) {
                     return true
                 }
             } else {
-                if (getFictionalDay(dayOfYear, year) == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_BEZ_SVIATARA || it.sluzba == VIACZERNIA_Z_LITURHIJA)) {
+                if (getFictionalDay(dayOfYear, year) == it.day && (it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA)) {
                     return true
                 }
             }
@@ -886,9 +841,10 @@ class SlugbovyiaTextu {
         return false
     }
 
-    fun getRealDay(day: Int): Int {
+    fun getRealDay(day: Int, year: Int): Int {
         var realDay = day
         val calendar = GregorianCalendar()
+        calendar[Calendar.YEAR] = year
         var addDay = 0
         if (!calendar.isLeapYear(calendar.get(Calendar.YEAR))) addDay = 1
         when (day) {
@@ -954,7 +910,7 @@ class SlugbovyiaTextu {
             NIADZELIA_PERAD_BOHAZJAULENNEM -> {
                 //Нядзеля прерад Богаз'яўленнем
                 calendar.set(calendar.get(Calendar.YEAR), Calendar.JANUARY, 5)
-                for (i in 1 .. 6) {
+                for (i in 1..6) {
                     addDay = 0
                     val wik = calendar.get(Calendar.DAY_OF_WEEK)
                     if (wik == Calendar.SUNDAY) {

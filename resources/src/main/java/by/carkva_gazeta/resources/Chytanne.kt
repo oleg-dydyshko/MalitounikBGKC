@@ -151,7 +151,6 @@ class Chytanne : ZmenyiaChastki() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
-        R.raw.mm_05_01_czakannie_bohazjaulennia_muczanikau_teapempta_teony_sinklityki_viaczernia
         binding.actionPlus.setOnClickListener {
             if (spid in 20..235) {
                 spid -= 5

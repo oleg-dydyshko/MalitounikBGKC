@@ -229,6 +229,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня; сьвятаначальніка Сільвестра, папы Рымскага", "mm_02_01_pieradsv_bohazjaulennia_silviestra_papy_rymskaha_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня; сьвятаначальніка Сільвестра, папы Рымскага", "mm_02_01_pieradsviaccie_bohazjaulennia_silviestra_papy_rymskaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня; Сабор 70-ці апосталаў, пачэснага Тэактыста", "mm_04_01_pieradsv_bohazjaulennia_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня; Сабор 70-ці апосталаў, пачэснага Тэактыста", "mm_04_01_pieradsviaccie_bohazjaulennia_sabor_70apostalau_paczesnaha_teaktysta_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(128, "Жырoвiцкaй iкoны Maцi Бoжae", "mm_07_05_zyrovickaj_ikony_maci_bozaj_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(142, "Сьвятых роўнаапостальных Канстанціна і Алены", "mm_21_05_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(142, "Сьвятых роўнаапостальных Канстанціна і Алены", "mm_21_05_viaczernia", VIACZERNIA))
@@ -282,6 +283,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(3, "Перадсьвяцьце Богазьяўленьня. Прарока Малахіі, мучаніка Гардзея", "mm_03_01_pieradsv_bohazjaulennia_praroka_malachii_muczanika_hardzieja_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня. Сабор 70-ці апосталаў, пачэснага Тэактыста", "mm_04_01_pieradsviaccie_bohazjaulennia_sabor_70apostalau_paczesnaha_teaktysta_liturhija", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "mm_05_01_czakannie_bohazjauliennia_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня. Мучанікаў Тэапэмпта і Тэоны; пачэснае Сынклітыкі Александрыйскай", "mm_05_01_czakannie_bohazjaulennia_muczanikau_teapempta_teony_sinklityki_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "mm_07_01_pasviaccie_bohazjaulennia_sabor_jana_chrysciciela_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "mm_07_01_pasviaccie_bohazjaulennia_sabor_jana_chrysciciela_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(16, "Пакланеньне кайданам апостала Пятра", "mm_16_01_paklaniennie_kajdanam_apostala_piatra_viaczernia", VIACZERNIA))
@@ -574,6 +576,47 @@ class SlugbovyiaTextu {
         return list.sorted()
     }
 
+    fun loadSluzbaDayList(slugbaType: Int, dayOfYear: Int): ArrayList<SlugbovyiaTextuData> {
+        var dayOfYearReal = 1
+        var day: Int
+        val resultSlugba = datMinALL.filter {
+            when (slugbaType) {
+                VIACZERNIA -> it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA
+                LITURHIJA -> it.sluzba == LITURHIJA || it.sluzba == MALEBEN_NA_NOVY_GOD
+                JUTRAN -> it.sluzba == JUTRAN || it.sluzba == JUTRAN_12_EVANGELIAU_MUKAU_XRYSTOVYX
+                else -> it.sluzba == slugbaType
+            }
+        }
+        val resultDay = ArrayList<SlugbovyiaTextuData>()
+        for (i in resultSlugba.indices) {
+            day = resultSlugba[i].day
+            when {
+                day >= 1000 -> {
+                    dayOfYearReal = getRealDay(day)
+                }
+
+                resultSlugba[i].pasxa -> {
+                    MenuCaliandar.getDataCalaindar(year = Calendar.getInstance()[Calendar.YEAR]).forEach {
+                        if (it[22].toInt() == day) {
+                            dayOfYearReal = it[24].toInt()
+                            return@forEach
+                        }
+                    }
+                }
+
+                else -> {
+                    dayOfYearReal = day
+                }
+            }
+            val c = ArrayList<String>()
+            c.addAll(MenuCaliandar.getPositionCaliandar(dayOfYearReal, Calendar.getInstance()[Calendar.YEAR]))
+            if (c[24].toInt() == dayOfYear) {
+                resultDay.add(resultSlugba[i])
+            }
+        }
+        return resultDay
+    }
+
     fun getResource(day: Int, dayOfYear: Int, sluzba: Int, year: Int): String {
         val checkDay = getRealDay(day)
         datMinALL.forEach {
@@ -620,7 +663,7 @@ class SlugbovyiaTextu {
         return "0"
     }
 
-    fun getResource(day: Int, pasxa: Boolean, sluzba: Int, year: Int): String {
+    /*fun getResource(day: Int, pasxa: Boolean, sluzba: Int, year: Int): String {
         datMinALL.forEach {
             if (sluzba == VIALHADZINY) {
                 if (day == it.day && pasxa == it.pasxa && (it.sluzba == VIALHADZINY || it.sluzba == VELIKODNYIAHADZINY || it.sluzba == HADZINA6)) {
@@ -658,7 +701,7 @@ class SlugbovyiaTextu {
             }
         }
         return "0"
-    }
+    }*/
 
     fun getTitle(resource: String): String {
         datMinALL.forEach {

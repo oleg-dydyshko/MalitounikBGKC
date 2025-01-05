@@ -49,10 +49,8 @@ class DialogTraparyAndKandaki : DialogFragment() {
             } else {
                 binding.listView.selector = ContextCompat.getDrawable(activity, R.drawable.selector_default)
             }
-            val title = arguments?.getStringArrayList("title") ?: ArrayList<String>()
             val ton = arguments?.getInt("ton", 0) ?: 0
             val denNedzeli = arguments?.getInt("denNedzeli", 0) ?: 0
-            val resurs = arguments?.getStringArrayList("resurs") ?: ArrayList<String>()
             binding.listView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@OnItemClickListener
@@ -65,8 +63,10 @@ class DialogTraparyAndKandaki : DialogFragment() {
                 intent.putExtra("title", data[position].title)
                 startActivity(intent)
             }
-            title.forEachIndexed { index, tit ->
-                data.add(Bogaslujbovyia(tit, resurs[index]))
+            val dayOfYear = arguments?.getInt("dayOfYear", 1) ?: 1
+            val list = SlugbovyiaTextu().loadSluzbaDayList(arguments?.getInt("slugbaType", SlugbovyiaTextu.VIACZERNIA) ?: SlugbovyiaTextu.VIACZERNIA, dayOfYear)
+            for (i in list.indices) {
+                data.add(Bogaslujbovyia(list[i].title, list[i].resource))
             }
             if (ton != 0) data.add(Bogaslujbovyia("Тон $ton", "ton$ton"))
             if (denNedzeli > Calendar.SUNDAY) {
@@ -102,11 +102,11 @@ class DialogTraparyAndKandaki : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(title: ArrayList<String>, ton: Int, resurs: ArrayList<String>, denNedzeli: Int): DialogTraparyAndKandaki {
+        fun getInstance(slugbaType: Int, dayOfYear: Int, ton: Int, denNedzeli: Int): DialogTraparyAndKandaki {
             val bundle = Bundle()
-            bundle.putStringArrayList("title", title)
+             bundle.putInt("slugbaType", slugbaType)
+            bundle.putInt("dayOfYear", dayOfYear)
             bundle.putInt("ton", ton)
-            bundle.putStringArrayList("resurs", resurs)
             bundle.putInt("denNedzeli", denNedzeli)
             val trapary = DialogTraparyAndKandaki()
             trapary.arguments = bundle

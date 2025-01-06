@@ -36,6 +36,7 @@ class SlugbovyiaTextu {
         const val NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU = 1003
         const val SUBOTA_PERAD_RASTVOM = 1004
         const val NIADZELIA_PERAD_BOHAZJAULENNEM = 1005
+        const val NIADZELIA_PASLIA_BOHAZJAULENIA = 1006
         const val MINEIA_SVIATOCHNAIA = 100
         const val MINEIA_VIALIKI_POST_1 = 101
         const val MINEIA_VIALIKI_POST_2 = 102
@@ -271,6 +272,7 @@ class SlugbovyiaTextu {
         datMinALL.add(SlugbovyiaTextuData(227, "Перадсьвяцьце Ўсьпеньня і сьв. прарока Міхея", "mm_14_08_pieradsv_uspiennia_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(NIADZELIA_PERAD_BOHAZJAULENNEM, "Нядзеля перад Богазьяўленьнем", "mm_ndz_pierad_bohazjaulenniem_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(NIADZELIA_PERAD_BOHAZJAULENNEM, "Нядзеля перад Богазьяўленьнем", "mm_ndz_pierad_bohazjaulenniem_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(NIADZELIA_PASLIA_BOHAZJAULENIA, "Нядзеля пасьля Богазьяўленьня", "mm_ndz_pasla_bohazjaulennia_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "mm_01_01_abrezannie_vasila_vialikaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня", "mm_02_04_01_pieradsv_bohazjaulennia_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(3, "Перадсьвяцьце Богазьяўленьня", "mm_02_04_01_pieradsv_bohazjaulennia_viaczernia", VIACZERNIA))
@@ -921,6 +923,18 @@ class SlugbovyiaTextu {
                     calendar.add(Calendar.DATE, -1 * i)
                 }
             }
+            NIADZELIA_PASLIA_BOHAZJAULENIA -> {
+                //Нядзеля пасля Богаз'яўлення
+                for (i in 7..13) {
+                    calendar.set(calendar.get(Calendar.YEAR), Calendar.JANUARY, i)
+                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                    if (wik == Calendar.SUNDAY) {
+                        realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                        break
+                    }
+                    calendar.add(Calendar.DATE, -1 * i)
+                }
+            }
         }
         return realDay
     }
@@ -988,6 +1002,14 @@ class SlugbovyiaTextu {
                 fictionalDay = NIADZELIA_PERAD_BOHAZJAULENNEM
             }
             calendar.add(Calendar.DATE, -1 * i)
+        }
+        //Нядзеля пасля Богаз'яўлення
+        for (i in 7..13) {
+            calendar.set(year, Calendar.JANUARY, i)
+            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+            if (wik == Calendar.SUNDAY && dayOfYear == calendar[Calendar.DAY_OF_YEAR]) {
+                fictionalDay = NIADZELIA_PASLIA_BOHAZJAULENIA
+            }
         }
         return fictionalDay
     }

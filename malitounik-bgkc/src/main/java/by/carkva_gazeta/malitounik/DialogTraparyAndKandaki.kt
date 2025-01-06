@@ -22,7 +22,7 @@ import java.util.Calendar
 
 class DialogTraparyAndKandaki : DialogFragment() {
     private var mLastClickTime: Long = 0
-    private val data = ArrayList<Bogaslujbovyia>()
+    private val data = ArrayList<SlugbovyiaTextuData>()
     private var _binding: TraparyAndKandakiBinding? = null
     private val binding get() = _binding!!
     private lateinit var alert: AlertDialog
@@ -58,21 +58,18 @@ class DialogTraparyAndKandaki : DialogFragment() {
                 mLastClickTime = SystemClock.elapsedRealtime()
                 val intent = Intent()
                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                intent.putExtra("resurs", data[position].resurs)
+                intent.putExtra("resurs", data[position].resource)
                 intent.putExtra("zmena_chastki", true)
                 intent.putExtra("title", data[position].title)
                 startActivity(intent)
             }
             val dayOfYear = arguments?.getInt("dayOfYear", 1) ?: 1
             val calendar = Calendar.getInstance()
-            val list = SlugbovyiaTextu().loadSluzbaDayList(arguments?.getInt("slugbaType", SlugbovyiaTextu.VIACZERNIA) ?: SlugbovyiaTextu.VIACZERNIA, dayOfYear, arguments?.getInt("year", calendar[Calendar.YEAR]) ?: calendar[Calendar.YEAR])
-            for (i in list.indices) {
-                data.add(Bogaslujbovyia(list[i].title, list[i].resource))
-            }
-            if (ton != 0) data.add(Bogaslujbovyia("Тон $ton", "ton$ton"))
+            data.addAll(SlugbovyiaTextu().loadSluzbaDayList(arguments?.getInt("slugbaType", SlugbovyiaTextu.VIACZERNIA) ?: SlugbovyiaTextu.VIACZERNIA, dayOfYear, arguments?.getInt("year", calendar[Calendar.YEAR]) ?: calendar[Calendar.YEAR]))
+            if (ton != 0) data.add(SlugbovyiaTextuData(0, "Тон $ton", "ton$ton", SlugbovyiaTextu.VIACZERNIA))
             if (denNedzeli > Calendar.SUNDAY) {
                 val listTonKognyDzen = MenuBogashlugbovya.getTextTonNaKoznyDzenList()[denNedzeli - 2]
-                data.add(Bogaslujbovyia(listTonKognyDzen.title, listTonKognyDzen.resurs))
+                data.add(SlugbovyiaTextuData(0, listTonKognyDzen.title, listTonKognyDzen.resurs, SlugbovyiaTextu.VIACZERNIA))
             }
             val adapter = TraparyAndKandakiAdaprer(activity, data)
             binding.listView.adapter = adapter
@@ -81,7 +78,7 @@ class DialogTraparyAndKandaki : DialogFragment() {
         return alert
     }
 
-    private class TraparyAndKandakiAdaprer(private val activity: BaseActivity, private val data: ArrayList<Bogaslujbovyia>) : ArrayAdapter<Bogaslujbovyia>(activity, R.layout.simple_list_item_2, R.id.label, data) {
+    private class TraparyAndKandakiAdaprer(private val activity: BaseActivity, private val data: ArrayList<SlugbovyiaTextuData>) : ArrayAdapter<SlugbovyiaTextuData>(activity, R.layout.simple_list_item_2, R.id.label, data) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -117,6 +114,4 @@ class DialogTraparyAndKandaki : DialogFragment() {
     }
 
     private class ViewHolder(var text: TextView)
-
-    private data class Bogaslujbovyia(val title: String, val resurs: String)
 }

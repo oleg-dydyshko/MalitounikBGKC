@@ -63,6 +63,12 @@ class DialogCalindarGrid : DialogFragment() {
     private var sviatyaName = "no_sviatyia"
     private var mItemArray = ArrayList<Int>()
     private val slugba = SlugbovyiaTextu()
+    private val listViachernia = ArrayList<SlugbovyiaTextuData>()
+    private val listLiturgia = ArrayList<SlugbovyiaTextuData>()
+    private val listJutran = ArrayList<SlugbovyiaTextuData>()
+    private val listPavachernica = ArrayList<SlugbovyiaTextuData>()
+    private val listPaunochnica = ArrayList<SlugbovyiaTextuData>()
+    private val listVialikiaGadziny = ArrayList<SlugbovyiaTextuData>()
 
     private fun getImage(id: Int, imageWhite: Boolean = false, imageSecondary: Boolean = false): Int {
         if (id == 1) {
@@ -155,6 +161,12 @@ class DialogCalindarGrid : DialogFragment() {
             raznicia = arguments?.getInt("raznicia", 400) ?: 400
             sviatyaName = arguments?.getString("svityiaName", "no_sviatyia") ?: "no_sviatyia"
             issetSvityia = sviatyaName.contains("no_sviatyia")
+            listViachernia.addAll(slugba.loadSluzbaDayList(SlugbovyiaTextu.VIACZERNIA, dayOfYear.toInt(), year))
+            listLiturgia.addAll(slugba.loadSluzbaDayList(SlugbovyiaTextu.LITURHIJA, dayOfYear.toInt(), year))
+            listJutran.addAll(slugba.loadSluzbaDayList(SlugbovyiaTextu.JUTRAN, dayOfYear.toInt(), year))
+            listPavachernica.addAll(slugba.loadSluzbaDayList(SlugbovyiaTextu.PAVIACHERNICA, dayOfYear.toInt(), year))
+            listPaunochnica.addAll(slugba.loadSluzbaDayList(SlugbovyiaTextu.PAUNOCHNICA, dayOfYear.toInt(), year))
+            listVialikiaGadziny.addAll(slugba.loadSluzbaDayList(SlugbovyiaTextu.VIALHADZINY, dayOfYear.toInt(), year))
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (k.getString("caliandarGrid", "") != "") {
                 try {
@@ -231,7 +243,7 @@ class DialogCalindarGrid : DialogFragment() {
             holder.mImage.contentDescription = text
             holder.itemView.tag = mItemList[position]
             when {
-                mItemList[position] == 4 && !(slugba.checkUtran(raznicia, dayOfYear.toInt(), year) || denNedzeliUtran == Calendar.SUNDAY) -> {
+                mItemList[position] == 4 && !(listJutran.size > 0 || denNedzeliUtran == Calendar.SUNDAY) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
@@ -246,12 +258,12 @@ class DialogCalindarGrid : DialogFragment() {
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
 
-                mItemList[position] == 5 && !slugba.checkVialikiaGadziny(raznicia, dayOfYear.toInt(), year) -> {
+                mItemList[position] == 5 && listVialikiaGadziny.size == 0 -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
 
-                mItemList[position] == 3 && !(slugba.checkPaunochnica(raznicia, dayOfYear.toInt(), year)) -> {
+                mItemList[position] == 3 && listPaunochnica.size == 0 -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
@@ -261,7 +273,7 @@ class DialogCalindarGrid : DialogFragment() {
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
 
-                mItemList[position] == 6 && !(slugba.checkLiturgia(raznicia, dayOfYear.toInt(), year) || (ton == 0 && denNedzeli != Calendar.SUNDAY) || ton != 0) -> {
+                mItemList[position] == 6 && !(listLiturgia.size > 0 || (ton == 0 && denNedzeli != Calendar.SUNDAY) || ton != 0) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
@@ -314,17 +326,16 @@ class DialogCalindarGrid : DialogFragment() {
                 when (itemList[bindingAdapterPosition].toInt()) {
                     1 -> {
                         when {
-                            slugba.checkViachernia(raznicia, dayOfYear.toInt(), year) -> {
-                                val listResource = slugba.loadSluzbaDayList(SlugbovyiaTextu.VIACZERNIA, dayOfYear.toInt(), year)
-                                if (listResource.size > 1) {
+                            listViachernia.size > 0 -> {
+                                if (listViachernia.size > 1) {
                                     val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.VIACZERNIA, dayOfYear.toInt(), 0, 0, year)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 } else {
                                     val intent = Intent()
                                     intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                                    intent.putExtra("resurs", listResource[0].resource)
+                                    intent.putExtra("resurs", listViachernia[0].resource)
                                     intent.putExtra("zmena_chastki", true)
-                                    intent.putExtra("title", listResource[0].title)
+                                    intent.putExtra("title", listViachernia[0].title)
                                     startActivity(intent)
                                 }
                             }
@@ -338,13 +349,13 @@ class DialogCalindarGrid : DialogFragment() {
 
                     2 -> {
                         when {
-                            slugba.checkPavichrrnica(raznicia, dayOfYear.toInt(), year) -> {
+                            listPavachernica.size > 0 -> {
                                 val intent = Intent()
-                                val resours = slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.PAVIACHERNICA, year)
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("resurs", resours)
+                                intent.putExtra("resurs", listPavachernica[0].resource)
                                 intent.putExtra("zmena_chastki", true)
-                                intent.putExtra("title", slugba.getTitle(resours))
+                                intent.putExtra("title", listPavachernica[0].title)
+                                intent.putExtra("sluzba", listPavachernica[0].sluzba)
                                 startActivity(intent)
                             }
 
@@ -361,13 +372,12 @@ class DialogCalindarGrid : DialogFragment() {
 
                     3 -> {
                         when {
-                            slugba.checkPaunochnica(raznicia, dayOfYear.toInt(), year) -> {
+                            listPaunochnica.size > 0 -> {
                                 val intent = Intent()
-                                val resours = slugba.getResource(raznicia, dayOfYear.toInt(), SlugbovyiaTextu.PAUNOCHNICA, year)
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("resurs", resours)
+                                intent.putExtra("resurs", listPaunochnica[0].resource)
                                 intent.putExtra("zmena_chastki", true)
-                                intent.putExtra("title", slugba.getTitle(resours))
+                                intent.putExtra("title", listPaunochnica[0].title)
                                 startActivity(intent)
                             }
                         }
@@ -375,13 +385,13 @@ class DialogCalindarGrid : DialogFragment() {
 
                     5 -> {
                         when {
-                            slugba.checkVialikiaGadziny(raznicia, dayOfYear.toInt(), year) -> {
+                            listVialikiaGadziny.size > 0 -> {
                                 val intent = Intent()
-                                val resours = slugba.getResource(raznicia, slugba.getDayVialikiaGadziny(dayOfYear.toInt(), year), SlugbovyiaTextu.VIALHADZINY, year)
+                                val resours = listVialikiaGadziny[0].resource
                                 intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("resurs", resours)
                                 intent.putExtra("zmena_chastki", true)
-                                intent.putExtra("title", slugba.getTitle(resours))
+                                intent.putExtra("title", listVialikiaGadziny[0].title)
                                 startActivity(intent)
                             }
                         }
@@ -389,17 +399,16 @@ class DialogCalindarGrid : DialogFragment() {
 
                     6 -> {
                         when {
-                            slugba.checkLiturgia(raznicia, dayOfYear.toInt(), year) -> {
-                                val listResource = slugba.loadSluzbaDayList(SlugbovyiaTextu.LITURHIJA, dayOfYear.toInt(), year)
-                                if (ton != 0 || listResource.size > 1) {
+                            listLiturgia.size > 0 -> {
+                                if (ton != 0 || listLiturgia.size > 1) {
                                     val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.LITURHIJA, dayOfYear.toInt(), ton, denNedzeli, year)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 } else {
                                     val intent = Intent()
                                     intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                                    intent.putExtra("resurs", listResource[0].resource)
+                                    intent.putExtra("resurs", listLiturgia[0].resource)
                                     intent.putExtra("zmena_chastki", true)
-                                    intent.putExtra("title", listResource[0].title)
+                                    intent.putExtra("title", listLiturgia[0].title)
                                     startActivity(intent)
                                 }
                             }
@@ -428,17 +437,16 @@ class DialogCalindarGrid : DialogFragment() {
 
                     4 -> {
                         when {
-                            slugba.checkUtran(raznicia, dayOfYear.toInt(), year) -> {
-                                val listResource = slugba.loadSluzbaDayList(SlugbovyiaTextu.JUTRAN, dayOfYear.toInt(), year)
-                                if (listResource.size > 1) {
+                            listJutran.size > 0 -> {
+                                if (listJutran.size > 1) {
                                     val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.JUTRAN, dayOfYear.toInt(), 0, 0, year)
                                     traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 } else {
                                     val intent = Intent()
                                     intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
-                                    intent.putExtra("resurs", listResource[0].resource)
+                                    intent.putExtra("resurs", listJutran[0].resource)
                                     intent.putExtra("zmena_chastki", true)
-                                    intent.putExtra("title", listResource[0].title)
+                                    intent.putExtra("title", listJutran[0].title)
                                     startActivity(intent)
                                 }
                             }

@@ -64,6 +64,7 @@ import by.carkva_gazeta.malitounik.MenuVybranoe
 import by.carkva_gazeta.malitounik.PdfDocumentAdapter
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.SlugbovyiaTextu
+import by.carkva_gazeta.malitounik.SlugbovyiaTextuData
 import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.VybranoeData
 import by.carkva_gazeta.resources.databinding.BogasluzbovyaBinding
@@ -118,8 +119,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     private var animatopRun = false
     private var chechZmena = false
     private var checkLiturgia = 0
-    private var raznica = 400
-    private var dayOfYear = "1"
+    //private var dayOfYear = "1"
     private var checkDayOfYear = false
     private var sviaty = false
     private var daysv = 1
@@ -130,6 +130,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     private var startSearchString = ""
     private var liturgia = false
     private var perevod = VybranoeBibleList.PEREVODSEMUXI
+    private var listResource = ArrayList<SlugbovyiaTextuData>()
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
@@ -750,29 +751,28 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             var nochenia = false
             val inputStream = resources.openRawResource(id)
             val dayOfWeek = c.get(Calendar.DAY_OF_WEEK)
-            val year = c.get(Calendar.YEAR)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val color = if (dzenNoch) "<font color=\"#ff6666\">"
             else "<font color=\"#d00505\">"
             val slugbovyiaTextu = SlugbovyiaTextu()
-            raznica = raznica()
-            dayOfYear = dayOfYear()
             var zmennyiaCastkiTitle = ""
             val cal = GregorianCalendar()
-            val dayOfYar = if (cal.isLeapYear(cal[Calendar.YEAR])) 0
+            val dayOfYar = if (cal.isLeapYear(cal[Calendar.YEAR]) && cal[Calendar.MONTH] <= Calendar.FEBRUARY) 0
             else 1
-            checkDayOfYear = if (liturgia) slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt(), getYear())
-            else slugbovyiaTextu.checkViachernia(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR])[22].toInt(), dayOfYear.toInt(), getYear())
-            if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, getYear()))) {
+            listResource.clear()
+            if (liturgia) listResource.addAll(slugbovyiaTextu.loadSluzbaDayList(SlugbovyiaTextu.LITURHIJA, c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR]))
+            else listResource.addAll(slugbovyiaTextu.loadSluzbaDayList(SlugbovyiaTextu.VIACZERNIA, c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR]))
+            checkDayOfYear = listResource.size > 0
+            if (liturgia && checkDayOfYear) {
                 chechZmena = true
-                val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA, year)
+                val resours = listResource[0].resource
                 val idZmenyiaChastki = resursMap[resours] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
-                zmennyiaCastkiTitle = slugbovyiaTextu.getTitle(resours)
+                zmennyiaCastkiTitle = listResource[0].title
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
             }
             val viachernia = resurs == "lit_raniej_asviaczanych_darou" || resurs == "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara" || resurs == "viaczernia_niadzelnaja" || resurs == "viaczernia_liccia_i_blaslavenne_chliabou" || resurs == "viaczernia_na_kozny_dzen" || resurs == "viaczernia_u_vialikim_poscie"
-            if (viachernia && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, c[Calendar.DAY_OF_YEAR] + dayOfYar, getYear()))) {
+            if (viachernia && checkDayOfYear) {
                 chechZmena = true
                 checkLiturgia = 1
             }
@@ -1561,7 +1561,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 override fun onClick(widget: View) {
                     val slugbovyiaTextu = SlugbovyiaTextu()
                     val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
-                    val resours = slugbovyiaTextu.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA, c[Calendar.YEAR])
+                    val resours = listResource[0].resource
                     intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
@@ -1855,8 +1855,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 }
 
                 checkDayOfYear -> {
-                    val resours = if (checkLiturgia == 0) slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA, c[Calendar.YEAR])
-                    else slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.VIACZERNIA, c[Calendar.YEAR])
+                    val resours = listResource[0].resource
                     intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
@@ -1864,7 +1863,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                 }
 
                 else -> {
-                    val resours = slugba.getResource(raznica, dayOfYear.toInt(), SlugbovyiaTextu.LITURHIJA, c[Calendar.YEAR])
+                    val resours = listResource[0].resource
                     intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)

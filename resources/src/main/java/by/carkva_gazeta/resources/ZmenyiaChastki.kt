@@ -141,11 +141,8 @@ abstract class ZmenyiaChastki : BaseActivity(), View.OnTouchListener, Interactiv
         arrayData.addAll(arrayList)
     }
 
-    fun raznica() = arrayData[0][22].toInt()
+    private fun raznica() = arrayData[0][22].toInt()
 
-    fun dayOfYear() = arrayData[0][24]
-
-    fun getYear() = arrayData[0][3].toInt()
 
     private fun bibliaNew(chtenie: String): Int {
         var bible = 0

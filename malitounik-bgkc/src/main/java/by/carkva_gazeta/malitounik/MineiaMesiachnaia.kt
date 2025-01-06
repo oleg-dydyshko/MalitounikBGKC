@@ -92,7 +92,7 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
             val dayOfMonth = c[1].toInt()
             val opisanie = ". " + sluzba.getNazouSluzby(sluzbaList[i].sluzba)
             if (c[2].toInt() == mun) {
-                mineiaList.add(MineiaList(adminDayOfYear + sluzbaList[i].title + opisanie, sluzbaList[i].resource, sluzbaList[i].sluzba, sluzbaList[i].pasxa, dayOfYear, dayOfMonth))
+                mineiaList.add(MineiaList(adminDayOfYear + sluzbaList[i].title + opisanie, sluzbaList[i].resource, sluzbaList[i].sluzba, dayOfYear, dayOfMonth))
             }
         }
         mineiaList.sortWith { o1, o2 ->
@@ -281,5 +281,5 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
         }
     }
 
-    class MineiaList(val title: String, val resource: String, val sluzba: Int, val pasxa: Boolean, val dayOfYear: Int, val dayOfMonth: Int)
+    class MineiaList(val title: String, val resource: String, val sluzba: Int, val dayOfYear: Int, val dayOfMonth: Int)
 }

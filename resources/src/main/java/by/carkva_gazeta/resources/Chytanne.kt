@@ -180,7 +180,6 @@ class Chytanne : ZmenyiaChastki() {
             onBack()
         }
         binding.InteractiveScroll.setOnScrollChangedCallback(this)
-        R.raw.mm_ndz_pasla_bohazjaulennia_liturhija
     }
 
     private fun setTollbarTheme() {

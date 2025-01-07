@@ -54,6 +54,7 @@ import by.carkva_gazeta.malitounik.CaliandarMun
 import by.carkva_gazeta.malitounik.DialogBibliotekaWIFI
 import by.carkva_gazeta.malitounik.DialogDzenNochSettings
 import by.carkva_gazeta.malitounik.DialogHelpShare
+import by.carkva_gazeta.malitounik.DialogTraparyAndKandaki
 import by.carkva_gazeta.malitounik.EditTextCustom
 import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
@@ -118,12 +119,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
     private val findListSpans = ArrayList<ArrayList<SpanStr>>()
     private var animatopRun = false
     private var chechZmena = false
-    private var checkLiturgia = 0
-    //private var dayOfYear = "1"
-    private var checkDayOfYear = false
-    private var sviaty = false
-    private var daysv = 1
-    private var munsv = 0
     private var vybranoePosition = -1
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
     private val c = Calendar.getInstance()
@@ -758,23 +753,18 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             val slugbovyiaTextu = SlugbovyiaTextu()
             var zmennyiaCastkiTitle = ""
             val cal = GregorianCalendar()
-            val dayOfYar = if (cal.isLeapYear(cal[Calendar.YEAR]) && cal[Calendar.MONTH] <= Calendar.FEBRUARY) 0
-            else 1
+            val dayOfYar = if (!cal.isLeapYear(cal[Calendar.YEAR]) && cal[Calendar.MONTH] > Calendar.FEBRUARY) 1
+            else 0
             listResource.clear()
             if (liturgia) listResource.addAll(slugbovyiaTextu.loadSluzbaDayList(SlugbovyiaTextu.LITURHIJA, c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR]))
             else listResource.addAll(slugbovyiaTextu.loadSluzbaDayList(SlugbovyiaTextu.VIACZERNIA, c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR]))
-            checkDayOfYear = listResource.size > 0
-            if (liturgia && checkDayOfYear) {
+            val viachernia = resurs == "lit_raniej_asviaczanych_darou" || resurs == "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara" || resurs == "viaczernia_niadzelnaja" || resurs == "viaczernia_liccia_i_blaslavenne_chliabou" || resurs == "viaczernia_na_kozny_dzen" || resurs == "viaczernia_u_vialikim_poscie"
+            if ((viachernia || liturgia) && listResource.size > 0) {
                 chechZmena = true
                 val resours = listResource[0].resource
                 val idZmenyiaChastki = resursMap[resours] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
                 zmennyiaCastkiTitle = listResource[0].title
                 nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
-            }
-            val viachernia = resurs == "lit_raniej_asviaczanych_darou" || resurs == "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara" || resurs == "viaczernia_niadzelnaja" || resurs == "viaczernia_liccia_i_blaslavenne_chliabou" || resurs == "viaczernia_na_kozny_dzen" || resurs == "viaczernia_u_vialikim_poscie"
-            if (viachernia && checkDayOfYear) {
-                chechZmena = true
-                checkLiturgia = 1
             }
             invalidateOptionsMenu()
             reader.forEachLine {
@@ -941,7 +931,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             return@withContext builder.toString()
         }
         val text = MainActivity.fromHtml(res).toSpannable()
-        if (liturgia) {
+        if (liturgia && listResource.size > 0) {
             val ch1 = runZmennyiaChastki(text, 0)
             val ch2 = runZmennyiaChastki(text, ch1)
             val ch3 = runZmennyiaChastki(text, ch2)
@@ -1559,14 +1549,18 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             }
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val slugbovyiaTextu = SlugbovyiaTextu()
-                    val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
-                    val resours = listResource[0].resource
-                    intent.putExtra("autoscrollOFF", autoscroll)
-                    intent.putExtra("resurs", resours)
-                    intent.putExtra("zmena_chastki", true)
-                    intent.putExtra("title", slugbovyiaTextu.getTitle(resours))
-                    startActivity(intent)
+                    if (listResource.size > 1) {
+                        val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.VIACZERNIA, c[Calendar.DAY_OF_YEAR], 0, 0, c[Calendar.YEAR])
+                        traparyAndKandaki.show(supportFragmentManager, "traparyAndKandaki")
+                    } else {
+                        val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
+                        val resours = listResource[0].resource
+                        intent.putExtra("autoscrollOFF", autoscroll)
+                        intent.putExtra("resurs", resours)
+                        intent.putExtra("zmena_chastki", true)
+                        intent.putExtra("title", listResource[0].title)
+                        startActivity(intent)
+                    }
                 }
             }, bsatGTA1, bsatGTA1 + strLigGTA1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             return bsatGTA1 + strLigGTA1
@@ -1788,7 +1782,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         itemVybranoe.title = spanString
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_zmena).isVisible = chechZmena
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_mun).isVisible = k.getBoolean("admin", false) && liturgia
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_mun).isVisible = k.getBoolean("admin", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_screen_on).isChecked = k.getBoolean("scrinOn", true)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_screen_on).isVisible = true
     }
@@ -1835,7 +1829,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_mun) {
-            val c = Calendar.getInstance()
             val i = Intent(this, CaliandarMun::class.java)
             i.putExtra("mun", c[Calendar.MONTH])
             i.putExtra("day", c[Calendar.DATE])
@@ -1845,32 +1838,18 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_zmena) {
-            val slugba = SlugbovyiaTextu()
             val intent = Intent(this, Bogashlugbovya::class.java)
-            when {
-                sviaty -> {
-                    intent.putExtra("day", daysv)
-                    intent.putExtra("mun", munsv)
-                    intent.putExtra("year", Calendar.getInstance()[Calendar.YEAR])
-                }
-
-                checkDayOfYear -> {
-                    val resours = listResource[0].resource
-                    intent.putExtra("autoscrollOFF", autoscroll)
-                    intent.putExtra("resurs", resours)
-                    intent.putExtra("zmena_chastki", true)
-                    intent.putExtra("title", slugba.getTitle(resours))
-                }
-
-                else -> {
-                    val resours = listResource[0].resource
-                    intent.putExtra("autoscrollOFF", autoscroll)
-                    intent.putExtra("resurs", resours)
-                    intent.putExtra("zmena_chastki", true)
-                    intent.putExtra("title", slugba.getTitle(resours))
-                }
+            if (listResource.size > 1) {
+                val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.VIACZERNIA, c[Calendar.DAY_OF_YEAR], 0, 0, c[Calendar.YEAR])
+                traparyAndKandaki.show(supportFragmentManager, "traparyAndKandaki")
+            } else if (listResource.size > 0) {
+                val resours = listResource[0].resource
+                intent.putExtra("autoscrollOFF", autoscroll)
+                intent.putExtra("resurs", resours)
+                intent.putExtra("zmena_chastki", true)
+                intent.putExtra("title", listResource[0].title)
+                startActivity(intent)
             }
-            startActivity(intent)
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
@@ -2256,7 +2235,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         val layoutParams = binding.scrollView2.layoutParams as ViewGroup.MarginLayoutParams
         val px = (resources.displayMetrics.density * 10).toInt()
         layoutParams.setMargins(0, 0, px, px)
-        binding.scrollView2.setPadding(binding.scrollView2.paddingLeft, binding.scrollView2.paddingTop, 0 , 0)
+        binding.scrollView2.setPadding(binding.scrollView2.paddingLeft, binding.scrollView2.paddingTop, 0, 0)
         binding.scrollView2.layoutParams = layoutParams
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -2274,7 +2253,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         val layoutParams = binding.scrollView2.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.setMargins(0, 0, 0, 0)
         val px = (resources.displayMetrics.density * 10).toInt()
-        binding.scrollView2.setPadding(binding.scrollView2.paddingLeft, binding.scrollView2.paddingTop, px , 0)
+        binding.scrollView2.setPadding(binding.scrollView2.paddingLeft, binding.scrollView2.paddingTop, px, 0)
         binding.scrollView2.layoutParams = layoutParams
         val controller = WindowCompat.getInsetsController(window, binding.constraint)
         controller.show(WindowInsetsCompat.Type.systemBars())

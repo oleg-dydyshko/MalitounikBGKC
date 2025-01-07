@@ -37,6 +37,7 @@ import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuBogashlugbovya
 import by.carkva_gazeta.malitounik.MenuListData
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.SlugbovyiaTextu
 import by.carkva_gazeta.resources.databinding.AkafistActivityPasliaPrichBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -49,7 +50,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 
-class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogHelpShare.DialogHelpShareListener {
+class PasliaPrychascia : SlugbovyiaTextu(), View.OnTouchListener, DialogHelpShare.DialogHelpShareListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -104,7 +105,7 @@ class PasliaPrychascia : BaseActivity(), View.OnTouchListener, DialogHelpShare.D
         binding = AkafistActivityPasliaPrichBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
-        malitvy.addAll(MenuBogashlugbovya.getTextPasliaPrychascia())
+        malitvy.addAll(getTextPasliaPrychascia())
         pasliaPrychascia = savedInstanceState?.getInt("pasliaPrychascia") ?: (intent.extras?.getInt("paslia_prychascia") ?: 0)
         men = Bogashlugbovya.checkVybranoe(this, malitvy[pasliaPrychascia].resurs)
         val adapterViewPager = MyPagerAdapter(this)

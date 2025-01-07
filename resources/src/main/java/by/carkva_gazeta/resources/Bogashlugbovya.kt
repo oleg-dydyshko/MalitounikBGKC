@@ -64,7 +64,6 @@ import by.carkva_gazeta.malitounik.MenuCaliandar
 import by.carkva_gazeta.malitounik.MenuVybranoe
 import by.carkva_gazeta.malitounik.PdfDocumentAdapter
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.SlugbovyiaTextu
 import by.carkva_gazeta.malitounik.SlugbovyiaTextuData
 import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.VybranoeData
@@ -743,34 +742,24 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             chechZmena = false
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
-            var nochenia = false
             val inputStream = resources.openRawResource(id)
             val dayOfWeek = c.get(Calendar.DAY_OF_WEEK)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val color = if (dzenNoch) "<font color=\"#ff6666\">"
             else "<font color=\"#d00505\">"
-            val slugbovyiaTextu = SlugbovyiaTextu()
-            var zmennyiaCastkiTitle = ""
             val cal = GregorianCalendar()
             val dayOfYar = if (!cal.isLeapYear(cal[Calendar.YEAR]) && cal[Calendar.MONTH] > Calendar.FEBRUARY) 1
             else 0
             listResource.clear()
-            if (liturgia) listResource.addAll(slugbovyiaTextu.loadSluzbaDayList(SlugbovyiaTextu.LITURHIJA, c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR]))
-            else listResource.addAll(slugbovyiaTextu.loadSluzbaDayList(SlugbovyiaTextu.VIACZERNIA, c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR]))
+            if (liturgia) listResource.addAll(loadSluzbaDayList(LITURHIJA, c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR]))
+            else listResource.addAll(loadSluzbaDayList(VIACZERNIA, c[Calendar.DAY_OF_YEAR] + dayOfYar, c[Calendar.YEAR]))
             val viachernia = resurs == "lit_raniej_asviaczanych_darou" || resurs == "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara" || resurs == "viaczernia_niadzelnaja" || resurs == "viaczernia_liccia_i_blaslavenne_chliabou" || resurs == "viaczernia_na_kozny_dzen" || resurs == "viaczernia_u_vialikim_poscie"
-            if ((viachernia || liturgia) && listResource.size > 0) {
-                chechZmena = true
-                val resours = listResource[0].resource
-                val idZmenyiaChastki = resursMap[resours] ?: by.carkva_gazeta.malitounik.R.raw.bogashlugbovya_error
-                zmennyiaCastkiTitle = listResource[0].title
-                nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
-            }
+            chechZmena = (viachernia || liturgia) && listResource.size > 0
             invalidateOptionsMenu()
             reader.forEachLine {
                 var line = it
                 if (dzenNoch) line = line.replace("#d00505", "#ff6666")
-                line = line.replace("NOCH", "")
                 when {
                     resurs.contains("ton") -> {
                         line = line.replace("TRAPARN", "")
@@ -789,7 +778,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                             line = line.replace("KANDAK", "")
                             builder.append(line)
                             if (chechZmena) {
-                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
+                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, listResource[0].title)).append("<br><br>\n")
                             }
                             try {
                                 if (dayOfWeek == 1) {
@@ -805,7 +794,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                             line = line.replace("PRAKIMEN", "")
                             builder.append(line)
                             if (chechZmena) {
-                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
+                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, listResource[0].title)).append("<br><br>\n")
                             }
                             try {
                                 if (dayOfWeek == 1) {
@@ -821,7 +810,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                             line = line.replace("ALILUIA", "")
                             builder.append(line)
                             if (chechZmena) {
-                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
+                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, listResource[0].title)).append("<br><br>\n")
                             }
                             try {
                                 if (dayOfWeek == 1) {
@@ -837,7 +826,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                             line = line.replace("PRICHASNIK", "")
                             builder.append(line)
                             if (chechZmena) {
-                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
+                                builder.append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, listResource[0].title)).append("<br><br>\n")
                             }
                             try {
                                 if (dayOfWeek == 1) {
@@ -852,8 +841,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
                         when {
                             line.contains("APCH") -> {
                                 line = line.replace("APCH", "")
-                                if (chechZmena && !nochenia) {
-                                    builder.append("<br>").append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
+                                if (chechZmena) {
+                                    builder.append("<br>").append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, listResource[0].title)).append("<br><br>\n")
                                 }
                                 var sv = sviatyia()
                                 if (sv != "") {
@@ -887,8 +876,8 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
 
                             line.contains("EVCH") -> {
                                 line = line.replace("EVCH", "")
-                                if (chechZmena && !nochenia) {
-                                    builder.append("<br>").append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, zmennyiaCastkiTitle)).append("<br><br>\n")
+                                if (chechZmena) {
+                                    builder.append("<br>").append(getString(by.carkva_gazeta.malitounik.R.string.gl_tyt, listResource[0].title)).append("<br><br>\n")
                                 }
                                 var sv = sviatyia()
                                 if (sv != "") {
@@ -1550,7 +1539,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
                     if (listResource.size > 1) {
-                        val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.VIACZERNIA, c[Calendar.DAY_OF_YEAR], 0, 0, c[Calendar.YEAR])
+                        val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(VIACZERNIA, c[Calendar.DAY_OF_YEAR], 0, 0, c[Calendar.YEAR])
                         traparyAndKandaki.show(supportFragmentManager, "traparyAndKandaki")
                     } else {
                         val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
@@ -1840,7 +1829,7 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         if (id == by.carkva_gazeta.malitounik.R.id.action_zmena) {
             val intent = Intent(this, Bogashlugbovya::class.java)
             if (listResource.size > 1) {
-                val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(SlugbovyiaTextu.VIACZERNIA, c[Calendar.DAY_OF_YEAR], 0, 0, c[Calendar.YEAR])
+                val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(VIACZERNIA, c[Calendar.DAY_OF_YEAR], 0, 0, c[Calendar.YEAR])
                 traparyAndKandaki.show(supportFragmentManager, "traparyAndKandaki")
             } else if (listResource.size > 0) {
                 val resours = listResource[0].resource
@@ -1895,29 +1884,28 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         }
         if (id == by.carkva_gazeta.malitounik.R.id.menu_print) {
             CoroutineScope(Dispatchers.Main).launch {
-                val sluzba = SlugbovyiaTextu()
                 var printFile = ""
-                val res1 = sluzba.getTydzen1()
+                val res1 = getTydzen1()
                 res1.forEach {
                     if (resurs == it.resource) printFile = "Tydzien-1 VP_2012.pdf"
                 }
-                val res2 = sluzba.getTydzen2()
+                val res2 = getTydzen2()
                 res2.forEach {
                     if (resurs == it.resource) printFile = "Tydzien-2 VP_2012.pdf"
                 }
-                val res3 = sluzba.getTydzen3()
+                val res3 = getTydzen3()
                 res3.forEach {
                     if (resurs == it.resource) printFile = "Tydzien-3 VP_2014.pdf"
                 }
-                val res4 = sluzba.getTydzen4()
+                val res4 = getTydzen4()
                 res4.forEach {
                     if (resurs == it.resource) printFile = "Tydzien-4 VP_2014.pdf"
                 }
-                val res5 = sluzba.getTydzen5()
+                val res5 = getTydzen5()
                 res5.forEach {
                     if (resurs == it.resource) printFile = "Tydzien-5 VP_2015.pdf"
                 }
-                val res6 = sluzba.getTydzen6()
+                val res6 = getTydzen6()
                 res6.forEach {
                     if (resurs == it.resource) printFile = "Tydzien-6 VP_2015.pdf"
                 }
@@ -2114,7 +2102,6 @@ class Bogashlugbovya : ZmenyiaChastki(), DialogHelpShare.DialogHelpShareListener
         val builder = StringBuilder()
         reader.forEachLine {
             var line = it
-            line = line.replace("NOCH", "")
             line = line.replace("TRAPARN", "")
             line = line.replace("TRAPARK", "")
             line = line.replace("PRAKIMENN", "")

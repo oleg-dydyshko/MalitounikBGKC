@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 
 
-class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandarMunDateListener {
+class MineiaMesiachnaia : SlugbovyiaTextu(), DialogCaliandarMunDate.DialogCaliandarMunDateListener {
     private lateinit var binding: ContentMineiaBinding
     private var resetTollbarJob: Job? = null
     private lateinit var adapter: MineiaListAdapter
@@ -57,8 +57,7 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
     }
 
     private fun loadMineia() {
-        val sluzba = SlugbovyiaTextu()
-        val sluzbaList = sluzba.getMineiaMesiachnaia()
+        val sluzbaList = getMineiaMesiachnaia()
         val k = getSharedPreferences("biblia", MODE_PRIVATE)
         mineiaList.clear()
         var dayOfYear = 1
@@ -67,7 +66,7 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
             day = sluzbaList[i].day
             when {
                 day >= 1000 -> {
-                    dayOfYear = sluzba.getRealDay(day, Calendar.getInstance()[Calendar.YEAR])
+                    dayOfYear = getRealDay(day, Calendar.getInstance()[Calendar.YEAR])
                 }
 
                 sluzbaList[i].pasxa -> {
@@ -90,7 +89,7 @@ class MineiaMesiachnaia : BaseActivity(), DialogCaliandarMunDate.DialogCaliandar
                 adminDayOfYear = "$dayOfYear (${c[22]}): "
             }
             val dayOfMonth = c[1].toInt()
-            val opisanie = ". " + sluzba.getNazouSluzby(sluzbaList[i].sluzba)
+            val opisanie = ". " + getNazouSluzby(sluzbaList[i].sluzba)
             if (c[2].toInt() == mun) {
                 mineiaList.add(MineiaList(adminDayOfYear + sluzbaList[i].title + opisanie, sluzbaList[i].resource, sluzbaList[i].sluzba, dayOfYear, dayOfMonth))
             }

@@ -25,7 +25,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SlugbyVialikagaPostuSpis : BaseActivity() {
+class SlugbyVialikagaPostuSpis : SlugbovyiaTextu() {
     private var mLastClickTime: Long = 0
     private lateinit var binding: AkafistListBibleBinding
     private var resetTollbarJob: Job? = null
@@ -64,14 +64,13 @@ class SlugbyVialikagaPostuSpis : BaseActivity() {
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
-        val slugba = SlugbovyiaTextu()
         val data = when (intent.extras?.getInt("resurs") ?: 0) {
-            12 -> slugba.getTydzen1()
-            13 -> slugba.getTydzen2()
-            14 -> slugba.getTydzen3()
-            15 -> slugba.getTydzen4()
-            16 -> slugba.getTydzen5()
-            17 -> slugba.getTydzen6()
+            12 -> getTydzen1()
+            13 -> getTydzen2()
+            14 -> getTydzen3()
+            15 -> getTydzen4()
+            16 -> getTydzen5()
+            17 -> getTydzen6()
             else -> listOf()
         }
         val adapter = ListAdaprer(this, data)

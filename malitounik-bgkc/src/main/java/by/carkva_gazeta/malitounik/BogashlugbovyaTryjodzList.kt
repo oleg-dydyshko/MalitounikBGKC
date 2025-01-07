@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -23,7 +22,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class BogashlugbovyaTryjodzList : BaseActivity() {
+class BogashlugbovyaTryjodzList : SlugbovyiaTextu() {
     private var data = ArrayList<ArrayList<SlugbovyiaTextuData>>()
     private var mLastClickTime: Long = 0
     private lateinit var binding: ContentBibleBinding
@@ -77,12 +76,11 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
         }
         binding.titleToolbar.text = intent?.extras?.getString("title", getString(R.string.tryjodz)) ?: getString(R.string.tryjodz)
         binding.subTitleToolbar.visibility = View.GONE
-        val sluzba = SlugbovyiaTextu()
         var array = ArrayList<SlugbovyiaTextuData>()
         var day = ""
         when (intent?.extras?.getInt("tryjodz", 0) ?: 0) {
             1 -> {
-                sluzba.getVilikiTydzen().forEachIndexed { index, it ->
+                getVilikiTydzen().forEachIndexed { index, it ->
                     if (index == 0) day = it.title
                     if (day != it.title) {
                         data.add(array)
@@ -90,14 +88,14 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
                     }
                     array.add(it)
                     day = it.title
-                    if (sluzba.getVilikiTydzen().count() == index + 1) {
+                    if (getVilikiTydzen().count() == index + 1) {
                         data.add(array)
                     }
                 }
             }
 
             2 -> {
-                sluzba.getSvetlyTydzen().forEachIndexed { index, it ->
+                getSvetlyTydzen().forEachIndexed { index, it ->
                     if (index == 0) day = it.title
                     if (day != it.title) {
                         data.add(array)
@@ -105,14 +103,14 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
                     }
                     array.add(it)
                     day = it.title
-                    if (sluzba.getSvetlyTydzen().count() == index + 1) {
+                    if (getSvetlyTydzen().count() == index + 1) {
                         data.add(array)
                     }
                 }
             }
 
             else -> {
-                sluzba.getMineiaSviatochnaia().forEachIndexed { index, it ->
+                getMineiaSviatochnaia().forEachIndexed { index, it ->
                     if (index == 0) day = it.title
                     if (day != it.title) {
                         data.add(array)
@@ -120,7 +118,7 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
                     }
                     array.add(it)
                     day = it.title
-                    if (sluzba.getMineiaSviatochnaia().count() == index + 1) {
+                    if (getMineiaSviatochnaia().count() == index + 1) {
                         data.add(array)
                     }
                 }
@@ -158,7 +156,7 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
         binding.titleToolbar.isSingleLine = true
     }
 
-    private class ExpListAdapter(private val mContext: Activity, private val groups: ArrayList<ArrayList<SlugbovyiaTextuData>>) : BaseExpandableListAdapter() {
+    private class ExpListAdapter(private val mContext: SlugbovyiaTextu, private val groups: ArrayList<ArrayList<SlugbovyiaTextuData>>) : BaseExpandableListAdapter() {
         override fun getGroupCount(): Int {
             return groups.size
         }
@@ -197,7 +195,7 @@ class BogashlugbovyaTryjodzList : BaseActivity() {
             val rootView = ChildViewBinding.inflate(mContext.layoutInflater, parent, false)
             val dzenNoch = (mContext as BaseActivity).getBaseDzenNoch()
             if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            val opisanie = SlugbovyiaTextu().getNazouSluzby(groups[groupPosition][childPosition].sluzba)
+            val opisanie = mContext.getNazouSluzby(groups[groupPosition][childPosition].sluzba)
             rootView.textChild.text = opisanie
             return rootView.root
         }

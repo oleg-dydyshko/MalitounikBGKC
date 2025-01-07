@@ -23,7 +23,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class Aktoix : BaseActivity() {
+class Aktoix : SlugbovyiaTextu() {
     private val data = ArrayList<MenuListData>()
     private var mLastClickTime: Long = 0
     private lateinit var binding: AkafistListBinding
@@ -76,7 +76,7 @@ class Aktoix : BaseActivity() {
         } else {
             binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         }
-        data.addAll(MenuBogashlugbovya.getTextAktoixList())
+        data.addAll(getTextAktoixList())
         binding.ListView.adapter = MenuListAdaprer(this)
         binding.ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {

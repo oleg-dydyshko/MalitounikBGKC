@@ -36,7 +36,7 @@ class DialogTraparyAndKandaki : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
-        activity?.let { activity ->
+        (activity as? SlugbovyiaTextu)?.let { activity ->
             chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = (activity as BaseActivity).getBaseDzenNoch()
             _binding = TraparyAndKandakiBinding.inflate(layoutInflater)
@@ -65,10 +65,10 @@ class DialogTraparyAndKandaki : DialogFragment() {
             }
             val dayOfYear = arguments?.getInt("dayOfYear", 1) ?: 1
             val calendar = Calendar.getInstance()
-            data.addAll(SlugbovyiaTextu().loadSluzbaDayList(arguments?.getInt("slugbaType", SlugbovyiaTextu.VIACZERNIA) ?: SlugbovyiaTextu.VIACZERNIA, dayOfYear, arguments?.getInt("year", calendar[Calendar.YEAR]) ?: calendar[Calendar.YEAR]))
+            data.addAll(activity.loadSluzbaDayList(arguments?.getInt("slugbaType", SlugbovyiaTextu.VIACZERNIA) ?: SlugbovyiaTextu.VIACZERNIA, dayOfYear, arguments?.getInt("year", calendar[Calendar.YEAR]) ?: calendar[Calendar.YEAR]))
             if (ton != 0) data.add(SlugbovyiaTextuData(0, "Тон $ton", "ton$ton", SlugbovyiaTextu.VIACZERNIA))
             if (denNedzeli > Calendar.SUNDAY) {
-                val listTonKognyDzen = MenuBogashlugbovya.getTextTonNaKoznyDzenList()[denNedzeli - 2]
+                val listTonKognyDzen = activity.getTextTonNaKoznyDzenList()[denNedzeli - 2]
                 data.add(SlugbovyiaTextuData(0, listTonKognyDzen.title, listTonKognyDzen.resurs, SlugbovyiaTextu.VIACZERNIA))
             }
             val adapter = TraparyAndKandakiAdaprer(activity, data)

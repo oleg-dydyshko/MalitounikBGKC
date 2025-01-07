@@ -36,6 +36,7 @@ import by.carkva_gazeta.malitounik.VybranoeBibleList
 import by.carkva_gazeta.malitounik.HistoryAdapter
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuBogashlugbovya
+import by.carkva_gazeta.malitounik.SlugbovyiaTextu
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.resources.databinding.SearchBogaslugBinding
 import com.google.gson.Gson
@@ -50,7 +51,7 @@ import org.jsoup.Jsoup
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHistoryListener, DialogBibleSearshSettings.DiallogBibleSearshListiner {
+class SearchBogashlugbovya : SlugbovyiaTextu(), DialogClearHishory.DialogClearHistoryListener, DialogBibleSearshSettings.DiallogBibleSearshListiner {
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
     private lateinit var chin: SharedPreferences
@@ -555,7 +556,7 @@ class SearchBogashlugbovya : BaseActivity(), DialogClearHishory.DialogClearHisto
                 }
             }
         }
-        val bogaslugbovyiaList = MenuBogashlugbovya.getBogaslugbovyiaSearchText(false)
+        val bogaslugbovyiaList = getBogaslugbovyiaSearchText(false)
         for (i in 0 until bogaslugbovyiaList.size) {
             if (searchJob?.isActive == false) break
             var nazva: String

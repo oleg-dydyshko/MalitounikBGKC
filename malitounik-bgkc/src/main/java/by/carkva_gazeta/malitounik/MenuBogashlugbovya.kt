@@ -50,244 +50,6 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
     private lateinit var adapter: MenuListAdaprer
     private val textWatcher = MyTextWatcher()
 
-    companion object {
-        fun getTextPasliaPrychascia(isSearch: Boolean = false): ArrayList<MenuListData> {
-            var opisanie = ""
-            if (isSearch) opisanie = Malitounik.applicationContext().getString(R.string.paslia_prychascia)
-            val dataSearch = ArrayList<MenuListData>()
-            val list = Malitounik.applicationContext().resources.getStringArray(R.array.paslia_prychascia_list)
-            dataSearch.add(MenuListData(list[0] + opisanie, "paslia_prychascia1"))
-            dataSearch.add(MenuListData(list[1] + opisanie, "paslia_prychascia2"))
-            dataSearch.add(MenuListData(list[2] + opisanie, "paslia_prychascia3"))
-            dataSearch.add(MenuListData(list[3] + opisanie, "paslia_prychascia4"))
-            dataSearch.add(MenuListData(list[4] + opisanie, "paslia_prychascia5"))
-            return dataSearch
-        }
-
-        fun getTextSubBogaslugbovuiaVichernia(isSearch: Boolean = false): ArrayList<MenuListData> {
-            var opisanie = ""
-            if (isSearch) opisanie = Malitounik.applicationContext().getString(R.string.vichernia)
-            val dataSearch = ArrayList<MenuListData>()
-            val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.sub_bogaslugbovuia_vichernia)
-            dataSearch.add(MenuListData(r1[0] + opisanie, "viaczernia_niadzelnaja"))
-            dataSearch.add(MenuListData(r1[1] + opisanie, "viaczernia_liccia_i_blaslavenne_chliabou"))
-            dataSearch.add(MenuListData(r1[2] + opisanie, "viaczernia_na_kozny_dzen"))
-            dataSearch.add(MenuListData(r1[3] + opisanie, "viaczernia_u_vialikim_poscie"))
-            dataSearch.add(MenuListData(r1[4] + opisanie, "viaczerniaja_sluzba_sztodzionnaja_biez_sviatara"))
-            dataSearch.add(MenuListData(r1[5] + opisanie, "viaczernia_svietly_tydzien"))
-            return dataSearch
-        }
-
-        fun getTextAktoixList(isSearch: Boolean = false): ArrayList<MenuListData> {
-            var opisanie = ""
-            if (isSearch) opisanie = Malitounik.applicationContext().getString(R.string.aktoix)
-            val dataSearch = ArrayList<MenuListData>()
-            val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.aktoix_list)
-            dataSearch.add(MenuListData(r1[0] + opisanie, "viaczernia_ton1"))
-            dataSearch.add(MenuListData(r1[1] + opisanie, "viaczernia_ton2"))
-            dataSearch.add(MenuListData(r1[2] + opisanie, "viaczernia_ton3"))
-            dataSearch.add(MenuListData(r1[3] + opisanie, "viaczernia_ton4"))
-            dataSearch.add(MenuListData(r1[4] + opisanie, "viaczernia_ton5"))
-            dataSearch.add(MenuListData(r1[5] + opisanie, "viaczernia_ton6"))
-            dataSearch.add(MenuListData(r1[6] + opisanie, "viaczernia_ton7"))
-            dataSearch.add(MenuListData(r1[7] + opisanie, "viaczernia_ton8"))
-            dataSearch.add(MenuListData(r1[8] + opisanie, "viaczernia_baharodzicznyja_adpuszczalnyja"))
-            return dataSearch
-        }
-
-        fun getTextTrebnikList(isSearch: Boolean = false): ArrayList<MenuListData> {
-            var opisanie = ""
-            if (isSearch) opisanie = Malitounik.applicationContext().getString(R.string.trebnik_n)
-            val dataSearch = ArrayList<MenuListData>()
-            val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.trebnik_list)
-            dataSearch.add(MenuListData(r1[0] + opisanie, "sluzba_vyzvalen_biazvinna_zniavolenych"))
-            dataSearch.add(MenuListData(r1[1] + opisanie, "panichida_malaja"))
-            dataSearch.add(MenuListData(r1[2] + opisanie, "czyn_asviaczennia_transpartnaha_srodku"))
-            dataSearch.add(MenuListData(r1[3] + opisanie, "asviaczennie_kryza"))
-            dataSearch.add(MenuListData(r1[4] + opisanie, "mltv_blaslaviennie_usialakaj_reczy"))
-            dataSearch.add(MenuListData(r1[5] + opisanie, "mltv_asviacz_pamiatnaj_tablicy"))
-            dataSearch.add(MenuListData(r1[6] + opisanie, "mltv_asviacz_pamiatnaj_tablicy_paciarpieu_za_bielarus1"))
-            dataSearch.add(MenuListData(r1[7] + opisanie, "mltv_asviacz_pamiatnaj_tablicy_biazvinnym_achviaram_paciarpieli_za_bielarus"))
-            return dataSearch
-        }
-
-        fun getTextTonNaKoznyDzenList(isSearch: Boolean = false): ArrayList<MenuListData> {
-            var opisanie = ""
-            if (isSearch) opisanie = Malitounik.applicationContext().getString(R.string.ton_na_kozny_dzen_list)
-            val dataSearch = ArrayList<MenuListData>()
-            val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.ton_kogny_dzen)
-            dataSearch.add(MenuListData(r1[0] + opisanie, "ton1_budni"))
-            dataSearch.add(MenuListData(r1[1] + opisanie, "ton2_budni"))
-            dataSearch.add(MenuListData(r1[2] + opisanie, "ton3_budni"))
-            dataSearch.add(MenuListData(r1[3] + opisanie, "ton4_budni"))
-            dataSearch.add(MenuListData(r1[4] + opisanie, "ton5_budni"))
-            dataSearch.add(MenuListData(r1[5] + opisanie, "ton6_budni"))
-            return dataSearch
-        }
-
-        fun getTextMineiaAgulnaiaList(isSearch: Boolean = false): ArrayList<MenuListData> {
-            var opisanie = ""
-            if (isSearch) opisanie = Malitounik.applicationContext().getString(R.string.mineia_agulnaia_n)
-            val dataSearch = ArrayList<MenuListData>()
-            val r1 = Malitounik.applicationContext().resources.getStringArray(R.array.mineia_agulnaia_list)
-            dataSearch.add(MenuListData(r1[0] + opisanie, "viachernia_mineia_agulnaia1"))
-            dataSearch.add(MenuListData(r1[1] + opisanie, "viachernia_mineia_agulnaia2"))
-            dataSearch.add(MenuListData(r1[2] + opisanie, "viachernia_mineia_agulnaia3"))
-            dataSearch.add(MenuListData(r1[3] + opisanie, "viachernia_mineia_agulnaia4"))
-            dataSearch.add(MenuListData(r1[4] + opisanie, "viachernia_mineia_agulnaia5"))
-            dataSearch.add(MenuListData(r1[5] + opisanie, "viachernia_mineia_agulnaia6"))
-            dataSearch.add(MenuListData(r1[6] + opisanie, "viachernia_mineia_agulnaia7"))
-            dataSearch.add(MenuListData(r1[7] + opisanie, "viachernia_mineia_agulnaia8"))
-            dataSearch.add(MenuListData(r1[8] + opisanie, "viachernia_mineia_agulnaia9"))
-            dataSearch.add(MenuListData(r1[9] + opisanie, "viachernia_mineia_agulnaia10"))
-            dataSearch.add(MenuListData(r1[10] + opisanie, "viachernia_mineia_agulnaia11"))
-            dataSearch.add(MenuListData(r1[11] + opisanie, "viachernia_mineia_agulnaia12"))
-            dataSearch.add(MenuListData(r1[12] + opisanie, "viachernia_mineia_agulnaia13"))
-            dataSearch.add(MenuListData(r1[13] + opisanie, "viachernia_mineia_agulnaia14"))
-            dataSearch.add(MenuListData(r1[14] + opisanie, "viachernia_mineia_agulnaia15"))
-            dataSearch.add(MenuListData(r1[15] + opisanie, "viachernia_mineia_agulnaia16"))
-            dataSearch.add(MenuListData(r1[16] + opisanie, "viachernia_mineia_agulnaia17"))
-            dataSearch.add(MenuListData(r1[17] + opisanie, "viachernia_mineia_agulnaia18"))
-            dataSearch.add(MenuListData(r1[18] + opisanie, "viachernia_mineia_agulnaia19"))
-            dataSearch.add(MenuListData(r1[19] + opisanie, "viachernia_mineia_agulnaia20"))
-            dataSearch.add(MenuListData(r1[20] + opisanie, "viachernia_mineia_agulnaia21"))
-            dataSearch.add(MenuListData(r1[21] + opisanie, "viachernia_mineia_agulnaia22"))
-            dataSearch.add(MenuListData(r1[22] + opisanie, "viachernia_mineia_agulnaia23"))
-            dataSearch.add(MenuListData(r1[23] + opisanie, "viachernia_mineia_agulnaia24"))
-            dataSearch.add(MenuListData(r1[24] + opisanie, "sluzba_apostalu_apostalam"))
-            dataSearch.add(MenuListData(r1[25] + opisanie, "sluzba_nastauniku_cark_vyznaucu"))
-            dataSearch.add(MenuListData(r1[26] + opisanie, "sluzba_sviatanaczalnikam"))
-            dataSearch.add(MenuListData(r1[27] + opisanie, "sluzba_sviatanaczalniku"))
-            dataSearch.add(MenuListData(r1[28] + opisanie, "sluzba_najsviaciejszaj_baharodzicy"))
-            dataSearch.add(MenuListData(r1[29] + opisanie, "sluzba_za_pamierlych_na_kozny_dzien_tydnia"))
-            dataSearch.add(MenuListData(r1[30] + opisanie, "sluzba_bieskaryslivym_lekaram_cudatvorcam"))
-            dataSearch.add(MenuListData(r1[31] + opisanie, "sluzba_muczanicam"))
-            dataSearch.add(MenuListData(r1[32] + opisanie, "sluzba_muczanicy"))
-            dataSearch.add(MenuListData(r1[33] + opisanie, "sluzba_muczanikam"))
-            dataSearch.add(MenuListData(r1[34] + opisanie, "sluzba_muczanikam_sviataram_i_manacham"))
-            dataSearch.add(MenuListData(r1[35] + opisanie, "sluzba_muczaniku"))
-            dataSearch.add(MenuListData(r1[36] + opisanie, "sluzba_muczaniku_sviataru_i_manachu"))
-            dataSearch.add(MenuListData(r1[37] + opisanie, "sluzba_sviatoj_zanczynie"))
-            dataSearch.add(MenuListData(r1[38] + opisanie, "sluzba_sviatym_zanczynam"))
-            dataSearch.add(MenuListData(r1[39] + opisanie, "sluzba_posnikam_manacham_pustelnikam"))
-            dataSearch.add(MenuListData(r1[40] + opisanie, "sluzba_posniku_manachu_pustelniku"))
-            dataSearch.add(MenuListData(r1[41] + opisanie, "sluzba_janu_chryscicielu"))
-            dataSearch.add(MenuListData(r1[42] + opisanie, "sluzba_praroku"))
-            if (!isSearch) dataSearch.add(MenuListData(r1[43], "1"))
-            return dataSearch
-        }
-
-        fun getTextBogaslugbovyiaList(isSearch: Boolean = false): ArrayList<MenuListData> {
-            var opisanie = ""
-            if (isSearch) opisanie = Malitounik.applicationContext().getString(R.string.bogaslugbovyia)
-            val dataSearch = ArrayList<MenuListData>()
-            val list = Malitounik.applicationContext().resources.getStringArray(R.array.bogaslugbovyia_list)
-            dataSearch.add(MenuListData(list[0] + opisanie, "lit_jana_zalatavusnaha"))
-            dataSearch.add(MenuListData(list[1] + opisanie, "lit_jan_zalat_vielikodn"))
-            dataSearch.add(MenuListData(list[2] + opisanie, "lit_vasila_vialikaha"))
-            dataSearch.add(MenuListData(list[3] + opisanie, "lit_raniej_asviaczanych_darou"))
-            dataSearch.add(MenuListData(list[4] + opisanie, "nabazenstva_maci_bozaj_niast_dap"))
-            dataSearch.add(MenuListData(list[5] + opisanie, "jutran_niadzelnaja"))
-            dataSearch.add(MenuListData(list[6] + opisanie, "abiednica"))
-            dataSearch.add(MenuListData(list[7] + opisanie, "kanon_malebny_baharodzicy"))
-            dataSearch.add(MenuListData(list[8] + opisanie, "kanon_andreja_kryckaha"))
-            dataSearch.add(MenuListData(list[9] + opisanie, "malebien_kiryla_miatod"))
-            dataSearch.add(MenuListData(list[10] + opisanie, "paviaczernica_malaja"))
-            dataSearch.add(MenuListData(list[11] + opisanie, "kanon_andreja_kryckaha_4_czastki"))
-            dataSearch.sort()
-            return dataSearch
-        }
-
-        private fun getTextBogaslugbovyiaFolderList(): ArrayList<MenuListData> {
-            val dataSearch = ArrayList<MenuListData>()
-            val list = Malitounik.applicationContext().resources.getStringArray(R.array.bogaslugbovyia_folder_list)
-            for (i in list.indices) {
-                dataSearch.add(MenuListData(list[i], (i + 1).toString()))
-            }
-            dataSearch.sort()
-            return dataSearch
-        }
-
-        fun getBogaslugbovyiaSearchText(isMenu: Boolean = true): ArrayList<MenuListData> {
-            val dataSearch = ArrayList<MenuListData>()
-            dataSearch.addAll(getTextBogaslugbovyiaList(isMenu))
-            dataSearch.addAll(getTextTrebnikList(isMenu))
-            dataSearch.addAll(getTextPasliaPrychascia(isMenu))
-            dataSearch.addAll(getTextSubBogaslugbovuiaVichernia(isMenu))
-            dataSearch.addAll(getTextAktoixList(isMenu))
-            dataSearch.addAll(getTextMineiaAgulnaiaList(isMenu))
-            dataSearch.addAll(getTextTonNaKoznyDzenList(isMenu))
-            var opisanie = if (isMenu) Malitounik.applicationContext().getString(R.string.ton_na_niadzelu)
-            else ""
-            for (i in 1..8) {
-                dataSearch.add(MenuListData(Malitounik.applicationContext().getString(R.string.ton, i.toString() + opisanie), "ton$i"))
-            }
-            val sluzba = SlugbovyiaTextu()
-            var mesiach = sluzba.getMineiaMesiachnaia()
-            opisanie = if (isMenu) Malitounik.applicationContext().getString(R.string.mineia_mesiachnaia)
-            else ""
-            for (i in mesiach.indices) {
-                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-            }
-            mesiach = sluzba.getVilikiTydzen()
-            opisanie = if (isMenu) Malitounik.applicationContext().getString(R.string.tryedz_1)
-            else ""
-            for (i in mesiach.indices) {
-                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-            }
-            mesiach = sluzba.getSvetlyTydzen()
-            opisanie = if (isMenu) Malitounik.applicationContext().getString(R.string.tryedz_2)
-            else ""
-            for (i in mesiach.indices) {
-                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-            }
-            mesiach = sluzba.getMineiaSviatochnaia()
-            opisanie = if (isMenu) Malitounik.applicationContext().getString(R.string.tryedz_3)
-            else ""
-            for (i in mesiach.indices) {
-                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-            }
-            mesiach = sluzba.getTydzen1()
-            opisanie = if (isMenu) Malitounik.applicationContext().getString(R.string.tryedz_4)
-            else ""
-            for (i in mesiach.indices) {
-                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-            }
-            mesiach = sluzba.getTydzen2()
-            opisanie = if (isMenu) Malitounik.applicationContext().getString(R.string.tryedz_5)
-            else ""
-            for (i in mesiach.indices) {
-                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-            }
-            mesiach = sluzba.getTydzen3()
-            opisanie = if (isMenu) Malitounik.applicationContext().getString(R.string.tryedz_6)
-            else ""
-            for (i in mesiach.indices) {
-                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-            }
-            mesiach = sluzba.getTydzen4()
-            opisanie = if (isMenu) Malitounik.applicationContext().getString(R.string.tryedz_7)
-            else ""
-            for (i in mesiach.indices) {
-                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-            }
-            mesiach = sluzba.getTydzen5()
-            opisanie = if (isMenu) Malitounik.applicationContext().getString(R.string.tryedz_8)
-            else ""
-            for (i in mesiach.indices) {
-                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-            }
-            mesiach = sluzba.getTydzen6()
-            opisanie = if (isMenu) Malitounik.applicationContext().getString(R.string.tryedz_9)
-            else ""
-            for (i in mesiach.indices) {
-                dataSearch.add(MenuListData(mesiach[i].title + ". " + sluzba.getNazouSluzby(mesiach[i].sluzba) + opisanie, mesiach[i].resource))
-            }
-            dataSearch.sort()
-            return dataSearch
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -300,9 +62,9 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.let {
-            data.addAll(getTextBogaslugbovyiaFolderList())
-            data.addAll(getTextBogaslugbovyiaList())
+        (activity as? SlugbovyiaTextu)?.let {
+            data.addAll(it.getTextBogaslugbovyiaFolderList())
+            data.addAll(it.getTextBogaslugbovyiaList())
             dataOriginal.addAll(data)
             adapter = MenuListAdaprer(it as BaseActivity)
             binding.ListView.adapter = adapter
@@ -318,7 +80,7 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
             }
             if (actionExpandOn) {
                 dataSearch.clear()
-                dataSearch.addAll(getBogaslugbovyiaSearchText())
+                dataSearch.addAll(it.getBogaslugbovyiaSearchText())
                 data.clear()
                 data.addAll(dataSearch)
                 adapter.notifyDataSetChanged()
@@ -418,14 +180,16 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
         }
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                actionExpandOn = true
-                dataSearch.clear()
-                dataSearch.addAll(getBogaslugbovyiaSearchText())
-                data.clear()
-                data.addAll(dataSearch)
-                textViewCount?.text = getString(R.string.seash, dataSearch.size)
-                menu.findItem(R.id.count).isVisible = actionExpandOn
-                adapter.notifyDataSetChanged()
+                (activity as? SlugbovyiaTextu)?.let {
+                    actionExpandOn = true
+                    dataSearch.clear()
+                    dataSearch.addAll(it.getBogaslugbovyiaSearchText())
+                    data.clear()
+                    data.addAll(dataSearch)
+                    textViewCount?.text = getString(R.string.seash, dataSearch.size)
+                    menu.findItem(R.id.count).isVisible = actionExpandOn
+                    adapter.notifyDataSetChanged()
+                }
                 return true
             }
 

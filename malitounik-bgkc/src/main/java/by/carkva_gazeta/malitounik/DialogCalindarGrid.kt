@@ -62,7 +62,6 @@ class DialogCalindarGrid : DialogFragment() {
     private var issetSvityia = true
     private var sviatyaName = "no_sviatyia"
     private var mItemArray = ArrayList<Int>()
-    private val slugba = SlugbovyiaTextu()
     private val listViachernia = ArrayList<SlugbovyiaTextuData>()
     private val listLiturgia = ArrayList<SlugbovyiaTextuData>()
     private val listJutran = ArrayList<SlugbovyiaTextuData>()
@@ -136,15 +135,15 @@ class DialogCalindarGrid : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        slugba.onDestroy()
+        (activity as? SlugbovyiaTextu)?.cancelLoadPiarliny()
         _binding = null
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
-        activity?.let {
+        (activity as? SlugbovyiaTextu)?.let { slugba ->
             _binding = CalindarGridBinding.inflate(layoutInflater)
-            val builder = AlertDialog.Builder(it)
+            val builder = AlertDialog.Builder(slugba)
             builder.setView(binding.root)
             slugba.loadPiarliny()
             alert = builder.create()
@@ -167,7 +166,7 @@ class DialogCalindarGrid : DialogFragment() {
             listPavachernica.addAll(slugba.loadSluzbaDayList(SlugbovyiaTextu.PAVIACHERNICA, dayOfYear.toInt(), year))
             listPaunochnica.addAll(slugba.loadSluzbaDayList(SlugbovyiaTextu.PAUNOCHNICA, dayOfYear.toInt(), year))
             listVialikiaGadziny.addAll(slugba.loadSluzbaDayList(SlugbovyiaTextu.VIALHADZINY, dayOfYear.toInt(), year))
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val k = slugba.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (k.getString("caliandarGrid", "") != "") {
                 try {
                     val gson = Gson()
@@ -182,8 +181,8 @@ class DialogCalindarGrid : DialogFragment() {
             } else {
                 for (i in 1..9) mItemArray.add(i)
             }
-            binding.dragGridView.setLayoutManager(GridLayoutManager(it, 3))
-            val listAdapter = ItemAdapter(it, mItemArray, R.id.item_layout, true)
+            binding.dragGridView.setLayoutManager(GridLayoutManager(slugba, 3))
+            val listAdapter = ItemAdapter(slugba, mItemArray, R.id.item_layout, true)
             binding.dragGridView.setAdapter(listAdapter, true)
             binding.dragGridView.setCanDragHorizontally(true)
             binding.dragGridView.setCanDragVertically(true)
@@ -198,7 +197,7 @@ class DialogCalindarGrid : DialogFragment() {
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
                     if (fromPosition != toPosition) {
                         val gson = Gson()
-                        val edit = it.getSharedPreferences("biblia", Context.MODE_PRIVATE).edit()
+                        val edit = slugba.getSharedPreferences("biblia", Context.MODE_PRIVATE).edit()
                         val type = TypeToken.getParameterized(java.util.ArrayList::class.java, Integer::class.java).type
                         edit.putString("caliandarGrid", gson.toJson(mItemArray, type))
                         edit.apply()
@@ -214,7 +213,7 @@ class DialogCalindarGrid : DialogFragment() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    private inner class ItemAdapter(private val activity: Activity, list: ArrayList<Int>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<Int, ItemAdapter.ViewHolder>() {
+    private inner class ItemAdapter(private val activity: SlugbovyiaTextu, list: ArrayList<Int>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<Int, ItemAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = GridItemBinding.inflate(layoutInflater, parent, false)
@@ -253,7 +252,7 @@ class DialogCalindarGrid : DialogFragment() {
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
 
-                mItemList[position] == 8 && !slugba.checkParliny(data, mun) -> {
+                mItemList[position] == 8 && !activity.checkParliny(data, mun) -> {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(activity, R.color.colorSecondary_text))
                 }
@@ -311,7 +310,7 @@ class DialogCalindarGrid : DialogFragment() {
                     return
                 }
                 if (itemList[bindingAdapterPosition].toInt() == 8) {
-                    if (slugba.checkParliny(data, mun)) {
+                    if (activity.checkParliny(data, mun)) {
                         val i = Intent(activity, PiarlinyAll::class.java)
                         i.putExtra("mun", munreal)
                         i.putExtra("day", datareal)

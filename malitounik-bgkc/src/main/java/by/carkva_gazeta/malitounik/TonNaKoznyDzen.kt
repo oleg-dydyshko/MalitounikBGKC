@@ -21,7 +21,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class TonNaKoznyDzen : BaseActivity() {
+class TonNaKoznyDzen : SlugbovyiaTextu() {
     private var mLastClickTime: Long = 0
     private val data = ArrayList<MenuListData>()
     private lateinit var binding: AkafistListBinding
@@ -63,7 +63,7 @@ class TonNaKoznyDzen : BaseActivity() {
         }
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
-        data.addAll(MenuBogashlugbovya.getTextTonNaKoznyDzenList())
+        data.addAll(getTextTonNaKoznyDzenList())
         val adapter = MenuListAdaprer(this)
         binding.ListView.adapter = adapter
         binding.ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->

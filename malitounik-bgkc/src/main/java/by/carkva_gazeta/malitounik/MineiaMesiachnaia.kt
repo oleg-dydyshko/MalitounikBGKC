@@ -66,7 +66,7 @@ class MineiaMesiachnaia : SlugbovyiaTextu(), DialogCaliandarMunDate.DialogCalian
             day = sluzbaList[i].day
             when {
                 day >= 1000 -> {
-                    dayOfYear = getRealDay(day, Calendar.getInstance()[Calendar.YEAR])
+                    dayOfYear = getRealDay(day, Calendar.getInstance()[Calendar.DAY_OF_YEAR], Calendar.getInstance()[Calendar.YEAR])
                 }
 
                 sluzbaList[i].pasxa -> {

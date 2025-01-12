@@ -632,7 +632,6 @@ class MainActivity : SlugbovyiaTextu(), View.OnClickListener, DialogContextMenu.
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         val citataList = ArrayList<Spannable>()
-        var lineIndex = 0
         reader.forEachLine {
             val line = SpannableStringBuilder()
             val t1 = it.indexOf("(")
@@ -641,13 +640,7 @@ class MainActivity : SlugbovyiaTextu(), View.OnClickListener, DialogContextMenu.
                 line.append("\n")
                 line.append(it.substring(t1))
                 citataList.add(line.toSpannable())
-            } else if (k.getBoolean("admin", false)) {
-                val lineError = lineIndex
-                binding.citata.post {
-                    toastView(this, getString(R.string.citata_error, lineError), Toast.LENGTH_LONG)
-                }
             }
-            lineIndex++
         }
         binding.citata.text = citataList[Random.nextInt(citataList.size)].apply {
             setSpan(CustomTypefaceSpan("", ResourcesCompat.getFont(this@MainActivity, R.font.andantinoscript)), 0, 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)

@@ -705,7 +705,6 @@
     <string name="convert_to_html">Канвертаваньне ў html</string>
     <string name="is_html_title">ФАРМАТ HTML</string>
     <string name="is_html">Тэкст у фармаце HTML?</string>
-    <string name="citata_error">Памылка: у файле \"citata\" няма \"(\" у страке %1$d</string>
     <string name="vybrac_file">ВЫБЕРЫЦЕ ФАЙЛ</string>
     <string name="dvunad_sv">ДВУНАДЗЯСЯТЫЯ СЬВЯТЫ</string>
     <string name="vial_sv">ВЯЛІКІЯ СЬВЯТЫ</string>

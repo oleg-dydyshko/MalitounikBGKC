@@ -218,6 +218,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         rub6.add(MenuListData("Малітва перад пачаткам і пасьля кожнай справы", "mltv_pierad_i_pasla_koznaj_spravy"))
         rub6.add(MenuListData("Малітва ў дзень нараджэньня", "mltv_dzien_naradzennia"))
         rub6.add(MenuListData("Малітва аб духу любові", "mltv_ab_duchu_lubovi_sv_franciszak"))
+        rub6.add(MenuListData("Малітва на кожны час", "mltv_na_kozny_czas"))
         rub6.sort()
         data.add(rub1)
         data.add(rub2)

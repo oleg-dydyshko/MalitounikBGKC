@@ -283,6 +283,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         datMinALL.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "mm_07_01_pasviaccie_bohazjaulennia_sabor_jana_chrysciciela_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "mm_07_01_pasviaccie_bohazjaulennia_sabor_jana_chrysciciela_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(16, "Пакланеньне кайданам апостала Пятра", "mm_16_01_paklaniennie_kajdanam_apostala_piatra_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(16, "Пакланеньне кайданам апостала Пятра", "mm_16_01_paklaniennie_kajdanam_apostala_piatra_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(30, "Трох сьвятаначальнікаў: Васіля Вялікага, Рыгора Багаслова і Яна Залатавуснага", "mm_30_01_troch_sviatanacalnikau_vasilia_vialikaha_ryhora_bahaslova_i_jana_zalatavusnaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(30, "Трох сьвятаначальнікаў: Васіля Вялікага, Рыгора Багаслова і Яна Залатавуснага", "mm_30_01_troch_sviatanacalnikau_vasilia_vialikaha_ryhora_bahaslova_i_jana_zalatavusnaha_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(275, "Покрыва Найсьвяцейшай Багародзіцы", "mm_01_10_pokryva_baharodzicy_liturhija", LITURHIJA))

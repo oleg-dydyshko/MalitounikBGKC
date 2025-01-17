@@ -171,23 +171,25 @@ class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarli
         setImageSize(binding.imagePdf)
         binding.imagePdf.setOnClickListener {
             val intent = Intent()
-            intent.type = "*/*"
+            intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
             intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
             mActivityResultImageFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
         }
         binding.admin.setOnClickListener {
             val intent = Intent()
-            intent.type = "*/*"
+            intent.type = "application/pdf"
             intent.action = Intent.ACTION_GET_CONTENT
             intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf"))
             mActivityResultFile.launch(Intent.createChooser(intent, getString(by.carkva_gazeta.malitounik.R.string.vybrac_file)))
         }
     }
 
-    private suspend fun getPdfFileLength(url: String, count: Int = 0): String {
+    private suspend fun getPdfFileLength(url: Uri, count: Int = 0): String {
+        val t1 = url.path?.lastIndexOf("/") ?: 0
+        val fileName = url.path?.substring(t1 + 1) ?: ""
         var error = false
-        val pathReference = Malitounik.referens.child("/data/bibliateka/$url")
+        val pathReference = Malitounik.referens.child("/data/bibliateka/$fileName")
         val metaData = pathReference.metadata.addOnFailureListener {
             error = true
         }.await()
@@ -206,8 +208,10 @@ class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarli
                     val rubrika = (binding.rubrika.selectedItemPosition + 1).toString()
                     val link = binding.textViewTitle.text.toString()
                     val str = binding.opisanie.text.toString()
-                    val pdf = binding.pdfTextView.text.toString()
-                    val t1 = pdf.lastIndexOf(".")
+                    val pdf = Uri.parse(binding.pdfTextView.text.toString())
+                    val t2 = pdf.path?.lastIndexOf("/") ?: 0
+                    val pdfName = pdf.path?.substring(t2 + 1) ?: ""
+                    val t1 = pdfName.lastIndexOf(".")
                     if (t1 == -1 || link == "" || binding.imagePdf.drawable == null) {
                         withContext(Dispatchers.Main) {
                             MainActivity.toastView(this@BibliatekaList, getString(by.carkva_gazeta.malitounik.R.string.error))
@@ -215,21 +219,21 @@ class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarli
                         }
                         return@withContext
                     }
-                    val imageLocal = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png"
+                    val imageLocal = "$filesDir/image_temp/" + pdfName.substring(0, t1) + ".png"
                     if (position == -1) {
                         val mySqlList = ArrayList<String>()
                         mySqlList.add(link)
                         mySqlList.add(str)
-                        mySqlList.add(pdf)
-                        mySqlList.add(getPdfFileLength(binding.pdfTextView.text.toString()))
+                        mySqlList.add(pdfName)
+                        mySqlList.add(getPdfFileLength(Uri.parse(binding.pdfTextView.text.toString())))
                         mySqlList.add(rubrika)
                         mySqlList.add(imageLocal)
                         arrayList.add(0, mySqlList)
                     } else {
                         arrayList[position][0] = link
                         arrayList[position][1] = str
-                        arrayList[position][2] = pdf
-                        if (binding.pdfTextView.text.toString() != "") arrayList[position][3] = getPdfFileLength(binding.pdfTextView.text.toString())
+                        arrayList[position][2] = pdfName
+                        if (binding.pdfTextView.text.toString() != "") arrayList[position][3] = getPdfFileLength(Uri.parse(binding.pdfTextView.text.toString()))
                         arrayList[position][4] = rubrika
                         arrayList[position][5] = imageLocal
                     }
@@ -335,7 +339,8 @@ class BibliatekaList : BaseActivity(), DialogBiblijatekaContextMenu.DialogPiarli
                     }
                     binding.progressBar2.visibility = View.GONE
                 }
-            } catch (_: Throwable) {
+            } catch (e: Throwable) {
+                e.printStackTrace()
             }
         } else {
             MainActivity.toastView(this@BibliatekaList, getString(by.carkva_gazeta.malitounik.R.string.no_internet))

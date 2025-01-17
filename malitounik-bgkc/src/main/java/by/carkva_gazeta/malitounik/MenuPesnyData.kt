@@ -30,6 +30,7 @@ class MenuPesnyData {
         pesnyBag.add(Data("piesni_bahar_maci_bozaja_u_barunach", "Маці Божая ў Барунах"))
         pesnyBag.add(Data("piesni_bahar_maci_bozaja", "Маці Божая"))
         pesnyBag.add(Data("piesni_bahar_himn_da_imia_maryi", "Гімн да імя Марыі"))
+        pesnyBag.add(Data("piesni_bahar_karaleva_supakoju", "Каралева супакою"))
 
         pesnyBel.add(Data("piesni_belarus_ave_maria_pazniak", "Ave Maria"))
         pesnyBel.add(Data("piesni_belarus_boza_szto_kalis_narody", "Божа, што калісь народы"))

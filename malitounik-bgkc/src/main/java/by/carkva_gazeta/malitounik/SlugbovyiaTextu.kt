@@ -440,6 +440,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         datMinALL.add(SlugbovyiaTextuData(14, "Адданьне сьвята Богазьяўленьня. Пачэсных айцоў, у Сінаі і Раіце забітых", "mm_14_01_addannie_bohazjaulennia_ajcou_u_sinai_raicie_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(14, "Адданьне сьвята Богазьяўленьня. Пачэсных айцоў, у Сінаі і Раіце забітых", "mm_14_01_addannie_bohazjaulennia_ajcou_u_sinai_raicie_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(17, "Пачэснага Антона Вялікага", "mm_17_01_paczesnaha_antona_vialikaha_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(17, "Пачэснага Антона Вялікага", "mm_17_01_paczesnaha_antona_vialikaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(21, "Пачэснага Максіма вызнаўцы, мучаніка Неафіта", "mm_21_01_paczesnaha_maksima_vyznaucy_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(25, "Сьвятаначальніка Рыгора Багаслова, архібіскупа Канстанцінопальскага", "mm_25_01_sviatanaczalnika_ryhora_bahaslova_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(25, "Сьвятаначальніка Рыгора Багаслова, архібіскупа Канстанцінопальскага", "mm_25_01_sviatanaczalnika_ryhora_bahaslova_liturhija", LITURHIJA))
@@ -482,6 +483,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         datMinALL.add(SlugbovyiaTextuData(362, "Пасьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста, памяць сьвятога першамучаніка і дыякана Сьцяпана", "mm_27_12_pasviaccie_rastva_pierszamuczanika_sciapana_ajca_todara_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(362, "Пасьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста, памяць сьвятога першамучаніка і дыякана Сьцяпана", "mm_27_12_pasviaccie_rastva_pierszamuczanika_sciapana_ajca_todara_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(SUBOTA_PERAD_RASTVOM, "Субота перад Раством Хрыстовым", "mm_18_24_12_subota_pierad_rastvom_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(20, "Пачэснага Яўхіма Вялікага", "mm_20_01_paczesnaha_jauchima_vialikaha_viaczernia", VIACZERNIA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

@@ -175,6 +175,7 @@ class MenuPesnyData {
         pesnyPrasl.add(Data("piesni_prasl_addac_z_lubovi_usio", "Аддаць з любові ўсё"))
         pesnyPrasl.add(Data("piesni_prasl_sionniaszni_dzien", "Сёньняшні дзень"))
         pesnyPrasl.add(Data("piesni_prasl_ci_ty_byu_na_halhofie", "Ці ты быў на Галгофе"))
+        pesnyPrasl.add(Data("piesni_prasl_dzien_za_dniom", "Дзень за днём"))
 
         pesnyTaize.add(Data("pesny_taize_0", "Magnifikat"))
         pesnyTaize.add(Data("pesny_taize_1", "Ostende nobis"))

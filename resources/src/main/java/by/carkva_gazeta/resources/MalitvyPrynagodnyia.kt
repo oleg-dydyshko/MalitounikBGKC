@@ -220,7 +220,6 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         rub6.add(MenuListData("Малітва аб духу любові", "mltv_ab_duchu_lubovi_sv_franciszak"))
         rub6.add(MenuListData("Малітва на кожны час", "mltv_na_kozny_czas"))
         rub6.add(MenuListData("Малітвы за памерлых («Божа духаў і ўсякага цялеснага стварэньня»)", "mltv_za_pamierlych_boza_duchau"))
-        by.carkva_gazeta.resources.R.raw.mm_17_01_paczesnaha_antona_vialikaha_viaczernia
         rub6.sort()
         data.add(rub1)
         data.add(rub2)

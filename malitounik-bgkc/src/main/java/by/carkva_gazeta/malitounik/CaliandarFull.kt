@@ -210,7 +210,7 @@ class CaliandarFull : BaseFragment(), View.OnClickListener {
                         binding.textCviatyGlavnyia.typeface = MainActivity.createFont(Typeface.NORMAL)
                         binding.textCviatyGlavnyia.isEnabled = false
                     } else {
-                        if (MenuCaliandar.getPositionCaliandar(position)[6].contains("Айцоў першых 6-ці Ўсяленскіх сабораў", true)) binding.textCviatyGlavnyia.setOnClickListener(this@CaliandarFull)
+                        if (MenuCaliandar.getPositionCaliandar(position)[6].contains("Айцоў першых 6-ці Ўсяленскіх сабораў", true) || MenuCaliandar.getPositionCaliandar(position)[6].contains("СУСТРЭЧА ГОСПАДА НАШАГА ІСУСА ХРЫСТА", true)) binding.textCviatyGlavnyia.setOnClickListener(this@CaliandarFull)
                         else if (MenuCaliandar.getPositionCaliandar(position)[6].contains("нядзел", true) || MenuCaliandar.getPositionCaliandar(position)[6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
                         else binding.textCviatyGlavnyia.setOnClickListener(this@CaliandarFull)
                     }

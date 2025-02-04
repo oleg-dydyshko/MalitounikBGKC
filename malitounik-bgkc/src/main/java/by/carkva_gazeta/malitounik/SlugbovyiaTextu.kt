@@ -484,7 +484,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         datMinALL.add(SlugbovyiaTextuData(362, "Пасьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста, памяць сьвятога першамучаніка і дыякана Сьцяпана", "mm_27_12_pasviaccie_rastva_pierszamuczanika_sciapana_ajca_todara_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(362, "Пасьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста, памяць сьвятога першамучаніка і дыякана Сьцяпана", "mm_27_12_pasviaccie_rastva_pierszamuczanika_sciapana_ajca_todara_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(SUBOTA_PERAD_RASTVOM, "Субота перад Раством Хрыстовым", "mm_18_24_12_subota_pierad_rastvom_liturhija", LITURHIJA))
-        datMinALL.add(SlugbovyiaTextuData(20, "Пачэснага Яўхіма Вялікага", "mm_20_01_paczesnaha_jauchima_vialikaha_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(35, "Пасьвяцьце Сустрэчы і сьвятога айца нашага Сідара Пелусійскага", "mm_04_02_pasviaccie_sustreczy_sviatoha_sidara_pielusijskaha_viaczernia", VIACZERNIA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {
@@ -889,7 +889,11 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         dataSearch.add(MenuListData(r1[40] + opisanie, "sluzba_posniku_manachu_pustelniku"))
         dataSearch.add(MenuListData(r1[41] + opisanie, "sluzba_janu_chryscicielu"))
         dataSearch.add(MenuListData(r1[42] + opisanie, "sluzba_praroku"))
-        if (!isSearch) dataSearch.add(MenuListData(r1[43], "1"))
+        dataSearch.add(MenuListData(r1[43] + opisanie, "sluzba_aniolam"))
+        dataSearch.add(MenuListData(r1[44] + opisanie, "sluzba_kryzu"))
+        dataSearch.add(MenuListData(r1[45] + opisanie, "sluzba_sviatamuczanikam"))
+        dataSearch.add(MenuListData(r1[46] + opisanie, "sluzba_sviatamuczaniku"))
+        if (!isSearch) dataSearch.add(MenuListData(r1[47], "1"))
         return dataSearch
     }
 

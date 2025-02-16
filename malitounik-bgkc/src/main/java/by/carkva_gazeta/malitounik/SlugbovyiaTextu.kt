@@ -485,6 +485,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         datMinALL.add(SlugbovyiaTextuData(362, "Пасьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста, памяць сьвятога першамучаніка і дыякана Сьцяпана", "mm_27_12_pasviaccie_rastva_pierszamuczanika_sciapana_ajca_todara_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(SUBOTA_PERAD_RASTVOM, "Субота перад Раством Хрыстовым", "mm_18_24_12_subota_pierad_rastvom_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(35, "Пасьвяцьце Сустрэчы і сьвятога айца нашага Сідара Пелусійскага", "mm_04_02_pasviaccie_sustreczy_sviatoha_sidara_pielusijskaha_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(47, "mm_16_02_lva_vialikaha_viaczernia", "Між сьвятымі айца нашага Льва Вялікага, папы Рымскага", VIACZERNIA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

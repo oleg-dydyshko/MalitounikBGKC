@@ -312,7 +312,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         datMinALL.add(SlugbovyiaTextuData(361, "Сабор Найсьвяцейшай Багародзіцы", "mm_26_12_sabor_baharodzicy_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(-70, "Нядзеля мытніка і фарысэя", "ndz_mytnika_i_faryseja_liturhija", LITURHIJA, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(32, "Перадсьвяцьце Сустрэчы Госпада, Бога і Збаўцы нашага Ісуса Хрыста і сьвятога мучаніка Трыфана", "mm_01_02_pieradsviaccie_sustreczy_hospada_liturhija", LITURHIJA))
-        datMinALL.add(SlugbovyiaTextuData(32, "Перадсьвяцьце Сустрэчы Госпада, Бога і Збаўцы нашага Ісуса Хрыста і сьвятога мучаніка Трыфана", "mm_01_02_sustrecza_hospada_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(32, "Перадсьвяцьце Сустрэчы Госпада, Бога і Збаўцы нашага Ісуса Хрыста і сьвятога мучаніка Трыфана", "mm_01_02_pieradsviaccie_sustreczy_hospada_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(33, "Сустрэча Госпада нашага Ісуса Хрыста (ГРАМНІЦЫ)", "mm_02_02_sustrecza_hospada_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(33, "Сустрэча Госпада нашага Ісуса Хрыста (ГРАМНІЦЫ)", "mm_02_02_sustrecza_hospada_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(-56, "Нядзеля мясапусная, пра Страшны суд", "ndz_miasapusnaja_liturhija", LITURHIJA, pasxa = true))
@@ -485,7 +485,12 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         datMinALL.add(SlugbovyiaTextuData(362, "Пасьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста, памяць сьвятога першамучаніка і дыякана Сьцяпана", "mm_27_12_pasviaccie_rastva_pierszamuczanika_sciapana_ajca_todara_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(SUBOTA_PERAD_RASTVOM, "Субота перад Раством Хрыстовым", "mm_18_24_12_subota_pierad_rastvom_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(35, "Пасьвяцьце Сустрэчы і сьвятога айца нашага Сідара Пелусійскага", "mm_04_02_pasviaccie_sustreczy_sviatoha_sidara_pielusijskaha_viaczernia", VIACZERNIA))
-        datMinALL.add(SlugbovyiaTextuData(47, "mm_16_02_lva_vialikaha_viaczernia", "Між сьвятымі айца нашага Льва Вялікага, папы Рымскага", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(47, "Між сьвятымі айца нашага Льва Вялікага, папы Рымскага", "mm_16_02_lva_vialikaha_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(36, "Пасьвяцьце Сустрэчы Госпада. Сьвятой мучаніцы Агаты", "mm_05_02_pasviaccie_sustreczy_muczanicy_ahaty_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(40, "Адданьне сьвята Сустрэчы Госпада, Бога і Збаўцы нашага Ісуса Хрыста. Мучаніка Нічыпара", "mm_09_02_addanie_sustreczy_hospada_muczanika_niczypara_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(40, "Адданьне сьвята Сустрэчы Госпада, Бога і Збаўцы нашага Ісуса Хрыста. Мучаніка Нічыпара", "mm_09_02_addanie_sustreczy_hospada_muczanika_niczypara_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(45, "Сьвятога і роўнага апосталам Кірылы Філосафа, настаўніка славянаў", "mm_14_02_kirylu_filosafa_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(45, "Сьвятога і роўнага апосталам Кірылы Філосафа, настаўніка славянаў", "mm_14_02_kiryly_filosafa_liturhija", LITURHIJA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {

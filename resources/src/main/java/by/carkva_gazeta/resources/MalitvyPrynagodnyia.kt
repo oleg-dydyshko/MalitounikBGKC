@@ -194,6 +194,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         rub5.add(MenuListData("Малітва за хворага («Лекару душ і целаў»)", "mltv_za_chvoraha_lekaru_dush_cielau"))
         rub5.add(MenuListData("Малітва ў часе хваробы", "mltv_u_czasie_chvaroby"))
         rub5.add(MenuListData("Малітва падчас згубнай пошасьці", "prynagodnyia_28"))
+        rub5.sort()
         rub6.add(MenuListData("Малітва перад пачаткам навучаньня", "prynagodnyia_21"))
         rub6.add(MenuListData("Малітва за дзяцей перад пачаткам навукі", "prynagodnyia_12"))
         rub6.add(MenuListData("Малітва вучняў перад навучаньнем", "prynagodnyia_29"))

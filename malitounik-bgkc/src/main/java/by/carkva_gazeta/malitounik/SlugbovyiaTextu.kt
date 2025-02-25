@@ -830,6 +830,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         dataSearch.add(MenuListData(r1[5] + opisanie, "mltv_asviacz_pamiatnaj_tablicy"))
         dataSearch.add(MenuListData(r1[6] + opisanie, "mltv_asviacz_pamiatnaj_tablicy_paciarpieu_za_bielarus1"))
         dataSearch.add(MenuListData(r1[7] + opisanie, "mltv_asviacz_pamiatnaj_tablicy_biazvinnym_achviaram_paciarpieli_za_bielarus"))
+        dataSearch.add(MenuListData(r1[8] + opisanie, "malitouny_czyn_sviatarskich_adviedzinau_parafijanau"))
         return dataSearch
     }
 

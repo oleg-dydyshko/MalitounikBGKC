@@ -390,7 +390,7 @@ abstract class ZmenyiaChastki : SlugbovyiaTextu(), View.OnTouchListener, Interac
             bible = 10
             novyZapavet = true
         }
-        if (chtenie == "Иуд" || chtenie == "Юды") {
+        if (chtenie == "Иуд" || chtenie == "Юд") {
             bible = 11
             novyZapavet = true
         }

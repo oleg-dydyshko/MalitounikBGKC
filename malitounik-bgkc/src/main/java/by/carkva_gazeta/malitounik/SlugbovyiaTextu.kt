@@ -491,6 +491,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         datMinALL.add(SlugbovyiaTextuData(40, "Адданьне сьвята Сустрэчы Госпада, Бога і Збаўцы нашага Ісуса Хрыста. Мучаніка Нічыпара", "mm_09_02_addanie_sustreczy_hospada_muczanika_niczypara_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(45, "Сьвятога і роўнага апосталам Кірылы Філосафа, настаўніка славянаў", "mm_14_02_kirylu_filosafa_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(45, "Сьвятога і роўнага апосталам Кірылы Філосафа, настаўніка славянаў", "mm_14_02_kiryly_filosafa_liturhija", LITURHIJA))
+        datMinALL.add(SlugbovyiaTextuData(69, "40 мучанікаў Себастыйскіх", "mm_09_03_40_muczanikau_siebastyjskich_viaczernia", VIACZERNIA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {
@@ -612,9 +613,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
             }
             val calendar = GregorianCalendar()
             calendar[Calendar.YEAR] = year
-            var addDay = 0
-            if (!calendar.isLeapYear(calendar.get(Calendar.YEAR)) && calendar[Calendar.MONTH] > Calendar.FEBRUARY) addDay = 1
-            if (dayOfYearReal + addDay == dayOfYear) {
+            if (dayOfYearReal == dayOfYear) {
                 resultDay.add(resultSlugba[i])
             }
         }

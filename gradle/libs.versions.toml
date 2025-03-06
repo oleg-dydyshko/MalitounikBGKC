@@ -1,11 +1,11 @@
 [versions]
 appcompat = "1.7.0"
 commonsText = "1.13.0"
-constraintlayout = "2.2.0"
+constraintlayout = "2.2.1"
 core = "1.58.0.0"
 draglistview = "1.7.3"
 featureDelivery = "2.1.0"
-firebaseBom = "33.9.0"
+firebaseBom = "33.10.0"
 gridlayout = "1.0.0"
 gson = "2.12.1"
 itextg = "5.5.10"

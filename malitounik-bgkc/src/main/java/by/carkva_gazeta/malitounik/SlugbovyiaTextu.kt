@@ -318,7 +318,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         datMinALL.add(SlugbovyiaTextuData(-56, "Нядзеля мясапусная, пра Страшны суд", "ndz_miasapusnaja_liturhija", LITURHIJA, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(-63, "Нядзеля блуднага сына", "ndz_bludnaha_syna_liturhija", LITURHIJA, pasxa = true))
         datMinALL.add(SlugbovyiaTextuData(-49, "Нядзеля сырная", "ndz_syrnaja_liturhija", LITURHIJA, pasxa = true))
-        datMinALL.add(SlugbovyiaTextuData(66, "Сьвятога і роўнага апосталам Мятода, настаўніка славянскага і архібіскупа Мараўскага", "mm_06_04_miatoda_marauskaha_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(97, "Сьвятога і роўнага апосталам Мятода, настаўніка славянскага і архібіскупа Мараўскага", "mm_06_04_miatoda_marauskaha_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(74, "Пачэснага айца нашага Бенядыкта", "mm_14_03_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(77, "Аляксея, чалавека Божага", "mm_17_03_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(78, "Між сьвятымі айца нашага Кірылы, біскупа Ерусалімскага", "mm_18_03_viaczernia", VIACZERNIA))
@@ -581,8 +581,6 @@ abstract class SlugbovyiaTextu : BaseActivity() {
     }
 
     fun loadSluzbaDayList(slugbaType: Int, dayOfYear: Int, year: Int): ArrayList<SlugbovyiaTextuData> {
-        var dayOfYearReal = 1
-        var day: Int
         val resultSlugba = datMinALL.filter {
             when (slugbaType) {
                 VIACZERNIA -> it.sluzba == VIACZERNIA || it.sluzba == VIACZERNIA_Z_LITURHIJA
@@ -592,25 +590,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         }
         val resultDay = ArrayList<SlugbovyiaTextuData>()
         for (i in resultSlugba.indices) {
-            day = resultSlugba[i].day
-            when {
-                day >= 1000 -> {
-                    dayOfYearReal = getRealDay(day, dayOfYear, year)
-                }
-
-                resultSlugba[i].pasxa -> {
-                    MenuCaliandar.getDataCalaindar(year = year).forEach {
-                        if (it[22].toInt() == day) {
-                            dayOfYearReal = it[24].toInt()
-                            return@forEach
-                        }
-                    }
-                }
-
-                else -> {
-                    dayOfYearReal = day
-                }
-            }
+            val dayOfYearReal = getRealDay(resultSlugba[i].day, Calendar.getInstance()[Calendar.DAY_OF_YEAR], Calendar.getInstance()[Calendar.YEAR], resultSlugba[i].pasxa)
             val calendar = GregorianCalendar()
             calendar[Calendar.YEAR] = year
             if (dayOfYearReal == dayOfYear) {
@@ -672,100 +652,142 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         return false
     }
 
-    fun getRealDay(day: Int, dayOfYear: Int, year: Int): Int {
+    fun getRealDay(day: Int, dayOfYear: Int, year: Int, isPasxa: Boolean): Int {
         var realDay = day
         val calendar = GregorianCalendar()
         calendar[Calendar.YEAR] = year
-        var addDay = 0
-        if (!calendar.isLeapYear(calendar.get(Calendar.YEAR))) addDay = 1
-        when (day) {
-            AICOU_VII_SUSVETNAGA_SABORY -> {
-                //Айцоў VII Сусьветнага Сабору
-                for (i in 11..17) {
-                    calendar.set(calendar.get(Calendar.YEAR), Calendar.OCTOBER, i)
-                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
-                    if (wik == Calendar.SUNDAY) {
-                        realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
-                        break
+        when {
+            day >= 1000 -> {
+                when(day) {
+                    AICOU_VII_SUSVETNAGA_SABORY -> {
+                        //Айцоў VII Сусьветнага Сабору
+                        for (i in 11..17) {
+                            calendar.set(calendar.get(Calendar.YEAR), Calendar.OCTOBER, i)
+                            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                            if (wik == Calendar.SUNDAY) {
+                                realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                                break
+                            }
+                        }
                     }
-                }
-            }
 
-            NIADZELIA_PRA_AICOU -> {
-                //Нядзеля праайцоў
-                for (i in 11..17) {
-                    calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
-                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
-                    if (wik == Calendar.SUNDAY) {
-                        realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
-                        break
+                    NIADZELIA_PRA_AICOU -> {
+                        //Нядзеля праайцоў
+                        for (i in 11..17) {
+                            calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
+                            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                            if (wik == Calendar.SUNDAY) {
+                                realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                                break
+                            }
+                        }
                     }
-                }
-            }
 
-            NIADZELIA_AICOU_VI_SABORY -> {
-                //Нядзеля сьвятых Айцоў першых шасьці Сабораў
-                for (i in 13..19) {
-                    calendar.set(calendar.get(Calendar.YEAR), Calendar.JULY, i)
-                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
-                    if (wik == Calendar.SUNDAY) {
-                        realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
-                        break
+                    NIADZELIA_AICOU_VI_SABORY -> {
+                        //Нядзеля сьвятых Айцоў першых шасьці Сабораў
+                        for (i in 13..19) {
+                            calendar.set(calendar.get(Calendar.YEAR), Calendar.JULY, i)
+                            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                            if (wik == Calendar.SUNDAY) {
+                                realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                                break
+                            }
+                        }
                     }
-                }
-            }
 
-            SUBOTA_PERAD_RASTVOM -> {
-                //Субота прерад Раством
-                for (i in 18..24) {
-                    calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
-                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
-                    if (wik == Calendar.SATURDAY) {
-                        realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
-                        break
+                    SUBOTA_PERAD_RASTVOM -> {
+                        //Субота прерад Раством
+                        for (i in 18..24) {
+                            calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
+                            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                            if (wik == Calendar.SATURDAY) {
+                                realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                                break
+                            }
+                        }
                     }
-                }
-            }
 
-            NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU -> {
-                //Нядзеля прерад Раством, сьвятых Айцоў
-                for (i in 18..24) {
-                    calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
-                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
-                    if (wik == Calendar.SUNDAY) {
-                        realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
-                        break
+                    NIADZELIA_PERAD_RASTVOM_SVIATYCH_AJCOU -> {
+                        //Нядзеля прерад Раством, сьвятых Айцоў
+                        for (i in 18..24) {
+                            calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, i)
+                            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                            if (wik == Calendar.SUNDAY) {
+                                realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                                break
+                            }
+                        }
+                    }
+
+                    NIADZELIA_PERAD_BOHAZJAULENNEM -> {
+                        //Нядзеля прерад Богаз'яўленнем
+                        if (dayOfYear > 5) calendar.set(
+                            calendar.get(Calendar.YEAR),
+                            Calendar.DECEMBER,
+                            30
+                        )
+                        else calendar.set(calendar.get(Calendar.YEAR) - 1, Calendar.DECEMBER, 30)
+                        for (i in 1..7) {
+                            //addDay = 0
+                            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                            if (wik == Calendar.SUNDAY) {
+                                //if (!calendar.isLeapYear(calendar.get(Calendar.YEAR)) && calendar[Calendar.MONTH] > Calendar.FEBRUARY) addDay = 1
+                                realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                                break
+                            }
+                            calendar.add(Calendar.DATE, 1)
+                        }
+                    }
+
+                    NIADZELIA_PASLIA_BOHAZJAULENIA -> {
+                        //Нядзеля пасля Богаз'яўлення
+                        for (i in 7..13) {
+                            calendar.set(calendar.get(Calendar.YEAR), Calendar.JANUARY, i)
+                            val wik = calendar.get(Calendar.DAY_OF_WEEK)
+                            if (wik == Calendar.SUNDAY) {
+                                realDay = calendar.get(Calendar.DAY_OF_YEAR)
+                                break
+                            }
+                        }
                     }
                 }
             }
-            NIADZELIA_PERAD_BOHAZJAULENNEM -> {
-                //Нядзеля прерад Богаз'яўленнем
-                if (dayOfYear > 5) calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, 30)
-                else calendar.set(calendar.get(Calendar.YEAR) - 1, Calendar.DECEMBER, 30)
-                for (i in 1..7) {
-                    addDay = 0
-                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
-                    if (wik == Calendar.SUNDAY) {
-                        if (!calendar.isLeapYear(calendar.get(Calendar.YEAR)) && calendar[Calendar.MONTH] > Calendar.FEBRUARY) addDay = 1
-                        realDay = calendar.get(Calendar.DAY_OF_YEAR) + addDay
-                        break
-                    }
-                    calendar.add(Calendar.DATE, 1)
-                }
+            isPasxa -> {
+                realDay = pasha(day)
             }
-            NIADZELIA_PASLIA_BOHAZJAULENIA -> {
-                //Нядзеля пасля Богаз'яўлення
-                for (i in 7..13) {
-                    calendar.set(calendar.get(Calendar.YEAR), Calendar.JANUARY, i)
-                    val wik = calendar.get(Calendar.DAY_OF_WEEK)
-                    if (wik == Calendar.SUNDAY) {
-                        realDay = calendar.get(Calendar.DAY_OF_YEAR)
-                        break
-                    }
-                }
+            else -> {
+                realDay = day
             }
         }
         return realDay
+    }
+
+    private fun pasha(day: Int): Int {
+        val year = Calendar.getInstance()[Calendar.YEAR]
+        var dataP: Int
+        val monthP: Int
+        val a = year % 19
+        val b = year % 4
+        val cx = year % 7
+        val k = year / 100
+        val p = (13 + 8 * k) / 25
+        val q = k / 4
+        val m = (15 - p + k - q) % 30
+        val n = (4 + k - q) % 7
+        val d = (19 * a + m) % 30
+        val ex = (2 * b + 4 * cx + 6 * d + n) % 7
+        if (d + ex <= 9) {
+            dataP = d + ex + 22
+            monthP = Calendar.MARCH
+        } else {
+            dataP = d + ex - 9
+            if (d == 29 && ex == 6) dataP = 19
+            if (d == 28 && ex == 6) dataP = 18
+            monthP = Calendar.APRIL
+        }
+        val gCalendar = GregorianCalendar(year, monthP, dataP)
+        gCalendar.add(Calendar.DATE, day)
+        return gCalendar[Calendar.DAY_OF_YEAR]
     }
 
     fun cancelLoadPiarliny() {

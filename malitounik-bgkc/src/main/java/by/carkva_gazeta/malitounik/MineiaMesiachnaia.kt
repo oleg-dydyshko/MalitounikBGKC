@@ -60,28 +60,8 @@ class MineiaMesiachnaia : SlugbovyiaTextu(), DialogCaliandarMunDate.DialogCalian
         val sluzbaList = getMineiaMesiachnaia()
         val k = getSharedPreferences("biblia", MODE_PRIVATE)
         mineiaList.clear()
-        var dayOfYear = 1
-        var day: Int
         for (i in sluzbaList.indices) {
-            day = sluzbaList[i].day
-            when {
-                day >= 1000 -> {
-                    dayOfYear = getRealDay(day, Calendar.getInstance()[Calendar.DAY_OF_YEAR], Calendar.getInstance()[Calendar.YEAR])
-                }
-
-                sluzbaList[i].pasxa -> {
-                    MenuCaliandar.getDataCalaindar(year = Calendar.getInstance()[Calendar.YEAR]).forEach {
-                        if (it[22].toInt() == day) {
-                            dayOfYear = it[24].toInt()
-                            return@forEach
-                        }
-                    }
-                }
-
-                else -> {
-                    dayOfYear = day
-                }
-            }
+            val dayOfYear = getRealDay(sluzbaList[i].day, Calendar.getInstance()[Calendar.DAY_OF_YEAR], Calendar.getInstance()[Calendar.YEAR], sluzbaList[i].pasxa)
             val c = ArrayList<String>()
             c.addAll(MenuCaliandar.getPositionCaliandar(dayOfYear, Calendar.getInstance()[Calendar.YEAR]))
             var adminDayOfYear = ""

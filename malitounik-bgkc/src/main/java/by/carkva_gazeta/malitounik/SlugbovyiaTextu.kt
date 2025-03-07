@@ -489,9 +489,9 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         datMinALL.add(SlugbovyiaTextuData(36, "Пасьвяцьце Сустрэчы Госпада. Сьвятой мучаніцы Агаты", "mm_05_02_pasviaccie_sustreczy_muczanicy_ahaty_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(40, "Адданьне сьвята Сустрэчы Госпада, Бога і Збаўцы нашага Ісуса Хрыста. Мучаніка Нічыпара", "mm_09_02_addanie_sustreczy_hospada_muczanika_niczypara_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(40, "Адданьне сьвята Сустрэчы Госпада, Бога і Збаўцы нашага Ісуса Хрыста. Мучаніка Нічыпара", "mm_09_02_addanie_sustreczy_hospada_muczanika_niczypara_liturhija", LITURHIJA))
-        datMinALL.add(SlugbovyiaTextuData(45, "Сьвятога і роўнага апосталам Кірылы Філосафа, настаўніка славянаў", "mm_14_02_kirylu_filosafa_viaczernia", VIACZERNIA))
         datMinALL.add(SlugbovyiaTextuData(45, "Сьвятога і роўнага апосталам Кірылы Філосафа, настаўніка славянаў", "mm_14_02_kiryly_filosafa_liturhija", LITURHIJA))
         datMinALL.add(SlugbovyiaTextuData(69, "40 мучанікаў Себастыйскіх", "mm_09_03_40_muczanikau_siebastyjskich_viaczernia", VIACZERNIA))
+        datMinALL.add(SlugbovyiaTextuData(45, "Сьвятога і роўнага апосталам Кірылы Філосафа, настаўніка славянаў", "mm_14_02_kiryly_filosafa_viaczernia", VIACZERNIA))
     }
 
     fun getNazouSluzby(sluzba: Int): String {
@@ -941,7 +941,8 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         dataSearch.add(MenuListData(list[8] + opisanie, "kanon_andreja_kryckaha"))
         dataSearch.add(MenuListData(list[9] + opisanie, "malebien_kiryla_miatod"))
         dataSearch.add(MenuListData(list[10] + opisanie, "paviaczernica_malaja"))
-        dataSearch.add(MenuListData(list[11] + opisanie, "kanon_andreja_kryckaha_4_czastki"))
+        dataSearch.add(MenuListData(list[11] + opisanie, "paviaczernica_vialikaja"))
+        dataSearch.add(MenuListData(list[12] + opisanie, "kanon_andreja_kryckaha_4_czastki"))
         dataSearch.sort()
         return dataSearch
     }

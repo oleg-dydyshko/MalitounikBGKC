@@ -290,6 +290,7 @@ class Chytanne : ZmenyiaChastki() {
         val ssb = StringBuilder()
         val list = chtenia(wOld, perevod)
         for (i in list.indices) {
+            if (list[i].isEmpty()) continue
             ssb.append(list[i])
             if (i == 1) {
                 val t1 = list[i].indexOf("<strong>")

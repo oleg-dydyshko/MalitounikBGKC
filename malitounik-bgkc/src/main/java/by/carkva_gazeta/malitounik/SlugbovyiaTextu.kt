@@ -658,7 +658,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         calendar[Calendar.YEAR] = year
         when {
             day >= 1000 -> {
-                when(day) {
+                when (day) {
                     AICOU_VII_SUSVETNAGA_SABORY -> {
                         //Айцоў VII Сусьветнага Сабору
                         for (i in 11..17) {
@@ -721,11 +721,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
 
                     NIADZELIA_PERAD_BOHAZJAULENNEM -> {
                         //Нядзеля прерад Богаз'яўленнем
-                        if (dayOfYear > 5) calendar.set(
-                            calendar.get(Calendar.YEAR),
-                            Calendar.DECEMBER,
-                            30
-                        )
+                        if (dayOfYear > 5) calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, 30)
                         else calendar.set(calendar.get(Calendar.YEAR) - 1, Calendar.DECEMBER, 30)
                         for (i in 1..7) {
                             //addDay = 0
@@ -753,41 +749,19 @@ abstract class SlugbovyiaTextu : BaseActivity() {
                 }
             }
             isPasxa -> {
-                realDay = pasha(day)
+                MenuCaliandar.getDataCalaindar(year = Calendar.getInstance()[Calendar.YEAR]).forEach {
+                    if (it[22].toInt() == day) {
+                        realDay = it[24].toInt()
+                        return@forEach
+                    }
+                }
             }
+
             else -> {
                 realDay = day
             }
         }
         return realDay
-    }
-
-    private fun pasha(day: Int): Int {
-        val year = Calendar.getInstance()[Calendar.YEAR]
-        var dataP: Int
-        val monthP: Int
-        val a = year % 19
-        val b = year % 4
-        val cx = year % 7
-        val k = year / 100
-        val p = (13 + 8 * k) / 25
-        val q = k / 4
-        val m = (15 - p + k - q) % 30
-        val n = (4 + k - q) % 7
-        val d = (19 * a + m) % 30
-        val ex = (2 * b + 4 * cx + 6 * d + n) % 7
-        if (d + ex <= 9) {
-            dataP = d + ex + 22
-            monthP = Calendar.MARCH
-        } else {
-            dataP = d + ex - 9
-            if (d == 29 && ex == 6) dataP = 19
-            if (d == 28 && ex == 6) dataP = 18
-            monthP = Calendar.APRIL
-        }
-        val gCalendar = GregorianCalendar(year, monthP, dataP)
-        gCalendar.add(Calendar.DATE, day)
-        return gCalendar[Calendar.DAY_OF_YEAR]
     }
 
     fun cancelLoadPiarliny() {

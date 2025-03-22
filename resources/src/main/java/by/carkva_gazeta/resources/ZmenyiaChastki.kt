@@ -234,7 +234,7 @@ abstract class ZmenyiaChastki : SlugbovyiaTextu(), View.OnTouchListener, Interac
             bible = 21
             novyZapavet = false
         }
-        if (chtenie == "Притч" || chtenie == "Высл") {
+        if (chtenie == "Притч" || chtenie == "Высл" || chtenie == "Прып") {
             bible = 22
             novyZapavet = false
         }
@@ -481,6 +481,7 @@ abstract class ZmenyiaChastki : SlugbovyiaTextu(), View.OnTouchListener, Interac
         val list = ArrayList<String>()
         for (i in split.indices) {
             try {
+                if (split[i].trim().isEmpty()) continue
                 val res = StringBuilder()
                 var knigaN: String
                 var knigaK = "0"

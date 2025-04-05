@@ -369,6 +369,14 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
+            android:name=".Chasaslou"
+            android:label="@string/casaslou"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
             android:name=".VybranoeBibleList"
             android:label="@string/str_short_label1"
             android:theme="@style/AppTheme">

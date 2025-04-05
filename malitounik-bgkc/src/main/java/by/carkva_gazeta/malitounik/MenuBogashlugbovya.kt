@@ -225,31 +225,31 @@ class MenuBogashlugbovya : BaseFragment(), AdapterView.OnItemClickListener {
                     startActivity(intent)
                 }
                 "2" -> {
-                    val intent = Intent(it, SubMenuBogashlugbovyaViachernia::class.java)
-                    startActivity(intent)
-                }
-                "3" -> {
                     val intent = Intent(it, TonNiadzelny::class.java)
                     startActivity(intent)
                 }
-                "4" -> {
+                "3" -> {
                     val intent = Intent(it, MineiaMesiachnaiaMonth::class.java)
                     startActivity(intent)
                 }
-                "5" -> {
+                "4" -> {
                     val intent = Intent(it, BogashlugbovyaTryjodz::class.java)
                     startActivity(intent)
                 }
-                "6" -> {
+                "5" -> {
                     val intent = Intent(it, MineiaAgulnaia::class.java)
                     startActivity(intent)
                 }
-                "7" -> {
+                "6" -> {
                     val intent = Intent(it, Aktoix::class.java)
                     startActivity(intent)
                 }
-                "8" -> {
+                "7" -> {
                     val intent = Intent(it, Trebnik::class.java)
+                    startActivity(intent)
+                }
+                "8" -> {
+                    val intent = Intent(it, Chasaslou::class.java)
                     startActivity(intent)
                 }
                 else -> {

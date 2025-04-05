@@ -188,7 +188,7 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_vialikija_hadziny", VIALHADZINY, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_mal_paviaczernica", PAVIACHERNICA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
-        datMinALL.add(SlugbovyiaTextuData(-2, "Вячэрня (без сьвятара)", "vialikaja_piatnica_viaczernia_biez_sviatara", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-2, "Вячэрня з вынасам плашчаніцы (без сьвятара)", "vialikaja_piatnica_viaczernia_biez_sviatara", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_paunocznica", PAUNOCHNICA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_jutran", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_viaczernia_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
@@ -904,6 +904,19 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         return dataSearch
     }
 
+    fun getCasaslou(isSearch: Boolean = false): ArrayList<MenuListData> {
+        var opisanie = ""
+        if (isSearch) opisanie = getString(R.string.casaslou)
+        val list = ArrayList<MenuListData>()
+        if (!isSearch) list.add(MenuListData("ВЯЧЭРНЯ", "1"))
+        list.add(MenuListData("Гадзіна 6", "kan_hadz_hadzina_6"))
+        list.add(MenuListData("Гадзіна 6 у вялікі пост", "kan_hadz_hadzina_6_vialiki_post"))
+        list.add(MenuListData("Павячэрніца малая", "paviaczernica_malaja"))
+        list.add(MenuListData("Павячэрніца вялікая", "paviaczernica_vialikaja"))
+        list.add(MenuListData("Ютрань нядзельная (у скароце)", "jutran_niadzelnaja"))
+        return list
+    }
+
     fun getTextBogaslugbovyiaList(isSearch: Boolean = false): ArrayList<MenuListData> {
         var opisanie = ""
         if (isSearch) opisanie = getString(R.string.bogaslugbovyia)
@@ -914,14 +927,11 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         dataSearch.add(MenuListData(list[2] + opisanie, "lit_vasila_vialikaha"))
         dataSearch.add(MenuListData(list[3] + opisanie, "lit_raniej_asviaczanych_darou"))
         dataSearch.add(MenuListData(list[4] + opisanie, "nabazenstva_maci_bozaj_niast_dap"))
-        dataSearch.add(MenuListData(list[5] + opisanie, "jutran_niadzelnaja"))
-        dataSearch.add(MenuListData(list[6] + opisanie, "abiednica"))
-        dataSearch.add(MenuListData(list[7] + opisanie, "kanon_malebny_baharodzicy"))
-        dataSearch.add(MenuListData(list[8] + opisanie, "kanon_andreja_kryckaha"))
-        dataSearch.add(MenuListData(list[9] + opisanie, "malebien_kiryla_miatod"))
-        dataSearch.add(MenuListData(list[10] + opisanie, "paviaczernica_malaja"))
-        dataSearch.add(MenuListData(list[11] + opisanie, "paviaczernica_vialikaja"))
-        dataSearch.add(MenuListData(list[12] + opisanie, "kanon_andreja_kryckaha_4_czastki"))
+        dataSearch.add(MenuListData(list[5] + opisanie, "abiednica"))
+        dataSearch.add(MenuListData(list[6] + opisanie, "kanon_malebny_baharodzicy"))
+        dataSearch.add(MenuListData(list[7] + opisanie, "kanon_andreja_kryckaha"))
+        dataSearch.add(MenuListData(list[8] + opisanie, "malebien_kiryla_miatod"))
+        dataSearch.add(MenuListData(list[9] + opisanie, "kanon_andreja_kryckaha_4_czastki"))
         dataSearch.sort()
         return dataSearch
     }

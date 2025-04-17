@@ -1,7 +1,9 @@
 package by.carkva_gazeta.resources
 
+import android.R.attr.theme
 import android.app.Activity
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -24,7 +26,10 @@ import android.widget.Filter
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.startActivity
 import androidx.transition.TransitionManager
 import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogClearHishory
@@ -222,6 +227,7 @@ class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistor
         rub6.add(MenuListData("Малітва на кожны час", "mltv_na_kozny_czas"))
         rub6.add(MenuListData("Малітвы за памерлых («Божа духаў і ўсякага цялеснага стварэньня»)", "mltv_za_pamierlych_boza_duchau"))
         rub6.add(MenuListData("Юбілейная малітва", "mltv_jubilejnaja"))
+        rub6.add(MenuListData("Малітва аб муках Госпада нашага Ісуса Хрыста", "mltv_ab_mukach_hospada"))
         rub6.sort()
         data.add(rub1)
         data.add(rub2)

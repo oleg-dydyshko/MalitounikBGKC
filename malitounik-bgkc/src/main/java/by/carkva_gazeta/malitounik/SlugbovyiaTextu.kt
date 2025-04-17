@@ -171,7 +171,8 @@ abstract class SlugbovyiaTextu : BaseActivity() {
         datMinALL.add(SlugbovyiaTextuData(-9, "Пятніца 6-га тыдня посту ўвечары", "bogashlugbovya17_6", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_POST_6))
         datMinALL.add(SlugbovyiaTextuData(-8, "Субота Лазара. Ютрань", "bogashlugbovya17_7", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_POST_6))
         datMinALL.add(SlugbovyiaTextuData(-8, "Субота Лазара. Літургія", "bogashlugbovya17_8", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_POST_6))
-
+        datMinALL.add(SlugbovyiaTextuData(-8, "Уваход у Ерусалім Госпада, Бога і Збаўцы нашага Ісуса Хрыста (Вербніца)", "vierbnica_viaczernia", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
+        datMinALL.add(SlugbovyiaTextuData(-7, "Уваход у Ерусалім Госпада, Бога і Збаўцы нашага Ісуса Хрыста (Вербніца)", "vierbnica_viaczernia_niadziela_uvieczary", VIACZERNIA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-7, "Уваход у Ерусалім Госпада, Бога і Збаўцы нашага Ісуса Хрыста (Вербніца)", "vierbnica_jutran", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-7, "Уваход у Ерусалім Госпада, Бога і Збаўцы нашага Ісуса Хрыста (Вербніца)", "vierbnica_liturhija", LITURHIJA, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
         datMinALL.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak_jutran", JUTRAN, pasxa = true, mineia = MINEIA_VIALIKI_TYDZEN))
